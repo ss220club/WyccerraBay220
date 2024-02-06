@@ -4,27 +4,27 @@
 //////////////
 
 /obj/item/clothing/suit/storage/toggle/Resomicoat
-	 name = "small cloak"
-	 icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
-	 desc = "A cloak that seems too small to fit a human."
-	 icon_state = "resomicoat"
-	 icon_open = "resomicoat_open"
-	 icon_closed = "resomicoat"
-	 body_parts_covered = UPPER_TORSO|ARMS|LOWER_TORSO|LEGS
-	 species_restricted = list(SPECIES_RESOMI)
+	name = "small cloak"
+	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	desc = "A cloak that seems too small to fit a human."
+	icon_state = "resomicoat"
+	//icon_open = "resomicoat_open"
+	//icon_closed = "resomicoat"
+	body_parts_covered = UPPER_TORSO|ARMS|LOWER_TORSO|LEGS
+	species_restricted = list(SPECIES_RESOMI)
 
 /obj/item/clothing/suit/storage/toggle/Resomicoat/white
  	icon_state = "white_resomicoat"
- 	icon_open = "white_resomicoat_open"
- 	icon_closed = "white_resomicoat"
+ 	//icon_open = "white_resomicoat_open"
+ 	//icon_closed = "white_resomicoat"
 
 /obj/item/clothing/suit/storage/toggle/Resomilabcoat
 	name = "small labcoat"
 	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 	desc = "A labcoat that seems too small to fit a human."
 	icon_state = "resomi_labcoat"
-	icon_open = "resomi_labcoat_open"
-	icon_closed = "resomi_labcoat"
+	//icon_open = "resomi_labcoat_open"
+	//icon_closed = "resomi_labcoat"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
 	species_restricted = list(SPECIES_RESOMI)
 	allowed = list(/obj/item/device/scanner/gas,/obj/item/stack/medical,/obj/item/reagent_containers/dropper,/obj/item/reagent_containers/syringe,/obj/item/reagent_containers/hypospray,/obj/item/device/scanner/health,/obj/item/device/flashlight/pen,/obj/item/reagent_containers/glass/bottle,/obj/item/reagent_containers/glass/beaker,/obj/item/reagent_containers/pill,/obj/item/storage/pill_bottle,/obj/item/paper)
@@ -611,10 +611,11 @@
 	hood.color = color
 	hood.update_clothing_icon()
 
-/obj/item/clothing/suit/storage/hooded/polychromic/emp_act()
+/obj/item/clothing/suit/storage/hooded/polychromic/emp_act(severity)
 	color = null
 	hood.color = null
 	update_icon()
+	..()
 
 /obj/item/clothing/head/winterhood/polychromic_hood
 	name = "hood"

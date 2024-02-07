@@ -162,7 +162,7 @@ GLOBAL_LIST_EMPTY(known_overmap_sectors)
 /obj/overmap/visitable/sector/update_known_connections(notify = FALSE)
 	. = ..()
 
-	for(var/obj/machinery/computer/ship/helm/H in SSmachines.machinery)
+	for(var/obj/machinery/computer/ship/helm/H as anything in SSmachines.get_machinery_of_type(/obj/machinery/computer/ship/helm))
 		H.add_known_sector(src, notify)
 
 

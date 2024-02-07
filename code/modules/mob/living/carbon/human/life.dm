@@ -727,7 +727,7 @@
 				if(55 to 70)		severity = 4
 				if(70 to 85)		severity = 5
 				if(85 to INFINITY)	severity = 6
-			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
+			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity, TRUE)
 		else
 			clear_fullscreen("brute")
 

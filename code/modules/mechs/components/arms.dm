@@ -84,4 +84,3 @@
 	icon_state = "combat_arms"
 	action_delay = 10
 	power_use = 50
-

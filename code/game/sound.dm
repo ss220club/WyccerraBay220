@@ -77,7 +77,7 @@ GLOBAL_LIST_INIT(tray_hit_sound,list('sound/items/trayhit1.ogg', 'sound/items/tr
 
 var/global/const/FALLOFF_SOUNDS = 0.5
 
-/mob/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, is_global, extrarange)
+/mob/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, is_global, extrarange, wait = FALSE) // SS220 EDIT
 	if (isnull(soundin))
 		return
 	if(!src.client || ear_deaf > 0)	return
@@ -85,7 +85,7 @@ var/global/const/FALLOFF_SOUNDS = 0.5
 	if(!istype(S))
 		soundin = get_sfx(soundin)
 		S = sound(soundin)
-		S.wait = 0 //No queue
+		S.wait = wait //No queue
 		S.channel = 0 //Any channel
 		S.volume = vol
 		S.environment = -1

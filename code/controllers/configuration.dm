@@ -894,6 +894,19 @@
 			if("minimum_byondacc_age")
 				minimum_byondacc_age = text2num(value)
 			// [/SIERRA-ADD]
+			// [SS220-ADD]
+			if("tts_enabled")
+				tts_enabled = TRUE
+			if("tts_token_silero")
+				tts_token_silero = value
+			if("tts_cache_enabled")
+				tts_cache_enabled = TRUE
+			if("ffmpeg_cpuaffinity")
+				var/sanitized = regex(@"[^0-9,-]", "g").Replace(value, "")
+				ffmpeg_cpuaffinity = sanitized
+			if("tts_api_url_silero")
+				tts_api_url_silero = value
+			// [/SS220-ADD]
 			else
 				log_misc("Unknown setting in config/config.txt: '[name]'")
 

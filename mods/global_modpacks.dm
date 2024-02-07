@@ -23,4 +23,10 @@
 #include "utf8/_utf8.dme"
 #include "utility_items/_utility_items.dme"
 
+// SS220 PACKS START
+
+#include "~_ss220/text2speech/tts.dme"
+
+// SS220 PACKS END
+
 #include "../packs/sierra-tweaks/_pack.dm"

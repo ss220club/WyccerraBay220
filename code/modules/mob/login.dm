@@ -60,6 +60,7 @@
 	var/logout_time = null
 
 /mob/Login()
+	..()
 
 	// Add to player list if missing
 	if (!GLOB.player_list.Find(src))

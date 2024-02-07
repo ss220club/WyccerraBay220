@@ -1031,7 +1031,7 @@ Ccomp's first proc.
 					SL.landmark.shuttle_name = name
 					SL.shuttle = name
 
-	for (var/obj/machinery/computer/shuttle_control/S in SSmachines.machinery)
+	for (var/obj/machinery/computer/shuttle_control/S as anything in SSmachines.get_machinery_of_type(/obj/machinery/computer/shuttle_control))
 		if (S.shuttle_tag == original_name)
 			S.shuttle_tag = name
 			S.name = "[name] Control Console"

@@ -1,5 +1,5 @@
 /datum/preferences
-	var/tts_seed
+	var/datum/tts_seed/tts_seed
 	var/static/explorer_users = list()
 
 /mob/new_player/proc/check_tts_seed_ready()
@@ -22,7 +22,7 @@
 	var/list/data = ui_data(user, ui_key)
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "tts_explorer.tmpl", "TTS Expplorer UI", 600, 800) // Todo: move to mods
+		ui = new(user, src, ui_key, "tts_explorer.tmpl", "TTS Expplorer UI", 400, 800) // Todo: move to mods
 		ui.set_initial_data(data)
 		ui.open()
 
@@ -73,17 +73,21 @@
 
 		usr.client.prefs.tts_seed = seed
 		usr.client.prefs.save_preferences()
+		SSnano.update_uis(src)
+
 
 /datum/preferences/get_content(mob/user)
 	. = ..()
 	. += "<a href='?src=\ref[src];tts_explorer=1'>Выбрать голос</a>"
 
-/datum/preferences/Topic(href, list/href_list)
-	if(href_list["ready"] || href_list["latejoin"])
+/mob/new_player/Topic(href, href_list)
+	if(config.tts_enabled && (href_list["lobby_ready"] || href_list["late_join"]))
 		if(!usr.client.prefs.tts_seed)
 			to_chat(usr, SPAN_WARNING("У вас не выбран голос."))
 			return
 	. = ..()
+
+/datum/preferences/Topic(href, list/href_list)
 	if(href_list["tts_explorer"])
 		var/datum/nano_module/tts_seeds_explorer/explorer = explorer_users[usr]
 		if(!explorer)
@@ -95,3 +99,7 @@
 /datum/preferences/CanUseTopic(mob/user, datum/topic_state/state)
 	. = ..()
 	return STATUS_INTERACTIVE
+
+/datum/preferences/copy_to(mob/living/carbon/human/character, is_preview_copy)
+	. = ..()
+	character.tts_seed = tts_seed?.name

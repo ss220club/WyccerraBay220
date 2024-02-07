@@ -13,9 +13,6 @@
 #define CALL_EXT call_ext
 #endif
 
-/proc/rustg_create_async_http_client() return RUSTG_CALL(RUST_G, "start_http_client")()
-/proc/rustg_close_async_http_client() return RUSTG_CALL(RUST_G, "shutdown_http_client")()
-
 #define SOUND_EFFECT_NONE 0
 #define SOUND_EFFECT_RADIO 1
 #define SOUND_EFFECT_ROBOT 2

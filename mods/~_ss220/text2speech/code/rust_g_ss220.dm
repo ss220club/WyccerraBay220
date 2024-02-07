@@ -46,3 +46,6 @@
 // Text Operations //
 #define rustg_ss220_cyrillic_to_latin(text) RUSTG_CALL(RUST_G_SS220, "cyrillic_to_latin")("[text]")
 #define rustg_ss220_latin_to_cyrillic(text) RUSTG_CALL(RUST_G_SS220, "latin_to_cyrillic")("[text]")
+
+/proc/rustg_create_async_http_client() return RUSTG_CALL(RUST_G_SS220, "start_http_client")()
+/proc/rustg_close_async_http_client() return RUSTG_CALL(RUST_G_SS220, "shutdown_http_client")()

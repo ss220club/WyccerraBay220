@@ -400,7 +400,7 @@ SUBSYSTEM_DEF(tts220)
 		addtimer(new /datum/callback(src, PROC_REF(cleanup_tts_file), "[filename].ogg"), 30 SECONDS)
 
 	for(var/datum/callback/cb in tts_queue[filename])
-		cb.invoke_async()
+		invoke_async(cb)
 		tts_queue[filename] -= cb
 
 	tts_queue -= filename
@@ -437,7 +437,7 @@ SUBSYSTEM_DEF(tts220)
 				tts_effects_queue[voice] -= cb
 				if(cb == play_tts_cb)
 					continue
-				cb.invoke_async()
+				invoke_async(cb)
 			tts_effects_queue -= voice
 
 	var/turf/turf_source = get_turf(speaker)

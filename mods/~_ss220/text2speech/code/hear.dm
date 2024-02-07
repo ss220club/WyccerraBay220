@@ -10,4 +10,4 @@
 
 	if(src != speaker || isrobot(src) || isAI(src))
 		var/effect = isrobot(speaker) ? SOUND_EFFECT_RADIO_ROBOT : SOUND_EFFECT_RADIO
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), src, src, message, speaker.tts_seed, FALSE, effect, null, null, 'modular_ss220/text_to_speech/code/sound/radio_chatter.ogg')
+		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), src, src, message, speaker.tts_seed, FALSE, effect, null, null, 'mods/~_ss220/text2speech/code/sound/radio_chatter.ogg')

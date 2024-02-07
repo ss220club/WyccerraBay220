@@ -15,9 +15,6 @@ SUBSYSTEM_DEF(http)
 	. = ..()
 	rustg_create_async_http_client() // Open the door
 
-/datum/controller/subsystem/http/get_stat_details()
-	return "P: [length(active_async_requests)] | T: [total_requests]"
-
 /datum/controller/subsystem/http/fire(resumed)
 	for(var/r in active_async_requests)
 		var/datum/http_request/req = r
@@ -29,7 +26,7 @@ SUBSYSTEM_DEF(http)
 
 			// If the request has a callback, invoke it.Async of course to avoid choking the SS
 			if(req.cb)
-				req.cb.invoke_async(res)
+				invoke_async(req.cb, res)
 
 			// And log the result
 			if(logging_enabled)
@@ -43,7 +40,7 @@ SUBSYSTEM_DEF(http)
 					log_data += "\tResponse body: [res.body]"
 					log_data += "\tResponse headers: [json_encode(res.headers)]"
 				log_data += "END ASYNC RESPONSE (ID: [req.id])"
-				log_debug(log_data.Join("\n[GLOB.log_end]"))
+				log_debug(log_data.Join("\n"))
 
 /**
   * Async request creator
@@ -72,7 +69,7 @@ SUBSYSTEM_DEF(http)
 		log_data += "END ASYNC REQUEST (ID: [req.id])"
 
 		// Write the log data
-		log_debug(log_data.Join("\n[GLOB.log_end]"))
+		log_debug(log_data.Join("\n"))
 
 /**
   * Blocking request creator

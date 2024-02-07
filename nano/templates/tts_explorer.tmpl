@@ -1,0 +1,15 @@
+<div class='notice'>
+	<b><h3>TTS Seed Explorer</h3></b>
+	<i>Сделано на коленке...</i><br>
+</div>
+
+{{for data.seeds}}
+	<div class="item">
+		<div class="itemLabel">
+				{{:value.name}}
+			</div>
+			<div class="itemContent" style="width: 70px; text-align: right">
+				{{:helper.link('Выбрать', null, { 'seed' : value.name })}} {{:helper.link('Прослушать', null, { 'listen' : 1, 'phrase' : 'Капитан, вы уверены что хотите назначить клоуна на должность главы персонала?', 'seed' : value.name })}}
+			</div>
+	</div><br>
+{{/for}}

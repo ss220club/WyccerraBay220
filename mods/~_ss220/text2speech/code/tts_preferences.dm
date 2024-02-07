@@ -22,7 +22,7 @@
 	var/list/data = ui_data(user, ui_key)
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "tts_explorer.tmpl", "TTS Expplorer UI", 600, 800)
+		ui = new(user, src, ui_key, "tts_explorer.tmpl", "TTS Expplorer UI", 600, 800) // Todo: move to mods
 		ui.set_initial_data(data)
 		ui.open()
 
@@ -59,30 +59,39 @@
 
 /datum/nano_module/tts_seeds_explorer/Topic(href, href_list)
 	. = ..()
-	if(href["listen"])
-		if(!(href["phrase"] in phrases))
+	if(href_list["listen"])
+		if(!(href_list["phrase"] in phrases))
 			return
-		if(!(href["seed"] in SStts220.tts_seeds))
+		if(!(href_list["seed"] in SStts220.tts_seeds))
 			return
 
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, usr, href["phrase"], href["seed"], FALSE)
-	if(href["select"])
-		if(!(href["seed"] in SStts220.tts_seeds))
+		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, usr, href_list["phrase"], href_list["seed"], FALSE)
+	if(href_list["select"])
+		if(!(href_list["seed"] in SStts220.tts_seeds))
 			return
-		var/datum/tts_seed/seed = SStts220.tts_seeds[href["seed"]]
+		var/datum/tts_seed/seed = SStts220.tts_seeds[href_list["seed"]]
 
 		usr.client.prefs.tts_seed = seed
+		usr.client.prefs.save_preferences()
 
 /datum/preferences/get_content(mob/user)
 	. = ..()
 	. += "<a href='?src=\ref[src];tts_explorer=1'>Выбрать голос</a>"
 
 /datum/preferences/Topic(href, list/href_list)
+	if(href_list["ready"] || href_list["latejoin"])
+		if(!usr.client.prefs.tts_seed)
+			to_chat(usr, SPAN_WARNING("У вас не выбран голос."))
+			return
 	. = ..()
 	if(href_list["tts_explorer"])
 		var/datum/nano_module/tts_seeds_explorer/explorer = explorer_users[usr]
 		if(!explorer)
-			explorer = new()
+			explorer = new(src)
 			explorer_users[usr] = explorer
 		explorer.ui_interact(usr)
 		return
+
+/datum/preferences/CanUseTopic(mob/user, datum/topic_state/state)
+	. = ..()
+	return STATUS_INTERACTIVE

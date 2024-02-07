@@ -71,7 +71,7 @@
 			return
 		var/datum/tts_seed/seed = SStts220.tts_seeds[href_list["seed"]]
 
-		usr.client.prefs.tts_seed = seed
+		usr.client.prefs.tts_seed = seed.name
 		usr.client.prefs.save_preferences()
 		SSnano.update_uis(src)
 
@@ -95,6 +95,7 @@
 			explorer_users[usr] = explorer
 		explorer.ui_interact(usr)
 		return
+	return ..()
 
 /datum/preferences/CanUseTopic(mob/user, datum/topic_state/state)
 	. = ..()
@@ -102,4 +103,4 @@
 
 /datum/preferences/copy_to(mob/living/carbon/human/character, is_preview_copy)
 	. = ..()
-	character.tts_seed = tts_seed?.name
+	character.tts_seed = tts_seed

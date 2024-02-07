@@ -22,7 +22,7 @@
 	var/list/data = ui_data(user, ui_key)
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "tts_explorer.tmpl", "TTS Expplorer UI", 400, 800) // Todo: move to mods
+		ui = new(user, src, ui_key, "mods-tts_explorer.tmpl", "TTS Expplorer UI", 400, 800)
 		ui.set_initial_data(data)
 		ui.open()
 

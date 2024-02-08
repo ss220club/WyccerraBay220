@@ -11,15 +11,6 @@
 	var/converted_gender = SStts220.gender_table[gender]
 	tts_seed = pick(SStts220.tts_seeds_by_gender[converted_gender])
 
-/datum/category_item/player_setup_item/player_global/ui/load_preferences(datum/pref_record_reader/R)
-	. = ..()
-	pref.tts_enabled = R.read("enable_tts")
-
-
-/datum/category_item/player_setup_item/player_global/ui/save_preferences(datum/pref_record_writer/W)
-	. = ..()
-	W.write("enable_tts", pref.tts_enabled)
-
 /mob/new_player/proc/check_tts_seed_ready()
 	return TRUE
 

@@ -1,18 +1,11 @@
 /datum/preferences
 	var/tts_seed
 	var/static/explorer_users = list()
-	var/tts_enabled = TRUE
 
 /datum/client_preference/tts_enabled
 	default_value = GLOB.PREF_YES
 	description = "Toggle TTS"
 	key = "TTS_ENABLED"
-
-/datum/client_preference/tts_enabled/changed(mob/preference_mob, new_value)
-	var/datum/preferences/prefs = preference_mob.client?.prefs
-	if(!prefs)
-		return
-	prefs.tts_enabled = TRUE ? new_value == GLOB.PREF_YES : FALSE
 
 /datum/preferences/proc/set_random_gendered_tts_seed()
 	var/converted_gender = SStts220.gender_table[gender]

@@ -1,6 +1,6 @@
 /mob/hear_say(message, verb, datum/language/language, alt_name, italics, mob/speaker, sound/speech_sound, sound_vol)
 	. = ..()
-	if(!client?.prefs?.tts_enabled)
+	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_NO)
 		return
 	var/effect = isrobot(speaker) ? SOUND_EFFECT_ROBOT : SOUND_EFFECT_NONE
 	var/traits = TTS_TRAIT_RATE_FASTER
@@ -8,7 +8,7 @@
 
 /mob/hear_radio(message, verb, datum/language/language, part_a, part_b, part_c, mob/speaker, hard_to_hear, vname)
 	. = ..()
-	if(!client?.prefs?.tts_enabled)
+	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_NO)
 		return
 	if(src != speaker || isrobot(src) || isAI(src))
 		var/effect = isrobot(speaker) ? SOUND_EFFECT_RADIO_ROBOT : SOUND_EFFECT_RADIO

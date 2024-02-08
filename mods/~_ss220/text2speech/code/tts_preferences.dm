@@ -1,6 +1,24 @@
 /datum/preferences
-	var/datum/tts_seed/tts_seed
+	var/tts_seed
 	var/static/explorer_users = list()
+
+/datum/client_preference/tts_enabled
+	default_value = GLOB.PREF_YES
+	description = "Toggle TTS"
+	key = "TTS_ENABLED"
+
+/datum/preferences/proc/set_random_gendered_tts_seed()
+	var/converted_gender = SStts220.gender_table[gender]
+	tts_seed = pick(SStts220.tts_seeds_by_gender[converted_gender])
+
+/datum/category_item/player_setup_item/player_global/ui/load_preferences(datum/pref_record_reader/R)
+	. = ..()
+	pref.tts_enabled = R.read("enable_tts")
+
+
+/datum/category_item/player_setup_item/player_global/ui/save_preferences(datum/pref_record_writer/W)
+	. = ..()
+	W.write("enable_tts", pref.tts_enabled)
 
 /mob/new_player/proc/check_tts_seed_ready()
 	return TRUE
@@ -16,21 +34,10 @@
 /datum/nano_module/tts_seeds_explorer
 	name = "Эксплорер TTS голосов"
 	var/phrases = TTS_PHRASES
+	var/static/list/static_data
 
-/datum/nano_module/tts_seeds_explorer/ui_interact(mob/user, ui_key, datum/nanoui/ui, force_open, datum/nanoui/master_ui, datum/topic_state/state)
-	. = ..()
-	var/list/data = ui_data(user, ui_key)
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if (!ui)
-		ui = new(user, src, ui_key, "mods-tts_explorer.tmpl", "TTS Expplorer UI", 400, 800)
-		ui.set_initial_data(data)
-		ui.open()
-
-/datum/nano_module/tts_seeds_explorer/ui_data(mob/user, ui_key)
-	var/list/data = list()
-
-	data["selected_seed"] = user.client.prefs.tts_seed
-	data["donator_level"] = 5
+/datum/nano_module/tts_seeds_explorer/proc/init_static_data()
+	static_data = list()
 
 	var/list/providers = list()
 	for(var/_provider in SStts220.tts_providers)
@@ -39,7 +46,7 @@
 			"name" = provider.name,
 			"is_enabled" = provider.is_enabled,
 		))
-	data["providers"] = providers
+	static_data["providers"] = providers
 
 	var/list/seeds = list()
 	for(var/_seed in SStts220.tts_seeds)
@@ -52,8 +59,26 @@
 			"provider" = initial(seed.provider.name),
 			"required_donator_level" = seed.required_donator_level,
 		))
-	data["seeds"] = seeds
-	data["phrases"] = phrases
+	static_data["seeds"] = seeds
+	static_data["phrases"] = phrases
+
+/datum/nano_module/tts_seeds_explorer/ui_interact(mob/user, ui_key, datum/nanoui/ui, force_open, datum/nanoui/master_ui, datum/topic_state/state)
+	. = ..()
+	var/list/data = ui_data(user, ui_key)
+	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if (!ui)
+		ui = new(user, src, ui_key, "mods-tts_explorer.tmpl", "TTS Expplorer UI", 400, 800)
+		ui.set_initial_data(data)
+		ui.open()
+
+/datum/nano_module/tts_seeds_explorer/ui_data(mob/user, ui_key)
+	var/list/data = list()
+	if(!static_data)
+		init_static_data()
+	data += static_data
+
+	data["selected_seed"] = user.client.prefs.tts_seed
+	data["donator_level"] = 5
 
 	return data
 
@@ -83,8 +108,8 @@
 /mob/new_player/Topic(href, href_list)
 	if(config.tts_enabled && (href_list["lobby_ready"] || href_list["late_join"]))
 		if(!usr.client.prefs.tts_seed)
-			to_chat(usr, SPAN_WARNING("У вас не выбран голос."))
-			return
+			usr.client.prefs.set_random_gendered_tts_seed()
+			to_chat(usr, SPAN_WARNING("У вас не выбран голос. Мы вам зарандомили его, так что не жалуйтесь потом."))
 	. = ..()
 
 /datum/preferences/Topic(href, list/href_list)

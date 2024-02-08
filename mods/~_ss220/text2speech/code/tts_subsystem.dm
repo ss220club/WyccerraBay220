@@ -35,6 +35,12 @@ SUBSYSTEM_DEF(tts220)
 	var/list/datum/tts_provider/tts_providers = list()
 
 	var/list/tts_seeds_by_gender = list(TTS_GENDER_ANY = list(), TTS_GENDER_MALE = list(), TTS_GENDER_FEMALE = list())
+	var/list/gender_table = list(
+		NEUTER = TTS_GENDER_ANY,
+		PLURAL = TTS_GENDER_ANY,
+		MALE = TTS_GENDER_MALE,
+		FEMALE = TTS_GENDER_FEMALE
+	)
 
 	var/list/tts_local_channels_by_owner = list()
 
@@ -466,7 +472,7 @@ SUBSYSTEM_DEF(tts220)
 		if(preSFX)
 			play_sfx(listener, preSFX, output.channel, output.volume, output.environment)
 
-		listener << output
+		sound_to(listener, output)
 		return
 
 	if(preSFX)
@@ -487,7 +493,7 @@ SUBSYSTEM_DEF(tts220)
 	output.channel = channel
 	output.volume = volume
 	output.environment = environment
-	listener << output
+	sound_to(listener, output)
 
 /datum/controller/subsystem/tts220/proc/get_local_channel_by_owner(owner)
 	var/channel = tts_local_channels_by_owner[owner]

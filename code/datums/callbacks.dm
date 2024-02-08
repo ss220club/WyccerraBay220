@@ -17,7 +17,7 @@ on the first sleep, and so should be used only where results are not required.
 Callables are proc names or proc references, with references preferred for safety (in most cases).
 These vary between 515 and older major versions:
 Before 515:
-- .proc/name refers to the last override of name on target, OR the global proc name.
+- proc_ref(name refers to the last override of name on target, OR the global proc name.
 After 515:
 - src::name() must be used for the last override, or ::name() for the global.
 - nameof() is available at compile time to resolve safe proc names like nameof(/datum::fooBehavior()).

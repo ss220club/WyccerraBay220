@@ -43,7 +43,7 @@ var/global/bomb_set
 	if(timing)
 		playsound(loc, 'sound/items/timer.ogg',50)
 		if(world.time > timeleft)
-			addtimer(new Callback(src, .proc/explode), 0)
+			addtimer(new Callback(src, proc_ref(explode)), 0)
 		SSnano.update_uis(src)
 
 /obj/machinery/nuclearbomb/use_tool(obj/item/O, mob/living/user, list/click_params)

@@ -61,7 +61,7 @@
 /obj/overmap/visitable/ship/landable/populate_sector_objects()
 	..()
 	var/datum/shuttle/shuttle_datum = SSshuttle.shuttles[shuttle]
-	GLOB.shuttle_moved_event.register(shuttle_datum, src, .proc/on_shuttle_jump)
+	GLOB.shuttle_moved_event.register(shuttle_datum, src, proc_ref(on_shuttle_jump))
 	on_landing(landmark, shuttle_datum.current_location) // We "land" at round start to properly place ourselves on the overmap.
 
 /obj/shuttle_landmark/ship
@@ -115,7 +115,7 @@
 
 /obj/shuttle_landmark/visiting_shuttle/shuttle_arrived(datum/shuttle/shuttle)
 	LAZYSET(core_landmark.visitors, src, shuttle)
-	GLOB.shuttle_moved_event.register(shuttle, src, .proc/shuttle_left)
+	GLOB.shuttle_moved_event.register(shuttle, src, proc_ref(shuttle_left))
 
 /obj/shuttle_landmark/visiting_shuttle/proc/shuttle_left(datum/shuttle/shuttle, obj/shuttle_landmark/old_landmark, obj/shuttle_landmark/new_landmark)
 	if(old_landmark == src)

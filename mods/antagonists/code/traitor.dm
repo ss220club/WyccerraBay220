@@ -31,7 +31,7 @@
 
 		to_chat(user, "Bomb has been planted.")
 
-		GLOB.density_set_event.register(target, src, .proc/explode)
+		GLOB.density_set_event.register(target, src, proc_ref(explode))
 
 	return TRUE
 

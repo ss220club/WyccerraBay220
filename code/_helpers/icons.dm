@@ -421,6 +421,7 @@ The _flatIcons list is a cache for generated icon files.
 
 /proc/getFlatIcon(image/A, defdir=2, deficon=null, defstate="", defblend=BLEND_DEFAULT, always_use_defdir = 0)
 	RETURN_TYPE(/icon)
+	stack_trace("Debugging flat icon stack trace")
 	// We start with a blank canvas, otherwise some icon procs crash silently
 	var/icon/flat = icon('icons/effects/effects.dmi', "icon_state"="nothing") // Final flattened icon
 	if(!A)

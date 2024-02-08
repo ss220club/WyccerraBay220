@@ -99,7 +99,7 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 		crash_with("[src.type] created with [isnull(owner) ? "null" : "invalid"] mob owner")
 		qdel(src)
 		return
-	invoke_async(src, .proc/generate_image, text, target, owner, extra_classes, lifespan)
+	invoke_async(src, proc_ref(generate_image), text, target, owner, extra_classes, lifespan)
 
 /datum/chatmessage/Destroy()
 	if (!QDELING(owned_by))
@@ -116,7 +116,7 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	return ..()
 
 /datum/chatmessage/proc/unregister_and_qdel_self()
-	GLOB.destroyed_event.unregister(owned_by, src, .proc/unregister_and_qdel_self)
+	GLOB.destroyed_event.unregister(owned_by, src, proc_ref(unregister_and_qdel_self))
 	qdel_self()
 
 
@@ -162,7 +162,7 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 		return
 
 	// If haven't been deleted, watch for the owner
-	GLOB.destroyed_event.register(owned_by, src, .proc/unregister_and_qdel_self)
+	GLOB.destroyed_event.register(owned_by, src, proc_ref(unregister_and_qdel_self))
 
 	// Non mobs speakers can be small
 	if (!ismob(target))
@@ -194,7 +194,7 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	var/mheight
 	WXH_TO_HEIGHT(owned_by.MeasureText(replacetext(complete_text, html_metachars, "m"), null, msgwidth), mheight)
 
-	invoke_async(src, .proc/finish_image_generation, mheight, target, owner, complete_text, lifespan)
+	invoke_async(src, proc_ref(finish_image_generation), mheight, target, owner, complete_text, lifespan)
 
 /// Finishes the image generation after the MeasureText() call in generate_image().
 /// Necessary because after that call the proc can resume at the end of the tick and cause overtime.
@@ -261,7 +261,7 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	animate(alpha = 0, time = CHAT_MESSAGE_EOL_FADE)
 
 	// Desctruct yourself
-	addtimer(new Callback(src, .proc/unregister_and_qdel_self), lifespan + CHAT_MESSAGE_GRACE_PERIOD, TIMER_UNIQUE|TIMER_OVERRIDE)
+	addtimer(new Callback(src, proc_ref(unregister_and_qdel_self)), lifespan + CHAT_MESSAGE_GRACE_PERIOD, TIMER_UNIQUE|TIMER_OVERRIDE)
 
 /datum/chatmessage/proc/get_current_alpha(time_spent)
 	if(time_spent < CHAT_MESSAGE_SPAWN_TIME)

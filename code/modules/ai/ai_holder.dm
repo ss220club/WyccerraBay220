@@ -113,7 +113,7 @@ if (!(datum.process_flags & AI_FASTPROCESSING)) { \
 		QDEL_NULL(src)
 		return
 	manage_processing(AI_PROCESSING)
-	GLOB.stat_set_event.register(holder, src, .proc/holder_stat_change)
+	GLOB.stat_set_event.register(holder, src, proc_ref(holder_stat_change))
 
 	if (cooperative)
 		build_faction_friends()
@@ -149,7 +149,7 @@ if (!(datum.process_flags & AI_FASTPROCESSING)) { \
 /// Set the AI as 'busy' for a specific length of time.
 /datum/ai_holder/proc/set_busy_delay(time)
 	set_busy(TRUE)
-	addtimer(new Callback(src, .proc/set_busy, FALSE), time)
+	addtimer(new Callback(src, proc_ref(set_busy), FALSE), time)
 
 /**
  * Makes this ai holder not get processed.

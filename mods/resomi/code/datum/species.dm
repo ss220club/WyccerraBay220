@@ -47,7 +47,6 @@
 	blood_volume = 280
 	hunger_factor = DEFAULT_HUNGER_FACTOR * 1.5
 	taste_sensitivity = TASTE_SENSITIVE
-//	pulse_rate_mod = 1.5 KURWA
 	body_temperature = 314.15
 
 	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
@@ -199,4 +198,5 @@
 		/singleton/emote/audible/cough/resomi,
 		/singleton/emote/audible/laugh/resomi,
 		/singleton/emote/audible/scream/resomi,
+		/singleton/emote/audible/sneeze/resomi,
 		)

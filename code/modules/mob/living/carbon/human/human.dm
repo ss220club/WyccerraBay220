@@ -1577,7 +1577,7 @@
 	species.toggle_stance(src)
 
 // Similar to get_pulse, but returns only integer numbers instead of text.
-/mob/living/carbon/human/proc/get_pulse_as_number()
+/mob/living/carbon/human/proc/get_pulse_as_number()	// IMPORTANT TO KNOW THIS PROC IS FULLY OVERRIDED IN RESOMI MODULE.
 	var/obj/item/organ/internal/heart/heart_organ = internal_organs_by_name[BP_HEART]
 	if(!heart_organ)
 		return 0

@@ -378,3 +378,80 @@
 	desc = "Resomi job clothing for the Internal Affairs Agent"
 	icon_state = "tesh_uniform_iaa"
 	item_state = "tesh_uniform_iaa"
+
+/*
+ * RESOMI SOL GOV UNDER
+ */
+
+/obj/item/clothing/under/solgov/pt/expeditionary/resomi
+	name = "small expeditionary pt smock"
+	desc = "It looks fitted to nonhuman proportions."
+	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_under_resomi.dmi'
+	item_icons = list('mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+	icon_state = "resomi_expeditionpt"
+	worn_state = "resomi_expeditionpt"
+	species_restricted = list(SPECIES_RESOMI)
+	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+
+/obj/item/clothing/under/solgov/utility/expeditionary/resomi
+	name = "small expeditionary uniform"
+	desc = "It looks fitted to nonhuman proportions."
+	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_under_resomi.dmi'
+	item_icons = list('mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+	icon_state = "resomi_blackutility"
+	worn_state = "resomi_blackutility"
+	species_restricted = list(SPECIES_RESOMI)
+	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+
+/obj/item/clothing/under/solgov/utility/expeditionary/officer/resomi
+	name = "small expeditionary officer's uniform"
+	desc = "It looks fitted to nonhuman proportions."
+	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_under_resomi.dmi'
+	item_icons = list('mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+	icon_state = "resomi_blackutility_com"
+	worn_state = "resomi_blackutility_com"
+	species_restricted = list(SPECIES_RESOMI)
+	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+	accessories = list(/obj/item/clothing/accessory/solgov/department/command)
+
+/obj/item/clothing/under/solgov/mildress/expeditionary/resomi
+	name = "small expeditionary dress uniform"
+	desc = "It looks fitted to nonhuman proportions."
+	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_under_resomi.dmi'
+	item_icons = list('mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+	icon_state = "resomi_greydress"
+	worn_state = "resomi_greydress"
+	species_restricted = list(SPECIES_RESOMI)
+	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_under_resomi.dmi')
+
+/obj/item/clothing/under/thermal
+	name = "thermal suit"
+	desc = "Gray thermal suit. Nothing interesting."
+	icon = 'packs/infinity/icons/obj/clothing/obj_under.dmi'
+	item_icons = list(slot_w_uniform_str = 'packs/infinity/icons/mob/onmob/onmob_under.dmi')
+	icon_state = "gray_camo"
+	item_state = "gray_camo"
+	item_flags = ITEM_FLAG_THICKMATERIAL
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
+	cold_protection = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
+	min_cold_protection_temperature = T0C - 75
+	max_heat_protection_temperature = T0C + 50
+	var/max_cooling = 1.2					// in degrees per second - probably don't need to mess with heat capacity here
+	var/thermostat = T0C + 10
+
+
+/obj/item/clothing/under/thermal/resomi
+	name = "small thermal suit"
+	desc = "Looks like very small suit. For children or resomi? This thermal suit is black."
+	icon_state = "thermores_1"
+	item_state = "thermores_1"
+	thermostat = T0C
+	species_restricted = list(SPECIES_RESOMI)
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'packs/infinity/icons/mob/onmob/onmob_under.dmi',
+		)
+
+/obj/item/clothing/under/thermal/resomi/white
+	desc = "Looks like very small suit. For children or resomi? This thermal suit is white. "
+	icon_state = "thermores_2"
+	item_state = "thermores_2"

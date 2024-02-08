@@ -680,6 +680,7 @@
 	if(client.holder)
 		if(statpanel("MC"))
 			stat("CPU:","[world.cpu]")
+			stat("Map CPU:","[world.map_cpu]")
 			stat("Instances:","[length(world.contents)]")
 			stat(null)
 			var/time = Uptime()

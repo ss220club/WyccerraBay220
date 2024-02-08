@@ -25,12 +25,12 @@
 		wet_overlay = image('icons/effects/water.dmi',src,"wet_floor")
 		AddOverlays(wet_overlay)
 
-	timer_id = addtimer(new Callback(src,/turf/simulated/proc/unwet_floor),8 SECONDS, TIMER_STOPPABLE|TIMER_UNIQUE|TIMER_NO_HASH_WAIT|TIMER_OVERRIDE)
+	timer_id = addtimer(new Callback(src, type_proc_ref(/turf/simulated, unwet_floor)),8 SECONDS, TIMER_STOPPABLE|TIMER_UNIQUE|TIMER_NO_HASH_WAIT|TIMER_OVERRIDE)
 
 /turf/simulated/proc/unwet_floor(check_very_wet = TRUE)
 	if(check_very_wet && wet >= 2)
 		wet--
-		timer_id = addtimer(new Callback(src,/turf/simulated/proc/unwet_floor), 8 SECONDS, TIMER_STOPPABLE|TIMER_UNIQUE|TIMER_NO_HASH_WAIT|TIMER_OVERRIDE)
+		timer_id = addtimer(new Callback(src, type_proc_ref(/turf/simulated, unwet_floor)), 8 SECONDS, TIMER_STOPPABLE|TIMER_UNIQUE|TIMER_NO_HASH_WAIT|TIMER_OVERRIDE)
 		return
 
 	wet = 0
@@ -124,7 +124,7 @@
 				slip_stun = 10
 
 			if(M.slip("the [floor_type] floor", slip_stun))
-				addtimer(new Callback(M, /mob/proc/slip_handler, M.dir, slip_dist - 1, 1), 1)
+				addtimer(new Callback(M, type_proc_ref(/mob, slip_handler), M.dir, slip_dist - 1, 1), 1)
 
 
 /mob/proc/slip_handler(dir, dist, delay)

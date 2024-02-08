@@ -212,10 +212,10 @@ var/global/list/additional_antag_types = list()
 
 	refresh_event_modifiers()
 
-	addtimer(new Callback(null, /proc/display_roundstart_logout_report), ROUNDSTART_LOGOUT_REPORT_TIME)
+	addtimer(new Callback(null, global_proc_ref(display_roundstart_logout_report)), ROUNDSTART_LOGOUT_REPORT_TIME)
 
 	var/welcome_delay = rand(waittime_l, waittime_h)
-	addtimer(new Callback(GLOB.using_map, /datum/map/proc/send_welcome), welcome_delay)
+	addtimer(new Callback(GLOB.using_map, type_proc_ref(/datum/map, send_welcome)), welcome_delay)
 	addtimer(new Callback(src, proc_ref(announce_ert_disabled)), welcome_delay + 10 SECONDS)
 
 	//Assign all antag types for this game mode. Any players spawned as antags earlier should have been removed from the pending list, so no need to worry about those.

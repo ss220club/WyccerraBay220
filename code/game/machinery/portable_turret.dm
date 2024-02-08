@@ -367,7 +367,7 @@ var/global/list/turret_icons
 
 	disabled = 1
 	var/power = 4 - severity
-	addtimer(new Callback(src,/obj/machinery/porta_turret/proc/enable), rand(60*power,600*power))
+	addtimer(new Callback(src, type_proc_ref(/obj/machinery/porta_turret, enable)), rand(60*power,600*power))
 
 	..()
 

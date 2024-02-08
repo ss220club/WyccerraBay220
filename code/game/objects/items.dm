@@ -334,7 +334,7 @@
 	GLOB.item_unequipped_event.raise_event(src, user)
 
 	if(user && (z_flags & ZMM_MANGLE_PLANES))
-		addtimer(new Callback(user, /mob/proc/check_emissive_equipment), 0, TIMER_UNIQUE)
+		addtimer(new Callback(user, type_proc_ref(/mob, check_emissive_equipment)), 0, TIMER_UNIQUE)
 
 
 // called just as an item is picked up (loc is not yet changed)
@@ -375,7 +375,7 @@ note this isn't called during the initial dressing of a player
 	GLOB.item_equipped_event.raise_event(src, user, slot)
 
 	if(user && (z_flags & ZMM_MANGLE_PLANES))
-		addtimer(new Callback(user, /mob/proc/check_emissive_equipment), 0, TIMER_UNIQUE)
+		addtimer(new Callback(user, type_proc_ref(/mob, check_emissive_equipment)), 0, TIMER_UNIQUE)
 
 
 /obj/item/proc/equipped_robot(mob/user)

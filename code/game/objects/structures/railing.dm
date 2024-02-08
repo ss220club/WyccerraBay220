@@ -342,7 +342,7 @@
 			kill_health() // Fatboy
 
 		user.jump_layer_shift()
-		addtimer(new Callback(user, /mob/living/proc/jump_layer_shift_end), 2)
+		addtimer(new Callback(user, type_proc_ref(/mob/living, jump_layer_shift_end)), 2)
 
 
 /obj/structure/railing/slam_into(mob/living/L)

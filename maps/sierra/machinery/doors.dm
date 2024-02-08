@@ -33,14 +33,14 @@
 	if(.)
 		for(var/obj/machinery/door/blast/regular/lockdown/door as anything in SSmachines.get_machinery_of_type(/obj/machinery/door/blast/regular/lockdown))
 			if(door.id_tag == id_tag && door.density && door.operable())
-				invoke_async(door, /obj/machinery/door/proc/do_animate, "emag")
+				invoke_async(door, type_proc_ref(/obj/machinery/door, do_animate), "emag")
 
 /obj/machinery/door/blast/regular/lockdown/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	if(isid(tool) || istype(tool, /obj/item/modular_computer/pda))
 		if(allowed(user))
 			for(var/obj/machinery/door/blast/regular/lockdown/door as anything in SSmachines.get_machinery_of_type(/obj/machinery/door/blast/regular/lockdown))
 				if(door.id_tag == id_tag)
-					invoke_async(door, /obj/machinery/door/proc/open)
+					invoke_async(door, type_proc_ref(/obj/machinery/door, open))
 		return TRUE
 	return ..()
 
@@ -48,6 +48,6 @@
 	for(var/obj/machinery/door/blast/regular/lockdown/door as anything in SSmachines.get_machinery_of_type(/obj/machinery/door/blast/regular/lockdown))
 		if(door.id_tag == id_tag)
 			if(door.density)
-				invoke_async(door, /obj/machinery/door/proc/open)
+				invoke_async(door, type_proc_ref(/obj/machinery/door, open))
 			else
-				invoke_async(door, /obj/machinery/door/proc/close)
+				invoke_async(door, type_proc_ref(/obj/machinery/door, close))

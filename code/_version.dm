@@ -5,12 +5,6 @@ Retain even if empty - the future exists
 
 #if DM_VERSION < 515
 
-#define proc_ref(X) (.proc/##X)
-#define type_proc_ref(TYPE, X) (##TYPE.proc/##X)
-#define global_proc_ref(X) (.proc/##X)
-
-#define CALL_EXT call
-
 /proc/ceil(number)
 	return -round(-number)
 
@@ -74,6 +68,12 @@ Retain even if empty - the future exists
 
 #define JSON_STRICT 1
 #define JSON_ALLOW_COMMENTS 2
+
+#define proc_ref(X) (.proc/##X)
+#define type_proc_ref(TYPE, X) (##TYPE.proc/##X)
+#define global_proc_ref(X) (.proc/##X)
+
+#define CALL_EXT call
 
 #else
 

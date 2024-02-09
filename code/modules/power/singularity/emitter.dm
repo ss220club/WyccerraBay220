@@ -293,7 +293,7 @@
 /singleton/public_access/public_method/toggle_emitter
 	name = "toggle emitter"
 	desc = "Toggles whether or not the emitter is active. It must be unlocked to work."
-	call_proc = type_proc_ref(/obj/machinery/power/emitter,  activate)
+	call_proc = type_proc_ref(/obj/machinery/power/emitter, activate)
 
 /singleton/public_access/public_variable/emitter_active
 	expected_type = /obj/machinery/power/emitter

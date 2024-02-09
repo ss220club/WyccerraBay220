@@ -57,7 +57,7 @@ GLOBAL_DATUM_INIT(default_state, /datum/topic_state/default, new)
 		if(cameranet && !cameranet.is_turf_visible(get_turf(src_object)))
 			return STATUS_CLOSE
 		return STATUS_INTERACTIVE
-	else if(get_dist(src_object, src) <= client.view)	// View does not return what one would expect while installed in an inteliCard
+	else if(get_dist(src_object, src) <= get_view_size_x(client.view))	// View does not return what one would expect while installed in an inteliCard
 		return STATUS_INTERACTIVE
 
 	return STATUS_CLOSE

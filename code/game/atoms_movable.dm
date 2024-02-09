@@ -323,7 +323,7 @@
 //Overlays
 /atom/movable/fake_overlay
 	var/atom/master = null
-	var/follow_proc = /atom/movable/proc/move_to_loc_or_null
+	var/follow_proc = type_proc_ref(/atom/movable, move_to_loc_or_null)
 	anchored = TRUE
 	simulated = FALSE
 
@@ -339,8 +339,8 @@
 		GLOB.moved_event.register(master, src, follow_proc)
 		SetInitLoc()
 
-	GLOB.destroyed_event.register(master, src, /datum/proc/qdel_self)
-	GLOB.dir_set_event.register(master, src, /atom/proc/recursive_dir_set)
+	GLOB.destroyed_event.register(master, src, type_proc_ref(/datum, qdel_self))
+	GLOB.dir_set_event.register(master, src, type_proc_ref(/atom, recursive_dir_set))
 
 	. = ..()
 

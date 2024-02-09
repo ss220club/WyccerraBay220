@@ -287,14 +287,14 @@
 	target.vis_contents += src
 	flick("shield_raise", src) //Animation on add / spawn
 	set_dir() //the whole dir bit is for rendering, if you dont use this just remove this and the GLOB.dir_set_event stuff
-	GLOB.dir_set_event.register(user, src, /obj/aura/mobshield/proc/update_dir)
+	GLOB.dir_set_event.register(user, src, type_proc_ref(/obj/aura/mobshield, update_dir))
 
 /obj/aura/mobshield/proc/update_dir(user, old_dir, dir)
 	set_dir(dir) //Theres ways to make vis contents inherit dir but eh
 
 /obj/aura/mobshield/Destroy()
 	if(user)
-		GLOB.dir_set_event.unregister(user, src, /obj/aura/mechshield/proc/update_dir)
+		GLOB.dir_set_event.unregister(user, src, type_proc_ref(/obj/aura/mechshield, update_dir))
 		user.vis_contents -= src
 	. = ..()
 

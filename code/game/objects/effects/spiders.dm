@@ -129,7 +129,7 @@
 		dormant = FALSE
 
 	if(dormant)
-		GLOB.moved_event.register(src, src, /obj/spider/spiderling/proc/disturbed)
+		GLOB.moved_event.register(src, src, type_proc_ref(/obj/spider/spiderling, disturbed))
 	else
 		START_PROCESSING(SSobj, src)
 
@@ -147,7 +147,7 @@
 
 /obj/spider/spiderling/Destroy()
 	if(dormant)
-		GLOB.moved_event.unregister(src, src, /obj/spider/spiderling/proc/disturbed)
+		GLOB.moved_event.unregister(src, src, type_proc_ref(/obj/spider/spiderling, disturbed))
 	STOP_PROCESSING(SSobj, src)
 	. = ..()
 
@@ -167,7 +167,7 @@
 		return
 	dormant = FALSE
 
-	GLOB.moved_event.unregister(src, src, /obj/spider/spiderling/proc/disturbed)
+	GLOB.moved_event.unregister(src, src, type_proc_ref(/obj/spider/spiderling, disturbed))
 	START_PROCESSING(SSobj, src)
 
 /obj/spider/spiderling/Bump(atom/user)

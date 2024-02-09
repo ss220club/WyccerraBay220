@@ -580,9 +580,9 @@
 /singleton/public_access/public_method/open_door
 	name = "open door"
 	desc = "Opens the door if possible."
-	call_proc = /obj/machinery/door/proc/open
+	call_proc = type_proc_ref(/obj/machinery/door,  open)
 
 /singleton/public_access/public_method/toggle_door
 	name = "toggle door"
 	desc = "Toggles whether the door is open or not, if possible."
-	call_proc = /obj/machinery/door/proc/toggle
+	call_proc = type_proc_ref(/obj/machinery/door,  toggle)

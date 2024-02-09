@@ -70,13 +70,13 @@
 	current_field.dir = dir
 	current_field.generator = src
 	colorize(field_color)
-	GLOB.moved_event.register(src, src, /obj/machinery/sealgen/proc/off)
+	GLOB.moved_event.register(src, src, type_proc_ref(/obj/machinery/sealgen, off))
 
 
 /obj/machinery/sealgen/proc/off()
 	qdel(current_field)
 	current_field = null
-	GLOB.moved_event.unregister(src, src, /obj/machinery/sealgen/proc/off)
+	GLOB.moved_event.unregister(src, src, type_proc_ref(/obj/machinery/sealgen, off))
 
 /obj/machinery/sealgen/proc/colorize()
 	if(!current_field) return

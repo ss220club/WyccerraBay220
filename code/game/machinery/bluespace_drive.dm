@@ -221,8 +221,8 @@
 				if (istype(mob, /mob/living/simple_animal) && prob(80))
 					return
 				var/turf/T = pick_area_turf_in_connected_z_levels(
-					list(/proc/is_not_space_area),
-					list(/proc/not_turf_contains_dense_objects, /proc/IsTurfAtmosSafe),
+					list(global_proc_ref(is_not_space_area)),
+					list(global_proc_ref(not_turf_contains_dense_objects), global_proc_ref(IsTurfAtmosSafe)),
 					zlevels[1])
 				if (!T)
 					return

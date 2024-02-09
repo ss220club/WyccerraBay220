@@ -60,23 +60,23 @@
 
 /singleton/vv_set_handler/opacity_hander
 	handled_type = /atom
-	handled_vars = list("opacity" = /atom/proc/set_opacity)
-	predicates = list(/proc/is_num_predicate)
+	handled_vars = list("opacity" = type_proc_ref(/atom, set_opacity))
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/dir_hander
 	handled_type = /atom
-	handled_vars = list("dir" = /atom/proc/set_dir)
-	predicates = list(/proc/is_dir_predicate)
+	handled_vars = list("dir" = type_proc_ref(/atom, set_dir))
+	predicates = list(global_proc_ref(is_dir_predicate))
 
 /singleton/vv_set_handler/ghost_appearance_handler
 	handled_type = /mob/observer/ghost
-	handled_vars = list("appearance" = /mob/observer/ghost/proc/set_appearance)
-	predicates = list(/proc/is_atom_predicate)
+	handled_vars = list("appearance" = type_proc_ref(/mob/observer/ghost, set_appearance))
+	predicates = list(global_proc_ref(is_atom_predicate))
 
 /singleton/vv_set_handler/virtual_ability_handler
 	handled_type = /mob/observer/virtual
 	handled_vars = list("abilities")
-	predicates = list(/proc/is_num_predicate)
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/virtual_ability_handler/handle_set_var(mob/observer/virtual/virtual, variable, var_value, client)
 	..()
@@ -84,37 +84,37 @@
 
 /singleton/vv_set_handler/mob_see_invisible_handler
 	handled_type = /mob
-	handled_vars = list("see_invisible" = /mob/proc/set_see_invisible)
-	predicates = list(/proc/is_num_predicate)
+	handled_vars = list("see_invisible" = type_proc_ref(/mob, set_see_invisible))
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/mob_sight_handler
 	handled_type = /mob
-	handled_vars = list("sight" = /mob/proc/set_sight)
-	predicates = list(/proc/is_num_predicate)
+	handled_vars = list("sight" = type_proc_ref(/mob, set_sight))
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/mob_see_in_dark_handler
 	handled_type = /mob
-	handled_vars = list("see_in_dark" = /mob/proc/set_see_in_dark)
-	predicates = list(/proc/is_num_predicate)
+	handled_vars = list("see_in_dark" = type_proc_ref(/mob, set_see_in_dark))
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/mob_stat_handler
 	handled_type = /mob
-	handled_vars = list("set_stat" = /mob/proc/set_stat)
-	predicates = list(/proc/is_num_predicate)
+	handled_vars = list("set_stat" = type_proc_ref(/mob, set_stat))
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/icon_state_handler
 	handled_type = /atom
-	handled_vars = list("icon_state" = /atom/proc/set_icon_state)
+	handled_vars = list("icon_state" = type_proc_ref(/atom, set_icon_state))
 
 /singleton/vv_set_handler/invisibility_handler
 	handled_type = /atom
-	handled_vars = list("invisibility" = /atom/proc/set_invisibility)
-	predicates = list(/proc/is_num_predicate)
+	handled_vars = list("invisibility" = type_proc_ref(/atom, set_invisibility))
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/name_handler
 	handled_type = /atom
-	handled_vars = list("name" = /atom/proc/SetName)
-	predicates = list(/proc/is_text_predicate)
+	handled_vars = list("name" = type_proc_ref(/atom, SetName))
+	predicates = list(global_proc_ref(is_text_predicate))
 
 /singleton/vv_set_handler/light_handler
 	handled_type = /atom
@@ -134,15 +134,15 @@
 /singleton/vv_set_handler/health_value_handler
 	handled_type = /atom
 	handled_vars = list(
-		"health_max" = /atom/proc/set_max_health,
-		"health_current" = /atom/proc/set_health
+		"health_max" = type_proc_ref(/atom, set_max_health),
+		"health_current" = type_proc_ref(/atom, set_health)
 	)
-	predicates = list(/proc/is_num_predicate)
+	predicates = list(global_proc_ref(is_num_predicate))
 
 /singleton/vv_set_handler/health_dead_handler
 	handled_type = /atom
 	handled_vars = list("health_dead")
-	predicates = list(/proc/is_strict_bool_predicate)
+	predicates = list(global_proc_ref(is_strict_bool_predicate))
 
 /singleton/vv_set_handler/health_dead_handler/handle_set_var(atom/target, variable, var_value, client)
 	if (var_value == target.health_dead)
@@ -157,7 +157,7 @@
 	handled_type = /obj/overmap/visitable/ship
 	handled_vars = list("vessel_mass")
 	predicates = list(
-		/proc/is_num_predicate,
-		/proc/is_non_zero_predicate,
-		/proc/is_non_negative_predicate
+		global_proc_ref(is_num_predicate),
+		global_proc_ref(is_non_zero_predicate),
+		global_proc_ref(is_non_negative_predicate)
 	)

@@ -35,7 +35,7 @@
 	command_announcement.Announce("Extreme subspace anomalies detected. Ensure all persons and assets are accounted for.", "[location_name()] Spooky Sensor Network", zlevels = affecting_z)
 
 /datum/event/deepmaint/proc/create_deepmaint_ladder_connection()
-	var/area/location = pick_area(list(/proc/is_not_space_area, /proc/is_station_area, /proc/is_maint_area))
+	var/area/location = pick_area(list(global_proc_ref(is_not_space_area), global_proc_ref(is_station_area), global_proc_ref(is_maint_area)))
 	if(!location)
 		log_debug("Could not find suitable location(s) to spawn ladders to deepmaint. Aborting.")
 		kill()

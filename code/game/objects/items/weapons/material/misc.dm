@@ -61,7 +61,7 @@
 	origin_tech = list(TECH_MATERIAL = 2, TECH_COMBAT = 1)
 	attack_verb = list("chopped", "torn", "cut")
 	applies_material_colour = 0
-	hitsound = "chop"
+	hitsound = 'sound/weapons/bladeslice.ogg'
 
 /obj/item/material/hatchet/unbreakable
 	unbreakable = TRUE

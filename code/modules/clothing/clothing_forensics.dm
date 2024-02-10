@@ -74,8 +74,6 @@
 /obj/item/clothing/accessory/storage/bandolier/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS
 /obj/item/clothing/accessory/medal/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS
 /obj/item/clothing/accessory/stethoscope/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS
-/obj/item/clothing/accessory/pride_pin/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS
-/obj/item/clothing/accessory/pronouns/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS
 /obj/item/clothing/accessory/arm_guards/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS
 /obj/item/clothing/accessory/leg_guards/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS
 /obj/item/clothing/accessory/badge/clothing_flags = CLOTHING_FLAGS_ACCESSORY_DEFAULT_FIBERLESS

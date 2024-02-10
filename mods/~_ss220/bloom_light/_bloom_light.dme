@@ -9,18 +9,3 @@
 #include "code/lighting_atom.dm"
 
 #endif
-// BEGIN_INTERNALS
-// END_INTERNALS
-// BEGIN_FILE_DIR
-#define FILE_DIR .
-// END_FILE_DIR
-// BEGIN_PREFERENCES
-// END_PREFERENCES
-// BEGIN_INCLUDE
-#include "_bloom_light.dm"
-#include "code\_renderer.dm"
-#include "code\lighting.dm"
-#include "code\lighting_atom.dm"
-#include "code\preferences.dm"
-#include "code\__HELPERS\color_matrix.dm"
-// END_INCLUDE

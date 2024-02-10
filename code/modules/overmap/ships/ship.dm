@@ -49,11 +49,11 @@ var/global/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 	min_speed = round(min_speed, SHIP_MOVE_RESOLUTION)
 	max_speed = round(max_speed, SHIP_MOVE_RESOLUTION)
 	SSshuttle.ships += src
-	START_PROCESSING(SSobj, src)
+	START_PROCESSING(SSovermap, src)
 	base_sensor_visibility = initial(base_sensor_visibility) + round(sqrt(vessel_mass/SENSOR_COEFFICENT),1)
 
 /obj/overmap/visitable/ship/Destroy()
-	STOP_PROCESSING(SSobj, src)
+	STOP_PROCESSING(SSovermap, src)
 	SSshuttle.ships -= src
 	if(length(consoles))
 		for(var/obj/machinery/computer/ship/machine in consoles)

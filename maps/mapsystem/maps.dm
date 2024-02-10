@@ -461,9 +461,9 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 // Get a list of 'nearby' or 'connected' zlevels.
 // You should at least return a list with the given z if nothing else.
-/datum/map/proc/get_map_levels(var/srcz, var/long_range = FALSE, var/om_range = -1)
+/datum/map/proc/get_map_levels(srcz, long_range = FALSE, om_range = -1)
 	//Get what sector we're in
-	var/obj/effect/overmap/visitable/O = get_overmap_sector(srcz)
+	var/obj/overmap/visitable/O = get_overmap_sector(srcz)
 	if(istype(O))
 		//Just the sector we're in
 		if(om_range == -1)
@@ -473,7 +473,7 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 		var/list/connections = list()
 		var/turf/T = get_turf(O)
 		var/turfrange = long_range ? max(0, om_range) : om_range
-		for(var/obj/effect/overmap/visitable/V in range(turfrange, T))
+		for(var/obj/overmap/visitable/V in range(turfrange, T))
 			connections += V.map_z // Adding list to list adds contents
 		return connections
 
@@ -489,7 +489,7 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 		else
 			return GetConnectedZlevels(srcz)
 
-/proc/get_overmap_sector(var/z)
+/proc/get_overmap_sector(z)
 	if(GLOB.using_map.use_overmap)
 		return map_sectors["[z]"]
 	else

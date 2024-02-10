@@ -28,7 +28,6 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 //print a testing-mode debug message to world.log
 /proc/testing(msg)
 	to_world_log("## TESTING: [msg][log_end]")
-	rustg_log_write(GLOB.world_game_log, "## TESTING: [html_decode(msg)][GLOB.log_end]")
 
 /proc/game_log(category, text)
 	// [SIERRA-EDIT] - RUST_G
@@ -121,7 +120,6 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 		var/client/client = user_or_client
 		entry += "[client.ckey]"
 	entry += ":\n[text]"
-	rustg_log_write(GLOB.world_game_log, "TGUI: [entry][GLOB.log_end]")
 
 /proc/log_unit_test(text)
 	to_world_log("## UNIT_TEST ##: [text]")

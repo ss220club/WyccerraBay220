@@ -1,6 +1,5 @@
 // In case upstream decides to make lobby use assets
 /datum/asset/simple/mod_lobby
-	verify = FALSE
 	assets = list(
 		"courierprime-code.woff" = 'mods/lobbyscreen/html/fonts/courierprime-code.woff',
 		"round-control.woff"     = 'mods/lobbyscreen/html/fonts/round-control.woff',
@@ -12,5 +11,4 @@
 	)
 
 /datum/asset/simple/mod_lobby_loop
-	verify = FALSE
 	assets = list("loop.mp4" = 'mods/lobbyscreen/html/assets/loop.mp4')

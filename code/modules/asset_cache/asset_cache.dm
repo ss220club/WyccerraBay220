@@ -55,7 +55,7 @@ Note: If your code uses output() with assets you will need to call asset_flush o
 		for(var/asset in unreceived)
 			var/datum/asset_cache_item/ACI
 			if ((ACI = SSassets.cache[asset]))
-				log_asset("Sending asset [asset] to client [client]")
+				log_debug("Sending asset [asset] to client [client]")
 				send_rsc(client, ACI.resource, asset)
 
 		client.sent_assets |= unreceived
@@ -90,8 +90,7 @@ Note: If your code uses output() with assets you will need to call asset_flush o
 		if (OACI.md5 != ACI.md5)
 			stack_trace("ERROR: new asset added to the asset cache with the same name as another asset: [asset_name] existing asset md5: [OACI.md5] new asset md5:[ACI.md5]")
 		else
-			var/list/stacktrace = gib_stack_trace()
-			log_asset("WARNING: dupe asset added to the asset cache: [asset_name] existing asset md5: [OACI.md5] new asset md5:[ACI.md5]\n[stacktrace.Join("\n")]")
+			log_debug("WARNING: dupe asset added to the asset cache: [asset_name] existing asset md5: [OACI.md5] new asset md5:[ACI.md5]")
 	SSassets.cache[asset_name] = ACI
 	return ACI
 

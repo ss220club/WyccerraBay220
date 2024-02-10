@@ -170,7 +170,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	//SS220 edit
 	// Automatic admin rights for people connecting locally.
 	// Concept stolen from /tg/ with deepest gratitude.
-	var/local_connection = (config.auto_local_admin && (isnull(address) || localhost_addresses[address]))
+	var/local_connection = (config.auto_local_admin && (isnull(address) || GLOB.localhost_addresses[address]))
 	if(local_connection && !admin_datums[ckey])
 		new /datum/admins("Local Host", 32767, ckey) // Прости меня бог за это
 

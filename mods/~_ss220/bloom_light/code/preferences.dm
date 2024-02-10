@@ -10,7 +10,7 @@
 			R.GraphicsUpdate()
 
 /datum/client_preference/glare
-	description = "Show glare"
+	description = "Show lamp glare"
 	key = "GLARE"
 	options = list(GLOB.PREF_YES, GLOB.PREF_NO)
 	default_value = GLOB.PREF_YES

@@ -50,10 +50,6 @@
 	if(istype(M))
 		var/level = M.get_preference_value(/datum/client_preference/bloomlevel)
 		if(level == GLOB.PREF_OFF)
-			filters += filter(
-				type = "color",
-				color = "#00000000"
-			)
 			return
 		else if(level == GLOB.PREF_LOW)
 			bloomsize = 2

@@ -18,11 +18,11 @@
 	default_value = GLOB.PREF_MED
 
 /datum/client_preference/bloomlevel/changed(mob/preference_mob, new_value)
-	if(preference_mob?.client)
-		for(var/atom/movable/renderer/R as anything in preference_mob.renderers)
-			if (istype(R, /atom/movable/renderer/lamps))
-				var /atom/movable/renderer/lamps/N = R
-				N.UpdateRenderer()
+	if(!preference_mob?.client)
+		return
+		
+	for(var/atom/movable/renderer/lamps/lamps_to_update in preference_mob.renderers)
+		lamps_to_update.UpdateRenderer()
 
 /datum/client_preference/glare
 	description = "Show lamp glare"

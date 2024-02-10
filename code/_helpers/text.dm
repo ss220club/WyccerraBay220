@@ -74,14 +74,14 @@
 	for(var/i=1, i<=length(input), i++)
 		var/ascii_char = text2ascii(input,i)
 		switch(ascii_char)
-			// A  .. Z
-			if(65 to 90)			//Uppercase Letters
+			// A  .. Z, А  .. Я
+			if(65 to 90, 1040 to 1071, 1025)			//Uppercase Letters
 				output += ascii2text(ascii_char)
 				number_of_alphanumeric++
 				last_char_group = 4
 
-			// a  .. z
-			if(97 to 122)			//Lowercase Letters
+			// a  .. z, а  .. я
+			if(97 to 122, 1072 to 1103, 1105)			//Lowercase Letters
 				if(last_char_group<2 && force_first_letter_uppercase)
 					output += ascii2text(ascii_char-32)	//Force uppercase first character
 				else
@@ -97,8 +97,8 @@
 				number_of_alphanumeric++
 				last_char_group = 3
 
-			// '  -  .
-			if(39,45,46)			//Common name punctuation
+			// '  -  . ,
+			if(39,44,45,46)			//Common name punctuation
 				if(!last_char_group) continue
 				output += ascii2text(ascii_char)
 				last_char_group = 2
@@ -137,9 +137,9 @@
 	for(var/i=1, i<=length(text), i++)
 		var/ascii_char = text2ascii(text,i)
 		switch(ascii_char)
-			if(65 to 90)	//A-Z, make them lowercase
+			if(65 to 90, 1040 to 1071, 1025)	//A-Z, а-я, make them lowercase
 				dat += ascii2text(ascii_char + 32)
-			if(97 to 122)	//a-z
+			if(97 to 122, 1072 to 1103, 1105)	//a-z, а-я
 				dat += ascii2text(ascii_char)
 				last_was_space = 0
 			if(48 to 57)	//0-9
@@ -371,16 +371,16 @@
 	for(var/i=1, i<=length(input), i++)
 		var/ascii_char = text2ascii(input,i)
 		switch(ascii_char)
-			// A  .. Z
-			if(65 to 90)			//Uppercase Letters
-				return 1
-			// a  .. z
-			if(97 to 122)			//Lowercase Letters
-				return 1
+			// A  .. Z, а  .. я
+			if(65 to 90, 1040 to 1071, 1025)			//Uppercase Letters
+				return TRUE
+			// a  .. z, а  .. я
+			if(97 to 122, 1072 to 1103, 1105)				//Lowercase Letters
+				return TRUE
 
 			// 0  .. 9
 			if(48 to 57)			//Numbers
-				return 1
+				return TRUE
 	return 0
 
 /proc/generateRandomString(length)

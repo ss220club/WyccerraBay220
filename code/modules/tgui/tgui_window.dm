@@ -96,14 +96,14 @@
 		inline_assets_str = "<script>\n" + inline_assets_str + "</script>\n"
 	html = replacetextEx(html, "<!-- tgui:assets -->\n", inline_assets_str)
 	// Inject inline HTML
-	if (inline_html)
+	if(inline_html)
 		html = replacetextEx(html, "<!-- tgui:inline-html -->", inline_html)
 	// Inject inline JS
-	if (inline_js)
+	if(inline_js)
 		inline_js = "<script>\n[inline_js]\n</script>"
 		html = replacetextEx(html, "<!-- tgui:inline-js -->", inline_js)
 	// Inject inline CSS
-	if (inline_css)
+	if(inline_css)
 		inline_css = "<style>\n[inline_css]\n</style>"
 		html = replacetextEx(html, "<!-- tgui:inline-css -->", inline_css)
 	// Open the window
@@ -277,6 +277,7 @@
 /datum/tgui_window/proc/send_asset(datum/asset/asset)
 	if(!client || !asset)
 		return
+
 	sent_assets |= list(asset)
 	. = asset.send(client)
 	if(istype(asset, /datum/asset/spritesheet))
@@ -344,7 +345,7 @@
 	// If not locked, handle these message types
 	switch(type)
 		if("ping")
-			send_message("pingReply", payload)
+			send_message("ping/reply", payload)
 		if("suspend")
 			close(can_be_suspended = TRUE)
 		if("close")

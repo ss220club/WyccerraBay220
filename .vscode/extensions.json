@@ -4,6 +4,8 @@
     "platymuus.dm-langclient",
     "biomejs.biome",
     "eamodio.gitlens",
-    "anturk.dmi-editor"
+    "anturk.dmi-editor",
+    "stylemistake.auto-comment-blocks",
+    "esbenp.prettier-vscode"
   ]
 }

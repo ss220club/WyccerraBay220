@@ -100,7 +100,7 @@ SUBSYSTEM_DEF(tgui)
 		user.client.tgui_windows = list()
 		for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
 			var/window_id = TGUI_WINDOW_ID(i)
-			user << browse(null, "window=[window_id]")
+			to_target(user, browse(null, "window=[window_id]"))
 
 /**
  * public
@@ -118,7 +118,7 @@ SUBSYSTEM_DEF(tgui)
 	// Unset machine just to be sure.
 	user.unset_machine()
 	// Close window directly just to be sure.
-	user << browse(null, "window=[window_id]")
+	to_target(user, browse(null, "window=[window_id]"))
 
  /**
   * public

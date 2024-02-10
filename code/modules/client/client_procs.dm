@@ -44,12 +44,12 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	var/asset_cache_job
 	if(href_list["asset_cache_confirm_arrival"])
 		asset_cache_job = asset_cache_confirm_arrival(href_list["asset_cache_confirm_arrival"])
-		if (!asset_cache_job)
+		if(!asset_cache_job)
 			return
 
 
 	//search the href for script injection
-	if( findtext(href,"<script",1,0) )
+	if(findtext(href,"<script",1,0))
 		to_world_log("Attempted use of scripts within a topic call, by [src]")
 		message_admins("Attempted use of scripts within a topic call, by [src]")
 		//qdel(usr)
@@ -88,15 +88,15 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 		ticket.close(client_repository.get_lite_client(usr.client))
 
-	if (GLOB.href_logfile)
+	if(GLOB.href_logfile)
 		to_chat(GLOB.href_logfile, "<small>[time2text(world.timeofday,"hh:mm")] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br>")
 
 	//byond bug ID:2256651
-	if (asset_cache_job && (asset_cache_job in completed_asset_jobs))
+	if(asset_cache_job && (asset_cache_job in completed_asset_jobs))
 		to_chat(src, "<span class='danger'>An error has been detected in how your client is receiving resources. Attempting to correct.... (If you keep seeing these messages you might want to close byond and reconnect)</span>")
-		src << browse("...", "window=asset_cache_browser")
+		to_target(src, browse("...", "window=asset_cache_browser"))
 		return
-	if (href_list["asset_cache_preload_data"])
+	if(href_list["asset_cache_preload_data"])
 		asset_cache_preload_data(href_list["asset_cache_preload_data"])
 		return
 

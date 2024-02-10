@@ -31,7 +31,7 @@
 	if (!islist(new_assets))
 		new_assets = list("[new_assets]" = md5(SSassets.cache[new_assets]))
 
-	src << browse(json_encode(new_assets|sent_assets), "file=asset_data.json&display=0")
+	to_target(src, browse(json_encode(new_assets|sent_assets), "file=asset_data.json&display=0"))
 
 /// Blocks until all currently sending browser assets have been sent.
 /// Due to byond limitations, this proc will sleep for 1 client round trip even if the client has no pending asset sends.
@@ -40,7 +40,7 @@
 	var/job = ++last_asset_job
 	var/t = 0
 	var/timeout_time = timeout
-	src << browse({"<script>window.location.href="?asset_cache_confirm_arrival=[job]"</script>"}, "window=asset_cache_browser")
+	to_target(src, browse({"<script>window.location.href="?asset_cache_confirm_arrival=[job]"</script>"}, "window=asset_cache_browser"))
 
 	while(!completed_asset_jobs["[job]"] && t < timeout_time) // Reception is handled in Topic()
 		stoplag(1) // Lock up the caller until this is received.

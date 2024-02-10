@@ -287,7 +287,7 @@ SUBSYSTEM_DEF(tts220)
 	if(sanitized_messages_caching)
 		sanitized_messages_cache.Cut()
 		if(debug_mode_enabled)
-			world.log << "sanitized_messages_cache: HIT=[sanitized_messages_cache_hit] / MISS=[sanitized_messages_cache_miss]"
+			log_world("sanitized_messages_cache: HIT=[sanitized_messages_cache_hit] / MISS=[sanitized_messages_cache_miss]")
 		sanitized_messages_cache_hit = 0
 		sanitized_messages_cache_miss = 0
 

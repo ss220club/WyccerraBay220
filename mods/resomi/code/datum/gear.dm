@@ -9,14 +9,14 @@
 
 
 /datum/gear/uniform/resomi
-	display_name = "(Resomi) uniform, Sport"
+	display_name = "(Resomi) uniform, sport"
 	path = /obj/item/clothing/under/resomi/sport
 	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
 
 /datum/gear/uniform/resomi/smock
-	display_name = "(Resomi) smocks selection"
+	display_name = "(Resomi) smock, standart"
 	path = /obj/item/clothing/under/resomi
 
 /datum/gear/uniform/resomi/smock/New()
@@ -26,6 +26,8 @@
 	uniform["engineering smock"] =	/obj/item/clothing/under/resomi/yellow
 	uniform["robotics smock"]	 =	/obj/item/clothing/under/resomi/robotics
 	uniform["security smock"]	 =	/obj/item/clothing/under/resomi/red
+	uniform["medical uniform"]	 =	/obj/item/clothing/under/resomi/medical
+	uniform["science uniform"]	 =	/obj/item/clothing/under/resomi/science
 	gear_tweaks += new/datum/gear_tweak/path(uniform)
 
 
@@ -35,6 +37,16 @@
 	flags = GEAR_HAS_COLOR_SELECTION
 
 
+/datum/gear/tactical/security_uniforms/resomi
+	display_name = "(Resomi) smock, Security"
+	path = /obj/item/clothing/under/resomi/red
+	sort_category = "Xenowear"
+	whitelisted = list(SPECIES_RESOMI)
+
+/datum/gear/tactical/security_uniforms/resomi/New()
+	return
+
+
 /datum/gear/uniform/resomi/dress
 	display_name = "(Resomi) dresses selection"
 	path = /obj/item/clothing/under/resomi/dress
@@ -42,30 +54,15 @@
 
 
 /datum/gear/uniform/resomi/utility
-	display_name = "(Resomi) uniform selection"
+	display_name = "(Resomi) uniform, utility"
 	path = /obj/item/clothing/under/resomi/utility
 	flags = GEAR_HAS_TYPE_SELECTION
 
+
 /datum/gear/uniform/resomi/dark_worksmock
-	display_name = "(Resomi) work uniform, dark"
-	path = /obj/item/clothing/under/resomi/work_black
+	display_name = "(Resomi) uniform, work"
+	path = /obj/item/clothing/under/resomi/work
 	flags = GEAR_HAS_TYPE_SELECTION
-
-
-/datum/gear/uniform/resomi/light_worksmock
-	display_name = "(Resomi) work uniform, light"
-	path = /obj/item/clothing/under/resomi/work_white
-	flags = GEAR_HAS_TYPE_SELECTION
-
-
-/datum/gear/uniform/resomi/med
-	display_name = "(Resomi) uniform, Medical"
-	path = /obj/item/clothing/under/resomi/medical
-
-
-/datum/gear/uniform/resomi/science
-	display_name = "(Resomi) uniform, Science"
-	path = /obj/item/clothing/under/resomi/science
 
 
 /datum/gear/eyes/resomi
@@ -81,12 +78,18 @@
 	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
+/datum/gear/eyes/security/resomi/New()
+	return
+
 
 /datum/gear/eyes/medical/resomi
 	display_name = "(Resomi) sun medhud lenses"
 	path = /obj/item/clothing/glasses/hud/health/lenses
 	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
+
+/datum/gear/eyes/medical/resomi/New()
+	return
 
 
 /datum/gear/accessory/resomi_mantle
@@ -117,35 +120,44 @@
 
 
 /datum/gear/suit/resomi
-	display_name = "(Resomi) standard/job cloaks"
-	path = /obj/item/clothing/suit/storage/resomicloak
+	display_name = "(Resomi) cloaks, alt"
+	path = /obj/item/clothing/suit/storage/resomicloak_alt
 	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 	flags = GEAR_HAS_SUBTYPE_SELECTION
 
 
-/datum/gear/suit/resomi/cloak
-	display_name = "(Resomi) small cloak"
-	path = /obj/item/clothing/suit/storage/toggle/Resomicoat
+/datum/gear/suit/resomi/standart
+	display_name = "(Resomi) cloaks, standart"
+	path = /obj/item/clothing/suit/storage/resomicloak
 	flags = GEAR_HAS_TYPE_SELECTION
 
 
-/datum/gear/suit/resomi/alt
-	display_name = "(Resomi) alt cloaks"
-	path = /obj/item/clothing/suit/storage/resomicloak_alt
-
-
 /datum/gear/suit/resomi/belted
-	display_name = "(Resomi) belted cloaks"
+	display_name = "(Resomi) cloaks, belted"
 	path = /obj/item/clothing/suit/storage/resomicloak_belted
 
 
 /datum/gear/suit/resomi/hood
-	display_name = "(Resomi) Hooded Cloak"
+	display_name = "(Resomi) cloaks, hooded"
 	path = /obj/item/clothing/suit/storage/hooded/resomi
 
 
 /datum/gear/suit/resomi/labcoat
 	display_name = "(Resomi) small labcoat"
-	path = /obj/item/clothing/suit/storage/toggle/Resomilabcoat
+	path = /obj/item/clothing/suit/storage/toggle/resomilabcoat
 	flags = GEAR_HAS_COLOR_SELECTION
+
+
+/datum/gear/suit/resomi_coat
+	display_name = "(Resomi) coats selection"
+	path = /obj/item/clothing/suit/storage/toggle/resomicoat
+	sort_category = "Xenowear"
+	whitelisted = list(SPECIES_RESOMI)
+
+/datum/gear/suit/resomi/coat/New()
+	..()
+	var/resomi = list()
+	resomi["black coat"] = /obj/item/clothing/suit/storage/toggle/resomicoat
+	resomi["white coat"] = /obj/item/clothing/suit/storage/toggle/resomicoat/white
+	gear_tweaks += new/datum/gear_tweak/path(resomi)

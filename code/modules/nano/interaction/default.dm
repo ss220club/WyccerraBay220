@@ -13,9 +13,7 @@ GLOBAL_DATUM_INIT(default_state, /datum/topic_state/default, new)
 	if(can_admin_interact())
 		return STATUS_INTERACTIVE							// Admins are more equal
 
-	var/client_view = getviewsize(client)
-	var/view_x = client_view[1]
-	if(!client || get_dist(src_object, src)	> view_x)	// Preventing ghosts from having a million windows open by limiting to objects in range
+	if(!client || get_dist(src_object, src)	> get_view_size_x(client.view))	// Preventing ghosts from having a million windows open by limiting to objects in range
 		return STATUS_CLOSE
 	return STATUS_UPDATE									// Ghosts can view updates
 

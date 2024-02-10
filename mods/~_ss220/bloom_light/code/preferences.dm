@@ -31,8 +31,8 @@
 	default_value = GLOB.PREF_YES
 
 /datum/client_preference/glare/changed(mob/preference_mob, new_value)
-	if(preference_mob?.client)
-		for(var/atom/movable/renderer/R as anything in preference_mob.renderers)
-			if (istype(R, /atom/movable/renderer/lamps_glare))
-				var/atom/movable/renderer/lamps_glare/N = R
-				N.UpdateRenderer()
+	if(!preference_mob?.client)
+		return
+		
+	for(var/atom/movable/renderer/lamps_glare/glare_to_update in preference_mob.renderers)
+		glare_to_update.UpdateRenderer()

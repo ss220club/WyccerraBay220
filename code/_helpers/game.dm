@@ -593,3 +593,7 @@
 /proc/get_view_size_x(view)
 	var/list/view_size = getviewsize(view)
 	return view_size[1]
+
+/proc/get_view_size_y(view)
+	var/list/view_size = getviewsize(view)
+	return view_size[2]

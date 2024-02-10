@@ -571,7 +571,7 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 	H.change_light_colour(H.getDarkvisionTint())
 
 	if(H.stat == DEAD)
-		return 1
+		return TRUE
 
 	if(!H.druggy)
 		H.set_see_in_dark((H.sight == (SEE_TURFS|SEE_MOBS|SEE_OBJS)) ? 8 : min(H.getDarkvisionRange() + H.equipment_darkness_modifier, 8))
@@ -582,7 +582,7 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 		H.eye_blind = max(H.eye_blind, 1)
 
 	if(!H.client)//no client, no screen to update
-		return 1
+		return TRUE
 
 	H.set_fullscreen(H.eye_blind && !H.equipment_prescription, "blind", /obj/screen/fullscreen/blind)
 	H.set_fullscreen(H.stat == UNCONSCIOUS, "blackout", /obj/screen/fullscreen/blackout)
@@ -594,8 +594,15 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 	H.set_fullscreen(H.eye_blurry, "blurry", /obj/screen/fullscreen/blurry)
 	H.set_fullscreen(H.druggy, "high", /obj/screen/fullscreen/high)
 
-	for(var/overlay in H.equipment_overlays)
-		H.client.screen |= overlay
+	var/client/client_to_update = H.client
+	var/list/viewsize = getviewsize(client_to_update.view)
+	var/scale_x = viewsize[1] / (480 / world.icon_size)
+	var/scale_y = viewsize[2] / (480 / world.icon_size)
+	var/matrix/M = matrix()
+	M.Scale(scale_x, scale_y)
+	for(var/obj/screen/overlay as anything in H.equipment_overlays)
+		overlay.transform = M
+		client_to_update.screen |= overlay
 
 	return 1
 

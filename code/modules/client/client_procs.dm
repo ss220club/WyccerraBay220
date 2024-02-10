@@ -411,7 +411,7 @@
 		'html/images/sierralogo.png',
 		// [/SIERRA-ADD]
 		)
-	addtimer(new Callback(src, proc_ref(after_send_resources)), 1 SECOND)
+	addtimer(new Callback(src, PROC_REF(after_send_resources)), 1 SECOND)
 
 
 /client/proc/after_send_resources()

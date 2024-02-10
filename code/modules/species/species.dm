@@ -489,7 +489,7 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 /datum/species/proc/handle_pre_spawn(mob/living/carbon/human/H)
 	// Changing species can change NPC behaviour, so delete the holder if there is one
 	if (H.ai_holder && istype(H.ai_holder, /datum))
-		GLOB.stat_set_event.unregister(H, H.ai_holder, type_proc_ref(/datum/ai_holder, holder_stat_change))
+		GLOB.stat_set_event.unregister(H, H.ai_holder, TYPE_PROC_REF(/datum/ai_holder, holder_stat_change))
 		QDEL_NULL(H.ai_holder)
 
 /datum/species/proc/handle_death(mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).

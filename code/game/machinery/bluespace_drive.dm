@@ -85,7 +85,7 @@
 /obj/machinery/bluespacedrive/on_death()
 	playsound(loc, 'sound/machines/BSD_explosion.ogg', 100)
 	visible_message(SPAN_DANGER(FONT_LARGE("\The [src] begins emitting an ear-splitting, horrible shrill! Get back!")))
-	addtimer(new Callback(src, proc_ref(explode)), 5 SECONDS)
+	addtimer(new Callback(src, PROC_REF(explode)), 5 SECONDS)
 	..()
 
 
@@ -221,8 +221,8 @@
 				if (istype(mob, /mob/living/simple_animal) && prob(80))
 					return
 				var/turf/T = pick_area_turf_in_connected_z_levels(
-					list(global_proc_ref(is_not_space_area)),
-					list(global_proc_ref(not_turf_contains_dense_objects), global_proc_ref(IsTurfAtmosSafe)),
+					list(GLOBAL_PROC_REF(is_not_space_area)),
+					list(GLOBAL_PROC_REF(not_turf_contains_dense_objects), GLOBAL_PROC_REF(IsTurfAtmosSafe)),
 					zlevels[1])
 				if (!T)
 					return

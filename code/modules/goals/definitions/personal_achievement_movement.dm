@@ -3,7 +3,7 @@
 	..()
 	if(owner)
 		var/datum/mind/mind = owner
-		GLOB.moved_event.register(mind.current, src, proc_ref(owner_moved))
+		GLOB.moved_event.register(mind.current, src, PROC_REF(owner_moved))
 
 /datum/goal/movement/proc/owner_moved()
 	return

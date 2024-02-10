@@ -64,7 +64,7 @@
 		return
 	if (!owner.equip_to_slot_if_possible(item, slot))
 		return
-	GLOB.item_unequipped_event.register(item, src, type_proc_ref(/obj/item/organ/internal/augment/active/item, item_dropped))
+	GLOB.item_unequipped_event.register(item, src, TYPE_PROC_REF(/obj/item/organ/internal/augment/active/item, item_dropped))
 	if (deploy_sound)
 		playsound(owner, deploy_sound, 30)
 	if (as_owner)

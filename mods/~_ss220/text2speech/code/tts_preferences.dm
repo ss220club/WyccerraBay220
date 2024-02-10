@@ -65,7 +65,7 @@
 		if(!(href_list["seed"] in SStts220.tts_seeds))
 			return
 
-		invoke_async(GLOBAL_PROC, global_proc_ref(tts_cast), null, usr, href_list["phrase"], href_list["seed"], FALSE)
+		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, usr, href_list["phrase"], href_list["seed"], FALSE)
 	if(href_list["select"])
 		if(!(href_list["seed"] in SStts220.tts_seeds))
 			return

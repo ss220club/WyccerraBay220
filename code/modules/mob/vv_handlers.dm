@@ -1,6 +1,6 @@
 /singleton/vv_set_handler/mob_confused
 	handled_type = /mob
-	predicates = list(global_proc_ref(is_num_predicate), global_proc_ref(is_non_negative_predicate), global_proc_ref(is_int_predicate))
+	predicates = list(GLOBAL_PROC_REF(is_num_predicate), GLOBAL_PROC_REF(is_non_negative_predicate), GLOBAL_PROC_REF(is_int_predicate))
 	handled_vars = list("confused")
 
 

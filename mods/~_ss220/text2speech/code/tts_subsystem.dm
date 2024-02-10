@@ -352,7 +352,7 @@ SUBSYSTEM_DEF(tts220)
 		play_tts(speaker, listener, filename, is_local, effect, preSFX, postSFX)
 		return
 
-	var/datum/callback/play_tts_cb = new /datum/callback(src, proc_ref(play_tts), speaker, listener, filename, is_local, effect, preSFX, postSFX)
+	var/datum/callback/play_tts_cb = new /datum/callback(src, PROC_REF(play_tts), speaker, listener, filename, is_local, effect, preSFX, postSFX)
 
 	if(LAZYLEN(tts_queue[filename]))
 		tts_reused++
@@ -360,7 +360,7 @@ SUBSYSTEM_DEF(tts220)
 		LAZYADD(tts_queue[filename], play_tts_cb)
 		return
 
-	var/datum/callback/cb = new /datum/callback(src, proc_ref(get_tts_callback), speaker, listener, filename, seed, is_local, effect, preSFX, postSFX)
+	var/datum/callback/cb = new /datum/callback(src, PROC_REF(get_tts_callback), speaker, listener, filename, seed, is_local, effect, preSFX, postSFX)
 	queue_request(text, seed, cb)
 	LAZYADD(tts_queue[filename], play_tts_cb)
 
@@ -397,7 +397,7 @@ SUBSYSTEM_DEF(tts220)
 	rustg_ss220_file_write_b64decode(voice, "[filename].ogg")
 
 	if(!config.tts_cache_enabled)
-		addtimer(new /datum/callback(src, proc_ref(cleanup_tts_file), "[filename].ogg"), 30 SECONDS)
+		addtimer(new /datum/callback(src, PROC_REF(cleanup_tts_file), "[filename].ogg"), 30 SECONDS)
 
 	for(var/datum/callback/cb in tts_queue[filename])
 		invoke_async(cb)
@@ -427,7 +427,7 @@ SUBSYSTEM_DEF(tts220)
 			CRASH("Invalid sound effect chosen.")
 	if(effect != SOUND_EFFECT_NONE)
 		if(!fexists(voice))
-			var/datum/callback/play_tts_cb = new /datum/callback(src, proc_ref(play_tts), speaker, listener, filename, is_local, effect, preSFX, postSFX)
+			var/datum/callback/play_tts_cb = new /datum/callback(src, PROC_REF(play_tts), speaker, listener, filename, is_local, effect, preSFX, postSFX)
 			if(LAZYLEN(tts_effects_queue[voice]))
 				LAZYADD(tts_effects_queue[voice], play_tts_cb)
 				return

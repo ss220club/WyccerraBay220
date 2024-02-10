@@ -39,10 +39,10 @@
 			return null
 
 	if(!silent_target && src != user && ismob(src))
-		invoke_async(GLOBAL_PROC, global_proc_ref(tts_cast), null, src, tts_test_str, new_tts_seed, FALSE)
+		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, src, tts_test_str, new_tts_seed, FALSE)
 
 	if(user)
-		invoke_async(GLOBAL_PROC, global_proc_ref(tts_cast), null, user, tts_test_str, new_tts_seed, FALSE)
+		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, user, tts_test_str, new_tts_seed, FALSE)
 
 	return new_tts_seed
 

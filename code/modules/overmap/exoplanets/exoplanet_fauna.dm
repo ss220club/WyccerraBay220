@@ -39,8 +39,8 @@
 
 /obj/overmap/visitable/sector/exoplanet/proc/track_animal(mob/A)
 	animals += A
-	GLOB.death_event.register(A, src, type_proc_ref(/obj/overmap/visitable/sector/exoplanet, remove_animal))
-	GLOB.destroyed_event.register(A, src, type_proc_ref(/obj/overmap/visitable/sector/exoplanet, remove_animal))
+	GLOB.death_event.register(A, src, TYPE_PROC_REF(/obj/overmap/visitable/sector/exoplanet, remove_animal))
+	GLOB.destroyed_event.register(A, src, TYPE_PROC_REF(/obj/overmap/visitable/sector/exoplanet, remove_animal))
 
 /obj/overmap/visitable/sector/exoplanet/proc/get_random_species_name()
 	return pick("nol","shan","can","fel","xor")+pick("a","e","o","t","ar")+pick("ian","oid","ac","ese","inian","rd")

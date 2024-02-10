@@ -51,7 +51,7 @@ var/global/list/limb_icon_cache = list()
 	update_icon(1)
 	if(owner)
 		SetName("[owner.real_name]'s head")
-		addtimer(new Callback(owner, TYPE_PROC_REF(/mob/living/carbon/human, update_hair)), 1, TIMER_UNIQUE)
+		addtimer(CALLBACK(owner, TYPE_PROC_REF(/mob/living/carbon/human, update_hair)), 1, TIMER_UNIQUE)
 	..()
 
 /obj/item/organ/external/proc/get_icon_key()

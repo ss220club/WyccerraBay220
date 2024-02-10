@@ -190,7 +190,7 @@ var/global/list/all_gps_units = list()
 	var/duration = 5 MINUTES / severity_modifier
 	emped = TRUE
 	update_icon()
-	addtimer(new Callback(src, PROC_REF(reset_emp)), duration)
+	addtimer(CALLBACK(src, PROC_REF(reset_emp)), duration)
 	GLOB.empd_event.raise_event(src, severity)
 
 /obj/item/device/gps/proc/reset_emp()

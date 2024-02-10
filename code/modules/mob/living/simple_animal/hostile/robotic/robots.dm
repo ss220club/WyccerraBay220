@@ -247,7 +247,7 @@
 	visible_message(SPAN_DANGER("\The [src]'s back begins to crack and hum!"))
 	playsound(src,'sound/effects/cascade.ogg', 50, 1, -6)
 	var/delay = rand(explosion_delay_lower, explosion_delay_upper)
-	addtimer(new Callback(src, PROC_REF(flash), delay), 0)
+	addtimer(CALLBACK(src, PROC_REF(flash), delay), 0)
 
 	return ..()
 

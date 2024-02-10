@@ -140,6 +140,8 @@
 
 #define MAP_IMAGE_PATH "nano/images/[GLOB.using_map.path]/"
 
+#define NANO_TEMPLATES_PATH "nano/templates/"
+
 #define map_image_file_name(z_level) "[GLOB.using_map.path]-[z_level].png"
 
 #define RANDOM_BLOOD_TYPE pick(4;"O-", 36;"O+", 3;"A-", 28;"A+", 1;"B-", 20;"B+", 1;"AB-", 5;"AB+")
@@ -160,7 +162,7 @@
 
 #define QDEL_NULL(x) if(x) { qdel(x) ; x = null }
 
-#define QDEL_IN(item, time) addtimer(new Callback(item, TYPE_PROC_REF(/datum, qdel_self)), time, TIMER_STOPPABLE)
+#define QDEL_IN(item, time) addtimer(CALLBACK(item, TYPE_PROC_REF(/datum, qdel_self)), time, TIMER_STOPPABLE)
 
 #define DROP_NULL(x) if(x) { x.dropInto(loc); x = null; }
 

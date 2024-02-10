@@ -433,19 +433,17 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		'html/images/FleetLogo.png',
 		'html/images/sfplogo.png',
 		'html/images/falogo.png',
-		// [SIERRA-ADD] ,
 		'html/images/ofbluelogo.png',
 		'html/images/ofntlogo.png',
 		'html/images/foundlogo.png',
 		'html/images/ccalogo.png',
 		'html/images/sierralogo.png',
-		// [/SIERRA-ADD]
 		)
-	spawn(10) // Removing this spawn causes all clients to not get verbs.
+	spawn(1 SECOND) // Removing this spawn causes all clients to not get verbs.
 		// Load info on what assets the client has
 		show_browser(src, 'code/modules/asset_cache/validate_assets.html', "window=asset_cache_browser")
 		// Precache the client with all other assets slowly, so as to not block other browse() calls
-		addtimer(new Callback(GLOBAL_PROC, PROC_REF(getFilesSlow), src, SSassets.preload, FALSE), 5 SECONDS)
+		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(getFilesSlow), src, SSassets.preload, FALSE), 5 SECONDS)
 
 /mob/proc/MayRespawn()
 	return 0

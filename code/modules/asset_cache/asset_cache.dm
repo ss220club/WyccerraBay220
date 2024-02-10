@@ -59,7 +59,7 @@ it to return before calling output(). You only need do this if .send(client) ret
 				send_rsc(client, ACI.resource, asset)
 
 		client.sent_assets |= unreceived
-		addtimer(new Callback(client, /client/proc/asset_cache_update_json), 1 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
+		addtimer(CALLBACK(client, TYPE_PROC_REF(/client, asset_cache_update_json), 1 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE))
 		return TRUE
 	return FALSE
 

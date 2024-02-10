@@ -6,13 +6,12 @@ SUBSYSTEM_DEF(assets)
 	var/list/preload = list()
 
 /datum/controller/subsystem/assets/Initialize(timeofday)
-	for(var/type in typesof(/datum/asset))
-		var/datum/asset/A = type
-		if (type != initial(A._abstract))
+	for(var/datum/asset/A as anything in typesof(/datum/asset))
+		if(type != initial(A._abstract))
 			get_asset_datum(type)
 
 	preload = cache.Copy()
 
-	for(var/client/C in GLOB.clients)
-		addtimer(new Callback(GLOBAL_PROC, .proc/getFilesSlow, C, preload, FALSE), 10)
+	for(var/client/C as anything in GLOB.clients)
+		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(getFilesSlow), C, preload, FALSE), 10)
 	return ..()

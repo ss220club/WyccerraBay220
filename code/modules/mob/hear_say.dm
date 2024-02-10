@@ -2,6 +2,10 @@
 	if (!client)
 		return
 
+	message = replace_characters(message, list("+"))
+	if(!message)
+		return
+
 	var/is_ghost = isghost(src)
 	var/in_view = (speaker in view(src))
 
@@ -56,9 +60,7 @@
 		if (sound_turf)
 			playsound_local(sound_turf, speech_sound, sound_vol, TRUE)
 
-	var/display_message = replace_characters(message, list("+"))
-	if(!message)
-		return
+	var/display_message = message
 
 	if (!(language?.flags & INNATE) && !say_understands(speaker, language))
 		if (!istype(speaker, /mob/living/simple_animal))
@@ -136,15 +138,16 @@
 	if(!client)
 		return
 
+	message = replace_characters(message, list("+"))
+	if(!message)
+		return
+
 	if(sleeping || stat==1) //If unconscious or sleeping
 		hear_sleep(message)
 		return
 
 	var/track = null
 
-	var/display_message = replace_characters(message, list("+"))
-	if(!message)
-		return
 
 	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
 	if (language && (language.flags & NONVERBAL))

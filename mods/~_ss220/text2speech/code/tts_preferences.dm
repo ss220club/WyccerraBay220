@@ -101,18 +101,11 @@
 		else
 			return FALSE
 
-/datum/preferences/get_content(mob/user)
+/datum/category_item/player_setup_item/physical/body/content(mob/user)
 	. = ..()
-	. += "<a href='?src=\ref[src];tts_explorer=1'>Выбрать голос</a>"
+	. += "<br><a href='?src=\ref[src];tts_explorer=1'>Выбрать голос</a>"
 
-/mob/new_player/Topic(href, href_list)
-	if(config.tts_enabled && (href_list["lobby_ready"] || href_list["late_join"]))
-		if(!usr.client.prefs.tts_seed)
-			usr.client.prefs.set_random_gendered_tts_seed()
-			to_chat(usr, SPAN_WARNING("У вас не выбран голос. Мы вам зарандомили его, так что не жалуйтесь потом."))
-	. = ..()
-
-/datum/preferences/Topic(href, list/href_list)
+/datum/category_item/player_setup_item/physical/body/Topic(href, list/href_list)
 	if(href_list["tts_explorer"])
 		var/datum/tgui_module/tts_seeds_explorer/explorer = explorer_users[usr]
 		if(!explorer)
@@ -121,6 +114,13 @@
 		explorer.tgui_interact(usr)
 		return
 	return ..()
+
+/mob/new_player/Topic(href, href_list)
+	if(config.tts_enabled && (href_list["lobby_ready"] || href_list["late_join"]))
+		if(!usr.client.prefs.tts_seed)
+			usr.client.prefs.set_random_gendered_tts_seed()
+			to_chat(usr, SPAN_WARNING("У вас не выбран голос. Мы вам зарандомили его, так что не жалуйтесь потом."))
+	. = ..()
 
 /datum/preferences/CanUseTopic(mob/user, datum/topic_state/state)
 	. = ..()

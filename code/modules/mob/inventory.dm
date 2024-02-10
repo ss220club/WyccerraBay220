@@ -381,7 +381,3 @@
 		var/obj/item/I = entry
 		if(I.body_parts_covered & body_parts)
 			. += I
-
-//SIERRA
-/mob/proc/get_all_held_items()
-	return list()

@@ -106,21 +106,6 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 /proc/log_misc(text)
 	game_log("MISC", text)
 
-/proc/log_tgui(user_or_client, text)
-	if(!text)
-		stack_trace("Pointless log_tgui message")
-		return
-	var/entry = ""
-	if(!user_or_client)
-		entry += "no user"
-	else if(istype(user_or_client, /mob))
-		var/mob/user = user_or_client
-		entry += "[user.ckey] (as [user])"
-	else if(istype(user_or_client, /client))
-		var/client/client = user_or_client
-		entry += "[client.ckey]"
-	entry += ":\n[text]"
-
 /proc/log_unit_test(text)
 	to_world_log("## UNIT_TEST ##: [text]")
 	log_debug(text)

@@ -58,6 +58,7 @@ GLOBAL_VAR(href_logfile)
 /proc/stack_trace(msg)
 	CRASH(msg)
 
+
 /proc/enable_debugging(mode, port)
 	CRASH("auxtools not loaded")
 

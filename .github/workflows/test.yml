@@ -5,13 +5,13 @@ permissions:
 
 on:
   pull_request:
-    branches: [ "dev-sierra" ]
+    branches: [ "master" ]
   workflow_dispatch: # allows this workflow to be manually triggered
 env:
   BYOND_MAJOR: "514"
   BYOND_MINOR: "1589"
   SPACEMAN_DMM_VERSION: suite-1.7.3
-  RUST_G_REPO: "ss220-space/rust-g-tg"
+  RUST_G_REPO: "ss220club/rust-g-tg"
   RUST_G_VERSION: "3.0.0-ss220"
 
 jobs:

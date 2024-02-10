@@ -51,7 +51,7 @@ body:
     attributes:
       label: Шаги для повторения проблемы.
       description: Самая важная часть. Опишите ВСЁ, что вы делали, что бы встретиться с проблемой. (Обязательное поле)
-      placeholder: Find a chair, buckle yourself into it, be eaten by dragon.
+      placeholder: Найди стул, сядь на него, пойми, что на стуле стояла бутылка. (Тру стори)
     validations:
       required: true
 

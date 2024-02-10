@@ -11,26 +11,31 @@ var/global/EXPOSURE_CONTRAST_POWER = 0
 /atom/proc/update_bloom()
 	CutOverlays(exposure_overlay)
 
-	if (exposure_icon && exposure_icon_state)
-		if (!exposure_overlay)
-			exposure_overlay = image(icon = exposure_icon, icon_state = exposure_icon_state, dir = dir, layer = -1)
+	if (!(exposure_icon && exposure_icon_state))
+		return
 
-		exposure_overlay.plane = LIGHTING_EXPOSURE_PLANE
-		exposure_overlay.blend_mode = BLEND_ADD
-		exposure_overlay.appearance_flags = RESET_ALPHA | RESET_COLOR | KEEP_APART
+	if (!exposure_overlay)
+		exposure_overlay = image(icon = exposure_icon, icon_state = exposure_icon_state, dir = dir, layer = -1)
 
-		var/datum/ColorMatrix/MATRIX = new(1, EXPOSURE_CONTRAST_BASE + EXPOSURE_CONTRAST_POWER * light_power, EXPOSURE_BRIGHTNESS_BASE + EXPOSURE_BRIGHTNESS_POWER * light_power)
-		if(exposure_colored)
-			MATRIX.SetColor(light_color, EXPOSURE_CONTRAST_BASE + EXPOSURE_CONTRAST_POWER * light_power, EXPOSURE_BRIGHTNESS_BASE + EXPOSURE_BRIGHTNESS_POWER * light_power)
+	exposure_overlay.plane = LIGHTING_EXPOSURE_PLANE
+	exposure_overlay.blend_mode = BLEND_ADD
+	exposure_overlay.appearance_flags = RESET_ALPHA | RESET_COLOR | KEEP_APART
 
-		exposure_overlay.color = MATRIX.Get()
+	var/contrast = EXPOSURE_CONTRAST_BASE + EXPOSURE_CONTRAST_POWER * light_power
+	var/brightness = EXPOSURE_BRIGHTNESS_BASE + EXPOSURE_BRIGHTNESS_POWER * light_power
 
-		var/icon/EX = icon(icon = exposure_icon, icon_state = exposure_icon_state)
+	var/datum/ColorMatrix/MATRIX = new(1, contrast, brightness)
+	if(exposure_colored)
+		MATRIX.SetColor(light_color, contrast, brightness)
 
-		exposure_overlay.pixel_x = 16 - EX.Width() / 2
-		exposure_overlay.pixel_y = 16 - EX.Height() / 2
+	exposure_overlay.color = MATRIX.Get()
 
-		AddOverlays(exposure_overlay)
+	var/icon/EX = icon(icon = exposure_icon, icon_state = exposure_icon_state)
+
+	exposure_overlay.pixel_x = 16 - EX.Width() / 2
+	exposure_overlay.pixel_y = 16 - EX.Height() / 2
+
+	AddOverlays(exposure_overlay)
 
 /atom/proc/delete_lights()
 	CutOverlays(exposure_overlay)

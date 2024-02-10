@@ -7,9 +7,9 @@
 /datum/client_preference/exposurelevel/changed(mob/preference_mob, new_value)
 	if(!preference_mob?.client)
 		return
-		
+
 	for(var/atom/movable/renderer/exposure/exposure_to_update in preference_mob.renderers)
-		exposure_to_update .UpdateRenderer()
+		exposure_to_update.UpdateRenderer()
 
 /datum/client_preference/bloomlevel
 	description = "Bloom strength"
@@ -20,7 +20,7 @@
 /datum/client_preference/bloomlevel/changed(mob/preference_mob, new_value)
 	if(!preference_mob?.client)
 		return
-		
+
 	for(var/atom/movable/renderer/lamps/lamps_to_update in preference_mob.renderers)
 		lamps_to_update.UpdateRenderer()
 
@@ -33,6 +33,6 @@
 /datum/client_preference/glare/changed(mob/preference_mob, new_value)
 	if(!preference_mob?.client)
 		return
-		
+
 	for(var/atom/movable/renderer/lamps_glare/glare_to_update in preference_mob.renderers)
 		glare_to_update.UpdateRenderer()

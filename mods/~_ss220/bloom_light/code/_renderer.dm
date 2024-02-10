@@ -11,12 +11,21 @@
 
 	var/mob/M = owner
 	if(istype(M))
-		var/level = M.get_preference_value(/datum/client_preference/bloomlevel)
+		var/level = M.get_preference_value(/datum/client_preference/exposurelevel)
+		var/alpha = 255
 		if(level == GLOB.PREF_OFF)
-			filters += filter(
-				type = "color",
-				color = "#00000000"
-			)
+			alpha *= 0
+		else if(level == GLOB.PREF_LOW)
+			alpha *= 0.33
+		else if(level == GLOB.PREF_MEDIUM)
+			alpha *= 0.66
+
+		filters += filter(
+			type = "color",
+			color = rgb(255, 255, 255, alpha)
+		)
+
+		if(level == GLOB.PREF_OFF)
 			return
 
 	filters += filter(
@@ -24,7 +33,7 @@
 		size = 20
 	)
 
-/atom/movable/renderer/exposure/GraphicsUpdate()
+/atom/movable/renderer/exposure/proc/UpdateRenderer()
 	. = ..()
 	Setup()
 
@@ -69,7 +78,7 @@
 		alpha = 100
 	)
 
-/atom/movable/renderer/lamps/GraphicsUpdate()
+/atom/movable/renderer/lamps/proc/UpdateRenderer()
 	. = ..()
 	Setup()
 
@@ -103,7 +112,7 @@
 		size = 0.03
 	)
 
-/atom/movable/renderer/lamps_glare/GraphicsUpdate()
+/atom/movable/renderer/lamps_glare/proc/UpdateRenderer()
 	. = ..()
 	Setup()
 

@@ -3,7 +3,7 @@
 /atom/var/exposure_colored = TRUE
 /atom/var/image/exposure_overlay
 
-var/global/EXPOSURE_BRIGHTNESS_BASE = 0.1
+var/global/EXPOSURE_BRIGHTNESS_BASE = 0.2
 var/global/EXPOSURE_BRIGHTNESS_POWER = -0.2
 var/global/EXPOSURE_CONTRAST_BASE = 10
 var/global/EXPOSURE_CONTRAST_POWER = 0

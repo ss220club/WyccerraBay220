@@ -1,5 +1,18 @@
+/datum/client_preference/exposurelevel
+	description = "Exposure strength"
+	key = "EXPOSURELEVEL"
+	options = list(GLOB.PREF_OFF, GLOB.PREF_LOW, GLOB.PREF_MED, GLOB.PREF_HIGH)
+	default_value = GLOB.PREF_HIGH
+
+/datum/client_preference/exposurelevel/changed(mob/preference_mob, new_value)
+	if(preference_mob?.client)
+		for(var/atom/movable/renderer/R as anything in preference_mob.renderers)
+			if (istype(R, /atom/movable/renderer/exposure))
+				var/atom/movable/renderer/exposure/N = R
+				N.UpdateRenderer()
+
 /datum/client_preference/bloomlevel
-	description = "Bloom level"
+	description = "Bloom strength"
 	key = "BLOOMLEVEL"
 	options = list(GLOB.PREF_OFF, GLOB.PREF_LOW, GLOB.PREF_MED, GLOB.PREF_HIGH)
 	default_value = GLOB.PREF_MED
@@ -7,7 +20,9 @@
 /datum/client_preference/bloomlevel/changed(mob/preference_mob, new_value)
 	if(preference_mob?.client)
 		for(var/atom/movable/renderer/R as anything in preference_mob.renderers)
-			R.GraphicsUpdate()
+			if (istype(R, /atom/movable/renderer/lamps))
+				var /atom/movable/renderer/lamps/N = R
+				N.UpdateRenderer()
 
 /datum/client_preference/glare
 	description = "Show lamp glare"
@@ -19,4 +34,5 @@
 	if(preference_mob?.client)
 		for(var/atom/movable/renderer/R as anything in preference_mob.renderers)
 			if (istype(R, /atom/movable/renderer/lamps_glare))
-				R.GraphicsUpdate()
+				var/atom/movable/renderer/lamps_glare/N = R
+				N.UpdateRenderer()

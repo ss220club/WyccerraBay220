@@ -9,6 +9,7 @@
 #define SS_PRIORITY_TIMER 30
 #define SS_PRIORITY_OVERLAYS 20
 #define SS_PRIORITY_ICON_UPDATE 10
+#define SS_PRIORITY_OVERMAP 12 // Handles overmap processing. Keeps things smooth during highpop, ideally.
 
 // Normal
 #define SS_PRIORITY_TICKER         100 // Gameticker.
@@ -53,6 +54,7 @@
 #define SS_PRIORITY_CHAR_SETUP    25   // Writes player preferences to savefiles.
 #define SS_PRIORITY_GARBAGE       20   // Garbage collection.
 #define SS_PRIORITY_INACTIVITY    10  // Idle kicking.
+
 
 // Subsystem fire priority, from lowest to highest priority
 // If the subsystem isn't listed here it's either DEFAULT or PROCESS (if it's a processing subsystem child)

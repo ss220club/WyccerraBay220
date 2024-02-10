@@ -423,7 +423,7 @@ The _flatIcons list is a cache for generated icon files.
 /proc/getFlatIcon(image/appearance, defdir, deficon, defstate, defblend, start = TRUE, no_anim = FALSE, always_use_defdir = FALSE)
 	// Loop through the underlays, then overlays, sorting them into the layers list
 	#define PROCESS_OVERLAYS_OR_UNDERLAYS(flat, process, base_layer) \
-		for (var/i in 1 to process.len) { \
+		for (var/i in 1 to length(process)) { \
 			var/image/current = process[i]; \
 			if (!current) { \
 				continue; \
@@ -438,7 +438,7 @@ The _flatIcons list is a cache for generated icon files.
 				} \
 				current_layer = base_layer + appearance.layer + current_layer / 1000; \
 			} \
-			for (var/index_to_compare_to in 1 to layers.len) { \
+			for (var/index_to_compare_to in 1 to length(layers)) { \
 				var/compare_to = layers[index_to_compare_to]; \
 				if (current_layer < layers[compare_to]) { \
 					layers.Insert(index_to_compare_to, current); \
@@ -494,7 +494,7 @@ The _flatIcons list is a cache for generated icon files.
 
 	var/curblend = appearance.blend_mode || defblend
 
-	if(appearance.overlays.len || appearance.underlays.len)
+	if(length(appearance.overlays) || length(appearance.underlays))
 		var/icon/flat = icon(flat_template)
 		// Layers will be a sorted list of icons/overlays, based on the order in which they are displayed
 		var/list/layers = list()
@@ -635,7 +635,7 @@ The _flatIcons list is a cache for generated icon files.
 		if(image.plane == EMISSIVE_PLANE)
 			continue
 		image.dir = dir
-		dummy.overlays += image
+		AddOverlays(image, dummy.overlays)
 
 	qdel(dummy)
 	return icon(rendering_client.RenderIcon(dummy))
@@ -669,8 +669,8 @@ The _flatIcons list is a cache for generated icon files.
 	dummy.transform = transform
 
 	for(var/current_dir in dirs_list)
-		dummy.underlays.Cut()
-		dummy.overlays.Cut()
+		CutOverlays(dummy.underlays)
+		CutOverlays(dummy.overlays)
 		dummy.set_dir(current_dir)
 
 		for(var/I in underlays)
@@ -685,7 +685,7 @@ The _flatIcons list is a cache for generated icon files.
 			if(image.plane == EMISSIVE_PLANE)
 				continue
 			image.dir = current_dir
-			dummy.overlays += image
+			AddOverlays(image, dummy.overlays)
 
 		ret += icon(rendering_client.RenderIcon(dummy))
 

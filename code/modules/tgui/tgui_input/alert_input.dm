@@ -29,11 +29,11 @@
 		return tgui_input_list(user, message, title, buttons, timeout)
 
 	// Client does NOT have tgui_input on: Returns regular input
-	/*if(user.client?.prefs?.toggles2 & PREFTOGGLE_2_DISABLE_TGUI_INPUT)
+	if(user.get_preference_value(/datum/client_preference/tgui_input) == GLOB.PREF_NO)
 		if(length(buttons) == 2)
 			return alert(user, message, title, buttons[1], buttons[2])
 		if(length(buttons) == 3)
-			return alert(user, message, title, buttons[1], buttons[2], buttons[3])*/
+			return alert(user, message, title, buttons[1], buttons[2], buttons[3])
 
 	var/datum/tgui_alert/alert = new(user, message, title, buttons, timeout, autofocus, tgui_state)
 
@@ -112,8 +112,8 @@
 	data["autofocus"] = autofocus
 	data["buttons"] = buttons
 	data["message"] = message
-	data["large_buttons"] = 1 //user.client?.prefs?.toggles2 & PREFTOGGLE_2_LARGE_INPUT_BUTTONS
-	data["swapped_buttons"] = 1 //user.client?.prefs?.toggles2 & PREFTOGGLE_2_SWAP_INPUT_BUTTONS
+	data["large_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_large)
+	data["swapped_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_swap)
 	data["title"] = title
 	return data
 

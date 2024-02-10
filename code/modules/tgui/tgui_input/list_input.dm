@@ -27,8 +27,8 @@
 		return
 
 	/// Client does NOT have tgui_input on: Returns regular input
-	/*if(user.client?.prefs?.toggles2 & PREFTOGGLE_2_DISABLE_TGUI_INPUT)
-		return input(user, message, title, default) as null|anything in items*/
+	if(user.get_preference_value(/datum/client_preference/tgui_input) == GLOB.PREF_NO)
+		return input(user, message, title, default) as null|anything in items
 
 	var/datum/tgui_list_input/list_input = new(user, message, title, items, default, timeout, tgui_state)
 
@@ -79,7 +79,7 @@
 	src.items_map = list()
 	src.default = default
 	src.state = tgui_state
-	//var/list/repeat_items = list()
+	var/list/repeat_items = list()
 
 	// Gets rid of illegal characters
 	var/static/regex/whitelistedWords = regex(@{"([^\u0020-\u8000]+)"})
@@ -88,7 +88,7 @@
 		var/string_key = whitelistedWords.Replace("[i]", "")
 
 		// Avoids duplicated keys E.g: when areas have the same name
-		//string_key = avoid_assoc_duplicate_keys(string_key, repeat_items)
+		string_key = avoid_assoc_duplicate_keys(string_key, repeat_items)
 		src.items += string_key
 		src.items_map[string_key] = i
 
@@ -132,8 +132,8 @@
 	data["init_value"] = default || items[1]
 	data["items"] = items
 	data["message"] = message
-	data["large_buttons"] = 1 //user.client?.prefs?.toggles2 & PREFTOGGLE_2_LARGE_INPUT_BUTTONS
-	data["swapped_buttons"] = 1 //user.client?.prefs?.toggles2 & PREFTOGGLE_2_SWAP_INPUT_BUTTONS
+	data["large_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_large)
+	data["swapped_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_swap)
 	data["title"] = title
 	return data
 

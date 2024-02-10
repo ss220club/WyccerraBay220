@@ -29,9 +29,9 @@
 		return
 
 	// Client does NOT have tgui_input on: Returns regular input
-	/*if(user.client?.prefs?.toggles2 & PREFTOGGLE_2_DISABLE_TGUI_INPUT)
+	if(user.get_preference_value(/datum/client_preference/tgui_input) == GLOB.PREF_NO)
 		var/input_number = input(user, message, title, default) as null|num
-		return clamp(round_value ? round(input_number) : input_number, min_value, max_value)*/
+		return clamp(round_value ? round(input_number) : input_number, min_value, max_value)
 
 	var/datum/tgui_input_number/number_input = new(user, message, title, default, max_value, min_value, timeout, round_value, tgui_state)
 
@@ -130,8 +130,8 @@
 	data["max_value"] = max_value
 	data["round_value"] = round_value
 	data["message"] = message
-	data["large_buttons"] = 1//user.client?.prefs?.toggles2 & PREFTOGGLE_2_LARGE_INPUT_BUTTONS
-	data["swapped_buttons"] = 1//user.client?.prefs?.toggles2 & PREFTOGGLE_2_SWAP_INPUT_BUTTONS
+	data["large_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_large)
+	data["swapped_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_swap)
 	data["title"] = title
 	return data
 

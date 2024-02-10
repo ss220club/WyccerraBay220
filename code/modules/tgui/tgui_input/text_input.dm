@@ -29,7 +29,7 @@
 		return
 
 	// Client does NOT have tgui_input on: Returns regular input
-	/*if(user.client?.prefs?.toggles2 & PREFTOGGLE_2_DISABLE_TGUI_INPUT)
+	if(user.get_preference_value(/datum/client_preference/tgui_input) == GLOB.PREF_NO)
 		if(encode)
 			if(multiline)
 				return stripped_multiline_input(user, message, title, default, max_length)
@@ -39,7 +39,7 @@
 			if(multiline)
 				return input(user, message, title, default) as message|null
 			else
-				return input(user, message, title, default) as text|null*/
+				return input(user, message, title, default) as text|null
 
 	var/datum/tgui_input_text/text_input = new(user, message, title, default, max_length, multiline, encode, timeout, tgui_state)
 
@@ -124,8 +124,8 @@
 	data["message"] = message
 	data["multiline"] = multiline
 	data["placeholder"] = default // Default is a reserved keyword
-	data["large_buttons"] = 1//user.client?.prefs?.toggles2 & PREFTOGGLE_2_LARGE_INPUT_BUTTONS
-	data["swapped_buttons"] = 1//user.client?.prefs?.toggles2 & PREFTOGGLE_2_SWAP_INPUT_BUTTONS
+	data["large_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_large)
+	data["swapped_buttons"] = user.get_preference_value(/datum/client_preference/tgui_input_swap)
 	data["title"] = title
 	return data
 

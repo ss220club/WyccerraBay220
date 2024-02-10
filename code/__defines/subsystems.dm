@@ -16,7 +16,6 @@
 // Subsystems shutdown in the reverse of the order they initialize in
 // The numbers just define the ordering, they are meaningless otherwise.
 
-#define SS_INIT_DBCORE           20 // SIERRA
 #define SS_INIT_EARLY            19
 #define SS_INIT_GARBAGE          18
 #define SS_INIT_CHEMISTRY        17
@@ -28,7 +27,7 @@
 #define SS_INIT_SKYBOX           11
 #define SS_INIT_MAPPING          10
 #define SS_INIT_JOBS             9
-#define SS_INIT_ASSETS           8 // SIERRA
+#define SS_INIT_ASSETS           8
 #define SS_INIT_CHAR_SETUP       7
 // [SIERRA-ADD] - SSINPUT - Input must be after char setup
 #define SS_INIT_INPUT            6

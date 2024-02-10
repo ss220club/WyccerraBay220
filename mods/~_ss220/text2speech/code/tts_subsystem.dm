@@ -58,6 +58,8 @@ SUBSYSTEM_DEF(tts220)
 
 	var/debug_mode_enabled = FALSE
 
+	var/TTS_radio_channel
+
 	var/static/tts_acronym_replacements = list(
 		"нт" = "Эн Тэ",
 		"смо" = "Эс Мэ О",
@@ -255,6 +257,7 @@ SUBSYSTEM_DEF(tts220)
 	is_enabled = config.tts_enabled
 	if(!is_enabled)
 		flags |= SS_NO_FIRE
+	TTS_radio_channel = GLOB.sound_channels.RequestChannel("CHANNEL_TTS_RADIO")
 
 /datum/controller/subsystem/tts220/fire()
 	tts_rps = tts_rps_counter
@@ -449,20 +452,17 @@ SUBSYSTEM_DEF(tts220)
 	var/turf/turf_source = get_turf(speaker)
 
 	var/volume = 100
-	var/channel = GLOB.CHANNEL_TTS_RADIO
-	if(is_local)
-		volume *= 1
-		channel = get_local_channel_by_owner(speaker)
-	else
-		volume *= 1
-		channel = GLOB.CHANNEL_TTS_RADIO
 
 	var/sound/output = sound(voice)
 	output.status = SOUND_STREAM
+	if(is_local)
+		output.channel = get_local_channel_by_owner(speaker)
+	else
+		output.channel = SStts220.TTS_radio_channel
+		output.wait = TRUE
 
 	if(isnull(speaker))
 		output.wait = TRUE
-		output.channel = channel
 		output.volume = volume
 		output.environment = -1
 
@@ -478,7 +478,7 @@ SUBSYSTEM_DEF(tts220)
 	if(preSFX)
 		play_sfx(listener, preSFX, output.channel, output.volume, output.environment)
 
-	output = listener.playsound_local(turf_source, output, volume, wait = TRUE)
+	output = listener.playsound_local(turf_source, output, volume)
 
 	if(!output || output.volume <= 0)
 		return

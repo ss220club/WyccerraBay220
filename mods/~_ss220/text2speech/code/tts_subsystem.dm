@@ -287,7 +287,7 @@ SUBSYSTEM_DEF(tts220)
 	if(sanitized_messages_caching)
 		sanitized_messages_cache.Cut()
 		if(debug_mode_enabled)
-			world.log << "sanitized_messages_cache: HIT=[sanitized_messages_cache_hit] / MISS=[sanitized_messages_cache_miss]"
+			log_debug("sanitized_messages_cache: HIT=[sanitized_messages_cache_hit] / MISS=[sanitized_messages_cache_miss]")
 		sanitized_messages_cache_hit = 0
 		sanitized_messages_cache_miss = 0
 
@@ -400,7 +400,7 @@ SUBSYSTEM_DEF(tts220)
 	if(!voice)
 		return
 
-	rustg_ss220_file_write_b64decode(voice, "[filename].ogg")
+	rustg_file_write_b64decode(voice, "[filename].ogg")
 
 	if(!config.tts_cache_enabled)
 		addtimer(new /datum/callback(src, PROC_REF(cleanup_tts_file), "[filename].ogg"), 30 SECONDS)
@@ -544,7 +544,7 @@ SUBSYSTEM_DEF(tts220)
 	. = replacetext_char(., acronyms, /proc/tts_acronym_replacer)
 	for(var/job in tts_job_replacements)
 		. = replacetext_char(., job, tts_job_replacements[job])
-	. = rustg_ss220_latin_to_cyrillic(.)
+	. = rustg_latin_to_cyrillic(.)
 
 	var/static/regex/decimals = new(@"-?\d+\.\d+", "g")
 	. = replacetext_char(., decimals, /proc/dec_in_words)

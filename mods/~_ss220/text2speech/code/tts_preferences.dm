@@ -1,6 +1,6 @@
 /datum/preferences
 	var/tts_seed
-	var/static/explorer_users = list()
+
 
 /datum/client_preference/tts_enabled
 	default_value = GLOB.PREF_YES
@@ -100,6 +100,8 @@
 			usr.client.prefs.tts_seed = seed_name
 		else
 			return FALSE
+/datum/category_item/player_setup_item/physical/body
+	var/static/explorer_users = list()
 
 /datum/category_item/player_setup_item/physical/body/content(mob/user)
 	. = ..()

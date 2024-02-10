@@ -34,7 +34,6 @@
 	)
 
 /atom/movable/renderer/exposure/proc/UpdateRenderer()
-	. = ..()
 	Setup()
 
 /atom/movable/renderer/exposure/Initialize()
@@ -79,7 +78,6 @@
 	)
 
 /atom/movable/renderer/lamps/proc/UpdateRenderer()
-	. = ..()
 	Setup()
 
 /atom/movable/renderer/lamps/Initialize()
@@ -113,7 +111,6 @@
 	)
 
 /atom/movable/renderer/lamps_glare/proc/UpdateRenderer()
-	. = ..()
 	Setup()
 
 /atom/movable/renderer/lamps_glare/Initialize()

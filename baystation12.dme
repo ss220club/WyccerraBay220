@@ -1699,8 +1699,6 @@
 #include "code\modules\clothing\under\accessories\neckerchief.dm"
 #include "code\modules\clothing\under\accessories\necklace.dm"
 #include "code\modules\clothing\under\accessories\pouches.dm"
-#include "code\modules\clothing\under\accessories\pride_pin.dm"
-#include "code\modules\clothing\under\accessories\pronouns.dm"
 #include "code\modules\clothing\under\accessories\qipao.dm"
 #include "code\modules\clothing\under\accessories\scarf.dm"
 #include "code\modules\clothing\under\accessories\sherwani.dm"

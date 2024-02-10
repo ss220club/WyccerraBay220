@@ -17,6 +17,7 @@
 // [/SIERRA-ADD]
 #define SS_PRIORITY_MOB            95  // Mob Life().
 #define SS_PRIORITY_MACHINERY      95  // Machinery + powernet ticks.
+#define SS_PRIORITY_TGUI           95  // SIERRA TGUI.
 #define SS_PRIORITY_AIR            80  // ZAS processing.
 #define SS_PRIORITY_THROWING       75  // Throwing calculation and constant checks
 #define SS_PRIORITY_CHEMISTRY      60  // Multi-tick chemical reactions.

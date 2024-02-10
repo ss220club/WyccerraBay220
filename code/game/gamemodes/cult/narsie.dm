@@ -2,8 +2,8 @@ var/global/narsie_behaviour = "CultStation13"
 var/global/narsie_cometh = 0
 var/global/list/narsie_list = list()
 /obj/singularity/narsie //Moving narsie to its own file for the sake of being clearer
-	name = "Nar-Sie"
-	desc = "Your mind begins to bubble and ooze as it tries to comprehend what it sees."
+	name = "Нар-Си"
+	desc = "Ваш разум начинает пузыриться и сочиться, пытаясь понять то, что он видит."
 	icon = 'icons/obj/narsie.dmi'
 	icon_state = "narsie-small"
 	pixel_x = -236
@@ -25,7 +25,7 @@ var/global/list/narsie_list = list()
 	..()
 
 /obj/singularity/narsie/large
-	name = "Nar-Sie"
+	name = "Нар-Си"
 	icon = 'icons/obj/narsie.dmi'
 	icon_state = "narsie"//mobs perceive the geometer of blood through their see_narsie proc
 
@@ -43,7 +43,7 @@ var/global/list/narsie_list = list()
 /obj/singularity/narsie/large/New()
 	..()
 	if(announce)
-		to_world(SPAN_SIZE(15, SPAN_COLOR("red", "<b>[uppertext(name)] HAS RISEN</b>")))
+		to_world(SPAN_SIZE(15, SPAN_COLOR("red", "<b>[uppertext(name)] ВОСПРЯНУЛ</b>")))
 		sound_to(world, sound('sound/effects/wind/wind_5_1.ogg'))
 
 	narsie_spawn_animation()
@@ -79,7 +79,7 @@ var/global/list/narsie_list = list()
 			if(M.status_flags & GODMODE)
 				continue
 			if(!iscultist(M))
-				to_chat(M, SPAN_DANGER(" You feel your sanity crumble away in an instant as you gaze upon [src.name]..."))
+				to_chat(M, SPAN_DANGER(" Вы чувствуете, что ваше здравомыслие рушится в одно мгновение, когда вы смотрите на [src.name]..."))
 				M.apply_effect(3, EFFECT_STUN)
 
 
@@ -143,13 +143,13 @@ var/global/list/narsie_list = list()
 /obj/singularity/narsie/proc/narsiefloor(turf/T)//leaving "footprints"
 	if(!(istype(T, /turf/simulated/wall/cult)||istype(T, /turf/space)))
 		if(T.icon_state != "cult-narsie")
-			T.desc = "Something that goes beyond your understanding went this way."
+			T.desc = "Что-то, выходящее за рамки вашего понимания, пошло этим путем."
 			T.icon = 'icons/turf/flooring/cult.dmi'
 			T.icon_state = "cult-narsie"
 			T.set_light(1)
 
 /obj/singularity/narsie/proc/narsiewall(turf/T)
-	T.desc = "An opening has been made on that wall, but who can say if what you seek truly lies on the other side?"
+	T.desc = "В этой стене образовалась дыра, но кто может сказать, действительно ли то, что вы ищете, находится по другую сторону?"
 	T.icon = 'icons/turf/walls.dmi'
 	T.icon_state = "cult-narsie"
 	T.set_opacity(0)
@@ -308,13 +308,13 @@ var/global/list/narsie_list = list()
 /obj/singularity/narsie/proc/acquire(mob/food)
 	var/capname = uppertext(name)
 
-	to_chat(target, SPAN_NOTICE("<b>[capname] HAS LOST INTEREST IN YOU.</b>"))
+	to_chat(target, SPAN_NOTICE("<b>[capname] ПОТЕРЯЛ К ВАМ ИНТЕРЕС.</b>"))
 	target = food
 
 	if (ishuman(target))
-		to_chat(target, SPAN_DANGER("[capname] HUNGERS FOR YOUR SOUL."))
+		to_chat(target, SPAN_DANGER("[capname] ЖАЖДЕТ ВАШЕЙ ДУШИ."))
 	else
-		to_chat(target, SPAN_DANGER("[capname] HAS CHOSEN YOU TO LEAD HIM TO HIS NEXT MEAL."))
+		to_chat(target, SPAN_DANGER("[capname] ВЫБРАЛ ВАС, ЧТОБЫ ПРИВЕСТИ ЕГО К СЛЕДУЮЩЕЙ ЕДЕ."))
 /obj/singularity/narsie/on_capture()
 	chained = 1
 	move_self = 0

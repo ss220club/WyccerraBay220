@@ -45,5 +45,5 @@
     "--ignore-revs-file", ".git-blame-ignore-revs"
   ],
 
-  "diffEditor.ignoreTrimWhitespace": false
+  "diffEditor.ignoreTrimWhitespace": true
 }

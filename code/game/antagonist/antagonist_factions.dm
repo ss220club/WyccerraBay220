@@ -1,6 +1,6 @@
 /mob/living/proc/convert_to_rev(mob/M as mob in able_mobs_in_oview(src))
-	set name = "Recruit to Faction"
-	set category = "Abilities"
+	set name = "Вербовать во фракцию"
+	set category = "Способности"
 	if(!M.mind || !M.client)
 		return
 	convert_to_faction(M.mind, GLOB.revs)
@@ -14,39 +14,39 @@
 		return
 
 	if(player_is_antag(player))
-		to_chat(src, SPAN_WARNING("\The [player.current]'s loyalties seem to be elsewhere..."))
-		log_debug("\The [src] attempted to convert \the [player.current] to [faction], but failed: Player is already an antagonist.")
+		to_chat(src, SPAN_WARNING("У [player.current] лояльность, похоже, находится в другом месте..."))
+		log_debug("[src] пытался завербовать [player.current] в [faction], но не смог: Игрок уже антагонист.")
 		return
 
 	var/result = faction.can_become_antag_detailed(player, TRUE)
 	if(result)
-		to_chat(src, SPAN_WARNING("\The [player.current] cannot be \a [faction.faction_role_text]!"))
-		log_debug("\The [src] attempted to convert \the [player.current] to [faction], but failed: [result]")
+		to_chat(src, SPAN_WARNING("[player.current] не может быть [faction.faction_role_text]!"))
+		log_debug("[src] пытался завербовать [player.current] в [faction], но не смог: [result]")
 		return
 
 	if(world.time < player.rev_cooldown)
-		to_chat(src, SPAN_DANGER("You must wait five seconds between attempts."))
+		to_chat(src, SPAN_DANGER("Вы должны ждать пять секунд между попытками."))
 		return
 
-	to_chat(src, SPAN_DANGER("You are attempting to convert \the [player.current]..."))
-	log_admin("[src]([src.ckey]) attempted to convert [player.current] to the [faction.faction_role_text] faction.")
-	message_admins(SPAN_DANGER("[src]([src.ckey]) attempted to convert [player.current] to the [faction.faction_role_text] faction."))
+	to_chat(src, SPAN_DANGER("Вы пробуете завербовать [player.current]..."))
+	log_admin("[src]([src.ckey]) попробовал завербовать [player.current] в [faction.faction_role_text] фракцию.")
+	message_admins(SPAN_DANGER("[src]([src.ckey]) пробовал завербовать [player.current] в [faction.faction_role_text] фракцию."))
 
 	player.rev_cooldown = world.time + 5 SECONDS
 	if (!faction.is_antagonist(player))
-		var/choice = alert(player.current,"Asked by [src]: Do you want to join the [faction.faction_descriptor]?","Join the [faction.faction_descriptor]?","No!","Yes!")
-		if(choice == "Yes!" && faction.add_antagonist_mind(player, 0, faction.faction_role_text, faction.faction_welcome))
-			to_chat(src, SPAN_NOTICE("\The [player.current] joins the [faction.faction_descriptor]!"))
-			log_debug("\The [src] has successfully converted \the [player.current] to [faction].")
+		var/choice = alert(player.current,"Спросил [src]: Хотите ли вы вступить в [faction.faction_descriptor]?","Присоединяйся к [faction.faction_descriptor]?","Нет!","Да!")
+		if(choice == "Да!" && faction.add_antagonist_mind(player, 0, faction.faction_role_text, faction.faction_welcome))
+			to_chat(src, SPAN_NOTICE("[player.current] вступает в [faction.faction_descriptor]!"))
+			log_debug("[src] удачно завербован [player.current] в [faction].")
 			return
 		else
-			to_chat(player, SPAN_DANGER("You reject this traitorous cause!"))
-	to_chat(src, SPAN_DANGER("\The [player.current] does not support the [faction.faction_descriptor]!"))
-	log_debug("\The [src] attempted to convert \the [player.current] to [faction], but failed: The player refused to join or the faction failed to add them.")
+			to_chat(player, SPAN_DANGER("Вы отвергаете это предательское дело!"))
+	to_chat(src, SPAN_DANGER("[player.current] не поддерживает [faction.faction_descriptor]!"))
+	log_debug("[src] пробовал завербовать \the [player.current] в [faction], но не смог: Игрок отказался присоединиться, или фракции не удалось добавить его.")
 
 /mob/living/proc/convert_to_loyalist(mob/M as mob in able_mobs_in_oview(src))
-	set name = "Convert"
-	set category = "Abilities"
+	set name = "Завербовать"
+	set category = "Способности"
 	if(!M.mind || !M.client)
 		return
 	convert_to_faction(M.mind, GLOB.loyalists)

@@ -3,10 +3,10 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 
 /datum/antagonist/vox
 	id = MODE_VOXRAIDER
-	role_text = "Vox Raider"
-	role_text_plural = "Vox Raiders"
+	role_text = "Пираты Воксы"
+	role_text_plural = "Пираты Воксы"
 	landmark_id = "Vox-Spawn"
-	welcome_text = "Scrap has been hard to find lately, and the Shroud requires replacement parts. Do not disappoint your kin."
+	welcome_text = "В последнее время металлолом найти сложно, а Шрауд требует запасных частей. Не разочаровывайте своих родственников."
 	flags = ANTAG_VOTABLE | ANTAG_OVERRIDE_JOB | ANTAG_OVERRIDE_MOB | ANTAG_CLEAR_EQUIPMENT | ANTAG_CHOOSE_NAME | ANTAG_SET_APPEARANCE
 	antaghud_indicator = "hudraider"
 
@@ -33,23 +33,23 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 	candidates = list()
 	for(var/datum/mind/player in mode.get_players_for_role(id))
 		if (ghosts_only && !(isghostmind(player) || isnewplayer(player.current)))
-			log_debug("[key_name(player)] is not eligible to become a [role_text]: Only ghosts may join as this role!")
+			log_debug("[key_name(player)] не имеет права стать [role_text]: Только призраки могут присоединиться к этой роли.!")
 			continue
 		if (player.special_role)
-			log_debug("[key_name(player)] is not eligible to become a [role_text]: They already have a special role ([player.special_role])!")
+			log_debug("[key_name(player)] не имеет права стать [role_text]: У них уже есть особая роль ([player.special_role])!")
 			continue
 		if (player in pending_antagonists)
-			log_debug("[key_name(player)] is not eligible to become a [role_text]: They have already been selected for this role!")
+			log_debug("[key_name(player)] не имеет права стать [role_text]: Они уже отобраны на эту роль.!")
 			continue
 		if (player_is_antag(player))
-			log_debug("[key_name(player)] is not eligible to become a [role_text]: They are already an antagonist!")
+			log_debug("[key_name(player)] не имеет права стать [role_text]: Они уже антагонисты!")
 			continue
 		if(!is_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
-			log_debug("[player.current.ckey] is not whitelisted")
+			log_debug("[player.current.ckey] не внесен в белый список")
 			continue
 		var/result = can_become_antag_detailed(player)
 		if (result)
-			log_debug("[key_name(player)] is not eligible to become a [role_text]: [result]")
+			log_debug("[key_name(player)] не имеет права стать [role_text]: [result]")
 			continue
 		candidates |= player
 
@@ -73,7 +73,7 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 
 /datum/antagonist/vox/can_become_antag_detailed(datum/mind/player, ignore_role)
 	if(!is_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
-		return "Player doesn't have vox whitelist"
+		return "У игрока нет белого списка Vox"
 	..()
 
 /datum/antagonist/vox/equip(mob/living/carbon/human/vox/player)
@@ -89,8 +89,8 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 
 
 /obj/structure/voxuplink
-	name = "Shoal beacon"
-	desc = "A pulsating mass of flesh and steel."
+	name = "Мелководный маяк"
+	desc = "Пульсирующая масса плоти и стали."
 	icon = 'maps/antag_spawn/vox/vox.dmi'
 	icon_state = "printer"
 	anchored = TRUE
@@ -115,12 +115,12 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 	var/obj/item/organ/internal/voxstack/stack = user.internal_organs_by_name[BP_STACK]
 	if(istype(stack) || ignore_wl)
 		if(!working)
-			var/choice = input(user, "What would you like to request from Apex? You have [favors] favors left!", "Shoal Beacon") as null|anything in rewards
+			var/choice = input(user, "Что бы вы хотели запросить у Апекса? Осталось [favors] одолжений!", "Мелководный маяк") as null|anything in rewards
 			if(choice && !working)
 				if(rewards[choice][1] <= favors)
 					working = TRUE
 					on_update_icon()
-					to_chat(user, SPAN_NOTICE("The Apex rewards you with \the [choice]."))
+					to_chat(user, SPAN_NOTICE("Апекс дарует вам [choice]."))
 					sleep(20)
 					working = FALSE
 					on_update_icon()
@@ -129,11 +129,11 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 						if(!isnum(I))
 							new I(get_turf(src))
 				else
-					to_chat(user, SPAN_WARNING("You aren't worthy of \the [choice]!"))
+					to_chat(user, SPAN_WARNING("Вы не достойны [choice]!"))
 		else
-			to_chat(user, SPAN_WARNING("\The [src.name] is still working!"))
+			to_chat(user, SPAN_WARNING("[src.name] еще работает!"))
 	else
-		to_chat(user, SPAN_WARNING("You don't know what to do with \the [src.name]."))
+		to_chat(user, SPAN_WARNING("Вы не знаете, что делать с [src.name]."))
 	..()
 
 /obj/structure/voxuplink/use_tool(obj/item/I, mob/user)
@@ -142,8 +142,8 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 		favors += A.favor_value
 		qdel(A)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [A] into \the [src]."),
-			SPAN_NOTICE("You return \the [A] back to the Apex with \the [src].")
+			SPAN_NOTICE("[user] вставляет \a [A] в \the [src]."),
+			SPAN_NOTICE("Вы вернули [A] назад Апексу [src].")
 		)
 		return TRUE
 	if(istype(I, /obj/item/bluecrystal))
@@ -151,8 +151,8 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 		favors += A.favor_value
 		qdel(A)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [A] into \the [src]."),
-			SPAN_NOTICE("You offer \the [A.name] to the Apex.")
+			SPAN_NOTICE("[user] вставляет [A] в [src]."),
+			SPAN_NOTICE("Вы предложили [A.name] Апексу.")
 		)
 		return TRUE
 	return ..()
@@ -162,8 +162,8 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 		favors += I.favor_value
 		qdel(I)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [I] into \the [src]."),
-			SPAN_NOTICE("You return \the [I] back to the Apex with \the [src].")
+			SPAN_NOTICE("[user] вставляет [A] в [src]."),
+			SPAN_NOTICE("Вы вернули [A] назад Апексу [src].")
 		)
 		return TRUE
 	return ..()
@@ -175,8 +175,8 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 		icon_state = "printer"
 
 /obj/item/voxartifact
-	name = "Apex shard"
-	desc = "An odd-looking piece of organic matter, You can hear faint humming from the inside."
+	name = "Осколок Апекса"
+	desc = "Странный на вид кусок органики. Внутри слышно слабое гудение."
 	icon = 'icons/obj/urn.dmi'
 	icon_state = "urn"
 	var/favor_value = 4
@@ -194,13 +194,13 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 
 /obj/item/voxartifact/attack_self(mob/living/carbon/human/user)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts tinkering with [src.name]."),
-		SPAN_NOTICE("You start to analyze \the [src.name]."),
+		SPAN_NOTICE("[user] начинает возиться с [src.name]."),
+		SPAN_NOTICE("Вы начинаете анализировать [src.name]."),
 	)
 	var/obj/item/organ/internal/voxstack/stack = user.internal_organs_by_name[BP_STACK]
 	if (istype(stack))
 		if (do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE | DO_BAR_OVER_USER))
-			to_chat(user, SPAN_NOTICE("\The [src.name] disappears after a moment, leaving something behind.\nYou were able to send it back to arkship, but Apex did not appreciate your actions."))
+			to_chat(user, SPAN_NOTICE("[src.name] исчезает через мгновение, оставляя что-то после себя.\nВам удалось отправить его обратно на ковчег, но Апекс не оценил ваших действий."))
 			var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
@@ -208,13 +208,13 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 	else
 		if (do_after(user, 60 SECONDS, src, DO_PUBLIC_UNIQUE | DO_BAR_OVER_USER))
 			if(rand(open_chance))
-				to_chat(user, SPAN_NOTICE("After tinkering with [src.name] for some time, it suddenly disappears leaving something behind!"))
+				to_chat(user, SPAN_NOTICE("После возни с [src.name] на какое-то время он внезапно исчезает, оставляя после себя что-то!"))
 				var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
 				s.set_up(10, 1, src)
 				s.start()
 				activate()
 			else
-				to_chat(user, SPAN_NOTICE("You are unable to learn anything useful about [src.name]."))
+				to_chat(user, SPAN_NOTICE("Вы не можете узнать ничего полезного о [src.name]."))
 
 /obj/item/voxartifact/proc/activate()
 	new /obj/random/loot(get_turf(src))
@@ -222,15 +222,15 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 	qdel(src)
 
 /obj/structure/voxartifactbig
-	name = "biopod"
-	desc = "A bizarre structure made out of chitin-like material."
+	name = "биопод"
+	desc = "Причудливая структура, сделанная из хитиноподобного материала."
 	icon = 'maps/antag_spawn/vox/vox.dmi'
 	icon_state = "pod_big"
 	density = TRUE
 	var/favor_value = 12
 
 /obj/voxartifactspawner
-	name = "landmark"
+	name = "посадочная метка"
 	icon = 'icons/effects/landmarks.dmi'
 	icon_state = "x2"
 	anchored = TRUE
@@ -256,16 +256,16 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 	qdel(src)
 
 /obj/item/bluecrystal
-	name = "Bluespace crystal"
-	desc = "Unusual looking crystal with eerie deep blue shimmering, holding it in your hand makes you feel like if your hand was sinking in to it."
+	name = "БлюСпейс кристалл"
+	desc = "Необычно выглядящий кристалл с жутковатым темно-синим мерцанием, держа его в руке, чувствуешь, будто твоя рука погружается в него."
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "ansible_crystal"
 	w_class = ITEM_SIZE_TINY
 	var/favor_value = 1
 
 /obj/structure/voxanalyzer
-	name = "oddity analyzer"
-	desc = "An old, dusty machine meant to analyze various bluespace anomalies and send research data directly to SCGEC Observatory."
+	name = "анализатор странностей"
+	desc = "Старая пыльная машина, предназначенная для анализа различных БлюСпейс аномалий и отправки исследовательских данных непосредственно в обсерваторию SCGEC."
 	icon = 'icons/obj/machines/research/xenoarcheology_scanner.dmi'
 	icon_state = "scanner"
 	anchored = FALSE
@@ -290,8 +290,8 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 /obj/structure/voxanalyzer/attack_hand(mob/living/carbon/human/user)
 	if(activated)
 		if(!working)
-			visible_message(SPAN_NOTICE("<b>\The [src]'s</b> microphone transmits, \"Nice find! We can send you a few of our prototypes in exchange for data about these crystals.\""))
-			var/choice = input(user, "Choose a prototype.\n [points] crystals sent.", "Oddity analyzer") as null|anything in rewards
+			visible_message(SPAN_NOTICE("<b>[src]</b> микрофон передает, \"Хорошая находка! Мы можем выслать вам несколько наших прототипов в обмен на данные об этих кристаллах.\""))
+			var/choice = input(user, "Выберите прототип.\n [points] кристары отправлены.", "Анализатор Странностей") as null|anything in rewards
 			if (choice)
 				if((rewards[choice][1] <= points) && choice)
 					points -= rewards[choice][1]
@@ -299,32 +299,32 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 						if(!isnum(I))
 							new I(get_turf(src))
 				else
-					to_chat(user, SPAN_WARNING("\The [src.name] doesn't respond, maybe you should be less greedy next time?"))
+					to_chat(user, SPAN_WARNING("[src.name] не отвечает, может, в следующий раз стоит быть менее жадным?"))
 		else
-			to_chat(user, SPAN_WARNING("\The [src.name] is used by someone!"))
+			to_chat(user, SPAN_WARNING("[src.name] используется кем-то!"))
 	else
-		to_chat(user, SPAN_WARNING("\The [src.name] seems to be powered down."))
+		to_chat(user, SPAN_WARNING("[src.name] выглядит обесточеным."))
 	..()
 
 /obj/structure/voxanalyzer/use_tool(obj/item/I, mob/user)
 	if(istype(I, /obj/item/bluecrystal))
 		if(!activated)
-			to_chat(user, SPAN_INFO("As soon as you bring [I] closer to [src] it powers up with shower of sparks!."))
+			to_chat(user, SPAN_INFO("Как только вы подносите [I] ближе к [src], он взрывается ливнем искр!."))
 			var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
 			activated = TRUE
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts analyzing [I.name]."),
-			SPAN_NOTICE("You begin to analyze [I.name]."),
+			SPAN_NOTICE("[user] начинает анализировать [I.name]."),
+			SPAN_NOTICE("Вы начинаете анализировать [I.name]."),
 		)
 		working = TRUE
 		on_update_icon()
 		if (do_after(user, 1 SECONDS, src, DO_PUBLIC_UNIQUE | DO_BAR_OVER_USER))
 			points += crystal_value
 			qdel(I)
-			to_chat(user, SPAN_NOTICE("You finish analyzing \the [I.name]."))
+			to_chat(user, SPAN_NOTICE("Анализ закончен \the [I.name]."))
 		working = FALSE
 		on_update_icon()
 		return TRUE

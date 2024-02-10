@@ -40,7 +40,7 @@
 
 /obj/item/reagent_containers/glass/rag/attack_self(mob/user as mob)
 	if(on_fire && user.unEquip(src))
-		user.visible_message(SPAN_WARNING("\The [user] вытесняет [src]."), SPAN_WARNING("Вы вытеснили [src]."))
+		user.visible_message(SPAN_WARNING("[user] вытесняет [src]."), SPAN_WARNING("Вы вытеснили [src]."))
 		extinguish()
 	else
 		remove_contents(user)
@@ -50,11 +50,11 @@
 		ignite()
 		if(on_fire)
 			user.visible_message(
-				SPAN_WARNING("\The [user] свет \the [src] с \the [W]!"),
+				SPAN_WARNING("[user] подсветил \the [src] с помощью \the [W]!"),
 				SPAN_DANGER("Вы подсветили \the [src]!")
 			)
 		else
-			to_chat(user, SPAN_WARNING("You manage to singe \the [src], but it won't burn on its own.")) // Give a hint about needing fuel
+			to_chat(user, SPAN_WARNING("Вы поджигаете [src], но горения не происходит.")) // Give a hint about needing fuel
 
 	. = ..()
 	update_name()
@@ -101,9 +101,9 @@
 
 /obj/item/reagent_containers/glass/rag/proc/wipe_down(atom/A, mob/user)
 	if(!reagents.total_volume)
-		to_chat(user, SPAN_WARNING("The [initial(name)] is dry!"))
+		to_chat(user, SPAN_WARNING("[initial(name)] просохло!"))
 	else
-		user.visible_message("\The [user] starts to wipe down [A] with [src]!")
+		user.visible_message("[user] starts to wipe down [A] with [src]!")
 		reagents.splash(A, 1) //get a small amount of liquid on the thing we're wiping.
 		update_name()
 		if (do_after(user, 3 SECONDS, A, DO_PUBLIC_UNIQUE))

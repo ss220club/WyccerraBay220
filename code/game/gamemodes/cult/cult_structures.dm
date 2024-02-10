@@ -4,19 +4,19 @@
 	icon = 'icons/obj/cult.dmi'
 
 /obj/structure/cult/talisman
-	name = "Altar"
-	desc = "A bloodstained altar dedicated to Nar-Sie."
+	name = "Алтарь"
+	desc = "Окровавленный алтарь, посвященный Нар-Си."
 	icon_state = "talismanaltar"
 
 
 /obj/structure/cult/forge
-	name = "Daemon forge"
-	desc = "A forge used in crafting the unholy weapons used by the armies of Nar-Sie."
+	name = "Демоническая кузница"
+	desc = "Кузница, используемая для изготовления нечестивого оружия, используемого армиями Нар-Си."
 	icon_state = "forge"
 
 /obj/structure/cult/pylon
-	name = "pylon"
-	desc = "A floating crystal that hums with an unearthly energy."
+	name = "пилон"
+	desc = "Парящий кристалл, гудящий неземной энергией."
 	icon = 'icons/obj/structures/pylon.dmi'
 	icon_state = "pylon"
 	light_power = 0.5
@@ -44,8 +44,8 @@
 
 
 /obj/structure/cult/tome
-	name = "Desk"
-	desc = "A desk covered in arcane manuscripts and tomes in unknown languages. Looking at the text makes your skin crawl."
+	name = "Стол"
+	desc = "Стол, заваленный загадочными рукописями и томами на неизвестных языках. Глядя на текст, по коже пробегают мурашки."
 	icon_state = "tomealtar"
 
 //sprites for this no longer exist	-Pete
@@ -59,8 +59,8 @@
 */
 
 /obj/gateway
-	name = "gateway"
-	desc = "You're pretty sure that abyss is staring back."
+	name = "врата"
+	desc = "Вы почти уверены, что бездна смотрит в вас."
 	icon = 'icons/effects/64x64.dmi'
 	icon_state = "portal"
 	pixel_x = -16

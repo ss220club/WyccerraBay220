@@ -13,7 +13,7 @@ GLOBAL_DATUM_INIT(borers, /datum/antagonist/borer, new)
 
 	faction_role_text = "Тралл Инопланетного глиста"
 	faction_descriptor = "Unity"
-	faction_welcome = "Теперь вы в плену у инопланетного глиста головного мозга. Пожалуйста, послушайте, что они хотят сказать; они у вас в голове."
+	faction_welcome = "Теперь вы в плену у инопланетного глиста. Пожалуйста, послушайте, что они хотят сказать; они у вас в голове."
 	faction = "borer"
 	faction_indicator = "hudalien"
 

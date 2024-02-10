@@ -16,7 +16,7 @@
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
-			to_chat(user, SPAN_NOTICE("Вы закрутили \the [machine] на место."))
+			to_chat(user, SPAN_NOTICE("Вы закрутили [machine] на место."))
 			machine.anchored = TRUE
 	if(isWelder(I))
 		var/obj/item/weldingtool/WT = I
@@ -27,7 +27,7 @@
 			if (!WT.remove_fuel(3, user))
 				return TRUE
 			TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
-			to_chat(user, SPAN_NOTICE("Вы разобрали \the [machine]."))
+			to_chat(user, SPAN_NOTICE("Вы разобрали [machine]."))
 			machine.dismantle()
 
 
@@ -58,7 +58,7 @@
 	if(isCoil(I))
 		var/obj/item/stack/cable_coil/C = I
 		if(C.get_amount() < 5)
-			to_chat(user, SPAN_WARNING("Вам понадобится пять отрезков кабеля, чтобы добавить их к \the [machine]."))
+			to_chat(user, SPAN_WARNING("Вам понадобится пять отрезков кабеля, чтобы добавить их к [machine]."))
 			return TRUE
 		playsound(machine.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		to_chat(user, SPAN_NOTICE("Вы начинаете добавлять кабели к раме."))
@@ -93,7 +93,7 @@
 			TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_parts)
 			user.unEquip(I, machine)
 			playsound(machine.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			to_chat(user, SPAN_NOTICE("Вы добавляете печатную плату в \the [machine]."))
+			to_chat(user, SPAN_NOTICE("Вы добавляете печатную плату в [machine]."))
 			machine.circuit = I
 			return
 		else

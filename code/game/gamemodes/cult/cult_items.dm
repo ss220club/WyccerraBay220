@@ -1,6 +1,6 @@
 /obj/item/melee/cultblade
-	name = "cult blade"
-	desc = "An arcane weapon wielded by the followers of Nar-Sie."
+	name = "меч культа"
+	desc = "Тайное оружие, которым владеют последователи Нар-Си."
 	icon = 'icons/obj/weapons/melee_physical.dmi'
 	icon_state = "cultblade"
 	item_state = "cultblade"
@@ -24,9 +24,9 @@
 		affecting = H.get_organ(zone)
 
 	if(affecting)
-		to_chat(user, SPAN_DANGER("An unexplicable force rips through your [affecting.name], tearing the sword from your grasp!"))
+		to_chat(user, SPAN_DANGER("Необъяснимая сила пронзает твою [affecting.name], вырывая меч из твоих рук!"))
 	else
-		to_chat(user, SPAN_DANGER("An unexplicable force rips through you, tearing the sword from your grasp!"))
+		to_chat(user, SPAN_DANGER("Необъяснимая сила пронзает вас, вырывая меч из ваших рук!"))
 
 	//random amount of damage between half of the blade's force and the full force of the blade.
 	user.apply_damage(rand(force/2, force), DAMAGE_BRUTE, zone, (DAMAGE_FLAG_SHARP | DAMAGE_FLAG_EDGE), armor_pen = 100)
@@ -41,14 +41,14 @@
 
 /obj/item/melee/cultblade/pickup(mob/living/user as mob)
 	if (!iscultist(user))
-		to_chat(user, SPAN_WARNING("An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to be rid of this blade quickly."))
+		to_chat(user, SPAN_WARNING("Когда вы берете в руки меч культиста, вас охватывает непреодолимое чувство страха. Было бы разумно поскорее избавиться от этого клинка."))
 		user.make_dizzy(120)
 
 
 /obj/item/clothing/head/culthood
-	name = "cult hood"
+	name = "культистский капюшон"
 	icon_state = "culthood"
-	desc = "A hood worn by the followers of Nar-Sie."
+	desc = "Капюшон, который носят последователи Нар-Си."
 	flags_inv = HIDEFACE
 	body_parts_covered = HEAD
 	armor = list(
@@ -60,9 +60,9 @@
 	siemens_coefficient = 0.8 //That's a pretty cool opening in the hood. Also: Cloth making physical contact to the skull.
 
 /obj/item/clothing/head/culthood/magus
-	name = "magus helm"
+	name = "шлем мага"
 	icon_state = "magus"
-	desc = "A helm worn by the followers of Nar-Sie."
+	desc = "Шлем, который носят последователи Нар-Си."
 	flags_inv = HIDEFACE | BLOCKHAIR
 	body_parts_covered = HEAD|FACE|EYES
 	armor = list(
@@ -76,8 +76,8 @@
 	icon_state = "cult_hoodalt"
 
 /obj/item/clothing/suit/cultrobes
-	name = "cult robes"
-	desc = "A set of durable robes worn by the followers of Nar-Sie."
+	name = "культистская роба"
+	desc = "Набор прочных одежд, которые носят последователи Нар-Си."
 	icon_state = "cultrobes"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 	allowed = list(/obj/item/book/tome,/obj/item/melee/cultblade)
@@ -95,8 +95,8 @@
 	icon_state = "cultrobesalt"
 
 /obj/item/clothing/suit/cultrobes/magusred
-	name = "magus robes"
-	desc = "A set of plated robes worn by the followers of Nar-Sie."
+	name = "магическая роба"
+	desc = "Комплект латных одеяний, которые носят последователи Нар-Си."
 	icon_state = "magusred"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
@@ -109,8 +109,8 @@
 	)
 
 /obj/item/clothing/head/helmet/space/cult
-	name = "cult helmet"
-	desc = "A space worthy helmet used by the followers of Nar-Sie."
+	name = "культистский шлем"
+	desc = "Достойный космический шлем, используемый последователями Нар-Си."
 	icon_state = "cult_helmet"
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,
@@ -124,9 +124,9 @@
 	siemens_coefficient = 0.3 //Bone is not very conducive to electricity.
 
 /obj/item/clothing/suit/space/cult
-	name = "cult armour"
+	name = "культистская броня"
 	icon_state = "cult_armour"
-	desc = "A bulky suit of armour, bristling with spikes. It looks space proof."
+	desc = "Громоздкий доспех, ощетинившийся шипами. Он выглядит космически."
 	allowed = list(/obj/item/book/tome,/obj/item/melee/cultblade,/obj/item/tank,/obj/item/device/suit_cooling_unit)
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,

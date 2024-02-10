@@ -2,12 +2,12 @@ GLOBAL_DATUM_INIT(changelings, /datum/antagonist/changeling, new)
 
 /datum/antagonist/changeling
 	id = MODE_CHANGELING
-	role_text = "Changeling"
-	role_text_plural = "Changelings"
+	role_text = "Тенелинг"
+	role_text_plural = "Тенелинги"
 	feedback_tag = "changeling_objective"
 	blacklisted_jobs = list(/datum/job/ai, /datum/job/cyborg, /datum/job/submap)
 	restricted_jobs = list(/datum/job/officer, /datum/job/warden, /datum/job/detective, /datum/job/captain, /datum/job/hos)
-	welcome_text = "Use say \"%LANGUAGE_PREFIX%g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them."
+	welcome_text = "Говорите \"%LANGUAGE_PREFIX%g message\" общаться с другими тенелингами. Помните: вы получите все их ранее поглощенные ДНК, если поглотите их."
 	flags = ANTAG_SUSPICIOUS | ANTAG_RANDSPAWN | ANTAG_VOTABLE
 	antaghud_indicator = "hudchangeling"
 
@@ -17,7 +17,7 @@ GLOBAL_DATUM_INIT(changelings, /datum/antagonist/changeling, new)
 	return replacetext(welcome_text, "%LANGUAGE_PREFIX%", recipient?.get_prefix_key(/singleton/prefix/language) || ",")
 
 /datum/antagonist/changeling/get_special_objective_text(datum/mind/player)
-	return "<br><b>Changeling ID:</b> [player.changeling.changelingID].<br><b>Genomes Absorbed:</b> [player.changeling.absorbedcount]"
+	return "<br><b>Тенелинг ID:</b> [player.changeling.changelingID].<br><b>Поглощенные геномы:</b> [player.changeling.absorbedcount]"
 
 /datum/antagonist/changeling/update_antag_mob(datum/mind/player)
 	..()

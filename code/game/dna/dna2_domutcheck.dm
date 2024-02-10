@@ -33,14 +33,14 @@
 		if(changed)
 			// Gene active (or ALWAYS ACTIVATE)
 			if(gene_active || (gene.flags & GENE_ALWAYS_ACTIVATE))
-				testing("[gene.name] activated!")
+				testing("[gene.name] активирован!")
 				gene.activate(M,connected,flags)
 				if(M)
 					M.active_genes |= gene.type
 					M.update_icon = 1
 			// If Gene is NOT active:
 			else
-				testing("[gene.name] deactivated!")
+				testing("[gene.name] деактивирован!")
 				gene.deactivate(M,connected,flags)
 				if(M)
 					M.active_genes -= gene.type

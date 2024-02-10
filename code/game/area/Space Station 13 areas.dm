@@ -22,7 +22,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	/// Boolean. Whether or not the area is in 'party light' mode. Do not modify directly; Use `./partyalert()` or `./partyreset()` instead.
 	var/party = null
 	level = null
-	name = "Unknown"
+	name = "Неизвестное"
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "unknown"
 	plane = DEFAULT_PLANE

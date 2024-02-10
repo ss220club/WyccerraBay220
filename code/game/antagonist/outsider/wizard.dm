@@ -3,9 +3,9 @@ GLOBAL_DATUM_INIT(wizards, /datum/antagonist/wizard, new)
 /datum/antagonist/wizard
 	id = MODE_WIZARD
 	role_text = ANTAG_WIZARD
-	role_text_plural = ANTAG_WIZARD + "s"
+	role_text_plural = ANTAG_WIZARD_DESC
 	landmark_id = "wizard"
-	welcome_text = "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.<br>In your pockets you will find a teleport scroll. Use it as needed."
+	welcome_text = "Список доступных заклинаний вы найдете в своей книге заклинаний. Тщательно выбирайте свой магический арсенал.<br>В карманах вы найдете свиток телепортации. Используйте его по мере необходимости."
 	flags = ANTAG_OVERRIDE_JOB | ANTAG_OVERRIDE_MOB | ANTAG_CLEAR_EQUIPMENT | ANTAG_CHOOSE_NAME | ANTAG_VOTABLE | ANTAG_SET_APPEARANCE
 	antaghud_indicator = "hudwizard"
 
@@ -64,7 +64,7 @@ GLOBAL_DATUM_INIT(wizards, /datum/antagonist/wizard, new)
 
 /datum/antagonist/wizard/update_antag_mob(datum/mind/wizard)
 	..()
-	wizard.StoreMemory("<B>Remember:</B> do not forget to prepare your spells.", /singleton/memory_options/system)
+	wizard.StoreMemory("<B>Помните:</B> не забудь подготовить свои заклинания.", /singleton/memory_options/system)
 	wizard.current.real_name = "[pick(GLOB.wizard_first)] [pick(GLOB.wizard_second)]"
 	wizard.current.SetName(wizard.current.real_name)
 
@@ -83,14 +83,14 @@ GLOBAL_DATUM_INIT(wizards, /datum/antagonist/wizard, new)
 	..()
 	for(var/p in current_antagonists)
 		var/datum/mind/player = p
-		var/text = "<b>[player.name]'s spells were:</b>"
+		var/text = "<b>[player.name] заклинания были:</b>"
 		if(!player.learned_spells || !length(player.learned_spells))
-			text += "<br>None!"
+			text += "<br>Не было!"
 		else
 			for(var/s in player.learned_spells)
 				var/spell/spell = s
 				text += "<br><b>[spell.name]</b> - "
-				text += "Speed: [spell.spell_levels["speed"]] Power: [spell.spell_levels["power"]]"
+				text += "Скорость: [spell.spell_levels["speed"]] Мощь: [spell.spell_levels["power"]]"
 		text += "<br>"
 		to_world(text)
 
@@ -111,18 +111,18 @@ GLOBAL_DATUM_INIT(wizards, /datum/antagonist/wizard, new)
 /*Checks if the wizard is wearing the proper attire.
 Made a proc so this is not repeated 14 (or more) times.*/
 /mob/proc/wearing_wiz_garb()
-	to_chat(src, "Silly creature, you're not a human. Only humans can cast this spell.")
+	to_chat(src, "Глупое существо, ты не человек. Только люди могут использовать это заклинание.")
 	return 0
 
 // Humans can wear clothes.
 /mob/living/carbon/human/wearing_wiz_garb()
 	if(!is_wiz_garb(src.wear_suit) && (!src.species.hud || (slot_wear_suit in src.species.hud.equip_slots)))
-		to_chat(src, SPAN_WARNING("I don't feel strong enough without my robe."))
+		to_chat(src, SPAN_WARNING("Без рясы я не чувствую себя достаточно сильным."))
 		return 0
 	if(!is_wiz_garb(src.shoes) && (!species.hud || (slot_shoes in src.species.hud.equip_slots)))
-		to_chat(src, SPAN_WARNING("I don't feel strong enough without my sandals."))
+		to_chat(src, SPAN_WARNING("Я не чувствую себя достаточно сильным без сандалий."))
 		return 0
 	if(!is_wiz_garb(src.head) && (!species.hud || (slot_head in src.species.hud.equip_slots)))
-		to_chat(src, SPAN_WARNING("I don't feel strong enough without my hat."))
+		to_chat(src, SPAN_WARNING("Без шляпы я не чувствую себя достаточно сильным."))
 		return 0
 	return 1

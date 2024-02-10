@@ -101,7 +101,7 @@
 	)
 
 /obj/item/stock_parts/circuitboard/ntnet_relay
-	name = "печатная плата (NTNet кватовое реле)"
+	name = "печатная плата (NTNet квантовое реле)"
 	build_path = /obj/machinery/ntnet_relay
 	board_type = "machine"
 	origin_tech = list(TECH_DATA = 4)

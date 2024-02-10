@@ -1,6 +1,6 @@
 /obj/rune
-	name = "rune"
-	desc = "A strange collection of symbols drawn in blood."
+	name = "руна"
+	desc = "Странная коллекция символов, нарисованных кровью."
 	anchored = TRUE
 	icon = 'icons/effects/uristrunes.dmi'
 	icon_state = "blank"
@@ -37,12 +37,12 @@
 			AddOverlays(t)
 		GLOB.cult.rune_strokes[type] = f.Copy()
 	color = bcolor
-	desc = "A strange collection of symbols drawn in [blood]."
+	desc = "Странная коллекция нарисованных символов. [blood]."
 
 /obj/rune/examine(mob/user)
 	. = ..()
 	if(iscultist(user))
-		to_chat(user, "This is \a [cultname] rune.")
+		to_chat(user, "Это [cultname] руна.")
 
 
 /obj/rune/use_tool(obj/item/tool, mob/user, list/click_params)
@@ -51,8 +51,8 @@
 		if (!iscultist(user))
 			return FALSE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] rubs \the [src] with \a [tool], and \the [src] is absorbed by it."),
-			SPAN_NOTICE("You retrace your steps, carefully undoing the lines of \the [src] with \the [tool].")
+			SPAN_NOTICE(" [user] трет [src] [tool], и [src] поглощает его."),
+			SPAN_NOTICE("Вы повторяете свои шаги, осторожно удаляя строки [src] с помощью [tool].")
 		)
 		qdel(src)
 		return TRUE
@@ -60,9 +60,9 @@
 	// Null Rod - Remove rune
 	if (istype(tool, /obj/item/nullrod))
 		user.visible_message(
-			SPAN_NOTICE("\The [user] hits \the [src] with \a [tool], and it disappears, fizzling."),
-			SPAN_NOTICE("You disrupt \the [src]'s vile magic with the deadening field of \the [tool]."),
-			SPAN_ITALIC("You hear a fizzle.")
+			SPAN_NOTICE("[user] ударяет по [src] [tool], и тот исчезает, шипя."),
+			SPAN_NOTICE("Вы разрушаете мерзкую магию [src] мертвящим полем [tool]."),
+			SPAN_ITALIC("Вы слышите шипение.")
 		)
 		qdel(src)
 		return TRUE
@@ -72,13 +72,13 @@
 
 /obj/rune/attack_hand(mob/living/user)
 	if(!iscultist(user))
-		to_chat(user, "You can't mouth the arcane scratchings without fumbling over them.")
+		to_chat(user, "Вы не можете произносить тайные царапины, не возясь с ними.")
 		return
 	if(istype(user.wear_mask, /obj/item/clothing/mask/muzzle) || user.silent)
-		to_chat(user, "You are unable to speak the words of the rune.")
+		to_chat(user, "Вы не можете произнести слова рун.")
 		return
 	if(GLOB.cult.powerless)
-		to_chat(user, "You read the words, but nothing happens.")
+		to_chat(user, "Вы читаете слова, но ничего не происходит.")
 		return fizzle(user)
 	cast(user)
 
@@ -96,7 +96,7 @@
 			. += M
 
 /obj/rune/proc/fizzle(mob/living/user)
-	visible_message(SPAN_WARNING("The markings pulse with a small burst of light, then fall dark."), "You hear a fizzle.")
+	visible_message(SPAN_WARNING("Отметины пульсируют небольшой вспышкой света, а затем темнеют."), "Вы слышите шипение.")
 
 //Makes the speech a proc so all verbal components can be easily manipulated as a whole, or individually easily
 /obj/rune/proc/speak_incantation(mob/living/user, incantation)

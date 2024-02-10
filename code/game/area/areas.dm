@@ -47,7 +47,7 @@
 // Area is expected to be a non-null instance.
 /proc/ChangeArea(turf/T, area/A)
 	if(!istype(A))
-		CRASH("Area change attempt failed: invalid area supplied.")
+		CRASH("Попытка изменения региона не удалась: указана неверная область.")
 	var/area/old_area = get_area(T)
 	if(old_area == A)
 		return

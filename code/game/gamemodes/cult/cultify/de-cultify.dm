@@ -1,6 +1,6 @@
 /turf/unsimulated/wall/cult/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(istype(I, /obj/item/nullrod))
-		user.visible_message(SPAN_NOTICE("\The [user] touches \the [src] with \the [I], and it shifts."), SPAN_NOTICE("You touch \the [src] with \the [I], and it shifts."))
+		user.visible_message(SPAN_NOTICE("[user] соприкасается с [src] [I], и оно обращается."), SPAN_NOTICE("Вы соприкасаетесь с [src] [I], и оно обращается."))
 		ChangeTurf(/turf/unsimulated/wall)
 		return TRUE
 	return ..()
@@ -8,8 +8,8 @@
 /turf/simulated/wall/cult/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if (istype(I, /obj/item/nullrod))
 		user.visible_message(
-			SPAN_NOTICE("\The [user] touches \the [src] with \the [I], and it shifts."),
-			SPAN_NOTICE("You touch \the [src] with \the [I], and it shifts.")
+			SPAN_NOTICE("[user] соприкасается с [src] [I], и оно обращается."),
+			SPAN_NOTICE("Вы соприкасаетесь с [src] [I], и оно обращается.")
 		)
 		decultify_wall()
 		return TRUE
@@ -18,8 +18,8 @@
 /turf/simulated/floor/cult/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if (istype(I, /obj/item/nullrod))
 		user.visible_message(
-			SPAN_NOTICE("\The [user] touches \the [src] with \the [I], and it shifts."),
-			SPAN_NOTICE("You touch \the [src] with \the [I], and it shifts.")
+			SPAN_NOTICE("[user] соприкасается с [src] [I], и оно обращается."),
+			SPAN_NOTICE("Вы соприкасаетесь с [src] [I], и оно обращается.")
 		)
 		decultify_floor()
 		return TRUE

@@ -37,7 +37,7 @@
 	if(activation_message)
 		to_chat(M, SPAN_WARNING("[activation_message]"))
 	else
-		testing("[name] has no activation message.")
+		testing("[name] не имеет сообщения активации.")
 
 /datum/dna/gene/disability/deactivate(mob/M, connected, flags)
 	if(mutation && (mutation in M.mutations))
@@ -49,60 +49,60 @@
 	if(deactivation_message)
 		to_chat(M, SPAN_WARNING("[deactivation_message]"))
 	else
-		testing("[name] has no deactivation message.")
+		testing("[name] не имеет сообщения деактивации.")
 
 // Note: Doesn't seem to do squat, at the moment.
 /datum/dna/gene/disability/hallucinate
-	name="Hallucinate"
-	activation_message="Your mind says 'Hello'."
+	name="Галлюцинация"
+	activation_message="Твой разум говорит 'Привет, ГЫ'"
 	mutation=mHallucination
 
 /datum/dna/gene/disability/hallucinate/New()
 	block=GLOB.HALLUCINATIONBLOCK
 
 /datum/dna/gene/disability/epilepsy
-	name="Epilepsy"
-	activation_message="You get a headache."
+	name="Эпилепсия"
+	activation_message="У тебя болит голова."
 	disability=EPILEPSY
 
 /datum/dna/gene/disability/epilepsy/New()
 	block=GLOB.HEADACHEBLOCK
 
 /datum/dna/gene/disability/cough
-	name="Coughing"
-	activation_message="You start coughing."
+	name="Кашель"
+	activation_message="Вы начинаете кашлять."
 	disability=COUGHING
 
 /datum/dna/gene/disability/cough/New()
 	block=GLOB.COUGHBLOCK
 
 /datum/dna/gene/disability/clumsy
-	name="Clumsiness"
-	activation_message="You feel lightheaded."
+	name="Неуклюжесть"
+	activation_message="Вы чувствуете головокружение."
 	mutation=MUTATION_CLUMSY
 
 /datum/dna/gene/disability/clumsy/New()
 	block=GLOB.CLUMSYBLOCK
 
 /datum/dna/gene/disability/nervousness
-	name="Nervousness"
-	activation_message="You feel nervous."
+	name="Нервозность"
+	activation_message="Вы нервничаете."
 	disability=NERVOUS
 
 /datum/dna/gene/disability/nervousness/New()
 	block=GLOB.NERVOUSBLOCK
 
 /datum/dna/gene/disability/blindness
-	name="Blindness"
-	activation_message="You can't seem to see anything."
+	name="Слепота"
+	activation_message="Вы не можете ничего увидеть."
 	sdisability=BLINDED
 
 /datum/dna/gene/disability/blindness/New()
 	block=GLOB.BLINDBLOCK
 
 /datum/dna/gene/disability/deaf
-	name="Deafness"
-	activation_message="It's kinda quiet."
+	name="Глухота"
+	activation_message="Кажется очень тихо."
 	sdisability=DEAFENED
 
 /datum/dna/gene/disability/deaf/New()
@@ -113,8 +113,8 @@
 	M.ear_deaf = 1
 
 /datum/dna/gene/disability/nearsighted
-	name="Nearsightedness"
-	activation_message="Your eyes feel weird..."
+	name="Близорукость"
+	activation_message="Твои глаза кажутся странными..."
 	disability=NEARSIGHTED
 
 /datum/dna/gene/disability/nearsighted/New()

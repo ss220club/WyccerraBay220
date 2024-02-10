@@ -1,6 +1,6 @@
 /obj/item/paper/talisman/stun
-	talisman_name = "stun"
-	talisman_desc = "temporarily stuns a targeted mob with a blinding and disorienting flash of light"
+	talisman_name = "ошеломление"
+	talisman_desc = "временно оглушает выбранного моба ослепляющей и дезориентирующей вспышкой света"
 	talisman_sound = 'sound/weapons/flash.ogg'
 	valid_target_type = list(
 		/mob/living/carbon,
@@ -12,7 +12,7 @@
 /obj/item/paper/talisman/stun/get_antag_info()
 	. = ..()
 	. += {"
-		<p>The stun talisman's effects can be blocked or mitigated by certain eye and face wear, similarly to a flash.</p>
+		<p>Эффекты оглушающего талисмана, аналогично вспышке можно заблокировать или смягчить определенной защитой глаз и лица.</p>
 	"}
 
 

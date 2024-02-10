@@ -22,17 +22,17 @@ GLOBAL_DATUM_INIT(cult, /datum/antagonist/cultist, new)
 
 /datum/antagonist/cultist
 	id = MODE_CULTIST
-	role_text = "Cultist"
-	role_text_plural = "Cultists"
+	role_text = "Культист"
+	role_text_plural = "Культисты"
 	restricted_jobs = list(/datum/job/lawyer, /datum/job/captain, /datum/job/hos, /datum/job/officer, /datum/job/warden, /datum/job/detective)
 	blacklisted_jobs = list(/datum/job/ai, /datum/job/cyborg, /datum/job/chaplain, /datum/job/psychiatrist, /datum/job/submap)
 	feedback_tag = "cult_objective"
 	antag_indicator = "hudcultist"
-	welcome_text = "You have a tome in your possession; one that will help you start the cult. Use it well and remember - there are others."
-	victory_text = "The cult wins! It has succeeded in serving its dark masters!"
-	loss_text = "The staff managed to stop the cult!"
-	victory_feedback_tag = "win - cult win"
-	loss_feedback_tag = "loss - staff stopped the cult"
+	welcome_text = "У вас есть священное писание; которое поможет вам начать культ. Используйте его правильно и помните — вокруг есть и другие."
+	victory_text = "Культ побеждает! Он преуспел в служении своим темным хозяевам!"
+	loss_text = "Экипажу удалось остановить культ!"
+	victory_feedback_tag = "победа - культ победил"
+	loss_feedback_tag = "поражение - экипаж справился с культом"
 	flags = ANTAG_SUSPICIOUS | ANTAG_RANDSPAWN | ANTAG_VOTABLE
 	hard_cap = 5
 	hard_cap_round = 6
@@ -50,7 +50,7 @@ GLOBAL_DATUM_INIT(cult, /datum/antagonist/cultist, new)
 	var/cult_rating = 0
 	var/list/cult_rating_bounds = list(CULT_RUNES_1, CULT_RUNES_2, CULT_RUNES_3, CULT_GHOSTS_1, CULT_GHOSTS_2, CULT_GHOSTS_3)
 	var/max_cult_rating = 0
-	var/conversion_blurb = "You catch a glimpse of the Realm of Nar-Sie, the Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of That Which Waits. Assist your new compatriots in their dark dealings. Their goals are yours, and yours are theirs. You serve the Dark One above all else. Bring It back."
+	var/conversion_blurb = "Вы мельком видите Царство Нар-Си, Геометра Крови. Теперь вы видите, насколько хрупок мир, вы видите, что он должен быть открыт для познания Того, Что Ждет. Помогите своим новым соотечественникам в их темных делах. Их цели — ваши, а ваши — их. Служение Темному Лорду превыше всего. Возроди его."
 	var/station_summon_only = TRUE
 	var/no_shuttle_summon = TRUE
 
@@ -96,10 +96,10 @@ GLOBAL_DATUM_INIT(cult, /datum/antagonist/cultist, new)
 /datum/antagonist/cultist/remove_antagonist(datum/mind/player, show_message, implanted)
 	if(!..())
 		return 0
-	to_chat(player.current, SPAN_DANGER("An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and the memories of your time as his servant with it."))
+	to_chat(player.current, SPAN_DANGER("Незнакомый белый свет вспыхивает в вашем разуме, очищая порчу Темного лорда и воспоминания о том времени, когда вы были его слугой."))
 	player.ClearMemories(type)
 	if(show_message)
-		player.current.visible_message(SPAN_NOTICE("[player.current] looks like they just reverted to their old faith!"))
+		player.current.visible_message(SPAN_NOTICE("[player.current] похоже, они только что вернулись к своей старой вере!"))
 	remove_cult_magic(player.current)
 	remove_cultiness(CULTINESS_PER_CULTIST)
 
@@ -138,17 +138,17 @@ GLOBAL_DATUM_INIT(cult, /datum/antagonist/cultist, new)
 	if(CULT_RUNES_1 in to_update)
 		for(var/datum/mind/H in GLOB.cult.current_antagonists)
 			if(H.current)
-				to_chat(H.current, SPAN_OCCULT("The veil between this world and beyond grows thin, and your power grows."))
+				to_chat(H.current, SPAN_OCCULT("Завеса между этим миром и потусторонним становится тоньше, а ваша сила растет."))
 				add_cult_magic(H.current)
 	if(CULT_RUNES_2 in to_update)
 		for(var/datum/mind/H in GLOB.cult.current_antagonists)
 			if(H.current)
-				to_chat(H.current, SPAN_OCCULT("You feel that the fabric of reality is tearing."))
+				to_chat(H.current, SPAN_OCCULT("Вы чувствуете, что ткань реальности рвется."))
 				add_cult_magic(H.current)
 	if(CULT_RUNES_3 in to_update)
 		for(var/datum/mind/H in GLOB.cult.current_antagonists)
 			if(H.current)
-				to_chat(H.current, SPAN_OCCULT("The world is at end. The veil is as thin as ever."))
+				to_chat(H.current, SPAN_OCCULT("Миру конец. Завеса тонка, как никогда."))
 				add_cult_magic(H.current)
 
 	if((CULT_GHOSTS_1 in to_update) || (CULT_GHOSTS_2 in to_update) || (CULT_GHOSTS_3 in to_update))
@@ -159,7 +159,7 @@ GLOBAL_DATUM_INIT(cult, /datum/antagonist/cultist, new)
 	if(!iscultist(M) || !M.mind)
 		return
 
-	to_chat(M, SPAN_OCCULT("Do you want to abandon the cult of Nar'Sie? <a href='?src=\ref[src];confirmleave=1'>ACCEPT</a>"))
+	to_chat(M, SPAN_OCCULT("Хотите покинуть культ Нар'Си? <a href='?src=\ref[src];confirmleave=1'>ПРИНЯТЬ</a>"))
 
 /datum/antagonist/cultist/Topic(href, href_list)
 	if(href_list["confirmleave"])

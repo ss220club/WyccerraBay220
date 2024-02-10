@@ -3,10 +3,10 @@ GLOBAL_DATUM_INIT(ninjas, /datum/antagonist/ninja, new)
 
 /datum/antagonist/ninja
 	id = MODE_NINJA
-	role_text = "Operative"
-	role_text_plural = "Operatives"
+	role_text = "Оперативник"
+	role_text_plural = "Оперативники"
 	landmark_id = "ninjastart"
-	welcome_text = "<span class='info'>You are an elite operative of some interest group. You have a variety of abilities at your disposal, thanks to your advanced hardsuit.</span>"
+	welcome_text = "<span class='info'>Вы элитный оперативник секретных спец. служб. В вашем распоряжении множество способностей благодаря вашему усовершенствованному жесткому костюму.</span>"
 	flags = ANTAG_OVERRIDE_JOB | ANTAG_OVERRIDE_MOB | ANTAG_CLEAR_EQUIPMENT | ANTAG_CHOOSE_NAME | ANTAG_RANDSPAWN | ANTAG_VOTABLE | ANTAG_SET_APPEARANCE
 	antaghud_indicator = "hudninja"
 	initial_spawn_req = 1

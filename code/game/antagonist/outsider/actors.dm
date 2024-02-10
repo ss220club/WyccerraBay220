@@ -21,7 +21,7 @@ GLOBAL_DATUM_INIT(actor, /datum/antagonist/actor, new)
 	if(!..())
 		return
 
-	player.current.show_message("Вы работаете на [GLOB.using_map.company_name], занимается производством и трансляцией развлекательных программ на все свои активы.")
+	player.current.show_message("Вы работаете на [GLOB.using_map.company_name], занимаетесь производством и трансляцией развлекательных программ на все свои активы.")
 	player.current.show_message("Развлекайте съемочную группу! Старайтесь не слишком отрывать их от работы и напоминайте им, какая великая [GLOB.using_map.company_name] is!")
 
 /datum/antagonist/actor/equip(mob/living/carbon/human/player)
@@ -37,21 +37,21 @@ GLOBAL_DATUM_INIT(actor, /datum/antagonist/actor, new)
 
 /mob/observer/ghost/verb/join_as_actor()
 	set category = "Ghost"
-	set name = "Join as Actor"
-	set desc = "Join as an Actor to entertain the crew through television!"
+	set name = "Присоединиться за Актера"
+	set desc = "Присоединяйтесь как актер, чтобы развлечь экипаж по телевидению!"
 
 	if(!MayRespawn(1) || !GLOB.actor.can_become_antag(usr.mind, 1))
 		return
 
-	var/choice = alert("Are you sure you'd like to join as an actor?", "Confirmation","Yes", "No")
-	if(choice != "Yes")
+	var/choice = alert("Вы уверены, что хотите присоединиться за Актера?", "Подтверждение","Да", "Нет")
+	if(choice != "Да")
 		return
 
 	if(isghostmind(usr.mind) || isnewplayer(usr))
 		if(length(GLOB.actor.current_antagonists) >= GLOB.actor.hard_cap)
-			to_chat(usr, "No more actors may spawn at the current time.")
+			to_chat(usr, "Больше актеров не может появиться в настоящее время.")
 			return
 		GLOB.actor.create_default(usr)
 		return
 
-	to_chat(usr, "You must be observing or be a new player to spawn as an actor.")
+	to_chat(usr, "Вы должны наблюдать или стать новым игроком, чтобы появиться в роли актера.")

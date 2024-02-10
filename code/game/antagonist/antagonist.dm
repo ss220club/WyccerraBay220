@@ -5,7 +5,7 @@
 	var/list/blacklisted_jobs =		list(/datum/job/submap)   // Jobs that can NEVER be this antagonist
 
 	// Strings.
-	var/welcome_text = "Cry havoc and let slip the dogs of war!"
+	var/welcome_text = "Плачь о хаосе и выпусти псов войны.!"
 	var/leader_welcome_text                 // Text shown to the leader, if any.
 	var/victory_text                        // World output at roundend for victory.
 	var/loss_text                           // As above for loss.
@@ -14,8 +14,8 @@
 
 	// Role data.
 	var/id = "traitor"                      // Unique datum identifier. Also preferences option for this role.
-	var/role_text = "Traitor"               // special_role text.
-	var/role_text_plural = "Traitors"       // As above but plural.
+	var/role_text = "Предатель"               // special_role text.
+	var/role_text_plural = "Предатели"       // As above but plural.
 
 	// Visual references.
 	var/antaghud_indicator = "hudsyndicate" // Used by the ghost antagHUD.
@@ -72,12 +72,12 @@
 	var/default_access = list()
 	var/id_type = /obj/item/card/id
 
-	var/antag_text = "You are an antagonist! Within the rules, \
-		try to act as an opposing force to the crew. Further RP and try to make sure \
-		other players have <i>fun</i>! If you are confused or at a loss, always adminhelp, \
-		and before taking extreme actions, please try to also contact the administration! \
-		Think through your actions and make the roleplay immersive! <b>Please remember all \
-		rules aside from those without explicit exceptions apply to antagonists.</b>"
+	var/antag_text = "Ты антагонист! В рамках правил, \
+		попытайтесь действовать как противостоящая сила экипажу. Соблюдай РП и попробуй убедиться \
+		что другие игроки <i>веселятся</i>! Если вы запутались или растерялись, всегда обращайтесь в помощь администратору, \
+		и прежде чем предпринимать крайние действия, попробуйте еще и обратиться к администрации! \
+		Продумывайте свои действия и сделайте ролевую игру захватывающей! <b>Пожалуйста, помните все \
+		правила которые применяются к антагонистам, кроме тех, которые не содержат явных исключений.</b>"
 
 	// Map template that antag needs to load before spawning. Nulled after it's loaded.
 	var/datum/map_template/base_to_load

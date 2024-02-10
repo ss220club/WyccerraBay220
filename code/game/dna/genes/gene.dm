@@ -14,7 +14,7 @@
 	var/name="BASE GENE"
 
 	// Probably won't get used but why the fuck not
-	var/desc="Oh god who knows what this does."
+	var/desc="О боже, кто знает, что оно делает."
 
 	// Set in initialize()!
 	//  What gene activates this?

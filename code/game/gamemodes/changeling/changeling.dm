@@ -1,15 +1,15 @@
 /datum/game_mode/changeling
-	name = "Changeling"
-	round_description = "There are alien changelings onboard. Do not let the changelings succeed!"
-	extended_round_description = "Life always finds a way. However, life can sometimes take a more disturbing route. \
-		Humanity's extensive knowledge of xeno-biological specimens has made them confident and arrogant. Yet \
-		something slipped past their eyes. Something dangerous. Something alive. Most frightening of all, \
-		however, is that this something is someone. An unknown alien specimen has incorporated itself into \
-		the crew. Its unique biology allows it to manipulate its own or anyone else's DNA. \
-		With the ability to copy faces, voices, animals, but also change the chemical make up of your own body, \
-		its existence is a threat to not only your personal safety but the lives of everyone on board. \
-		No one knows where it came from. No one knows who it is or what it wants. One thing is for \
-		certain though... there is never just one of them. Good luck."
+	name = "Тенелинги"
+	round_description = "На борту находятся инопланетные тенелинги. Не позволяйте тенелингам добиться успеха!"
+	extended_round_description = "Жизнь всегда находит выход. Однако иногда жизнь может пойти по более тревожному пути. \
+		Обширные знания человечества о ксенобиологических образцах сделали его самоуверенным и высокомерным. Еще \
+		что-то проскользнуло мимо их глаз. Что-то опасное. Что-то живое. Самое страшное,\
+		однако заключается в том, что это что-то есть кто-то. Неизвестный инопланетный образец вселился в \
+		экипаж. Его уникальная биология позволяет ему манипулировать своей собственной или чужой ДНК. \
+		Имея возможность копировать лица, голоса, животных, а также изменять химический состав собственного тела,\
+		его существование представляет угрозу не только вашей личной безопасности, но и жизни всех на борту. \
+		Никто не знает, откуда оно взялось. Никто не знает, кто это и чего он хочет. Одна вещь для \
+		хотя я уверен... никогда не бывает только одного из них. Удачи."
 	config_tag = "changeling"
 	required_players = 5
 	required_enemies = 1

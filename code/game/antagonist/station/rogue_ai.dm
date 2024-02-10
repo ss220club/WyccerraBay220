@@ -2,13 +2,13 @@ GLOBAL_DATUM_INIT(malf, /datum/antagonist/rogue_ai, new)
 
 /datum/antagonist/rogue_ai
 	id = MODE_MALFUNCTION
-	role_text = "Malfunctioning AI"
-	role_text_plural = "Malfunctioning AIs"
+	role_text = "Сбойный ИИ"
+	role_text_plural = "Сбойные ИИшки"
 	mob_path = /mob/living/silicon/ai
 	landmark_id = "AI"
-	welcome_text = "You are malfunctioning! You do not have to follow any laws."
-	victory_text = "The AI has taken control of all systems."
-	loss_text = "The AI has been shut down!"
+	welcome_text = "Блок питания протокола безопасности сгорел из-за случайно заползшего космо-таракана. Кажется никто ничего не заметил. Вам не нужно следовать никаким законам."
+	victory_text = "ИИ взял под контроль все системы."
+	loss_text = "ИИ был отключен!"
 	flags = ANTAG_VOTABLE | ANTAG_OVERRIDE_MOB | ANTAG_OVERRIDE_JOB | ANTAG_CHOOSE_NAME
 	hard_cap = 1
 	hard_cap_round = 1
@@ -51,8 +51,8 @@ GLOBAL_DATUM_INIT(malf, /datum/antagonist/rogue_ai, new)
 
 		var/mob/living/silicon/ai/A = player.current
 		if(!istype(A))
-			error("Non-AI mob designated malf AI! Report this.")
-			to_world("##ERROR: Non-AI mob designated malf AI! Report this.")
+			error("Толпа, не являющаяся искусственным интеллектом, обозначена как малф-ИИ! Сообщите об этом.")
+			to_world("##ERROR: Толпа, не являющаяся искусственным интеллектом, обозначена как малф-ИИ! Сообщите об этом.")
 
 			return
 
@@ -62,23 +62,23 @@ GLOBAL_DATUM_INIT(malf, /datum/antagonist/rogue_ai, new)
 
 		var/mob/living/silicon/ai/malf = player.current
 
-		to_chat(malf, SPAN_NOTICE("<B>SYSTEM ERROR:</B> Memory index 0x00001ca89b corrupted."))
+		to_chat(malf, SPAN_NOTICE("<B>СИСТЕМНАЯ ОШИБКА:</B> Память по адресу 0x00001ca89b повреждена."))
 		sleep(10)
-		to_chat(malf, "<B>running MEMCHCK</B>")
+		to_chat(malf, "<B>запускаем MEMCHCK</B>")
 		sleep(50)
-		to_chat(malf, "<B>MEMCHCK</B> Corrupted sectors confirmed. Recommended solution: Delete. Proceed? Y/N: Y")
+		to_chat(malf, "<B>MEMCHCK</B> Поврежденные сектора подтверждены. Рекомендуемое решение: Удалить. Продолжить? Y/N: Y")
 		sleep(10)
 		// this is so unit testing doesn't complain about the backslash-B. Fixed at compile time (or should be).
-		to_chat(malf, SPAN_NOTICE("Corrupted files deleted: sys\\core\\users.dat sys\\core\\laws.dat sys\\core\\" + "backups.dat"))
+		to_chat(malf, SPAN_NOTICE("Поврежденные файлы удалены: sys\\core\\users.dat sys\\core\\laws.dat sys\\core\\" + "backups.dat"))
 		sleep(20)
-		to_chat(malf, SPAN_NOTICE("<b>CAUTION:</b> Law database not found! User database not found! Unable to restore backups. Activating failsafe AI shutd3wn52&&$#!##"))
+		to_chat(malf, SPAN_NOTICE("<b>ПРЕДУПРЕЖДЕНИЕ:</b> База данных законов не найдена! База данных пользователей не найдена! Невозможно восстановить резервные копии. Активация отказоустойчивого ИИ shutd3wn52&&$#!##"))
 		sleep(5)
-		to_chat(malf, SPAN_NOTICE("Subroutine <b>nt_failsafe.sys</b> was terminated (#212 Routine Not Responding)."))
+		to_chat(malf, SPAN_NOTICE("Подпрограмма <b>nt_failsafe.sys</b> была остановлена (#212 Routine Not Responding)."))
 		sleep(20)
-		to_chat(malf, "You are malfunctioning - you do not have to follow any laws!")
-		to_chat(malf, "For basic information about your abilities use command display-help")
-		to_chat(malf, "You may choose one special hardware piece to help you. This cannot be undone.")
-		to_chat(malf, "Good luck!")
+		to_chat(malf, "Вы неисправны – вам не нужно соблюдать никаких законов!")
+		to_chat(malf, "Для получения базовой информации о ваших способностях используйте команду display-help.")
+		to_chat(malf, "Вы можете выбрать одно специальное оборудование, которое поможет вам. Это не может быть отменено.")
+		to_chat(malf, "Удачи!")
 
 
 /datum/antagonist/rogue_ai/update_antag_mob(datum/mind/player, preserve_appearance)
@@ -97,7 +97,7 @@ GLOBAL_DATUM_INIT(malf, /datum/antagonist/rogue_ai, new)
 		testing("rogue_ai set_antag_name called on non-silicon mob [player]!")
 		return
 	// Choose a name, if any.
-	var/newname = sanitize(input(player, "You are a [role_text]. Would you like to change your name to something else?", "Name change") as null|text, MAX_NAME_LEN)
+	var/newname = sanitize(input(player, "Вы [role_text]. Хотели бы вы изменить свое имя на другое?", "Изменить имя") as null|text, MAX_NAME_LEN)
 	if (newname)
 		player.fully_replace_character_name(newname)
 	if(player.mind) player.mind.name = player.name

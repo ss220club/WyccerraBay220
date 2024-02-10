@@ -1,9 +1,9 @@
 #define ANTAG_TYPE_RATIO 8
 
 /datum/game_mode/calamity
-	name = "Calamity"
-	round_description = "This must be a Thursday. You never could get the hang of Thursdays..."
-	extended_round_description = "All hell is about to break loose. Literally every antagonist type may spawn in this round. Hold on tight."
+	name = "Бедствие"
+	round_description = "Должно быть, это четверг. Рыбный день. Ты никогда не мог привыкнуть к четвергам..."
+	extended_round_description = "Весь ад вот-вот разразится. В этом раунде может появиться буквально каждый тип антагониста. Держись крепче."
 	config_tag = "calamity"
 	required_players = 1
 	votable = 0

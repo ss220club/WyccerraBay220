@@ -1,5 +1,5 @@
 /obj/item/book/tome
-	name = "arcane tome"
+	name = "тайный том"
 	icon = 'icons/obj/weapons/melee_physical.dmi'
 	icon_state = "tome"
 	throw_speed = 1
@@ -10,16 +10,16 @@
 
 /obj/item/book/tome/attack_self(mob/living/user)
 	if(!iscultist(user))
-		to_chat(user, SPAN_NOTICE("\The [src] seems full of illegible scribbles. Is this a joke?"))
+		to_chat(user, SPAN_NOTICE("[src] Кажется, полно неразборчивых каракулей. Это шутка?"))
 	else
-		to_chat(user, "Hold \the [src] in your hand while drawing a rune to use it.")
+		to_chat(user, "Держите [src] в руке, рисуя руну, чтобы использовать ее.")
 
 /obj/item/book/tome/examine(mob/user)
 	. = ..()
 	if(!iscultist(user))
-		to_chat(user, "An old, dusty tome with frayed edges and a sinister looking cover.")
+		to_chat(user, "Старый, пыльный том с потрепанными краями и зловещей на вид обложкой.")
 	else
-		to_chat(user, "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though.")
+		to_chat(user, "Священные писания Нар-Си, Того, Кто Узрел Геометра Крови. Содержит подробности каждого ритуала, о котором могли подумать его последователи. Однако большинство из них бесполезны.")
 
 /obj/item/book/tome/use_before(mob/living/M, mob/living/user)
 	. = FALSE
@@ -27,15 +27,15 @@
 		return FALSE
 	if (user.a_intent == I_HELP && user.zone_sel.selecting == BP_EYES)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] shows \the [src] to \the [M]."),
-			SPAN_NOTICE("You open up \the [src] and show it to \the [M].")
+			SPAN_NOTICE("[user] показывает [src] [M]."),
+			SPAN_NOTICE("Вы открыли [src] и показали [M].")
 		)
 		if (iscultist(M))
 			if (user != M)
-				to_chat(user, SPAN_NOTICE("But they already know all there is to know."))
-			to_chat(M, SPAN_NOTICE("But you already know all there is to know."))
+				to_chat(user, SPAN_NOTICE("Но они уже знают все, что нужно знать."))
+			to_chat(M, SPAN_NOTICE("Но вы уже знаете все, что нужно знать."))
 		else
-			to_chat(M, SPAN_NOTICE("\The [src] seems full of illegible scribbles. Is this a joke?"))
+			to_chat(M, SPAN_NOTICE("Кажется, [src] полон неразборчивых каракулей. Это шутка?"))
 		user.setClickCooldown(DEFAULT_QUICK_COOLDOWN)
 		return TRUE
 
@@ -43,7 +43,7 @@
 	if(!iscultist(user))
 		return FALSE
 	if(A.reagents && A.reagents.has_reagent(/datum/reagent/water/holywater))
-		to_chat(user, SPAN_NOTICE("You unbless \the [A]."))
+		to_chat(user, SPAN_NOTICE("Ваша святость пропала [A]."))
 		var/holy2water = A.reagents.get_reagent_amount(/datum/reagent/water/holywater)
 		A.reagents.del_reagent(/datum/reagent/water/holywater)
 		A.reagents.add_reagent(/datum/reagent/water, holy2water)
@@ -55,19 +55,19 @@
 	var/cult_ground = 0
 
 	if(!has_tome && tome_required && mob_needs_tome())
-		to_chat(src, SPAN_WARNING("This rune is too complex to draw by memory, you need to have a tome in your hand to draw it."))
+		to_chat(src, SPAN_WARNING("Эта руна слишком сложна, чтобы ее можно было нарисовать по памяти, чтобы ее нарисовать, вам нужно иметь в руках священное писание."))
 		return
 	if(istype(get_equipped_item(slot_head), /obj/item/clothing/head/culthood) && istype(get_equipped_item(slot_wear_suit), /obj/item/clothing/suit/cultrobes) && istype(get_equipped_item(slot_shoes), /obj/item/clothing/shoes/cult))
 		has_robes = 1
 	var/turf/T = get_turf(src)
 	if(T.holy)
-		to_chat(src, SPAN_WARNING("This place is blessed, you may not draw runes on it - defile it first."))
+		to_chat(src, SPAN_WARNING("Это место благословенно поганым священником, на нем нельзя рисовать руны — сначала оскверните его."))
 		return
 	if(!istype(T, /turf/simulated))
-		to_chat(src, SPAN_WARNING("You need more space to draw a rune here."))
+		to_chat(src, SPAN_WARNING("Вам нужно больше места, чтобы нарисовать здесь руну."))
 		return
 	if(locate(/obj/rune) in T)
-		to_chat(src, SPAN_WARNING("There's already a rune here.")) // Don't cross the runes
+		to_chat(src, SPAN_WARNING("Здесь уже есть руна.")) // Don't cross the runes
 		return
 	if(T.icon_state == "cult" || T.icon_state == "cult-narsie")
 		cult_ground = 1
@@ -76,50 +76,50 @@
 	var/damage = 1
 	if(has_tome)
 		if(has_robes && cult_ground)
-			self = "Feeling greatly empowered, you slice open your finger and make a rune on the engraved floor. It shifts when your blood touches it, and starts vibrating as you begin to chant the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world."
+			self = "Ощущая огромную силу, вы разрезаете палец и рисуете руну на выгравированном полу. Он смещается, когда ваша кровь касается его, и начинает вибрировать, когда вы начинаете повторять ритуал, который связывает вашу жизненную сущность с темными тайными энергиями, текущими через окружающий мир."
 			timer = 1 SECOND
 			damage = 0.2
 		else if(has_robes)
-			self = "Feeling empowered in your robes, you slice open your finger and start drawing a rune, chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world."
+			self = "Почувствовав силу в своих одеждах, вы разрезаете палец и начинаете рисовать руну, повторяя ритуал, который связывает вашу жизненную сущность с темными тайными энергиями, текущими через окружающий мир."
 			timer = 3 SECONDS
 			damage = 0.8
 		else if(cult_ground)
-			self = "You slice open your finger and slide it over the engraved floor, watching it shift when your blood touches it. It vibrates when you begin to chant the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world." // Sadly, you don't have access to the bell nor the candelbarum
+			self = "Вы разрезаете палец и проводите им по выгравированному полу, наблюдая, как он меняется, когда ваша кровь касается его. Он вибрирует, когда вы начинаете повторять ритуал, связывающий вашу жизненную сущность с темными тайными энергиями, текущими через окружающий мир." // Sadly, you don't have access to the bell nor the candelbarum
 			timer = 2 SECONDS
 			damage = 0.8
 		else
-			self = "You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world."
+			self = "Вы разрезаете один из своих пальцев и начинаете рисовать руну на полу, повторяя ритуал, который связывает вашу жизненную сущность с темными тайными энергиями, текущими через окружающий мир."
 			timer = 4 SECONDS
 	else
-		self = "Working without your tome, you try to draw the rune from your memory"
+		self = "Работая без священного писания, вы пытаетесь нарисовать руну по памяти."
 		if(has_robes && cult_ground)
-			self += ". You feel that you remember it perfectly, finishing it with a few bold strokes. The engraved floor shifts under your touch, and vibrates once you begin your chants."
+			self += ". Вы чувствуете, что прекрасно это помните, завершая несколькими смелыми штрихами. Выгравированный пол сдвигается от вашего прикосновения и вибрирует, когда вы начинаете песнопения."
 			timer = 3 SECONDS
 		else if(has_robes)
-			self += ". You don't remember it well, but you feel strangely empowered. You begin chanting, the unknown words slipping into your mind from beyond."
+			self += ". Вы плохо это помните, но чувствуете странную силу. Вы начинаете петь, неизвестные слова проникают в ваш разум извне."
 			timer = 5 SECONDS
 		else if(cult_ground)
-			self += ", watching as the floor shifts under your touch, correcting the rune. You begin your chants, and the ground starts to vibrate."
+			self += ", наблюдая, как пол сдвигается от твоего прикосновения, корректируя руну. Вы начинаете петь, и земля начинает вибрировать."
 			timer = 4 SECONDS
 		else
-			self += ", having to cut your finger two more times before you make it resemble the pattern in your memory. It still looks a little off."
+			self += ", вам придется порезать палец еще два раза, прежде чем он станет похожим на узор в вашей памяти. Это все еще выглядит немного не так."
 			timer = 8 SECONDS
 			damage = 2
-	visible_message(SPAN_WARNING("\The [src] slices open a finger and begins to chant and paint symbols on the floor."), SPAN_NOTICE("[self]"), "You hear chanting.")
+	visible_message(SPAN_WARNING("[src] разрезает палец и начинает напевать и рисовать символы на полу."), SPAN_NOTICE("[self]"), "Вы слышите песнопения.")
 	if(do_after(src, timer, T, DO_PUBLIC_UNIQUE))
 		remove_blood_simple(cost * damage)
 		if(locate(/obj/rune) in T)
 			return
 		var/obj/rune/R = new rune(T, get_rune_color(), get_blood_name())
 		var/area/A = get_area(R)
-		log_and_message_admins("created \an [R.cultname] rune at \the [A.name].")
+		log_and_message_admins("создал [R.cultname] руну на [A.name].")
 		R.add_fingerprint(src)
 		return 1
 	return 0
 
 /mob/living/carbon/human/make_rune(rune, cost, tome_required)
 	if(should_have_organ(BP_HEART) && vessel && !vessel.has_reagent(/datum/reagent/blood, species.blood_volume * 0.7))
-		to_chat(src, SPAN_DANGER("You are too weak to draw runes."))
+		to_chat(src, SPAN_DANGER("Ты слишком слаб, чтобы рисовать руны."))
 		return
 	..()
 
@@ -192,55 +192,55 @@ var/global/list/Tier4Runes = list(
 
 /mob/proc/convert_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Convert"
+	set name = "Руна: Конвертацияя"
 
 	make_rune(/obj/rune/convert, tome_required = 1)
 
 /mob/proc/teleport_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Teleport"
+	set name = "Руна: Телепортации"
 
 	make_rune(/obj/rune/teleport, tome_required = 1)
 
 /mob/proc/tome_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Summon Tome"
+	set name = "Руна: Призыва Священного писания"
 
 	make_rune(/obj/rune/tome, cost = 15)
 
 /mob/proc/wall_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Wall"
+	set name = "Руна: Стены"
 
 	make_rune(/obj/rune/wall, tome_required = 1)
 
 /mob/proc/ajorney_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Astral Journey"
+	set name = "Руна: Астрального путешествия"
 
 	make_rune(/obj/rune/ajorney)
 
 /mob/proc/defile_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Defile"
+	set name = "Руна: Defile"
 
 	make_rune(/obj/rune/defile, tome_required = 1)
 
 /mob/proc/massdefile_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Mass Defile"
+	set name = "Руна: Mass Defile"
 
 	make_rune(/obj/rune/massdefile, tome_required = 1, cost = 20)
 
 /mob/proc/armor_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Summon Robes"
+	set name = "Руна: Призыва мантии"
 
 	make_rune(/obj/rune/armor, tome_required = 1)
 
 /mob/proc/offering_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Offering"
+	set name = "Руна: Предложения"
 
 	make_rune(/obj/rune/offering, tome_required = 1)
 
@@ -248,90 +248,90 @@ var/global/list/Tier4Runes = list(
 
 /mob/proc/drain_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Blood Drain"
+	set name = "Руна: Утечки крови"
 
 	make_rune(/obj/rune/drain, tome_required = 1)
 
 /mob/proc/emp_rune()
 	set category = "Cult Magic"
-	set name = "Rune: EMP"
+	set name = "Руна: ЭМИ"
 
 	make_rune(/obj/rune/emp, tome_required = 1)
 
 /mob/proc/weapon_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Summon Weapon"
+	set name = "Руна: Призыва оружия"
 
 	make_rune(/obj/rune/weapon, tome_required = 1)
 
 /mob/proc/shell_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Summon Shell"
+	set name = "Руна: Призыва ракушки"
 
 	make_rune(/obj/rune/shell, cost = 10, tome_required = 1)
 
 /mob/proc/bloodboil_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Blood Boil"
+	set name = "Руна: Кипение крови"
 
 	make_rune(/obj/rune/blood_boil, cost = 20, tome_required = 1)
 
 /mob/proc/confuse_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Confuse"
+	set name = "Руна: Путаница"
 
 	make_rune(/obj/rune/confuse)
 
 /mob/proc/revive_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Revive"
+	set name = "Руна: Оживления"
 
 	make_rune(/obj/rune/revive, tome_required = 1)
 
 /mob/proc/tearreality_rune()
 	set category = "Cult Magic"
-	set name = "Rune: Tear Reality"
+	set name = "Руна: Разрыв реальности"
 
 	make_rune(/obj/rune/tearreality, cost = 50, tome_required = 1)
 
 /mob/proc/stun_imbue()
 	set category = "Cult Magic"
-	set name = "Imbue: Stun"
+	set name = "Наполнитель: Ошеломление"
 
 	make_rune(/obj/rune/imbue/stun, cost = 20, tome_required = 1)
 
 /mob/proc/emp_imbue()
 	set category = "Cult Magic"
-	set name = "Imbue: EMP"
+	set name = "Наполнитель: ЭМИ"
 
 	make_rune(/obj/rune/imbue/emp)
 
 /mob/proc/cult_communicate()
 	set category = "Cult Magic"
-	set name = "Communicate"
+	set name = "Коммуникация"
 
 	if(incapacitated())
-		to_chat(src, SPAN_WARNING("Not when you are incapacitated."))
+		to_chat(src, SPAN_WARNING("Не тогда, когда ты недееспособен."))
 		return
 
 	message_cult_communicate()
 	remove_blood_simple(3)
 
-	var/input = input(src, "Please choose a message to tell to the other acolytes.", "Voice of Blood", "")
+	var/input = input(src, "Пожалуйста, выберите сообщение, которое хотите передать другим послушникам.", "Голос крови", "")
 	if(!input)
 		return
 
 	whisper("[input]")
 
 	input = sanitize(input)
-	log_and_message_admins("used a communicate verb to say '[input]'")
+	log_and_message_admins("использовал способность общения, чтобы сказать '[input]'")
 	for(var/datum/mind/H in GLOB.cult.current_antagonists)
 		if(H.current && !H.current.stat)
 			to_chat(H.current, SPAN_OCCULT("[input]"))
 
 /mob/living/carbon/cult_communicate()
 	if(incapacitated(INCAPACITATION_RESTRAINED))
-		to_chat(src, SPAN_WARNING("You need at least your hands free to do this."))
+		to_chat(src, SPAN_WARNING("Для этого вам нужны как минимум свободные руки."))
 		return
 	..()
 
@@ -339,16 +339,16 @@ var/global/list/Tier4Runes = list(
 	return
 
 /mob/living/carbon/human/message_cult_communicate()
-	visible_message(SPAN_WARNING("\The [src] cuts \his finger and starts drawing on the back of \his hand."))
+	visible_message(SPAN_WARNING("[src] режет его палец и начинает рисовать на тыльной стороне ладони."))
 
 /mob/proc/obscure()
 	set category = "Cult Magic"
-	set name = "Rune: Obscure"
+	set name = "Руна: Затенения"
 
 	make_rune(/obj/rune/obscure)
 
 /mob/proc/reveal()
 	set category = "Cult Magic"
-	set name = "Rune: Reveal"
+	set name = "Руна: Раскрытия"
 
 	make_rune(/obj/rune/reveal)

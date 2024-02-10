@@ -15,21 +15,21 @@ var/global/list/datum/power/changeling/powerinstances = list()
 	var/genomecost = 500000 // Cost for the changling to evolve this power.
 
 /datum/power/changeling/absorb_dna
-	name = "Absorb DNA"
-	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
+	name = "Поглощать ДНК"
+	desc = "Позволяет нам выкачивать ДНК из человека. Они становятся одним целым с нами, и мы становимся сильнее."
 	genomecost = 0
 	verbpath = /mob/proc/changeling_absorb_dna
 
 /datum/power/changeling/transform
-	name = "Transform"
-	desc = "We take on the apperance and voice of one we have absorbed."
+	name = "Трансформация"
+	desc = "Мы принимаем облик и голос того, кого поглотили.."
 	genomecost = 0
 	verbpath = /mob/proc/changeling_transform
 
 /datum/power/changeling/fakedeath
-	name = "Regenerative Stasis"
-	desc = "We become weakened to a death-like state, where we will rise again from death."
-	helptext = "Can be used before or after death. Duration varies greatly."
+	name = "Регенеративный стазис"
+	desc = "Мы ослабляемся до состояния, подобного смерти, и снова восстаем из смерти."
+	helptext = "Можно использовать до или после смерти. Продолжительность сильно варьируется."
 	genomecost = 0
 	allowduringlesserform = 1
 	verbpath = /mob/proc/changeling_fakedeath
@@ -37,9 +37,9 @@ var/global/list/datum/power/changeling/powerinstances = list()
 // Hivemind
 
 /datum/power/changeling/hive_upload
-	name = "Hive Channel"
-	desc = "We can channel a DNA into the airwaves, allowing our fellow changelings to absorb it and transform into it as if they acquired the DNA themselves."
-	helptext = "Allows other changelings to absorb the DNA you channel from the airwaves. Will not help them towards their absorb objectives."
+	name = "Канал Улья"
+	desc = "Мы можем направить ДНК в эфир, позволяя нашим собратьям-подменышам поглотить ее и трансформироваться в нее, как если бы они сами приобрели эту ДНК."
+	helptext = "Позволяет другим тенелингам поглощать ДНК, которую вы передаете из радиоволн. Эта функция не поможет им в достижении их целей на поглощение ДНК."
 	genomecost = 0
 	verbpath = /mob/proc/changeling_hiveupload
 

@@ -1,6 +1,6 @@
 /obj/item/paper/talisman/emp
-	talisman_name = "emp"
-	talisman_desc = "invokes a localized EMP effect on the target. Can be used on machinery or mobs"
+	talisman_name = "ЭМИ"
+	talisman_desc = "вызывает локализованный эффект ЭМИ на цель. Можно использовать на технике или мобах."
 	talisman_sound = 'sound/effects/EMPulse.ogg'
 	valid_target_type = list(
 		/mob,

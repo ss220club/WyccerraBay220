@@ -16,8 +16,8 @@
 	return ""
 
 /mob/proc/add_objectives()
-	set name = "Get Objectives"
-	set desc = "Recieve optional objectives."
+	set name = "Получить цели"
+	set desc = "Получите дополнительные цели."
 	set category = "OOC"
 
 	src.verbs -= /mob/proc/add_objectives
@@ -31,35 +31,35 @@
 		if(antagonist && antagonist.is_antagonist(src.mind))
 			antagonist.create_objectives(src.mind,1)
 
-	to_chat(src, "<b>[FONT_LARGE("These objectives are completely voluntary. You are not required to complete them.")]</b>")
+	to_chat(src, "<b>[FONT_LARGE("Эти цели являются полностью добровольными. Вы не обязаны их заполнять.")]</b>")
 	show_objectives(src.mind)
 
 /mob/living/proc/set_ambition()
-	set name = "Set Ambition"
+	set name = "Выбрать амбиции"
 	set category = "IC"
 	set src = usr
 
 	if(!mind)
 		return
 	if(!is_special_character(mind))
-		to_chat(src, SPAN_WARNING("While you may perhaps have goals, this verb's meant to only be visible \
-		to antagonists.  Please make a bug report!"))
+		to_chat(src, SPAN_WARNING("Возможно, у вас есть цели, но эта панель предназначена только для \
+		антагонистов.  Пожалуйста сделайте репорт о наденном баге!"))
 		return
 
 	var/datum/goal/ambition/goal = SSgoals.ambitions[mind]
-	var/new_goal = sanitize(input(src, "Write a short sentence of what your character hopes to accomplish \
-	today as an antagonist.  Remember that this is purely optional.  It will be shown at the end of the \
-	round for everybody else.", "Antagonist Goal", (goal ? html_decode(goal.description) : "")) as null|message)
+	var/new_goal = sanitize(input(src, "Напишите короткое предложение о том, чего надеется достичь ваш персонаж. \
+	сегодня как антагонист.  Помните, что это совершенно необязательно.  Оно будет показано в конце \
+	раунда для всех.", "Цель антагониста", (goal ? html_decode(goal.description) : "")) as null|message)
 	if(!isnull(new_goal))
 		if(!goal)
 			goal = new /datum/goal/ambition(mind)
 		goal.description = new_goal
-		to_chat(src, SPAN_NOTICE("You've set your goal to be <b>'[goal.description]'</b>. You can check your goals with the <b>Show Goals</b> verb."))
+		to_chat(src, SPAN_NOTICE("Вы поставили перед собой цель <b>'[goal.description]'</b>. Вы можете проверить свои цели с помощью <b>Показать цели</b>."))
 	else
-		to_chat(src, SPAN_NOTICE("You leave your ambitions behind."))
+		to_chat(src, SPAN_NOTICE("Вы оставляете свои амбиции позади."))
 		if(goal)
 			qdel(goal)
-	log_and_message_admins("has set their ambitions to now be: [new_goal].")
+	log_and_message_admins("поставил перед собой следующие цели: [new_goal].")
 
 //some antagonist datums are not actually antagonists, so we might want to avoid
 //sending them the antagonist meet'n'greet messages.

@@ -23,13 +23,13 @@
 	if((. = ..()))
 		return
 	if (!machine.can_use_tools)
-		to_chat(user, SPAN_WARNING("\The [src] немодифицируемое!"))
+		to_chat(user, SPAN_WARNING("[src] немодифицируемое!"))
 		return TRUE
 	if(isScrewdriver(I))
 		TRANSFER_STATE(down_state)
 		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = TRUE
-		to_chat(user, SPAN_NOTICE("Вы открываете люк для технического обслуживания \the [machine]."))
+		to_chat(user, SPAN_NOTICE("Вы открываете люк для технического обслуживания [machine]."))
 		machine.update_icon()
 		return
 	if(istype(I, /obj/item/storage/part_replacer))
@@ -72,7 +72,7 @@
 		TRANSFER_STATE(up_state)
 		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = FALSE
-		to_chat(user, SPAN_NOTICE("Вы закрываете люк для технического обслуживания \the [machine]."))
+		to_chat(user, SPAN_NOTICE("Вы закрываете люк для технического обслуживания [machine]."))
 		machine.update_icon()
 		return
 

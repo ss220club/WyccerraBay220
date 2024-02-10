@@ -1,16 +1,16 @@
 GLOBAL_DATUM_INIT(renegades, /datum/antagonist/renegade, new)
 
 /datum/antagonist/renegade
-	role_text = "Renegade"
-	role_text_plural = "Renegades"
+	role_text = "Ренегат"
+	role_text_plural = "Ренегаты"
 	blacklisted_jobs = list(/datum/job/ai, /datum/job/submap)
 	restricted_jobs = list(/datum/job/officer, /datum/job/warden, /datum/job/captain, /datum/job/hop, /datum/job/hos, /datum/job/chief_engineer, /datum/job/rd, /datum/job/cmo)
-	welcome_text = "Something's going to go wrong today, you can just feel it. You're paranoid, you've got a gun, and you're going to survive."
+	welcome_text = "Сегодня что-то ЯВНО пойдет не так, ты просто это чувствуешь. Ты параноик, у тебя есть пистолет, пару грамм космо-дури и твердая уверенность что ты выживешь."
 	antag_text = {"\
-	<p>You are a <b>minor</b> antagonist! Make sure <b>you</b> survive the round at any cost.</p> \
-	<p>Betray friends, make deals with enemies, and keep your gun handy. \
-	You aren't here to go looking for trouble - but if <i>it</i> finds <i>you</i>, kill it.</p> \
-	<p>Remember that the rules still apply to antagonists - Chat with staff before taking extreme actions.</p>
+	<p>Вы <b>второстепенный</b> антагонист! Убедитесь, что <b>вы</b> выживите до конца раунда любой ценой.</p> \
+	<p>Предавайте друзей, заключайте сделки с врагами и держите пистолет под рукой. \
+	Вы тут не для поиска проблем на свою задницу - но есть <i>ОНИ</i> найдут <i>ВАС</i> сами, пустите их в расход.</p> \
+	<p>Помните, что правила по-прежнему распространяются на антагонистов. Прежде чем предпринимать крайние меры, пообщайтесь с администрацией.</p>
 	"}
 
 	id = MODE_RENEGADE
@@ -78,8 +78,8 @@ GLOBAL_DATUM_INIT(renegades, /datum/antagonist/renegade, new)
 
 
 /proc/rightandwrong()
-	to_chat(usr, "<B>You summoned guns!</B>")
-	message_admins("[key_name_admin(usr, 1)] summoned guns!")
+	to_chat(usr, "<B>Вы вызвали оружие!</B>")
+	message_admins("[key_name_admin(usr, 1)] вызвал оружие!")
 	for(var/mob/living/carbon/human/H in GLOB.player_list)
 		if(H.stat == 2 || !(H.client)) continue
 		if(is_special_character(H)) continue

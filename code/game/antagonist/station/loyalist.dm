@@ -2,14 +2,14 @@ GLOBAL_DATUM_INIT(loyalists, /datum/antagonist/loyalists, new)
 
 /datum/antagonist/loyalists
 	id = MODE_LOYALIST
-	role_text = "Head Loyalist"
-	role_text_plural = "Loyalists"
+	role_text = "Главный Лоялист"
+	role_text_plural = "Лоялисты"
 	feedback_tag = "loyalist_objective"
 	antag_indicator = "hud_loyal_head"
-	victory_text = "The heads of staff remained at their posts! The loyalists win!"
-	loss_text = "The heads of staff did not stop the revolution!"
-	victory_feedback_tag = "win - rev heads killed"
-	loss_feedback_tag = "loss - heads killed"
+	victory_text = "Руководители штабов остались на своих постах! Лоялисты побеждают!"
+	loss_text = "Руководители штабов не остановили революцию!"
+	victory_feedback_tag = "победа - революционеры убиты"
+	loss_feedback_tag = "поражение - главы убиты"
 	antaghud_indicator = "hud_loyal"
 	flags = 0
 
@@ -31,8 +31,8 @@ GLOBAL_DATUM_INIT(loyalists, /datum/antagonist/loyalists, new)
 
 /datum/antagonist/loyalists/Initialize()
 	..()
-	welcome_text = "You belong to the [GLOB.using_map.company_name], body and soul. Preserve its interests against the conspirators amongst the crew."
-	faction_welcome = "Preserve [GLOB.using_map.company_short]'s interests against the traitorous recidivists amongst the crew. Protect the heads of staff with your life."
+	welcome_text = "Вы принадлежите к [GLOB.using_map.company_name], тело и душа. Защитите свои интересы от заговорщиков среди экипажа."
+	faction_welcome = "Сохраните интересы [GLOB.using_map.company_short] против предателей-рецидивистов среди экипажа. Защитите руководителей штаба ценой своей жизни."
 	faction_descriptor = "[GLOB.using_map.company_name]"
 
 /datum/antagonist/loyalists/create_global_objectives()
@@ -44,5 +44,5 @@ GLOBAL_DATUM_INIT(loyalists, /datum/antagonist/loyalists, new)
 			continue
 		var/datum/objective/protect/loyal_obj = new
 		loyal_obj.target = player.mind
-		loyal_obj.explanation_text = "Protect [player.real_name], the [player.mind.assigned_role]."
+		loyal_obj.explanation_text = "Защитите [player.real_name], [player.mind.assigned_role]."
 		global_objectives += loyal_obj

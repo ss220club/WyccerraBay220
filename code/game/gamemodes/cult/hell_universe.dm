@@ -10,8 +10,8 @@ In short:
 
 */
 /datum/universal_state/hell
-	name = "Hell Rising"
-	desc = "OH FUCK OH FUCK OH FUCK"
+	name = "Восход ада"
+	desc = "ОХ БЛЯТЬ, ЕБАНЫЙ СЫР, ПИЗДАНУТЬСЯ МОЖНО, БЛЯДСКАЯ ЕБАНИНА"
 
 /datum/universal_state/hell/OnShuttleCall(mob/user)
 	return 1
@@ -35,7 +35,7 @@ In short:
 	SSskybox.change_skybox("dyable", new_use_stars = TRUE, new_use_overmap_details = TRUE)
 	for (var/mob/living/simple_animal/S in GLOB.alive_mobs)
 		if (S.faction == "cult")
-			to_chat(S, SPAN_OCCULT("You hear a terrible scream from a place beyond reality, as a life's sacrifice banishes your master. The dark power animating your form wavers, and withdraws, leaving it an unliving shell of meat. Your mind puffs away, like mist under a hot sun."))
+			to_chat(S, SPAN_OCCULT("Вы слышите ужасный крик из места за пределами реальности, когда жертва жизни изгоняет вашего хозяина. Темная сила, оживляющая ваше тело, колеблется и уходит, оставляя после себя неживую оболочку из мяса. Твой разум рассеивается, как туман под жарким солнцем."))
 			S.set_stat(DEAD)
 	for (var/turf/simulated/wall/cult/wall)
 		wall.decultify_wall()

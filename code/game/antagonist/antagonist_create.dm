@@ -59,7 +59,7 @@
 /datum/antagonist/proc/greet(datum/mind/player)
 
 	// Basic intro text.
-	to_chat(player.current, SPAN_DANGER(FONT_LARGE("You are a [role_text]!")))
+	to_chat(player.current, SPAN_DANGER(FONT_LARGE("Вы [role_text]!")))
 	if(leader_welcome_text && player == leader)
 		to_chat(player.current, SPAN_CLASS("antagdesc", "[get_leader_welcome_text(player.current)]"))
 	else
@@ -72,7 +72,7 @@
 
 /datum/antagonist/proc/set_antag_name(mob/living/player)
 	// Choose a name, if any.
-	var/newname = sanitize(input(player, "You are a [role_text]. Would you like to change your name to something else?", "Name change") as null|text, MAX_NAME_LEN)
+	var/newname = sanitize(input(player, "Вы [role_text]. Хотели бы вы сменить имя на другое?", "Изменить имя") as null|text, MAX_NAME_LEN)
 	if (newname)
 		player.real_name = newname
 		player.SetName(player.real_name)

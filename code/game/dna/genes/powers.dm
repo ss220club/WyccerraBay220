@@ -1,22 +1,22 @@
 /datum/dna/gene/basic/nobreath
-	name = "No Breathing"
-	activation_messages = list("You feel no need to breathe.")
+	name = "Воздух+"
+	activation_messages = list("Кажется теперь вам не нужно дышать.")
 	mutation = mNobreath
 
 /datum/dna/gene/basic/nobreath/New()
 	block = GLOB.NOBREATHBLOCK
 
 /datum/dna/gene/basic/feral
-	name = "Feral"
-	activation_messages = list("You feel feral.")
+	name = "Дикость"
+	activation_messages = list("Ты чувствуешь себя диким.")
 	mutation = MUTATION_FERAL
 
 /datum/dna/gene/basic/feral/New()
 	block = GLOB.FERALBLOCK
 
 /datum/dna/gene/basic/remoteview
-	name = "Remote Viewing"
-	activation_messages = list("Your mind expands.")
+	name = "Удаленный просмотр"
+	activation_messages = list("Ваш разум расширяется.")
 	mutation = mRemote
 
 
@@ -30,8 +30,8 @@
 
 
 /datum/dna/gene/basic/regenerate
-	name = "Regenerate"
-	activation_messages = list("You feel better.")
+	name = "Регенарция"
+	activation_messages = list("Вы чувствуете себя лучше.")
 	mutation = mRegen
 
 
@@ -40,8 +40,8 @@
 
 
 /datum/dna/gene/basic/increaserun
-	name = "Super Speed"
-	activation_messages = list("Your leg muscles pulsate.")
+	name = "Супер скорость"
+	activation_messages = list("Ваши мышцы ног пульсируют.")
 	mutation = mRun
 
 
@@ -50,8 +50,8 @@
 
 
 /datum/dna/gene/basic/remotetalk
-	name = "Telepathy"
-	activation_messages = list("You expand your mind outwards.")
+	name = "Телепатия"
+	activation_messages = list("Вы расширяете свой разум вовне.")
 	mutation = mRemotetalk
 
 
@@ -65,8 +65,8 @@
 
 
 /datum/dna/gene/basic/morph
-	name = "Morph"
-	activation_messages = list("Your skin feels strange.")
+	name = "Морф"
+	activation_messages = list("Ваша кожа чувствует себя странно.")
 	mutation = mMorph
 
 
@@ -80,8 +80,8 @@
 
 
 /datum/dna/gene/basic/cold_resist
-	name = "Cold Resistance"
-	activation_messages = list("Your body is filled with warmth.")
+	name = "Сопротивление холоду"
+	activation_messages = list("Ваше тело наполняется теплом.")
 	mutation = MUTATION_COLD_RESISTANCE
 
 
@@ -100,8 +100,8 @@
 
 
 /datum/dna/gene/basic/noprints
-	name = "No Prints"
-	activation_messages = list("Your fingers feel numb.")
+	name = "Отпечатки-"
+	activation_messages = list("Ваши отпечатки сходят на нет")
 	mutation = mFingerprints
 
 
@@ -110,8 +110,8 @@
 
 
 /datum/dna/gene/basic/noshock
-	name = "Shock Immunity"
-	activation_messages = list("Your skin feels strange.")
+	name = "Иммунитет к шоку"
+	activation_messages = list("Ваша кожа чувствует себя странно.")
 	mutation = mShock
 
 
@@ -120,8 +120,8 @@
 
 
 /datum/dna/gene/basic/midget
-	name = "Midget"
-	activation_messages = list("Your skin feels rubbery.")
+	name = "Карлик"
+	activation_messages = list("Ваша кожа становится резиновой.")
 	mutation = mSmallsize
 
 
@@ -140,8 +140,8 @@
 
 
 /datum/dna/gene/basic/xray
-	name = "X-Ray Vision"
-	activation_messages = list("The walls suddenly disappear.")
+	name = "Рентген+"
+	activation_messages = list("Стены внезапно исчезают.")
 	mutation = MUTATION_XRAY
 
 

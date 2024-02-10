@@ -1,67 +1,79 @@
-# Docs - https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema
-name: Bug Report
-description: File a bug report
+# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
+#
+name: "Issue Report"
+#title: "[Bug]: " | if you want to have a have it automatically say [Bug] when they start the form
+description: "Доложите о проблемах или багах, что бы мы могли их исправить."
+#labels: "Баг"
 
 body:
   - type: markdown
     attributes:
-      value: |
-        Make sure to [search for an existing issue report](https://github.com/Baystation12/Baystation12/issues) before making a new one.
+      value: Спасибо за оставленный отчёт! Не забудьте дать ему соответствующее проблеме название для упрощения работы другим.
 
-        Your issue will be tagged by a developer with reproduction status and a priority once it has been reviewed and verified.
-  - type: textarea
-    id: desc
-    attributes:
-      label: Description of issue
-      placeholder: The macguffin doesn't do anything when used.
-    validations:
-      required: true
-  - type: textarea
-    id: expected
-    attributes:
-      label: Difference between expected and actual behaviour
-      placeholder: The macguffin should kill the big bad when I use it.
-  - type: textarea
-    id: repro-steps
-    attributes:
-      label: Steps to reproduce
-      description: Please provide a complete step-by-step method of reproducing the bug, including steps you may think are obvious. Also please make sure you have followed and verified these steps reproduce the bug yourself. Being verbose is better than being vague. If reproduction is unreliable, i.e., it only happens sometimes or only happened once, mention that in the reproduction steps.
-      placeholder: |
-        1.
-        2.
-        3.
-        ...
-    validations:
-      required: true
-  - type: textarea
-    id: paths
-    attributes:
-      label: Specific information for locating
-      description: e.g. an object name, specific message outputs, object paths or file names if known, specific maps and/or coordinates, etc
-      placeholder: |
-        Item name: The MacGuffin
-        Big bad name: Very Evil Mob
-        Item path: `/obj/item/macguffin`
-  - type: textarea
+  - type: input
     id: version
     attributes:
-      label: Client version, server revision, & game ID
-      description: This is found with the `Show server revision` verb in the OOC tab in game, or typing `show-server-revision` into the chat.
-      placeholder: |
-        Client Version: 514
-        Server Revision: 34bf3ff6a39a09848d5552e0486c0f0fedb58fc9 - dev - 2022-08-06
-        Game ID: cji-cImG
-        Current map: SEV Torch
+      label: BYOND Version
+      description: "На какой версии BYOND встретился баг. (Если уверены, что не связано - можно пропустить.)"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Описание проблемы
+      description: В чем состоит суть проблемы? (Обязательное поле)
+      placeholder: Я сел на стул, от чего взорвался, а мой мозг оказался в душе на ЦК!
     validations:
       required: true
-  - type: checkboxes
-    id: issue-bingo
+
+  - type: textarea
+    id: what-expected
     attributes:
-      label: Issue bingo
-      description: Check all that apply. Try to tick off all of these before you submit the report.
-      options:
-        - label: Issue could be reproduced at least once
-        - label: Issue could be reproduced by different players
-        - label: Issue could be reproduced in multiple rounds
-        - label: Issue happened in a recent (less than 7 days ago) round
-        - label: "[Couldn't find an existing issue about this](https://github.com/Baystation12/Baystation12/issues)"
+      label: Что должно было произойти?
+      description: Почему вы считаете это проблемой?
+      placeholder: Я ожидал, что я просто сяду на стул и буду сидеть.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Что случилось вместо этого?
+      description: Как произошедшее отличается от ваших ожиданий?
+      placeholder: Я умер и оказался на ЦК.
+
+  - type: textarea
+    id: why-bad
+    attributes:
+      label: Почему это плохо/Какие последствия?
+      description: Почему вы считаете эту проблему значительной?
+      placeholder: Игроки должны иметь возможность сидеть на стульях, не взрываясь.
+
+  - type: textarea
+    id: how-to-reproduce
+    attributes:
+      label: Шаги для повторения проблемы.
+      description: Самая важная часть. Опишите ВСЁ, что вы делали, что бы встретиться с проблемой. (Обязательное поле)
+      placeholder: Find a chair, buckle yourself into it, be eaten by dragon.
+    validations:
+      required: true
+
+  - type: textarea
+    id: when-problem-start
+    attributes:
+      label: Когда проблема началась?
+      description: Если отчет связан с тем, что раньше работало иначе, опишите последний раз, когда механика работала корректно. (Обязательное поле)
+      placeholder: Я мог садиться на стулья без проблем неделю назад, так что примерно тогда.
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra-information
+    attributes:
+      label: Дополнительная информация
+      description: Всё, что вы считаете важным/относящимся к проблеме.
+      placeholder: "Я думаю, что проблема начала появляться после этого PR https://github.com/ss220club/Paradise-SS220/pull/583"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Связанные логи
+      description: Пожалуйста, предоставьте связанные логи или рантаймы, если имеете к ним доступ(Лучше цензурить IP адреса).
+      render: DM

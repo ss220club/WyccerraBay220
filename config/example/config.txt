@@ -470,6 +470,9 @@ RADIATION_LOWER_LIMIT 0.15
 #                            SIERRABAY                            #
 ###################################################################
 
+## Add a # in front of this to disable automatic admin rights for users connecting from the host the server is running on.
+AUTO_LOCAL_ADMIN
+
 ## Uncomment to use ckey whitelist ticket system with SQL
 #USEWHITELIST_DATABASE
 

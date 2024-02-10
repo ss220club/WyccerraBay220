@@ -1,3 +1,8 @@
+var/list/localhost_addresses = list(
+	"127.0.0.1" = TRUE,
+	"::1" = TRUE
+)
+
 	////////////
 	//SECURITY//
 	////////////
@@ -161,6 +166,14 @@
 	to_chat(src, SPAN_WARNING("If the title screen is black, resources are still downloading. Please be patient until the title screen appears."))
 	GLOB.clients += src
 	GLOB.ckey_directory[ckey] = src
+
+	//SS220 edit
+	// Automatic admin rights for people connecting locally.
+	// Concept stolen from /tg/ with deepest gratitude.
+	var/local_connection = (config.auto_local_admin && (isnull(address) || localhost_addresses[address]))
+	if(local_connection && !admin_datums[ckey])
+		new /datum/admins("Local Host", 32767, ckey) // Прости меня бог за это
+
 
 	//Admin Authorisation
 	holder = admin_datums[ckey]

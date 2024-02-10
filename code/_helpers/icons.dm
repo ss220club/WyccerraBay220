@@ -419,166 +419,290 @@ as a single icon. Useful for when you want to manipulate an icon via the above a
 The _flatIcons list is a cache for generated icon files.
 */
 
-/proc/getFlatIcon(image/A, defdir=2, deficon=null, defstate="", defblend=BLEND_DEFAULT, always_use_defdir = 0)
-	RETURN_TYPE(/icon)
-	// We start with a blank canvas, otherwise some icon procs crash silently
-	var/icon/flat = icon('icons/effects/effects.dmi', "icon_state"="nothing") // Final flattened icon
-	if(!A)
-		return flat
-	if(A.alpha <= 0)
-		return flat
-	var/noIcon = FALSE
-
-	var/curicon
-	if(A.icon)
-		curicon = A.icon
-	else
-		curicon = deficon
-
-	if(!curicon)
-		noIcon = TRUE // Do not render this object.
-
-	var/curstate
-	if(A.icon_state)
-		curstate = A.icon_state
-	else
-		curstate = defstate
-
-	if(!noIcon && !(curstate in icon_states(curicon)))
-		if("" in icon_states(curicon))
-			curstate = ""
-		else
-			noIcon = TRUE // Do not render this object.
-
-	var/curdir
-	if(A.dir != 2 && !always_use_defdir)
-		curdir = A.dir
-	else
-		curdir = defdir
-
-	var/curblend
-	if(A.blend_mode == BLEND_DEFAULT)
-		curblend = defblend
-	else
-		curblend = A.blend_mode
-
-	// Layers will be a sorted list of icons/overlays, based on the order in which they are displayed
-	var/list/layers = list()
-	var/image/copy
-	// Add the atom's icon itself, without pixel_x/y offsets.
-	if(!noIcon)
-		copy = image(icon=curicon, icon_state=curstate, layer=A.layer, dir=curdir)
-		copy.color = A.color
-		copy.alpha = A.alpha
-		copy.blend_mode = curblend
-		layers[copy] = A.layer
-
+// Creates a single icon from a given /atom or /image.  Only the first argument is required.
+/proc/getFlatIcon(image/appearance, defdir, deficon, defstate, defblend, start = TRUE, no_anim = FALSE, always_use_defdir = FALSE)
 	// Loop through the underlays, then overlays, sorting them into the layers list
-	var/list/process = A.underlays // Current list being processed
-	var/pSet=0 // Which list is being processed: 0 = underlays, 1 = overlays
-	var/curIndex=1 // index of 'current' in list being processed
-	var/current // Current overlay being sorted
-	var/currentLayer // Calculated layer that overlay appears on (special case for FLOAT_LAYER)
-	var/compare // The overlay 'add' is being compared against
-	var/cmpIndex // The index in the layers list of 'compare'
-	while(TRUE)
-		if(curIndex<=length(process))
-			current = process[curIndex]
-			if(current)
-				currentLayer = current:layer
-				if(currentLayer<0) // Special case for FLY_LAYER
-					if(currentLayer <= -1000) return flat
-					if(pSet == 0) // Underlay
-						currentLayer = A.layer+currentLayer/1000
-					else // Overlay
-						currentLayer = A.layer+(1000+currentLayer)/1000
+	#define PROCESS_OVERLAYS_OR_UNDERLAYS(flat, process, base_layer) \
+		for (var/i in 1 to process.len) { \
+			var/image/current = process[i]; \
+			if (!current) { \
+				continue; \
+			} \
+			if (current.plane != FLOAT_PLANE && current.plane != appearance.plane) { \
+				continue; \
+			} \
+			var/current_layer = current.layer; \
+			if (current_layer < 0) { \
+				if (current_layer <= -1000) { \
+					return flat; \
+				} \
+				current_layer = base_layer + appearance.layer + current_layer / 1000; \
+			} \
+			for (var/index_to_compare_to in 1 to layers.len) { \
+				var/compare_to = layers[index_to_compare_to]; \
+				if (current_layer < layers[compare_to]) { \
+					layers.Insert(index_to_compare_to, current); \
+					break; \
+				} \
+			} \
+			layers[current] = current_layer; \
+		}
 
-				// Sort add into layers list
-				for(cmpIndex=1,cmpIndex<=length(layers),cmpIndex++)
-					compare = layers[cmpIndex]
-					if(currentLayer < layers[compare]) // Associated value is the calculated layer
-						layers.Insert(cmpIndex,current)
-						layers[current] = currentLayer
-						break
-				if(cmpIndex>length(layers)) // Reached end of list without inserting
-					layers[current]=currentLayer // Place at end
+	var/static/icon/flat_template = icon('icons/effects/effects.dmi', "icon_state"="nothing") // Final flattened icon
 
-			curIndex++
-		else if(pSet == 0) // Switch to overlays
-			curIndex = 1
-			pSet = 1
-			process = A.overlays
-		else // All done
-			break
+	if(!appearance || appearance.alpha <= 0)
+		return icon(flat_template)
 
-	var/icon/add // Icon of overlay being added
+	if(start)
+		if(!defdir)
+			defdir = appearance.dir
+		if(!deficon)
+			deficon = appearance.icon
+		if(!defstate)
+			defstate = appearance.icon_state
+		if(!defblend)
+			defblend = appearance.blend_mode
 
-		// Current dimensions of flattened icon
-	var/flatX1=1
-	var/flatX2=flat.Width()
-	var/flatY1=1
-	var/flatY2=flat.Height()
-		// Dimensions of overlay being added
-	var/addX1
-	var/addX2
-	var/addY1
-	var/addY2
+	var/curicon = appearance.icon || deficon
+	var/curstate = appearance.icon_state || defstate
+	var/curdir = (!appearance.dir || appearance.dir == SOUTH || always_use_defdir) ? defdir : appearance.dir
 
-	for(var/I in layers)
+	var/render_icon = curicon
 
-		if(I:plane == EMISSIVE_PLANE) //Just replace this with whatever it is TG is doing these days sometime. Getflaticon breaks emissives
-			continue
-
-		if(I:alpha == 0)
-			continue
-
-		if(I == copy) // 'I' is an /image based on the object being flattened.
-			curblend = BLEND_OVERLAY
-			add = icon(I:icon, I:icon_state, I:dir)
-		else // 'I' is an appearance object.
-			if(istype(A,/obj/machinery/atmospherics) && (I in A.underlays))
-				var/image/Im = I
-				add = getFlatIcon(new/image(I), Im.dir, curicon, curstate, curblend, 1)
+	if (render_icon)
+		var/curstates = icon_states(curicon)
+		if(!(curstate in curstates))
+			if ("" in curstates)
+				curstate = ""
 			else
-				add = getFlatIcon(new/image(I), curdir, curicon, curstate, curblend, always_use_defdir)
+				render_icon = FALSE
 
-		// Find the new dimensions of the flat icon to fit the added overlay
-		addX1 = min(flatX1, I:pixel_x+1)
-		addX2 = max(flatX2, I:pixel_x+add.Width())
-		addY1 = min(flatY1, I:pixel_y+1)
-		addY2 = max(flatY2, I:pixel_y+add.Height())
+	var/base_icon_dir //We'll use this to get the icon state to display if not null BUT NOT pass it to overlays as the dir we have
 
-		if(addX1!=flatX1 || addX2!=flatX2 || addY1!=flatY1 || addY2!=flatY2)
-			// Resize the flattened icon so the new icon fits
-			flat.Crop(addX1-flatX1+1, addY1-flatY1+1, addX2-flatX1+1, addY2-flatY1+1)
-			flatX1=addX1;flatX2=addX2
-			flatY1=addY1;flatY2=addY2
-		var/iconmode
-		if(I in A.overlays)
-			iconmode = ICON_OVERLAY
-		else if(I in A.underlays)
-			iconmode = ICON_UNDERLAY
+	//Try to remove/optimize this section ASAP, CPU hog.
+	//Determines if there's directionals.
+	if(render_icon && curdir != SOUTH)
+		if (
+			!length(icon_states(icon(curicon, curstate, NORTH))) \
+			&& !length(icon_states(icon(curicon, curstate, EAST))) \
+			&& !length(icon_states(icon(curicon, curstate, WEST))) \
+		)
+			base_icon_dir = SOUTH
+
+	if(!base_icon_dir)
+		base_icon_dir = curdir
+
+	var/curblend = appearance.blend_mode || defblend
+
+	if(appearance.overlays.len || appearance.underlays.len)
+		var/icon/flat = icon(flat_template)
+		// Layers will be a sorted list of icons/overlays, based on the order in which they are displayed
+		var/list/layers = list()
+		var/image/copy
+		// Add the atom's icon itself, without pixel_x/y offsets.
+		if(render_icon)
+			copy = image(icon=curicon, icon_state=curstate, layer=appearance.layer, dir=base_icon_dir)
+			copy.color = appearance.color
+			copy.alpha = appearance.alpha
+			copy.blend_mode = curblend
+			layers[copy] = appearance.layer
+
+		PROCESS_OVERLAYS_OR_UNDERLAYS(flat, appearance.underlays, 0)
+		PROCESS_OVERLAYS_OR_UNDERLAYS(flat, appearance.overlays, 1)
+
+		var/icon/add // Icon of overlay being added
+
+		var/flatX1 = 1
+		var/flatX2 = flat.Width()
+		var/flatY1 = 1
+		var/flatY2 = flat.Height()
+
+		var/addX1 = 0
+		var/addX2 = 0
+		var/addY1 = 0
+		var/addY2 = 0
+
+		for(var/image/layer_image as anything in layers)
+			if(layer_image.alpha == 0)
+				continue
+
+			if(layer_image == copy) // 'layer_image' is an /image based on the object being flattened.
+				curblend = BLEND_OVERLAY
+				add = icon(layer_image.icon, layer_image.icon_state, base_icon_dir)
+			else // 'I' is an appearance object.
+				add = getFlatIcon(image(layer_image), curdir, curicon, curstate, curblend, FALSE, no_anim, always_use_defdir)
+			if(!add)
+				continue
+
+			// Find the new dimensions of the flat icon to fit the added overlay
+			addX1 = min(flatX1, layer_image.pixel_x + 1)
+			addX2 = max(flatX2, layer_image.pixel_x + add.Width())
+			addY1 = min(flatY1, layer_image.pixel_y + 1)
+			addY2 = max(flatY2, layer_image.pixel_y + add.Height())
+
+			if (
+				addX1 != flatX1 \
+				&& addX2 != flatX2 \
+				&& addY1 != flatY1 \
+				&& addY2 != flatY2 \
+			)
+				// Resize the flattened icon so the new icon fits
+				flat.Crop(
+					addX1 - flatX1 + 1,
+					addY1 - flatY1 + 1,
+					addX2 - flatX1 + 1,
+					addY2 - flatY1 + 1
+				)
+
+				flatX1 = addX1
+				flatX2 = addY1
+				flatY1 = addX2
+				flatY2 = addY2
+
+			// Blend the overlay into the flattened icon
+			flat.Blend(add, blendMode2iconMode(curblend), layer_image.pixel_x + 2 - flatX1, layer_image.pixel_y + 2 - flatY1)
+
+		if(appearance.color)
+			if(islist(appearance.color))
+				flat.MapColors(arglist(appearance.color))
+			else
+				flat.Blend(appearance.color, ICON_MULTIPLY)
+
+		if(appearance.alpha < 255)
+			flat.Blend(rgb(255, 255, 255, appearance.alpha), ICON_MULTIPLY)
+
+		if(no_anim)
+			//Clean up repeated frames
+			var/icon/cleaned = new /icon()
+			cleaned.Insert(flat, "", SOUTH, 1, 0)
+			return cleaned
 		else
-			iconmode = blendMode2iconMode(curblend)
-		// Blend the overlay into the flattened icon
-		flat.Blend(add, iconmode, I:pixel_x + 2 - flatX1, I:pixel_y + 2 - flatY1)
+			return icon(flat, "", SOUTH)
+	else if (render_icon) // There's no overlays.
+		var/icon/final_icon = icon(icon(curicon, curstate, base_icon_dir), "", SOUTH, no_anim ? TRUE : null)
 
-	if(A.color)
-		flat.Blend(A.color, ICON_MULTIPLY)
-	if(A.alpha < 255)
-		flat.Blend(rgb(255, 255, 255, A.alpha), ICON_MULTIPLY)
+		if (appearance.alpha < 255)
+			final_icon.Blend(rgb(255,255,255, appearance.alpha), ICON_MULTIPLY)
 
-	return icon(flat, "", SOUTH)
+		if (appearance.color)
+			if (islist(appearance.color))
+				final_icon.MapColors(arglist(appearance.color))
+			else
+				final_icon.Blend(appearance.color, ICON_MULTIPLY)
+
+		return final_icon
+
+	#undef PROCESS_OVERLAYS_OR_UNDERLAYS
+
+// Returns a flattened icon of an atom with emissive blockers stripped.
+// The icon gets rendered on 'caller's side. If there's no 'caller' provided or the 'caller' has no client,
+// the icon will be rendered on a random client's side (unless 'allow_ratty_rendering = FALSE', in this case we give up).
+// 'dir' accepts either a single dir, uses 'src.dir' if not provided.
+// I'm not completely sure how ethical the 'allow_ratty_rendering' usage is, since it's basically lowkey cryptomining, but who fucking cares?
+/atom/proc/get_flat_icon(mob/caller, dir, allow_ratty_rendering = TRUE)
+	var/client/rendering_client
+	if(caller?.client)
+		rendering_client = caller.client // We are good, let the caller deal with their own stuff.
+	else if(allow_ratty_rendering)
+		for(var/mob/prey in shuffle(GLOB.player_list)) // We are not that good, randomly choosing a poor being to deal with rendering.
+			if(prey?.client)
+				rendering_client = prey.client
+				break
+
+	if(!rendering_client)
+		return null // Everything's broken somehow, giving up.
+
+	if(!dir)
+		dir = src.dir
+
+	var/obj/dummy = new
+	dummy.icon = icon
+	dummy.icon_state = icon_state
+	dummy.alpha = alpha
+	dummy.color = color
+	dummy.transform = transform
+	dummy.set_dir(dir)
+
+	for(var/I in underlays)
+		var/image/image = image(I)
+		if(image.plane == EMISSIVE_PLANE)
+			continue
+		image.dir = dir
+		dummy.underlays += image
+
+	for(var/I in overlays)
+		var/image/image = image(I)
+		if(image.plane == EMISSIVE_PLANE)
+			continue
+		image.dir = dir
+		dummy.overlays += image
+
+	qdel(dummy)
+	return icon(rendering_client.RenderIcon(dummy))
+
+// Extended version of the above. It can accept 'dirs' as a list, and returns a list populated with rendered icons.
+// It's cheaper than calling 'get_flat_icon' multiple times, but for some reason beyond my understanding, it sometimes just gives
+// up and returns a list of same-directioned icons. Still may come in handy.
+/atom/proc/get_flat_icons_list(mob/caller, dirs = SOUTH, allow_ratty_rendering = TRUE)
+	var/client/rendering_client
+	if(caller?.client)
+		rendering_client = caller.client // We are good, let the caller deal with their own stuff.
+	else if(allow_ratty_rendering)
+		for(var/mob/prey in shuffle(GLOB.player_list)) // We are not that good, randomly choosing a poor being to deal with rendering.
+			if(prey?.client)
+				rendering_client = prey.client
+				break
+
+	if(!rendering_client)
+		return list() // Everything's broken somehow, giving up.
+
+	var/dirs_list = list()
+	dirs_list |= dirs
+
+	var/list/ret = list()
+
+	var/obj/dummy = new
+	dummy.icon = icon
+	dummy.icon_state = icon_state
+	dummy.alpha = alpha
+	dummy.color = color
+	dummy.transform = transform
+
+	for(var/current_dir in dirs_list)
+		dummy.underlays.Cut()
+		dummy.overlays.Cut()
+		dummy.set_dir(current_dir)
+
+		for(var/I in underlays)
+			var/image/image = image(I)
+			if(image.plane == EMISSIVE_PLANE)
+				continue
+			image.dir = current_dir
+			dummy.underlays += image
+
+		for(var/I in overlays)
+			var/image/image = image(I)
+			if(image.plane == EMISSIVE_PLANE)
+				continue
+			image.dir = current_dir
+			dummy.overlays += image
+
+		ret += icon(rendering_client.RenderIcon(dummy))
+
+	qdel(dummy)
+	return ret
 
 /proc/getIconMask(atom/A)//By yours truly. Creates a dynamic mask for a mob/whatever. /N
 	RETURN_TYPE(/icon)
-	var/icon/alpha_mask = new(A.icon,A.icon_state)//So we want the default icon and icon state of A.
-	for(var/I in A.overlays)//For every image in overlays. var/image/I will not work, don't try it.
-		if(I:layer>A.layer)	continue//If layer is greater than what we need, skip it.
-		var/icon/image_overlay = new(I:icon,I:icon_state)//Blend only works with icon objects.
-		//Also, icons cannot directly set icon_state. Slower than changing variables but whatever.
-		alpha_mask.Blend(image_overlay,ICON_OR)//OR so they are lumped together in a nice overlay.
-	return alpha_mask//And now return the mask.
+	var/icon/alpha_mask = new(A.icon, A.icon_state) // So we want the default icon and icon state of A.
+	for(var/V in A.overlays) // For every image in overlays. var/image/I will not work, don't try it.
+		var/image/I = V
+		if(I.layer > A.layer)
+			continue // If layer is greater than what we need, skip it.
+		var/icon/image_overlay = new(I.icon, I.icon_state) // Blend only works with icon objects.
+		// Also, icons cannot directly set icon_state. Slower than changing variables but whatever.
+		alpha_mask.Blend(image_overlay, ICON_OR) // OR so they are lumped together in a nice overlay.
+	return alpha_mask // And now return the mask.
 
 /mob/proc/AddCamoOverlay(atom/A)//A is the atom which we are using as the overlay.
 	var/icon/opacity_icon = new(A.icon, A.icon_state)//Don't really care for overlays/underlays.
@@ -691,7 +815,7 @@ lighting determines lighting capturing (optional), suppress_errors suppreses err
 	cap.Blend("#000", ICON_OVERLAY)
 	for(var/atom/A in atoms)
 		if(A)
-			var/icon/img = getFlatIcon(A)
+			var/icon/img = ishuman(A) ? A.get_flat_icon(user) : getFlatIcon(A, no_anim = TRUE)
 			if(istype(img, /icon))
 				if(istype(A, /mob/living) && A:lying)
 					img.BecomeLying()

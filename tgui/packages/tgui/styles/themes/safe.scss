@@ -28,9 +28,6 @@
     $with: ('background-color': #35435a)
   );
 
-  // Interfaces
-  @include meta.load-css('../interfaces/Safe.scss');
-
   .Layout__content {
     background-image: none;
   }

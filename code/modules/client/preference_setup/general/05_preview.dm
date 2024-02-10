@@ -101,11 +101,11 @@
 		last_built_icon = icon('icons/effects/128x48.dmi', bgstate)
 		last_built_icon.Scale(48+32, 16+32)
 		mannequin.dir = WEST
-		last_built_icon.Blend(mannequin.get_flat_icon(mannequin, WEST), ICON_OVERLAY, 1, 9)
+		last_built_icon.Blend(mannequin.get_flat_icon(mannequin, WEST), ICON_OVERLAY, 1, 0)
 		mannequin.dir = NORTH
-		last_built_icon.Blend(mannequin.get_flat_icon(mannequin, NORTH), ICON_OVERLAY, 25, 17)
+		last_built_icon.Blend(mannequin.get_flat_icon(mannequin, NORTH), ICON_OVERLAY, 25, 0)
 		mannequin.dir = SOUTH
-		last_built_icon.Blend(mannequin.get_flat_icon(mannequin, SOUTH), ICON_OVERLAY, 25, 17)
+		last_built_icon.Blend(mannequin.get_flat_icon(mannequin, SOUTH), ICON_OVERLAY, 49, 0)
 	preview_icon = new (last_built_icon)
 	var/scale = client.get_preference_value(/datum/client_preference/preview_scale)
 	switch (scale)

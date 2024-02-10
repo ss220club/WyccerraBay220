@@ -9,7 +9,7 @@ const path = require('path');
 const ExtractCssPlugin = require('mini-css-extract-plugin');
 const { createBabelConfig } = require('./babel.config.js');
 
-const createStats = (verbose) => ({
+const createStats = verbose => ({
   assets: verbose,
   builtAt: verbose,
   cached: false,
@@ -24,18 +24,20 @@ const createStats = (verbose) => ({
   version: verbose,
 });
 
-// prettier-ignore
 module.exports = (env = {}, argv) => {
   const mode = argv.mode === 'production' ? 'production' : 'development';
-  const bench = env.TGUI_BENCH;
   const config = {
     mode,
     context: path.resolve(__dirname),
-    target: ['web', 'es3', 'browserslist:ie 8'],
+    target: ['web', 'es5', 'browserslist:ie 11'],
     entry: {
       'tgui': [
         './packages/tgui-polyfill',
         './packages/tgui',
+      ],
+      'tgui-panel': [
+        './packages/tgui-polyfill',
+        './packages/tgui-panel',
       ],
     },
     output: {
@@ -45,6 +47,7 @@ module.exports = (env = {}, argv) => {
       filename: '[name].bundle.js',
       chunkFilename: '[name].bundle.js',
       chunkLoadTimeout: 15000,
+      hashFunction: "xxhash64",
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
@@ -57,9 +60,7 @@ module.exports = (env = {}, argv) => {
           use: [
             {
               loader: require.resolve('babel-loader'),
-              options: createBabelConfig({
-                removeConsole: !bench,
-              }),
+              options: createBabelConfig({ mode }),
             },
           ],
         },
@@ -91,6 +92,8 @@ module.exports = (env = {}, argv) => {
     },
     optimization: {
       emitOnErrors: false,
+      realContentHash: true,
+      moduleIds: 'deterministic',
     },
     performance: {
       hints: false,
@@ -117,28 +120,22 @@ module.exports = (env = {}, argv) => {
     ],
   };
 
-  if (bench) {
-    config.entry = {
-      'tgui-bench': [
-        './packages/tgui-polyfill',
-        './packages/tgui-bench/entrypoint',
-      ],
-    };
+  // Add a bundle analyzer to the plugins array
+  if (argv.analyze) {
+    const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+    config.plugins = [
+      ...config.plugins,
+      new BundleAnalyzerPlugin(),
+    ];
   }
 
   // Production build specific options
   if (argv.mode === 'production') {
-    const TerserPlugin = require('terser-webpack-plugin');
+    const { EsbuildPlugin } = require('esbuild-loader');
     config.optimization.minimizer = [
-      new TerserPlugin({
-        extractComments: false,
-        terserOptions: {
-          ie8: true,
-          output: {
-            ascii_only: true,
-            comments: false,
-          },
-        },
+      new EsbuildPlugin({
+        target: 'ie11',
+        css: true,
       }),
     ];
   }

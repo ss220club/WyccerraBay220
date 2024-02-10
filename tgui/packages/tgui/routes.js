@@ -11,7 +11,7 @@ import { Window } from './layouts';
 
 const requireInterface = require.context('./interfaces');
 
-export const routingError = (type, name) => () => {
+const routingError = (type, name) => () => {
   return (
     <Window>
       <Window.Content scrollable>

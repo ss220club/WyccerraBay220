@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 ## Copyright (c) 2020 Aleksej Komarov
 ## SPDX-License-Identifier: MIT
 
@@ -25,11 +25,6 @@ fi
 ## Find a canonical path to project root
 base_dir="$(dirname "$(tgui-realpath "${0}")")/.."
 base_dir="$(tgui-realpath "${base_dir}")"
-
-## Make use of nvm if it exists
-if [[ -e "${HOME}/.nvm/nvm.sh" ]]; then
-  source "${HOME}/.nvm/nvm.sh"
-fi
 
 ## Fall back to running Yarn from the repo
 if ! hash yarn 2>/dev/null; then
@@ -67,7 +62,7 @@ task-lint() {
   cd "${base_dir}"
   yarn run tsc
   echo "tgui: type check passed"
-  yarn run eslint packages --ext .js,.cjs,.ts,.tsx "${@}"
+  yarn run eslint packages --ext .js,.jsx,.ts,.tsx,.cjs,.mjs "${@}"
   echo "tgui: eslint check passed"
 }
 
@@ -76,34 +71,44 @@ task-test() {
   yarn run jest
 }
 
+task-prettier() {
+  cd "${base_dir}"
+  npx prettier --check packages --write "${@}"
+}
+
+task-polyfill() {
+  cd "${base_dir}"
+  yarn tgui-polyfill:build
+}
+
 ## Mr. Proper
 task-clean() {
   cd "${base_dir}"
+  echo "tgui: cleaning build artifacts"
   ## Build artifacts
   rm -rf public/.tmp
   rm -f public/*.map
-  rm -f public/*.chunk.*
-  rm -f public/*.bundle.*
   rm -f public/*.hot-update.*
+  echo "tgui: cleaning Yarn artifacts"
   ## Yarn artifacts
   rm -rf .yarn/cache
   rm -rf .yarn/unplugged
   rm -rf .yarn/webpack
-  rm -f .yarn/build-state.yml
-  rm -f .yarn/install-state.gz
-  rm -f .yarn/install-target
+  rm -rf .yarn/build-state.yml
+  rm -rf .yarn/install-state.gz
   rm -f .pnp.*
+  echo "tgui: cleaning NPM artifacts"
   ## NPM artifacts
   rm -rf **/node_modules
   rm -f **/package-lock.json
+  echo "tgui: All artifacts cleaned"
 }
 
 ## Validates current build against the build stored in git
-## VOREStation Addition Start
 task-validate-build() {
   cd "${base_dir}"
   local diff
-  diff="$(git diff packages/tgui/public/tgui.bundle.*)"
+  diff="$(git diff --text public/*)"
   if [[ -n ${diff} ]]; then
     echo "Error: our build differs from the build committed into git."
     echo "Please rebuild tgui."
@@ -111,7 +116,6 @@ task-validate-build() {
   fi
   echo "tgui: build is ok"
 }
-## VOREStation Addition End
 
 ## Installs merge drivers and git hooks
 task-install-git-hooks() {
@@ -167,30 +171,10 @@ if [[ ${1} == "--dev" ]]; then
   exit 0
 fi
 
-## VOREStation Addition Start
-## Continuous integration scenario
-if [[ ${1} == "--ci" ]]; then
-  task-clean
-  task-install
-  task-lint
-  task-test
-  task-webpack --mode=production
-  task-validate-build
-  exit 0
-fi
-## VOREStation Addition End
-
 if [[ ${1} == '--lint' ]]; then
   shift 1
   task-install
   task-lint "${@}"
-  exit 0
-fi
-
-if [[ ${1} == '--lint-harder' ]]; then
-  shift 1
-  task-install
-  task-lint -c .eslintrc-harder.yml "${@}"
   exit 0
 fi
 
@@ -201,13 +185,6 @@ if [[ ${1} == '--fix' ]]; then
   exit 0
 fi
 
-if [[ ${1} == '--test' ]]; then
-  shift 1
-  task-install
-  task-test "${@}"
-  exit 0
-fi
-
 ## Analyze the bundle
 if [[ ${1} == '--analyze' ]]; then
   task-install
@@ -215,17 +192,46 @@ if [[ ${1} == '--analyze' ]]; then
   exit 0
 fi
 
-## Make a production webpack build
-if [[ ${1} == '--build' ]]; then
+## Jest test
+if [[ ${1} == '--test' ]]; then
+  shift 1
   task-install
-  task-webpack --mode=production
+  task-test "${@}"
   exit 0
 fi
 
-## Make a production webpack build + Run eslint
+## Continuous integration scenario
+if [[ ${1} == "--ci" ]]; then
+  task-clean
+  task-install
+  task-prettier
+  task-test "${@}"
+  task-lint
+  task-webpack --mode=production
+  task-validate-build
+  exit 0
+fi
+
+## Run prettier
+if [[ ${1} == '--prettier' ]]; then
+  shift 1
+  task-prettier "${@}"
+  exit 0
+fi
+
+## Run prettier
+if [[ ${1} == '--tgui-polyfill' ]]; then
+  shift 1
+  task-install
+  task-polyfill "${@}"
+  exit 0
+fi
+
+## Make a production webpack build
 if [[ -z ${1} ]]; then
   task-install
   task-lint --fix
+  task-prettier
   task-webpack --mode=production
   exit 0
 fi

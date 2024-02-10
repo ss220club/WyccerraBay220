@@ -4,11 +4,11 @@
  * @license MIT
  */
 
-import { KEY_ENTER, KEY_ESCAPE, KEY_SPACE } from 'common/keycodes';
 import { classes, pureComponentHooks } from 'common/react';
 import { Component, createRef } from 'inferno';
+import { KEY_ENTER, KEY_ESCAPE, KEY_SPACE } from 'common/keycodes';
 import { createLogger } from '../logging';
-import { Box, computeBoxClassName, computeBoxProps } from './Box';
+import { Box } from './Box';
 import { Icon } from './Icon';
 import { Tooltip } from './Tooltip';
 
@@ -21,10 +21,8 @@ export const Button = (props) => {
     icon,
     iconRotation,
     iconSpin,
-    iconColor,
-    iconPosition,
-    iconSize, // VOREStation Addition
     color,
+    textColor,
     disabled,
     selected,
     tooltip,
@@ -33,9 +31,13 @@ export const Button = (props) => {
     compact,
     circular,
     content,
+    iconColor,
+    iconRight,
+    iconStyle,
     children,
     onclick,
     onClick,
+    multiLine,
     ...rest
   } = props;
   const hasContent = !!(content || children);
@@ -58,7 +60,7 @@ export const Button = (props) => {
     rest.unselectable = true;
   }
   let buttonContent = (
-    <div
+    <Box
       className={classes([
         'Button',
         fluid && 'Button--fluid',
@@ -68,17 +70,16 @@ export const Button = (props) => {
         ellipsis && 'Button--ellipsis',
         circular && 'Button--circular',
         compact && 'Button--compact',
-        iconPosition && 'Button--iconPosition--' + iconPosition,
-        color && typeof color === 'string' ? 'Button--color--' + color : 'Button--color--default',
+        iconRight && 'Button--iconRight',
+        multiLine && 'Button--multiLine',
+        color && typeof color === 'string'
+          ? 'Button--color--' + color
+          : 'Button--color--default',
         className,
-        computeBoxClassName(rest),
       ])}
       tabIndex={!disabled && '0'}
+      color={textColor}
       onKeyDown={(e) => {
-        if (props.captureKeys === false) {
-          return;
-        }
-
         const keyCode = window.event ? e.which : e.keyCode;
         // Simulate a click when pressing space or enter.
         if (keyCode === KEY_SPACE || keyCode === KEY_ENTER) {
@@ -94,22 +95,29 @@ export const Button = (props) => {
           return;
         }
       }}
-      {...computeBoxProps(rest)}>
-      {icon && iconPosition !== 'right' && (
-        <Icon name={icon} color={iconColor} rotation={iconRotation} spin={iconSpin} />
-      )}
-      {content}
-      {children}
-      {icon && iconPosition === 'right' && (
+      {...rest}
+    >
+      {icon && !iconRight && (
         <Icon
           name={icon}
           color={iconColor}
           rotation={iconRotation}
           spin={iconSpin}
-          fontSize={iconSize} // VOREStation Addition
+          style={iconStyle}
         />
       )}
-    </div>
+      {content}
+      {children}
+      {icon && iconRight && (
+        <Icon
+          name={icon}
+          color={iconColor}
+          rotation={iconRotation}
+          spin={iconSpin}
+          style={iconStyle}
+        />
+      )}
+    </Box>
   );
 
   if (tooltip) {
@@ -127,7 +135,14 @@ Button.defaultHooks = pureComponentHooks;
 
 export const ButtonCheckbox = (props) => {
   const { checked, ...rest } = props;
-  return <Button color="transparent" icon={checked ? 'check-square-o' : 'square-o'} selected={checked} {...rest} />;
+  return (
+    <Button
+      color="transparent"
+      icon={checked ? 'check-square-o' : 'square-o'}
+      selected={checked}
+      {...rest}
+    />
+  );
 };
 
 Button.Checkbox = ButtonCheckbox;
@@ -172,7 +187,9 @@ export class ButtonConfirm extends Component {
         content={this.state.clickedOnce ? confirmContent : content}
         icon={this.state.clickedOnce ? confirmIcon : icon}
         color={this.state.clickedOnce ? confirmColor : color}
-        onClick={() => (this.state.clickedOnce ? onClick() : this.setClickedOnce(true))}
+        onClick={() =>
+          this.state.clickedOnce ? onClick() : this.setClickedOnce(true)
+        }
         {...rest}
       />
     );
@@ -191,6 +208,10 @@ export class ButtonInput extends Component {
   }
 
   setInInput(inInput) {
+    const { disabled } = this.props;
+    if (disabled) {
+      return;
+    }
     this.setState({
       inInput,
     });
@@ -232,16 +253,25 @@ export class ButtonInput extends Component {
       tooltip,
       tooltipPosition,
       color = 'default',
+      disabled,
       placeholder,
       maxLength,
+      multiLine,
       ...rest
     } = this.props;
 
     let buttonContent = (
       <Box
-        className={classes(['Button', fluid && 'Button--fluid', 'Button--color--' + color])}
+        className={classes([
+          'Button',
+          fluid && 'Button--fluid',
+          disabled && 'Button--disabled',
+          'Button--color--' + color,
+          multiLine + 'Button--multiLine',
+        ])}
         {...rest}
-        onClick={() => this.setInInput(true)}>
+        onClick={() => this.setInInput(true)}
+      >
         {icon && <Icon name={icon} rotation={iconRotation} spin={iconSpin} />}
         <div>{content}</div>
         <input

@@ -5,7 +5,7 @@
  */
 
 import { BooleanLike, classes, pureComponentHooks } from 'common/react';
-import { createVNode, InfernoNode, SFC } from 'inferno';
+import { createVNode, InfernoNode } from 'inferno';
 import { ChildFlags, VNodeFlags } from 'inferno-vnode-flags';
 import { CSS_COLORS } from '../constants';
 
@@ -34,8 +34,6 @@ export interface BoxProps {
   opacity?: number;
   textAlign?: string | BooleanLike;
   verticalAlign?: string | BooleanLike;
-  textTransform?: string | BooleanLike; // VOREStation Addition
-  unselectable?: string | BooleanLike; // VOREStation Addition
   inline?: BooleanLike;
   bold?: BooleanLike;
   italic?: BooleanLike;
@@ -58,20 +56,6 @@ export interface BoxProps {
   color?: string | BooleanLike;
   textColor?: string | BooleanLike;
   backgroundColor?: string | BooleanLike;
-  // VOREStation Addition Start
-  // Flex props
-  order?: string | BooleanLike;
-  flexDirection?: string | BooleanLike;
-  flexGrow?: string | BooleanLike;
-  flexShrink?: string | BooleanLike;
-  flexWrap?: string | BooleanLike;
-  flexFlow?: string | BooleanLike;
-  flexBasis?: string | BooleanLike;
-  flex?: string | BooleanLike;
-  alignItems?: string | BooleanLike;
-  justifyContent?: string | BooleanLike;
-  alignSelf?: string | BooleanLike;
-  // VOREStation Addition End
   fillPositionedParent?: boolean;
 }
 
@@ -109,7 +93,9 @@ export const halfUnit = (value: unknown): string | undefined => {
 const isColorCode = (str: unknown) => !isColorClass(str);
 
 const isColorClass = (str: unknown): boolean => {
-  return typeof str === 'string' && CSS_COLORS.includes(str);
+  if (typeof str === 'string') {
+    return CSS_COLORS.includes(str);
+  }
 };
 
 const mapRawPropTo = (attrName) => (style, value) => {
@@ -172,8 +158,6 @@ const styleMapperByPropName = {
   opacity: mapRawPropTo('opacity'),
   textAlign: mapRawPropTo('text-align'),
   verticalAlign: mapRawPropTo('vertical-align'),
-  textTransform: mapRawPropTo('text-transform'), // VOREStation Addition
-  unselectable: mapRawPropTo('unselectable'), // VOREStation Addition
   // Boolean props
   inline: mapBooleanPropTo('display', 'inline-block'),
   bold: mapBooleanPropTo('font-weight', 'bold'),
@@ -181,7 +165,12 @@ const styleMapperByPropName = {
   nowrap: mapBooleanPropTo('white-space', 'nowrap'),
   preserveWhitespace: mapBooleanPropTo('white-space', 'pre-wrap'),
   // Margins
-  m: mapDirectionalUnitPropTo('margin', halfUnit, ['top', 'bottom', 'left', 'right']),
+  m: mapDirectionalUnitPropTo('margin', halfUnit, [
+    'top',
+    'bottom',
+    'left',
+    'right',
+  ]),
   mx: mapDirectionalUnitPropTo('margin', halfUnit, ['left', 'right']),
   my: mapDirectionalUnitPropTo('margin', halfUnit, ['top', 'bottom']),
   mt: mapUnitPropTo('margin-top', halfUnit),
@@ -189,7 +178,12 @@ const styleMapperByPropName = {
   ml: mapUnitPropTo('margin-left', halfUnit),
   mr: mapUnitPropTo('margin-right', halfUnit),
   // Margins
-  p: mapDirectionalUnitPropTo('padding', halfUnit, ['top', 'bottom', 'left', 'right']),
+  p: mapDirectionalUnitPropTo('padding', halfUnit, [
+    'top',
+    'bottom',
+    'left',
+    'right',
+  ]),
   px: mapDirectionalUnitPropTo('padding', halfUnit, ['left', 'right']),
   py: mapDirectionalUnitPropTo('padding', halfUnit, ['top', 'bottom']),
   pt: mapUnitPropTo('padding-top', halfUnit),
@@ -200,20 +194,6 @@ const styleMapperByPropName = {
   color: mapColorPropTo('color'),
   textColor: mapColorPropTo('color'),
   backgroundColor: mapColorPropTo('background-color'),
-  // VOREStation Addition Start
-  // Flex props
-  order: mapRawPropTo('order'),
-  flexDirection: mapRawPropTo('flex-direction'),
-  flexGrow: mapRawPropTo('flex-grow'),
-  flexShrink: mapRawPropTo('flex-shrink'),
-  flexWrap: mapRawPropTo('flex-wrap'),
-  flexFlow: mapRawPropTo('flex-flow'),
-  flexBasis: mapRawPropTo('flex-basis'),
-  flex: mapRawPropTo('flex'),
-  alignItems: mapRawPropTo('align-items'),
-  justifyContent: mapRawPropTo('justify-content'),
-  alignSelf: mapRawPropTo('align-self'),
-  // VOREStation Addition End
   // Utility props
   fillPositionedParent: (style, value) => {
     if (value) {
@@ -274,14 +254,16 @@ export const computeBoxClassName = (props: BoxProps) => {
   ]);
 };
 
-export const Box: SFC<BoxProps> = (props: BoxProps) => {
+export const Box = (props: BoxProps) => {
   const { as = 'div', className, children, ...rest } = props;
   // Render props
   if (typeof children === 'function') {
     return children(computeBoxProps(props));
   }
   const computedClassName =
-    typeof className === 'string' ? className + ' ' + computeBoxClassName(rest) : computeBoxClassName(rest);
+    typeof className === 'string'
+      ? className + ' ' + computeBoxClassName(rest)
+      : computeBoxClassName(rest);
   const computedProps = computeBoxProps(rest);
   // Render a wrapper element
   return createVNode(
@@ -290,8 +272,7 @@ export const Box: SFC<BoxProps> = (props: BoxProps) => {
     computedClassName,
     children,
     ChildFlags.UnknownChildren,
-    computedProps,
-    undefined
+    computedProps
   );
 };
 

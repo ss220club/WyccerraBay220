@@ -26,8 +26,8 @@
 	name = "Эксплорер TTS голосов"
 	var/phrases = TTS_PHRASES
 
-/datum/tgui_module/tts_seeds_explorer/ui_state(mob/user)
-	return GLOB.always_state
+/datum/tgui_module/tts_seeds_explorer/tgui_state(mob/user)
+	return GLOB.tgui_always_state
 
 /datum/tgui_module/tts_seeds_explorer/tgui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -36,15 +36,15 @@
 		ui.set_autoupdate(FALSE)
 		ui.open()
 
-/datum/tgui_module/tts_seeds_explorer/ui_data(mob/user)
+/datum/tgui_module/tts_seeds_explorer/tgui_data(mob/user)
 	var/list/data = list()
-	data["selected_seed"] = user.client.prefs.active_character.tts_seed
+	data["selected_seed"] = user.client.prefs.tts_seed
 	data["donator_level"] = 5
-	data["character_gender"] = user.client.prefs.active_character.gender
+	data["character_gender"] = user.client.prefs.gender
 
 	return data
 
-/datum/tgui_module/tts_seeds_explorer/ui_static_data(mob/user)
+/datum/tgui_module/tts_seeds_explorer/tgui_static_data(mob/user)
 	var/list/data = list()
 
 	var/list/providers = list()
@@ -72,7 +72,7 @@
 
 	return data
 
-/datum/tgui_module/tts_seeds_explorer/ui_act(action, list/params)
+/datum/tgui_module/tts_seeds_explorer/tgui_act(action, list/params)
 	if(..())
 		return
 	. = TRUE
@@ -87,17 +87,17 @@
 			if(!(seed_name in SStts220.tts_seeds))
 				return
 
-			INVOKE_ASYNC(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, usr, phrase, seed_name, FALSE)
+			invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, usr, phrase, seed_name, FALSE)
 		if("select")
 			var/seed_name = params["seed"]
 
 			if(!(seed_name in SStts220.tts_seeds))
 				return
-			var/datum/tts_seed/seed = SStts220.tts_seeds[seed_name]
-			if(usr.client.donator_level < seed.required_donator_level)
-				return
+			//var/datum/tts_seed/seed = SStts220.tts_seeds[seed_name]
+			//if(usr.client.donator_level < seed.required_donator_level)
+			//	return
 
-			usr.client.prefs.active_character.tts_seed = seed_name
+			usr.client.prefs.tts_seed = seed_name
 		else
 			return FALSE
 
@@ -114,7 +114,7 @@
 
 /datum/preferences/Topic(href, list/href_list)
 	if(href_list["tts_explorer"])
-		var/datum/nano_module/tts_seeds_explorer/explorer = explorer_users[usr]
+		var/datum/tgui_module/tts_seeds_explorer/explorer = explorer_users[usr]
 		if(!explorer)
 			explorer = new(src)
 			explorer_users[usr] = explorer

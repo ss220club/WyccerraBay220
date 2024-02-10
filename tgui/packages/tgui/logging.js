@@ -36,7 +36,6 @@ const log = (level, ns, ...args) => {
       navigator.userAgent;
     Byond.sendMessage({
       type: 'log',
-      ns,
       message: logEntry,
     });
   }

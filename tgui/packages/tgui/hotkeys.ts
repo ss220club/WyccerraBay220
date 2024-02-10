@@ -25,14 +25,10 @@ const hotKeysAcquired = [
   keycodes.KEY_DOWN,
   keycodes.KEY_LEFT,
   keycodes.KEY_RIGHT,
-  keycodes.KEY_F5,
 ];
 
 // State of passed-through keys.
 const keyState: Record<string, boolean> = {};
-
-// Custom listeners for key events
-const keyListeners: ((key: KeyEvent) => void)[] = [];
 
 /**
  * Converts a browser keycode to BYOND keycode.
@@ -71,7 +67,7 @@ const keyCodeToByond = (keyCode: number) => {
  */
 const handlePassthrough = (key: KeyEvent) => {
   const keyString = String(key);
-  // In addition to F5, support reloading with Ctrl+R and Ctrl+F5
+  // Support reloading with Ctrl+R and Ctrl+F5
   if (keyString === 'Ctrl+F5' || keyString === 'Ctrl+R') {
     location.reload();
     return;
@@ -81,8 +77,17 @@ const handlePassthrough = (key: KeyEvent) => {
     return;
   }
   // NOTE: Alt modifier is pretty bad and sticky in IE11.
-  if (key.event.defaultPrevented || key.isModifierKey() || hotKeysAcquired.includes(key.code)) {
+  if (
+    key.event.defaultPrevented ||
+    key.isModifierKey() ||
+    hotKeysAcquired.includes(key.code)
+  ) {
     return;
+  }
+  if (keyString === 'F5') {
+    // Hacky prevention of F5 reloading
+    key.event.preventDefault();
+    key.event.returnValue = false;
   }
   const byondKeyCode = keyCodeToByond(key.code);
   if (!byondKeyCode) {
@@ -94,17 +99,17 @@ const handlePassthrough = (key: KeyEvent) => {
     logger.debug('macro', macro);
     return Byond.command(macro);
   }
-  // KeyDown
+  // Key_Down
   if (key.isDown() && !keyState[byondKeyCode]) {
     keyState[byondKeyCode] = true;
-    const command = `TguiKeyDown "${byondKeyCode}"`;
+    const command = `Key_Down "${byondKeyCode}"`;
     logger.debug(command);
     return Byond.command(command);
   }
-  // KeyUp
+  // Key_Up
   if (key.isUp() && keyState[byondKeyCode]) {
     keyState[byondKeyCode] = false;
-    const command = `TguiKeyUp "${byondKeyCode}"`;
+    const command = `Key_Up "${byondKeyCode}"`;
     logger.debug(command);
     return Byond.command(command);
   }
@@ -133,7 +138,7 @@ export const releaseHeldKeys = () => {
     if (keyState[byondKeyCode]) {
       keyState[byondKeyCode] = false;
       logger.log(`releasing key "${byondKeyCode}"`);
-      Byond.command(`TguiKeyUp "${byondKeyCode}"`);
+      Byond.command(`Key_Up "${byondKeyCode}"`);
     }
   }
 };
@@ -164,7 +169,8 @@ export const setupHotKeys = () => {
     }
     // Insert macros
     const escapedQuotRegex = /\\"/g;
-    const unescape = (str: string) => str.substring(1, str.length - 1).replace(escapedQuotRegex, '"');
+    const unescape = (str: string) =>
+      str.substring(1, str.length - 1).replace(escapedQuotRegex, '"');
     for (let ref of Object.keys(groupedByRef)) {
       const macro = groupedByRef[ref];
       const byondKeyName = unescape(macro.name);
@@ -177,36 +183,6 @@ export const setupHotKeys = () => {
     releaseHeldKeys();
   });
   globalEvents.on('key', (key: KeyEvent) => {
-    for (const keyListener of keyListeners) {
-      keyListener(key);
-    }
-
     handlePassthrough(key);
   });
-};
-
-/**
- * Registers for any key events, such as key down or key up.
- * This should be preferred over directly connecting to keydown/keyup
- * as it lets tgui prevent the key from reaching BYOND.
- *
- * If using in a component, prefer KeyListener, which automatically handles
- * stopping listening when unmounting.
- *
- * @param callback The function to call whenever a key event occurs
- * @returns A callback to stop listening
- */
-export const listenForKeyEvents = (callback: (key: KeyEvent) => void): (() => void) => {
-  keyListeners.push(callback);
-
-  let removed = false;
-
-  return () => {
-    if (removed) {
-      return;
-    }
-
-    removed = true;
-    keyListeners.splice(keyListeners.indexOf(callback), 1);
-  };
 };

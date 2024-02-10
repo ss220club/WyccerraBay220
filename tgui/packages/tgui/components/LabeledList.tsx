@@ -10,7 +10,7 @@ import { Box, unit } from './Box';
 import { Divider } from './Divider';
 
 type LabeledListProps = {
-  children?: any;
+  children: InfernoNode;
 };
 
 export const LabeledList = (props: LabeledListProps) => {
@@ -26,7 +26,6 @@ type LabeledListItemProps = {
   labelColor?: string | BooleanLike;
   color?: string | BooleanLike;
   textAlign?: string | BooleanLike;
-  verticalAlign?: string | BooleanLike; // VOREStation Addition
   buttons?: InfernoNode;
   /** @deprecated */
   content?: any;
@@ -40,34 +39,32 @@ const LabeledListItem = (props: LabeledListItemProps) => {
     labelColor = 'label',
     color,
     textAlign,
-    verticalAlign, // VOREStation Addition
     buttons,
     content,
     children,
-    ...rest // VOREStation Addition
   } = props;
   return (
     <tr className={classes(['LabeledList__row', className])}>
       <Box
         as="td"
-        verticalAlign={verticalAlign} // VOREStation Addition
         color={labelColor}
-        className={classes(['LabeledList__cell', 'LabeledList__label'])}>
+        className={classes(['LabeledList__cell', 'LabeledList__label'])}
+      >
         {label ? label + ':' : null}
       </Box>
       <Box
         as="td"
         color={color}
         textAlign={textAlign}
-        verticalAlign={verticalAlign} // VOREStation Addition
         className={classes(['LabeledList__cell', 'LabeledList__content'])}
         colSpan={buttons ? undefined : 2}
-        {...rest} /* VOREStation Addition*/
       >
         {content}
         {children}
       </Box>
-      {buttons && <td className="LabeledList__cell LabeledList__buttons">{buttons}</td>}
+      {buttons && (
+        <td className="LabeledList__cell LabeledList__buttons">{buttons}</td>
+      )}
     </tr>
   );
 };
@@ -87,7 +84,8 @@ const LabeledListDivider = (props: LabeledListDividerProps) => {
         style={{
           'padding-top': padding,
           'padding-bottom': padding,
-        }}>
+        }}
+      >
         <Divider />
       </td>
     </tr>

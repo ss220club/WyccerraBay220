@@ -11,7 +11,6 @@ export type FlexProps = BoxProps & {
   direction?: string | BooleanLike;
   wrap?: string | BooleanLike;
   align?: string | BooleanLike;
-  alignContent?: string | BooleanLike; // VOREStation Addition
   justify?: string | BooleanLike;
   inline?: BooleanLike;
 };
@@ -27,23 +26,13 @@ export const computeFlexClassName = (props: FlexProps) => {
 };
 
 export const computeFlexProps = (props: FlexProps) => {
-  const {
-    className,
-    direction,
-    wrap,
-    align,
-    alignContent, // VOREStation Addition
-    justify,
-    inline,
-    ...rest
-  } = props;
+  const { className, direction, wrap, align, justify, inline, ...rest } = props;
   return computeBoxProps({
     style: {
       ...rest.style,
       'flex-direction': direction,
       'flex-wrap': wrap === true ? 'wrap' : wrap,
       'align-items': align,
-      'align-content': alignContent, // VOREStation Addition
       'justify-content': justify,
     },
     ...rest,
@@ -52,7 +41,12 @@ export const computeFlexProps = (props: FlexProps) => {
 
 export const Flex = (props) => {
   const { className, ...rest } = props;
-  return <div className={classes([className, computeFlexClassName(rest)])} {...computeFlexProps(rest)} />;
+  return (
+    <div
+      className={classes([className, computeFlexClassName(rest)])}
+      {...computeFlexProps(rest)}
+    />
+  );
 };
 
 Flex.defaultHooks = pureComponentHooks;
@@ -66,7 +60,11 @@ export type FlexItemProps = BoxProps & {
 };
 
 export const computeFlexItemClassName = (props: FlexItemProps) => {
-  return classes(['Flex__item', Byond.IS_LTE_IE10 && 'Flex__item--iefix', computeBoxClassName(props)]);
+  return classes([
+    'Flex__item',
+    Byond.IS_LTE_IE10 && 'Flex__item--iefix',
+    computeBoxClassName(props),
+  ]);
 };
 
 export const computeFlexItemProps = (props: FlexItemProps) => {
@@ -99,7 +97,7 @@ const FlexItem = (props) => {
   const { className, ...rest } = props;
   return (
     <div
-      className={classes([className, computeFlexItemClassName(props), computeBoxClassName(props)])}
+      className={classes([className, computeFlexItemClassName(props)])}
       {...computeFlexItemProps(rest)}
     />
   );

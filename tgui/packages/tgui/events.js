@@ -91,10 +91,10 @@ const focusNearestTrackedParent = (node) => {
   const body = document.body;
   while (node && node !== body) {
     if (trackedNodes.includes(node)) {
-      // NOTE: Contains is a DOM4 method - VORESTATION REMOVAL
-      // if (node.contains(focusedNode)) {
-      //   return;
-      // }
+      // NOTE: Contains is a DOM4 method
+      if (node.contains(focusedNode)) {
+        return;
+      }
       focusedNode = node;
       node.focus();
       return;
@@ -159,7 +159,9 @@ export class KeyEvent {
   }
 
   isModifierKey() {
-    return this.code === KEY_CTRL || this.code === KEY_SHIFT || this.code === KEY_ALT;
+    return (
+      this.code === KEY_CTRL || this.code === KEY_SHIFT || this.code === KEY_ALT
+    );
   }
 
   isDown() {

@@ -11,15 +11,11 @@ import { BoxProps, computeBoxClassName, computeBoxProps } from './Box';
 
 interface SectionProps extends BoxProps {
   className?: string;
-  title?: string | InfernoElement<string>;
+  title?: string;
   buttons?: InfernoNode;
   fill?: boolean;
   fitted?: boolean;
   scrollable?: boolean;
-  transparent?: boolean;
-  flexGrow?: boolean; // VOREStation Addition
-  noTopPadding?: boolean; // VOREStation Addition
-  stretchContents?: boolean; // VOREStation Addition
   /** @deprecated This property no longer works, please remove it. */
   level?: boolean;
   /** @deprecated Please use `scrollable` property */
@@ -40,13 +36,6 @@ export class Section extends Component<SectionProps> {
     if (this.scrollable) {
       addScrollableNode(this.scrollableRef.current);
     }
-    if (this.props.autoFocus) {
-      setTimeout(() => {
-        if (this.scrollableRef.current) {
-          return this.scrollableRef.current.focus();
-        }
-      }, 1);
-    }
   }
 
   componentWillUnmount() {
@@ -63,10 +52,6 @@ export class Section extends Component<SectionProps> {
       fill,
       fitted,
       scrollable,
-      transparent,
-      flexGrow, // VOREStation Addition
-      noTopPadding, // VOREStation Addition
-      stretchContents, // VOREStation Addition
       children,
       ...rest
     } = this.props;
@@ -79,12 +64,11 @@ export class Section extends Component<SectionProps> {
           fill && 'Section--fill',
           fitted && 'Section--fitted',
           scrollable && 'Section--scrollable',
-          transparent && 'Section--transparent',
-          flexGrow && 'Section--flex', // VOREStation Addition
           className,
           computeBoxClassName(rest),
         ])}
-        {...computeBoxProps(rest)}>
+        {...computeBoxProps(rest)}
+      >
         {hasTitle && (
           <div className="Section__title">
             <span className="Section__titleText">{title}</span>
@@ -92,17 +76,9 @@ export class Section extends Component<SectionProps> {
           </div>
         )}
         <div className="Section__rest">
-          {/* Vorestation Edit Start */}
-          <div
-            ref={this.scrollableRef}
-            className={classes([
-              'Section__content',
-              !!stretchContents && 'Section__content--stretchContents',
-              !!noTopPadding && 'Section__content--noTopPadding',
-            ])}>
+          <div ref={this.scrollableRef} className="Section__content">
             {children}
           </div>
-          {/* Vorestation Edit End */}
         </div>
       </div>
     );

@@ -54,14 +54,13 @@ window.addEventListener('beforeunload', () => {
 });
 
 /**
- * Get the bounding box of the DOM element in display-pixels.
+ * Get the bounding box of the DOM element.
  */
 const getBoundingBox = (element) => {
-  const pixelRatio = window.devicePixelRatio ?? 1;
   const rect = element.getBoundingClientRect();
   return {
-    pos: [rect.left * pixelRatio, rect.top * pixelRatio],
-    size: [(rect.right - rect.left) * pixelRatio, (rect.bottom - rect.top) * pixelRatio],
+    pos: [rect.left, rect.top],
+    size: [rect.right - rect.left, rect.bottom - rect.top],
   };
 };
 
@@ -78,7 +77,10 @@ export class ByondUi extends Component {
   shouldComponentUpdate(nextProps) {
     const { params: prevParams = {}, ...prevRest } = this.props;
     const { params: nextParams = {}, ...nextRest } = nextProps;
-    return shallowDiffers(prevParams, nextParams) || shallowDiffers(prevRest, nextRest);
+    return (
+      shallowDiffers(prevParams, nextParams) ||
+      shallowDiffers(prevRest, nextRest)
+    );
   }
 
   componentDidMount() {
@@ -117,12 +119,20 @@ export class ByondUi extends Component {
   }
 
   render() {
-    const { params, ...rest } = this.props;
+    const { parent, params, ...rest } = this.props;
+    const boxProps = computeBoxProps(rest);
     return (
-      <div ref={this.containerRef} {...computeBoxProps(rest)}>
+      <div ref={this.containerRef} {...boxProps}>
         {/* Filler */}
         <div style={{ 'min-height': '22px' }} />
       </div>
     );
   }
 }
+const ButtonMock = () => (
+  <div
+    style={{
+      'min-height': '22px',
+    }}
+  />
+);

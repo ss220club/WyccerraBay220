@@ -50,23 +50,11 @@ function task-dev-server {
   yarn node --experimental-modules "packages/tgui-dev-server/index.js" @Args
 }
 
-function task-bench {
-  yarn tgui:bench @Args
-}
-
-function task-prettier {
-  yarn tgui:prettier @Args
-}
-
-function task-prettify {
-  yarn prettierx --write packages @Args
-}
-
 ## Run a linter through all packages
 function task-lint {
   yarn run tsc
   Write-Output "tgui: type check passed"
-  yarn run eslint packages --ext ".js,.cjs,.ts,.tsx" @Args
+  yarn run eslint packages --ext ".js,.jsx,.ts,.tsx,.cjs,.mjs" @Args
   Write-Output "tgui: eslint check passed"
 }
 
@@ -74,12 +62,22 @@ function task-test {
   yarn run jest
 }
 
+function task-prettier {
+  npx prettier --check packages --write @Args
+}
+
+function task-polyfill {
+  yarn tgui-polyfill:build
+}
+
 ## Mr. Proper
 function task-clean {
   ## Build artifacts
+  Write-Output "tgui: cleaning build artifacts"
   Remove-Quiet -Recurse -Force "public\.tmp"
   Remove-Quiet -Force "public\*.map"
   Remove-Quiet -Force "public\*.hot-update.*"
+  Write-Output "tgui: cleaning Yarn artifacts"
   ## Yarn artifacts
   Remove-Quiet -Recurse -Force ".yarn\cache"
   Remove-Quiet -Recurse -Force ".yarn\unplugged"
@@ -88,11 +86,23 @@ function task-clean {
   Remove-Quiet -Force ".yarn\install-state.gz"
   Remove-Quiet -Force ".yarn\install-target"
   Remove-Quiet -Force ".pnp.*"
+  Write-Output "tgui: cleaning NPM artifacts"
   ## NPM artifacts
   Get-ChildItem -Path "." -Include "node_modules" -Recurse -File:$false | Remove-Item -Recurse -Force
   Remove-Quiet -Force "package-lock.json"
+  Write-Output "tgui: All artifacts cleaned"
 }
 
+## Validates current build against the build stored in git
+function task-validate-build {
+  $diff = git diff --text public/*
+  if ($diff) {
+    Write-Output "Error: our build differs from the build committed into git."
+    Write-Output "Please rebuild tgui."
+    exit 1
+  }
+  Write-Output "tgui: build is ok"
+}
 
 ## Main
 ## --------------------------------------------------------
@@ -117,34 +127,10 @@ if ($Args.Length -gt 0) {
     exit 0
   }
 
-  if ($Args[0] -eq "--lint-harder") {
-    $Rest = $Args | Select-Object -Skip 1
-    task-install
-    task-lint -c ".eslintrc-harder.yml" @Rest
-    exit 0
-  }
-
   if ($Args[0] -eq "--fix") {
     $Rest = $Args | Select-Object -Skip 1
     task-install
     task-lint --fix @Rest
-    exit 0
-  }
-
-  if ($Args[0] -eq "--test") {
-    $Rest = $Args | Select-Object -Skip 1
-    task-install
-    task-test @Rest
-    exit 0
-  }
-
-  if ($Args[0] -eq "--pretty") {
-    $Rest = $Args | Select-Object -Skip 1
-    task-install
-    task-prettify
-    task-prettier
-    task-lint
-    task-webpack --mode=production
     exit 0
   }
 
@@ -155,10 +141,39 @@ if ($Args.Length -gt 0) {
     exit 0
   }
 
-  if ($Args[0] -eq "--bench") {
+  ## Jest test
+  if ($Args[0] -eq "--test") {
     $Rest = $Args | Select-Object -Skip 1
     task-install
-    task-bench --wait-on-error
+    task-test @Rest
+    exit 0
+  }
+
+  ## Continuous integration scenario
+  if ($Args[0] -eq "--ci") {
+    $Rest = $Args | Select-Object -Skip 1
+    task-clean
+    task-install
+    task-prettier
+    task-test @Rest
+    task-lint
+    task-webpack --mode=production
+    task-validate-build
+    exit 0
+  }
+
+  ## ## Run prettier
+  if ($Args[0] -eq "--prettier") {
+    $Rest = $Args | Select-Object -Skip 1
+    task-prettier @Rest
+    exit 0
+  }
+
+  ## ## Run prettier
+  if ($Args[0] -eq "--tgui-polyfill") {
+    $Rest = $Args | Select-Object -Skip 1
+    task-install
+    task-polyfill @Rest
     exit 0
   }
 }
@@ -166,8 +181,8 @@ if ($Args.Length -gt 0) {
 ## Make a production webpack build
 if ($Args.Length -eq 0) {
   task-install
+  task-lint --fix
   task-prettier
-  task-lint
   task-webpack --mode=production
   exit 0
 }

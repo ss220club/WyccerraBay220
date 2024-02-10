@@ -107,7 +107,7 @@
 		inline_css = "<style>\n[inline_css]\n</style>"
 		html = replacetextEx(html, "<!-- tgui:inline-css -->", inline_css)
 	// Open the window
-	client << browse(html, "window=[id];[options]")
+	to_target(client, browse(html, "window=[id];[options]"))
 	// Detect whether the control is a browser
 	is_browser = winexists(client, id) == "BROWSER"
 	// Instruct the client to signal UI when the window is closed.
@@ -217,7 +217,7 @@
 	// Do not close the window to give user some time
 	// to read the error message.
 	if(!fatally_errored)
-		client << browse(null, "window=[id]")
+		to_target(client, browse(null, "window=[id]"))
 		if(!logout && client)
 			winset(client, null, "mapwindow.map.focus=true")
 
@@ -240,9 +240,9 @@
 			message_queue = list()
 		message_queue += list(message)
 		return
-	client << output(message, is_browser \
+	to_target(client, output(message, is_browser \
 		? "[id]:update" \
-		: "[id].browser:update")
+		: "[id].browser:update"))
 
 /**
  * public
@@ -261,9 +261,9 @@
 			message_queue = list()
 		message_queue += list(message)
 		return
-	client << output(message, is_browser \
+	to_target(client, output(message, is_browser \
 		? "[id]:update" \
-		: "[id].browser:update")
+		: "[id].browser:update"))
 
 /**
  * public
@@ -294,9 +294,9 @@
 	if(!client || !message_queue)
 		return
 	for(var/message in message_queue)
-		client << output(message, is_browser \
+		to_target(client, output(message, is_browser \
 			? "[id]:update" \
-			: "[id].browser:update")
+			: "[id].browser:update"))
 	message_queue = null
 
 /**
@@ -307,9 +307,9 @@
  * required inline_html string HTML to inject
  */
 /datum/tgui_window/proc/replace_html(inline_html = "")
-	client << output(url_encode(inline_html), is_browser \
+	to_target(client, output(url_encode(inline_html), is_browser \
 		? "[id]:replaceHtml" \
-		: "[id].browser:replaceHtml")
+		: "[id].browser:replaceHtml"))
 
 /**
  * private
@@ -351,7 +351,7 @@
 		if("close")
 			close(can_be_suspended = FALSE)
 		if("openLink")
-			client << link(href_list["url"])
+			to_target(client, link(href_list["url"]))
 		if("cacheReloaded")
 			// Reinitialize
 			initialize(

@@ -23,7 +23,7 @@
 	var/z = get_z(tgui_host())
 	var/list/map_levels = GLOB.using_map.get_map_levels(z, TRUE, om_range = DEFAULT_OVERMAP_RANGE)
 
-	if(!map_levels.len)
+	if(!length(map_levels))
 		to_chat(user, "<span class='warning'>The crew monitor doesn't seem like it'll work here.</span>")
 		if(ui)
 			ui.close()

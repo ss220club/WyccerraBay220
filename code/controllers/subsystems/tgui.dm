@@ -34,16 +34,16 @@ SUBSYSTEM_DEF(tgui)
 /datum/controller/subsystem/tgui/UpdateStat(time)
 	if (PreventUpdateStat(time))
 		return ..()
-	..("P:[open_uis.len]")
+	..("P:[length(open_uis)]")
 
 /datum/controller/subsystem/tgui/fire(resumed = 0)
 	if(!resumed)
 		src.current_run = open_uis.Copy()
 	// Cache for sanic speed (lists are references anyways)
 	var/list/current_run = src.current_run
-	while(current_run.len)
-		var/datum/tgui/ui = current_run[current_run.len]
-		current_run.len--
+	while(length(current_run))
+		var/datum/tgui/ui = current_run[length(current_run)]
+		length(current_run--)
 		// TODO: Move user/src_object check to process()
 		if(ui && ui.user && ui.src_object)
 			ui.process()

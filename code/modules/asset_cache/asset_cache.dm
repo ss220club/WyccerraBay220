@@ -34,27 +34,27 @@ Note: If your code uses output() with assets you will need to call asset_flush o
 
 	var/list/unreceived = list()
 
-	for (var/asset_name in asset_list)
+	for(var/asset_name in asset_list)
 		var/datum/asset_cache_item/asset = SSassets.cache[asset_name]
-		if (!asset)
+		if(!asset)
 			continue
 		var/asset_file = asset.resource
-		if (!asset_file)
+		if(!asset_file)
 			continue
 
 		var/asset_md5 = asset.md5
-		if (client.sent_assets[asset_name] == asset_md5)
+		if(client.sent_assets[asset_name] == asset_md5)
 			continue
 
 		unreceived[asset_name] = asset_md5
 
-	if (unreceived.len)
-		if (unreceived.len >= ASSET_CACHE_TELL_CLIENT_AMOUNT)
+	if(length(unreceived))
+		if(length(unreceived) >= ASSET_CACHE_TELL_CLIENT_AMOUNT)
 			to_chat(client, "Sending Resources...")
 
 		for(var/asset in unreceived)
 			var/datum/asset_cache_item/ACI
-			if ((ACI = SSassets.cache[asset]))
+			if((ACI = SSassets.cache[asset]))
 				log_debug("Sending asset [asset] to client [client]")
 				send_rsc(client, ACI.resource, asset)
 
@@ -68,13 +68,13 @@ Note: If your code uses output() with assets you will need to call asset_flush o
 /proc/getFilesSlow(client/client, list/files, register_asset = TRUE, filerate = 3)
 	var/startingfilerate = filerate
 	for(var/file in files)
-		if (!client)
+		if(!client)
 			break
-		if (register_asset)
+		if(register_asset)
 			register_asset(file, files[file])
 
-		if (send_asset(client, file))
-			if (!(--filerate))
+		if(send_asset(client, file))
+			if(!(--filerate))
 				filerate = startingfilerate
 				client.asset_flush()
 			stoplag(0) //queuing calls like this too quickly can cause issues in some client versions
@@ -85,9 +85,9 @@ Note: If your code uses output() with assets you will need to call asset_flush o
 	var/datum/asset_cache_item/ACI = new(asset_name, asset)
 
 	//this is technically never something that was supported and i want metrics on how often it happens if at all.
-	if (SSassets.cache[asset_name])
+	if(SSassets.cache[asset_name])
 		var/datum/asset_cache_item/OACI = SSassets.cache[asset_name]
-		if (OACI.md5 != ACI.md5)
+		if(OACI.md5 != ACI.md5)
 			stack_trace("ERROR: new asset added to the asset cache with the same name as another asset: [asset_name] existing asset md5: [OACI.md5] new asset md5:[ACI.md5]")
 		else
 			log_debug("WARNING: dupe asset added to the asset cache: [asset_name] existing asset md5: [OACI.md5] new asset md5:[ACI.md5]")

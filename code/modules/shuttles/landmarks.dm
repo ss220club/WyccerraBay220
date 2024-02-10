@@ -258,11 +258,11 @@
 		return INITIALIZE_HINT_QDEL
 
 	src.beacon = beacon
-	GLOB.moved_event.register(beacon, src, /obj/shuttle_landmark/automatic/spaceflare/proc/update_beacon_moved)
+	GLOB.moved_event.register(beacon, src, TYPE_PROC_REF(/obj/shuttle_landmark/automatic/spaceflare, update_beacon_moved))
 
 
 /obj/shuttle_landmark/automatic/spaceflare/Destroy()
-	GLOB.moved_event.unregister(beacon, src, /obj/shuttle_landmark/automatic/spaceflare/proc/update_beacon_moved)
+	GLOB.moved_event.unregister(beacon, src, TYPE_PROC_REF(/obj/shuttle_landmark/automatic/spaceflare, update_beacon_moved))
 	if (beacon?.active)
 		log_debug(append_admin_tools("\A [src] was destroyed with a still active beacon.", location = get_turf(beacon)))
 		beacon.deactivate()
@@ -283,7 +283,7 @@
 
 /// Desynchronizes the effect from the beacon, rendering it a permanent landmark.
 /obj/shuttle_landmark/automatic/spaceflare/proc/desync_flare()
-	GLOB.moved_event.unregister(beacon, src, /obj/shuttle_landmark/automatic/spaceflare/proc/update_beacon_moved)
+	GLOB.moved_event.unregister(beacon, src, TYPE_PROC_REF(/obj/shuttle_landmark/automatic/spaceflare, update_beacon_moved))
 	if (beacon?.active)
 		beacon.deactivate(TRUE, TRUE)
 	beacon = null

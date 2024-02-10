@@ -441,6 +441,11 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		'html/images/sierralogo.png',
 		// [/SIERRA-ADD]
 		)
+	addtimer(new Callback(src, PROC_REF(after_send_resources)), 1 SECOND)
+
+/client/proc/after_send_resources()
+	var/singleton/asset_cache/asset_cache = GET_SINGLETON(/singleton/asset_cache)
+	getFilesSlow(src, asset_cache.cache, register_asset = FALSE)
 
 	spawn(10) // Removing this spawn causes all clients to not get verbs.
 		// Load info on what assets the client has

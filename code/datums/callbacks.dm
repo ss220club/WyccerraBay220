@@ -17,13 +17,13 @@ on the first sleep, and so should be used only where results are not required.
 Callables are proc names or proc references, with references preferred for safety (in most cases).
 These vary between 515 and older major versions:
 Before 515:
-- .proc/name refers to the last override of name on target, OR the global proc name.
+- PROC_REF(name refers to the last override of name on target, OR the global proc name.
 After 515:
 - src::name() must be used for the last override, or ::name() for the global.
 - nameof() is available at compile time to resolve safe proc names like nameof(/datum::fooBehavior()).
   This can be preferable to direct refs in complex cases.
 A specific version of a proc may be called by fully specifying its type depth, like
-invoke(myLivingMob, /mob/living/proc/handle_vision)
+invoke(myLivingMob, TYPE_PROC_REF(/mob/living, handle_vision)
 
 ** Timers
 Timers accept callbacks as their first argument. For full timer documentation, see the timedevent

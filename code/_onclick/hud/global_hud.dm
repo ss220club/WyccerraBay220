@@ -14,7 +14,7 @@ GLOBAL_DATUM_INIT(global_hud, /datum/global_hud, new())
 
 /datum/global_hud/proc/setup_overlay(icon_state)
 	var/obj/screen/screen = new /obj/screen()
-	screen.screen_loc = "1,1"
+	screen.screen_loc = "CENTER-7,CENTER-7"
 	screen.icon = 'icons/obj/hud_full.dmi'
 	screen.icon_state = icon_state
 	screen.mouse_opacity = 0

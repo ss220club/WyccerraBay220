@@ -57,7 +57,7 @@
 		transformed_dudes[trans] = M
 		GLOB.death_event.register(trans,src,/spell/targeted/shapeshift/proc/stop_transformation)
 		GLOB.destroyed_event.register(trans,src,/spell/targeted/shapeshift/proc/stop_transformation)
-		GLOB.destroyed_event.register(M, src, /spell/targeted/shapeshift/proc/destroyed_transformer)
+		GLOB.destroyed_event.register(M, src, TYPE_PROC_REF(/spell/targeted/shapeshift, destroyed_transformer))
 		if(duration)
 			spawn(duration)
 				stop_transformation(trans)

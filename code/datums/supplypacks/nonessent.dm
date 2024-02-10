@@ -275,34 +275,3 @@
 		/obj/item/flame/lighter/random)
 	cost = 15
 	containername = "aromatherapy crate"
-
-/singleton/hierarchy/supply_pack/nonessent/pins
-	name = "Costume - Pride Pin Crate"
-	contains = list(
-		/obj/item/clothing/accessory/pride_pin/transgender = 2,
-		/obj/item/clothing/accessory/pride_pin/lesbian = 2,
-		/obj/item/clothing/accessory/pride_pin/bisexual = 2,
-		/obj/item/clothing/accessory/pride_pin/gay = 2,
-		/obj/item/clothing/accessory/pride_pin/pansexual = 2,
-		/obj/item/clothing/accessory/pride_pin/nonbinary = 2,
-		/obj/item/clothing/accessory/pride_pin/asexual = 2,
-		/obj/item/clothing/accessory/pride_pin/intersex = 2,
-		/obj/item/clothing/accessory/pride_pin/aromantic = 2
-	)
-	cost = 20
-	containername = "pin crate"
-
-/singleton/hierarchy/supply_pack/nonessent/pronounbadges
-	name = "Costume - Pronoun Badge Crate"
-	contains = list(
-		/obj/item/clothing/accessory/pronouns/they = 2,
-		/obj/item/clothing/accessory/pronouns/hehim = 2,
-		/obj/item/clothing/accessory/pronouns/sheher = 2,
-		/obj/item/clothing/accessory/pronouns/hethey = 2,
-		/obj/item/clothing/accessory/pronouns/shethey = 2,
-		/obj/item/clothing/accessory/pronouns/heshe = 2,
-		/obj/item/clothing/accessory/pronouns/zehir = 2,
-		/obj/item/clothing/accessory/pronouns/ask = 2
-	)
-	cost = 20
-	containername = "pronoun badge crate"

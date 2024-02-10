@@ -441,17 +441,11 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		'html/images/sierralogo.png',
 		// [/SIERRA-ADD]
 		)
-	addtimer(new Callback(src, PROC_REF(after_send_resources)), 1 SECOND)
-
-/client/proc/after_send_resources()
-	var/singleton/asset_cache/asset_cache = GET_SINGLETON(/singleton/asset_cache)
-	getFilesSlow(src, asset_cache.cache, register_asset = FALSE)
-
 	spawn(10) // Removing this spawn causes all clients to not get verbs.
 		// Load info on what assets the client has
 		show_browser(src, 'code/modules/asset_cache/validate_assets.html', "window=asset_cache_browser")
 		// Precache the client with all other assets slowly, so as to not block other browse() calls
-		addtimer(new Callback(GLOBAL_PROC, /proc/getFilesSlow, src, SSassets.preload, FALSE), 5 SECONDS)
+		addtimer(new Callback(GLOBAL_PROC, PROC_REF(getFilesSlow), src, SSassets.preload, FALSE), 5 SECONDS)
 
 /mob/proc/MayRespawn()
 	return 0

@@ -2,12 +2,12 @@ GLOBAL_DATUM_INIT(ert, /datum/antagonist/ert, new)
 
 /datum/antagonist/ert
 	id = MODE_ERT
-	role_text = "Emergency Responder"
-	role_text_plural = "Emergency Responders"
-	antag_text = "You are an <b>anti</b>-antagonist! Within the rules, try to save the ship and its crew from the ongoing crisis. \
-				 Try to make sure the other players have <i>fun</i>, and if you are confused or at a loss, always adminhelp. \
-				 You should also contact the staff before taking any extreme actions. \
-				 <b>Remember that all rules outside of those with explicit exceptions apply to the ERT!</b>"
+	role_text = "Аварийный авто-ответчик"
+	role_text_plural = "Аварийный авто-ответчик"
+	antag_text = "Вы <b>анти</b>-антагонист! В рамках правил постарайтесь спасти корабль и его команду от продолжающегося кризиса. \
+				 Постарайтесь убедиться, чтобы другие игроки <i>веселились</i>, если вы растеряны, пишите в AdminHelp. \
+				 Вы также должны связаться с персоналом, прежде чем предпринять какие -либо экстремальные действия. \
+				 <b>Помните, что все правила за пределами тех, у кого явные исключения применимы к ГЭР!</b>"
 	welcome_text = "You shouldn't see this"
 	leader_welcome_text = "You shouldn't see this"
 	landmark_id = "Response Team"
@@ -35,16 +35,16 @@ GLOBAL_DATUM_INIT(ert, /datum/antagonist/ert, new)
 
 /datum/antagonist/ert/Initialize()
 	..()
-	leader_welcome_text = SPAN_BOLD("You are the leader of the Emergency Response Team. ") + "As the leader, you answer only to [GLOB.using_map.company_name] officials. You have authorization to override the Commanding Officer where it is necessary to achieve your goals. However, it is recommended that you work with them to achieve your goals if possible."
-	welcome_text =        SPAN_BOLD("You are a member of the Emergency Response Team.") + "As a member of the Emergency Response Team, you answer only to your leader and [GLOB.using_map.company_name] officials."
+	leader_welcome_text = SPAN_BOLD("Вы лидер Группы Экстренного Реагирования (ГЭР).") + "Как лидер, вы подчиняетесь командованию [GLOB.using_map.company_name]. У вас есть разрешение переопределить командира, где необходимо достичь ваших целей. Тем не менее, рекомендуется работать в команде для достижения ваших целей, если это возможно."
+	welcome_text =        SPAN_BOLD("Вы сотрудник Группы Экстренного Реагирования (ГЭР).") + "Как сотрудник Группы Экстренного Реагирования (ГЭР), вы подчиняетесь вашему людеру и командованию [GLOB.using_map.company_name]."
 
 /datum/antagonist/ert/greet(datum/mind/player)
 	if(!..())
 		return
-	to_chat(player.current, "You are part of a Fifth Fleet Quick Reaction Force. There is a severe emergency on \the [GLOB.using_map.station_name] and you are tasked to fix the problem.")
-	to_chat(player.current, "You should first gear up and discuss a plan with your team. More members may be joining, so don't move out before you're all ready. You might receive further instruction from a superior in person or through holocomms soon.")
+	to_chat(player.current, "Вы являетесь частью Пятого Флота Быстрых Сил и Реакции (ПФБСР). Существует КРИТИЧЕСКАЯ ситуация \the [GLOB.using_map.station_name] и вам поручено решить проблему.")
+	to_chat(player.current, "Вы должны сначала подготовиться и обсудить план со своей командой. Можно присоединиться к большему количеству участников, поэтому не выходите, пока не подготовились. Вскоре вы можете получить дальнейшие инструкции от начальника лично или по голосвязи.")
 
 	if(reason)
-		to_chat(player.current, SPAN_BOLD(FONT_LARGE("You have been summoned to \the [GLOB.using_map.station_name] for the following reason: " + SPAN_NOTICE(reason))))
+		to_chat(player.current, SPAN_BOLD(FONT_LARGE("Вас вызвали в \the [GLOB.using_map.station_name] по следующей причине: " + SPAN_NOTICE(reason))))
 
 //Equip proc has been moved to the map specific folders.

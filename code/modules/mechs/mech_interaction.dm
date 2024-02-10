@@ -89,12 +89,12 @@
 		return
 
 	if(!arms)
-		to_chat(user, SPAN_WARNING("\The [src] has no manipulators!"))
+		to_chat(user, SPAN_WARNING("\The [src] не имеет манипуляторы!"))
 		setClickCooldown(3)
 		return
 
 	if(!arms.motivator || !arms.motivator.is_functional())
-		to_chat(user, SPAN_WARNING("Your motivators are damaged! You can't use your manipulators!"))
+		to_chat(user, SPAN_WARNING("Твои движители повреждены! Вы не можете использовать свои движители!"))
 		setClickCooldown(15)
 		return
 
@@ -114,10 +114,10 @@
 	var/fail_prob = (user != src && istype(AM) && AM.loc != src) ? (user.skill_check(SKILL_MECH, HAS_PERK) ? 0: 15 ) : 0
 	var/failed = FALSE
 	if(prob(fail_prob))
-		to_chat(user, SPAN_DANGER("Your incompetence leads you to target the wrong thing with the exosuit!"))
+		to_chat(user, SPAN_DANGER("Ваша некомпетентность приводит к тому, что вы нацеливаете экзокостюм не на то.!"))
 		failed = TRUE
 	else if(emp_damage > EMP_ATTACK_DISRUPT && prob(emp_damage*2))
-		to_chat(user, SPAN_DANGER("The wiring sparks as you attempt to control the exosuit!"))
+		to_chat(user, SPAN_DANGER("Проводка искрится, когда вы пытаетесь управлять экзокостюмом!"))
 		failed = TRUE
 
 	if(!failed)
@@ -144,7 +144,7 @@
 			// Slip up and attack yourself maybe.
 			failed = FALSE
 			if(prob(fail_prob))
-				to_chat(user, SPAN_DANGER("You artlessly shove the exosuit controls the wrong way!"))
+				to_chat(user, SPAN_DANGER("Вы неумело управляете экзоскафандром не туда!"))
 				failed = TRUE
 			else if(emp_damage>EMP_MOVE_DISRUPT && prob(10))
 				failed = TRUE
@@ -170,7 +170,7 @@
 					ruser = user
 				temp_system.afterattack(A,ruser,adj,params)
 			if(system_moved) //We are using a proxy system that may not have logging like mech equipment does
-				admin_attack_log(user, A, "Attacked using \a [temp_system] (MECH)", "Was attacked with \a [temp_system] (MECH)", "used \a [temp_system] (MECH) to attack")
+				admin_attack_log(user, A, "Атаковал используя \a [temp_system] (MECH)", "Был атакован \a [temp_system] (MECH)", "использовал \a [temp_system] (MECH) для атаки")
 			//Mech equipment subtypes can add further click delays
 			var/extra_delay = 0
 			if(!isnull(selected_system))
@@ -187,7 +187,7 @@
 	else if(adj && user.a_intent == I_HURT) //Prevents accidental slams.
 		setClickCooldown(arms ? arms.action_delay : 7) // You've already commited to applying fist, don't turn and back out now!
 		playsound(src.loc, legs.mech_step_sound, 60, 1)
-		src.visible_message(SPAN_DANGER("\The [src] steps back, preparing for a slam!"), blind_message = SPAN_DANGER("You hear the loud hissing of hydraulics!"))
+		src.visible_message(SPAN_DANGER("\The [src] делает шаг назад, готовясь к удару!"), blind_message = SPAN_DANGER("Вы слышите громкое шипение гидравлики!"))
 		if (do_after(src, 1.2 SECONDS, get_turf(src), DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && user)
 			A.attack_generic(src, arms.melee_damage, "slammed against", DAMAGE_BRUTE) //"Punch" would be bad since vehicles without arms could be a thing
 			var/turf/T = get_step(get_turf(src), src.dir)

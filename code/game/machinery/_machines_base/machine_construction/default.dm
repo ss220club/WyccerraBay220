@@ -23,13 +23,13 @@
 	if((. = ..()))
 		return
 	if (!machine.can_use_tools)
-		to_chat(user, SPAN_WARNING("\The [src] cannot be modified!"))
+		to_chat(user, SPAN_WARNING("\The [src] немодифицируемое!"))
 		return TRUE
 	if(isScrewdriver(I))
 		TRANSFER_STATE(down_state)
 		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = TRUE
-		to_chat(user, SPAN_NOTICE("You open the maintenance hatch of \the [machine]."))
+		to_chat(user, SPAN_NOTICE("Вы открываете люк для технического обслуживания \the [machine]."))
 		machine.update_icon()
 		return
 	if(istype(I, /obj/item/storage/part_replacer))
@@ -43,8 +43,8 @@
 
 /singleton/machine_construction/default/panel_closed/mechanics_info()
 	. = list()
-	. += "Use a screwdriver to open the panel."
-	. += "Use a parts replacer to view installed parts."
+	. += "Используйте отвертку, чтобы открыть панель."
+	. += "Используйте средство замены деталей для просмотра установленных деталей."
 
 /singleton/machine_construction/default/panel_closed/cannot_print
 	cannot_print = TRUE
@@ -72,7 +72,7 @@
 		TRANSFER_STATE(up_state)
 		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = FALSE
-		to_chat(user, SPAN_NOTICE("You close the maintenance hatch of \the [machine]."))
+		to_chat(user, SPAN_NOTICE("Вы закрываете люк для технического обслуживания \the [machine]."))
 		machine.update_icon()
 		return
 
@@ -87,11 +87,11 @@
 
 /singleton/machine_construction/default/panel_open/mechanics_info()
 	. = list()
-	. += "Use a screwdriver to close the panel."
-	. += "Use a parts replacer to upgrade some parts."
-	. += "Use a crowbar to remove the circuit and deconstruct the machine"
-	. += "Insert a new part to install it."
-	. += "Remove installed parts with a wrench."
+	. += "Используйте отвертку, чтобы закрыть панель."
+	. += "Используйте средство для замены деталей, чтобы обновить некоторые детали."
+	. += "Используйте лом, чтобы отсоединить цепь и разобрать устройство"
+	. += "Вставьте новую деталь."
+	. += "Снимите установленные детали с помощью гаечного ключа."
 
 // Not implemented fully as the machine will qdel on transition to this. Path needed for checks.
 /singleton/machine_construction/default/deconstructed

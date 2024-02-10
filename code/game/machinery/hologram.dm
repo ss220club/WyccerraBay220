@@ -32,8 +32,8 @@ Possible to do for anyone motivated enough:
 var/global/const/HOLOPAD_MODE = RANGE_BASED
 
 /obj/machinery/hologram/holopad
-	name = "holopad"
-	desc = "It's a floor-mounted device for projecting holographic images."
+	name = "голопад"
+	desc = "Это напольное устройство для проецирования голокрафических изображений."
 	icon_state = "holopad-B0"
 	icon = 'icons/obj/machines/holopads.dmi'
 	layer = ABOVE_TILE_LAYER
@@ -62,13 +62,13 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 
 /obj/machinery/hologram/holopad/New()
 	..()
-	desc = "It's a floor-mounted device for projecting holographic images. Its ID is '[loc.loc]'"
+	desc = "Это напольное устройство для проецирования голографических изображений. Его ID '[loc.loc]'"
 
 /obj/machinery/hologram/holopad/examine(mob/user)
 	. = ..()
 	if (incoming_connection && sourcepad)
-		to_chat(user, SPAN_NOTICE("There is currently an incoming call from [get_area(sourcepad)]!"))
-	var/callstring = "Recent incoming calls:"
+		to_chat(user, SPAN_NOTICE("В данный момент поступает входящий запрос от [get_area(sourcepad)]!"))
+	var/callstring = "Прошлые входящие запросы:"
 	for (var/id in recent_calls)
 		callstring += "\n[id]"
 	callstring = SPAN_NOTICE(callstring)
@@ -82,14 +82,14 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 			incoming_connection = 0
 			clear_holo()
 			return TRUE
-		visible_message("The pad hums quietly as it establishes a connection.")
+		visible_message("Голопад тихо жужжит, устанавливая соединение.")
 		if(caller_id.loc!=sourcepad.loc)
-			visible_message("The pad flashes an error message. The caller has left their holopad.")
+			visible_message("На панели высвечивается сообщение об ошибке. Абонент покинул свой голопад.")
 			return TRUE
 		take_call(user)
 		return TRUE
 	else if(caller_id && !incoming_connection)
-		audible_message("Severing connection to distant holopad.")
+		audible_message("Разрыв связи с удаленным голопадом.")
 		end_call(user)
 		return TRUE
 
@@ -103,24 +103,24 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 		break
 
 	if(allow_ai && ai_exists)
-		handle_type = alert(user,"Would you like to request an AI's presence or establish communications with another pad?", "Holopad","AI","Holocomms","Cancel")
+		handle_type = alert(user,"Хотите ли вы запросить присутствие искусственного интеллекта или установить связь с другой площадкой?", "Голопад","ИИ","Голокоммы","Отклонить")
 
 	switch(handle_type)
-		if("AI")
+		if("ИИ")
 			if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
 				last_request = world.time
-				to_chat(user, SPAN_NOTICE("You request an AI's presence."))
+				to_chat(user, SPAN_NOTICE("Вы запросили присутствие искусственного интеллекта."))
 				var/area/area = get_area(src)
 				for(var/mob/living/silicon/ai/AI in GLOB.alive_mobs)
 					if(!AI.client)	continue
 					if (holopadType != HOLOPAD_LONG_RANGE && !AreConnectedZLevels(AI.z, src.z))
 						continue
-					to_chat(AI, SPAN_INFO("Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>."))
+					to_chat(AI, SPAN_INFO("Ваше присутствие требуется в <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>."))
 			else
-				to_chat(user, SPAN_NOTICE("A request for AI presence was already sent recently."))
-		if("Holocomms")
+				to_chat(user, SPAN_NOTICE("Недавно уже был отправлен запрос на присутствие искусственного интеллекта."))
+		if("Голокоммы")
 			if(user.loc != src.loc)
-				to_chat(user, SPAN_INFO("Please step onto the holopad."))
+				to_chat(user, SPAN_INFO("Пожалуйста, станьте на голопад."))
 				return
 			if(last_request + 200 < world.time) //don't spam other people with requests either, you jerk!
 				last_request = world.time
@@ -139,20 +139,20 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 						if (H.holopadType == HOLOPAD_LONG_RANGE && (H.z in zlevels_long))
 							holopadlist["[H.loc.loc.name]"] = H
 				holopadlist = sortAssoc(holopadlist)
-				var/temppad = input(user, "Which holopad would you like to contact?", "holopad list") as null|anything in holopadlist
+				var/temppad = input(user, "С каким голопадом вы хотели бы связаться?", "список голоподов") as null|anything in holopadlist
 				targetpad = holopadlist["[temppad]"]
 				if(targetpad==src)
-					to_chat(user, SPAN_INFO("Using such sophisticated technology, just to talk to yourself seems a bit silly."))
+					to_chat(user, SPAN_INFO("Использовать такую сложную технологию просто для того, чтобы поговорить с самим собой, кажется немного глупым."))
 					targetpad = null //Clean up the mess after an unsuccessful call
 					return
 				if(targetpad && targetpad.caller_id)
-					to_chat(user, SPAN_INFO("The pad flashes a busy sign. Maybe you should try again later.."))
+					to_chat(user, SPAN_INFO("На панели мигает значок занято. Возможно, вам стоит повторить попытку позже..."))
 					targetpad = null //Clean up the mess after an unsuccessful call
 					return
 				if(targetpad)
 					make_call(targetpad, user)
 			else
-				to_chat(user, SPAN_NOTICE("A request for holographic communication was already sent recently."))
+				to_chat(user, SPAN_NOTICE("Недавно уже был отправлен запрос на голографическую связь."))
 
 
 /obj/machinery/hologram/holopad/proc/make_call(obj/machinery/hologram/holopad/targetpad, mob/living/carbon/user)
@@ -162,14 +162,14 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 	targetpad.incoming_connection = 1
 	playsound(targetpad.loc, 'sound/machines/chime.ogg', 25, 5)
 	targetpad.icon_state = "[targetpad.base_icon]1"
-	targetpad.audible_message("<b>\The [src]</b> announces, \"Incoming communications request from [targetpad.sourcepad.loc.loc].\"")
+	targetpad.audible_message("<b>\[src]</b> оповещает, \"Запрос на входящее сообщение от [targetpad.sourcepad.loc.loc].\"")
 	// Notify any linked PDAs
 	if (LAZYLEN(targetpad.linked_pdas))
 		for (var/obj/item/modular_computer/pda/pda as anything in targetpad.linked_pdas)
 			if (!AreConnectedZLevels(get_z(targetpad), get_z(pda)))
 				continue
-			pda.receive_notification("Call at [targetpad.loc.loc] holopad.")
-	to_chat(user, SPAN_NOTICE("Trying to establish a connection to the holopad in [targetpad.loc.loc]... Please await confirmation from recipient."))
+			pda.receive_notification("Звонок от [targetpad.loc.loc] голопада.")
+	to_chat(user, SPAN_NOTICE("Пытаюсь установить соединение с голопадом в [targetpad.loc.loc]... Пожалуйста, дождитесь подтверждения от получателя."))
 	targetpad.addrecentcall(get_area(src))
 
 
@@ -179,7 +179,7 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 	caller_id.reset_view(src)
 	if(!masters[caller_id])//If there is no hologram, possibly make one.
 		activate_holocall(caller_id)
-	log_admin("[key_name(caller_id)] just established a holopad connection from [sourcepad.loc.loc] to [src.loc.loc]")
+	log_admin("[key_name(caller_id)] только что установил соединение с голопадом с [sourcepad.loc.loc] к [src.loc.loc]")
 
 /obj/machinery/hologram/holopad/proc/end_call(mob/user)
 	if(!caller_id)
@@ -206,9 +206,9 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 	if(user.eyeobj && (user.eyeobj.loc != src.loc))//Set client eye on the object if it's not already.
 		user.eyeobj.setLoc(get_turf(src))
 	else if (!allow_ai)
-		to_chat(user, SPAN_WARNING("Access denied."))
+		to_chat(user, SPAN_WARNING("Доступ запрещен."))
 	else if (holopadType != HOLOPAD_LONG_RANGE && !AreConnectedZLevels(user.z, src.z))
-		to_chat(user, SPAN_WARNING("Out of range."))
+		to_chat(user, SPAN_WARNING("Вне зоны покрытия."))
 	else if(!masters[user])//If there is no hologram, possibly make one.
 		activate_holo(user)
 	else//If there is a hologram, remove it.
@@ -218,30 +218,30 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
 	if(is_powered() && user.eyeobj && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it
 		if (user.holo)
-			to_chat(user, "[SPAN_DANGER("ERROR:")] Image feed in progress.")
+			to_chat(user, "[SPAN_DANGER("ОШИБКА:")] Выполняется подача изображений.")
 			return
-		src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
+		src.visible_message("Голографическое изображение [user] оживает прямо на ваших глазах!")
 		create_holo(user)//Create one.
 	else
-		to_chat(user, "[SPAN_DANGER("ERROR:")] Unable to project hologram.")
+		to_chat(user, "[SPAN_DANGER("ОШИБКА:")] Невозможно спроецировать голограмму.")
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holocall(mob/living/carbon/caller_id)
 	if(caller_id)
-		src.visible_message("A holographic image of [caller_id] flicks to life right before your eyes!")
+		src.visible_message("Голографическое изображение [caller_id] оживает прямо на ваших глазах!")
 		create_holo(0,caller_id)//Create one.
 	else
-		to_chat(caller_id, "[SPAN_DANGER("ERROR:")] Unable to project hologram.")
+		to_chat(caller_id, "[SPAN_DANGER("ОШИБКА:")] Невозможно спроецировать голограмму.")
 	return
 
 /obj/machinery/hologram/holopad/use_tool(obj/item/O, mob/user)
 	if (istype(O, /obj/item/modular_computer/pda))
 		if (LAZYISIN(linked_pdas, O))
 			unlink_pda(O)
-			to_chat(user, SPAN_NOTICE("You remove \the [O] from \the [src]'s notifications list."))
+			to_chat(user, SPAN_NOTICE("Вы удалили \the [O] с \the [src] списка оповещения."))
 			return TRUE
 		link_pda(O)
-		to_chat(user, SPAN_NOTICE("You add \the [O] to \the [src]'s notifications list. It will now be pinged whenever a call is received."))
+		to_chat(user, SPAN_NOTICE("Вы добавили \the [O] в \the [src] список оповещения. Теперь он будет проверяться при каждом поступлении вызова."))
 		return TRUE
 
 	return ..()
@@ -295,25 +295,25 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		targetpad.audible_message(message)
 		targetpad.last_message = message
 	if(sourcepad && sourcepad.targetpad && !sourcepad.targetpad.incoming_connection) //If this is a pad receiving a call and the call is accepted
-		if(name_used==caller_id||text==last_message||findtext(text, "Holopad received")) //prevent echoes
+		if(name_used==caller_id||text==last_message||findtext(text, "Голопад принял")) //prevent echoes
 			return
 		sourcepad.audible_message(message)
 
 /obj/machinery/hologram/holopad/proc/get_hear_message(name_used, text, verb, datum/language/speaking, prefix = "")
 	if(speaking)
-		return "<i>[SPAN_CLASS("game say", "Holopad received, [SPAN_CLASS("name", name_used)][prefix] [speaking.format_message(text, verb)]")]</i>"
-	return "<i>[SPAN_CLASS("game say", "Holopad received, [SPAN_CLASS("name", name_used)][prefix] [verb], [SPAN_CLASS("message", text)]")]</i>"
+		return "<i>[SPAN_CLASS("game say", "Голопад принял, [SPAN_CLASS("name", name_used)][prefix] [speaking.format_message(text, verb)]")]</i>"
+	return "<i>[SPAN_CLASS("game say", "Голопад принял, [SPAN_CLASS("name", name_used)][prefix] [verb], [SPAN_CLASS("message", text)]")]</i>"
 
 /obj/machinery/hologram/holopad/see_emote(mob/living/M, text)
 	if(M)
 		for(var/mob/living/silicon/ai/master in masters)
 			//var/name_used = M.GetVoice()
-			var/rendered = "<i>[SPAN_CLASS("game say", "Holopad received, [SPAN_CLASS("message", "[text]")]")]</i>"
+			var/rendered = "<i>[SPAN_CLASS("game say", "Голопад принял, [SPAN_CLASS("message", "[text]")]")]</i>"
 			//The lack of name_used is needed, because message already contains a name.  This is needed for simple mobs to emote properly.
 			master.show_message(rendered, 2)
 		for(var/mob/living/carbon/master in masters)
 			//var/name_used = M.GetVoice()
-			var/rendered = "<i>[SPAN_CLASS("game say", "Holopad received, [SPAN_CLASS("message", "[text]")]")]</i>"
+			var/rendered = "<i>[SPAN_CLASS("game say", "Голопад принял, [SPAN_CLASS("message", "[text]")]")]</i>"
 			//The lack of name_used is needed, because message already contains a name.  This is needed for simple mobs to emote properly.
 			master.show_message(rendered, 2)
 		if(targetpad)
@@ -321,16 +321,16 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/show_message(msg, type, alt, alt_type)
 	for(var/mob/living/silicon/ai/master in masters)
-		var/rendered = "<i>[SPAN_CLASS("game say", "The holographic image of [SPAN_CLASS("message", "[msg]")]")]</i>"
+		var/rendered = "<i>[SPAN_CLASS("game say", "Голографическое изображение [SPAN_CLASS("message", "[msg]")]")]</i>"
 		master.show_message(rendered, type)
-	if(findtext(msg, "Holopad received,"))
+	if(findtext(msg, "Голопад принял,"))
 		return
 	for(var/mob/living/carbon/master in masters)
-		var/rendered = "<i>[SPAN_CLASS("game say", "The holographic image of [SPAN_CLASS("message", "[msg]")]")]</i>"
+		var/rendered = "<i>[SPAN_CLASS("game say", "Голографическое изображение [SPAN_CLASS("message", "[msg]")]")]</i>"
 		master.show_message(rendered, type)
 	if(targetpad)
 		for(var/mob/living/carbon/master in view(targetpad))
-			var/rendered = "<i>[SPAN_CLASS("game say", "The holographic image of [SPAN_CLASS("message", "[msg]")]")]</i>"
+			var/rendered = "<i>[SPAN_CLASS("game say", "Голографическое изображение [SPAN_CLASS("message", "[msg]")]")]</i>"
 			master.show_message(rendered, type)
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, mob/living/carbon/caller_id, turf/T = loc)
@@ -349,11 +349,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	hologram.layer = ABOVE_HUMAN_LAYER //Above all the other objects/mobs. Or the vast majority of them.
 	hologram.anchored = TRUE//So space wind cannot drag it.
 	if(caller_id)
-		hologram.SetName("[caller_id.name] (Hologram)")
+		hologram.SetName("[caller_id.name] (Голограмма)")
 		hologram.forceMove(get_step(src,1))
 		masters[caller_id] = hologram
 	else
-		hologram.SetName("[A.name] (Hologram)") //If someone decides to right click.
+		hologram.SetName("[A.name] (Голограмма)") //If someone decides to right click.
 		A.holo = src
 		masters[A] = hologram
 	hologram.set_light(2, 0.1)	//hologram lighting
@@ -394,14 +394,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		use_power_oneoff(power_per_hologram)
 	if(last_request + 200 < world.time&&incoming_connection==1)
 		if(sourcepad)
-			sourcepad.audible_message("<i>[SPAN_CLASS("game say", "The holopad connection timed out")]</i>")
+			sourcepad.audible_message("<i>[SPAN_CLASS("game say", "Время ожидания подключения к голопаду истекло")]</i>")
 		incoming_connection = 0
 		end_call()
 	if (caller_id&&sourcepad)
 		if(caller_id.loc!=sourcepad.loc)
-			to_chat(sourcepad.caller_id, "Severing connection to distant holopad.")
+			to_chat(sourcepad.caller_id, "Разрыв связи с удаленным голопадом.")
 			end_call()
-			audible_message("The connection has been terminated by the caller.")
+			audible_message("Соединение было прервано вызывающим абонентом.")
 	return 1
 
 /obj/machinery/hologram/holopad/proc/move_hologram(mob/living/silicon/ai/user)
@@ -492,14 +492,14 @@ Holographic project of everything else.
  * Other Stuff: Is this even used?
  */
 /obj/machinery/hologram/projector
-	name = "hologram projector"
-	desc = "It makes a hologram appear...with magnets or something..."
+	name = "проектор голограмм"
+	desc = "Это заставляет появляться голограмму... с магнитами или чем-то в этом роде..."
 	icon = 'icons/obj/structures/coatrack.dmi'
 	icon_state = "hologram0"
 
 /obj/machinery/hologram/holopad/longrange
-	name = "long range holopad"
-	desc = "It's a floor-mounted device for projecting holographic images. This one utilizes bluespace transmitter to communicate with far away locations."
+	name = "голопад дальнего действия"
+	desc = "Это напольное устройство для проецирования голографических изображений. В этом устройстве используется передатчик BLueSPace для связи с удаленными местоположениями."
 	icon_state = "holopad-Y0"
 	power_per_hologram = 1000 //per usage per hologram
 	holopadType = HOLOPAD_LONG_RANGE

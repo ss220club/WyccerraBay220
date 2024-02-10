@@ -2,19 +2,19 @@ GLOBAL_DATUM_INIT(foundation_agents, /datum/antagonist/foundation, new)
 
 /datum/antagonist/foundation
 	id = MODE_FOUNDATION
-	role_text = "Foundation Agent"
+	role_text = "Агент Фонда"
 	antag_indicator = "hudfoundation"
-	role_text_plural = "Foundation Agents"
-	welcome_text = "<span class='info'>You are a field agent of the Cuchulain Foundation, \
-	a body that specializes in taking down psychic threats. You have a free pass to anywhere \
-	you like, a pistol loaded with anti-psi nullglass rounds, and a clear duty. Naturally, \
-	nobody takes your employers seriously - until a day like today.</span>"
-	antag_text = "You are an <b>anti</b> antagonist! Within the rules, \
-		try to save the installation and its inhabitants from the ongoing crisis. \
-		Try to make sure other players have <i>fun</i>! If you are confused or at a loss, always adminhelp, \
-		and before taking extreme actions, please try to also contact the administration! \
-		Think through your actions and make the roleplay immersive! <b>Please remember all \
-		rules aside from those without explicit exceptions apply to Foundation Agents.</b>"
+	role_text_plural = "Фондовые Агенты"
+	welcome_text = "<span class='info'>Вы полевой агент Фонда Кухулайна, \
+	орган, который специализируется на устранении психических угроз. У вас есть пропуск куда угодно \
+	как вам нравится, пистолет, заряженный антипси-зарядными патронами с нулевым стеклом, и четкая обязанность. Естественно, \
+	никто не воспринимает ваших работодателей всерьез - до сегодня.</span>"
+	antag_text = "Вы <b>анти</b>-антагонист! В рамках правил, \
+		постарайтесь спасти установку и ее обитателей от продолжающегося кризиса. \
+		Постарайтесь, чтобы другие игроки <i>развлеклись</i>! Если вы запутались или растерялись, всегда обращайтесь за помощью к администратору, \
+		и прежде чем предпринимать крайние действия, попробуйте обратиться к администрации! \
+		Продумывайте свои действия и сделайте ролевую игру захватывающей! <b>Пожалуйста, помните все \
+		К агентам Фонда применяются правила, за исключением тех, которые не содержат явных исключений.</b>"
 
 	flags = ANTAG_OVERRIDE_JOB | ANTAG_OVERRIDE_MOB | ANTAG_CLEAR_EQUIPMENT | ANTAG_CHOOSE_NAME | ANTAG_SET_APPEARANCE
 	antaghud_indicator = "hudfoundation"

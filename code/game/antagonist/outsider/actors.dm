@@ -2,9 +2,9 @@ GLOBAL_DATUM_INIT(actor, /datum/antagonist/actor, new)
 
 /datum/antagonist/actor
 	id = MODE_ACTOR
-	role_text = "Actor"
-	role_text_plural = "Actors"
-	welcome_text = "You've been hired to entertain people through the power of television!"
+	role_text = "Актер"
+	role_text_plural = "Актеры"
+	welcome_text = "Вас наняли развлекать людей с помощью телевидения!"
 	landmark_id = "ActorSpawn"
 	id_type = /obj/item/card/id/syndicate
 
@@ -21,8 +21,8 @@ GLOBAL_DATUM_INIT(actor, /datum/antagonist/actor, new)
 	if(!..())
 		return
 
-	player.current.show_message("You work for [GLOB.using_map.company_name], tasked with the production and broadcasting of entertainment to all of its assets.")
-	player.current.show_message("Entertain the crew! Try not to disrupt them from their work too much and remind them how great [GLOB.using_map.company_name] is!")
+	player.current.show_message("Вы работаете на [GLOB.using_map.company_name], занимается производством и трансляцией развлекательных программ на все свои активы.")
+	player.current.show_message("Развлекайте съемочную группу! Старайтесь не слишком отрывать их от работы и напоминайте им, какая великая [GLOB.using_map.company_name] is!")
 
 /datum/antagonist/actor/equip(mob/living/carbon/human/player)
 	player.equip_to_slot_or_del(new /obj/item/clothing/under/chameleon(src), slot_w_uniform)

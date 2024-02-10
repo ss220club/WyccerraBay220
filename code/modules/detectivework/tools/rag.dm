@@ -14,8 +14,8 @@
 	var/track_blood = 0
 
 /obj/item/reagent_containers/glass/rag
-	name = "rag"
-	desc = "For cleaning up messes, you suppose."
+	name = "тряпка"
+	desc = "Для уборки палуб."
 	w_class = ITEM_SIZE_TINY
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "rag"
@@ -40,7 +40,7 @@
 
 /obj/item/reagent_containers/glass/rag/attack_self(mob/user as mob)
 	if(on_fire && user.unEquip(src))
-		user.visible_message(SPAN_WARNING("\The [user] stamps out [src]."), SPAN_WARNING("You stamp out [src]."))
+		user.visible_message(SPAN_WARNING("\The [user] вытесняет [src]."), SPAN_WARNING("Вы вытеснили [src]."))
 		extinguish()
 	else
 		remove_contents(user)
@@ -50,8 +50,8 @@
 		ignite()
 		if(on_fire)
 			user.visible_message(
-				SPAN_WARNING("\The [user] lights \the [src] with \the [W]!"),
-				SPAN_DANGER("You light \the [src]!")
+				SPAN_WARNING("\The [user] свет \the [src] с \the [W]!"),
+				SPAN_DANGER("Вы подсветили \the [src]!")
 			)
 		else
 			to_chat(user, SPAN_WARNING("You manage to singe \the [src], but it won't burn on its own.")) // Give a hint about needing fuel
@@ -61,11 +61,11 @@
 
 /obj/item/reagent_containers/glass/rag/proc/update_name()
 	if(on_fire)
-		SetName("burning [initial(name)]")
+		SetName("горит [initial(name)]")
 	else if(reagents.total_volume)
-		SetName("damp [initial(name)]")
+		SetName("увлажнил [initial(name)]")
 	else
-		SetName("dry [initial(name)]")
+		SetName("высушил [initial(name)]")
 
 /obj/item/reagent_containers/glass/rag/on_update_icon()
 	if(on_fire)

@@ -17,7 +17,7 @@
 	if(isScrewdriver(I))
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
 		machine.panel_open = TRUE
-		to_chat(user, "You unfasten the bolts.")
+		to_chat(user, "Вы открутили болты.")
 		playsound(machine.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 
 /singleton/machine_construction/tcomms/panel_closed/post_construct(obj/machinery/machine)
@@ -27,7 +27,7 @@
 
 /singleton/machine_construction/tcomms/panel_closed/mechanics_info()
 	. = list()
-	. += "Use a screwdriver to open the panel."
+	. += "Вы откручиваете болты с помощью отвертки, чтобы открыть панель."
 
 /singleton/machine_construction/tcomms/panel_closed/cannot_print
 	cannot_print = TRUE
@@ -49,37 +49,37 @@
 	if(isScrewdriver(I))
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_closed)
 		machine.panel_open = FALSE
-		to_chat(user, "You fasten the bolts.")
+		to_chat(user, "Вы закрутили болты.")
 		playsound(machine.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		return
 	if(isWrench(I))
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/unwrenched)
-		to_chat(user, "You dislodge the external plating.")
+		to_chat(user, "Вы снимаете внешнюю обшивку.")
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 75, 1)
 
 /singleton/machine_construction/tcomms/panel_open/mechanics_info()
 	. = list()
-	. += "Use a screwdriver to close the panel."
-	. += "Use a wrench to remove the external plating."
+	. += "Используйте отвертку, чтобы закрыть панель."
+	. += "Используйте гаечный ключ, чтобы снять внешнюю обшивку."
 
 /singleton/machine_construction/tcomms/panel_open/unwrenched/state_interactions(obj/item/I, mob/user, obj/machinery/machine)
 	if(isWrench(I))
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
-		to_chat(user, "You secure the external plating.")
+		to_chat(user, "Вы закрепляете внешнюю обшивку.")
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 75, 1)
 		return
 	if(isWirecutter(I))
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/no_cable)
 		playsound(machine.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		to_chat(user, "You remove the cables.")
+		to_chat(user, "Вы отсоединяете кабели.")
 		var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( user.loc )
 		A.amount = 5
 		machine.set_broken(TRUE, TRUE) // the machine's been borked!
 
 /singleton/machine_construction/tcomms/panel_open/unwrenched/mechanics_info()
 	. = list()
-	. += "Use a wrench to secure the external plating."
-	. += "Use wirecutters to remove the cabling."
+	. += "Используйте гаечный ключ, чтобы закрепить внешнюю обшивку."
+	. += "Используйте кусачки для отсоединения кабелей."
 
 /singleton/machine_construction/tcomms/panel_open/no_cable/state_interactions(obj/item/I, mob/user, obj/machinery/machine)
 	if(isCoil(I))
@@ -87,11 +87,11 @@
 		if (A.can_use(5))
 			TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/unwrenched)
 			A.use(5)
-			to_chat(user, SPAN_NOTICE("You insert the cables."))
+			to_chat(user, SPAN_NOTICE("Вы вставляете кабель."))
 			machine.set_broken(FALSE, TRUE) // the machine's not borked anymore!
 			return
 		else
-			to_chat(user, SPAN_WARNING("You need five coils of wire for this."))
+			to_chat(user, SPAN_WARNING("Для этого вам понадобится пять витков провода."))
 			return TRUE
 	if(isCrowbar(I))
 		TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
@@ -109,8 +109,8 @@
 
 /singleton/machine_construction/tcomms/panel_open/no_cable/mechanics_info()
 	. = list()
-	. += "Attach cables to make the machine functional."
-	. += "Use a parts replacer to upgrade some parts."
-	. += "Use a crowbar to remove the circuit and deconstruct the machine"
-	. += "Insert a new part to install it."
-	. += "Remove installed parts with a wrench."
+	. += "Подсоедините кабеля, чтобы устройство заработало."
+	. += "Используйте средство для замены деталей, чтобы обновить некоторые детали."
+	. += "Используйте лом, чтобы отсоединить цепь и разобрать устройство."
+	. += "Вставьте новую деталь, чтобы установить ее."
+	. += "Снимите установленные детали с помощью гаечного ключа"

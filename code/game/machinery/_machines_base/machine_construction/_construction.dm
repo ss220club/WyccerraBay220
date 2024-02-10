@@ -27,18 +27,18 @@
 // Run on unit testing. Should return a fail message or null.
 /singleton/machine_construction/proc/fail_unit_test(obj/machinery/machine)
 	if(!state_is_valid(machine))
-		return "[log_info_line(machine)] had an invalid construction state of type [type]."
+		return "[log_info_line(machine)] имело недопустимое конструкционное состояние типа [type]."
 	if(needs_board)
 		var/obj/item/stock_parts/circuitboard/C = machine.get_component_of_type(/obj/item/stock_parts/circuitboard)
 		if(!C)
-			return "Machine [log_info_line(machine)] lacked a circuitboard."
+			return "Устройству [log_info_line(machine)] не хватало печатной платы."
 		if(C.board_type != needs_board)
-			return "Machine [log_info_line(machine)] had a circuitboard of an unexpected type: was [C.board_type], should be [needs_board]."
+			return "Устройство [log_info_line(machine)] имело печатную плату неожиданного типа: было [C.board_type], должно быть [needs_board]."
 		var/design = GLOB.build_path_to_design_datum_path[C.type]
 		if(!design && !cannot_print)
-			return "Machine [log_info_line(machine)] had a circuitboard which could not be printed."
+			return "Устройство [log_info_line(machine)] имеет печатную плату, которую невозможно распечатать."
 		else if(design && cannot_print)
-			return "Machine [log_info_line(machine)] had a circuitboard which could be printed, but it wasn't supposed to."
+			return "Устройство [log_info_line(machine)] имеет печатную плату, которую невозможно распечатать, но этого не должно было случиться.."
 
 // Fetches the components the machine is supposed to have to function fully. Not related to state validity.
 /singleton/machine_construction/proc/get_requirements(obj/machinery/machine)
@@ -74,7 +74,7 @@
 
 /singleton/machine_construction/proc/attack_hand(mob/user, obj/machinery/machine)
 	if(!validate_state(machine))
-		crash_with("Machine [log_info_line(machine)] violated the state assumptions of the construction state [type]!")
+		crash_with("Устройство [log_info_line(machine)]: нарушены государственные предположения о состоянии конструкции [type]!")
 		machine.attack_hand(user)
 		return TRUE
 
@@ -84,7 +84,7 @@ In that same vein, the attackby() children of this proc will also continue the r
 */
 /singleton/machine_construction/proc/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if(!validate_state(machine))
-		crash_with("Machine [log_info_line(machine)] violated the state assumptions of the construction state [type]!")
+		crash_with("Устройство [log_info_line(machine)]: нарушены государственные предположения о состоянии конструкции [type]!")
 		return FALSE
 
 /singleton/machine_construction/proc/mechanics_info()

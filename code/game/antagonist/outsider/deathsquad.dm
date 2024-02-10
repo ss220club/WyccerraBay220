@@ -2,9 +2,9 @@ GLOBAL_DATUM_INIT(deathsquad, /datum/antagonist/deathsquad, new)
 
 /datum/antagonist/deathsquad
 	id = MODE_DEATHSQUAD
-	role_text = "Death Commando"
-	role_text_plural = "Death Commandos"
-	welcome_text = "You work in the service of corporate Asset Protection, answering directly to the Board of Directors."
+	role_text = "Коммандос смерти"
+	role_text_plural = "Коммандосы смерти"
+	welcome_text = "Вы работаете в службе защиты корпоративных активов, отвечая непосредственно в совете директоров."
 	landmark_id = "Commando"
 	flags = ANTAG_OVERRIDE_JOB | ANTAG_OVERRIDE_MOB | ANTAG_HAS_LEADER | ANTAG_RANDOM_EXCEPTED
 	default_access = list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage)

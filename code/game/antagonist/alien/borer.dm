@@ -2,18 +2,18 @@ GLOBAL_DATUM_INIT(borers, /datum/antagonist/borer, new)
 
 /datum/antagonist/borer
 	id = MODE_BORER
-	role_text = "Cortical Borer"
-	role_text_plural = "Cortical Borers"
+	role_text = "Инопланетный глист"
+	role_text_plural = "Инопланетные глисты"
 	flags = ANTAG_OVERRIDE_MOB | ANTAG_RANDSPAWN | ANTAG_OVERRIDE_JOB
 
 	mob_path = /mob/living/simple_animal/borer
-	welcome_text = "Use your Infest power to crawl into the ear of a host and fuse with their brain. You can only take control temporarily, and at risk of hurting your host, so be clever and careful; your host is encouraged to help you however they can. On grab intent, you will use the infest ability. On disarm intent at a distance, you will expell psionic waves to paralyze potential hosts, or enemies. Talk to your fellow borers with ,z."
+	welcome_text = "Используйте свою способность заражать, чтобы заползти в ухо хозяина и слиться с его мозгом. Вы можете взять управление на себя только временно и с риском причинить вред своему хозяину, поэтому будьте умны и осторожны; вашему хозяину рекомендуется помогать вам всем, чем он может. При намерении захватить вы будете использовать способность заражать. При намерении обезвредить на расстоянии вы будете испускать псионические волны, чтобы парализовать потенциальных хозяев или врагов. Поговорите со своими собратьями-паразитам с помощью z."
 	antag_indicator = "hudborer"
 	antaghud_indicator = "hudborer"
 
-	faction_role_text = "Borer Thrall"
+	faction_role_text = "Тралл Инопланетного глиста"
 	faction_descriptor = "Unity"
-	faction_welcome = "You are now a thrall to a cortical borer. Please listen to what they have to say; they're in your head."
+	faction_welcome = "Теперь вы в плену у инопланетного глиста головного мозга. Пожалуйста, послушайте, что они хотят сказать; они у вас в голове."
 	faction = "borer"
 	faction_indicator = "hudalien"
 

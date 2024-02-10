@@ -19,8 +19,8 @@
 	make_exact_fit()
 
 /obj/item/csi_marker
-	name = "crime scene marker"
-	desc = "Plastic cards used to mark points of interests on the scene. Just like in the holoshows!"
+	name = "маркер места преступления"
+	desc = "Пластиковые карты, используемые для обозначения точек интереса на месте происшествия. Прямо как в голошоу!"
 	icon = 'icons/obj/forensics.dmi'
 	icon_state = "card1"
 	w_class = ITEM_SIZE_TINY
@@ -30,7 +30,7 @@
 
 /obj/item/csi_marker/Initialize(mapload)
 	. = ..()
-	desc += " This one is marked with [number]."
+	desc += " Этот отмечен значком [number]."
 	update_icon()
 
 /obj/item/csi_marker/on_update_icon()

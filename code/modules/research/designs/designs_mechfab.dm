@@ -1,10 +1,10 @@
 /datum/design/item/mechfab
 	build_type = MECHFAB
-	category = "Misc"
+	category = "Разное"
 	req_tech = list(TECH_MATERIAL = 1)
 
 /datum/design/item/mechfab/robot
-	category = "Robot"
+	category = "Борг"
 
 //if the fabricator is a exosuit fab pass the manufacturer info over to the robot part constructor
 /datum/design/item/mechfab/robot/Fabricate(newloc, fabricator)
@@ -14,56 +14,56 @@
 	return ..()
 
 /datum/design/item/mechfab/robot/exoskeleton_ground
-	name = "Robot frame, standard"
+	name = "Рама борга, стандарт"
 	id = "robot_exoskeleton"
 	build_path = /obj/item/robot_parts/robot_suit
 	time = 50
 	materials = list(MATERIAL_STEEL = 50000)
 
 /datum/design/item/mechfab/robot/exoskeleton_flying
-	name = "Robot frame, hover"
+	name = "Рама борга, наведение"
 	id = "robot_exoskeleton_hover"
 	build_path = /obj/item/robot_parts/robot_suit/flyer
 	time = 50
 	materials = list(MATERIAL_STEEL = 50000)
 
 /datum/design/item/mechfab/robot/torso
-	name = "Robot torso"
+	name = "Торс борга"
 	id = "robot_torso"
 	build_path = /obj/item/robot_parts/chest
 	time = 35
 	materials = list(MATERIAL_STEEL = 40000)
 
 /datum/design/item/mechfab/robot/head
-	name = "Robot head"
+	name = "Голова борга"
 	id = "robot_head"
 	build_path = /obj/item/robot_parts/head
 	time = 35
 	materials = list(MATERIAL_STEEL = 25000)
 
 /datum/design/item/mechfab/robot/l_arm
-	name = "Robot left arm"
+	name = "Левая рука борга"
 	id = "robot_l_arm"
 	build_path = /obj/item/robot_parts/l_arm
 	time = 20
 	materials = list(MATERIAL_STEEL = 18000)
 
 /datum/design/item/mechfab/robot/r_arm
-	name = "Robot right arm"
+	name = "Правая рука борга"
 	id = "robot_r_arm"
 	build_path = /obj/item/robot_parts/r_arm
 	time = 20
 	materials = list(MATERIAL_STEEL = 18000)
 
 /datum/design/item/mechfab/robot/l_leg
-	name = "Robot left leg"
+	name = "Левая нога борга"
 	id = "robot_l_leg"
 	build_path = /obj/item/robot_parts/l_leg
 	time = 20
 	materials = list(MATERIAL_STEEL = 15000)
 
 /datum/design/item/mechfab/robot/r_leg
-	name = "Robot right leg"
+	name = "Правая нога борга"
 	id = "robot_r_leg"
 	build_path = /obj/item/robot_parts/r_leg
 	time = 20
@@ -74,37 +74,37 @@
 	materials = list(MATERIAL_STEEL = 5000)
 
 /datum/design/item/mechfab/robot/component/binary_communication_device
-	name = "Binary communication device"
+	name = "Бинарное устройство связи"
 	id = "binary_communication_device"
 	build_path = /obj/item/robot_parts/robot_component/binary_communication_device
 
 /datum/design/item/mechfab/robot/component/radio
-	name = "Radio"
+	name = "Радио"
 	id = "radio"
 	build_path = /obj/item/robot_parts/robot_component/radio
 
 /datum/design/item/mechfab/robot/component/actuator
-	name = "Actuator"
+	name = "Привод"
 	id = "actuator"
 	build_path = /obj/item/robot_parts/robot_component/actuator
 
 /datum/design/item/mechfab/robot/component/diagnosis_unit
-	name = "Diagnosis unit"
+	name = "Диагностический блок"
 	id = "diagnosis_unit"
 	build_path = /obj/item/robot_parts/robot_component/diagnosis_unit
 
 /datum/design/item/mechfab/robot/component/camera
-	name = "Camera"
+	name = "Камера"
 	id = "camera"
 	build_path = /obj/item/robot_parts/robot_component/camera
 
 /datum/design/item/mechfab/robot/component/armour
-	name = "Armour plating"
+	name = "Бронеплита"
 	id = "armour"
 	build_path = /obj/item/robot_parts/robot_component/armour
 
 /datum/design/item/mechfab/robot/component/armour/light
-	name = "Light-weight armour plating"
+	name = "Легкая бронированная плита"
 	id = "light_armour"
 	build_path = /obj/item/robot_parts/robot_component/armour/light
 	// Half the armor, half the cost
@@ -112,22 +112,22 @@
 	materials = list(MATERIAL_STEEL = 2500)
 
 /datum/design/item/mechfab/exosuit
-	name = "exosuit frame"
+	name = "каркас экзокостюма"
 	id = "mech_frame"
 	build_path = /obj/structure/heavy_vehicle_frame
 	time = 70
 	materials = list(MATERIAL_STEEL = 20000)
-	category = "Exosuits"
+	category = "Экзокостюмы"
 
 /datum/design/item/mechfab/exosuit/basic_armour
-	name = "basic exosuit armour"
+	name = "базовая броня экзокостюма"
 	id = "mech_armour_basic"
 	build_path = /obj/item/robot_parts/robot_component/armour/exosuit
 	time = 30
 	materials = list(MATERIAL_STEEL = 7500)
 
 /datum/design/item/mechfab/exosuit/radproof_armour
-	name = "radiation-proof exosuit armour"
+	name = "радиационно-защитная броня экзокостюма"
 	id = "mech_armour_radproof"
 	build_path = /obj/item/robot_parts/robot_component/armour/exosuit/radproof
 	time = 50
@@ -135,7 +135,7 @@
 	materials = list(MATERIAL_STEEL = 12500)
 
 /datum/design/item/mechfab/exosuit/em_armour
-	name = "EM-shielded exosuit armour"
+	name = "броня экзокостюма с ЭМ-защитой"
 	id = "mech_armour_em"
 	build_path = /obj/item/robot_parts/robot_component/armour/exosuit/em
 	time = 50
@@ -143,7 +143,7 @@
 	materials = list(MATERIAL_STEEL = 12500, MATERIAL_SILVER = 1000)
 
 /datum/design/item/mechfab/exosuit/combat_armour
-	name = "Combat exosuit armour"
+	name = "броня боевого экзокостюма"
 	id = "mech_armour_combat"
 	build_path = /obj/item/robot_parts/robot_component/armour/exosuit/combat
 	time = 50
@@ -151,14 +151,14 @@
 	materials = list(MATERIAL_STEEL = 20000, MATERIAL_DIAMOND = 5000)
 
 /datum/design/item/mechfab/exosuit/control_module
-	name = "exosuit control module"
+	name = "управляющий модуль экзокостюма"
 	id = "mech_control_module"
 	build_path = /obj/item/mech_component/control_module
 	time = 15
 	materials = list(MATERIAL_STEEL = 5000)
 
 /datum/design/item/mechfab/exosuit/combat_torso
-	name = "combat exosuit chassis"
+	name = "каркас боевого экзокостюма"
 	id = "combat_body"
 	time = 60
 	materials = list(MATERIAL_STEEL = 45000)
@@ -166,7 +166,7 @@
 	req_tech = list(TECH_COMBAT = 2)
 
 /datum/design/item/mechfab/exosuit/combat_arms
-	name = "combat exosuit manipulators"
+	name = "манипуляторы боевого экзокостюма"
 	id = "combat_arms"
 	time = 30
 	materials = list(MATERIAL_STEEL = 15000)
@@ -174,7 +174,7 @@
 	req_tech = list(TECH_COMBAT = 2)
 
 /datum/design/item/mechfab/exosuit/combat_legs
-	name = "combat exosuit motivators"
+	name = "движители боевого экзокостюма"
 	id = "combat_legs"
 	time = 30
 	materials = list(MATERIAL_STEEL = 15000)
@@ -182,35 +182,35 @@
 	req_tech = list(TECH_COMBAT = 2)
 
 /datum/design/item/mechfab/exosuit/powerloader_head
-	name = "power loader sensors"
+	name = "сенсоры силового погрузчика"
 	id = "powerloader_head"
 	build_path = /obj/item/mech_component/sensors/powerloader
 	time = 15
 	materials = list(MATERIAL_STEEL = 5000)
 
 /datum/design/item/mechfab/exosuit/powerloader_torso
-	name = "power loader chassis"
+	name = "каркас силового погрузчика"
 	id = "powerloader_body"
 	build_path = /obj/item/mech_component/chassis/powerloader
 	time = 50
 	materials = list(MATERIAL_STEEL = 20000)
 
 /datum/design/item/mechfab/exosuit/powerloader_arms
-	name = "power loader manipulators"
+	name = "манипуляторы силового погрузчика"
 	id = "powerloader_arms"
 	build_path = /obj/item/mech_component/manipulators/powerloader
 	time = 30
 	materials = list(MATERIAL_STEEL = 6000)
 
 /datum/design/item/mechfab/exosuit/powerloader_legs
-	name = "power loader motivators"
+	name = "движители силового погрузчика"
 	id = "powerloader_legs"
 	build_path = /obj/item/mech_component/propulsion/powerloader
 	time = 30
 	materials = list(MATERIAL_STEEL = 6000)
 
 /datum/design/item/mechfab/exosuit/light_head
-	name = "light exosuit sensors"
+	name = "легкие сенсоры экзокостюма"
 	id = "light_head"
 	time = 20
 	materials = list(MATERIAL_STEEL = 8000)
@@ -226,7 +226,7 @@
 	req_tech = list(TECH_MATERIAL = 1)
 
 /datum/design/item/mechfab/exosuit/light_arms
-	name = "light exosuit manipulators"
+	name = "легкие манипуляторы экзокостюма"
 	id = "light_arms"
 	time = 20
 	materials = list(MATERIAL_STEEL = 10000)
@@ -234,7 +234,7 @@
 	req_tech = list(TECH_MATERIAL = 1)
 
 /datum/design/item/mechfab/exosuit/light_legs
-	name = "light exosuit motivators"
+	name = "легкие движители экзокостюма"
 	id = "light_legs"
 	time = 25
 	materials = list(MATERIAL_STEEL = 10000)
@@ -242,7 +242,7 @@
 	req_tech = list(TECH_MATERIAL = 1)
 
 /datum/design/item/mechfab/exosuit/heavy_head
-	name = "heavy exosuit sensors"
+	name = "тяжелые сенсоры экзокостюма"
 	id = "heavy_head"
 	time = 35
 	materials = list(MATERIAL_STEEL = 16000)
@@ -250,28 +250,28 @@
 	req_tech = list(TECH_COMBAT = 2)
 
 /datum/design/item/mechfab/exosuit/heavy_torso
-	name = "heavy exosuit chassis"
+	name = "тяжелое шасси экзокостюма"
 	id = "heavy_body"
 	time = 75
 	materials = list(MATERIAL_STEEL = 70000, MATERIAL_URANIUM = 10000)
 	build_path = /obj/item/mech_component/chassis/heavy
 
 /datum/design/item/mechfab/exosuit/heavy_arms
-	name = "heavy exosuit manipulators"
+	name = "тяжелые манипуляторы экзокостюмов"
 	id = "heavy_arms"
 	time = 35
 	materials = list(MATERIAL_STEEL = 20000)
 	build_path = /obj/item/mech_component/manipulators/heavy
 
 /datum/design/item/mechfab/exosuit/heavy_legs
-	name = "heavy exosuit motivators"
+	name = "тяжелые движители экзокостюма"
 	id = "heavy_legs"
 	time = 35
 	materials = list(MATERIAL_STEEL = 20000)
 	build_path = /obj/item/mech_component/propulsion/heavy
 
 /datum/design/item/mechfab/exosuit/spider
-	name = "quadruped motivators"
+	name = "четвероногие движители"
 	id = "quad_legs"
 	time = 20
 	materials = list(MATERIAL_STEEL = 12000)
@@ -279,7 +279,7 @@
 	req_tech = list(TECH_ENGINEERING = 2)
 
 /datum/design/item/mechfab/exosuit/track
-	name = "armored treads"
+	name = "бронированные гусеницы"
 	id = "treads"
 	time = 35
 	materials = list(MATERIAL_STEEL = 25000)
@@ -287,7 +287,7 @@
 	req_tech = list(TECH_MATERIAL = 4)
 
 /datum/design/item/mechfab/exosuit/sphere_torso
-	name = "spherical chassis"
+	name = "сферическая рама"
 	id = "sphere_body"
 	build_path = /obj/item/mech_component/chassis/pod
 	time = 50
@@ -297,79 +297,79 @@
 	build_type = MECHFAB
 	time = 12
 	materials = list(MATERIAL_STEEL = 10000)
-	category = "Cyborg Upgrade Modules"
+	category = "Модули улучшения боргов"
 
 /datum/design/item/robot_upgrade/rename
-	name = "Rename module"
-	desc = "Used to rename a cyborg."
+	name = "Модуль переименования"
+	desc = "Используется для переименования борга."
 	id = "borg_rename_module"
 	build_path = /obj/item/borg/upgrade/rename
 
 /datum/design/item/robot_upgrade/reset
-	name = "Reset module"
-	desc = "Used to reset a cyborg's module. Destroys any other upgrades applied to the robot."
+	name = "Модуль сброса"
+	desc = "Используется для сброса модуля борга. Уничтожает любые другие улучшения, примененные к роботу."
 	id = "borg_reset_module"
 	build_path = /obj/item/borg/upgrade/reset
 
 /datum/design/item/robot_upgrade/floodlight
-	name = "Floodlight module"
-	desc = "Used to boost cyborg's integrated light intensity."
+	name = "Модуль прожектора"
+	desc = "Используется для повышения интегрированной интенсивности света киборга."
 	id = "borg_floodlight_module"
 	build_path = /obj/item/borg/upgrade/floodlight
 
 /datum/design/item/robot_upgrade/restart
-	name = "Emergency restart module"
-	desc = "Used to force a restart of a disabled-but-repaired robot, bringing it back online."
+	name = "Модуль экстренной перезагрузки"
+	desc = "Используется для принудительного перезапуска отключенного, но отремонтированного робота и возвращения его в оперативный режим."
 	id = "borg_restart_module"
 	materials = list(MATERIAL_STEEL = 60000, MATERIAL_GLASS = 5000)
 	build_path = /obj/item/borg/upgrade/restart
 
 /datum/design/item/robot_upgrade/vtec
-	name = "VTEC module"
-	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
+	name = "VTEC модуль"
+	desc = "Используется для запуска систем VTEC робота, увеличивая его скорость."
 	id = "borg_vtec_module"
 	materials = list(MATERIAL_STEEL = 80000, MATERIAL_GLASS = 6000, MATERIAL_GOLD = 5000)
 	build_path = /obj/item/borg/upgrade/vtec
 
 /datum/design/item/robot_upgrade/weaponcooler
-	name = "Rapid weapon cooling module"
-	desc = "Used to cool a mounted energy gun, increasing the potential current in it and thus its recharge rate."
+	name = "Модуль охлаждения"
+	desc = "Используется для охлаждения установленной энергетической пушки, увеличивая потенциальный ток в ней, а следовательно скорость ее перезарядки."
 	id = "borg_taser_module"
 	materials = list(MATERIAL_STEEL = 80000, MATERIAL_GLASS = 6000, MATERIAL_GOLD = 2000, MATERIAL_DIAMOND = 500)
 	build_path = /obj/item/borg/upgrade/weaponcooler
 
 /datum/design/item/robot_upgrade/jetpack
-	name = "Jetpack module"
+	name = "Модуль Джет-Пака"
 	desc = "A carbon dioxide jetpack suitable for low-gravity mining operations."
 	id = "borg_jetpack_module"
 	materials = list(MATERIAL_STEEL = 10000, MATERIAL_PHORON = 15000, MATERIAL_URANIUM = 20000)
 	build_path = /obj/item/borg/upgrade/jetpack
 
 /datum/design/item/robot_upgrade/rcd
-	name = "RCD module"
-	desc = "A rapid construction device module for use during construction operations."
+	name = "RCD модуль"
+	desc = "Модуль для ускорения строительных работ."
 	id = "borg_rcd_module"
 	materials = list(MATERIAL_STEEL = 25000, MATERIAL_PHORON = 10000, MATERIAL_GOLD = 1000, MATERIAL_SILVER = 1000)
 	build_path = /obj/item/borg/upgrade/rcd
 
 /datum/design/item/robot_upgrade/syndicate
-	name = "Illegal upgrade"
-	desc = "Allows for the construction of lethal upgrades for cyborgs."
+	name = "Нелегальные запчасти"
+	desc = "Позволяет создавать смертоносные улучшения для киборгов."
 	id = "borg_syndicate_module"
 	req_tech = list(TECH_COMBAT = 4, TECH_ESOTERIC = 3)
 	materials = list(MATERIAL_STEEL = 10000, MATERIAL_GLASS = 15000, MATERIAL_DIAMOND = 10000)
 	build_path = /obj/item/borg/upgrade/syndicate
 
 /datum/design/item/robot_upgrade/flash_protection
-	name = "Optical Matrix Shielding"
-	desc = "Provides shielding for the optical matrix, rendering the robot immune to flashes."
+	name = "Оптическая Матрица Экранирования"
+	desc = "Обеспечивает защиту оптической матрицы, делая робота невосприимчивым к вспышкам."
 	id = "borg_flash_protection_module"
 	materials = list(MATERIAL_STEEL = 80000, MATERIAL_GLASS = 6000, MATERIAL_GOLD = 5000)
 	build_path = /obj/item/borg/upgrade/flash_protection
 
 /datum/design/item/exosuit
 	build_type = MECHFAB
-	category = "Exosuit Equipment"
+	category = "Экзо-оборудование"
 	time = 10
 	materials = list(MATERIAL_STEEL = 10000)
 

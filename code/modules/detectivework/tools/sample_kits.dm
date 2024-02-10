@@ -62,13 +62,13 @@
 	return ..()
 
 /obj/item/sample/fibers
-	name = "fiber bag"
-	desc = "Used to hold fiber evidence for the detective."
+	name = "мешок для волокон"
+	desc = "Используется для хранения волоконных вещ. доков."
 	icon_state = "fiberbag"
 
 /obj/item/sample/print
-	name = "fingerprint card"
-	desc = "Records a set of fingerprints."
+	name = "планшет отпечатков"
+	desc = "Записывает в себя отпечатки."
 	icon = 'icons/obj/tools/card.dmi'
 	icon_state = "fingerprint0"
 	item_state = "paper"
@@ -137,8 +137,8 @@
 	item_flags = ITEM_FLAG_NO_PRINT
 
 /obj/item/forensics/sample_kit
-	name = "fiber collection kit"
-	desc = "A magnifying glass and tweezers. Used to lift suit fibers."
+	name = "набор для волоконной экпертизы"
+	desc = "Увеличительное стекло и пинцет. Используется для подъема волокон одежды."
 	icon_state = "m_glass"
 	w_class = ITEM_SIZE_SMALL
 	var/evidence_type = "fiber"
@@ -149,7 +149,7 @@
 
 /obj/item/forensics/sample_kit/proc/take_sample(mob/user, atom/supplied)
 	var/obj/item/sample/S = new evidence_path(get_turf(user), supplied)
-	to_chat(user, SPAN_NOTICE("You transfer [length(S.evidence)] [length(S.evidence) > 1 ? "[evidence_type]s" : "[evidence_type]"] to \the [S]."))
+	to_chat(user, SPAN_NOTICE("Вы передали [length(S.evidence)] [length(S.evidence) > 1 ? "[evidence_type]" : "[evidence_type]"] к \the [S]."))
 
 /obj/item/forensics/sample_kit/use_before(atom/target, mob/living/user, click_parameters)
 	if (user.a_intent == I_HELP) // Prevents putting sample kits in bags, on racks/tables, etc when trying to take samples
@@ -158,7 +158,7 @@
 	if (user.skill_check(SKILL_FORENSICS, SKILL_TRAINED) && can_take_sample(user, target))
 		take_sample(user,target)
 	else
-		to_chat(user, SPAN_WARNING("You are unable to locate any [evidence_type]s on \the [target]."))
+		to_chat(user, SPAN_WARNING("Вы не можете найти ни одного [evidence_type] на \the [target]."))
 	return TRUE
 
 /obj/item/forensics/sample_kit/MouseDrop(atom/over)
@@ -166,8 +166,8 @@
 		use_after(over, usr)
 
 /obj/item/forensics/sample_kit/powder
-	name = "fingerprint powder"
-	desc = "A jar containing alumiinum powder and a specialized brush."
+	name = "набор для отпечатков"
+	desc = "Баночка с алюминиевым порошком и специальная кисточка."
 	icon_state = "dust"
 	evidence_type = "fingerprint"
 	evidence_path = /obj/item/sample/print

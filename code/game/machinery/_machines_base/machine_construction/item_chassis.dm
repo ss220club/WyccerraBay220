@@ -22,4 +22,4 @@
 
 /singleton/machine_construction/default/panel_closed/mechanics_info()
 	. = list()
-	. += "Use a wrench to deconstruct the machine"
+	. += "Используйте гаечный ключ, чтобы разобрать устройство"

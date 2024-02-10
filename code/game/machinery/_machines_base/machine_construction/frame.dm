@@ -16,7 +16,7 @@
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
-			to_chat(user, SPAN_NOTICE("You wrench \the [machine] into place."))
+			to_chat(user, SPAN_NOTICE("Вы закрутили \the [machine] на место."))
 			machine.anchored = TRUE
 	if(isWelder(I))
 		var/obj/item/weldingtool/WT = I
@@ -27,14 +27,14 @@
 			if (!WT.remove_fuel(3, user))
 				return TRUE
 			TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
-			to_chat(user, SPAN_NOTICE("You deconstruct \the [machine]."))
+			to_chat(user, SPAN_NOTICE("Вы разобрали \the [machine]."))
 			machine.dismantle()
 
 
 /singleton/machine_construction/frame/unwrenched/mechanics_info()
 	. = list()
-	. += "Use a welder to break apart the frame."
-	. += "Use a wrench to secure the frame in place."
+	. += "Используйте сварочный аппарат, чтобы разобрать раму на части."
+	. += "Используйте гаечный ключ, чтобы закрепить раму на месте."
 
 /singleton/machine_construction/frame/wrenched/state_is_valid(obj/machinery/constructable_frame/machine)
 	return machine.anchored && !machine.circuit
@@ -52,26 +52,26 @@
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			TRANSFER_STATE(/singleton/machine_construction/frame/unwrenched)
-			to_chat(user, SPAN_NOTICE("You unfasten \the [machine]."))
+			to_chat(user, SPAN_NOTICE("Вы раскрутили \the [machine]."))
 			machine.anchored = FALSE
 			return
 	if(isCoil(I))
 		var/obj/item/stack/cable_coil/C = I
 		if(C.get_amount() < 5)
-			to_chat(user, SPAN_WARNING("You need five lengths of cable to add them to \the [machine]."))
+			to_chat(user, SPAN_WARNING("Вам понадобится пять отрезков кабеля, чтобы добавить их к \the [machine]."))
 			return TRUE
 		playsound(machine.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-		to_chat(user, SPAN_NOTICE("You start to add cables to the frame."))
+		to_chat(user, SPAN_NOTICE("Вы начинаете добавлять кабели к раме."))
 		if(do_after(user, 2 SECONDS, machine, DO_REPAIR_CONSTRUCT) && C.use(5))
 			TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_circuit)
-			to_chat(user, SPAN_NOTICE("You add cables to the frame."))
+			to_chat(user, SPAN_NOTICE("Вы добавляете кабели к раме."))
 		return TRUE
 
 
 /singleton/machine_construction/frame/wrenched/mechanics_info()
 	. = list()
-	. += "Use a wrench to unfasten the frame from the floor and prepare it for deconstruction."
-	. += "Add cables to make it ready for a circuit."
+	. += "С помощью гаечного ключа открепите раму от пола и подготовьте ее к демонтажу."
+	. += "Добавьте кабели, чтобы подготовить его к подключению."
 
 /singleton/machine_construction/frame/awaiting_circuit/state_is_valid(obj/machinery/constructable_frame/machine)
 	return machine.anchored && !machine.circuit
@@ -93,22 +93,22 @@
 			TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_parts)
 			user.unEquip(I, machine)
 			playsound(machine.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			to_chat(user, SPAN_NOTICE("You add the circuit board to \the [machine]."))
+			to_chat(user, SPAN_NOTICE("Вы добавляете печатную плату в \the [machine]."))
 			machine.circuit = I
 			return
 		else
-			to_chat(user, SPAN_WARNING("This frame does not accept circuit boards of this type!"))
+			to_chat(user, SPAN_WARNING("Эта рама не подходит для печатных плат такого типа!"))
 			return TRUE
 	if(isWirecutter(I))
 		TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
 		playsound(machine.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		to_chat(user, SPAN_NOTICE("You remove the cables."))
+		to_chat(user, SPAN_NOTICE("Вы отсоединяете кабели."))
 		new /obj/item/stack/cable_coil(machine.loc, 5)
 
 /singleton/machine_construction/frame/awaiting_circuit/mechanics_info()
 	. = list()
-	. += "Insert a circuit board to progress with constructing the machine."
-	. += "Use a wirecutter to remove the cables."
+	. += "Вставьте печатную плату, чтобы приступить к сборке машины."
+	. += "Используйте кусачки для отсоединения кабелей."
 
 /singleton/machine_construction/frame/awaiting_parts/state_is_valid(obj/machinery/constructable_frame/machine)
 	return machine.anchored && machine.circuit
@@ -127,7 +127,7 @@
 		playsound(machine.loc, 'sound/items/Crowbar.ogg', 50, 1)
 		machine.circuit.dropInto(machine.loc)
 		machine.circuit = null
-		to_chat(user, SPAN_NOTICE("You remove the circuit board."))
+		to_chat(user, SPAN_NOTICE("Вы снимаете печатную плату."))
 		return
 	if(isScrewdriver(I))
 		playsound(machine.loc, 'sound/items/Screwdriver.ogg', 50, 1)
@@ -139,11 +139,11 @@
 		if(new_machine.construct_state)
 			new_machine.construct_state.post_construct(new_machine)
 		else
-			crash_with("Machine of type [new_machine.type] was built from a circuit and frame, but had no construct state set.")
+			crash_with("Устройство типа [new_machine.type] был собран из схемы и рамы, но не имел установленного состояния строительства.")
 		qdel(machine)
 		return TRUE
 
 /singleton/machine_construction/frame/awaiting_parts/mechanics_info()
 	. = list()
-	. += "Use a crowbar to remove the circuitboard and any parts installed."
-	. += "Use a screwdriver to build the machine."
+	. += "Используйте лом, чтобы снять печатную плату и все установленные детали."
+	. += "Используйте отвертку, чтобы собрать машину."

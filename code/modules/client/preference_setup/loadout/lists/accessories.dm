@@ -1,5 +1,5 @@
 /datum/gear/accessory
-	sort_category = "Accessories"
+	sort_category = "Аксессуары"
 	category = /datum/gear/accessory
 	slot = slot_tie
 

@@ -5,11 +5,11 @@
 	default_value = GLOB.PREF_HIGH
 
 /datum/client_preference/exposurelevel/changed(mob/preference_mob, new_value)
-	if(preference_mob?.client)
-		for(var/atom/movable/renderer/R as anything in preference_mob.renderers)
-			if (istype(R, /atom/movable/renderer/exposure))
-				var/atom/movable/renderer/exposure/N = R
-				N.UpdateRenderer()
+	if(!preference_mob?.client)
+		return
+		
+	for(var/atom/movable/renderer/exposure/exposure_to_update in preference_mob.renderers)
+		exposure_to_update .UpdateRenderer()
 
 /datum/client_preference/bloomlevel
 	description = "Bloom strength"

@@ -40,7 +40,7 @@
 	var/job = ++last_asset_job
 	var/t = 0
 	var/timeout_time = timeout
-	to_target(src, browse({"<script>window.location.href="?asset_cache_confirm_arrival=[job]"</script>"}, "window=asset_cache_browser"))
+	src << browse({"<script>window.location.href="?asset_cache_confirm_arrival=[job]"</script>"}, "window=asset_cache_browser")
 
 	while(!completed_asset_jobs["[job]"] && t < timeout_time) // Reception is handled in Topic()
 		stoplag(1) // Lock up the caller until this is received.

@@ -458,7 +458,7 @@ SUBSYSTEM_DEF(tts220)
 	if(is_local)
 		output.channel = get_local_channel_by_owner(speaker)
 	else
-		output.channel = SStts220.TTS_radio_channel
+		output.channel = TTS_radio_channel
 		output.wait = TRUE
 
 	if(isnull(speaker))

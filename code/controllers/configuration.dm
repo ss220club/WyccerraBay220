@@ -446,6 +446,7 @@
 
 	// [SIERRA-ADD]
 	var/static/shutdown_on_reboot = FALSE
+	var/static/auto_local_admin = FALSE
 	// [/SIERRA-ADD]
 
 
@@ -496,6 +497,10 @@
 	for (var/name in file)
 		var/value = file[name]
 		switch (name)
+			// [SS220-ADD]
+			if ("auto_local_admin")
+				config.auto_local_admin = TRUE
+			// [SS220-ADDEND]
 			if ("resource_urls")
 				resource_urls = splittext(value, " ")
 			if ("admin_legacy_system")

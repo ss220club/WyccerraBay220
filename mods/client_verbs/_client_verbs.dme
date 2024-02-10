@@ -4,8 +4,10 @@
 #include "_client_verbs.dm"
 
 #include "code/credits.dm"
+#include "code/set_respawn_timer.dm"
 #include "code/get_server_logs.dm"
 #include "code/respawn_as_human.dm"
 #include "code/skin_dmf.dm"
+#include "code/sendbacktolobby.dm"
 
 #endif

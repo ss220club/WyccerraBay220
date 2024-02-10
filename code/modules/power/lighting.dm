@@ -297,9 +297,12 @@
 			on = FALSE
 
 	if(istype(lightbulb, /obj/item/light))
+		var/lamps_plane // SS220 Bloom-Light
 		if (on)
 			AddOverlays(emissive_appearance(icon, _state))
-		AddOverlays(overlay_image(icon, _state, color))
+			lamps_plane = LIGHTING_LAMPS_PLANE // SS220 Bloom-Light
+			AddOverlays(overlay_image(icon, _state, color, plane = LIGHTING_LAMPS_GLARE)) // SS220 Bloom-Light
+		AddOverlays(overlay_image(icon, _state, color, plane = lamps_plane)) // SS220 Bloom-Light (layer edit)
 
 	if(on)
 

@@ -1,7 +1,7 @@
-var/list/localhost_addresses = list(
+GLOBAL_LIST_INIT(localhost_addresses, list(
 	"127.0.0.1" = TRUE,
 	"::1" = TRUE
-)
+))
 
 	////////////
 	//SECURITY//

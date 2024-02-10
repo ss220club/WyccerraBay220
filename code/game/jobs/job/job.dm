@@ -360,7 +360,7 @@
 		var/mob/living/carbon/human/dummy/mannequin/mannequin = get_mannequin("#job_icon")
 		dress_mannequin(mannequin)
 		mannequin.dir = SOUTH
-		var/icon/preview_icon = getFlatIcon(mannequin)
+		var/icon/preview_icon = mannequin.get_flat_icon(mannequin, SOUTH)
 		preview_icon.Scale(preview_icon.Width() * 2, preview_icon.Height() * 2) // Scaling here to prevent blurring in the browser.
 		SSjobs.job_icons[title] = preview_icon
 	return SSjobs.job_icons[title]

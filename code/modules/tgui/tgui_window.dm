@@ -279,7 +279,8 @@
 		return
 
 	sent_assets |= list(asset)
-	. = asset.send(client)
+	if(asset.send(client))
+		return TRUE
 	if(istype(asset, /datum/asset/spritesheet))
 		var/datum/asset/spritesheet/spritesheet = asset
 		send_message("asset/stylesheet", spritesheet.css_filename())

@@ -512,23 +512,28 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 /mob/observer/ghost/MayRespawn(feedback = 0, respawn_time = 0)
 	if(!client)
-		return 0
+		return FALSE
+
 	if(mind && mind.current && mind.current.stat != DEAD && can_reenter_corpse == CORPSE_CAN_REENTER)
 		if(feedback)
 			to_chat(src, SPAN_WARNING("Your non-dead body prevents you from respawning."))
-		return 0
+		return FALSE
+
+	if(!config.respawn_delay)
+		return TRUE
+
 	if(config.antag_hud_restricted && has_enabled_antagHUD == 1)
 		if(feedback)
 			to_chat(src, SPAN_WARNING("antagHUD restrictions prevent you from respawning."))
-		return 0
+		return FALSE
 
 	var/timedifference = world.time - timeofdeath
 	if(!client.holder && respawn_time && timeofdeath && timedifference < respawn_time MINUTES)
 		var/timedifference_text = time2text(respawn_time MINUTES - timedifference,"mm:ss")
 		to_chat(src, SPAN_WARNING("You must have been dead for [respawn_time] minute\s to respawn. You have [timedifference_text] left."))
-		return 0
+		return FALSE
 
-	return 1
+	return TRUE
 
 /proc/isghostmind(datum/mind/player)
 	return player && !isnewplayer(player.current) && (!player.current || isghost(player.current) || (isliving(player.current) && player.current.stat == DEAD) || !player.current.client)

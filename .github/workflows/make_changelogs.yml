@@ -6,14 +6,14 @@ permissions:
 on:
   push:
     branches:
-    - dev-sierra
+    - master
 
 jobs:
   MakeCL:
     permissions:
       contents: write # required to push the changelog chunk yml commit
     runs-on: ubuntu-latest
-    if: github.repository == 'SierraBay/SierraBay12' # to prevent this running on forks
+    if: github.repository == 'ss220club/WyccerraBay220' # to prevent this running on forks
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11

@@ -113,7 +113,6 @@ menu "menu"
 		category = "&Help"
 		saved-params = "is-checked"
 
-
 window "mainwindow"
 	elem "mainwindow"
 		type = MAIN
@@ -121,26 +120,14 @@ window "mainwindow"
 		size = 640x440
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
+		is-maximized = true
 		is-default = true
 		statusbar = false
 		saved-params = "pos;size;is-minimized;is-maximized"
-		is-maximized = true
-		icon = 'icons\\ss13_64.png'
+		title = "SS220 | WyccStation (Sierra)"
+		icon = 'icons\\ws220.png'
 		macro = "default"
 		menu = "menu"
-		on-size = "onresize"
-		outer-size = 1874x1096
-		inner-size = 1858x1037
-	elem "asset_cache_browser"
-		type = BROWSER
-		pos = 0,0
-		size = 200x200
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = none
-		is-visible = false
-		saved-params = ""
 	elem "mainvsplit"
 		type = CHILD
 		pos = 0,0
@@ -149,26 +136,29 @@ window "mainwindow"
 		anchor2 = 100,100
 		background-color = none
 		saved-params = "splitter"
+		left = "mapwindow"
 		right = "rpane"
 		is-vert = true
+	elem "asset_cache_browser"
+		type = BROWSER
+		pos = 0,0
+		size = 200x200
+		is-visible = false
 	elem "tooltip"
 		type = BROWSER
 		pos = 0,0
 		size = 999x999
-		anchor1 = none
-		anchor2 = none
-		background-color = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
 		is-visible = false
-		saved-params = ""
 
 window "mapwindow"
 	elem "mapwindow"
 		type = MAIN
-		pos = 219,0
+		pos = 281,0
 		size = 640x480
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
 		on-status = ".winset \"statusbar.text=[[*]]\" "
@@ -181,7 +171,8 @@ window "mapwindow"
 		font-family = "Arial Rounded MT Bold,Arial Black,Arial,sans-serif"
 		font-size = 7
 		is-default = true
-		saved-params = "icon-size"
+		saved-params = "icon-size;zoom-mode"
+		zoom-mode = "distort"
 		style = ".maptext { font-family: 'Small Fonts'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; }"
 		on-show = ".winset\"mainwindow.mainvsplit.left=mapwindow\""
 		on-hide = ".winset\"mainwindow.mainvsplit.left=\""
@@ -191,7 +182,6 @@ window "mapwindow"
 		size = 640x480
 		anchor1 = 0,0
 		anchor2 = 100,100
-		background-color = none
 		is-visible = false
 		is-disabled = true
 		saved-params = ""

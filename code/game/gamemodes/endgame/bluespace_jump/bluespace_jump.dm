@@ -192,3 +192,4 @@
 	alpha = 80
 	color = "#000050"
 	blend_mode = BLEND_ADD
+	scale_to_view = TRUE

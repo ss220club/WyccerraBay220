@@ -441,7 +441,7 @@ var/global/list/datum/power/changeling/powerinstances = list()
 		if(!istype(M))
 			return
 		purchasePower(M, href_list["P"])
-		call(TYPE_PROC_REF(/datum/changeling, EvolutionMenu))()
+		EvolutionMenu()
 
 
 

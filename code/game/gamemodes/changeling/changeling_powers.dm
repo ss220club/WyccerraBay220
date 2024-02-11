@@ -701,7 +701,8 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	changeling.chem_charges -= required_chems
 	changeling.sting_range = 1
 	src.verbs -= verb_path
-	spawn(10)	src.verbs += verb_path
+	spawn(10)
+		src.verbs += verb_path
 	if(!loud)
 		to_chat(src, SPAN_NOTICE("We stealthily sting [T]."))
 	else
@@ -724,7 +725,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set name = "Hallucination Sting (15)"
 	set desc = "Causes terror in the target."
 
-	var/mob/living/carbon/human/T = changeling_sting(15, TYPE_PROC_REF(/mob, changeling_lsdsting), sting_name = "Hallucination Sting")
+	var/mob/living/carbon/human/T = changeling_sting(15, /mob/proc/changeling_lsdsting, sting_name = "Hallucination Sting")
 	if(!T)	return 0
 	spawn(rand(300,600))
 		if(T)	T.hallucination(400, 80)
@@ -735,7 +736,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set name = "Silence sting (10)"
 	set desc="Sting target"
 
-	var/mob/living/carbon/human/T = changeling_sting(10, TYPE_PROC_REF(/mob, changeling_silence_sting), sting_name = "Silence Sting")
+	var/mob/living/carbon/human/T = changeling_sting(10, /mob/proc/changeling_silence_sting, sting_name = "Silence Sting")
 	if(!T)	return 0
 	T.silent += 30
 	return 1
@@ -745,7 +746,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set name = "Blind sting (20)"
 	set desc="Sting target"
 
-	var/mob/living/carbon/human/T = changeling_sting(20, TYPE_PROC_REF(/mob, changeling_blind_sting), sting_name = "Blind Sting")
+	var/mob/living/carbon/human/T = changeling_sting(20, /mob/proc/changeling_blind_sting, sting_name = "Blind Sting")
 	if(!T)	return 0
 	to_chat(T, SPAN_DANGER("Your eyes burn horrificly!"))
 	T.disabilities |= NEARSIGHTED
@@ -759,7 +760,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set name = "Deaf sting (5)"
 	set desc="Sting target:"
 
-	var/mob/living/carbon/human/T = changeling_sting(5, TYPE_PROC_REF(/mob, changeling_deaf_sting), sting_name = "Deaf Sting")
+	var/mob/living/carbon/human/T = changeling_sting(5, /mob/proc/changeling_deaf_sting, sting_name = "Deaf Sting")
 	if(!T)	return 0
 	to_chat(T, SPAN_DANGER("Your ears pop and begin ringing loudly!"))
 	T.ear_deaf += 15
@@ -771,7 +772,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set desc = "Causes spasms onto death."
 	var/loud = 1
 
-	var/mob/living/carbon/human/T = changeling_sting(40, TYPE_PROC_REF(/mob, changeling_DEATHsting), loud, sting_name = "Death Sting")
+	var/mob/living/carbon/human/T = changeling_sting(40, /mob/proc/changeling_DEATHsting, loud, sting_name = "Death Sting")
 	if(!T)	return 0
 	to_chat(T, SPAN_DANGER("You feel a small prick and your chest becomes tight."))
 	T.make_jittery(400)
@@ -789,7 +790,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	if(!changeling)
 		return 0
 
-	var/mob/living/carbon/human/T = changeling_sting(40, TYPE_PROC_REF(/mob, changeling_extract_dna_sting), sting_name = "Extract DNA Sting")
+	var/mob/living/carbon/human/T = changeling_sting(40, /mob/proc/changeling_extract_dna_sting, sting_name = "Extract DNA Sting")
 	if(!T)	return 0
 	if((MUTATION_HUSK in T.mutations) || (T.species.species_flags & SPECIES_FLAG_NO_SCAN))
 		to_chat(src, SPAN_WARNING("We cannot extract DNA from this creature!"))

@@ -424,6 +424,7 @@
 	species_restricted = list(SPECIES_RESOMI)
 	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_under_resomi.dmi')
 
+/*	We don't use this suits in actual build, right?
 /obj/item/clothing/under/thermal
 	name = "thermal suit"
 	desc = "Gray thermal suit. Nothing interesting."
@@ -455,3 +456,4 @@
 	desc = "Looks like very small suit. For children or resomi? This thermal suit is white. "
 	icon_state = "thermores_2"
 	item_state = "thermores_2"
+*/

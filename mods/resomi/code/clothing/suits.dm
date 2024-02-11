@@ -1,8 +1,3 @@
-
-//////////////
-////resomi////
-//////////////
-
 /obj/item/clothing/suit/storage/toggle/resomicoat
 	name = "small coat"
 	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
@@ -566,29 +561,38 @@
 	desc = "A soft Resomi cloak made for the Janitor"
 	icon_state = "tesh_beltcloak_jani"
 
-
-
-/obj/item/clothing/suit/storage/hooded/polychromic
-	name = "polychromic cloak"
-	desc = "Resomi cloak. Seems to be coated with polychrome paint. There is also a sewn hood. DO NOT MIX WITH EMP!"
+//Hooded Resomi cloaks
+/obj/item/clothing/suit/storage/hooded/resomi
+	name = "Hooded Resomi Cloak"
+	desc = "A soft resomi cloak with an added hood."
 	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
-	icon_state = "polychromic"
-	hoodtype = /obj/item/clothing/head/winterhood/polychromic_hood
-	action_button_name = "Toggle Hood"
-	slots = 2
+	icon_state = "tesh_hcloak_bo"
+	//item_state_slots = list(slot_r_hand_str = "tesh_hcloak_bo", slot_l_hand_str = "tesh_hcloak_bo")
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
+	//flags_inv = HIDEHOLSTER|HIDETIE
+	action_button_name = "Toggle Cloak Hood"
+	hoodtype = /obj/item/clothing/head/resomi/resomi_hood
+	//allowed = list (/obj/item/weapon/pen, /obj/item/weapon/paper, /obj/item/device/flashlight,/obj/item/weapon/tank/emergency/oxygen, /obj/item/weapon/storage/fancy/cigarettes, /obj/item/weapon/storage/box/matches, /obj/item/weapon/reagent_containers/food/drinks/flask)
 	species_restricted = list(SPECIES_RESOMI)
-	body_parts_covered = UPPER_TORSO|ARMS|LOWER_TORSO
+	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
 
-/obj/item/clothing/suit/storage/hooded/polychromic/New()
+/obj/item/clothing/suit/storage/hooded/resomi/New()
 	..()
-	sprite_sheets = list(
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
-	)
 	if(pockets)
 		qdel(pockets)
 	pockets = new/obj/item/storage/internal/pouch(src, slots*BASE_STORAGE_COST(ITEM_SIZE_SMALL))
 
-/obj/item/clothing/suit/storage/hooded/polychromic/verb/change_color()
+/obj/item/clothing/suit/storage/hooded/resomi/on_update_icon()
+	..()
+	update_clothing_icon()
+
+/obj/item/clothing/suit/storage/hooded/resomi/polychromic
+	name = "polychromic cloak"
+	desc = "Resomi cloak. Seems to be coated with polychrome paint. There is also a sewn hood. DO NOT MIX WITH EMP!"
+	icon_state = "polychromic"
+	hoodtype = /obj/item/clothing/head/resomi/resomi_hood/polychromic_hood
+
+/obj/item/clothing/suit/storage/hooded/resomi/polychromic/verb/change_color()
 	set name = "Change Cloak Color"
 	set category = "Object"
 	set desc = "Change the color of the cloak."
@@ -605,77 +609,17 @@
 	hood.update_icon()
 	update_icon()
 
-/obj/item/clothing/suit/storage/hooded/polychromic/on_update_icon()
+/obj/item/clothing/suit/storage/hooded/resomi/polychromic/on_update_icon()
 	..()
 	update_clothing_icon()
 	hood.color = color
 	hood.update_clothing_icon()
 
-/obj/item/clothing/suit/storage/hooded/polychromic/emp_act(severity)
+/obj/item/clothing/suit/storage/hooded/resomi/polychromic/emp_act(severity)
 	color = null
 	hood.color = null
 	update_icon()
 	..()
-
-/obj/item/clothing/head/winterhood/polychromic_hood
-	name = "hood"
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
-	icon_state = "polychromic_hood"
-	species_restricted = list(SPECIES_RESOMI)
-	desc = "It's hood that covers the head."
-	flags_inv = BLOCKHAIR | HIDEEARS
-	body_parts_covered = HEAD
-
-/obj/item/clothing/head/winterhood/polychromic_hood/New()
-	..()
-	sprite_sheets = list(
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi'
-	)
-
-//Hooded Resomi cloaks
-/obj/item/clothing/suit/storage/hooded/resomi
-	name = "Hooded Resomi Cloak"
-	desc = "A soft resomi cloak with an added hood."
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
-	icon_state = "tesh_hcloak_bo"
-	//item_state_slots = list(slot_r_hand_str = "tesh_hcloak_bo", slot_l_hand_str = "tesh_hcloak_bo")
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-	//flags_inv = HIDEHOLSTER|HIDETIE
-	action_button_name = "Toggle Cloak Hood"
-	hoodtype = /obj/item/clothing/head/resomi/resomi_hood
-	//allowed = list (/obj/item/weapon/pen, /obj/item/weapon/paper, /obj/item/device/flashlight,/obj/item/weapon/tank/emergency/oxygen, /obj/item/weapon/storage/fancy/cigarettes, /obj/item/weapon/storage/box/matches, /obj/item/weapon/reagent_containers/food/drinks/flask)
-	species_restricted = list(SPECIES_RESOMI)
-
-/obj/item/clothing/suit/storage/hooded/resomi/New()
-	..()
-	sprite_sheets = list(
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
-	)
-	if(pockets)
-		qdel(pockets)
-	pockets = new/obj/item/storage/internal/pouch(src, slots*BASE_STORAGE_COST(ITEM_SIZE_SMALL))
-
-/obj/item/clothing/suit/storage/hooded/resomi/on_update_icon()
-	..()
-	update_clothing_icon()
-
-/obj/item/clothing/head/resomi/resomi_hood
-	name = "Cloak Hood"
-	desc = "A hood attached to a resomi cloak."
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
-	icon_state = "tesh_hcloak_bo_hood"
-	flags_inv = BLOCKHAIR | HIDEEARS
-	body_parts_covered = HEAD
-	species_restricted = list(SPECIES_RESOMI)
-	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
-
-/obj/item/clothing/head/resomi/resomi_hood/New()
-	..()
-	sprite_sheets = list(
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi'
-	)
-
-
 
 /obj/item/clothing/suit/storage/hooded/resomi/black_orange
 	name = "black and orange hooded cloak"
@@ -798,6 +742,21 @@
 	hoodtype = /obj/item/clothing/head/resomi/resomi_hood/brown_grey
 
 //The actual hoods
+/obj/item/clothing/head/resomi/resomi_hood
+	name = "Cloak Hood"
+	desc = "A hood attached to a resomi cloak."
+	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
+	icon_state = "tesh_hcloak_bo_hood"
+	flags_inv = BLOCKHAIR | HIDEEARS
+	body_parts_covered = HEAD
+	species_restricted = list(SPECIES_RESOMI)
+	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+
+/obj/item/clothing/head/resomi/resomi_hood/polychromic_hood
+	name = "polychromic hood"
+	icon_state = "polychromic_hood"
+	desc = "It's hood that covers the head."
+
 /obj/item/clothing/head/resomi/resomi_hood/black_orange
 	name = "black and orange cloak hood"
 	icon_state = "tesh_hcloak_bo_hood"

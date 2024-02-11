@@ -42,6 +42,8 @@
 	var/datum/tgui/parent_ui
 	/// Children of this UI
 	var/list/children = list()
+	/// Rate limit client refreshes to prevent DoS.
+	COOLDOWN_DECLARE(refresh_cooldown)
 
 /**
  * public
@@ -69,9 +71,6 @@
 	src.parent_ui = parent_ui
 	if(parent_ui)
 		parent_ui.children += src
-	// Deprecated
-	if(ui_x && ui_y)
-		src.window_size = list(ui_x, ui_y)
 
 /**
  * public
@@ -99,14 +98,21 @@
 			))
 	else
 		window.send_message("ping")
-	window.send_asset(get_asset_datum(/datum/asset/simple/fontawesome))
-	window.send_asset(get_asset_datum(/datum/asset/simple/tgfont))
-	for(var/datum/asset/asset in src_object.ui_assets(user))
-		window.send_asset(asset)
+	send_assets()
 	window.send_message("update", get_payload(
 		with_data = TRUE,
 		with_static_data = TRUE))
 	SStgui.on_open(src)
+
+/datum/tgui/proc/send_assets()
+	var/flush_queue = window.send_asset(get_asset_datum(
+		/datum/asset/simple/fontawesome))
+	flush_queue |= window.send_asset(get_asset_datum(
+		/datum/asset/simple/tgfont))
+	for(var/datum/asset/asset in src_object.ui_assets(user))
+		flush_queue |= window.send_asset(asset)
+	if(flush_queue)
+		user.client.asset_flush()
 
 /**
  * public
@@ -178,17 +184,17 @@
 /datum/tgui/proc/send_full_update(custom_data, force)
 	if(!user.client || !initialized || closing)
 		return
-	//if(!COOLDOWN_FINISHED(src, refresh_cooldown))
-		//refreshing = TRUE
-		//addtimer(CALLBACK(src, .proc/send_full_update), TGUI_REFRESH_FULL_UPDATE_COOLDOWN, TIMER_UNIQUE)
-		//return
-	//refreshing = FALSE
+	if(!COOLDOWN_FINISHED(src, refresh_cooldown))
+		refreshing = TRUE
+		addtimer(new Callback(src, PROC_REF(send_full_update)), TGUI_REFRESH_FULL_UPDATE_COOLDOWN, TIMER_UNIQUE)
+		return
+	refreshing = FALSE
 	var/should_update_data = force || status >= STATUS_UPDATE
 	window.send_message("update", get_payload(
 		custom_data,
 		with_data = should_update_data,
 		with_static_data = TRUE))
-	//COOLDOWN_START(src, refresh_cooldown, TGUI_REFRESH_FULL_UPDATE_COOLDOWN)
+	COOLDOWN_START(src, refresh_cooldown, TGUI_REFRESH_FULL_UPDATE_COOLDOWN)
 
 /**
  * public

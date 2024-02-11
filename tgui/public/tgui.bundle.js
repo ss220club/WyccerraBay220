@@ -226,7 +226,7 @@
  * @file
  * @copyright 2020 Aleksej Komarov
  * @license MIT
- */var t=n.focusMap=function(){function r(){Byond.winset("paramapwindow.map",{focus:!0})}return r}(),e=n.focusWindow=function(){function r(){Byond.winset(Byond.windowId,{focus:!0})}return r}()},48300:function(S,n,t){"use strict";n.__esModule=!0,n.formatSiUnit=n.formatPower=n.formatMoney=n.formatDb=void 0;var e=t(58331);/**
+ */var t=n.focusMap=function(){function r(){Byond.winset("mapwindow.map",{focus:!0})}return r}(),e=n.focusWindow=function(){function r(){Byond.winset(Byond.windowId,{focus:!0})}return r}()},48300:function(S,n,t){"use strict";n.__esModule=!0,n.formatSiUnit=n.formatPower=n.formatMoney=n.formatDb=void 0;var e=t(58331);/**
  * @file
  * @copyright 2020 Aleksej Komarov
  * @license MIT

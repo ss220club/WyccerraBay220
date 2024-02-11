@@ -452,12 +452,12 @@
 
 	/// Set this to TRUE to have the server passively send all browser assets to each client in the background.
 	/// (instead of waiting for them to be needed)
-	var/static/asset_simple_preload = FALSE
+	var/static/asset_simple_preload = TRUE
 
 	/// Local folder to save assets to.
 	var/static/asset_cdn_webroot = "data/asset-store/"
 
-	/// Ff you want to test this locally, you simpily run the `localhost-asset-webroot-server.py`
+	/// If you want to test this locally, you simpily run the `localhost-asset-webroot-server.py`
 	/// python3 script to host assets stored in `data/asset-store/` via http://localhost:58715/
 	var/static/asset_cdn_url = "http://localhost:58715/"
 
@@ -512,6 +512,14 @@
 			// [SS220-ADD]
 			if ("auto_local_admin")
 				config.auto_local_admin = TRUE
+			if ("asset_transport")
+				config.asset_transport = value
+			if ("asset_simple_preload")
+				config.asset_simple_preload = value
+			if ("asset_cdn_webroot")
+				config.asset_cdn_webroot = value
+			if ("asset_cdn_url")
+				config.asset_cdn_url = value
 			// [SS220-ADDEND]
 			if ("resource_urls")
 				resource_urls = splittext(value, " ")

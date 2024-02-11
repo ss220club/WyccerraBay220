@@ -34,8 +34,6 @@ type PowerChannel = {
   topicParams: string;
 };
 
-type TopicParameter = {};
-
 export const APC = (props, context) => {
   const { act, data } = useBackend<APCData>(context);
   return data.failTime > 0 ? <FailWindow /> : <APCWindow />;

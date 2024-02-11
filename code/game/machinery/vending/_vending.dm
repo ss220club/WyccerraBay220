@@ -18,82 +18,82 @@
 	idle_power_usage = 10
 	wires = /datum/wires/vending
 	health_max = 80
-
+	var/colored_entries = TRUE
+	var/last_reply = 0
+	var/scan_id = TRUE
+	var/light_max_bright_on = 0.2
+	var/light_outer_range_on = 2
+	var/list/ads_list = list()
+	var/list/slogan_list = list()
+	var/list/product_records = list()
+	var/obj/item/material/coin/coin
 	/// The machine's wires, but typed.
 	var/datum/wires/vending/vendor_wires
-
 	/// icon_state to flick() when vending
 	var/icon_vend
-
 	/// Total number of overlays that can be randomly picked from when an item is being vended.
 	var/max_overlays = 1
-
 	/// icon_state to flick() when refusing to vend
 	var/icon_deny
-
 	/// Power to one-off spend on successfully vending.
 	var/vend_power_usage = 150
-
-	var/active = TRUE //No sales pitches if off!
-	var/vend_ready = TRUE //Are we ready to vend?? Is it time??
-
+	/// No sales pitches if off!
+	var/active = TRUE
+	/// Are we ready to vend?? Is it time??
+	var/vend_ready = TRUE
 	/// A field associated with vending machines from the below flags.
 	var/vendor_flags = VENDOR_CATEGORY_NORMAL
+	///Minimum number of possible non-rare product that can be randomly spawned. This can be set by vending machine not item. Minimum rare product is set as 1 by default.
+	var/minrandom = 1
+	///Maximum number of possible non-rare products that can be randomly spawned. This can be set by vending machine not item. Maximum rare product depends on rarity.
+	var/maxrandom = 10
+	///Maximum number of randomly generated antag items. Default of 1 so it is usually only 0 or 1. This var is used as exceptions when large amounts of ammo needs to be randomly spawned.
+	var/antagrandom = 1
+	/// When did we last pitch?
+	var/last_slogan = 0
+	/// How long until we can pitch again?
+	var/slogan_delay = 2 MINUTES
+	/// Shock customers like an airlock.
+	var/seconds_electrified = 0
+	/// Fire items at customers! We're broken!
+	var/shoot_inventory = FALSE
+	/// The chance that items are being shot per tick
+	var/shooting_chance = 2
+	/// String of slogans spoken out loud, separated by semicolons
+	var/product_slogans = ""
+	/// String of anag slogans spoken out loud, separated by semicolons
+	var/antag_slogans = ""
+	/// String of small ad messages in the vending screen
+	var/product_ads = ""
+	/// Status screen messages like "insufficient funds", displayed in TGUI
+	var/status_message = ""
+	/// Set to 1 if status_message is an error
+	var/status_error = 0
+	/// Stop spouting those godawful pitches!
+	var/shut_up = TRUE
+	/// Thank you for shopping!
+	var/vend_reply
+	/// What we're requesting payment for right now
+	var/datum/stored_items/vending_products/currently_vending
+	/// Prices for each product as (/item/path = price). Unlisted items are free.
+	var/list/prices = list()
+	/// Stock for each product as (/item/path = count). Set to '0' if you want the vendor to randomly spawn between 1 and 10 items.
+	var/list/products	= list()
+	///Probability of each rare product of spawning in, max amount increases with large value. Need to have value of '0' associated with it in product list for this to work.
+	var/list/rare_products = list()
+	/// Stock for products hidden by the contraband wire as (/item/path = count)
+	var/list/contraband	= list()
+	/// Stock for products hidden by coin insertion as (/item/path = count)
+	var/list/premium = list()
+	/// Stock for antag items unlocked by challenge coin purchased from uplink. Each coin costs 10 TCs; value in vendor should be 10 at baseline with rare chance going up to 30.
+	var/list/antag = list()
+	/// Icons list for TGUI
+	var/list/imagelist = list()
 
 	var/const/VENDOR_CATEGORY_NORMAL = FLAG(0)
 	var/const/VENDOR_CATEGORY_HIDDEN = FLAG(1)
 	var/const/VENDOR_CATEGORY_COIN = FLAG(2)
 	var/const/VENDOR_CATEGORY_ANTAG = FLAG(3)
-
-	var/datum/stored_items/vending_products/currently_vending // What we're requesting payment for right now
-	var/status_message = "" // Status screen messages like "insufficient funds", displayed in NanoUI
-	var/status_error = 0 // Set to 1 if status_message is an error
-	var/list/prices = list() // Prices for each product as (/item/path = price). Unlisted items are free.
-
-	/// Stock for each product as (/item/path = count). Set to '0' if you want the vendor to randomly spawn between 1 and 10 items.
-	var/list/products	= list()
-
-	///Probability of each rare product of spawning in, max amount increases with large value. Need to have value of '0' associated with it in product list for this to work.
-	var/list/rare_products = list()
-
-	/// Stock for products hidden by the contraband wire as (/item/path = count)
-	var/list/contraband	= list()
-
-	/// Stock for products hidden by coin insertion as (/item/path = count)
-	var/list/premium = list()
-
-	/// Stock for antag items unlocked by challenge coin purchased from uplink. Each coin costs 10 TCs; value in vendor should be 10 at baseline with rare chance going up to 30.
-	var/list/antag = list()
-
-	///Minimum number of possible non-rare product that can be randomly spawned. This can be set by vending machine not item. Minimum rare product is set as 1 by default.
-	var/minrandom = 1
-
-	///Maximum number of possible non-rare products that can be randomly spawned. This can be set by vending machine not item. Maximum rare product depends on rarity.
-	var/maxrandom = 10
-
-	///Maximum number of randomly generated antag items. Default of 1 so it is usually only 0 or 1. This var is used as exceptions when large amounts of ammo needs to be randomly spawned.
-	var/antagrandom = 1
-
-	var/list/product_records = list()
-	var/product_slogans = "" //String of slogans spoken out loud, separated by semicolons
-	var/antag_slogans = ""
-	var/product_ads = "" //String of small ad messages in the vending screen
-	var/colored_entries = TRUE
-	var/list/ads_list = list()
-	var/list/slogan_list = list()
-	var/shut_up = TRUE //Stop spouting those godawful pitches!
-	var/vend_reply //Thank you for shopping!
-	var/last_reply = 0
-	var/last_slogan = 0 //When did we last pitch?
-	var/slogan_delay = 2 MINUTES //How long until we can pitch again?
-	var/seconds_electrified = 0 //Shock customers like an airlock.
-	var/shoot_inventory = FALSE //Fire items at customers! We're broken!
-	var/shooting_chance = 2 //The chance that items are being shot per tick
-	var/scan_id = TRUE
-	var/obj/item/material/coin/coin
-	var/light_max_bright_on = 0.2
-	var/light_outer_range_on = 2
-
 
 /obj/machinery/vending/Destroy()
 	vendor_wires = null
@@ -102,51 +102,56 @@
 	QDEL_NULL(coin)
 	return ..()
 
-
-/obj/machinery/vending/Initialize(mapload, d=0, populate_parts = TRUE)
+/obj/machinery/vending/Initialize(mapload, d = 0, populate_parts = TRUE)
 	. = ..()
 	vendor_wires = wires
-	if (product_slogans)
+	if(product_slogans)
 		slogan_list += splittext(product_slogans, ";")
 		last_slogan = world.time + rand(0, slogan_delay)
-	if (product_ads)
+	if(product_ads)
 		ads_list += splittext(product_ads, ";")
-	if (minrandom > maxrandom)
+	if(minrandom > maxrandom)
 		minrandom = maxrandom
+
+	for(var/key = 1 to length(product_records))
+		var/datum/stored_items/vending_products/product = product_records[key]
+		var/obj/item/item = product.item_path
+		var/clear_path = replacetext(replacetext("[product.item_path]", "/obj/item/", ""), "/", "-")
+		imagelist[clear_path] = "[icon2base64(icon(initial(item.icon), initial(item.icon_state), SOUTH, 1))]"
+
 	build_inventory(populate_parts)
 	update_icon()
 
 /obj/machinery/vending/examine(mob/user)
 	. = ..()
-	if (IsShowingAntag())
+	if(IsShowingAntag())
 		to_chat(user, SPAN_WARNING("A secret panel is open, revealing a small compartment that is dimly lit with red lighting."))
 
-
 /obj/machinery/vending/Process()
-	if (inoperable())
+	if(inoperable())
 		return
-	if (!active)
+	if(!active)
 		return
-	if (seconds_electrified > 0)
+	if(seconds_electrified > 0)
 		seconds_electrified--
-	if (!shut_up && prob(5) && length(slogan_list) && last_slogan + slogan_delay <= world.time)
+	if(!shut_up && prob(5) && length(slogan_list) && last_slogan + slogan_delay <= world.time)
 		var/slogan = pick(slogan_list)
 		speak(slogan)
 		last_slogan = world.time
-	if (shoot_inventory && prob(shooting_chance))
+	if(shoot_inventory && prob(shooting_chance))
 		throw_item()
 
 /obj/machinery/vending/post_health_change(health_mod, prior_health, damage_type)
 	. = ..()
 	queue_icon_update()
-	if (health_mod < 0 && !health_dead())
+	if(health_mod < 0 && !health_dead())
 		var/initial_damage_percentage = Percent(get_max_health() - prior_health, get_max_health(), 0)
 		var/damage_percentage = get_damage_percentage()
-		if (damage_percentage >= 25 && initial_damage_percentage < 25 && prob(75))
+		if(damage_percentage >= 25 && initial_damage_percentage < 25 && prob(75))
 			shut_up = FALSE
-		else if (damage_percentage >= 50 && initial_damage_percentage < 50)
+		else if(damage_percentage >= 50 && initial_damage_percentage < 50)
 			vendor_wires.RandomCut()
-		else if (damage_percentage >= 75 && initial_damage_percentage < 75 && prob(10))
+		else if(damage_percentage >= 75 && initial_damage_percentage < 75 && prob(10))
 			malfunction()
 
 /obj/machinery/vending/powered()
@@ -154,127 +159,125 @@
 
 /obj/machinery/vending/proc/update_glow()
 	var/light_color
-	if (IsShowingAntag())
+	if(IsShowingAntag())
 		light_color = COLOR_RED
 		light_max_bright_on = 0.4
-	if (!is_powered() || MACHINE_IS_BROKEN(src))
+	if(!is_powered() || MACHINE_IS_BROKEN(src))
 		set_light(0)
 	else
 		set_light(light_outer_range_on, light_max_bright_on, light_color)
 
-
 /obj/machinery/vending/on_update_icon()
 	ClearOverlays()
 	update_glow()
-	if (MACHINE_IS_BROKEN(src))
+	if(MACHINE_IS_BROKEN(src))
 		icon_state = "[initial(icon_state)]-broken"
-	else if (is_powered())
+	else if(is_powered())
 		icon_state = initial(icon_state)
 	else
 		spawn(rand(0, 15))
 		icon_state = "[initial(icon_state)]-off"
-	if (panel_open || IsShowingAntag())
+	if(panel_open || IsShowingAntag())
 		AddOverlays(image(icon, "[initial(icon_state)]-panel"))
-	if ((IsShowingAntag() || get_damage_percentage() >= 50) && is_powered())
+	if((IsShowingAntag() || get_damage_percentage() >= 50) && is_powered())
 		AddOverlays(image(icon, "sparks"))
 		AddOverlays(emissive_appearance(icon, "sparks"))
-	if (!vend_ready)
+	if(!vend_ready)
 		AddOverlays(image(icon, "[initial(icon_state)]-shelf[rand(max_overlays)]"))
 
 /obj/machinery/vending/emag_act(remaining_charges, mob/living/user)
-	if (emagged)
+	if(emagged)
 		return
 	emagged = TRUE
 	req_access.Cut()
-	if (antag_slogans)
+	if(antag_slogans)
 		shut_up = FALSE
 		slogan_list.Cut()
 		slogan_list += splittext(antag_slogans, ";")
 		last_slogan = world.time + rand(0, slogan_delay)
-	for (var/datum/stored_items/vending_products/product as anything in product_records)
+	for(var/datum/stored_items/vending_products/product as anything in product_records)
 		product.price = 0
 	UpdateShowContraband(TRUE)
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 	to_chat(user, "You short out the product lock on \the [src].")
-	return 1
-
+	return TRUE
 
 /obj/machinery/vending/use_tool(obj/item/item, mob/living/user, list/click_params)
 	var/obj/item/card/id/id = item.GetIdCard()
 	var/static/list/simple_coins = subtypesof(/obj/item/material/coin) - typesof(/obj/item/material/coin/challenge)
-	if (currently_vending && vendor_account && !vendor_account.suspended)
-		var/paid
+	if(currently_vending && vendor_account && !vendor_account.suspended)
 		var/handled
-		if (id)
+		var/paid
+		if(id)
 			paid = pay_with_card(id, item)
 			handled = TRUE
-		else if (istype(item, /obj/item/spacecash/ewallet))
+		else if(istype(item, /obj/item/spacecash/ewallet))
 			paid = pay_with_ewallet(item)
 			handled = TRUE
-		else if (istype(item, /obj/item/spacecash/bundle))
+		else if(istype(item, /obj/item/spacecash/bundle))
 			paid = pay_with_cash(item)
 			handled = TRUE
-		if (paid)
+		if(paid)
 			vend(currently_vending, user)
 			return TRUE
-		else if (handled)
-			SSnano.update_uis(src)
+		else if(handled)
+			SStgui.update_uis(src)
 			return TRUE
 
-	if (id || istype(item, /obj/item/spacecash))
+	if(id || istype(item, /obj/item/spacecash))
 		attack_hand(user)
 		return TRUE
-	if (isMultitool(item) || isWirecutter(item))
-		if (panel_open)
+	if(isMultitool(item) || isWirecutter(item))
+		if(panel_open)
 			attack_hand(user)
 			return TRUE
-	if (is_type_in_list(item, simple_coins))
-		if (!length(premium))
+	if(is_type_in_list(item, simple_coins))
+		if(!length(premium))
 			to_chat(user, SPAN_WARNING("\The [src] does not accept the [item]."))
 			return TRUE
-		if (!user.unEquip(item, src))
+		if(!user.unEquip(item, src))
 			return FALSE
 		coin = item
 		UpdateShowPremium(TRUE)
 		to_chat(user, SPAN_NOTICE("You insert \the [item] into \the [src]."))
-		SSnano.update_uis(src)
+		SStgui.update_uis(src)
 		return TRUE
 
-	if (istype(item, /obj/item/material/coin/challenge/syndie))
-		if (!LAZYLEN(antag))
+	if(istype(item, /obj/item/material/coin/challenge/syndie))
+		if(!LAZYLEN(antag))
 			to_chat(user, SPAN_WARNING("\The [src] does not have a secret compartment installed."))
 			return TRUE
-		if (IsShowingAntag())
+		if(IsShowingAntag())
 			to_chat(user, SPAN_WARNING("\The [src]'s secret compartment is already unlocked!"))
 			return TRUE
-		if (!user.unEquip(item, src))
+		if(!user.unEquip(item, src))
 			to_chat(user, SPAN_WARNING("You can't drop \the [item]."))
 			return TRUE
 		ProcessAntag(item, user)
 		return TRUE
 
-	if ((user.a_intent == I_HELP) && attempt_to_stock(item, user))
+	if((user.a_intent == I_HELP) && attempt_to_stock(item, user))
 		return TRUE
 
 	return ..()
 
-///Proc that enables hidden antag items and replaces slogan list with anti-Sol slogans if any.
+/// Proc that enables hidden antag items and replaces slogan list with anti-Sol slogans if any.
 /obj/machinery/vending/proc/ProcessAntag(obj/item/item, mob/living/user)
 	to_chat(user, SPAN_NOTICE("You insert \the [item] into \the [src]."))
 	visible_message(SPAN_WARNING("\The [src] hisses as a hidden panel swings open with a loud thud."))
 	playsound(loc, 'sound/items/metal_clack.ogg', 50)
 	UpdateShowAntag(TRUE)
 	req_access.Cut()
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 	update_icon()
 	var/obj/item/material/coin/challenge/syndie/antagcoin = item
-	if (antag_slogans)
+	if(antag_slogans)
 		shut_up = FALSE
 		slogan_list.Cut()
 		slogan_list += splittext(antag_slogans, ";")
 		last_slogan = world.time + rand(0, slogan_delay)
-	if (!isnull(antagcoin.string_color))
-		if (prob(10))
+	if(!isnull(antagcoin.string_color))
+		if(prob(10))
 			user.put_in_hands(item)
 			to_chat(user, SPAN_NOTICE("You successfully pull \the [item] out before \the [src] could swallow it."))
 			return TRUE
@@ -287,115 +290,117 @@
 		qdel(item)
 		return TRUE
 
-
 /obj/machinery/vending/MouseDrop_T(obj/item/item, mob/living/user)
-	if (!CanMouseDrop(item, user) || (item.loc != user))
+	if(!CanMouseDrop(item, user) || (item.loc != user))
 		return
 	return attempt_to_stock(item, user)
 
-
 /obj/machinery/vending/state_transition(singleton/machine_construction/new_state)
 	. = ..()
-	SSnano.update_uis(src)
-
+	SStgui.update_uis(src)
 
 /obj/machinery/vending/physical_attack_hand(mob/living/user)
-	if (seconds_electrified)
-		if (shock(user, 100))
-			return TRUE
-
+	if(!seconds_electrified)
+		return
+	if(shock(user, 100))
+		return TRUE
 
 /obj/machinery/vending/interface_interact(mob/living/user)
-	ui_interact(user)
+	tgui_interact(user)
 	return TRUE
 
+/obj/machinery/vending/tgui_state(mob/user)
+	return GLOB.tgui_default_state
 
-/obj/machinery/vending/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui, force_open = TRUE)
-	user.set_machine(src)
+/obj/machinery/vending/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "Vending", name)
+		ui.open()
+
+/obj/machinery/vending/tgui_data(mob/user)
 	var/list/data = list()
-	if (currently_vending)
+
+	if(currently_vending)
+		var/obj/item = currently_vending.item_path
 		data["mode"] = TRUE
 		data["product"] = currently_vending.item_name
 		data["price"] = currently_vending.price
-		data["message_err"] = FALSE
-		data["message"] = status_message
-		data["message_err"] = status_error
+		data["image"] = "[icon2base64(icon(initial(item.icon), initial(item.icon_state), SOUTH, 1))]"
 	else
 		data["mode"] = FALSE
-		var/list/listed_products = list()
-		for (var/key = 1 to length(product_records))
-			var/datum/stored_items/vending_products/product = product_records[key]
-			if (!(product.category & vendor_flags))
-				continue
-			listed_products.Add(list(list(
-				"key" = key,
-				"name" = product.item_name,
-				"price" = product.price,
-				"color" = product.display_color,
-				"amount" = product.get_amount()
-			)))
-		data["products"] = listed_products
-	if (coin)
-		data["coin"] = coin.name
-	if (panel_open)
-		data["panel"] = TRUE
-		data["speaker"] = shut_up ? FALSE : TRUE
-	else
-		data["panel"] = FALSE
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if (!ui)
-		ui = new(user, src, ui_key, "vending_machine.tmpl", name, 440, 600)
-		ui.set_initial_data(data)
-		ui.open()
 
+	data["message"] = status_message
+	data["message_err"] = status_error
+	data["vend_ready"] = vend_ready
+	data["coin"] = coin
+	data["panel"] = panel_open
+	data["speaker"] = shut_up
 
-/obj/machinery/vending/OnTopic(mob/user, href_list, datum/topic_state/state)
-	if (href_list["remove_coin"] && !istype(usr, /mob/living/silicon))
-		if (!coin)
-			to_chat(user, "There is no coin in this machine.")
-			return TOPIC_HANDLED
-		coin.dropInto(loc)
-		if (!user.get_active_hand())
-			user.put_in_hands(coin)
-		to_chat(user, SPAN_NOTICE("You remove \the [coin] from \the [src]"))
-		coin = null
-		UpdateShowPremium(FALSE)
-		return TOPIC_HANDLED
-	if (href_list["vend"] && vend_ready && !currently_vending)
-		var/key = text2num(href_list["vend"])
-		if (!is_valid_index(key, product_records))
-			return TOPIC_REFRESH
+	var/list/listed_products = list()
+	for(var/key = 1 to length(product_records))
 		var/datum/stored_items/vending_products/product = product_records[key]
-		if (!istype(product))
-			return TOPIC_REFRESH
-		if (!(product.category & vendor_flags))
-			return TOPIC_REFRESH
-		if (product.price <= 0)
-			vend(product, user)
-		else if (istype(user, /mob/living/silicon))
-			to_chat(user, SPAN_WARNING("Artificial unit recognized. Purchase canceled."))
-		else
-			currently_vending = product
-			if (!vendor_account || vendor_account.suspended)
-				status_message = "This machine is currently unable to process payments due to problems with the associated account."
-				status_error = TRUE
-			else
-				status_message = "Please swipe a card or insert cash to pay for the item."
-				status_error = FALSE
-		return TOPIC_REFRESH
-	if (href_list["cancelpurchase"])
-		currently_vending = null
-		return TOPIC_REFRESH
-	if (href_list["togglevoice"] && panel_open)
-		shut_up = !shut_up
-		return TOPIC_HANDLED
+		var/obj/item = product.item_path
+		if(!(product.category & vendor_flags))
+			continue
+		listed_products += list(list(
+			"key" = key,
+			"name" = product.item_name,
+			"price" = product.price,
+			"ammount" = product.get_amount(),
+			"imageID" = "[icon2base64(icon(initial(item.icon), initial(item.icon_state), SOUTH, 1))]"
+		))
+	data["products"] = listed_products
 
+	return data
+
+/obj/machinery/vending/tgui_act(action, list/params)
+	if(..())
+		return
+	. = TRUE
+
+	switch(action)
+		if("remove_coin")
+			coin.dropInto(loc)
+			if(!usr.get_active_hand())
+				usr.put_in_hands(coin)
+			to_chat(usr, SPAN_NOTICE("You remove \the [coin] from \the [src]"))
+			coin = null
+			UpdateShowPremium(FALSE)
+			return TRUE
+		if("vend")
+			var/key = text2num(params["vend"])
+			if(!is_valid_index(key, product_records))
+				return  FALSE
+			var/datum/stored_items/vending_products/product = product_records[key]
+			if(!istype(product))
+				return FALSE
+			if(!(product.category & vendor_flags))
+				return FALSE
+			if(product.price <= 0)
+				vend(product, usr)
+			else if(istype(usr, /mob/living/silicon))
+				to_chat(usr, SPAN_WARNING("Artificial unit recognized. Purchase canceled."))
+			else
+				currently_vending = product
+				if(!vendor_account || vendor_account.suspended)
+					status_message = "This machine is currently unable to process payments due to problems with the associated account."
+					status_error = TRUE
+				else
+					status_message = "Please swipe a card or insert cash to pay for the item."
+					status_error = FALSE
+			return TRUE
+		if("cancelpurchase")
+			currently_vending = null
+			return TRUE
+		if("togglevoice")
+			shut_up = !shut_up
+			return TRUE
 
 /obj/machinery/vending/get_req_access()
 	if(!scan_id)
 		return list()
 	return ..()
-
 
 /obj/machinery/vending/dismantle()
 	var/obj/structure/vending_refill/dump = new (loc)
@@ -407,13 +412,11 @@
 	product_records = null
 	return ..()
 
-
 /obj/machinery/vending/proc/attempt_to_stock(obj/item/item, mob/living/user)
 	for (var/datum/stored_items/vending_products/product in product_records)
 		if (item.type == product.item_path)
 			stock(item, product, user)
 			return TRUE
-
 
 /obj/machinery/vending/proc/pay_with_cash(obj/item/spacecash/bundle/cash)
 	if (currently_vending.price > cash.worth)
@@ -428,7 +431,6 @@
 	credit_purchase("(cash)")
 	return TRUE
 
-
 /obj/machinery/vending/proc/pay_with_ewallet(obj/item/spacecash/ewallet/ewallet)
 	visible_message(SPAN_INFO("\The [usr] swipes \the [ewallet] through \the [src]."))
 	if (currently_vending.price > ewallet.worth)
@@ -439,7 +441,6 @@
 	credit_purchase("[ewallet.owner_name] (chargecard)")
 	return TRUE
 
-
 /obj/machinery/vending/proc/pay_with_card(obj/item/card/id/id, obj/item/item)
 	if (id == item || isnull(item))
 		visible_message(SPAN_INFO("\The [usr] swipes \the [id] through \the [src]."))
@@ -447,35 +448,33 @@
 		visible_message(SPAN_INFO("\The [usr] swipes \the [item] through \the [src]."))
 	var/datum/money_account/customer_account = get_account(id.associated_account_number)
 	if (!customer_account)
-		status_message = "Error: Unable to access account. Please contact technical support if problem persists."
+		status_message = "Ошибка: Нет доступа к аккаунту. Обратитесь в поддержку."
 		status_error = TRUE
 		return FALSE
 	if (customer_account.suspended)
-		status_message = "Unable to access account: account suspended."
+		status_message = "Ошибка: Нет доступа к аккаунту. Аккаунт заморожен."
 		status_error = TRUE
 		return FALSE
 	if (customer_account.security_level)
 		var/response = input("Enter pin code", "Vendor transaction") as null | num
 		if (isnull(response) || !Adjacent(usr) || usr.incapacitated())
-			status_message = "User cancelled transaction."
+			status_message = "Пользователь отменил транзакцию."
 			status_error = FALSE
 			return FALSE
 		customer_account = attempt_account_access(id.associated_account_number, response, 2)
 		if (!customer_account)
-			status_message = "Unable to access account: incorrect credentials."
+			status_message = "Ошибка: Нет доступа к аккаунту. Обратитесь в поддержку."
 			status_error = TRUE
 			return FALSE
 	if (currently_vending.price > customer_account.money)
-		status_message = "Insufficient funds in account."
+		status_message = "Недостаточно средств на счету."
 		status_error = TRUE
 		return FALSE
 	customer_account.transfer(vendor_account, currently_vending.price, "Purchase of [currently_vending.item_name]")
 	return TRUE
 
-
 /obj/machinery/vending/proc/credit_purchase(target)
 	vendor_account.deposit(currently_vending.price, "Purchase of [currently_vending.item_name]", target)
-
 
 /obj/machinery/vending/proc/vend(datum/stored_items/vending_products/product, mob/user)
 	if (scan_id && !emagged && !allowed(user))
@@ -485,7 +484,7 @@
 	vend_ready = FALSE
 	status_message = "Vending..."
 	status_error = FALSE
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 	update_icon()
 	if (product.category & VENDOR_CATEGORY_COIN)
 		if(!coin)
@@ -523,18 +522,16 @@
 		vend_ready = TRUE
 		update_icon()
 		currently_vending = null
-		SSnano.update_uis(src)
-
+		SStgui.update_uis(src)
 
 /obj/machinery/vending/proc/stock(obj/item/item, datum/stored_items/vending_products/stored, mob/living/user)
 	if (!user.unEquip(item))
 		return
 	if (stored.add_product(item))
 		to_chat(user, SPAN_NOTICE("You insert \the [item] into \the [src]."))
-		SSnano.update_uis(src)
+		SStgui.update_uis(src)
 		return TRUE
-	SSnano.update_uis(src)
-
+	SStgui.update_uis(src)
 
 /obj/machinery/vending/proc/speak(message)
 	if (!is_powered())
@@ -544,7 +541,6 @@
 	audible_message(SPAN_CLASS("game say", "[SPAN_CLASS("name", "\The [src]")] beeps, \"[message]\""))
 	return
 
-
 /obj/machinery/vending/proc/malfunction()
 	for (var/datum/stored_items/vending_products/product in shuffle(product_records))
 		if (product.category == VENDOR_CATEGORY_ANTAG)
@@ -553,7 +549,6 @@
 			product.get_product(loc)
 		break
 	set_broken(TRUE)
-
 
 /obj/machinery/vending/proc/throw_item()
 	var/mob/living/target = locate() in view(7, src)
@@ -572,7 +567,6 @@
 		throw_item.throw_at(target, rand(1,2), 3)
 	visible_message(SPAN_WARNING("\The [src] launches \a [throw_item] at \the [target]!"))
 	return TRUE
-
 
 /obj/machinery/vending/proc/build_inventory(populate_parts)
 	var/list/all_products = list(
@@ -607,10 +601,8 @@
 					product.display_color = COLOR_RED
 			product_records.Add(product)
 
-
 /obj/machinery/vending/proc/IsShowingProducts()
 	return HAS_FLAGS(vendor_flags, VENDOR_CATEGORY_NORMAL)
-
 
 /// Update whether the vendor should show the normal products category, flipping if null.
 /obj/machinery/vending/proc/UpdateShowProducts(show)
@@ -621,10 +613,8 @@
 	else
 		CLEAR_FLAGS(vendor_flags, VENDOR_CATEGORY_NORMAL)
 
-
 /obj/machinery/vending/proc/IsShowingContraband()
 	return HAS_FLAGS(vendor_flags, VENDOR_CATEGORY_HIDDEN)
-
 
 /// Update whether the vendor should show the contraband category, flipping if null.
 /obj/machinery/vending/proc/UpdateShowContraband(show)
@@ -635,10 +625,8 @@
 	else
 		CLEAR_FLAGS(vendor_flags, VENDOR_CATEGORY_HIDDEN)
 
-
 /obj/machinery/vending/proc/IsShowingPremium()
 	return HAS_FLAGS(vendor_flags, VENDOR_CATEGORY_COIN)
-
 
 /// Update whether the vendor should show the premium category, flipping if null.
 /obj/machinery/vending/proc/UpdateShowPremium(show)
@@ -651,7 +639,6 @@
 
 /obj/machinery/vending/proc/IsShowingAntag()
 	return HAS_FLAGS(vendor_flags, VENDOR_CATEGORY_ANTAG)
-
 
 /// Update whether the vendor should show the antag category, flipping if null.
 /obj/machinery/vending/proc/UpdateShowAntag(show)

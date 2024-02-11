@@ -1,0 +1,47 @@
+@use '../colors.scss';
+@use '../base.scss';
+
+$background-color: rgba(0, 0, 0, 0.33) !default;
+$text-color: rgba(255, 255, 255) !default;
+
+.Vending__Button {
+  width: 64px;
+  height: 86px;
+  text-align: center;
+  margin: base.em(3px);
+  background-color: rgba(125, 125, 125, 0.05);
+  border: base.em(1px) solid lighten($background-color, 25%);
+
+  transition:
+    color 100ms,
+    background-color 100ms;
+
+  &:hover {
+    background-color: lighten($background-color, 25%);
+  }
+
+  &--disabled {
+    background-color: rgba(255, 50, 50, 0.1);
+
+    &:hover,
+    &:focus {
+      background-color: rgba(255, 50, 50, 0.1);
+    }
+  }
+}
+
+.Vending__Price {
+  width: 64px;
+  height: 20px;
+  margin: 0;
+  padding-top: 2px;
+  border: 0;
+  text-align: center;
+  background-color: #272727;
+  border-top: base.em(1px) solid lighten($background-color, 35%);
+
+  &--disabled {
+    background-color: #4d1717;
+    color: darken($text-color, 20%);
+  }
+}

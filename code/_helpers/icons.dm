@@ -604,7 +604,7 @@ The _flatIcons list is a cache for generated icon files.
 	if(caller?.client)
 		rendering_client = caller.client // We are good, let the caller deal with their own stuff.
 	else if(allow_ratty_rendering)
-		for(var/mob/prey in shuffle(GLOB.player_list)) // We are not that good, randomly choosing a poor being to deal with rendering.
+		for(var/mob/prey as anything in shuffle(GLOB.player_list)) // We are not that good, randomly choosing a poor being to deal with rendering.
 			if(prey?.client)
 				rendering_client = prey.client
 				break
@@ -635,10 +635,12 @@ The _flatIcons list is a cache for generated icon files.
 		if(image.plane == EMISSIVE_PLANE)
 			continue
 		image.dir = dir
-		AddOverlays(image, dummy.overlays)
+		dummy.AddOverlays(image)
 
+
+	var/ret = icon(rendering_client.RenderIcon(dummy))
 	qdel(dummy)
-	return icon(rendering_client.RenderIcon(dummy))
+	return ret
 
 // Extended version of the above. It can accept 'dirs' as a list, and returns a list populated with rendered icons.
 // It's cheaper than calling 'get_flat_icon' multiple times, but for some reason beyond my understanding, it sometimes just gives
@@ -669,8 +671,7 @@ The _flatIcons list is a cache for generated icon files.
 	dummy.transform = transform
 
 	for(var/current_dir in dirs_list)
-		CutOverlays(dummy.underlays)
-		CutOverlays(dummy.overlays)
+		dummy.ClearOverlays()
 		dummy.set_dir(current_dir)
 
 		for(var/I in underlays)
@@ -685,7 +686,7 @@ The _flatIcons list is a cache for generated icon files.
 			if(image.plane == EMISSIVE_PLANE)
 				continue
 			image.dir = current_dir
-			AddOverlays(image, dummy.overlays)
+			dummy.AddOverlays(image)
 
 		ret += icon(rendering_client.RenderIcon(dummy))
 

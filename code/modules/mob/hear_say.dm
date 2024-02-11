@@ -279,6 +279,8 @@
 	if(sleeping || stat == UNCONSCIOUS)
 		return 0
 
+	var/runechat_message = message
+
 	if(say_understands(speaker, language))
 		var/nverb = null
 		switch(src.get_preference_value(/datum/client_preference/language_display))
@@ -305,6 +307,7 @@
 			H.show_message(message)
 		for(var/mob/living/M in src.contents)
 			M.show_message(message)
+	create_chat_message(speaker, capitalize(runechat_message), FALSE, list(), FALSE)
 	src.show_message(message)
 
 /mob/proc/hear_sleep(message)

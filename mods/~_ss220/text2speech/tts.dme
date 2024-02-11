@@ -5,6 +5,7 @@
 
 #include "code/_procs.dm"
 #include "code/configuration.dm"
+#include "code/mob.dm"
 #include "code/numbers.dm"
 #include "code/providers/silero.dm"
 #include "code/seeds/base.dm"

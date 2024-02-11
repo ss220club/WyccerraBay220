@@ -82,3 +82,14 @@
 	if(!seed)
 		return null
 	return seed.name
+
+/atom/proc/tts_get_effect(effect = SOUND_EFFECT_NONE, datum/language/language)
+	return effect
+
+/proc/tts_robotize(effect = SOUND_EFFECT_NONE)
+	. = SOUND_EFFECT_ROBOT
+	switch(effect)
+		if(SOUND_EFFECT_RADIO)
+			. = SOUND_EFFECT_RADIO_ROBOT
+		if(SOUND_EFFECT_MEGAPHONE)
+			. = SOUND_EFFECT_MEGAPHONE_ROBOT

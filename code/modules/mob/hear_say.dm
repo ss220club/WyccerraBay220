@@ -77,7 +77,7 @@
 		return
 
 	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES)
-		var/effect = isrobot(speaker) ? SOUND_EFFECT_ROBOT : SOUND_EFFECT_NONE
+		var/effect = speaker.tts_get_effect(SOUND_EFFECT_NONE, language)
 		var/traits = TTS_TRAIT_RATE_FASTER
 		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), speaker, src, display_message, speaker.tts_seed, TRUE, effect, traits)
 
@@ -176,7 +176,7 @@
 				message = RadioChat(null, message, 80, 1+(hard_to_hear/10))
 
 	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES && (src != speaker || isrobot(src) || isAI(src)))
-		var/effect = isrobot(speaker) ? SOUND_EFFECT_RADIO_ROBOT : SOUND_EFFECT_RADIO
+		var/effect = speaker.tts_get_effect(SOUND_EFFECT_RADIO, language)
 		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), src, src, message, speaker.tts_seed, FALSE, effect, null, null, 'mods/~_ss220/text2speech/code/sound/radio_chatter.ogg')
 
 	var/speaker_name = vname ? vname : speaker.name

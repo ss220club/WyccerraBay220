@@ -10,7 +10,7 @@
 
 	if(isnewplayer(C.mob))
 		var/datum/asset/lobby_assets = get_asset_datum(/datum/asset/simple/mod_lobby) // Sending fonts+png+mp4 assets to the client
-		var/datum/asset/fa_assets = get_asset_datum(/datum/asset/simple/fontawesome)  // Sending font awesome to the client
+		var/datum/asset/fa_assets = get_asset_datum(/datum/asset/simple/namespaced/fontawesome)  // Sending font awesome to the client
 		lobby_assets.send(C)
 		fa_assets.send(C)
 

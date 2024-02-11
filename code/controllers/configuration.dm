@@ -440,14 +440,26 @@
 
 	var/static/enable_cold_mist = FALSE
 
-
 	/// If the runechat is enabled on the server
 	var/static/runechat_enabled = TRUE
 
-	// [SIERRA-ADD]
 	var/static/shutdown_on_reboot = FALSE
+
 	var/static/auto_local_admin = FALSE
-	// [/SIERRA-ADD]
+
+	/// Type of assets delivery transport. Valid values: simple, webroot. Simple is the default.
+	var/static/asset_transport = "simple"
+
+	/// Set this to TRUE to have the server passively send all browser assets to each client in the background.
+	/// (instead of waiting for them to be needed)
+	var/static/asset_simple_preload = FALSE
+
+	/// Local folder to save assets to.
+	var/static/asset_cdn_webroot = "data/asset-store/"
+
+	/// Ff you want to test this locally, you simpily run the `localhost-asset-webroot-server.py`
+	/// python3 script to host assets stored in `data/asset-store/` via http://localhost:58715/
+	var/static/asset_cdn_url = "http://localhost:58715/"
 
 
 /datum/configuration/New()

@@ -2,18 +2,23 @@
 	set category = "Admin"
 	set name = "Permissions Panel"
 	set desc = "Edit admin permissions"
-	if(!check_rights(R_PERMISSIONS))	return
-	usr.client.holder.edit_admin_permissions()
+	if(!check_rights(R_PERMISSIONS))
+		return
+	usr.client.holder.edit_admin_permissions(usr)
 
-/datum/admins/proc/edit_admin_permissions()
-	if(!check_rights(R_PERMISSIONS))	return
+/datum/admins/proc/edit_admin_permissions(client/user)
+	if(!check_rights(R_PERMISSIONS, C = user))
+		return
+
+	var/datum/asset/permission_panel_asset = get_asset_datum(/datum/asset/simple/permissions_panel)
+	SSassets.transport.send_assets(user, permission_panel_asset)
 
 	var/output = {"<!DOCTYPE html>
 <html>
 <head>
 <title>Permissions Panel</title>
-<script type='text/javascript' src='search.js'></script>
-<link rel='stylesheet' type='text/css' href='panels.css'>
+<script type='text/javascript' src=[SSassets.transport.get_asset_url("search.js")]></script>
+<link rel='stylesheet' type='text/css' href=[SSassets.transport.get_asset_url("panels.css")]>
 </head>
 <body onload='selectTextField();updateSearch();'>
 <div id='main'><table id='searchable' cellspacing='0'>

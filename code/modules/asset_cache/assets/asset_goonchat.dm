@@ -2,10 +2,11 @@
 	children = list(
 		/datum/asset/simple/jquery,
 		/datum/asset/simple/goonchat,
-		/datum/asset/simple/fontawesome
+		/datum/asset/simple/namespaced/fontawesome
 	)
 
 /datum/asset/simple/goonchat
+	keep_local_name = TRUE
 	assets = list(
 		"json2.min.js"             = 'code/modules/goonchat/browserassets/js/json2.min.js',
 		"browserOutput.js"         = 'code/modules/goonchat/browserassets/js/browserOutput.js',

@@ -95,7 +95,7 @@
 /datum/feed_network/proc/insert_message_in_channel(datum/feed_channel/FC, datum/feed_message/newMsg)
 	FC.messages += newMsg
 	if(newMsg.img)
-		register_asset("newscaster_photo_[sanitize(FC.channel_name)]_[length(FC.messages)].png", newMsg.img)
+		SSassets.transport.register_asset("newscaster_photo_[sanitize(FC.channel_name)]_[length(FC.messages)].png", newMsg.img)
 	newMsg.parent_channel = FC
 	FC.update()
 	alert_readers(FC.announcement)
@@ -283,7 +283,7 @@ var/global/list/obj/machinery/newscaster/allCasters = list() //Global list that 
 				dat+="<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [src.msg] <BR>"
 				dat+="<B>Photo</B>: "
 				if(photo_data && photo_data.photo)
-					send_rsc(usr, photo_data.photo.img, "tmp_photo.png")
+					send_rsc(user, photo_data.photo.img, "tmp_photo.png")
 					dat+="<BR><img src='tmp_photo.png' width = '180'>"
 					dat+="<BR><B><A href='?src=\ref[src];set_attachment=1'>Delete Photo</A></B></BR>"
 				else
@@ -355,7 +355,7 @@ var/global/list/obj/machinery/newscaster/allCasters = list() //Global list that 
 							dat+="-[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								var/resourc_name = "newscaster_photo_[sanitize(viewing_channel.channel_name)]_[i].png"
-								send_asset(usr.client, resourc_name)
+								SSassets.transport.send_assets(usr.client, resourc_name)
 								dat+="<img src='[resourc_name]' width = '180'><BR>"
 								if(MESSAGE.caption)
 									dat+="[FONT_SMALL("<B>[MESSAGE.caption]</B>")]<BR>"
@@ -842,7 +842,7 @@ var/global/list/obj/machinery/newscaster/allCasters = list() //Global list that 
 							dat+="-[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								var/resourc_name = "newscaster_photo_[sanitize(C.channel_name)]_[i].png"
-								send_asset(user.client, resourc_name)
+								SSassets.transport.send_assets(user.client, resourc_name)
 								dat+="<img src='[resourc_name]' width = '180'><BR>"
 							dat+="[FONT_SMALL("\[[MESSAGE.message_type] by [SPAN_COLOR("maroon", MESSAGE.author)]\]")]<BR><BR>"
 						dat+="</ul>"

@@ -1,4 +1,5 @@
 /datum/asset/simple/nanoui_common
+	keep_local_name = TRUE
 	var/list/asset_dirs = list(
 		"nano/css/",
 		"nano/images/",

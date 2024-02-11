@@ -39,7 +39,7 @@
 		return
 
 	var/datum/asset/paicard_asset = get_asset_datum(/datum/asset/simple/paicard)
-	SSassets.transport.send_assets(user, paicard_asset)
+	paicard_asset.send(user)
 
 	user.set_machine(src)
 	var/dat = {"

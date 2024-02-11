@@ -413,7 +413,7 @@
 	set category = "OOC"
 
 	var/datum/asset/changelog_asset = get_asset_datum(/datum/asset/simple/changelog)
-	SSassets.transport.send_assets(src, changelog_asset)
+	changelog_asset.send(src)
 
 	show_browser(src, 'html/changelog.html', "window=changes;size=675x650")
 	if (GLOB.changelog_hash && prefs.lastchangelog != GLOB.changelog_hash)

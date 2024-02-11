@@ -163,7 +163,7 @@
 
 
 	var/datum/asset/paper_asset = get_asset_datum(/datum/asset/simple/paper)
-	SSassets.transport.send_assets(user, paper_asset)
+	paper_asset.send(user)
 
 	var/html = "<html><head><title>[name]</title></head><body bgcolor='[color]'>"
 	if (!can_read)

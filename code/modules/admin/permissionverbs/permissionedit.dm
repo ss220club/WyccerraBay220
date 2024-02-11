@@ -11,7 +11,7 @@
 		return
 
 	var/datum/asset/permission_panel_asset = get_asset_datum(/datum/asset/simple/permissions_panel)
-	SSassets.transport.send_assets(user, permission_panel_asset)
+	permission_panel_asset.send(user)
 
 	var/output = {"<!DOCTYPE html>
 <html>

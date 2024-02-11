@@ -1,12 +1,8 @@
 /mob/new_player/Login()
 	update_Login_details()	//handles setting lastKnownIP and computer_id for use by the ban systems as well as checking for multikeying
-	// [SIERRA-ADD] - EX666_ECOSYSTEM
 	if(config.usewhitelist_database && config.overflow_server_url && !whitelist_check())
 		to_target(src, link(config.overflow_server_url))
-	// [/SIERRA-ADD]
-	// [SIERRA-ADD] - STATUSBAR
 	winset(client, "mapwindow.statusbar", "is-visible=false")
-	// [/SIERRA-ADD]
 	if (config.motd)
 		to_chat(src, "<div class=\"motd\">[config.motd]</div>", handle_whitespace=FALSE)
 	to_chat(src, "<div class='info'>Game ID: <div class='danger'>[game_id]</div></div>")
@@ -18,9 +14,8 @@
 
 	loc = null
 
-	invoke_async(GLOB.using_map, TYPE_PROC_REF(/datum/map, show_titlescreen))
+	invoke_async(GLOB.using_map, TYPE_PROC_REF(/datum/map, show_titlescreen), client)
 
-	GLOB.using_map.show_titlescreen(client)
 	my_client = client
 	set_sight(sight|SEE_TURFS)
 

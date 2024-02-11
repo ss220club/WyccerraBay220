@@ -17,6 +17,9 @@
 		mind.current = src
 
 	loc = null
+
+	invoke_async(GLOB.using_map, TYPE_PROC_REF(/datum/map, show_titlescreen))
+
 	GLOB.using_map.show_titlescreen(client)
 	my_client = client
 	set_sight(sight|SEE_TURFS)

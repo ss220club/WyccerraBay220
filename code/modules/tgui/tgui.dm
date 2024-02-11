@@ -99,14 +99,25 @@
 			))
 	else
 		window.send_message("ping")
-	window.send_asset(get_asset_datum(/datum/asset/simple/fontawesome))
-	window.send_asset(get_asset_datum(/datum/asset/simple/tgfont))
-	for(var/datum/asset/asset in src_object.ui_assets(user))
-		window.send_asset(asset)
+
+	send_assets()
 	window.send_message("update", get_payload(
 		with_data = TRUE,
 		with_static_data = TRUE))
 	SStgui.on_open(src)
+
+/datum/tgui/proc/send_assets()
+	PRIVATE_PROC(TRUE)
+	var/flushqueue = window.send_asset(
+		get_asset_datum(/datum/asset/simple/namespaced/fontawesome)
+	)
+	flushqueue |= window.send_asset(get_asset_datum(/datum/asset/simple/tgfont))
+
+	for(var/datum/asset/asset in src_object.ui_assets(user))
+		flushqueue |= window.send_asset(asset)
+
+	if(flushqueue)
+		user.client.browse_queue_flush()
 
 /**
  * public
@@ -178,17 +189,12 @@
 /datum/tgui/proc/send_full_update(custom_data, force)
 	if(!user.client || !initialized || closing)
 		return
-	//if(!COOLDOWN_FINISHED(src, refresh_cooldown))
-		//refreshing = TRUE
-		//addtimer(CALLBACK(src, .proc/send_full_update), TGUI_REFRESH_FULL_UPDATE_COOLDOWN, TIMER_UNIQUE)
-		//return
-	//refreshing = FALSE
+
 	var/should_update_data = force || status >= STATUS_UPDATE
 	window.send_message("update", get_payload(
 		custom_data,
 		with_data = should_update_data,
 		with_static_data = TRUE))
-	//COOLDOWN_START(src, refresh_cooldown, TGUI_REFRESH_FULL_UPDATE_COOLDOWN)
 
 /**
  * public

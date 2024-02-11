@@ -37,6 +37,10 @@
 /obj/item/device/paicard/attack_self(mob/user)
 	if (!in_range(src, user))
 		return
+
+	var/datum/asset/paicard_asset = get_asset_datum(/datum/asset/simple/paicard)
+	paicard_asset.send(user)
+
 	user.set_machine(src)
 	var/dat = {"
 		<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">

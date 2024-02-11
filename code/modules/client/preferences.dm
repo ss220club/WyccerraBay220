@@ -236,6 +236,7 @@
 
 	character.gender = gender
 	character.pronouns = pronouns
+	character.tts_seed = tts_seed
 	character.age = age
 	character.b_type = b_type
 

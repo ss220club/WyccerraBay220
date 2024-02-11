@@ -43,7 +43,7 @@
 	if (isliving(target))
 		to_chat(target, FONT_LARGE(SPAN_WARNING("Your vision goes blurry and nausea strikes your stomach. Where are you...?")))
 		do_teleport(target, T, precision, type)
-		addtimer(new Callback(GLOBAL_PROC, GLOBAL_PROC_REF(do_teleport), target, destination), duration)
+		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(do_teleport), target, destination), duration)
 
 /datum/map/bolt_saferooms()
 	for(var/atype in typesof(/area/crew_quarters/safe_room))

@@ -1,7 +1,3 @@
-/datum/preferences
-	var/tts_seed
-	var/static/explorer_users = list()
-
 /datum/client_preference/tts_enabled
 	default_value = GLOB.PREF_YES
 	description = "Toggle TTS"
@@ -10,17 +6,6 @@
 /datum/preferences/proc/set_random_gendered_tts_seed()
 	var/converted_gender = SStts220.gender_table[gender]
 	tts_seed = pick(SStts220.tts_seeds_by_gender[converted_gender])
-
-/mob/new_player/proc/check_tts_seed_ready()
-	return TRUE
-
-/datum/category_item/player_setup_item/physical/basic/load_character(datum/pref_record_reader/R)
-	. = ..()
-	pref.tts_seed = R.read("tts_seed")
-
-/datum/category_item/player_setup_item/physical/basic/save_character(datum/pref_record_writer/W)
-	. = ..()
-	W.write("tts_seed", pref.tts_seed)
 
 /datum/tgui_module/tts_seeds_explorer
 	name = "Эксплорер TTS голосов"
@@ -101,10 +86,6 @@
 		else
 			return FALSE
 
-/datum/preferences/get_content(mob/user)
-	. = ..()
-	. += "<a href='?src=\ref[src];tts_explorer=1'>Выбрать голос</a>"
-
 /mob/new_player/Topic(href, href_list)
 	if(config.tts_enabled && (href_list["lobby_ready"] || href_list["late_join"]))
 		if(!usr.client.prefs.tts_seed)
@@ -112,20 +93,7 @@
 			to_chat(usr, SPAN_WARNING("У вас не выбран голос. Мы вам зарандомили его, так что не жалуйтесь потом."))
 	. = ..()
 
-/datum/preferences/Topic(href, list/href_list)
-	if(href_list["tts_explorer"])
-		var/datum/tgui_module/tts_seeds_explorer/explorer = explorer_users[usr]
-		if(!explorer)
-			explorer = new(src)
-			explorer_users[usr] = explorer
-		explorer.tgui_interact(usr)
-		return
-	return ..()
 
 /datum/preferences/CanUseTopic(mob/user, datum/topic_state/state)
 	. = ..()
 	return STATUS_INTERACTIVE
-
-/datum/preferences/copy_to(mob/living/carbon/human/character, is_preview_copy)
-	. = ..()
-	character.tts_seed = tts_seed

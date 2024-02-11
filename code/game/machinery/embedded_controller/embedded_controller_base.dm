@@ -3,7 +3,7 @@
 	anchored = TRUE
 	idle_power_usage = 10
 	var/datum/computer/file/embedded_program/program	//the currently executing program
-	var/on = 1
+	var/on = TRUE
 
 /obj/machinery/embedded_controller/Initialize()
 	if(program)
@@ -16,7 +16,7 @@
 	return ..()
 
 /obj/machinery/embedded_controller/proc/post_signal(datum/signal/signal, comm_line)
-	return 0
+	return FALSE
 
 /obj/machinery/embedded_controller/receive_signal(datum/signal/signal, receive_method, receive_param)
 	if(!signal || signal.encryption) return
@@ -25,14 +25,6 @@
 		program.receive_signal(signal, receive_method, receive_param)
 			//spawn(5) program.process() //no, program.process sends some signals and machines respond and we here again and we lag -rastaf0
 
-/obj/machinery/embedded_controller/Topic(href, href_list)
-	if(..())
-		return
-	if(usr)
-		usr.set_machine(src)
-	if(program)
-		return program.receive_user_command(href_list["command"]) // Any further sanitization should be done in here.
-
 /obj/machinery/embedded_controller/Process()
 	if(program)
 		program.process()
@@ -40,7 +32,7 @@
 	update_icon()
 
 /obj/machinery/embedded_controller/interface_interact(mob/user)
-	ui_interact(user)
+	tgui_interact(user)
 	return TRUE
 
 /obj/machinery/embedded_controller/radio

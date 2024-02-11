@@ -16,32 +16,33 @@
 	var/err_file = ""
 	var/static/list/interpreters = list("[MS_WINDOWS]" = "cmd /c", "[UNIX]" = "sh -c")
 	var/interpreter = interpreters["[world.system_type]"]
-	if(interpreter)
-		for(var/seo_id in shelleo_ids)
-			if(!shelleo_ids[seo_id])
-				shelleo_ids[seo_id] = TRUE
-				shelleo_id = "[seo_id]"
-				break
-		if(!shelleo_id)
-			shelleo_id = "[length(shelleo_ids) + 1]"
-			shelleo_ids += shelleo_id
-			shelleo_ids[shelleo_id] = TRUE
-		out_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_OUT]"
-		err_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_ERR]"
-		if(world.system_type == UNIX)
-			errorcode = shell("[interpreter] \"[replacetext(command, "\"", "\\\"")]\" > [out_file] 2> [err_file]")
-		else
-			errorcode = shell("[interpreter] \"[command]\" > [out_file] 2> [err_file]")
-		if(fexists(out_file))
-			stdout = file2text(out_file)
-			fdel(out_file)
-		if(fexists(err_file))
-			stderr = file2text(err_file)
-			fdel(err_file)
-		shelleo_ids[shelleo_id] = FALSE
-	else
+	if(!interpreter)
 		CRASH("Operating System: [world.system_type] not supported") // If you encounter this error, you are encouraged to update this proc with support for the new operating system
-	. = list(errorcode, stdout, stderr)
+
+	for(var/seo_id in shelleo_ids)
+		if(!shelleo_ids[seo_id])
+			shelleo_ids[seo_id] = TRUE
+			shelleo_id = "[seo_id]"
+			break
+	if(!shelleo_id)
+		shelleo_id = "[length(shelleo_ids) + 1]"
+		shelleo_ids += shelleo_id
+		shelleo_ids[shelleo_id] = TRUE
+	out_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_OUT]"
+	err_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_ERR]"
+	if(world.system_type == UNIX)
+		errorcode = shell("[interpreter] \"[replacetext(command, "\"", "\\\"")]\" > [out_file] 2> [err_file]")
+	else
+		errorcode = shell("[interpreter] \"[command]\" > [out_file] 2> [err_file]")
+	if(fexists(out_file))
+		stdout = file2text(out_file)
+		fdel(out_file)
+	if(fexists(err_file))
+		stderr = file2text(err_file)
+		fdel(err_file)
+	shelleo_ids[shelleo_id] = FALSE
+
+	return list(errorcode, stdout, stderr)
 
 /proc/shell_url_scrub(url)
 	var/static/regex/bad_chars_regex = regex("\[^#%&./:=?\\w]*", "g")

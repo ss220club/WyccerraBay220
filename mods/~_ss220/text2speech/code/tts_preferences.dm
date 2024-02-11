@@ -94,6 +94,13 @@
 	. = ..()
 
 
+/mob/new_player/Topic(href, href_list)
+	if(config.tts_enabled && (href_list["lobby_ready"] || href_list["late_join"]))
+		if(!usr.client.prefs.tts_seed)
+			usr.client.prefs.set_random_gendered_tts_seed()
+			to_chat(usr, SPAN_WARNING("У вас не выбран голос. Мы вам зарандомили его, так что не жалуйтесь потом."))
+	. = ..()
+
 /datum/preferences/CanUseTopic(mob/user, datum/topic_state/state)
 	. = ..()
 	return STATUS_INTERACTIVE

@@ -2,6 +2,10 @@
 	if (!client)
 		return
 
+	message = replace_characters(message, list("+"))
+	if(!message)
+		return
+
 	var/is_ghost = isghost(src)
 	var/in_view = (speaker in view(src))
 
@@ -72,6 +76,11 @@
 		hear_sleep(display_message)
 		return
 
+	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES)
+		var/effect = isrobot(speaker) ? SOUND_EFFECT_ROBOT : SOUND_EFFECT_NONE
+		var/traits = TTS_TRAIT_RATE_FASTER
+		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), speaker, src, display_message, speaker.tts_seed, TRUE, effect, traits)
+
 	if (italics)
 		display_message = "<i>[display_message]</i>"
 
@@ -129,11 +138,16 @@
 	if(!client)
 		return
 
+	message = replace_characters(message, list("+"))
+	if(!message)
+		return
+
 	if(sleeping || stat==1) //If unconscious or sleeping
 		hear_sleep(message)
 		return
 
 	var/track = null
+
 
 	//non-verbal languages are garbled if you can't see the speaker. Yes, this includes if they are inside a closet.
 	if (language && (language.flags & NONVERBAL))
@@ -160,6 +174,10 @@
 				message = stars(message)
 			else // Used for compression
 				message = RadioChat(null, message, 80, 1+(hard_to_hear/10))
+
+	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES && (src != speaker || isrobot(src) || isAI(src)))
+		var/effect = isrobot(speaker) ? SOUND_EFFECT_RADIO_ROBOT : SOUND_EFFECT_RADIO
+		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), src, src, message, speaker.tts_seed, FALSE, effect, null, null, 'mods/~_ss220/text2speech/code/sound/radio_chatter.ogg')
 
 	var/speaker_name = vname ? vname : speaker.name
 

@@ -241,6 +241,8 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 	var/base_lobby_html
 
 /datum/map/New()
+	base_lobby_html = file2text('html/lobby_screen/lobby.html')
+
 	if(!map_levels)
 		map_levels = station_levels.Copy()
 	if(!allowed_jobs)
@@ -251,10 +253,7 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 				allowed_jobs += jtype
 	if(!LAZYLEN(planet_size))
 		planet_size = list(world.maxx, world.maxy)
-	current_lobby_screen = pick(lobby_screens)
 	game_year = text2num(time2text(world.timeofday, "YYYY")) + DEFAULT_GAME_YEAR_OFFSET
-
-	base_lobby_html = file2text('html/lobby_screen/lobby.html')
 
 /datum/map/proc/update_titlescreens()
 	for(var/mob/new_player/player in GLOB.player_list)
@@ -631,6 +630,7 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 		loop.send(C)
 
 	var/mob/new_player/player = C.mob
+
 	show_browser(C, replacetext_char(base_lobby_html, "\[player-ref]", "\ref[player]"), "window=lobbybrowser")
 	update_titlescreen(C)
 

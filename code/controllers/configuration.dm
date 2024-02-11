@@ -452,7 +452,7 @@
 
 	/// Set this to TRUE to have the server passively send all browser assets to each client in the background.
 	/// (instead of waiting for them to be needed)
-	var/static/asset_simple_preload = TRUE
+	var/static/asset_simple_preload = FALSE
 
 	/// Local folder to save assets to.
 	var/static/asset_cdn_webroot = "data/asset-store/"

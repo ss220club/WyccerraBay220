@@ -85,8 +85,6 @@
 			usr.client.prefs.tts_seed = seed_name
 		else
 			return FALSE
-/datum/category_item/player_setup_item/physical/body
-	var/static/explorer_users = list()
 
 /mob/new_player/Topic(href, href_list)
 	if(config.tts_enabled && (href_list["lobby_ready"] || href_list["late_join"]))

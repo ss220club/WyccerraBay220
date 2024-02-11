@@ -8,8 +8,9 @@
 	key = "TTS_ENABLED"
 
 /datum/preferences/proc/set_random_gendered_tts_seed()
-	var/converted_gender = SStts220.gender_table[gender]
-	tts_seed = pick(SStts220.tts_seeds_by_gender[converted_gender])
+	var/random_tts_seed = SStts220.pick_tts_seed_by_gender(gender)
+	if(random_tts_seed)
+		tts_seed = random_tts_seed
 
 /mob/new_player/proc/check_tts_seed_ready()
 	return TRUE
@@ -87,7 +88,7 @@
 			if(!(seed_name in SStts220.tts_seeds))
 				return
 
-			invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, usr, phrase, seed_name, FALSE)
+			invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, usr, phrase, seed_name, FALSE)
 		if("select")
 			var/seed_name = params["seed"]
 

@@ -728,11 +728,7 @@
 	var/list/data = list()
 	var/obj/item/cell/cell = get_cell()
 
-	data["pChan_Off"] = POWERCHAN_OFF
-	data["pChan_Off_T"] = POWERCHAN_OFF_TEMP
-	data["pChan_Off_A"] = POWERCHAN_OFF_AUTO
-	data["pChan_On"] = POWERCHAN_ON
-	data["pChan_On_A"] = POWERCHAN_ON_AUTO
+	data["hasAccess"] = (has_access(req_access, user.GetAccess()) && !isWireCut(APC_WIRE_IDSCAN))
 	data["locked"] = (locked && !emagged) ? 1 : 0
 	data["isOperating"] = operating
 	data["externalPower"] = main_status
@@ -742,13 +738,42 @@
 	data["totalLoad"] = round(lastused_total)
 	data["totalCharging"] = round(lastused_charging)
 	data["coverLocked"] = coverlocked
-	data["failTime"] = failure_timer * 2
+	data["failTime"] = failure_timer
 	data["siliconUser"] = (istype(user, /mob/living/silicon) || (isghost(user) && isadmin(user)))
-	data["powerChannels"] = list(
-		list("title" = "Equipment", "powerLoad" = lastused_equip, "status" = equipment),
-		list("title" = "Lighting", "powerLoad" = round(lastused_light), "status" = lighting),
-		list("title" = "Environment", "powerLoad" = round(lastused_environ), "status" = environ)
-	)
+
+	var/list/power_channels = list()
+	power_channels += list(list(
+		"title" = "Оборудование",
+		"powerLoad" = round(lastused_equip),
+		"status" = equipment,
+		"topicParams" = list(
+			"auto" = list("eqp" = 3),
+			"on"   = list("eqp" = 2),
+			"off"  = list("eqp" = 1)
+		)
+	))
+	power_channels += list(list(
+		"title" = "Освещение",
+		"powerLoad" = round(lastused_light),
+		"status" = lighting,
+		"topicParams" = list(
+			"auto" = list("lgt" = 3),
+			"on"   = list("lgt" = 2),
+			"off"  = list("lgt" = 1)
+		)
+	))
+	power_channels += list(list(
+		"title" = "Окружение",
+		"powerLoad" = round(lastused_environ),
+		"status" = environ,
+		"topicParams" = list(
+			"auto" = list("env" = 3),
+			"on"   = list("env" = 2),
+			"off"  = list("env" = 1)
+		)
+	))
+
+	data["powerChannels"] = power_channels
 
 	return data
 
@@ -771,27 +796,23 @@
 			if(!chargemode)
 				charging = 0
 				update_icon()
-		if("eqp")
-			var/val = text2num(params["eqp"])
-			equipment = setsubsystem(val)
-			force_update_channels()
-		if("lgt")
-			var/val = text2num(params["lgt"])
-			lighting = setsubsystem(val)
-			force_update_channels()
-		if("env")
-			var/val = text2num(params["env"])
-			environ = setsubsystem(val)
-			force_update_channels()
+		if("set")
+			var/val = text2num(params["set"])
+			switch(params["chan"])
+				if("Оборудование")
+					equipment = setsubsystem(val)
+				if("Освещение")
+					lighting = setsubsystem(val)
+				if("Окружение")
+					environ = setsubsystem(val)
+			update_icon()
+			update()
 		if("overload")
-			if(!istype(usr, /mob/living/silicon))
-				return
 			src.overload_lighting()
-		if("overload")
-			if(!istype(usr, /mob/living/silicon))
-				return
-			if(emagged || MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
-				to_chat(usr, "The APC does not respond to the command.")
+		if("toggleaccess")
+			if(istype(usr, /mob/living/silicon))
+				if(emagged || MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
+					to_chat(usr, "The APC does not respond to the command.")
 			else
 				locked = !locked
 				update_icon()

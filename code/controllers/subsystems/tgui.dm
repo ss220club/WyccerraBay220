@@ -218,7 +218,7 @@ SUBSYSTEM_DEF(tgui)
 		// Check if UI is valid.
 		if(ui && ui.src_object && ui.user && ui.src_object.tgui_host(ui.user))
 			ui.close()
-			.++
+			count++
 	return
 
 /**

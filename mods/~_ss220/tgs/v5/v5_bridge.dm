@@ -84,6 +84,7 @@
 		TGS_ERROR_LOG("Failed bridge request: [bridge_request]")
 		return
 
+	TGS_ERROR_LOG("[export_response]")
 	var/content = export_response["CONTENT"]
 	if(!content)
 		TGS_ERROR_LOG("Failed bridge request, missing content!")

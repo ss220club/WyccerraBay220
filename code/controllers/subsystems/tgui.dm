@@ -209,7 +209,7 @@ SUBSYSTEM_DEF(tgui)
  * return int The number of UIs closed.
  */
 /datum/controller/subsystem/tgui/proc/close_uis(datum/src_object)
-	. = 0
+	var/count = 0
 	var/key = "[REF(src_object)]"
 	// No UIs opened for this src_object
 	if(isnull(open_uis_by_src[key]) || !islist(open_uis_by_src[key]))

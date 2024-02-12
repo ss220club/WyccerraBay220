@@ -38,6 +38,9 @@ SUBSYSTEM_DEF(jobs)
 	// Create main map jobs.
 	primary_job_datums.Cut()
 	for(var/jobtype in (list(DEFAULT_JOB_TYPE) | GLOB.using_map.allowed_jobs))
+		if(!jobtype)
+			stack_trace("`null` jobtype exists in `GLOB.using_map.allowed_jobs` and `DEFAULT_JOB_TYPE`")
+
 		var/datum/job/job = get_by_path(jobtype)
 		if(!job)
 			job = new jobtype

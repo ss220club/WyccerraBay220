@@ -14,7 +14,6 @@
 #include "sprite_accessories/_sprite_accessories.dme"
 #include "jukebox_tapes/_jukebox_tapes.dme"
 #include "loadout_items/_loadout_items.dme"
-#include "lobbyscreen/_lobbyscreen.dme"
 #include "music_player/_music_player.dme"
 #include "ntnet/_ntnet.dme"
 #include "nyc_posters/_nyc_posters.dme"

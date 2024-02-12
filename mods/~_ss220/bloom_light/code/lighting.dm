@@ -4,3 +4,6 @@
 
 /obj/machinery/light/small
 	exposure_icon_state = "circle"
+
+/obj/machinery/light/led/small
+	exposure_icon_state = "circle"

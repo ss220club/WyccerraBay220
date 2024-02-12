@@ -195,8 +195,8 @@ SUBSYSTEM_DEF(tgui)
 	for(var/datum/tgui/ui in open_uis_by_src[key])
 		// Check if UI is valid.
 		if(ui && ui.src_object && ui.user && ui.src_object.tgui_host(ui.user))
-			ui.process(force = TRUE)
-			count++
+			ui.process(force = TRUE) // Update the UI.
+			count++ // Count each UI we update.
 	return count
 
 /**

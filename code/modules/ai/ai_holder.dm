@@ -149,7 +149,7 @@ if (!(datum.process_flags & AI_FASTPROCESSING)) { \
 /// Set the AI as 'busy' for a specific length of time.
 /datum/ai_holder/proc/set_busy_delay(time)
 	set_busy(TRUE)
-	addtimer(new Callback(src, PROC_REF(set_busy), FALSE), time)
+	addtimer(CALLBACK(src, PROC_REF(set_busy), FALSE), time)
 
 /**
  * Makes this ai holder not get processed.

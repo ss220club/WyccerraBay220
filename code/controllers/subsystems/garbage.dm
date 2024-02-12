@@ -65,12 +65,7 @@ SUBSYSTEM_DEF(garbage)
 			qdel_log += "\tSleeps: [details.slept_destroy]"
 		if (details.no_hint)
 			qdel_log += "\tNo hint: [details.no_hint] times"
-	// [SIERRA-EDIT] - RUST_G
-	// var/log_file = file("[GLOB.log_directory]/qdel.log") // SIERRA-EDIT - ORIGINAL
-	// to_file(log_file, jointext(qdel_log, "\n")) // SIERRA-EDIT - ORIGINAL
 	rustg_log_write_formatted("[GLOB.log_directory]/qdel.log", jointext(qdel_log, "\n"))
-	// [/SIERRA-EDIT]
-
 
 /datum/controller/subsystem/garbage/Initialize(start_uptime)
 	pause_deletion_queue = config.deletion_starts_paused
@@ -204,15 +199,19 @@ SUBSYSTEM_DEF(garbage)
 
 
 /// Queue datum D for garbage collection / deletion. Calls the datum's Destroy() and sets its gc_destroyed value.
+/// If not datum passed, `del` will be called
 /proc/qdel(datum/datum)
 	var/static/list/details_by_path = SSgarbage.details_by_path
 	var/static/list/collection_queue = SSgarbage.collection_queue
 	var/static/list/deletion_queue = SSgarbage.deletion_queue
+
 	if (!datum)
 		return
-	if (!istype(datum))
-		crash_with("qdel() can only handle /datum (sub)types, was passed: [log_info_line(datum)]")
+
+	if(!istype(datum))
+		del(datum)
 		return
+
 	var/datum/qdel_details/details = details_by_path[datum.type]
 	if (!details)
 		details = new

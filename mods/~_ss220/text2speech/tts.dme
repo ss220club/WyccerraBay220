@@ -4,9 +4,7 @@
 #include "_tts.dm"
 
 #include "code/_procs.dm"
-#include "code/_defines.dm"
 #include "code/configuration.dm"
-#include "code/hear.dm"
 #include "code/numbers.dm"
 #include "code/providers/silero.dm"
 #include "code/seeds/base.dm"

@@ -157,7 +157,7 @@
 /atom/movable/proc/begin_falling(lastloc, below)
 	if (QDELETED(src))
 		return
-	addtimer(new Callback(src, TYPE_PROC_REF(/atom/movable, fall_callback), below), 0)
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/atom/movable, fall_callback), below), 0)
 
 /atom/movable/proc/fall_callback(turf/below)
 	var/mob/M = src

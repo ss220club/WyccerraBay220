@@ -48,7 +48,7 @@
 	var/json = CreateBridgeData(command, data, TRUE)
 	var/encoded_json = url_encode(json)
 
-	var/api_prefix = interop_version.minor >= 7 ? "api/" : ""
+	var/api_prefix = interop_version.minor >= 8 ? "api/" : ""
 
 	var/url = "http://127.0.0.1:[server_port]/[api_prefix]Bridge?[DMAPI5_BRIDGE_DATA]=[encoded_json]"
 	return url
@@ -79,12 +79,10 @@
 
 	// This is an infinite sleep until we get a response
 	var/export_response = world.Export(bridge_request)
-	TGS_ERROR_LOG("[bridge_request]")
 	if(!export_response)
 		TGS_ERROR_LOG("Failed bridge request: [bridge_request]")
 		return
 
-	TGS_ERROR_LOG("[list2params(export_response)]")
 	var/content = export_response["CONTENT"]
 	if(!content)
 		TGS_ERROR_LOG("Failed bridge request, missing content!")

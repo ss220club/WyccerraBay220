@@ -93,7 +93,7 @@ export const APCWindow = (props, context) => {
                   fluid
                   disabled={!hasAccess}
                   content={locked ? 'Заблокирован' : 'Разблокирован'}
-                  icon={locked ? 'lock' : 'unlock'}
+                  icon={locked ? 'lock' : 'lock-open'}
                   color={data.locked ? 'good' : 'bad'}
                   onClick={() => act('toggleaccess')}
                   style={{
@@ -110,7 +110,7 @@ export const APCWindow = (props, context) => {
                 data.siliconUser ? (
                   <Button
                     content="Overload Lighting Circuit"
-                    icon="bulb"
+                    icon="lightbulb"
                     disabled={locked}
                     onClick={() => act('overload')}
                   />
@@ -225,11 +225,11 @@ export const APCWindow = (props, context) => {
             <Section fill title="Прочее">
               <LabeledList>
                 <LabeledList.Item
-                  label="Cover Lock"
+                  label="Фиксатор"
                   buttons={
                     <Button
                       content={data.coverLocked ? 'Engaged' : 'Disengaged'}
-                      icon={data.coverLocked ? 'lock' : 'unlock-alt'}
+                      icon={data.coverLocked ? 'lock' : 'lock-open'}
                       color={data.coverLocked ? '' : 'bad'}
                       selected={data.coverLocked}
                       disabled={locked}

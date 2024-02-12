@@ -28,9 +28,9 @@
 
 
 //Shared cooldowns for actions
-#define MOB_SHARED_COOLDOWN_1 (1<<0)
-#define MOB_SHARED_COOLDOWN_2 (1<<1)
-#define MOB_SHARED_COOLDOWN_3 (1<<2)
+#define MOB_SHARED_COOLDOWN_1 FLAG(1)
+#define MOB_SHARED_COOLDOWN_2 FLAG(2)
+#define MOB_SHARED_COOLDOWN_3 FLAG(3)
 
 //TIMER COOLDOWN MACROS
 

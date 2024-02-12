@@ -1,3 +1,12 @@
+#define SETUP_NAME "name"
+#define SETUP_OBJ_SHEET "icon"
+#define SETUP_ONMOB_SHEET "item_icons"
+#define SETUP_ICON_STATE "icon_state"
+#define SETUP_ITEM_STATE "item_state"
+#define SETUP_ITEM_STATE_SLOTS "item_state_slots"
+#define SETUP_SPECIES_OBJ "sprite_sheets_obj"
+#define SETUP_SPECIES_ONMOB "sprite_sheets"
+
 
 
 //Shoes
@@ -19,19 +28,114 @@
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
 	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
 
-//rig
+/singleton/item_modifier/space_suit/sol/sierra/Initialize()
+	. = ..()
+	var/helmet_setup = type_setups[/obj/item/clothing/head/helmet/space]
+	LAZYSET((helmet_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi')
+	LAZYSET((helmet_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+
+	var/suit_setup = type_setups[/obj/item/clothing/suit/space/void]
+	LAZYSET((suit_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
+	LAZYSET((suit_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+
+/singleton/item_modifier/space_suit/sierra/Initialize()
+	. = ..()
+	var/helmet_setup = type_setups[/obj/item/clothing/head/helmet/space]
+	LAZYSET((helmet_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi')
+	LAZYSET((helmet_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+
+	var/suit_setup = type_setups[/obj/item/clothing/suit/space/void]
+	LAZYSET((suit_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
+	LAZYSET((suit_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+
+
+
+/singleton/item_modifier/space_suit
+. = ..()
+	var/helmet_setup = type_setups[/obj/item/clothing/head/helmet/space]
+	LAZYSET((helmet_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi')
+	LAZYSET((helmet_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+
+	var/suit_setup = type_setups[/obj/item/clothing/suit/space/void]
+	LAZYSET((suit_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
+	LAZYSET((suit_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+
+/obj/item/clothing/suit/space/void/Initialize()
+	. = ..()
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
+
+/obj/item/clothing/head/helmet/space/void/Initialize()
+	. = ..()
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi')
+
+
+//
+// EVA RIG
+//
 /obj/item/rig/eva/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
+
+/obj/item/clothing/head/helmet/space/rig/eva/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+
+/obj/item/clothing/suit/space/rig/eva/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/obj/item/clothing/shoes/magboots/rig/eva/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_feet_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/obj/item/clothing/gloves/rig/eva/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_hands_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
 
 /obj/item/rig/light/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
 
+
+//
+// MEDICAL RIG
+//
+
 /obj/item/rig/medical/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
 
+/obj/item/clothing/head/helmet/space/rig/medical/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/obj/item/clothing/suit/space/rig/medical/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/obj/item/clothing/shoes/magboots/rig/medical/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_feet_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/obj/item/clothing/gloves/rig/medical/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_hands_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/*
 /obj/item/rig/hazard/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
@@ -43,11 +147,26 @@
 /obj/item/rig/merc/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
+*/
 
+//
+// NULL RIG
+//
 /obj/item/rig/zero/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
 
+/obj/item/clothing/head/helmet/space/rig/zero/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/obj/item/clothing/suit/space/rig/zero/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+	LAZYDISTINCTADD(species_restricted, SPECIES_RESOMI)
+
+/*
 /obj/item/rig/ce/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
@@ -67,26 +186,7 @@
 /obj/item/rig/command/Initialize()
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi')
-
-
-/*
-/obj/item/clothing/head/helmet/space/rig/Initialize()
-	. = ..()
-	LAZYADD(species_restricted, list(SPECIES_RESOMI))
-
-/obj/item/clothing/gloves/rig/Initialize()
-	. = ..()
-	LAZYADD(species_restricted, list(SPECIES_RESOMI))
-
-/obj/item/clothing/shoes/magboots/rig/Initialize()
-	. = ..()
-	LAZYADD(species_restricted, list(SPECIES_RESOMI))
-
-/obj/item/clothing/suit/space/rig/Initialize()
-	. = ..()
-	LAZYADD(species_restricted, list(SPECIES_RESOMI))
 */
-
 
 /obj/item/storage/belt/Initialize()
 	. = ..()

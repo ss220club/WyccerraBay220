@@ -21,3 +21,30 @@
 #include "code/datum/species.dm"
 
 #endif
+// BEGIN_INTERNALS
+// END_INTERNALS
+// BEGIN_FILE_DIR
+#define FILE_DIR .
+// END_FILE_DIR
+// BEGIN_PREFERENCES
+// END_PREFERENCES
+// BEGIN_INCLUDE
+#include "_resomi.dm"
+#include "code\overrides.dm"
+#include "code\unit_tests.dm"
+#include "code\body\abilities.dm"
+#include "code\body\emotes.dm"
+#include "code\body\organs.dm"
+#include "code\clothing\clothing.dm"
+#include "code\clothing\glasses.dm"
+#include "code\clothing\misc.dm"
+#include "code\clothing\shoes.dm"
+#include "code\clothing\suits.dm"
+#include "code\clothing\under.dm"
+#include "code\datum\_defines.dm"
+#include "code\datum\body.dm"
+#include "code\datum\gear.dm"
+#include "code\datum\language.dm"
+#include "code\datum\resomi_culture.dm"
+#include "code\datum\species.dm"
+// END_INCLUDE

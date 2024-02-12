@@ -79,6 +79,7 @@
 
 	// This is an infinite sleep until we get a response
 	var/export_response = world.Export(bridge_request)
+	TGS_ERROR_LOG("[bridge_request]")
 	if(!export_response)
 		TGS_ERROR_LOG("Failed bridge request: [bridge_request]")
 		return

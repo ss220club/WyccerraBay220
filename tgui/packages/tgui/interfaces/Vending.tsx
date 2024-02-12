@@ -1,6 +1,6 @@
 import { classes, BooleanLike } from 'common/react';
 import { capitalizeAll } from 'common/string';
-import { useBackend } from '../backend';
+import { useBackend, useLocalState } from '../backend';
 import {
   Button,
   Icon,
@@ -10,6 +10,7 @@ import {
   Dimmer,
   NoticeBox,
   LabeledList,
+  Input,
 } from '../components';
 import { Window } from '../layouts';
 
@@ -32,6 +33,7 @@ type Product = {
   key: string;
   name: string;
   price: number;
+  category: number;
   ammount: number;
   imageID: string;
 };
@@ -76,6 +78,10 @@ export const VendingMaint = (props, context) => {
 export const VendingMain = (props, context) => {
   const { act, data } = useBackend<VendingData>(context);
   const { coin, vend_ready, products = [] } = data;
+  const [searchText, setSearchText] = useLocalState(context, 'searchText', '');
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchText.toLowerCase())
+  );
   return (
     <Window width={products.length > 25 ? '391' : '375'} height={550}>
       {!vend_ready || data.mode ? <Vend /> : ''}
@@ -85,19 +91,26 @@ export const VendingMain = (props, context) => {
           scrollable
           title="Продукты"
           buttons={
-            coin ? (
-              <Button
-                content="Достать монетку"
-                disabled={data.isSilicon}
-                tooltip="Вы не можете достать монетку."
-                onClick={() => act('remove_coin')}
+            <>
+              {coin ? (
+                <Button
+                  mr={1}
+                  content="Достать монетку"
+                  disabled={data.isSilicon}
+                  tooltip="Вы не можете достать монетку."
+                  onClick={() => act('remove_coin')}
+                />
+              ) : null}
+              <Input
+                width={10.5}
+                placeholder="Поиск..."
+                value={searchText}
+                onInput={(e, value) => setSearchText(value)}
               />
-            ) : (
-              ''
-            )
+            </>
           }
         >
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <Tooltip
               key={product.key}
               content={
@@ -114,6 +127,8 @@ export const VendingMain = (props, context) => {
                 grow
                 className={classes([
                   'Vending__Button',
+                  product.category === 2 && 'Vending__Button--contraband',
+                  product.category === 4 && 'Vending__Button--premium',
                   product.ammount <= 0 && 'Vending__Button--disabled',
                 ])}
                 onClick={() =>
@@ -131,13 +146,17 @@ export const VendingMain = (props, context) => {
                   bold
                   className={classes([
                     'Vending__Price',
+                    product.category === 2 && 'Vending__Price--contraband',
+                    product.category === 4 && 'Vending__Price--premium',
                     product.ammount <= 0 && 'Vending__Price--disabled',
                   ])}
                 >
                   {product.ammount > 0
                     ? product.price > 0
                       ? `${product.price} ₸`
-                      : 'Free'
+                      : product.category === 4
+                        ? 'Coin'
+                        : 'Free'
                     : 'Empty'}
                 </Stack.Item>
               </Stack.Item>

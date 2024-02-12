@@ -316,6 +316,7 @@
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "Vending", name)
+		ui.set_autoupdate(FALSE)
 		ui.open()
 
 /obj/machinery/vending/tgui_data(mob/user)
@@ -347,6 +348,7 @@
 			"key" = key,
 			"name" = product.item_name,
 			"price" = product.price,
+			"category" = product.category,
 			"ammount" = product.get_amount(),
 			"imageID" = "[icon2base64(icon(initial(item.icon), initial(item.icon_state), SOUTH, 1))]"
 		))
@@ -389,10 +391,9 @@
 			else
 				currently_vending = product
 				if(!vendor_account || vendor_account.suspended)
-					status_message = "This machine is currently unable to process payments due to problems with the associated account."
+					status_message = "Ошибка: Проблема со связанным счётом, платёж невозможен."
 					status_error = TRUE
 				else
-					status_message = "Please swipe a card or insert cash to pay for the item."
 					status_error = FALSE
 			return TRUE
 		if("cancelpurchase")

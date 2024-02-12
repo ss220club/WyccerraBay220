@@ -297,6 +297,8 @@
 	if(sleeping || stat == UNCONSCIOUS)
 		return 0
 
+	var/runechat_message
+
 	if(say_understands(speaker, language))
 		var/nverb = null
 		switch(src.get_preference_value(/datum/client_preference/language_display))
@@ -306,6 +308,7 @@
 				nverb = "[verb] ([language.shorthand])"
 			if(GLOB.PREF_OFF)//Regular output
 				nverb = verb
+		runechat_message = message
 		message = "<B>[speaker]</B> [nverb], \"[message]\""
 	else
 		var/adverb
@@ -316,6 +319,7 @@
 			if(30 to 48)	adverb = " a message"
 			if(48 to 90)	adverb = " a lengthy message"
 			else        	adverb = " a very lengthy message"
+		runechat_message = "[verb][adverb]"
 		message = "<B>[speaker]</B> [verb][adverb]."
 
 	if(src.status_flags & PASSEMOTES)
@@ -323,6 +327,7 @@
 			H.show_message(message)
 		for(var/mob/living/M in src.contents)
 			M.show_message(message)
+	create_chat_message(speaker, capitalize(runechat_message), FALSE, list("emote"), FALSE)
 	src.show_message(message)
 
 /mob/proc/hear_sleep(message)

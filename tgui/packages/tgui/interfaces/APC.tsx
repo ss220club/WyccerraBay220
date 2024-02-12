@@ -211,10 +211,12 @@ export const APCWindow = (props, context) => {
                   </LabeledList.Item>
                 ))}
                 <LabeledList.Item label="Общая нагрузка">
-                  {data.totalLoad} W
-                  {data.totalCharging
-                    ? ` (+ ${data.totalCharging}W Заряжается)`
-                    : null}
+                  <Stack.Item height="0px">
+                    {data.totalLoad} W
+                    {data.totalCharging
+                      ? ` (+ ${data.totalCharging}W Заряжается)`
+                      : null}
+                  </Stack.Item>
                 </LabeledList.Item>
               </LabeledList>
             </Section>

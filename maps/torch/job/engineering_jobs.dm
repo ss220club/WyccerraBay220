@@ -21,27 +21,20 @@
 		/datum/mil_rank/fleet/e7,
 		/datum/mil_rank/fleet/e8,
 	)
-	min_skill = list(   SKILL_COMPUTER     = SKILL_TRAINED,
-						SKILL_EVA          = SKILL_TRAINED,
-						SKILL_CONSTRUCTION = SKILL_TRAINED,
-						SKILL_ELECTRICAL   = SKILL_TRAINED,
-						SKILL_ATMOS        = SKILL_TRAINED,
-						SKILL_ENGINES      = SKILL_TRAINED)
+	skill_points = 26
+	min_skill = list( // 22 points
+		SKILL_COMPUTER = SKILL_TRAINED, // 2 points
+		SKILL_EVA = SKILL_TRAINED, // 2 points
+		SKILL_CONSTRUCTION = SKILL_TRAINED, // 2 points
+		SKILL_ELECTRICAL = SKILL_TRAINED, // 4 points
+		SKILL_ATMOS = SKILL_TRAINED, // 4 points
+		SKILL_ENGINES = SKILL_TRAINED // 8 points
+	)
 
 	max_skill = list(   SKILL_CONSTRUCTION = SKILL_MAX,
 						SKILL_ELECTRICAL   = SKILL_MAX,
 						SKILL_ATMOS        = SKILL_MAX,
-<<<<<<< ours
-<<<<<<< ours
 						SKILL_ENGINES      = SKILL_MAX)
-	skill_points = 20
-=======
-						SKILL_ENGINES      = SKILL_MAX,
-						SKILL_DEVICES = SKILL_EXPERIENCED)
->>>>>>> theirs
-=======
-						SKILL_ENGINES      = SKILL_MAX)
->>>>>>> theirs
 
 	access = list(
 		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,

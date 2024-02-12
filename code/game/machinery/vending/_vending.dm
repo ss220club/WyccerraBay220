@@ -301,7 +301,7 @@
 
 /obj/machinery/vending/physical_attack_hand(mob/living/user)
 	if(!seconds_electrified)
-		return
+		return FALSE
 	return shock(user, 100)
 
 /obj/machinery/vending/interface_interact(mob/living/user)

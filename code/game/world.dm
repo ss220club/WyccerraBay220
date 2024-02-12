@@ -104,8 +104,7 @@ GLOBAL_VAR(href_logfile)
 	log_unit_test("Unit Tests Enabled. This will destroy the world when testing is complete.")
 	load_unit_test_changes()
 #endif
-	Master.Initialize(10, FALSE)
-	TgsInitializationComplete()
+	Master.Initialize(10, FALSE, TRUE)
 
 
 /world/Del()

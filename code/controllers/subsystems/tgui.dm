@@ -213,7 +213,7 @@ SUBSYSTEM_DEF(tgui)
 	var/key = "[REF(src_object)]"
 	// No UIs opened for this src_object
 	if(isnull(open_uis_by_src[key]) || !islist(open_uis_by_src[key]))
-		return
+		return count
 	for(var/datum/tgui/ui in open_uis_by_src[key])
 		// Check if UI is valid.
 		if(ui && ui.src_object && ui.user && ui.src_object.tgui_host(ui.user))

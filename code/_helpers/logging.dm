@@ -106,6 +106,9 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 /proc/log_misc(text)
 	game_log("MISC", text)
 
+/proc/log_tgs(text, level)
+	game_log("TGS", text)
+
 /proc/log_tgui(user_or_client, text)
 	if(!text)
 		stack_trace("Pointless log_tgui message")

@@ -74,6 +74,7 @@ GLOBAL_VAR(href_logfile)
 
 /world/New()
 	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
+	to_world_log("[TgsApiVersion()], [TgsAvailable()], tgs [TgsVersion()]")
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if (debug_server)
 		CALL_EXT(debug_server, "auxtools_init")()
@@ -525,6 +526,7 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 	if(config.shutdown_on_reboot)
 		sleep(0)
 		del(world)
+		TgsEndProcess()
 		return
 	// [/SIERRA-ADD]
 	TgsReboot()

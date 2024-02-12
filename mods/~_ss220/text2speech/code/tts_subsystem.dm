@@ -434,20 +434,20 @@ SUBSYSTEM_DEF(tts220)
 			voice = "[filename]_megaphone_robot.ogg"
 		else
 			CRASH("Invalid sound effect chosen.")
-	if(effect != SOUND_EFFECT_NONE)
-		if(!fexists(voice))
-			var/datum/callback/play_tts_cb = new /datum/callback(src, PROC_REF(play_tts), speaker, listener, filename, is_local, effect, preSFX, postSFX)
-			if(LAZYLEN(tts_effects_queue[voice]))
-				LAZYADD(tts_effects_queue[voice], play_tts_cb)
-				return
+	if(effect != SOUND_EFFECT_NONE && !fexists(voice))
+		CHECK_TICK
+		var/datum/callback/play_tts_cb = new /datum/callback(src, PROC_REF(play_tts), speaker, listener, filename, is_local, effect, preSFX, postSFX)
+		if(LAZYLEN(tts_effects_queue[voice]))
 			LAZYADD(tts_effects_queue[voice], play_tts_cb)
-			apply_sound_effect(effect, "[filename].ogg", voice)
-			for(var/datum/callback/cb in tts_effects_queue[voice])
-				tts_effects_queue[voice] -= cb
-				if(cb == play_tts_cb)
-					continue
-				invoke_async(cb)
-			tts_effects_queue -= voice
+			return
+		LAZYADD(tts_effects_queue[voice], play_tts_cb)
+		apply_sound_effect(effect, "[filename].ogg", voice)
+		for(var/datum/callback/cb in tts_effects_queue[voice])
+			tts_effects_queue[voice] -= cb
+			if(cb == play_tts_cb)
+				continue
+			invoke_async(cb)
+		tts_effects_queue -= voice
 
 	var/turf/turf_source = get_turf(speaker)
 

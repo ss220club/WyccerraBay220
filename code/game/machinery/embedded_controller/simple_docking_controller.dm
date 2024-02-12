@@ -15,6 +15,7 @@
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "SimpleDockingConsole", name)
+		ui.set_autoupdate(FALSE)
 		ui.open()
 
 /obj/machinery/embedded_controller/radio/simple_docking_controller/tgui_data(mob/user)

@@ -152,7 +152,7 @@ SUBSYSTEM_DEF(tgui)
 	// FIXME: Doesn't actually fix the paper bug.
 	if(ui.status <= STATUS_CLOSE)
 		ui.close()
-		return
+		return null
 	ui.send_update()
 	return ui
 

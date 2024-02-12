@@ -134,12 +134,14 @@
 	if(!text) return ""
 	var/list/dat = list()
 	var/last_was_space = 1
-	for(var/i=1, i<=length_char(text), i++)
-		var/ascii_char = text2ascii_char(text,i)
+	if(contains_cyrillic(text))
+		text = convert_ru_symbols_to_en(text)
+	for(var/i=1, i<=length(text), i++)
+		var/ascii_char = text2ascii(text,i)
 		switch(ascii_char)
-			if(65 to 90, 1040 to 1071, 1025)	//A-Z, а-я, make them lowercase
+			if(65 to 90)	//A-Z, make them lowercase
 				dat += ascii2text(ascii_char + 32)
-			if(97 to 122, 1072 to 1103, 1105)	//a-z, а-я
+			if(97 to 122)	//a-z
 				dat += ascii2text(ascii_char)
 				last_was_space = 0
 			if(48 to 57)	//0-9
@@ -382,6 +384,18 @@
 			if(48 to 57)			//Numbers
 				return TRUE
 	return 0
+
+/proc/contains_cyrillic(input)
+	for(var/i=1, i<=length_char(input), i++)
+		var/ascii_char = text2ascii_char(input,i)
+		switch(ascii_char)
+			// А .. Я
+			if(1040 to 1071, 1025)			//Uppercase Letters
+				return TRUE
+			// а  .. я
+			if(1072 to 1103, 1105)				//Lowercase Letters
+				return TRUE
+	return FALSE
 
 /proc/generateRandomString(length)
 	. = list()

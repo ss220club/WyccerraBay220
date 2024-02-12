@@ -173,11 +173,20 @@ const Vend = (props, context) => {
   return data.mode ? (
     <Dimmer textAlign="center">
       {!data.message_err ? (
-        <NoticeBox height="22px" width="378px">
+        <NoticeBox
+          height="22px"
+          width={data.products.length > 25 ? '375px' : '360px'}
+          fontSize={0.95}
+        >
           Для оплаты, проведите картой или вставьте деньги.
         </NoticeBox>
       ) : (
-        <NoticeBox height="22px" width="378px" color="bad" fontSize={0.85}>
+        <NoticeBox
+          height="22px"
+          width={data.products.length > 25 ? '375px' : '360px'}
+          color="bad"
+          fontSize={0.84}
+        >
           {data.message}
         </NoticeBox>
       )}

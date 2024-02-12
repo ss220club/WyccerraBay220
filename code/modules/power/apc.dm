@@ -808,7 +808,7 @@
 			update_icon()
 			update()
 		if("overload")
-			src.overload_lighting()
+			overload_lighting()
 		if("toggleaccess")
 			if(istype(usr, /mob/living/silicon))
 				if(emagged || MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))

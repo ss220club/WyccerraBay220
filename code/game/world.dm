@@ -74,7 +74,6 @@ GLOBAL_VAR(href_logfile)
 
 /world/New()
 	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
-	to_world_log("[TgsApiVersion()], [TgsAvailable()], tgs [TgsVersion()]")
 	// var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	// if (debug_server)
 	// 	CALL_EXT(debug_server, "auxtools_init")()
@@ -106,7 +105,7 @@ GLOBAL_VAR(href_logfile)
 	load_unit_test_changes()
 #endif
 	Master.Initialize(10, FALSE, TRUE)
-
+	to_world_log("[TgsApiVersion()], [TgsAvailable()], tgs [TgsVersion()]")
 
 /world/Del()
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")

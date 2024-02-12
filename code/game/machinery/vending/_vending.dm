@@ -354,6 +354,11 @@
 
 	return data
 
+/obj/machinery/vending/tgui_static_data(mob/user)
+	var/list/data = list()
+	data["isSilicon"] = istype(usr, /mob/living/silicon)
+	return data
+
 /obj/machinery/vending/tgui_act(action, list/params)
 	if(..())
 		return

@@ -1,6 +1,6 @@
 import { classes, BooleanLike } from 'common/react';
-import { capitalize, capitalizeAll } from 'common/string';
-import { useBackend, useLocalState } from '../backend';
+import { capitalizeAll } from 'common/string';
+import { useBackend } from '../backend';
 import {
   Button,
   Icon,
@@ -19,6 +19,7 @@ export type VendingData = {
   speaker: BooleanLike;
   panel: BooleanLike;
   mode: BooleanLike;
+  isSilicon: BooleanLike;
   product: string;
   image: string;
   price: number;
@@ -87,6 +88,8 @@ export const VendingMain = (props, context) => {
             coin ? (
               <Button
                 content="Достать монетку"
+                disabled={data.isSilicon}
+                tooltip="Вы не можете достать монетку."
                 onClick={() => act('remove_coin')}
               />
             ) : (
@@ -99,10 +102,10 @@ export const VendingMain = (props, context) => {
               key={product.key}
               content={
                 <>
-                  {<b>{capitalize(product.name)}</b>}
+                  {<b>{capitalizeAll(product.name)}</b>}
                   <br />
                   <br />
-                  (В наличии: {product.ammount})
+                  (В наличии: <b>{product.ammount}</b>)
                 </>
               }
             >
@@ -131,7 +134,11 @@ export const VendingMain = (props, context) => {
                     product.ammount <= 0 && 'Vending__Price--disabled',
                   ])}
                 >
-                  {product.price > 0 ? product.price : 'Free'}
+                  {product.ammount > 0
+                    ? product.price > 0
+                      ? `${product.price} ₸`
+                      : 'Free'
+                    : 'Empty'}
                 </Stack.Item>
               </Stack.Item>
             </Tooltip>
@@ -172,7 +179,7 @@ const Vend = (props, context) => {
         <h2>К оплате</h2>
       </Stack.Item>
       <Stack.Item>
-        <h1>{data.price}$</h1>
+        <h1>{data.price} ₸</h1>
       </Stack.Item>
       <Stack.Item grow>
         <Button
@@ -188,7 +195,7 @@ const Vend = (props, context) => {
     <Dimmer textAlign="center">
       <Icon name="smile" size="7" color="yellow" />
       <Stack.Item color="label" mt={5}>
-        <h1>Спасибо за покупку!</h1>
+        <h1>Наслаждайтесь!</h1>
       </Stack.Item>
     </Dimmer>
   );

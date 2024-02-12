@@ -302,8 +302,7 @@
 /obj/machinery/vending/physical_attack_hand(mob/living/user)
 	if(!seconds_electrified)
 		return
-	if(shock(user, 100))
-		return TRUE
+	return shock(user, 100)
 
 /obj/machinery/vending/interface_interact(mob/living/user)
 	tgui_interact(user)

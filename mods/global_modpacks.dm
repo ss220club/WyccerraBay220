@@ -25,6 +25,7 @@
 
 #include "~_ss220/text2speech/tts.dme"
 #include "~_ss220/bloom_light/_bloom_light.dme"
+#include "~_ss220/tgs/includes.dm"
 
 // SS220 PACKS END
 

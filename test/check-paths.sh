@@ -33,7 +33,7 @@ exactly 2 "/area text paths" '"/area'
 exactly 2 "/datum text paths" '"/datum'
 exactly 2 "/mob text paths" '"/mob'
 exactly 8 "/turf text paths" '"/turf'
-exactly 115 "to_world uses" '\sto_world\('
+exactly 117 "to_world uses" '\sto_world\('
 exactly 0 "globals with leading /" '^/var' -P
 exactly 0 "globals without global sugar" '^var/(?!global/)' -P
 exactly 0 "apparent paths with trailing /" '\w/[,\)\n]' -P
@@ -59,7 +59,7 @@ exactly 7 "uses of .len" '\.len\b' -P
 exactly 192 "attackby() override" '\/attackby\((.*)\)'  -P
 exactly 15 "uses of examine()" '[.|\s]examine\(' -P # If this fails it's likely because you used '/atom/proc/examine(mob)' instead of '/proc/examinate(mob, atom)' - Exception: An examine()-proc may call other examine()-procs
 exactly 7 "direct modifications of overlays list" '\boverlays((\s*[|^=+&-])|(\.(Cut)|(Add)|(Copy)|(Remove)|(Remove)))' -P
-exactly 0 "new/list list instantiations" 'new\s*/list' -P
+exactly 1 "new/list list instantiations" 'new\s*/list' -P
 exactly 0 "== null tests" '(==\s*null\b)|(\bnull\s*==)' -P #Use isnull() instead
 # If you increase any of these numbers you're probably doing it wrong
 

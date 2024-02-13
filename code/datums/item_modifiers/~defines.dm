@@ -1,3 +1,4 @@
+/*
 #undef SETUP_NAME
 #undef SETUP_OBJ_SHEET
 #undef SETUP_ONMOB_SHEET
@@ -6,3 +7,4 @@
 #undef SETUP_ITEM_STATE_SLOTS
 #undef SETUP_SPECIES_OBJ
 #undef SETUP_SPECIES_ONMOB
+*/

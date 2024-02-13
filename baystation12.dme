@@ -104,6 +104,7 @@
 #include "code\__defines\dcs\signals\signals_object.dm"
 #include "code\__defines\~mods\bloom_light.dm"
 #include "code\__defines\~mods\expanded_culture_descriptor.dm"
+#include "code\__defines\~mods\Item_mod.dm"
 #include "code\__defines\~mods\rust_g.dm"
 #include "code\__defines\~mods\text_to_speech.dm"
 #include "code\__defines\~mods\~master_defines.dm"

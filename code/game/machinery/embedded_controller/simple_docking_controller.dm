@@ -5,7 +5,7 @@
 
 /obj/machinery/embedded_controller/radio/simple_docking_controller/Initialize()
 	. = ..()
-	docking_program = new(src)
+	docking_program = new/datum/computer/file/embedded_program/docking/simple(src)
 	program = docking_program
 
 /obj/machinery/embedded_controller/radio/simple_docking_controller/tgui_state(mob/user)

@@ -1,22 +1,28 @@
 /datum/stored_items
-	var/item_name = "name"	//Name of the item(s) displayed
-	var/item_path = null	// The original amount held
+	// Name of the item(s) displayed
+	var/item_name = "name"
+	/// The original amount held
 	var/amount = 0
-	var/list/instances		//What items are actually stored
+	///
+	var/atom/item_path = null
 	var/atom/storing_object
+	/// What items are actually stored
+	var/list/instances
 
-/datum/stored_items/New(atom/storing_object, path, name = null, amount = 0)
+/datum/stored_items/New(atom/storing_object, atom/path, name = null, amount = 0)
 	if(!istype(storing_object))
 		CRASH("Unexpected storing object.")
+
 	src.storing_object = storing_object
 	src.item_path = path
 	src.amount = amount
+	src.item_name = name
 
 	if(!name)
-		var/atom/tmp = path
-		src.item_name = initial(tmp.name)
+		src.item_name = initial(path.name)
 	else
 		src.item_name = name
+
 	..()
 
 /datum/stored_items/Destroy()
@@ -32,13 +38,13 @@
 
 /datum/stored_items/proc/add_product(atom/movable/product)
 	if(product.type != item_path)
-		return 0
+		return FALSE
 	if(product in instances)
-		return 0
+		return FALSE
 	product.forceMove(storing_object)
 	LAZYADD(instances, product)
 	amount++
-	return 1
+	return TRUE
 
 /datum/stored_items/proc/get_product(product_location)
 	if(!get_amount() || !product_location)

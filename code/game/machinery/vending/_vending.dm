@@ -43,6 +43,8 @@
 	var/vend_ready = TRUE
 	/// A field associated with vending machines from the below flags.
 	var/vendor_flags = VENDOR_CATEGORY_NORMAL
+	/// Possible vendor flags
+	var/possible_vendor_flags = VENDOR_CATEGORY_NORMAL|VENDOR_CATEGORY_HIDDEN|VENDOR_CATEGORY_COIN|VENDOR_CATEGORY_ANTAG
 	///Minimum number of possible non-rare product that can be randomly spawned. This can be set by vending machine not item. Minimum rare product is set as 1 by default.
 	var/minrandom = 1
 	///Maximum number of possible non-rare products that can be randomly spawned. This can be set by vending machine not item. Maximum rare product depends on rarity.
@@ -78,7 +80,7 @@
 	/// Prices for each product as (/item/path = price). Unlisted items are free.
 	var/list/prices = list()
 	/// Stock for each product as (/item/path = count). Set to '0' if you want the vendor to randomly spawn between 1 and 10 items.
-	var/list/products	= list()
+	var/list/products = list()
 	///Probability of each rare product of spawning in, max amount increases with large value. Need to have value of '0' associated with it in product list for this to work.
 	var/list/rare_products = list()
 	/// Stock for products hidden by the contraband wire as (/item/path = count)
@@ -87,8 +89,8 @@
 	var/list/premium = list()
 	/// Stock for antag items unlocked by challenge coin purchased from uplink. Each coin costs 10 TCs; value in vendor should be 10 at baseline with rare chance going up to 30.
 	var/list/antag = list()
-	/// Icons list for TGUI
-	var/list/imagelist = list()
+	/// 2D list of products as: list(list(category, products))
+	var/list/all_products = list()
 
 	var/const/VENDOR_CATEGORY_NORMAL = FLAG(0)
 	var/const/VENDOR_CATEGORY_HIDDEN = FLAG(1)
@@ -104,6 +106,10 @@
 
 /obj/machinery/vending/Initialize(mapload, d = 0, populate_parts = TRUE)
 	. = ..()
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/machinery/vending/LateInitialize(mapload, d = 0, populate_parts = TRUE)
+	. = ..()
 	vendor_wires = wires
 	if(product_slogans)
 		slogan_list += splittext(product_slogans, ";")
@@ -113,14 +119,9 @@
 	if(minrandom > maxrandom)
 		minrandom = maxrandom
 
-	for(var/key = 1 to length(product_records))
-		var/datum/stored_items/vending_products/product = product_records[key]
-		var/obj/item/item = product.item_path
-		var/clear_path = replacetext(replacetext("[product.item_path]", "/obj/item/", ""), "/", "-")
-		imagelist[clear_path] = "[icon2base64(icon(initial(item.icon), initial(item.icon_state), SOUTH, 1))]"
-
 	build_inventory(populate_parts)
 	update_icon()
+
 
 /obj/machinery/vending/examine(mob/user)
 	. = ..()
@@ -322,11 +323,10 @@
 	var/list/data = list()
 
 	if(currently_vending)
-		var/obj/item = currently_vending.item_path
 		data["mode"] = TRUE
 		data["product"] = currently_vending.item_name
 		data["price"] = currently_vending.price
-		data["image"] = "[icon2base64(icon(initial(item.icon), initial(item.icon_state), SOUTH, 1))]"
+		data["image"] = currently_vending.image
 	else
 		data["mode"] = FALSE
 
@@ -338,18 +338,19 @@
 	data["speaker"] = shut_up
 
 	var/list/listed_products = list()
-	for(var/key = 1 to length(product_records))
-		var/datum/stored_items/vending_products/product = product_records[key]
-		var/obj/item = product.item_path
+
+	var/product_position = 0
+	for(var/datum/stored_items/vending_products/product as anything in product_records)
 		if(!(product.category & vendor_flags))
 			continue
+
 		listed_products += list(list(
-			"key" = key,
+			"key" = ++product_position,
 			"name" = product.item_name,
 			"price" = product.price,
 			"category" = product.category,
 			"ammount" = product.get_amount(),
-			"imageID" = "[icon2base64(icon(initial(item.icon), initial(item.icon_state), SOUTH, 1))]"
+			"image" = product.image
 		))
 	data["products"] = listed_products
 
@@ -574,37 +575,84 @@
 	return TRUE
 
 /obj/machinery/vending/proc/build_inventory(populate_parts)
-	var/list/all_products = list(
-		list(products, VENDOR_CATEGORY_NORMAL),
-		list(contraband, VENDOR_CATEGORY_HIDDEN),
-		list(premium, VENDOR_CATEGORY_COIN),
-		list(antag, VENDOR_CATEGORY_ANTAG)
-	)
-	for (var/list/current_list in all_products)
-		var/category = current_list[2]
-		for (var/entry in current_list[1])
-			var/datum/stored_items/vending_products/product = new/datum/stored_items/vending_products(src, entry)
-			product.price = (entry in prices) ? prices[entry] : 0
-			product.rarity = (entry in rare_products) ? rare_products[entry] : 100
-			product.category = category
-			if (populate_parts)
-				product.amount = current_list[1][entry]
-				if (!product.amount && product.rarity < 100 && product.category != VENDOR_CATEGORY_ANTAG)
-					product.amount = prob(product.rarity) * rand(1,ceil(product.rarity/10))
-				if (!product.amount && product.category == VENDOR_CATEGORY_ANTAG)
-					product.amount = prob(product.rarity) * ceil(rand(1,antagrandom)) //Either 0 or 1 of a rare antag product, for balance purposes. Exception if antagrandom is redefined from default of 1.
-				if (!product.amount && product.rarity == 100)
-					product.amount = rand(minrandom,maxrandom)
-			if (colored_entries)
-				if (product.category == VENDOR_CATEGORY_NORMAL && product.rarity < 100)
+	SHOULD_NOT_OVERRIDE(TRUE)
+
+	for (var/list/entry in get_all_products())
+		var/category = entry[1]
+		var/list/products = entry[2]
+		for (var/product_path in products)
+			if(!product_path)
+				stack_trace("Product path is null")
+				continue
+
+			var/atom/dummy = new product_path
+			dummy.ImmediateOverlayUpdate()
+			product_records += generate_product_record(dummy, category, products[product_path], get_product_image(dummy), populate_parts)
+			qdel(dummy)
+
+/obj/machinery/vending/proc/get_product_image(atom/dummy)
+	SHOULD_NOT_OVERRIDE(TRUE)
+
+	var/static/list/product_image_cache = list()
+	var/cache_key = "[dummy.name]:[dummy.icon]:[dummy.icon_state]:[dummy.color]"
+	var/base64image = product_image_cache[cache_key]
+	if(!base64image)
+		base64image = icon2base64(getFlatIcon(dummy))
+		product_image_cache[cache_key] = base64image
+
+	return base64image
+
+/obj/machinery/vending/proc/generate_product_record(atom/dummy, category, amount, image, populate_parts)
+	var/datum/stored_items/vending_products/product = new(
+		src,
+		dummy.type,
+		dummy.name,
+		price = prices[dummy.type] || 0,
+		category = category,
+		rarity = rare_products[dummy.type] || 100,
+		image = image)
+
+	if (populate_parts)
+		if(!amount)
+			if (product.rarity == 100)
+				amount = rand(minrandom, maxrandom)
+
+			else if (product.rarity < 100 && product.category != VENDOR_CATEGORY_ANTAG)
+				amount = prob(product.rarity) * rand(1,ceil(product.rarity / 10))
+
+			else if (product.category == VENDOR_CATEGORY_ANTAG)
+				amount = prob(product.rarity) * ceil(rand(1, antagrandom)) //Either 0 or 1 of a rare antag product, for balance purposes. Exception if antagrandom is redefined from default of 1.
+
+		product.amount = amount
+
+	if (colored_entries)
+		switch(product.category)
+			if (VENDOR_CATEGORY_HIDDEN)
+				product.display_color = COLOR_DARK_ORANGE
+			if (VENDOR_CATEGORY_COIN)
+				product.display_color = COLOR_LIME
+			if (VENDOR_CATEGORY_ANTAG)
+				product.display_color = COLOR_RED
+			if (VENDOR_CATEGORY_NORMAL)
+				if (product.rarity < 100)
 					product.display_color = COLOR_GOLD
-				if (product.category == VENDOR_CATEGORY_HIDDEN)
-					product.display_color = COLOR_DARK_ORANGE
-				if (product.category == VENDOR_CATEGORY_COIN)
-					product.display_color = COLOR_LIME
-				if (product.category == VENDOR_CATEGORY_ANTAG)
-					product.display_color = COLOR_RED
-			product_records.Add(product)
+
+	return product
+
+/obj/machinery/vending/proc/get_all_products()
+	SHOULD_NOT_OVERRIDE(TRUE)
+
+	if(!length(all_products))
+		if(possible_vendor_flags & VENDOR_CATEGORY_NORMAL)
+			all_products += list(list(VENDOR_CATEGORY_NORMAL, products))
+		if(possible_vendor_flags & VENDOR_CATEGORY_HIDDEN)
+			all_products += list(list(VENDOR_CATEGORY_HIDDEN, contraband))
+		if(possible_vendor_flags & VENDOR_CATEGORY_COIN)
+			all_products += list(list(VENDOR_CATEGORY_COIN, premium))
+		if(possible_vendor_flags & VENDOR_CATEGORY_ANTAG)
+			all_products += list(list(VENDOR_CATEGORY_ANTAG, antag))
+
+	return all_products
 
 /obj/machinery/vending/proc/IsShowingProducts()
 	return HAS_FLAGS(vendor_flags, VENDOR_CATEGORY_NORMAL)

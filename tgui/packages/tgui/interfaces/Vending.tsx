@@ -35,7 +35,7 @@ type Product = {
   price: number;
   category: number;
   ammount: number;
-  imageID: string;
+  image: string;
 };
 
 export const Vending = (props, context) => {
@@ -136,7 +136,7 @@ export const VendingMain = (props, context) => {
                 }
               >
                 <img
-                  src={`data:image/jpeg;base64,${product.imageID}`}
+                  src={`data:image/jpeg;base64,${product.image}`}
                   style={{
                     width: '64px',
                     '-ms-interpolation-mode': 'nearest-neighbor',

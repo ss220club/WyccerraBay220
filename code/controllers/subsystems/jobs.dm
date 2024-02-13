@@ -154,8 +154,7 @@ SUBSYSTEM_DEF(jobs)
 /datum/controller/subsystem/jobs/proc/check_latejoin_blockers(mob/new_player/joining, datum/job/job)
 	if(!check_general_join_blockers(joining, job))
 		return FALSE
-	if(job.minimum_character_age && (joining.client.prefs.age < job.minimum_character_age))
-		to_chat(joining, SPAN_WARNING("Your character's in-game age is too low for this job."))
+	if(job.is_restricted(joining.client.prefs, joining))
 		return FALSE
 	if(!job.player_old_enough(joining.client))
 		to_chat(joining, SPAN_WARNING("Your player age (days since first seen on the server) is too low for this job."))

@@ -49,9 +49,8 @@
 	LAZYSET((suit_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
 
 
-
-/singleton/item_modifier/space_suit
-. = ..()
+/singleton/item_modifier/space_suit/Initialize()
+	. = ..()
 	var/helmet_setup = type_setups[/obj/item/clothing/head/helmet/space]
 	LAZYSET((helmet_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi')
 	LAZYSET((helmet_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')

@@ -1,53 +1,29 @@
+//a docking port that uses a single door
 /obj/machinery/embedded_controller/radio/simple_docking_controller
 	name = "docking hatch controller"
+	program = /datum/computer/file/embedded_program/docking/simple
 	var/tag_door
-	var/datum/computer/file/embedded_program/docking/simple/docking_program
 
-/obj/machinery/embedded_controller/radio/simple_docking_controller/Initialize()
-	. = ..()
-	docking_program = new(src)
-	program = docking_program
+/obj/machinery/embedded_controller/radio/simple_docking_controller/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/nanoui/master_ui = null, datum/topic_state/state = GLOB.default_state)
+	var/data[0]
+	var/datum/computer/file/embedded_program/docking/simple/docking_program = program
 
-/obj/machinery/embedded_controller/radio/simple_docking_controller/tgui_state(mob/user)
-	return GLOB.tgui_default_state
+	data = list(
+		"docking_status" = docking_program.get_docking_status(),
+		"override_enabled" = docking_program.override_enabled,
+		"door_state" = 	docking_program.memory["door_status"]["state"],
+		"door_lock" = 	docking_program.memory["door_status"]["lock"],
+	)
 
-/obj/machinery/embedded_controller/radio/simple_docking_controller/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
-	if(!ui)
-		ui = new(user, src, "SimpleDockingConsole", name)
-		ui.set_autoupdate(FALSE)
+	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
+
+	if (!ui)
+		ui = new(user, src, ui_key, "simple_docking_console.tmpl", name, 470, 290, state = state)
+		ui.set_initial_data(data)
 		ui.open()
+		ui.set_auto_update(1)
 
-/obj/machinery/embedded_controller/radio/simple_docking_controller/tgui_data(mob/user)
-	var/list/data = list()
-	data["docking_status"] = docking_program.get_docking_status()
-	data["override_enabled"] = docking_program.override_enabled
-	data["door_state"] = docking_program.memory["door_status"]["state"]
-	data["door_lock"] = docking_program.memory["door_status"]["lock"]
-	return data
-
-/obj/machinery/embedded_controller/radio/simple_docking_controller/tgui_act(action, params)
-	if(..())
-		return FALSE
-
-	. = TRUE
-
-	switch(action)
-		if("force_door")
-			if(docking_program.override_enabled)
-				if(docking_program.memory["door_status"]["state"] == "open")
-					docking_program.close_door()
-				else
-					docking_program.open_door()
-		if("toggle_override")
-			if(docking_program.override_enabled)
-				docking_program.disable_override()
-			else
-				docking_program.enable_override()
-		else
-			return FALSE
-
-// A docking controller program for a simple door based docking port
+//A docking controller program for a simple door based docking port
 /datum/computer/file/embedded_program/docking/simple
 	var/tag_door
 
@@ -74,6 +50,23 @@
 		memory["door_status"]["lock"] = signal.data["lock_status"]
 
 	..(signal, receive_method, receive_param)
+
+/datum/computer/file/embedded_program/docking/simple/receive_user_command(command)
+	. = TRUE
+	switch(command)
+		if("force_door")
+			if (override_enabled)
+				if(memory["door_status"]["state"] == "open")
+					close_door()
+				else
+					open_door()
+		if("toggle_override")
+			if (override_enabled)
+				disable_override()
+			else
+				enable_override()
+		else
+			. = FALSE
 
 /datum/computer/file/embedded_program/docking/simple/proc/signal_door(command)
 	var/datum/signal/signal = new

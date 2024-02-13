@@ -9,7 +9,7 @@ const path = require('path');
 const ExtractCssPlugin = require('mini-css-extract-plugin');
 const { createBabelConfig } = require('./babel.config.js');
 
-const createStats = verbose => ({
+const createStats = (verbose) => ({
   assets: verbose,
   builtAt: verbose,
   cached: false,
@@ -25,19 +25,21 @@ const createStats = verbose => ({
 });
 
 module.exports = (env = {}, argv) => {
-  const mode = argv.mode === 'production' ? 'production' : 'development';
+  const mode = argv.mode || 'production';
+  const bench = env.TGUI_BENCH;
   const config = {
-    mode,
+    mode: mode === 'production' ? 'production' : 'development',
     context: path.resolve(__dirname),
     target: ['web', 'es5', 'browserslist:ie 11'],
+    // prettier-ignore
     entry: {
       'tgui': [
         './packages/tgui-polyfill',
-        './packages/tgui',
+        './packages/tgui'
       ],
       'tgui-panel': [
         './packages/tgui-polyfill',
-        './packages/tgui-panel',
+        './packages/tgui-panel'
       ],
     },
     output: {
@@ -47,10 +49,10 @@ module.exports = (env = {}, argv) => {
       filename: '[name].bundle.js',
       chunkFilename: '[name].bundle.js',
       chunkLoadTimeout: 15000,
-      hashFunction: "xxhash64",
+      hashFunction: 'xxhash64',
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.js', '.jsx'],
       alias: {},
     },
     module: {
@@ -60,7 +62,9 @@ module.exports = (env = {}, argv) => {
           use: [
             {
               loader: require.resolve('babel-loader'),
-              options: createBabelConfig({ mode }),
+              options: createBabelConfig({
+                removeConsole: !bench,
+              }),
             },
           ],
         },
@@ -86,14 +90,19 @@ module.exports = (env = {}, argv) => {
         },
         {
           test: /\.(png|jpg|svg)$/,
-          type: 'asset/inline',
+          use: [
+            {
+              loader: require.resolve('url-loader'),
+              options: {
+                esModule: false,
+              },
+            },
+          ],
         },
       ],
     },
     optimization: {
       emitOnErrors: false,
-      realContentHash: true,
-      moduleIds: 'deterministic',
     },
     performance: {
       hints: false,
@@ -109,7 +118,7 @@ module.exports = (env = {}, argv) => {
     stats: createStats(true),
     plugins: [
       new webpack.EnvironmentPlugin({
-        NODE_ENV: env.NODE_ENV || argv.mode || 'development',
+        NODE_ENV: env.NODE_ENV || mode,
         WEBPACK_HMR_ENABLED: env.WEBPACK_HMR_ENABLED || argv.hot || false,
         DEV_SERVER_IP: env.DEV_SERVER_IP || null,
       }),
@@ -120,13 +129,13 @@ module.exports = (env = {}, argv) => {
     ],
   };
 
-  // Add a bundle analyzer to the plugins array
-  if (argv.analyze) {
-    const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-    config.plugins = [
-      ...config.plugins,
-      new BundleAnalyzerPlugin(),
-    ];
+  if (bench) {
+    config.entry = {
+      'tgui-bench': [
+        './packages/tgui-polyfill',
+        './packages/tgui-bench/entrypoint',
+      ],
+    };
   }
 
   // Production build specific options

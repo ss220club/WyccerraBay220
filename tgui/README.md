@@ -46,67 +46,67 @@ You will need these programs to start developing in tgui:
 
 ## Usage
 
-**For Git Bash, MSys2, WSL, Linux or macOS users:**
+**Via provided cmd scripts (Windows)**:
 
-Change your directory to `tgui`.
+- `bin/tgui-build` - Build tgui in production mode and run a full suite of code checks.
+- `bin/tgui-dev` - Launch a development server.
+  - `bin/tgui-dev --reload` - Reload byond cache once.
+  - `bin/tgui-dev --debug` - Run server with debug logging enabled.
+  - `bin/tgui-dev --no-hot` - Disable hot module replacement (helps when doing development on IE8).
+- `bin/tgui-sonar` - Analyze code with SonarQube.
+- `bin/tgui-bench` - Run benchmarks.
 
-Run `bin/tgui --install-git-hooks` to install merge drivers which will
-assist you in conflict resolution when rebasing your branches. Only has
-to be done once.
+> To open a CMD or PowerShell window in any open folder, right click **while holding Shift** on any free space in the folder, then click on either `Open command window here` or `Open PowerShell window here`.
 
-Run `bin/tgui` with any of the options listed below.
+**Via Juke Build (cross-platform)**:
 
-**For Windows CMD or PowerShell users:**
+- `tools/build/build tgui` - Build tgui in production mode.
+- `tools/build/build tgui-dev` - Build tgui in production mode.
+  - `tools/build/build tgui-dev --reload` - Reload byond cache once.
+  - `tools/build/build tgui-dev --debug` - Run server with debug logging enabled.
+  - `tools/build/build tgui-dev --no-hot` - Disable hot module replacement (helps when doing development on IE8).
+- `tools/build/build tgui-lint` - Show (and auto-fix) problems with the code.
+- `tools/build/build tgui-sonar` - Analyze code with SonarQube.
+- `tools/build/build tgui-test` - Run unit and integration tests.
+- `tools/build/build tgui-analyze` - Run a bundle analyzer.
+- `tools/build/build tgui-bench` - Run benchmarks.
+- `tools/build/build tgui-clean` - Clean up tgui folder.
 
-If you haven't opened the console already, you can do that by holding
-Shift and right clicking on the `tgui` folder, then pressing
-either `Open command window here` or `Open PowerShell window here`.
+> With Juke Build, you can run multiple targets together, e.g.:
+>
+> ```
+> tools/build/build tgui tgui-lint tgui-tsc tgui-test
+> ```
 
-Run `.\bin\tgui.bat` with any of the options listed below.
+**Via Yarn (cross-platform)**:
 
-> If using PowerShell, you will receive errors if trying to run
-> `.\bin\tgui.ps1`, because default Windows policy does not allow direct
-> execution of PS1 scripts. Run `.\bin\tgui.bat` instead.
+Run `yarn install` once to install tgui dependencies.
 
-**Available commands:**
-
-- `bin/tgui` - Build the project in production mode.
-- `bin/tgui --dev` - Launch a development server.
-  - tgui development server provides you with incremental compilation,
-  hot module replacement and logging facilities in all running instances
-  of tgui. In short, this means that you will instantly see changes in the
-  game as you code it. Very useful, highly recommended.
-  - In order to use it, you should start the game server first, connect to it
-  and wait until the world has been properly loaded and you are no longer
-  in the lobby. Start tgui dev server, and once it has finished building,
-  press F5 on any tgui window. You'll know that it's hooked correctly if
-  you see a green bug icon in titlebar and data gets dumped to the console.
-- `bin/tgui --dev --reload` - Reload byond cache once.
-- `bin/tgui --dev --debug` - Run server with debug logging enabled.
-- `bin/tgui --dev --no-hot` - Disable hot module replacement (helps when
-doing development on IE8).
-- `bin/tgui --lint` - Show problems with the code.
-- `bin/tgui --fix` - Auto-fix problems with the code.
-- `bin/tgui --test` - Run tests.
-- `bin/tgui --analyze` - Run a bundle analyzer.
-- `bin/tgui --clean` - Clean up project repo.
-- `bin/tgui --tgui-polyfill` - Build polyfills. You need to run it when updating any of the static (numbered) polyfills.
-- `bin/tgui [webpack options]` - Build the project with custom webpack
-options.
-
-**For everyone else:**
-
-You can double-click these batch files to achieve the same thing:
-
-- `bin\tgui.bat` - Build the project in production mode.
-- `bin\tgui-dev-server.bat` - Launch a development server.
-
-> Remember to always run a full build before submitting a PR. It creates
-> a compressed javascript bundle which is then referenced from DM code.
-> We prefer to keep it version controlled, so that people could build the
-> game just by using Dream Maker.
+- `yarn tgui:build` - Build tgui in production mode.
+  - `yarn tgui:build [options]` - Build tgui with custom webpack options.
+- `yarn tgui:dev` - Launch a development server.
+  - `yarn tgui:dev --reload` - Reload byond cache once.
+  - `yarn tgui:dev --debug` - Run server with debug logging enabled.
+  - `yarn tgui:dev --no-hot` - Disable hot module replacement (helps when doing development on IE8).
+- `yarn tgui:lint` - Show (and auto-fix) problems with the code.
+- `yarn tgui:sonar` - Analyze code with SonarQube.
+- `yarn tgui:tsc` - Check code with TypeScript compiler.
+- `yarn tgui:test` - Run unit and integration tests.
+- `yarn tgui:analyze` - Run a bundle analyzer.
+- `yarn tgui:bench` - Run benchmarks.
+- `yarn tgfont:build` - Build icon fonts.
+- `yarn tgui-polyfill:build` - Build polyfills. You need to run it when updating any of the static (numbered) polyfills.
 
 ## Troubleshooting
+
+**Development server is crashing**
+
+Make sure path to your working directory does not contain spaces, special unicode
+characters, exclamation marks or any other special symbols. If so, move codebase
+to a location which does not contain these characters.
+
+This is a known issue with Yarn (and some other tools, like Webpack), and fix is
+going to happen eventually.
 
 **Development server doesn't find my BYOND cache!**
 

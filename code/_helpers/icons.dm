@@ -529,6 +529,9 @@ The _flatIcons list is a cache for generated icon files.
 		if(I:plane == EMISSIVE_PLANE) //Just replace this with whatever it is TG is doing these days sometime. Getflaticon breaks emissives
 			continue
 
+		if(I:plane == LIGHTING_EXPOSURE_PLANE) // SS220 Bloom-Lighting
+			continue
+
 		if(I:alpha == 0)
 			continue
 

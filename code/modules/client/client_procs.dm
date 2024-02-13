@@ -56,8 +56,10 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		return
 
 	// Tgui Topic middleware
-	if(!tgui_Topic(href_list))
+	if(tgui_Topic(href_list))
 		return
+	if(href_list["reload_tguipanel"])
+		nuke_chat()
 
 	//Admin PM
 	if(href_list["priv_msg"])
@@ -106,7 +108,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
-		if("chat")		return chatOutput.Topic(href, href_list)
 
 	switch(href_list["action"])
 		if("openLink")
@@ -175,6 +176,8 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		src.preload_rsc = pick(config.resource_urls)
 	else src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
+	tgui_panel = new(src, "browseroutput")
+
 	if(byond_version < DM_VERSION)
 		to_chat(src, SPAN_WARNING("You are running an older version of BYOND than the server and may experience issues."))
 		to_chat(src, SPAN_WARNING("It is recommended that you update to at least [DM_VERSION] at http://www.byond.com/download/."))
@@ -182,7 +185,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	GLOB.clients += src
 	GLOB.ckey_directory[ckey] = src
 
-	//SS220 edit
 	// Automatic admin rights for people connecting locally.
 	// Concept stolen from /tg/ with deepest gratitude.
 	var/local_connection = (config.auto_local_admin && (isnull(address) || GLOB.localhost_addresses[address]))
@@ -292,7 +294,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		GLOB.admins -= src
 	if (watched_variables_window)
 		STOP_PROCESSING(SSprocessing, watched_variables_window)
-	QDEL_NULL(chatOutput)
 	GLOB.ckey_directory -= ckey
 	ticket_panels -= src
 	GLOB.clients -= src

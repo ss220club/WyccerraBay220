@@ -1,28 +1,40 @@
+/*!
+ * Copyright (c) 2022 Aleksej Komarov
+ * SPDX-License-Identifier: MIT
+ */
+
 SUBSYSTEM_DEF(ping)
 	name = "Ping"
-	flags = SS_NO_INIT | SS_BACKGROUND
-	wait = 15 SECONDS
-	var/static/list/datum/chatOutput/chats = list()
-	var/static/saved_index = 1
+	priority = SS_PRIORITY_PING
+	init_order = SS_INIT_PING
+	wait = 4 SECONDS
+	flags = SS_NO_INIT
+	runlevels = RUNLEVEL_INIT | RUNLEVEL_LOBBY | RUNLEVEL_SETUP | RUNLEVEL_GAME | RUNLEVEL_POSTGAME
 
+	var/list/currentrun = list()
 
-/datum/controller/subsystem/ping/UpdateStat(time)
-	if (PreventUpdateStat(time))
-		return ..()
-	..("Chats: [length(chats)]")
+/datum/controller/subsystem/ping/StartLoadingMap()
+	..("P:[length(GLOB.clients)]")
 
+/datum/controller/subsystem/ping/fire(resumed = FALSE)
+	// Prepare the new batch of clients
+	if(!resumed)
+		src.currentrun = GLOB.clients.Copy()
 
-/datum/controller/subsystem/ping/fire(resumed, no_mc_tick)
-	var/datum/chatOutput/chat
-	for (var/index = saved_index to length(chats))
-		chat = chats[index]
-		if (QDELETED(chat))
-			continue
-		if (chat.loaded && !chat.broken)
-			chat.updatePing()
-		if (no_mc_tick)
-			CHECK_TICK
-		else if (MC_TICK_CHECK)
-			saved_index = index
+	// De-reference the list for sanic speeds
+	var/list/currentrun = src.currentrun
+
+	while(currentrun.len)
+		var/client/client = currentrun[currentrun.len]
+		currentrun.len--
+
+		if(client?.tgui_panel?.is_ready())
+			// Send a soft ping
+			client.tgui_panel.window.send_message("ping/soft", list(
+				// Slightly less than the subsystem timer (somewhat arbitrary)
+				// to prevent incoming pings from resetting the afk state
+				"afk" = client.is_afk(3.5 SECONDS),
+			))
+
+		if(MC_TICK_CHECK)
 			return
-	saved_index = 1

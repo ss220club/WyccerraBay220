@@ -1,3 +1,4 @@
+GLOBAL_DATUM_INIT(iconCache, /savefile, new("data/iconCache.sav"))
 GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 
 

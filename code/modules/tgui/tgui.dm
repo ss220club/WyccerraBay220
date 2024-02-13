@@ -228,6 +228,7 @@
 		"refreshing" = FALSE,
 		"map" = (GLOB.using_map && GLOB.using_map.path) ? GLOB.using_map.path : "Unknown",
 		"mapZLevel" = map_z_level,
+		"ref" = "[REF(src)]",
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
@@ -242,7 +243,6 @@
 		),
 		"user" = list(
 			"name" = "[user]",
-			"ckey" = "[user.ckey]",
 			"observer" = isobserver(user),
 		),
 	)

@@ -176,7 +176,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		src.preload_rsc = pick(config.resource_urls)
 	else src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
-	tgui_panel = new(src, "browseroutput")
+
 
 	if(byond_version < DM_VERSION)
 		to_chat(src, SPAN_WARNING("You are running an older version of BYOND than the server and may experience issues."))
@@ -184,6 +184,8 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	to_chat(src, SPAN_WARNING("If the title screen is black, resources are still downloading. Please be patient until the title screen appears."))
 	GLOB.clients += src
 	GLOB.ckey_directory[ckey] = src
+
+	tgui_panel = new(src, "browseroutput")
 
 	// Automatic admin rights for people connecting locally.
 	// Concept stolen from /tg/ with deepest gratitude.
@@ -197,6 +199,8 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	if(holder)
 		GLOB.admins += src
 		holder.owner = src
+
+	tgui_panel.initialize()
 
 	//preferences datum - also holds some persistant data for the client (because we may as well keep these datums to a minimum)
 	prefs = SScharacter_setup.preferences_datums[ckey]

@@ -195,6 +195,15 @@
 	. = ..()
 	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_under_resomi.dmi')
 	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_under_resomi.dmi')
+
+/obj/item/clothing/under/rank/ntwork/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_under_resomi.dmi')
+
+/obj/item/clothing/under/rank/scientist/Initialize()
+	. = ..()
+	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_under_resomi.dmi')
+
 //ears
 /obj/item/clothing/ears/Initialize()
 	. = ..()

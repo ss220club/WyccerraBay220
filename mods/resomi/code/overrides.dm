@@ -5,7 +5,7 @@
 #define PULSE_NUMBER_2FAST 140
 #define PULSE_NUMBER_THREADY PULSE_MAX_BPM
 
-
+/*
 /mob/living/carbon/human/get_pulse_as_number()
 	var/obj/item/organ/internal/heart/heart_organ = internal_organs_by_name[BP_HEART]
 	if(!heart_organ)
@@ -27,7 +27,7 @@
 			return PULSE_NUMBER_THREADY
 	return ((raw_pulse_number * (2 - species.blood_volume / SPECIES_BLOOD_DEFAULT)) + (raw_pulse_number * rand(-0.2, 0.2)))
 
-
+*/
 #undef PULSE_NUMBER_NONE
 #undef PULSE_NUMBER_SLOW
 #undef PULSE_NUMBER_NORM

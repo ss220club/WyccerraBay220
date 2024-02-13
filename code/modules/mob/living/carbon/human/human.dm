@@ -1577,7 +1577,7 @@
 	species.toggle_stance(src)
 
 // Similar to get_pulse, but returns only integer numbers instead of text.
-/mob/living/carbon/human/proc/get_pulse_as_number()	// IMPORTANT TO KNOW THIS PROC IS FULLY OVERRIDED IN RESOMI MODULE.
+/mob/living/carbon/human/proc/get_pulse_as_number()
 	var/obj/item/organ/internal/heart/heart_organ = internal_organs_by_name[BP_HEART]
 	if(!heart_organ)
 		return 0
@@ -1586,13 +1586,13 @@
 		if(PULSE_NONE)
 			return 0
 		if(PULSE_SLOW)
-			return rand(40, 60)
+			return round(rand(40, 60) + 50 * (species.pulse_rate_mod - 1))
 		if(PULSE_NORM)
-			return rand(60, 90)
+			return round(rand(60, 90) + 75 * (species.pulse_rate_mod - 1))
 		if(PULSE_FAST)
-			return rand(90, 120)
+			return round(rand(90, 120) + 105 * (species.pulse_rate_mod - 1))
 		if(PULSE_2FAST)
-			return rand(120, 160)
+			return round(rand(120, 160) + 140 * (species.pulse_rate_mod - 1))
 		if(PULSE_THREADY)
 			return PULSE_MAX_BPM
 	return 0

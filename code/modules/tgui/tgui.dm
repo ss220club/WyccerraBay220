@@ -42,8 +42,6 @@
 	var/datum/tgui/parent_ui
 	/// Children of this UI
 	var/list/children = list()
-	/// Rate limit client refreshes to prevent DoS.
-	COOLDOWN_DECLARE(refresh_cooldown)
 
 /**
  * public

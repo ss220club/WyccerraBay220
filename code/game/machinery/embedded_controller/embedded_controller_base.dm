@@ -25,14 +25,6 @@
 		program.receive_signal(signal, receive_method, receive_param)
 			//spawn(5) program.process() //no, program.process sends some signals and machines respond and we here again and we lag -rastaf0
 
-/obj/machinery/embedded_controller/Topic(href, href_list)
-	if(..())
-		return
-	if(usr)
-		usr.set_machine(src)
-	if(program)
-		return program.receive_user_command(href_list["command"]) // Any further sanitization should be done in here.
-
 /obj/machinery/embedded_controller/Process()
 	if(program)
 		program.process()

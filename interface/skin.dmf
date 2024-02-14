@@ -224,7 +224,7 @@ window "rpane"
 		saved-params = "splitter"
 		right = "outputwindow"
 		is-vert = false
-	elem "fullscreenb"
+	elem "credits"
 		type = BUTTON
 		pos = 0,7
 		size = 119x18
@@ -234,8 +234,8 @@ window "rpane"
 		background-color = #ffffff
 		border = line
 		saved-params = "is-checked"
-		text = "Fullscreen"
-		command = "fullscreen"
+		text = "Авторы"
+		command = "Credits"
 		is-flat = true
 	elem "changelog"
 		type = BUTTON
@@ -313,7 +313,7 @@ window "rpane"
 		text = "Багрепорт"
 		command = "link-issue"
 		is-flat = true
-	elem "credits"
+	elem "fullscreenb"
 		type = BUTTON
 		pos = 868,7
 		size = 119x18
@@ -322,8 +322,8 @@ window "rpane"
 		background-color = #ffffff
 		border = line
 		saved-params = "is-checked"
-		text = "Авторы"
-		command = "Credits"
+		text = "Fullscreen"
+		command = "fullscreen"
 		is-flat = true
 		group = "rpanemode"
 

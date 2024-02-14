@@ -419,7 +419,7 @@ as a single icon. Useful for when you want to manipulate an icon via the above a
 The _flatIcons list is a cache for generated icon files.
 */
 
-/proc/getFlatIcon(image/A, defdir=2, deficon=null, defstate="", defblend=BLEND_DEFAULT)
+/proc/getFlatIcon(image/A, defdir=2, deficon=null, defstate="", defblend=BLEND_DEFAULT, always_use_defdir = FALSE)
 	RETURN_TYPE(/icon)
 	// We start with a blank canvas, otherwise some icon procs crash silently
 	var/icon/flat = icon('icons/effects/effects.dmi', "icon_state"="nothing") // Final flattened icon
@@ -451,10 +451,10 @@ The _flatIcons list is a cache for generated icon files.
 			noIcon = TRUE // Do not render this object.
 
 	var/curdir
-	if(defdir)
-		curdir = defdir
-	else
+	if(A.dir != 2 && !always_use_defdir)
 		curdir = A.dir
+	else
+		curdir = defdir
 
 	var/curblend
 	if(A.blend_mode == BLEND_DEFAULT)
@@ -541,9 +541,9 @@ The _flatIcons list is a cache for generated icon files.
 		else // 'I' is an appearance object.
 			if(istype(A,/obj/machinery/atmospherics) && (I in A.underlays))
 				var/image/Im = I
-				add = getFlatIcon(image(I), Im.dir, curicon, curstate, curblend)
+				add = getFlatIcon(image(I), Im.dir, curicon, curstate, curblend, TRUE)
 			else
-				add = getFlatIcon(image(I), curdir, curicon, curstate, curblend)
+				add = getFlatIcon(image(I), curdir, curicon, curstate, curblend, always_use_defdir)
 
 		// Find the new dimensions of the flat icon to fit the added overlay
 		addX1 = min(flatX1, I:pixel_x+1)

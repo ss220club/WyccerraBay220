@@ -15,8 +15,6 @@
 	. = ..()
 	add_language(LANGUAGE_SIIK_MAAS, TRUE)
 	add_language(LANGUAGE_LEGALESE, TRUE)
-	add_language(LANGUAGE_RESOMI, TRUE)
-
 
 // New verbs
 

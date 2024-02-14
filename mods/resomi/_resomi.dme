@@ -2,7 +2,6 @@
 #define MODPACK_RESOMI
 
 #include "_resomi.dm"
-#include "code/overrides.dm"
 #include "code/unit_tests.dm"
 #include "code/body/abilities.dm"
 #include "code/body/emotes.dm"

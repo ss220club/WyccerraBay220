@@ -69,9 +69,6 @@
 	src.parent_ui = parent_ui
 	if(parent_ui)
 		parent_ui.children += src
-	// Deprecated
-	if(ui_x && ui_y)
-		src.window_size = list(ui_x, ui_y)
 
 /**
  * public
@@ -99,7 +96,6 @@
 			))
 	else
 		window.send_message("ping")
-
 	send_assets()
 	window.send_message("update", get_payload(
 		with_data = TRUE,

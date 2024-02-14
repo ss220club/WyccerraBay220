@@ -503,7 +503,7 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 		var/client/C = thing
 		C?.tgui_panel?.send_roundrestart()
 		if(config.server) //if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
-			C << link("byond://[config.server]")
+			to_target(C, "byond://[config.server]")
 
 	rustg_log_close_all()
 	if(config.wait_for_sigusr1_reboot && reason != 3)

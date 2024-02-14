@@ -24,9 +24,9 @@ SUBSYSTEM_DEF(ping)
 	// De-reference the list for sanic speeds
 	var/list/currentrun = src.currentrun
 
-	while(currentrun.len)
-		var/client/client = currentrun[currentrun.len]
-		currentrun.len--
+	while(length(currentrun))
+		var/client/client = currentrun[length(currentrun)]
+		LIST_DEC(currentrun)
 
 		if(client?.tgui_panel?.is_ready())
 			// Send a soft ping

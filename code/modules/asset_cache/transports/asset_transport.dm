@@ -127,7 +127,7 @@
 				new_asset_name = "asset.[ACI.hash][ACI.ext]"
 			// Un-comment below to debug asset sending (This will spam logs so do not enable normally)
 			// log_debug("Sending asset `[asset_name]` to client `[client]` as `[new_asset_name]`")
-			client << browse_rsc(ACI.resource, new_asset_name)
+			send_rsc(client, ACI.resource, new_asset_name)
 
 			client.sent_assets[new_asset_name] = ACI.hash
 

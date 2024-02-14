@@ -83,12 +83,10 @@
 			to_chat(src, "You probably entered the game with a different keyboard layout.\n<a href='?src=\ref[src];reset_macros=1'>Please switch to the English layout and click here to fix the communication hotkeys.</a>")
 			break
 
-
 /client/verb/ToggleHotkeyMode()
 	set hidden = TRUE
 	prefs.hotkeys = !prefs.hotkeys
 	update_hotkey_mode()
-
 
 /client/proc/update_hotkey_mode()
 	if(prefs.hotkeys)
@@ -98,10 +96,11 @@
 		winset(src, "mainwindow.mainwindow", "macro=default")
 		winset(src, "mapwindow.map", "focus=true")
 		winset(src, "outputwindow.hotkeytoggle", "is-checked=true")
+		winset(src, "outputwindow.input", " border=line")
 	else
 		winset(src, "mainwindow.mainwindow", "macro=macro")
 		winset(src, "outputwindow.hotkeytoggle", "is-checked=false")
-		winset(src, "outputwindow.input", "focus=true;border=line")
+		winset(src, "outputwindow.input", "focus=true; border=sunken")
 
 // Я срал, Глист, на читаемость и отладку
 // Это уже протестировано и мы просто ждём пока на оффбей зальют эти кейбинды вонючие

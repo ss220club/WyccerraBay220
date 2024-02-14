@@ -15,8 +15,8 @@
 
 
 /mob/living/carbon/human/Initialize(mapload, new_species = null)
-	grasp_limbs = list()
-	stance_limbs = list()
+	LAZYINITLIST(grasp_limbs)
+	LAZYINITLIST(stance_limbs)
 
 	if(!dna)
 		dna = new /datum/dna(null)

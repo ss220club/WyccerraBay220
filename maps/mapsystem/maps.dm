@@ -106,7 +106,8 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 	var/away_site_budget = 0
 	var/min_offmap_players = 0
 
-	var/list/loadout_blacklist	//list of types of loadout items that will not be pickable
+	// Set of types of loadout items that will not be pickable as: type => TRUE
+	var/list/loadout_blacklist
 
 	//Economy stuff
 	var/starting_money = 75000		//Money in station account

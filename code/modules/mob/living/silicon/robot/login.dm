@@ -5,10 +5,6 @@
 
 	show_laws(0)
 
-	// [SIERRA-REMOVE] - SSINPUT
-	// winset(src, null, "mainwindow.macro=borgmacro hotkey_toggle.is-checked=false input.focus=true input.background-color=#d3b5b5")
-	// [/SIERRA-REMOVE]
-
 	// Forces synths to select an icon relevant to their module
 	if(!icon_selected)
 		choose_icon(icon_selection_tries, module_sprites)

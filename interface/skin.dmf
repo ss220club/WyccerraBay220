@@ -126,7 +126,8 @@ window "mainwindow"
 		on-size = "onresize"
 		statusbar = false
 		is-maximized = true
-		icon = 'icons\\ss13_64.png'
+		title = "SS220 | WyccStation (Sierra)"
+		icon = 'icons\\ws220.png'
 		macro = "default"
 		menu = "menu"
 	elem "mainvsplit"

@@ -55,5 +55,5 @@
   - any-glob-to-any-file:
     - 'sql/**/*'
 
-"TGUI":
+'TGUI':
 - 'tgui/**'

@@ -2,7 +2,7 @@ GLOBAL_DATUM_INIT(iconCache, /savefile, new("data/iconCache.sav"))
 GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 
 
-//Converts an icon to base64. Operates by putting the icon in the iconCache savefile,
+// Converts an icon to base64. Operates by putting the icon in the iconCache savefile,
 // exporting it as text, and then parsing the base64 from that.
 // (This relies on byond automatically storing icons in savefiles as base64)
 /proc/icon2base64(icon/icon, iconKey = "misc")
@@ -109,7 +109,7 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 
 	return "<img class='icon icon-[A.icon_state]' src='data:image/png;base64,[bicon_cache[key]]'>"
 
-//Costlier version of icon2html() that uses getFlatIcon() to account for overlays, underlays, etc. Use with extreme moderation, ESPECIALLY on mobs.
+// Costlier version of icon2html() that uses getFlatIcon() to account for overlays, underlays, etc. Use with extreme moderation, ESPECIALLY on mobs.
 /proc/costly_icon2html(thing, target)
 	if (!thing)
 		return

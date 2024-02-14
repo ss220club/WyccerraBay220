@@ -176,8 +176,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		src.preload_rsc = pick(config.resource_urls)
 	else src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
-
-
 	if(byond_version < DM_VERSION)
 		to_chat(src, SPAN_WARNING("You are running an older version of BYOND than the server and may experience issues."))
 		to_chat(src, SPAN_WARNING("It is recommended that you update to at least [DM_VERSION] at http://www.byond.com/download/."))

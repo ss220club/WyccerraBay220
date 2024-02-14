@@ -17,8 +17,8 @@
 	nuke_chat()
 
 	// Failed to fix, using tgalert as fallback
-	action = input(src, "Did that work?", "", "Yes") in list("Yes", "No, switch to old ui")
-	if (action == "No, switch to old ui")
+	action = alert(src, "Did that work?", "", "Yes", "No, switch to old ui")
+	if(action == "No, switch to old ui")
 		winset(src, "output", "on-show=&is-disabled=0&is-visible=1")
 		winset(src, "browseroutput", "is-disabled=1;is-visible=0")
 		log_tgui(src, "Failed to fix.")
@@ -34,3 +34,11 @@
 	// Force show the panel to see if there are any errors
 	winset(src, "output", "is-disabled=1&is-visible=0")
 	winset(src, "browseroutput", "is-disabled=0;is-visible=1")
+
+/client/verb/refresh_tgui()
+	set name = "Refresh TGUI"
+	set category = "OOC"
+
+	for(var/window_id in tgui_windows)
+		var/datum/tgui_window/window = tgui_windows[window_id]
+		window.reinitialize()

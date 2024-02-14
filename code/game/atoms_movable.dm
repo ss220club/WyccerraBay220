@@ -208,6 +208,7 @@
 	var/old_loc = loc
 	. = ..()
 	if (.)
+		SEND_SIGNAL(src, COMSIG_MOVABLE_MOVED, old_loc, TRUE)
 		// observ
 		if(!loc)
 			GLOB.moved_event.raise_event(src, old_loc, null)
@@ -230,6 +231,7 @@
 	var/old_loc = loc
 	. = ..()
 	if (.)
+		SEND_SIGNAL(src, COMSIG_MOVABLE_MOVED, old_loc)
 		if(!loc)
 			GLOB.moved_event.raise_event(src, old_loc, null)
 

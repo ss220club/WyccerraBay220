@@ -743,6 +743,7 @@
 		regenerate_icons()
 	else if( lying != lying_prev )
 		update_icons()
+	SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
 
 /mob/proc/reset_layer()
 	if(lying)

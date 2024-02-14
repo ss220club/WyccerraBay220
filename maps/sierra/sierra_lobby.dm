@@ -10,7 +10,7 @@
 		/singleton/audio/track/treacherous_voyage,
 
 		// Duke Gneiss - Exploring		--,
-		/singleton/audio/track/exploring
+		/singleton/audio/track/exploring,
 
 		// Duke Gneiss - Downtown		--,
 		/singleton/audio/track/downtown,

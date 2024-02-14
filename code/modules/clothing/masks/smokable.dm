@@ -17,6 +17,8 @@
 	var/ignitermes = "USER lights NAME with FLAME"
 	var/brand
 	var/gas_consumption = 0.04
+	var/smoke_effect = 0
+	var/smoke_amount = 1
 
 	z_flags = ZMM_MANGLE_PLANES
 
@@ -44,16 +46,25 @@
 /obj/item/clothing/mask/smokable/fire_act()
 	light(0)
 
-/obj/item/clothing/mask/smokable/proc/smoke(amount)
+/obj/item/clothing/mask/smokable/proc/smoke(amount, manual)
 	smoketime -= amount
 	if(reagents && reagents.total_volume) // check if it has any reagents at all
+		var/smoke_loc = loc
 		if(ishuman(loc))
 			var/mob/living/carbon/human/C = loc
-			if (src == C.wear_mask && C.check_has_mouth()) // if it's in the human/monkey mouth, transfer reagents to the mob
-				reagents.trans_to_mob(C, REM, CHEM_INGEST, 0.2) // Most of it is not inhaled... balance reasons.
+			smoke_loc = C.loc
+			if ((src == C.wear_mask || manual) && C.check_has_mouth()) // if it's in the human/monkey mouth, transfer reagents to the mob
+				reagents.trans_to_mob(C, smoke_amount * amount, CHEM_INGEST, 0.2)
 				add_trace_DNA(C)
 		else // else just remove some of the reagents
-			reagents.remove_any(REM)
+			reagents.remove_any(smoke_amount * amount)
+
+		smoke_effect++
+
+		if(smoke_effect >= 4 || manual)
+			smoke_effect = 0
+			new /obj/effect/effect/cig_smoke(smoke_loc)
+
 	var/turf/T = get_turf(src)
 	if(T)
 		var/datum/gas_mixture/environment = T.return_air()
@@ -131,6 +142,7 @@
 		if(flavor_text)
 			var/turf/T = get_turf(src)
 			T.visible_message(flavor_text)
+			smoke_amount = reagents.total_volume / smoketime
 		START_PROCESSING(SSobj, src)
 
 /obj/item/clothing/mask/smokable/proc/extinguish(mob/user, no_message)
@@ -337,10 +349,19 @@
 		if (blocked)
 			to_chat(H, SPAN_WARNING("\The [blocked] is in the way!"))
 			return TRUE
-		to_chat(H, SPAN_NOTICE("You take a drag on your [name]."))
-		smoke(5)
+		user.visible_message(\
+			"[user] takes a [pick("drag","puff","pull")] on \his [name].", \
+			"You take a [pick("drag","puff","pull")] on your [name].")
+		smoke(12, TRUE)
 		add_trace_DNA(H)
+		user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
 		return TRUE
+
+	if(!lit && istype(H) && H.on_fire)
+		user.do_attack_animation(H)
+		light(H, user)
+		return TRUE
+
 	return ..()
 
 /obj/item/clothing/mask/smokable/cigarette/use_after(obj/item/reagent_containers/glass/glass, mob/living/user, click_parameters)

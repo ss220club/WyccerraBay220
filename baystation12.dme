@@ -116,6 +116,7 @@
 #include "code\_helpers\assets.dm"
 #include "code\_helpers\atmospherics.dm"
 #include "code\_helpers\atom_movables.dm"
+#include "code\_helpers\bicon_procs.dm"
 #include "code\_helpers\bubble_effect.dm"
 #include "code\_helpers\builtin_proc_callers.dm"
 #include "code\_helpers\client.dm"

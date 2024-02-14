@@ -56,4 +56,6 @@
     - 'sql/**/*'
 
 'TGUI':
-- 'tgui/**'
+- changed-files:
+  - any-glob-to-any-file:
+    - 'tgui/**'

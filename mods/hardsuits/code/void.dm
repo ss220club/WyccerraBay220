@@ -204,12 +204,3 @@
 	suit_setup[SETUP_SPECIES_OBJ][SPECIES_UNATHI] = 'mods/hardsuits/icons/voidsuits/obj_suit_unathi.dmi'
 	suit_setup[SETUP_SPECIES_OBJ][SPECIES_SKRELL] = 'mods/hardsuits/icons/voidsuits/obj_suit_skrell.dmi'
 	suit_setup[SETUP_SPECIES_ONMOB][SPECIES_SKRELL] = 'mods/hardsuits/icons/voidsuits/onmob_suit_skrell.dmi'
-
-#undef SETUP_NAME
-#undef SETUP_OBJ_SHEET
-#undef SETUP_ONMOB_SHEET
-#undef SETUP_ICON_STATE
-#undef SETUP_ITEM_STATE
-#undef SETUP_ITEM_STATE_SLOTS
-#undef SETUP_SPECIES_OBJ
-#undef SETUP_SPECIES_ONMOB

@@ -467,7 +467,7 @@ The _flatIcons list is a cache for generated icon files.
 	var/image/copy
 	// Add the atom's icon itself, without pixel_x/y offsets.
 	if(!noIcon)
-		copy = image(icon=curicon, icon_state=curstate, layer=A.layer, dir=curdir)
+		copy = image(icon(curicon, curstate, curdir, 1), layer=A.layer)
 		copy.color = A.color
 		copy.alpha = A.alpha
 		copy.blend_mode = curblend

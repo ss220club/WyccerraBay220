@@ -72,11 +72,12 @@
 		return
 
 	if(modifiers["ctrl"])
-		if(selected_system)
-			if(selected_system == A)
-				selected_system.CtrlClick(user)
-				setClickCooldown(3)
-			return
+		if(istype(A, /obj/item/mech_equipment))
+			for(var/hardpoint in hardpoints)
+				if(A == hardpoints[hardpoint])
+					A.CtrlClick(user)
+					setClickCooldown(3)
+					return
 
 	if(!(user in pilots) && user != src)
 		return
@@ -121,12 +122,14 @@
 		failed = TRUE
 
 	if(!failed)
+		if(istype(A, /obj/item/mech_equipment))
+			for(var/hardpoint in hardpoints)
+				if(A == hardpoints[hardpoint])
+					var/obj/item/mech_equipment/mech_equipment = A
+					mech_equipment.attack_self(user)
+					setClickCooldown(5)
+					return
 		if(selected_system)
-			if(selected_system == A)
-				selected_system.attack_self(user)
-				setClickCooldown(5)
-				return
-
 			// Mounted non-exosuit systems have some hacky loc juggling
 			// to make sure that they work.
 			var/system_moved = FALSE

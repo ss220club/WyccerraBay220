@@ -17,6 +17,7 @@
 		Grow, baby, growww!;\
 		Aw h'yeah son!
 	"}
+	possible_vendor_flags = VENDOR_CATEGORY_NORMAL|VENDOR_CATEGORY_HIDDEN|VENDOR_CATEGORY_COIN
 	products = list(
 		/obj/item/seeds/bananaseed = 3,
 		/obj/item/seeds/berryseed = 3,
@@ -68,24 +69,15 @@
 		/obj/item/reagent_containers/spray/waterflower = 1
 	)
 
-
-/obj/machinery/vending/hydroseeds/build_inventory()
-	var/list/all_products = list(
-		list(products, VENDOR_CATEGORY_NORMAL),
-		list(contraband, VENDOR_CATEGORY_HIDDEN),
-		list(premium, VENDOR_CATEGORY_COIN)
-	)
-	for (var/current_list in all_products)
-		var/category = current_list[2]
-		for (var/entry in current_list[1])
-			var/obj/item/seeds/S = new entry(src)
-			var/name = S.name
-			var/datum/stored_items/vending_products/product = new/datum/stored_items/vending_products(src, entry, name)
-			product.price = (entry in prices) ? prices[entry] : 0
-			product.amount = (current_list[1][entry]) ? current_list[1][entry] : 1
-			product.category = category
-			product_records.Add(product)
-
+/obj/machinery/vending/hydroseeds/generate_product_record(atom/dummy, category, amount, image, populate_parts)
+	return new/datum/stored_items/vending_products(
+		src,
+		dummy.type,
+		dummy.name,
+		price = prices[dummy.type] || 0,
+		amount = amount || 1,
+		category = category,
+		image = image)
 
 /obj/machinery/vending/hydroseeds/generic
 	icon_state = "seeds_generic"

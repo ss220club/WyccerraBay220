@@ -39,5 +39,5 @@
 			refill_product.migrate(vendor)
 			vendor.product_records += refill_product
 	product_records = null
-	SSnano.update_uis(vendor)
+	SStgui.update_uis(vendor)
 	qdel(src)

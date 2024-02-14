@@ -1,5 +1,3 @@
-var/global/list/plant_seed_sprites = list()
-
 //Seed packet object/procs.
 /obj/item/seeds
 	name = "packet of seeds"
@@ -8,22 +6,27 @@ var/global/list/plant_seed_sprites = list()
 	w_class = ITEM_SIZE_SMALL
 
 	var/seed_type
-	var/datum/seed/seed
 	var/modified = 0
+	var/datum/seed/seed
+	var/static/list/plant_seed_sprites = list()
 
 /obj/item/seeds/Initialize()
-	update_seed()
 	. = ..()
+	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
-	if(!seed && seed_type && !isnull(SSplants.seeds) && SSplants.seeds[seed_type])
-		seed = SSplants.seeds[seed_type]
+	if(!seed && seed_type && length(SSplants.seeds))
+		var/datum/seed/existing_seed = SSplants.seeds[seed_type]
+		if(existing_seed)
+			seed = existing_seed
+
 	update_appearance()
 
 //Updates strings and icon appropriately based on seed datum.
 /obj/item/seeds/proc/update_appearance()
-	if(!seed) return
+	if(!seed)
+		return
 
 	// Update icon.
 	ClearOverlays()
@@ -51,11 +54,11 @@ var/global/list/plant_seed_sprites = list()
 	AddOverlays(seed_overlay)
 
 	if(is_seeds)
-		src.SetName("packet of [seed.seed_name] [seed.seed_noun]")
-		src.desc = "It has a picture of \a [seed.display_name] on the front."
+		SetName("packet of [seed.seed_name] [seed.seed_noun]")
+		desc = "It has a picture of \a [seed.display_name] on the front."
 	else
-		src.SetName("sample of [seed.seed_name] [seed.seed_noun]")
-		src.desc = "It's labelled as coming from \a [seed.seed_name]."
+		SetName("sample of [seed.seed_name] [seed.seed_noun]")
+		desc = "It's labelled as coming from \a [seed.seed_name]."
 
 /obj/item/seeds/examine(mob/user)
 	. = ..()
@@ -68,7 +71,7 @@ var/global/list/plant_seed_sprites = list()
 
 /obj/item/seeds/cutting/update_appearance()
 	..()
-	src.SetName("packet of [seed.seed_name] cuttings")
+	SetName("packet of [seed.seed_name] cuttings")
 
 /obj/item/seeds/random
 	seed_type = null

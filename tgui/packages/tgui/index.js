@@ -18,6 +18,7 @@ import './styles/themes/safe.scss';
 import './styles/themes/securestorage.scss';
 import './styles/themes/security.scss';
 import './styles/themes/syndicate.scss';
+import './styles/themes/hephaestus.scss';
 import './styles/themes/nologo.scss';
 
 import { perf } from 'common/perf';

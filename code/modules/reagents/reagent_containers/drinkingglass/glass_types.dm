@@ -3,6 +3,7 @@
 	base_name = "glass"
 	base_icon = "square"
 	icon = 'icons/obj/food/drink_glasses/square.dmi'
+	icon_state = "square"
 	desc = "Your standard drinking glass."
 	filling_states = "20;40;60;80;100"
 	volume = 30
@@ -104,6 +105,7 @@
 	base_name = "pitcher"
 	base_icon = "carafe"
 	icon = 'icons/obj/food/drink_glasses/carafe.dmi'
+	icon_state = "carafe"
 	filling_states = "10;20;30;40;50;60;70;80;90;100"
 	volume = 120
 	matter = list(MATERIAL_GLASS = 250)

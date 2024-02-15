@@ -105,7 +105,6 @@ GLOBAL_VAR(href_logfile)
 	load_unit_test_changes()
 #endif
 	Master.Initialize(10, FALSE, TRUE)
-	to_world_log("[TgsApiVersion()], [TgsAvailable()], tgs [TgsVersion()]")
 
 /world/Del()
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")

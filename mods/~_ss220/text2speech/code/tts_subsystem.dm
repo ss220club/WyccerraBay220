@@ -128,6 +128,8 @@ SUBSYSTEM_DEF(tts220)
 		"меде" = "м еде",
 		"кз" = "Кэ Зэ",
 		"гбс" = "Гэ Бэ Эс",
+		"цпсс" = "Цэ Пэ Эс Эс",
+		"гкк" = "Гэ Кэ Ка",
 	)
 
 	var/static/list/tts_job_replacements = list(

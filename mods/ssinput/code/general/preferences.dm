@@ -48,7 +48,7 @@
 			notadded += kb
 
 	if(length(notadded))
-		addtimer(new Callback(src, .proc/announce_conflict, notadded), 5 SECONDS)
+		addtimer(CALLBACK(src, PROC_REF(announce_conflict), notadded), 5 SECONDS)
 
 
 

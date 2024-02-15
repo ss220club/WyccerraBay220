@@ -48,11 +48,11 @@
 	Draw()
 	//Register for movement events
 	if(istype(origin, /atom/movable))
-		GLOB.moved_event.register(origin, src, .proc/redrawing)
+		GLOB.moved_event.register(origin, src, PROC_REF(redrawing))
 	if(istype(target, /atom/movable))
-		GLOB.moved_event.register(target, src, .proc/redrawing)
-	GLOB.destroyed_event.register(origin, src, .proc/redrawing)
-	GLOB.destroyed_event.register(target, src, .proc/redrawing)
+		GLOB.moved_event.register(target, src, PROC_REF(redrawing))
+	GLOB.destroyed_event.register(origin, src, PROC_REF(redrawing))
+	GLOB.destroyed_event.register(target, src, PROC_REF(redrawing))
 
 /**
  * Triggered by events set up when the beam is set up. If it's still sane to create a beam, it removes the old beam, creates a new one. Otherwise it kills the beam.
@@ -65,17 +65,17 @@
 /datum/beam/proc/redrawing(atom/movable/mover, atom/oldloc, new_loc)
 	if(!QDELETED(origin) && !QDELETED(target) && get_dist(origin,target)<max_distance && origin.z == target.z)
 		QDEL_NULL_LIST(elements)
-		invoke_async(src, .proc/Draw)
+		invoke_async(src, PROC_REF(Draw))
 	else
 		qdel(src)
 
 /datum/beam/Destroy()
 	QDEL_NULL_LIST(elements)
 	QDEL_NULL(visuals)
-	GLOB.moved_event.unregister(origin, src, .proc/redrawing)
-	GLOB.moved_event.unregister(target, src, .proc/redrawing)
-	GLOB.destroyed_event.unregister(origin, src, .proc/redrawing)
-	GLOB.destroyed_event.unregister(target, src, .proc/redrawing)
+	GLOB.moved_event.unregister(origin, src, PROC_REF(redrawing))
+	GLOB.moved_event.unregister(target, src, PROC_REF(redrawing))
+	GLOB.destroyed_event.unregister(origin, src, PROC_REF(redrawing))
+	GLOB.destroyed_event.unregister(target, src, PROC_REF(redrawing))
 	target = null
 	origin = null
 	return ..()
@@ -155,7 +155,8 @@
 /obj/ebeam/emissive/on_update_icon()
 	. = ..()
 	var/mutable_appearance/emissive_overlay = emissive_appearance(icon, icon_state, src)
-	AddOverlays(emissive_overlay)
+	var/mutable_appearance/glow_overlay = overlay_image(icon, icon_state, plane = LIGHTING_LAMPS_PLANE) // SS220 Bloom-Light
+	AddOverlays(list(emissive_overlay, glow_overlay)) // SS220 Bloom-Light
 
 /**
  * This is what you use to start a beam. Example: origin.Beam(target, args). **Store the return of this proc if you don't set maxdist or time, you need it to delete the beam.**
@@ -171,5 +172,5 @@
  */
 /atom/proc/Beam(atom/BeamTarget,icon_state="b_beam",icon='icons/effects/beam.dmi',time=INFINITY,maxdistance=INFINITY,beam_type=/obj/ebeam)
 	var/datum/beam/newbeam = new(src,BeamTarget,icon,icon_state,time,maxdistance,beam_type)
-	invoke_async(newbeam, /datum/beam/.proc/Start)
+	invoke_async(newbeam, TYPE_PROC_REF(/datum/beam, Start))
 	return newbeam

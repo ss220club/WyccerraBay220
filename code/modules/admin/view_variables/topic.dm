@@ -485,8 +485,8 @@
 			return
 
 		SSnano.close_uis(H)
-		H.client.cache.Cut()
-		var/datum/asset/assets = get_asset_datum(/datum/asset/nanoui)
+		H.client.sent_assets.Cut()
+		var/datum/asset/assets = get_asset_datum(/datum/asset/simple/nanoui_common)
 		assets.send(H)
 
 		to_chat(usr, "Resource files sent")

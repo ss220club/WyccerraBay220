@@ -321,7 +321,7 @@
 //disables breach detection temporarily
 /obj/machinery/alarm/proc/breach_start_cooldown()
 	breach_cooldown = TRUE
-	addtimer(new Callback(src,/obj/machinery/alarm/proc/breach_end_cooldown), 10 MINUTES, TIMER_UNIQUE | TIMER_OVERRIDE)
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/obj/machinery/alarm, breach_end_cooldown)), 10 MINUTES, TIMER_UNIQUE | TIMER_OVERRIDE)
 	return
 
 /obj/machinery/alarm/proc/get_danger_level(current_value, list/danger_levels)
@@ -357,7 +357,8 @@
 			new_color = COLOR_RED_LIGHT
 	AddOverlays(list(
 		emissive_appearance(icon, "alarm[icon_level]"),
-		image(icon, "alarm[icon_level]")
+		image(icon, "alarm[icon_level]"),
+		overlay_image(icon, "alarm[icon_level]", plane = LIGHTING_LAMPS_PLANE) // SS220 Bloom-Lighting
 	))
 
 	pixel_x = 0

@@ -103,6 +103,7 @@ var/global/floorIsLava = 0
 		body += "<A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> | "
 		body += "<A HREF='?src=\ref[src];reloadsave=\ref[M]'>Reload Save</A> | "
 		body += "<A HREF='?src=\ref[src];reloadchar=\ref[M]'>Reload Character</A> | "
+		body += "\ <A href='?_src_=holder;sendbacktolobby=\ref[M]'>Send back to Lobby</A> | " //MODPACK_CLIENT_VERBS
 		var/muted = M.client.prefs.muted
 		body += {"<br><b>Mute: </b>
 			\[<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_IC]'><span style='font-color: [(muted & MUTE_IC)?"red":"blue"]'>IC</span></a> |

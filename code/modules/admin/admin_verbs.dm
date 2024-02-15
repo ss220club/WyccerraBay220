@@ -162,6 +162,7 @@ var/global/list/admin_verbs_server = list(
 	/client/proc/cmd_debug_del_all,
 	/datum/admins/proc/adrev,
 	/datum/admins/proc/adspawn,
+	/datum/admins/proc/set_respawn_timer,		// MODPACK_CLIENT_VERBS,
 	/datum/admins/proc/adjump,
 	/client/proc/toggle_random_events,
 	/client/proc/nanomapgen_DumpImage

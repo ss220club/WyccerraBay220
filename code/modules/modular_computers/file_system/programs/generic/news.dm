@@ -120,7 +120,7 @@
 				story["has_photo"] = message.img != null
 				if (user && message.img) // user check here to avoid runtimes
 					var/resource_name = "newscaster_photo_[sanitize(feed.channel_name)]_[i].png"
-					send_asset(user.client, resource_name)
+					SSassets.transport.send_assets(user.client, resource_name)
 					story["photo_dat"] = "<img src='[resource_name]' width='180'><br>"
 				story["story_ref"] = "\ref[message]"
 				data["active_stories"] += list(story)

@@ -28,7 +28,7 @@
 		return
 	audible_message(SPAN_WARNING("\The [src] emits a long, harsh tone!"))
 	playsound(loc, 'sound/weapons/bombwhine.ogg', 100, 0, -3)
-	addtimer(new Callback(src, .proc/harpoon_detonate), 4 SECONDS) //for suspense
+	addtimer(CALLBACK(src, PROC_REF(harpoon_detonate)), 4 SECONDS) //for suspense
 
 /obj/item/material/harpoon/bomb/proc/harpoon_detonate()
 	audible_message(SPAN_DANGER("\The [src] detonates!")) //an actual sound will be handled by explosion()
@@ -61,7 +61,7 @@
 	origin_tech = list(TECH_MATERIAL = 2, TECH_COMBAT = 1)
 	attack_verb = list("chopped", "torn", "cut")
 	applies_material_colour = 0
-	hitsound = "chop"
+	hitsound = 'sound/weapons/bladeslice.ogg'
 
 /obj/item/material/hatchet/unbreakable
 	unbreakable = TRUE

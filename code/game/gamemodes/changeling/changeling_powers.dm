@@ -675,7 +675,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 		to_chat(src, SPAN_WARNING("We cannot reach \the [M] with a sting!"))
 		return 0 //One is inside, the other is outside something.
 	// Maximum queued turfs set to 25; I don't *think* anything raises sting_range above 2, but if it does the 25 may need raising
-	if(!AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, max_nodes=25, max_node_depth=sting_range)) //If we can't find a path, fail
+	if(!AStar(src.loc, M.loc, TYPE_PROC_REF(/turf, AdjacentTurfs), TYPE_PROC_REF(/turf, Distance), max_nodes=25, max_node_depth=sting_range)) //If we can't find a path, fail
 		to_chat(src, SPAN_WARNING("We cannot find a path to sting \the [M] by!"))
 		return 0
 	return 1
@@ -701,7 +701,8 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	changeling.chem_charges -= required_chems
 	changeling.sting_range = 1
 	src.verbs -= verb_path
-	spawn(10)	src.verbs += verb_path
+	spawn(10)
+		src.verbs += verb_path
 	if(!loud)
 		to_chat(src, SPAN_NOTICE("We stealthily sting [T]."))
 	else
@@ -735,7 +736,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set name = "Silence sting (10)"
 	set desc="Sting target"
 
-	var/mob/living/carbon/human/T = changeling_sting(10,/mob/proc/changeling_silence_sting, sting_name = "Silence Sting")
+	var/mob/living/carbon/human/T = changeling_sting(10, /mob/proc/changeling_silence_sting, sting_name = "Silence Sting")
 	if(!T)	return 0
 	T.silent += 30
 	return 1
@@ -745,7 +746,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set name = "Blind sting (20)"
 	set desc="Sting target"
 
-	var/mob/living/carbon/human/T = changeling_sting(20,/mob/proc/changeling_blind_sting, sting_name = "Blind Sting")
+	var/mob/living/carbon/human/T = changeling_sting(20, /mob/proc/changeling_blind_sting, sting_name = "Blind Sting")
 	if(!T)	return 0
 	to_chat(T, SPAN_DANGER("Your eyes burn horrificly!"))
 	T.disabilities |= NEARSIGHTED
@@ -759,7 +760,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set name = "Deaf sting (5)"
 	set desc="Sting target:"
 
-	var/mob/living/carbon/human/T = changeling_sting(5,/mob/proc/changeling_deaf_sting, sting_name = "Deaf Sting")
+	var/mob/living/carbon/human/T = changeling_sting(5, /mob/proc/changeling_deaf_sting, sting_name = "Deaf Sting")
 	if(!T)	return 0
 	to_chat(T, SPAN_DANGER("Your ears pop and begin ringing loudly!"))
 	T.ear_deaf += 15
@@ -771,7 +772,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	set desc = "Causes spasms onto death."
 	var/loud = 1
 
-	var/mob/living/carbon/human/T = changeling_sting(40,/mob/proc/changeling_DEATHsting,loud, sting_name = "Death Sting")
+	var/mob/living/carbon/human/T = changeling_sting(40, /mob/proc/changeling_DEATHsting, loud, sting_name = "Death Sting")
 	if(!T)	return 0
 	to_chat(T, SPAN_DANGER("You feel a small prick and your chest becomes tight."))
 	T.make_jittery(400)

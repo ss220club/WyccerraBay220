@@ -35,8 +35,6 @@
 		/obj/item/clothing/accessory/armor_tag,
 		/obj/item/clothing/ring,
 		/obj/item/passport,
-		/obj/item/clothing/accessory/pride_pin,
-		/obj/item/clothing/accessory/pronouns,
 		/obj/item/storage/chewables/rollable,
 		/obj/item/storage/fancy/matches/matchbook
 	)
@@ -146,7 +144,7 @@
 /obj/item/storage/wallet/poly/emp_act(severity)
 	icon_state = "wallet-emp"
 	update_icon()
-	addtimer(new Callback(src, .proc/resolve_emp_timer), 5 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(resolve_emp_timer)), 5 SECONDS)
 	..()
 
 

@@ -297,9 +297,12 @@
 			on = FALSE
 
 	if(istype(lightbulb, /obj/item/light))
+		var/lamps_plane // SS220 Bloom-Light
 		if (on)
 			AddOverlays(emissive_appearance(icon, _state))
-		AddOverlays(overlay_image(icon, _state, color))
+			lamps_plane = LIGHTING_LAMPS_PLANE // SS220 Bloom-Light
+			AddOverlays(overlay_image(icon, _state, light_color, plane = LIGHTING_LAMPS_GLARE)) // SS220 Bloom-Light
+		AddOverlays(overlay_image(icon, _state, light_color, plane = lamps_plane)) // SS220 Bloom-Light (layer edit)
 
 	if(on)
 
@@ -881,7 +884,7 @@
 			log_and_message_admins("Rigged light explosion, last touched by [fingerprintslast]")
 			var/turf/T = get_turf(loc)
 			set_status(LIGHT_BROKEN)
-			addtimer(new Callback(GLOBAL_PROC, /proc/explosion, T, 3, EX_ACT_LIGHT), 0.5 SECONDS)
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(explosion), T, 3, EX_ACT_LIGHT), 0.5 SECONDS)
 		else
 			visible_message(SPAN_WARNING("\The [src] short-circuits as something burns out its filament!"))
 			set_status(LIGHT_BURNED)

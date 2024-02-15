@@ -58,7 +58,6 @@ GLOBAL_VAR(href_logfile)
 /proc/stack_trace(msg)
 	CRASH(msg)
 
-
 /proc/enable_debugging(mode, port)
 	CRASH("auxtools not loaded")
 
@@ -76,29 +75,21 @@ GLOBAL_VAR(href_logfile)
 /world/New()
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if (debug_server)
-		call_ext(debug_server, "auxtools_init")()
+		CALL_EXT(debug_server, "auxtools_init")()
 		enable_debugging()
 
 	SetupLogs()
 	var/date_string = time2text(world.realtime, "YYYY/MM/DD")
-	// [SIERRA-EDIT] - RUST_G
-	// to_file(global.diary, "[log_end]\n[log_end]\nStarting up. (ID: [game_id]) [time2text(world.timeofday, "hh:mm.ss")][log_end]\n---------------------[log_end]") // SIERRA-EDIT - ORIGINAL
 	rustg_log_write_formatted("[GLOB.log_directory]/game.log", "Starting up. (ID: [game_id])")
 	rustg_log_write_formatted("[GLOB.log_directory]/game.log", "---------------------------")
-	// [/SIERRA-EDIT]
 
 
 	if (config)
 		if (config.server_name)
 			name = "[config.server_name]"
 		if (config.log_runtime)
-			// [SIERRA-EDIT] - RUST_G
-			// var/runtime_log = file("data/logs/runtime/[date_string]_[time2text(world.timeofday, "hh:mm")]_[game_id].log") // SIERRA-EDIT - ORIGINAL
-			// to_file(runtime_log, "Game [game_id] starting up at [time2text(world.timeofday, "hh:mm.ss")]") // SIERRA-EDIT - ORIGINAL
-			// log = runtime_log // SIERRA-EDIT - ORIGINAL
 			log = "data/logs/runtime/[date_string]_[time2text(world.timeofday, "hh:mm")]_[game_id].log"
 			to_world_log("Game [game_id] starting up at [time2text(world.timeofday, "hh:mm.ss")]")
-			// [/SIERRA-EDIT]
 		if (config.log_hrefs)
 			GLOB.href_logfile = file("data/logs/[date_string] hrefs.htm")
 
@@ -118,7 +109,7 @@ GLOBAL_VAR(href_logfile)
 /world/Del()
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if (debug_server)
-		call_ext(debug_server, "auxtools_shutdown")()
+		CALL_EXT(debug_server, "auxtools_shutdown")()
 	callHook("shutdown")
 	return ..()
 
@@ -128,13 +119,6 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 
 
 /world/Topic(T, addr, master, key)
-	// [SIERRA-EDIT] - RUST_G
-	// to_file(global.diary, "TOPIC: \"[T]\", from:[addr], master:[master], key:[key][log_end]") // SIERRA-EDIT - ORIGINAL
-
-	// Currently we have no need in topic log
-	// game_log("TOPIC","url:\"[T]\", from:[addr], master:[master], key:[key][log_end]" )
-	// [/SIERRA-EDIT]
-
 	if (GLOB.world_topic_last > world.timeofday)
 		GLOB.world_topic_throttle = list() //probably passed midnight
 	GLOB.world_topic_last = world.timeofday
@@ -183,7 +167,6 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 		s["roundduration"] = roundduration2text()
 		s["map"] = replacetext(GLOB.using_map.full_name, "\improper", "") //Done to remove the non-UTF-8 text macros
 
-		// [SIERRA-ADD] - EX666_ECOSYSTEM
 		s["roundtime"] = roundduration2text()
 		switch(GAME_STATE)
 			if(RUNLEVEL_INIT)
@@ -196,7 +179,6 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 				s["ticker_state"] = 3
 			if(RUNLEVEL_POSTGAME)
 				s["ticker_state"] = 4
-		// [/SIERRA-ADD]
 
 		var/active = 0
 		var/list/players = list()

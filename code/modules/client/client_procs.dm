@@ -1,3 +1,8 @@
+GLOBAL_LIST_INIT(localhost_addresses, list(
+	"127.0.0.1" = TRUE,
+	"::1" = TRUE
+))
+
 	////////////
 	//SECURITY//
 	////////////
@@ -36,17 +41,22 @@
 	#endif
 
 	// asset_cache
+	var/asset_cache_job
 	if(href_list["asset_cache_confirm_arrival"])
-//		to_chat(src, "ASSET JOB [href_list["asset_cache_confirm_arrival"]] ARRIVED.")
-		var/job = text2num(href_list["asset_cache_confirm_arrival"])
-		completed_asset_jobs += job
-		return
+		asset_cache_job = asset_cache_confirm_arrival(href_list["asset_cache_confirm_arrival"])
+		if(!asset_cache_job)
+			return
+
 
 	//search the href for script injection
-	if( findtext(href,"<script",1,0) )
+	if(findtext(href,"<script",1,0))
 		to_world_log("Attempted use of scripts within a topic call, by [src]")
 		message_admins("Attempted use of scripts within a topic call, by [src]")
 		//qdel(usr)
+		return
+
+	// Tgui Topic middleware
+	if(!tgui_Topic(href_list))
 		return
 
 	//Admin PM
@@ -78,8 +88,18 @@
 
 		ticket.close(client_repository.get_lite_client(usr.client))
 
-	if (GLOB.href_logfile)
+	if(GLOB.href_logfile)
 		to_chat(GLOB.href_logfile, "<small>[time2text(world.timeofday,"hh:mm")] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br>")
+
+	//byond bug ID:2256651
+	if(asset_cache_job && (asset_cache_job in completed_asset_jobs))
+		to_chat(src, "<span class='danger'>An error has been detected in how your client is receiving resources. Attempting to correct.... (If you keep seeing these messages you might want to close byond and reconnect)</span>")
+		to_target(src, browse("...", "window=asset_cache_browser"))
+		return
+
+	if(href_list["asset_cache_preload_data"])
+		asset_cache_preload_data(href_list["asset_cache_preload_data"])
+		return
 
 	switch(href_list["_src_"])
 		if("holder")	hsrc = holder
@@ -162,6 +182,14 @@
 	GLOB.clients += src
 	GLOB.ckey_directory[ckey] = src
 
+	//SS220 edit
+	// Automatic admin rights for people connecting locally.
+	// Concept stolen from /tg/ with deepest gratitude.
+	var/local_connection = (config.auto_local_admin && (isnull(address) || GLOB.localhost_addresses[address]))
+	if(local_connection && !admin_datums[ckey])
+		new /datum/admins("Local Host", 32767, ckey) // Прости меня бог за это
+
+
 	//Admin Authorisation
 	holder = admin_datums[ckey]
 	if(holder)
@@ -176,13 +204,14 @@
 	prefs.last_id = computer_id			//these are gonna be used for banning
 	fps = prefs.clientfps
 
-	// [SIERRA-ADD] - EX666_ECOSYSTEM
 	load_player_discord(src)
-	// [SIERRA-ADD]
 
 	. = ..()	//calls mob.Login()
 
 	view = get_preference_value(/datum/client_preference/client_view) || GLOB.PREF_CLIENT_VIEW_LARGE
+	connection_time = world.time
+	connection_realtime = world.realtime
+	connection_timeofday = world.timeofday
 
 	GLOB.using_map.map_info(src)
 
@@ -226,10 +255,9 @@
 	if(holder)
 		src.control_freak = 0 //Devs need 0 for profiler access
 
-	// [SIERRA-ADD] - SSINPUT
 	if(SSinput.initialized)
 		set_macros()
-	// [/SIERRA-ADD]
+
 	// This turns out to be a touch too much when a bunch of people are connecting at once from a restart during init.
 	if (GAME_STATE & RUNLEVELS_DEFAULT)
 		spawn()
@@ -379,45 +407,14 @@
 		sleep(config.stat_delay)
 
 
-//Sends resource files to client cache
-/client/proc/getFiles()
-	for(var/file in args)
-		send_rsc(src, file, null)
-
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
-	getFiles(
-		'html/search.js',
-		'html/panels.css',
-		'html/spacemag.css',
-		'html/images/loading.gif',
-		'html/images/ntlogo.png',
-		'html/images/bluentlogo.png',
-		'html/images/sollogo.png',
-		'html/images/terralogo.png',
-		'html/images/talisman.png',
-		'html/images/exologo.png',
-		'html/images/xynlogo.png',
-		'html/images/daislogo.png',
-		'html/images/eclogo.png',
-		'html/images/FleetLogo.png',
-		'html/images/sfplogo.png',
-		'html/images/falogo.png',
-		// [SIERRA-ADD] ,
-		'html/images/ofbluelogo.png',
-		'html/images/ofntlogo.png',
-		'html/images/foundlogo.png',
-		'html/images/ccalogo.png',
-		'html/images/sierralogo.png',
-		// [/SIERRA-ADD]
-		)
-	addtimer(new Callback(src, .proc/after_send_resources), 1 SECOND)
-
-
-/client/proc/after_send_resources()
-	var/singleton/asset_cache/asset_cache = GET_SINGLETON(/singleton/asset_cache)
-	getFilesSlow(src, asset_cache.cache, register_asset = FALSE)
-
+	spawn(1 SECOND) // Removing this spawn causes all clients to not get verbs.
+		// Load info on what assets the client has
+		show_browser(src, 'code/modules/asset_cache/validate_assets.html', "window=asset_cache_browser")
+		// Precache the client with all other assets slowly, so as to not block other browse() calls
+		if(config.asset_simple_preload)
+			addtimer(CALLBACK(SSassets.transport, TYPE_PROC_REF(/datum/asset_transport, send_assets_slow), src, SSassets.transport.preload), 5 SECONDS)
 
 /mob/proc/MayRespawn()
 	return 0
@@ -458,18 +455,11 @@
 		winset(usr, "mainwindow", "can-resize=false")
 		winset(usr, "mainwindow", "is-maximized=false")
 		winset(usr, "mainwindow", "is-maximized=true")
-		// [SIERRA-REMOVE] - SSINPUT
-		// winset(usr, "mainwindow", "statusbar=false")
-		// [/SIERRA-REMOVE]
 		winset(usr, "mainwindow", "menu=")
-//		winset(usr, "mainwindow.mainvsplit", "size=0x0")
 	else
 		winset(usr, "mainwindow", "is-maximized=false")
 		winset(usr, "mainwindow", "titlebar=true")
 		winset(usr, "mainwindow", "can-resize=true")
-		// [SIERRA-REMOVE] - SSINPUT
-		// winset(usr, "mainwindow", "statusbar=true")
-		// [/SIERRA-REMOVE]
 		winset(usr, "mainwindow", "menu=menu")
 
 	fit_viewport()

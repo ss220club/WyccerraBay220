@@ -89,7 +89,7 @@ if write_cl['changes']:
         cl_contents.seek(0)
 
         #Push the newly generated changelog to the master branch so that it can be compiled
-        repo.create_file(f"html/changelogs/AutoChangeLog-sierra-pr-{pr_number}.yml", f"Чейнджлог для PR #{pr_number} [ci skip]", content=f'{cl_contents.read()}', branch='dev-sierra', committer=InputGitAuthor(git_name, git_email))
+        repo.create_file(f"html/changelogs/AutoChangeLog-sierra-pr-{pr_number}.yml", f"Чейнджлог для PR #{pr_number} [ci skip]", content=f'{cl_contents.read()}', branch='master', committer=InputGitAuthor(git_name, git_email))
     print("Done!")
 else:
     print("No CL changes detected!")

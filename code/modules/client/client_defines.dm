@@ -66,3 +66,15 @@
 	preload_rsc = 0
 
 	var/fullscreen = FALSE
+
+
+	    //////////
+		//ASSETS//
+		//////////
+
+ 	///world.time they connected
+	var/connection_time
+ 	///world.realtime they connected
+	var/connection_realtime
+ 	///world.timeofday they connected
+	var/connection_timeofday

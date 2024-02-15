@@ -270,7 +270,6 @@ var/global/const/NO_EMAG_ACT = -50
 		send_rsc(user, side, "side.png")
 	var/datum/browser/popup = new(user, "idcard", name, 600, 250)
 	popup.set_content(dat())
-	popup.set_title_image(usr.browse_rsc_icon(src.icon, src.icon_state))
 	popup.open()
 	return
 
@@ -285,8 +284,8 @@ var/global/const/NO_EMAG_ACT = -50
 
 /obj/item/card/id/proc/set_id_photo(mob/M)
 	M.ImmediateOverlayUpdate()
-	front = getFlatIcon(M, SOUTH, always_use_defdir = 1)
-	side = getFlatIcon(M, WEST, always_use_defdir = 1)
+	front = getFlatIcon(M, SOUTH, always_use_defdir = TRUE)
+	side = getFlatIcon(M, WEST, always_use_defdir = TRUE)
 
 /mob/proc/set_id_info(obj/item/card/id/id_card)
 	id_card.age = 0

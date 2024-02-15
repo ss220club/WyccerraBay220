@@ -64,26 +64,26 @@
 
 //Filters out undesirable characters from names
 /proc/sanitizeName(input, max_length = MAX_NAME_LEN, allow_numbers = 0, force_first_letter_uppercase = TRUE)
-	if(!input || length(input) > max_length)
+	if(!input || length_char(input) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
 	var/number_of_alphanumeric	= 0
 	var/last_char_group			= 0
 	var/output = ""
 
-	for(var/i=1, i<=length(input), i++)
-		var/ascii_char = text2ascii(input,i)
+	for(var/i=1, i<=length_char(input), i++)
+		var/ascii_char = text2ascii_char(input,i)
 		switch(ascii_char)
-			// A  .. Z
-			if(65 to 90)			//Uppercase Letters
+			// A  .. Z, А  .. Я
+			if(65 to 90, 1040 to 1071, 1025)			//Uppercase Letters
 				output += ascii2text(ascii_char)
 				number_of_alphanumeric++
 				last_char_group = 4
 
-			// a  .. z
-			if(97 to 122)			//Lowercase Letters
+			// a  .. z, а  .. я
+			if(97 to 122, 1072 to 1103, 1105)			//Lowercase Letters
 				if(last_char_group<2 && force_first_letter_uppercase)
-					output += ascii2text(ascii_char-32)	//Force uppercase first character
+					output += uppertext(ascii2text(ascii_char))
 				else
 					output += ascii2text(ascii_char)
 				number_of_alphanumeric++
@@ -97,8 +97,8 @@
 				number_of_alphanumeric++
 				last_char_group = 3
 
-			// '  -  .
-			if(39,45,46)			//Common name punctuation
+			// '  -  . ,
+			if(39,44,45,46)			//Common name punctuation
 				if(!last_char_group) continue
 				output += ascii2text(ascii_char)
 				last_char_group = 2
@@ -134,6 +134,8 @@
 	if(!text) return ""
 	var/list/dat = list()
 	var/last_was_space = 1
+	if(contains_cyrillic(text))
+		text = convert_ru_symbols_to_en(text)
 	for(var/i=1, i<=length(text), i++)
 		var/ascii_char = text2ascii(text,i)
 		switch(ascii_char)
@@ -156,10 +158,10 @@
 
 //Returns null if there is any bad text in the string
 /proc/reject_bad_text(text, max_length=512)
-	if(length(text) > max_length)	return			//message too long
+	if(length_char(text) > max_length)	return			//message too long
 	var/non_whitespace = 0
-	for(var/i=1, i<=length(text), i++)
-		switch(text2ascii(text,i))
+	for(var/i=1, i<=length_char(text), i++)
+		switch(text2ascii_char(text,i))
 			if(62,60,92,47)	return			//rejects the text if it contains these bad characters: <, >, \ or /
 			if(127 to 255)	return			//rejects non-ASCII letters
 			if(0 to 31)		return			//more weird stuff
@@ -172,6 +174,17 @@
 /proc/sanitize_old(t,list/repl_chars = list("\n"="#","\t"="#"))
 	return html_encode(replace_characters(t,repl_chars))
 
+//Removes a few problematic characters
+/proc/sanitize_simple(t,list/repl_chars = list("\n"="#","\t"="#"))
+	for(var/char in repl_chars)
+		var/index = findtext(t, char)
+		while(index)
+			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index + length(char))
+			index = findtext(t, char, index + length(char))
+	return t
+
+/proc/sanitize_filename(t)
+	return sanitize_simple(t, list("\n"="", "\t"="", "/"="", "\\"="", "?"="", "%"="", "*"="", ":"="", "|"="", "\""="", "<"="", ">"=""))
 /*
  * Text searches
  */
@@ -181,21 +194,21 @@
 /proc/dd_hasprefix(text, prefix)
 	var/start = 1
 	var/end = length(prefix) + 1
-	return findtext(text, prefix, start, end)
+	return findtext_char(text, prefix, start, end)
 
 //Checks the beginning of a string for a specified sub-string. This proc is case sensitive
 //Returns the position of the substring or 0 if it was not found
 /proc/dd_hasprefix_case(text, prefix)
 	var/start = 1
 	var/end = length(prefix) + 1
-	return findtextEx(text, prefix, start, end)
+	return findtextEx_char(text, prefix, start, end)
 
 //Checks the end of a string for a specified substring.
 //Returns the position of the substring or 0 if it was not found
 /proc/dd_hassuffix(text, suffix)
 	var/start = length(text) - length(suffix)
 	if(start)
-		return findtext(text, suffix, start, null)
+		return findtext_char(text, suffix, start, null)
 	return
 
 //Checks the end of a string for a specified substring. This proc is case sensitive
@@ -203,7 +216,7 @@
 /proc/dd_hassuffix_case(text, suffix)
 	var/start = length(text) - length(suffix)
 	if(start)
-		return findtextEx(text, suffix, start, null)
+		return findtextEx_char(text, suffix, start, null)
 
 /*
  * Text modification
@@ -211,7 +224,7 @@
 
 /proc/replace_characters(t,list/repl_chars)
 	for(var/char in repl_chars)
-		t = replacetext(t, char, repl_chars[char])
+		t = replacetext_char(t, char, repl_chars[char])
 	return t
 
 
@@ -257,16 +270,16 @@
 
 //Returns a string with reserved characters and spaces before the first letter removed
 /proc/trim_left(text)
-	for (var/i = 1 to length(text))
-		if (text2ascii(text, i) > 32)
+	for (var/i = 1 to length_char(text))
+		if (text2ascii_char(text, i) > 32)
 			return copytext(text, i)
 	return ""
 
 //Returns a string with reserved characters and spaces after the last letter removed
 /proc/trim_right(text)
-	for (var/i = length(text) to 1 step -1)
-		if (text2ascii(text, i) > 32)
-			return copytext(text, 1, i + 1)
+	for (var/i = length_char(text) to 1 step -1)
+		if (text2ascii_char(text, i) > 32)
+			return copytext_char(text, 1, i + 1)
 	return ""
 
 //Returns a string with the first element of the string capitalized.
@@ -360,17 +373,29 @@
 	for(var/i=1, i<=length(input), i++)
 		var/ascii_char = text2ascii(input,i)
 		switch(ascii_char)
-			// A  .. Z
-			if(65 to 90)			//Uppercase Letters
-				return 1
-			// a  .. z
-			if(97 to 122)			//Lowercase Letters
-				return 1
+			// A  .. Z, а  .. я
+			if(65 to 90, 1040 to 1071, 1025)			//Uppercase Letters
+				return TRUE
+			// a  .. z, а  .. я
+			if(97 to 122, 1072 to 1103, 1105)				//Lowercase Letters
+				return TRUE
 
 			// 0  .. 9
 			if(48 to 57)			//Numbers
-				return 1
+				return TRUE
 	return 0
+
+/proc/contains_cyrillic(input)
+	for(var/i=1, i<=length_char(input), i++)
+		var/ascii_char = text2ascii_char(input,i)
+		switch(ascii_char)
+			// А .. Я
+			if(1040 to 1071, 1025)			//Uppercase Letters
+				return TRUE
+			// а  .. я
+			if(1072 to 1103, 1105)				//Lowercase Letters
+				return TRUE
+	return FALSE
 
 /proc/generateRandomString(length)
 	. = list()
@@ -436,13 +461,11 @@
 	t = replacetext(t, "\[fleetlogo\]", "<img src = fleetlogo.png>")
 	t = replacetext(t, "\[sfplogo\]", "<img src = sfplogo.png>")
 	t = replacetext(t, "\[falogo\]", "<img src = falogo.png>")
-	// [SIERRA-ADD]
 	t = replacetext(t, "\[ofbluelogo\]", "<img src = ofbluelogo.png>")
 	t = replacetext(t, "\[ofntlogo\]", "<img src = ofntlogo.png>")
 	t = replacetext(t, "\[foundlogo\]", "<img src = foundlogo.png>")
 	t = replacetext(t, "\[ccalogo\]", "<img src = ccalogo.png>")
 	t = replacetext(t, "\[sierralogo\]", "<img src = sierralogo.png>")
-	// [/SIERRA-ADD]
 	t = replacetext(t, "\[editorbr\]", "")
 	return t
 
@@ -689,3 +712,41 @@
 	if (other && other != thing)
 		return FALSE
 	return findtext(thing, suid_check)
+
+/**
+ * Used to get a properly sanitized input. Returns null if cancel is pressed.
+ *
+ * Arguments
+ ** user - Target of the input prompt.
+ ** message - The text inside of the prompt.
+ ** title - The window title of the prompt.
+ ** max_length - If you intend to impose a length limit - default is 1024.
+ ** no_trim - Prevents the input from being trimmed if you intend to parse newlines or whitespace.
+*/
+/proc/stripped_input(mob/user, message = "", title = "", default = "", max_length = MAX_MESSAGE_LEN, no_trim = FALSE)
+	var/user_input = input(user, message, title, default) as text|null
+	if(isnull(user_input)) // User pressed cancel
+		return
+	if(no_trim)
+		return copytext(html_encode(user_input), 1, max_length)
+	else
+		return trim(html_encode(user_input), max_length) //trim is "outside" because html_encode can expand single symbols into multiple symbols (such as turning < into &lt;)
+
+/**
+ * Used to get a properly sanitized input in a larger box. Works very similarly to stripped_input.
+ *
+ * Arguments
+ ** user - Target of the input prompt.
+ ** message - The text inside of the prompt.
+ ** title - The window title of the prompt.
+ ** max_length - If you intend to impose a length limit - default is 1024.
+ ** no_trim - Prevents the input from being trimmed if you intend to parse newlines or whitespace.
+*/
+/proc/stripped_multiline_input(mob/user, message = "", title = "", default = "", max_length = MAX_MESSAGE_LEN, no_trim = FALSE)
+	var/user_input = input(user, message, title, default) as message|null
+	if(isnull(user_input)) // User pressed cancel
+		return
+	if(no_trim)
+		return copytext(html_encode(user_input), 1, max_length)
+	else
+		return trim(html_encode(user_input), max_length)

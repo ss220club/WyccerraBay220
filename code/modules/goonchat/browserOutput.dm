@@ -75,7 +75,7 @@ GLOBAL_DATUM_INIT(iconCache, /savefile, new("data/iconCache.sav"))
 		return
 	var/datum/asset/stuff = get_asset_datum(/datum/asset/group/goonchat)
 	stuff.send(owner)
-	show_browser(owner, file('code/modules/goonchat/browserassets/html/browserOutput.html'), "window=browseroutput")
+	show_browser(owner, 'code/modules/goonchat/browserassets/html/browserOutput.html', "window=browseroutput")
 
 
 /datum/chatOutput/Topic(href, list/href_list)
@@ -96,17 +96,11 @@ GLOBAL_DATUM_INIT(iconCache, /savefile, new("data/iconCache.sav"))
 		if ("analyzeClientData")
 			data = analyzeClientData(arglist(params))
 		if ("swaptodarkmode")
-			// [SIERR-EDIT] - SSINPUT
-			// swaptodarkmode() // SIERRA-EDIT - ORIGINAL
 			owner.prefs.dark_theme = TRUE
 			owner.update_client_theme()
-			// [/SIERRA-EDIT]
 		if ("swaptolightmode")
-			// [SIERR-EDIT] - SSINPUT
-			// swaptolightmode() // SIERRA-EDIT - ORIGINAL
 			owner.prefs.dark_theme = FALSE
 			owner.update_client_theme()
-			// [/SIERRA-EDIT]
 		if ("reload")
 			loaded = FALSE
 			start()

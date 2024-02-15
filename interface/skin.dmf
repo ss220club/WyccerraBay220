@@ -1,194 +1,10 @@
 macro "default"
 
-macro "macro"
-	elem
-		name = "Tab"
-		command = "ToggleHotkeyMode"
-	elem
-		name = "Center+REP"
-		command = ".center"
-	elem
-		name = "ALT+Return"
-		command = "Toggle-Fullscreen"
-	elem
-		name = "Northeast"
-		command = ".northeast"
-	elem
-		name = "Southeast"
-		command = ".southeast"
-	elem
-		name = "Southwest"
-		command = ".southwest"
-	elem
-		name = "Northwest"
-		command = ".northwest"
-	elem
-		name = "ALT+West"
-		command = "westfaceperm"
-	elem
-		name = "CTRL+West"
-		command = "westface"
-	elem
-		name = "West+REP"
-		command = ".moveleft"
-	elem
-		name = "ALT+North"
-		command = "northfaceperm"
-	elem
-		name = "CTRL+North"
-		command = "northface"
-	elem
-		name = "North+REP"
-		command = ".moveup"
-	elem
-		name = "ALT+East"
-		command = "eastfaceperm"
-	elem
-		name = "CTRL+East"
-		command = "eastface"
-	elem
-		name = "East+REP"
-		command = ".moveright"
-	elem
-		name = "ALT+South"
-		command = "southfaceperm"
-	elem
-		name = "CTRL+South"
-		command = "southface"
-	elem
-		name = "South+REP"
-		command = ".movedown"
-	elem
-		name = "Insert"
-		command = "a-intent right"
-	elem
-		name = "Delete"
-		command = "delete-key-pressed"
-	elem
-		name = "CTRL+1"
-		command = "a-intent help"
-	elem
-		name = "CTRL+2"
-		command = "a-intent disarm"
-	elem
-		name = "CTRL+3"
-		command = "a-intent grab"
-	elem
-		name = "CTRL+4"
-		command = "a-intent harm"
-	elem
-		name = "CTRL+A+REP"
-		command = ".moveleft"
-	elem
-		name = "CTRL+D+REP"
-		command = ".moveright"
-	elem
-		name = "CTRL+E"
-		command = "quick-equip"
-	elem
-		name = "CTRL+F"
-		command = "a-intent left"
-	elem
-		name = "CTRL+G"
-		command = "a-intent right"
-	elem
-		name = "CTRL+SHIFT+G"
-		command = ".configure graphics-hwmode on"
-	elem
-		name = "CTRL+Q"
-		command = ".northwest"
-	elem
-		name = "CTRL+R"
-		command = ".southwest"
-	elem
-		name = "CTRL+S+REP"
-		command = ".movedown"
-	elem
-		name = "CTRL+W+REP"
-		command = ".moveup"
-	elem
-		name = "CTRL+X"
-		command = ".northeast"
-	elem
-		name = "CTRL+Y"
-		command = "Activate-Held-Object"
-	elem
-		name = "CTRL+Z"
-		command = "Activate-Held-Object"
-	elem
-		name = "CTRL+Numpad1"
-		command = "body-r-leg"
-	elem
-		name = "CTRL+Numpad2"
-		command = "body-groin"
-	elem
-		name = "CTRL+Numpad3"
-		command = "body-l-leg"
-	elem
-		name = "CTRL+Numpad4"
-		command = "body-r-arm"
-	elem
-		name = "CTRL+Numpad5"
-		command = "body-chest"
-	elem
-		name = "CTRL+Numpad6"
-		command = "body-l-arm"
-	elem
-		name = "CTRL+Numpad8"
-		command = "body-toggle-head"
-	elem
-		name = "CTRL+Add"
-		command = "move-upwards"
-	elem
-		name = "CTRL+Subtract"
-		command = "move-down"
-	elem
-		name = "F1"
-		command = "adminhelp"
-	elem
-		name = "CTRL+SHIFT+F1+REP"
-		command = ".options"
-	elem
-		name = "F2"
-		command = "ooc"
-	elem
-		name = "F2+REP"
-		command = ".screenshot auto"
-	elem
-		name = "SHIFT+F2+REP"
-		command = ".screenshot"
-	elem
-		name = "F3"
-		command = ".say"
-	elem
-		name = "F4"
-		command = ".me"
-	elem
-		name = "F5"
-		command = "msay"
-	elem
-		name = "F6"
-		command = "Player-Panel"
-	elem
-		name = "F7"
-		command = "Admin-PM"
-	elem
-		name = "F8"
-		command = "Invisimin"
-	elem
-		name = "F12"
-		command = "F12"
-
 
 menu "menu"
 	elem
 		name = "&File"
 		command = ""
-		saved-params = "is-checked"
-	elem
-		name = "&Quick screenshot\tF2"
-		command = ".screenshot auto"
-		category = "&File"
 		saved-params = "is-checked"
 	elem
 		name = "&Save screenshot as...\tShift+F2"
@@ -297,58 +113,52 @@ menu "menu"
 		category = "&Help"
 		saved-params = "is-checked"
 
-
 window "mainwindow"
 	elem "mainwindow"
 		type = MAIN
 		pos = 281,0
 		size = 640x440
-		anchor1 = none
-		anchor2 = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
+		is-maximized = true
 		is-default = true
 		statusbar = false
 		saved-params = "pos;size;is-minimized;is-maximized"
-		is-maximized = true
-		icon = 'icons\\ss13_64.png'
+		title = "SS220 | WyccStation (Sierra)"
+		icon = 'icons\\ws220.png'
 		macro = "default"
 		menu = "menu"
-		on-size = "onresize"
-		outer-size = 1874x1096
-		inner-size = 1858x1037
-	elem "asset_cache_browser"
-		type = BROWSER
-		pos = 424,208
-		size = 1x1
-		anchor1 = none
-		anchor2 = none
-		is-visible = false
-		saved-params = ""
 	elem "mainvsplit"
 		type = CHILD
 		pos = 0,0
 		size = 640x440
 		anchor1 = 0,0
 		anchor2 = 100,100
+		background-color = none
 		saved-params = "splitter"
+		left = "mapwindow"
 		right = "rpane"
 		is-vert = true
+	elem "asset_cache_browser"
+		type = BROWSER
+		pos = 0,0
+		size = 200x200
+		is-visible = false
 	elem "tooltip"
 		type = BROWSER
 		pos = 0,0
 		size = 999x999
-		anchor1 = none
-		anchor2 = none
-		background-color = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
 		is-visible = false
-		saved-params = ""
 
 window "mapwindow"
 	elem "mapwindow"
 		type = MAIN
-		pos = 219,0
+		pos = 281,0
 		size = 640x480
-		anchor1 = none
-		anchor2 = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
 		on-status = ".winset \"statusbar.text=[[*]]\" "
@@ -361,10 +171,12 @@ window "mapwindow"
 		font-family = "Arial Rounded MT Bold,Arial Black,Arial,sans-serif"
 		font-size = 7
 		is-default = true
-		saved-params = "icon-size"
-		style = ".maptext { font-family: 'Small Fonts'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; }"
+		saved-params = "icon-size;zoom-mode"
+		zoom-mode = "distort"
+		style = ".maptext { font-family: 'MS Serif'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; }"
 		on-show = ".winset\"mainwindow.mainvsplit.left=mapwindow\""
-		style=".center { text-align: center; } .maptext { font-family: 'Small Fonts'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; } .small { font-size: 6px; } .big { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .yell { font-weight: bold; } .emote { font-size: 6px; } .italics { font-size: 6px; font-style: italic; }"
+		on-hide = ".winset\"mainwindow.mainvsplit.left=\""
+		style=".center { text-align: center; } .maptext { font-family: 'MS Serif'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; } .small { font-size: 6px; } .big { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .yell { font-weight: bold; } .emote { font-size: 6px; } .italics { font-size: 6px; font-style: italic; }"
 	elem "lobbybrowser"
 		type = BROWSER
 		pos = 0,0
@@ -391,8 +203,9 @@ window "outputwindow"
 		type = MAIN
 		pos = 219,0
 		size = 658x450
-		anchor1 = none
-		anchor2 = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
+		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		titlebar = false
 		statusbar = false
@@ -422,7 +235,7 @@ window "outputwindow"
 	elem "input"
 		type = INPUT
 		pos = 0,430
-		size = 552x20
+		size = 610x20
 		anchor1 = 0,100
 		anchor2 = 100,100
 		background-color = #f0f0f0
@@ -430,40 +243,27 @@ window "outputwindow"
 		border = line
 		saved-params = "command"
 	elem "saybutton"
-		border = line
-		is-flat = true
 		type = BUTTON
-		pos = 551,430
+		pos = 610,430
 		size = 48x20
 		anchor1 = 100,100
 		anchor2 = -1,-1
-		background-color = #ffffff
+		background-color = none
+		border = line
+		is-flat = true
 		saved-params = "is-checked"
 		text = "Chat"
 		command = ".winset \"saybutton.is-checked=true?input.command=\"!say \\\"\" macrobutton.is-checked=false:input.command=\"\"saybutton.is-checked=true?mebutton.is-checked=false\""
 		button-type = pushbox
-	elem "hotkeytoggle"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 598,430
-		size = 60x20
-		anchor1 = 100,100
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Hotkey"
-		command = "ToggleHotkeyMode"
-		button-type = pushbox
-		is-checked = true
 
 window "rpane"
 	elem "rpane"
 		type = MAIN
 		pos = 219,0
 		size = 640x480
-		anchor1 = none
-		anchor2 = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
+		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
 		outer-size = 656x538
@@ -478,90 +278,37 @@ window "rpane"
 		saved-params = "splitter"
 		right = "outputwindow"
 		is-vert = false
-	elem "textb"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 8,7
-		size = 50x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		is-visible = false
-		saved-params = "is-checked"
-		text = "Text"
-		command = ".winset \"rpanewindow.left=;\""
-		is-checked = true
-		group = "rpanemode"
-		button-type = pushbox
-	elem "infob"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 57,7
-		size = 50x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		is-visible = false
-		saved-params = "is-checked"
-		text = "Info"
-		command = ".winset \"rpanewindow.left=infowindow\""
-		group = "rpanemode"
-		button-type = pushbox
 	elem "linkrules"
 		border = line
 		is-flat = true
 		type = BUTTON
-		pos = 126,7
-		size = 60x18
+		pos = 8,7
+		size = 66x18
 		anchor1 = -1,-1
 		anchor2 = -1,-1
 		background-color = #ffffff
 		saved-params = "is-checked"
-		text = "Rules"
+		text = "Правила"
 		command = "link-rules"
-	elem "linklore"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 205,7
-		size = 50x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Lore"
-		command = "link-lore"
+		group = "rpanemode"
 	elem "linkwiki"
 		border = line
 		is-flat = true
 		type = BUTTON
-		pos = 254,7
-		size = 50x18
+		pos = 73,7
+		size = 60x18
 		anchor1 = -1,-1
 		anchor2 = -1,-1
 		background-color = #ffffff
 		saved-params = "is-checked"
 		text = "Wiki"
 		command = "link-wiki"
-	elem "linkforum"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 303,7
-		size = 60x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Forum"
-		command = "link-forum"
+		group = "rpanemode"
 	elem "linkdiscord"
 		border = line
 		is-flat = true
 		type = BUTTON
-		pos = 362,7
+		pos = 132,7
 		size = 60x18
 		anchor1 = -1,-1
 		anchor2 = -1,-1
@@ -569,51 +316,66 @@ window "rpane"
 		saved-params = "is-checked"
 		text = "Discord"
 		command = "link-discord"
-	elem "changelog"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 441,7
-		size = 75x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Changelog"
-		command = "Changelog"
+		group = "rpanemode"
 	elem "linksource"
 		border = line
 		is-flat = true
 		type = BUTTON
-		pos = 515,7
+		pos = 211,7
 		size = 60x18
 		anchor1 = -1,-1
 		anchor2 = -1,-1
 		background-color = #ffffff
 		saved-params = "is-checked"
-		text = "Source"
+		text = "GitHub"
 		command = "link-source"
 	elem "linkissue"
 		border = line
 		is-flat = true
 		type = BUTTON
-		pos = 574,7
-		size = 75x18
+		pos = 270,7
+		size = 76x18
 		anchor1 = -1,-1
 		anchor2 = -1,-1
 		background-color = #ffffff
 		saved-params = "is-checked"
-		text = "Bug Report"
+		text = "Багрепорт"
 		command = "link-issue"
-
+	elem "changelog"
+		border = line
+		is-flat = true
+		type = BUTTON
+		pos = 365,7
+		size = 74x18
+		anchor1 = -1,-1
+		anchor2 = -1,-1
+		background-color = #ffffff
+		saved-params = "is-checked"
+		text = "Ченджлог"
+		command = "Changelog"
+		group = "rpanemode"
+	elem "credits"
+		border = line
+		is-flat = true
+		type = BUTTON
+		pos = 438,7
+		size = 64x18
+		anchor1 = -1,-1
+		anchor2 = -1,-1
+		background-color = #ffffff
+		saved-params = "is-checked"
+		text = "Авторы"
+		command = "Credits"
+		group = "rpanemode"
 
 window "infowindow"
 	elem "infowindow"
 		type = MAIN
 		pos = 219,0
 		size = 640x480
-		anchor1 = none
-		anchor2 = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
+		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		title = "Info"
 		is-pane = true
@@ -629,5 +391,5 @@ window "infowindow"
 		saved-params = ""
 		highlight-color = #00aa00
 		tab-background-color = none
-		on-show = ".winset\"rpane.infob.is-visible=true;rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
-		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=;\""
+		on-show = ".winset\"rpane.infob.is-visible=true;rpane.infob.pos=65,0 rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
+		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""

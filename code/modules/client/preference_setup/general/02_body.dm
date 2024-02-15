@@ -4,6 +4,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	var/species = SPECIES_HUMAN
 	var/gender = MALE					//gender of character (well duh)
 	var/pronouns = PRONOUNS_THEY_THEM
+	var/tts_seed = "arthas" // TTS seed
 	var/b_type = "A+"					//blood type (not-chooseable)
 	var/head_hair_style = "Bald"				//Hair type
 	var/head_hair_color = "#000000"
@@ -15,18 +16,17 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	var/base_skin = ""
 	var/list/body_markings = list()
 	var/list/body_descriptors = list()
-
 	// maps each organ to either null(intact), "cyborg" or "amputated"
 	// will probably not be able to do this for head and torso ;)
 	var/list/organ_data
 	var/list/rlimb_data
 	var/disabilities = 0
 
-
 /datum/category_item/player_setup_item/physical/body
 	name = "Body"
 	sort_order = 2
 	var/hide_species = TRUE
+	var/static/explorer_users = list()
 
 /datum/category_item/player_setup_item/physical/body/load_character(datum/pref_record_reader/R)
 	pref.species = R.read("species")
@@ -35,6 +35,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	pref.age = R.read("age")
 	pref.gender = R.read("gender")
 	pref.pronouns = R.read("pronouns")
+	pref.tts_seed = R.read("tts_seed")
 	if(R.get_version() < 3 && !(pref.pronouns))
 		switch (pref.gender)
 			if (MALE)
@@ -71,6 +72,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	W.write("species", pref.species)
 	W.write("gender", pref.gender)
 	W.write("pronouns", pref.pronouns)
+	W.write("tts_seed", pref.tts_seed)
 	W.write("age", pref.age)
 	W.write("head_hair_color", pref.head_hair_color)
 	W.write("facial_hair_color", pref.facial_hair_color)
@@ -144,6 +146,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	. += "<br /><br /><b>Body</b> [BTN("random", "Randomize")]"
 	. += "<br />[TBTN("gender", pref.gender, "Bodytype")]"
 	. += "<br />[TBTN("pronouns", pref.pronouns, "Pronouns")]"
+	. += "<br />[VTBTN("tts_explorer", 1, pref.tts_seed, "Voice")]"
 	. += "<br />[TBTN("age", pref.age, "Age")]"
 	. += "<br />[TBTN("blood_type", pref.b_type, "Blood Type")]"
 	. += "<br />[VTBTN("disabilities", NEARSIGHTED, pref.disabilities & NEARSIGHTED ? "Yes" : "No", "Glasses")]"
@@ -252,7 +255,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 
 	else if(href_list["gender"])
 		mob_species = all_species[pref.species]
-		var/new_gender = input(user, "Choose your character's bodytype:", CHARACTER_PREFERENCE_INPUT_TITLE, pref.gender) as null|anything in mob_species.genders
+		var/new_gender = tgui_input_list(user, "Choose your character's bodytype", CHARACTER_PREFERENCE_INPUT_TITLE, mob_species.genders, pref.gender)
 		if(new_gender && CanUseTopic(user) && (new_gender in mob_species.genders))
 			pref.gender = new_gender
 			if(!(pref.facial_hair_style in mob_species.get_facial_hair_styles(pref.gender)))
@@ -260,7 +263,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["age"])
-		var/new_age = input(user, "Choose your character's age:\n([mob_species.min_age]-[mob_species.max_age])", CHARACTER_PREFERENCE_INPUT_TITLE, pref.age) as num|null
+		var/new_age = tgui_input_number(user, "Choose your character's age:\n([mob_species.min_age]-[mob_species.max_age])", CHARACTER_PREFERENCE_INPUT_TITLE, pref.age, mob_species.max_age, mob_species.min_age)
 		if(new_age && CanUseTopic(user))
 			pref.age = max(min(round(text2num(new_age)), mob_species.max_age), mob_species.min_age)
 			pref.skills_allocated = pref.sanitize_skills(pref.skills_allocated)		// The age may invalidate skill loadouts
@@ -271,30 +274,38 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["pronouns"])
-		var/new_pronouns = input(user, "Choose your character's pronouns:", CHARACTER_PREFERENCE_INPUT_TITLE, pref.pronouns) as null|anything in mob_species.pronouns
+		var/new_pronouns = tgui_input_list(user, "Choose your character's pronouns", CHARACTER_PREFERENCE_INPUT_TITLE, mob_species.pronouns, pref.pronouns)
 		mob_species = all_species[pref.species]
 		if(new_pronouns && CanUseTopic(user) && (new_pronouns in mob_species.pronouns))
 			pref.pronouns = new_pronouns
 		return TOPIC_REFRESH
+
+	if(href_list["tts_explorer"])
+		var/datum/tgui_module/tts_seeds_explorer/explorer = explorer_users[usr]
+		if(!explorer)
+			explorer = new(src)
+			explorer_users[usr] = explorer
+		explorer.tgui_interact(usr)
+		return TOPIC_NOACTION
 
 	else if(href_list["change_descriptor"])
 		if(mob_species.descriptors)
 			var/desc_id = href_list["change_descriptor"]
 			if(pref.body_descriptors[desc_id])
 				var/datum/mob_descriptor/descriptor = mob_species.descriptors[desc_id]
-				var/choice = input("Please select a descriptor.", "Descriptor") as null|anything in descriptor.chargen_value_descriptors
+				var/choice = tgui_input_list(user, "Please select a descriptor", "Descriptor", descriptor.chargen_value_descriptors)
 				if(choice && mob_species.descriptors[desc_id]) // Check in case they sneakily changed species.
 					pref.body_descriptors[desc_id] = descriptor.chargen_value_descriptors[choice]
 					return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["blood_type"])
-		var/new_b_type = input(user, "Choose your character's blood-type:", CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in valid_bloodtypes
+		var/new_b_type = tgui_input_list(user, "Choose your character's blood-type", CHARACTER_PREFERENCE_INPUT_TITLE, valid_bloodtypes)
 		if(new_b_type && CanUseTopic(user))
 			pref.b_type = new_b_type
 			return TOPIC_REFRESH
 
 	else if(href_list["show_species"])
-		var/choice = input("Which species would you like to look at?") as null|anything in playable_species
+		var/choice = tgui_input_list(user, "Which species would you like to look at?", "Species", playable_species)
 		if(choice)
 			var/datum/species/current_species = all_species[choice]
 			show_browser(user, current_species.get_description(), "window=species;size=700x400")
@@ -312,7 +323,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					continue
 			species_to_pick += species
 
-		var/choice = input("Select a species to play as.") as null|anything in species_to_pick
+		var/choice = tgui_input_list(user, "Select a species to play as", CHARACTER_PREFERENCE_INPUT_TITLE, species_to_pick)
 		if(!choice || !(choice in all_species))
 			return
 
@@ -367,7 +378,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if (hair_index > 1 && valid_hairstyles[hair_index - 1])
 				new_h_style = valid_hairstyles[hair_index - 1]
 		else
-			new_h_style = input(user, "Choose your character's hair style:", CHARACTER_PREFERENCE_INPUT_TITLE, pref.head_hair_style)  as null|anything in valid_hairstyles
+			new_h_style = tgui_input_list(user, "Choose your character's hair style", CHARACTER_PREFERENCE_INPUT_TITLE, valid_hairstyles, pref.head_hair_style)
 
 		mob_species = all_species[pref.species]
 		if(new_h_style && CanUseTopic(user) && (new_h_style in mob_species.get_hair_styles()))
@@ -393,7 +404,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	else if(href_list["base_skin"])
 		if(!HasAppearanceFlag(mob_species, SPECIES_APPEARANCE_HAS_BASE_SKIN_COLOURS))
 			return TOPIC_NOACTION
-		var/new_s_base = input(user, "Choose your character's base colour:", CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in mob_species.base_skin_colours
+		var/new_s_base = tgui_input_list(user, "Choose your character's base colour", CHARACTER_PREFERENCE_INPUT_TITLE, mob_species.base_skin_colours)
 		if(new_s_base && CanUseTopic(user))
 			pref.base_skin = new_s_base
 			return TOPIC_REFRESH_UPDATE_PREVIEW
@@ -427,7 +438,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if (hair_index > 1 && valid_facialhairstyles[hair_index - 1])
 				new_f_style = valid_facialhairstyles[hair_index - 1]
 		else
-			new_f_style = input(user, "Choose your character's facial-hair style:", CHARACTER_PREFERENCE_INPUT_TITLE, pref.facial_hair_style)  as null|anything in valid_facialhairstyles
+			new_f_style = tgui_input_list(user, "Choose your character's facial-hair style", CHARACTER_PREFERENCE_INPUT_TITLE, valid_facialhairstyles, pref.facial_hair_style)
 
 		mob_species = all_species[pref.species]
 		if(new_f_style && CanUseTopic(user) && (new_f_style in mob_species.get_facial_hair_styles(pref.gender)))
@@ -445,7 +456,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if(is_type_in_list(S, disallowed_markings) || (S.species_allowed && !(mob_species.get_bodytype() in S.species_allowed)) || (S.subspecies_allowed && !(mob_species.name in S.subspecies_allowed)))
 				usable_markings -= M
 
-		var/new_marking = input(user, "Choose a body marking:", CHARACTER_PREFERENCE_INPUT_TITLE)  as null|anything in usable_markings
+		var/new_marking = tgui_input_list(user, "Choose a body marking", CHARACTER_PREFERENCE_INPUT_TITLE, usable_markings)
 		if(new_marking && CanUseTopic(user))
 			pref.body_markings[new_marking] = "#000000" //New markings start black
 			return TOPIC_REFRESH_UPDATE_PREVIEW
@@ -477,7 +488,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		else if(pref.organ_data[BP_CHEST] == "cyborg")
 			limb_selection_list |= "Head"
 
-		var/organ_tag = input(user, "Which limb do you want to change?") as null|anything in limb_selection_list
+		var/organ_tag = tgui_input_list(user, "Which limb do you want to change?", CHARACTER_PREFERENCE_INPUT_TITLE, limb_selection_list)
 
 		if(!organ_tag || !CanUseTopic(user)) return TOPIC_NOACTION
 
@@ -525,7 +536,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				third_limb =  BP_GROIN
 				choice_options = list("Normal","Prosthesis")
 
-		var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in choice_options
+		var/new_state = tgui_input_list(user, "What state do you wish the limb to be in?", "Limb", choice_options)
 		if(!new_state || !CanUseTopic(user)) return TOPIC_NOACTION
 
 		switch(new_state)
@@ -567,7 +578,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					usable_manufacturers[company] = M
 				if(!length(usable_manufacturers))
 					return
-				var/choice = input(user, "Which manufacturer do you wish to use for this limb?") as null|anything in usable_manufacturers
+				var/choice = tgui_input_list(user, "Which manufacturer do you wish to use for this limb?", "Limb -> Prothesis", usable_manufacturers)
 				if(!choice)
 					return
 				pref.rlimb_data[limb] = choice
@@ -590,7 +601,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["organs"])
-		var/organ_name = input(user, "Which internal function do you want to change?") as null|anything in list("Heart", "Eyes", "Lungs", "Liver", "Kidneys", "Stomach")
+		var/organ_name = tgui_input_list(user, "Which internal function do you want to change?", "Internal Organ", list("Heart", "Eyes", "Lungs", "Liver", "Kidneys", "Stomach"))
 		if(!organ_name) return
 
 		var/organ = null
@@ -618,7 +629,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			organ_choices -= "Normal"
 			organ_choices += "Synthetic"
 
-		var/new_state = input(user, "What state do you wish the organ to be in?") as null|anything in organ_choices
+		var/new_state = tgui_input_list(user, "What state do you wish the organ to be in?", "Internal Organ", organ_choices)
 		if(!new_state) return
 
 		switch(new_state)

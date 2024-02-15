@@ -46,7 +46,7 @@ export const Panel = (props, context) => {
                   color="grey"
                   selected={audio.visible}
                   icon="music"
-                  tooltip="Music player"
+                  tooltip="Проигрыватель"
                   tooltipPosition="bottom-start"
                   onClick={() => audio.toggle()}
                 />
@@ -56,7 +56,7 @@ export const Panel = (props, context) => {
                   icon={settings.visible ? 'times' : 'cog'}
                   selected={settings.visible}
                   tooltip={
-                    settings.visible ? 'Close settings' : 'Open settings'
+                    settings.visible ? 'Закрыть настройки' : 'Открыть настройки'
                   }
                   tooltipPosition="bottom-start"
                   onClick={() => settings.toggle()}

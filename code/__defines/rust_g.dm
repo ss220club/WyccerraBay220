@@ -8,7 +8,7 @@
 // logic of your own.
 
 // Enable replacement rust-g functions for certain builtins. Off by default.
-//#define RUSTG_OVERRIDE_BUILTINS
+#define RUSTG_OVERRIDE_BUILTINS
 
 #ifndef RUST_G
 // Default automatic RUST_G detection.
@@ -125,7 +125,7 @@
 #define rustg_file_write_b64decode(text, fname) RUSTG_CALL(RUST_G, "file_write")(text, fname, "true")
 
 #ifdef RUSTG_OVERRIDE_BUILTINS
-	#define file2text(fname) rustg_file_read("[fname]")
+	//#define file2text(fname) rustg_file_read("[fname]") Disable
 	#define text2file(text, fname) rustg_file_append(text, "[fname]")
 	#define fexists(fname) (rustg_file_exists("[fname]") == "true")
 #endif

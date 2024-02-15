@@ -4,22 +4,22 @@
 	var/list/version_bits = splittext(deprefixed_parameter, ".")
 
 	suite = text2num(version_bits[1])
-	if(version_bits.len > 1)
+	if(length(version_bits) > 1)
 		minor = text2num(version_bits[2])
-		if(version_bits.len > 2)
+		if(length(version_bits) > 2)
 			patch = text2num(version_bits[3])
-			if(version_bits.len == 4)
+			if(length(version_bits) == 4)
 				deprecated_patch = text2num(version_bits[4])
 
 /datum/tgs_version/proc/Valid(allow_wildcards = FALSE)
-	if(suite == null)
+	if(isnull(suite))
 		return FALSE
 	if(allow_wildcards)
 		return TRUE
 	return !Wildcard()
 
 /datum/tgs_version/Wildcard()
-	return minor == null || patch == null
+	return isnull(minor) || isnull(patch)
 
 /datum/tgs_version/Equals(datum/tgs_version/other_version)
 	if(!istype(other_version))

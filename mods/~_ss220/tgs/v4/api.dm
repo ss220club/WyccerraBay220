@@ -132,7 +132,7 @@
 	switch(command)
 		if(TGS4_TOPIC_CHAT_COMMAND)
 			var/result = HandleCustomCommand(params[TGS4_PARAMETER_DATA])
-			if(result == null)
+			if(isnull(result))
 				result = "Error running chat command!"
 			return result
 		if(TGS4_TOPIC_EVENT)

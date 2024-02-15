@@ -113,7 +113,7 @@
 		inline_css = "<style>\n[inline_css]\n</style>"
 		html = replacetextEx(html, "<!-- tgui:inline-css -->", inline_css)
 	// Open the window
-	to_target(client, browse(html, "window=[id];[options]"))
+	show_browser(client, html, "window=[id];[options]")
 	// Detect whether the control is a browser
 	is_browser = winexists(client, id) == "BROWSER"
 	// Instruct the client to signal UI when the window is closed.
@@ -240,7 +240,7 @@
 	// Do not close the window to give user some time
 	// to read the error message.
 	if(!fatally_errored)
-		to_target(client, browse(null, "window=[id]"))
+		close_browser(client, "window=[id]")
 		if(!logout && client)
 			winset(client, null, "mapwindow.map.focus=true")
 

@@ -138,6 +138,9 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 /client/New(TopicData)
 	TopicData = null							//Prevent calls to client.Topic from connect
 
+	// Create tgui panel. Dpn't put it bellow to_chat() procs, will runtime
+	tgui_panel = new(src, "browseroutput")
+
 	switch (connection)
 		if ("seeker", "web") // check for invalid connection type. do nothing if valid
 		else return null
@@ -183,8 +186,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	GLOB.clients += src
 	GLOB.ckey_directory[ckey] = src
 
-	tgui_panel = new(src, "browseroutput")
-
 	// Automatic admin rights for people connecting locally.
 	// Concept stolen from /tg/ with deepest gratitude.
 	var/local_connection = (config.auto_local_admin && (isnull(address) || GLOB.localhost_addresses[address]))
@@ -197,8 +198,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	if(holder)
 		GLOB.admins += src
 		holder.owner = src
-
-	tgui_panel.initialize()
 
 	//preferences datum - also holds some persistant data for the client (because we may as well keep these datums to a minimum)
 	prefs = SScharacter_setup.preferences_datums[ckey]
@@ -261,6 +260,9 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 	if(SSinput.initialized)
 		set_macros()
+
+	// Initialize tgui panel
+	tgui_panel.initialize()
 
 	// This turns out to be a touch too much when a bunch of people are connecting at once from a restart during init.
 	if (GAME_STATE & RUNLEVELS_DEFAULT)

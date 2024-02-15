@@ -8,7 +8,7 @@
 // logic of your own.
 
 // Enable replacement rust-g functions for certain builtins. Off by default.
-#define RUSTG_OVERRIDE_BUILTINS
+//#define RUSTG_OVERRIDE_BUILTINS
 
 #ifndef RUST_G
 // Default automatic RUST_G detection.

@@ -230,7 +230,6 @@ window "rpane"
 		size = 119x18
 		anchor1 = 0,0
 		anchor2 = 14,0
-		font-style = "bold"
 		background-color = #ffffff
 		border = line
 		saved-params = "is-checked"
@@ -246,7 +245,7 @@ window "rpane"
 		background-color = #ffffff
 		border = line
 		saved-params = "is-checked"
-		text = "Ченджлог"
+		text = "Чейнджлог"
 		command = "Changelog"
 		is-flat = true
 		group = "rpanemode"
@@ -319,6 +318,7 @@ window "rpane"
 		size = 119x18
 		anchor1 = 88,0
 		anchor2 = 100,0
+		font-style = "bold"
 		background-color = #ffffff
 		border = line
 		saved-params = "is-checked"

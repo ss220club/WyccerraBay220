@@ -45,7 +45,7 @@
 	return TRUE
 
 /datum/keybinding/living/pixel_shift
-	hotkey_keys = list("B")
+	hotkey_keys = list("V")
 	name = "pixel_shift"
 	full_name = "Pixel Shift"
 	description = "Hold to pixel shift with movement keys"

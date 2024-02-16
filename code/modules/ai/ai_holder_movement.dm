@@ -114,7 +114,7 @@
 /datum/ai_holder/proc/walk_path(atom/A, get_to = 1)
 	ai_log("walk_path() : Entering.", AI_LOG_TRACE)
 
-	if (use_astar)
+	if (use_astar && target)
 		if (!length(path)) // If we're missing a path, make a new one.
 			ai_log("walk_path() : No path. Attempting to calculate path.", AI_LOG_DEBUG)
 			calculate_path(A, get_to)

@@ -1,9 +1,9 @@
 /datum/map/sierra
 	welcome_sound = sound(ANNOUNCER_WELCOME, volume = 45)
 
-	shuttle_called_sound = sound(ANNOUNCER_BLUESPACEJUMP_INIT, volume = 45)
+	shuttle_called_sound = sound(ANNOUNCER_BLUESPACEJUMP_PREP, volume = 45)
 	shuttle_called_message = "Внимание всему персоналу: запущена процедура подготовки к подпространственному прыжку в следующий сектор. Расчетное время окончания зарядки генератора блюспейса: %ETA%."
-	shuttle_docked_sound = sound(ANNOUNCER_BLUESPACEJUMP_PREP, volume = 45)
+	shuttle_docked_sound = sound(ANNOUNCER_BLUESPACEJUMP_INIT, volume = 45)
 	shuttle_docked_message = "Внимание всему персоналу: подготовка к подпространственному прыжку завершена. Начата процедура безопасной активации генератора подпространства. Расчетное время до начала прыжка: %ETD%."
 	shuttle_leaving_message = sound(ANNOUNCER_BLUESPACEJUMP_START, volume = 45)
 	shuttle_leaving_sound = "Внимание всему персоналу: прыжок начат. Примерное время окончания прыжка: %ETA%. Сохраняйте спокойствие и трезвость мышления."

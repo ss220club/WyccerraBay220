@@ -49,6 +49,6 @@
 	welcome_text += "<hr>"
 
 	post_comm_message("NSV Sierra Sensor Readings", welcome_text)
-	minor_announcement.Announce(message = "Сканирование сектора завершено. Информация передана в базу данных консолей связи.")
+	minor_announcement.Announce("Сканирование сектора завершено. Информация передана в базу данных консолей связи.")
 	sleep(2 SECONDS)
-	minor_announcement.Announce(message = "Текущая система: [system_name]. Приятной смены на борту [station_name].")
+	minor_announcement.Announce("Текущая система: [system_name]. Приятной смены на борту [station_name].", new_sound = 'sound/misc/notice2.ogg')

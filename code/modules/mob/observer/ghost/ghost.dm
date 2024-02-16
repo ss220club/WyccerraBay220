@@ -20,6 +20,7 @@ var/global/list/image/ghost_sightless_images = list() //this is a list of images
 	var/is_manifest = FALSE
 	var/next_visibility_toggle = 0
 	var/can_reenter_corpse
+	var/thearea
 	var/bootime = 0
 	var/started_as_observer //This variable is set to 1 when you enter the game as an observer.
 							//If you died in the game and are a ghost - this will remain as null.
@@ -154,6 +155,7 @@ Works together with spawning an observer, noted above.
 		ghost.key = key
 		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
 			ghost.verbs -= /mob/observer/ghost/verb/toggle_antagHUD	// Poor guys, don't know what they are missing!
+		ghost.add_ghost_buttons()
 		return ghost
 
 /mob/observer/ghostize() // Do not create ghosts of ghosts.
@@ -222,7 +224,16 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	mind.current.reload_fullscreen()
 	if(!admin_ghosted)
 		announce_ghost_joinleave(mind, 0, "They now occupy their body again.")
-	return 1
+	return TRUE
+
+/mob/observer/ghost/proc/jumptomob()
+	var/mob/M = tgui_input_list(usr, "К кому вы хотите телепортироваться?", "Выбрать моба", SSmobs.mob_list)
+	log_and_message_admins("jumped to [key_name(M)]")
+	var/turf/T = get_turf(M)
+	if(T && isturf(T))
+		jumpTo(T)
+	else
+		to_chat(usr, "Этот моб не находится в игровом мире.")
 
 /mob/observer/ghost/verb/toggle_medHUD()
 	set category = "Ghost"
@@ -231,10 +242,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(!client)
 		return
 	if(medHUD)
-		medHUD = 0
+		medHUD = FALSE
 		to_chat(src, SPAN_NOTICE("Medical HUD Disabled"))
 	else
-		medHUD = 1
+		medHUD = TRUE
 		to_chat(src, SPAN_NOTICE("Medical HUD Enabled"))
 
 /mob/observer/ghost/verb/toggle_antagHUD()
@@ -264,11 +275,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		M.antagHUD = 1
 		to_chat(src, SPAN_NOTICE("AntagHUD Enabled"))
 
-/mob/observer/ghost/verb/dead_tele(A in area_repository.get_areas_by_z_level())
+/mob/observer/ghost/verb/dead_tele()
 	set category = "Ghost"
 	set name = "Teleport"
 	set desc= "Teleport to a location"
 
+	var/A = tgui_input_list(usr, "Выберите зону.", "Выбор зоны", area_repository.get_areas_by_z_level())
 	var/area/thearea = area_repository.get_areas_by_z_level()[A]
 	if(!thearea)
 		to_chat(src, "No area available.")
@@ -291,13 +303,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		ghost_to_turf(T)
 	else
 		to_chat(src, SPAN_WARNING("Invalid coordinates."))
-/mob/observer/ghost/verb/follow(datum/follow_holder/fh in get_follow_targets())
+/mob/observer/ghost/verb/follow()
 	set category = "Ghost"
 	set name = "Follow"
 	set desc = "Follow and haunt a mob."
 
-	if(!fh.show_entry()) return
-	start_following(fh.followed_instance)
+	GLOB.orbit_menu.show(src)
 
 /mob/observer/ghost/proc/ghost_to_turf(turf/target_turf)
 	if(check_is_holy_turf(target_turf))
@@ -315,7 +326,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(src, SPAN_NOTICE("No longer following \the [following]"))
 	..()
 
-/mob/observer/ghost/keep_following(atom/movable/am, old_loc, new_loc)
+/mob/observer/ghost/keep_following(obj/AM, old_loc, new_loc)
 	var/turf/T = get_turf(new_loc)
 	if(check_is_holy_turf(T))
 		to_chat(src, SPAN_WARNING("You cannot follow something standing on holy grounds!"))
@@ -586,3 +597,15 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		M.respawned_time = world.time
 	M.key = key
 	log_and_message_admins("has respawned.", M)
+
+/mob/observer/ghost/proc/add_ghost_buttons()
+	var/jumptomob = new /obj/screen/ghost/jumptomob()
+	var/orbit = new /obj/screen/ghost/orbit()
+	var/reenter_corpse = new /obj/screen/ghost/reenter_corpse()
+	var/teleport = new /obj/screen/ghost/teleport()
+	var/toggle_darkness = new /obj/screen/ghost/toggle_darkness()
+	client.screen.Add(jumptomob)
+	client.screen.Add(orbit)
+	client.screen.Add(reenter_corpse)
+	client.screen.Add(teleport)
+	client.screen.Add(toggle_darkness)

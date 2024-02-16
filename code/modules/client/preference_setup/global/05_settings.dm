@@ -88,6 +88,7 @@
 		else
 			return null
 	else
+		stack_trace("No client prefs inited")
 		log_error("Client is lacking preferences: [log_info_line(src)]")
 
 /client/proc/set_preference(preference, set_preference)

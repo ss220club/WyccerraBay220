@@ -107,13 +107,9 @@
 		machine.on_user_login(src)
 
 	if (SScharacter_setup.initialized && SSchat.initialized && !isnull(client.chatOutput))
+		client.view = client.get_preference_value(/datum/client_preference/client_view)
 		if(client.get_preference_value(/datum/client_preference/goonchat) == GLOB.PREF_YES)
 			client.chatOutput.start()
-
-	//set macro to normal incase it was overriden (like cyborg currently does)
-	// [SIERRA-REMOVE] - SSINPUT
-	// winset(src, null, "mainwindow.macro=macro hotkey_toggle.is-checked=false input.focus=true input.background-color=#d3b5b5")
-	// [/SIERRA-REMOVE]
 
 /mob/living/carbon/Login()
 	. = ..()

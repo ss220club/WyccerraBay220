@@ -106,7 +106,7 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 	var/away_site_budget = 0
 	var/min_offmap_players = 0
 
-	// Set of types of loadout items that will not be pickable as: type => TRUE
+	/// Set of types of loadout items that will not be pickable as: type => TRUE
 	var/list/loadout_blacklist
 
 	//Economy stuff

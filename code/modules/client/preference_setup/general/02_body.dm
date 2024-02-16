@@ -319,7 +319,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				var/datum/species/current_species = all_species[species]
 				if(!(current_species.spawn_flags & SPECIES_CAN_JOIN))
 					continue
-				else if((current_species.spawn_flags & SPECIES_IS_WHITELISTED) && !is_alien_whitelisted(preference_mob(),current_species))
+				else if((current_species.spawn_flags & SPECIES_IS_WHITELISTED) && !is_any_alien_whitelisted(preference_mob(),current_species))
 					continue
 			species_to_pick += species
 
@@ -354,7 +354,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			sanitize_organs()
 
 			if(!HasAppearanceFlag(all_species[pref.species], SPECIES_APPEARANCE_HAS_UNDERWEAR))
-				pref.all_underwear.Cut()
+				LAZYCLEARLIST(pref.all_underwear)
 
 			return TOPIC_REFRESH_UPDATE_PREVIEW
 

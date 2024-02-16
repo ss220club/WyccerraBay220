@@ -12,7 +12,7 @@
 	//doohickeys for savefiles
 	var/is_guest = FALSE
 	var/default_slot = 1				//Holder so it doesn't default to slot 1, rather the last one used
-
+	var/character_slots_count = 0
 	// Cache, mapping slot record ids to character names
 	// Saves reading all the slot records when listing
 	var/list/slot_names = null
@@ -33,9 +33,10 @@
 	var/client_ckey = null
 
 	var/datum/browser/popup
-
 	var/datum/category_collection/player_setup_collection/player_setup
 	var/datum/browser/panel
+	var/datum/gear/trying_on_gear
+	var/list/trying_on_tweaks = list()
 
 /datum/preferences/New(client/C)
 	if(istype(C))
@@ -150,7 +151,10 @@
 /datum/preferences/proc/open_setup_window(mob/user)
 	if (!SScharacter_setup.initialized)
 		return
-	popup = new (user, "preferences_browser", "Character Setup", 1200, 800, src)
+
+	winshow(user, "preference_window", TRUE)
+
+	popup = new (user, "prerference_browser", "Character Setup", 1000, 800, src)
 	var/content = {"
 	<script type='text/javascript'>
 		function update_content(data){
@@ -160,10 +164,12 @@
 	<div id='content'>[get_content(user)]</div>
 	"}
 	popup.set_content(content)
-	popup.open()
+	popup.open(FALSE)
+	onclose(user, "preference_window", src)
+	update_preview_icon()
 
 /datum/preferences/proc/update_setup_window(mob/user)
-	send_output(user, url_encode(get_content(user)), "preferences_browser.browser:update_content")
+	send_output(user, url_encode(get_content(user)), "preference_window.prerference_browser:update_content")
 
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 
@@ -181,51 +187,66 @@
 
 /datum/preferences/Topic(href, list/href_list)
 	if(..())
-		return 1
+		return TRUE
 
 	if (href_list["close"])
 		popup = null
+		clear_character_previews()
 
-	if(href_list["save"])
+	else if(href_list["save"])
 		save_preferences()
 		save_character()
-		// [SIERRA-ADD] - LOBBYSCREEN
-		if (istype(client.mob, /mob/new_player))
+
+		if(istype(client.mob, /mob/new_player))
 			var/mob/new_player/M = client.mob
 			M.new_player_panel()
-		// [/SIERRA-ADD]
+
 	else if(href_list["reload"])
 		load_preferences()
 		load_character()
 		sanitize_preferences()
+
 	else if(href_list["load"])
 		if(!IsGuestKey(usr.key))
 			open_load_dialog(usr, href_list["details"])
-			return 1
+			return TRUE
+
 	else if(href_list["changeslot"])
 		load_character(text2num(href_list["changeslot"]))
 		sanitize_preferences()
 		close_load_dialog(usr)
-
-		if (winget(usr, "preferences_browser", "is-visible") == "true")
-			open_setup_window(usr)
 
 		if (istype(client.mob, /mob/new_player))
 			var/mob/new_player/M = client.mob
 			M.new_player_panel()
 
 		if (href_list["details"])
-			return 1
+			return TRUE
+
 	else if(href_list["resetslot"])
 		if(real_name != input("This will reset the current slot. Enter the character's full name to confirm."))
-			return 0
+			return FALSE
+
 		load_character(SAVE_RESET)
 		sanitize_preferences()
+
+	else if (href_list["changeslot_next"])
+		character_slots_count += 10
+		if(character_slots_count >= config.character_slots)
+			character_slots_count = 0
+		open_load_dialog(usr, href_list["details"])
+
+	else if (href_list["changeslot_prev"])
+		character_slots_count -= 10
+		if(character_slots_count < 0)
+			character_slots_count = config.character_slots - config.character_slots % 10
+		open_load_dialog(usr, href_list["details"])
+
 	else
-		return 0
+		return FALSE
 
 	update_setup_window(usr)
-	return 1
+	return TRUE
 
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, is_preview_copy = FALSE)
 	// Sanitizing rather than saving as someone might still be editing when copy_to occurs.
@@ -376,18 +397,22 @@
 /datum/preferences/proc/open_load_dialog(mob/user, details)
 	var/dat  = list()
 	dat += "<body>"
-	dat += "<tt><center>"
+	dat += "<center>"
 
-	dat += "<b>Select a character slot to load</b><hr>"
-	for(var/i=1, i<= config.character_slots, i++)
-		var/name = (slot_names && slot_names[get_slot_key(i)]) || "Character[i]"
-		if(i==default_slot)
+	dat += "<b>Выберите слот для загрузки</b><hr>"
+	for(var/i = 1, i <= 10, i++)
+		var/name = (slot_names && slot_names[get_slot_key(i + character_slots_count)]) || "Персонаж [i + character_slots_count]"
+		if((i + character_slots_count) == default_slot)
 			name = "<b>[name]</b>"
-		dat += "<a href='?src=\ref[src];changeslot=[i];[details?"details=1":""]'>[name]</a><br>"
-
+		if(i + character_slots_count <= config.character_slots)
+			dat += "<a href='?src=\ref[src];changeslot=[i + character_slots_count];[details?"details=1":""]'>[name]</a><br>"
+	if(config.character_slots>10)
+		dat += "<br><a href='?src=\ref[src];changeslot_prev=1'> <b>&lt;</b> </a>"
+		dat += " <b>[character_slots_count + 1]</b> - <b>[character_slots_count + 10]</b> "
+		dat += "<a href='?src=\ref[src];changeslot_next=1'> <b>&gt;</b> </a><br>"
 	dat += "<hr>"
-	dat += "</center></tt>"
-	panel = new(user, "Character Slots", "Character Slots", 300, 390, src)
+	dat += "</center>"
+	panel = new(user, "character_slots", "Слоты персонажей", 300, 390, src)
 	panel.set_content(jointext(dat,null))
 	panel.open()
 

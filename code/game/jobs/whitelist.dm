@@ -11,91 +11,94 @@ var/global/list/whitelist = list()
 	whitelist = file2list(WHITELISTFILE)
 	if(!length(whitelist))	whitelist = null
 
-/proc/check_whitelist(mob/M /*, rank*/)
+/proc/check_whitelist(mob/M)
 	if(!whitelist)
-		return 0
+		return FALSE
 	return ("[M.ckey]" in whitelist)
 
 var/global/list/alien_whitelist = list()
 
 /hook/startup/proc/loadAlienWhitelist()
-	if(config.usealienwhitelist)
-		if(config.usealienwhitelistSQL)
-			if(!load_alienwhitelistSQL())
-				to_world_log("Could not load alienwhitelist via SQL")
-		else
-			load_alienwhitelist()
-	return 1
+	if(!config.usealienwhitelist)
+		return TRUE
+
+	if(!load_alienwhitelistSQL())
+		to_world_log("Could not load alienwhitelist via SQL")
+	else
+		load_alienwhitelist()
+
+	return FALSE
+
 /proc/load_alienwhitelist()
 	var/text = file2text("config/alienwhitelist.txt")
 	if (!text)
 		log_misc("Failed to load config/alienwhitelist.txt")
-		return 0
-	else
-		alien_whitelist = splittext(text, "\n")
-		return 1
+		return FALSE
+
+	var/list/ckey_to_whitelisted_races = json_decode(text)
+	for(var/ckey in ckey_to_whitelisted_races)
+		var/list/whitelisted_races = ckey_to_whitelisted_races[ckey]
+		for(var/race in whitelisted_races)
+			if(islist(alien_whitelist[ckey]))
+				alien_whitelist[ckey][race] = TRUE
+			else
+				alien_whitelist[ckey] = list(race = TRUE)
+
+	return TRUE
+
 /proc/load_alienwhitelistSQL()
 	var/DBQuery/query = dbcon_old.NewQuery("SELECT * FROM whitelist")
 	if(!query.Execute())
 		to_world_log(dbcon_old.ErrorMsg())
-		return 0
+		return FALSE
 	else
 		while(query.NextRow())
 			var/list/row = query.GetRowData()
-			if(alien_whitelist[row["ckey"]])
-				var/list/A = alien_whitelist[row["ckey"]]
-				A.Add(row["race"])
+
+			var/ckey = row["ckey"]
+			var/race = row["race"]
+			if(islist(alien_whitelist[ckey]))
+				alien_whitelist[ckey][race] = TRUE
 			else
-				alien_whitelist[row["ckey"]] = list(row["race"])
-	return 1
+				alien_whitelist[ckey] = list(race = TRUE)
 
-/proc/is_species_whitelisted(mob/M, species_name)
-	var/datum/species/S = all_species[species_name]
-	return is_alien_whitelisted(M, S)
+	return TRUE
 
-//todo: admin aliens
-/proc/is_alien_whitelisted(mob/M, species)
-	if(!M || !species)
-		return 0
+/proc/is_any_alien_whitelisted(mob/mob_to_check, list/species)
+	if(!mob_to_check || !species)
+		return FALSE
+
 	if (GLOB.skip_allow_lists)
 		return TRUE
+
 	if(!config.usealienwhitelist)
-		return 1
-	if(check_rights(R_ADMIN, 0, M))
-		return 1
+		return TRUE
 
-	if(istype(species,/datum/language))
-		var/datum/language/L = species
-		if(!(L.flags & (WHITELISTED|RESTRICTED)))
-			return 1
-		return whitelist_lookup(L.name, M.ckey)
+	if(check_rights(R_ADMIN, 0, mob_to_check))
+		return TRUE
 
-	if(istype(species,/datum/species))
-		var/datum/species/S = species
-		if(!(S.spawn_flags & (SPECIES_IS_WHITELISTED|SPECIES_IS_RESTRICTED)))
-			return 1
-		return whitelist_lookup(S.get_bodytype(S), M.ckey)
+	if(!islist(species))
+		species = list(species)
 
-	return 0
+
+	for(var/single_species in species)
+		if(istype(single_species, /datum/language))
+			var/datum/language/language_to_check = single_species
+			if(!(language_to_check.flags & (WHITELISTED|RESTRICTED)))
+				return TRUE
+
+			return whitelist_lookup(language_to_check.name, mob_to_check.ckey)
+
+		if(istype(single_species, /datum/species))
+			var/datum/species/species_to_check = single_species
+			if(!(species_to_check.spawn_flags & (SPECIES_IS_WHITELISTED|SPECIES_IS_RESTRICTED)))
+				return TRUE
+
+			return whitelist_lookup(species_to_check.get_bodytype(species_to_check), mob_to_check.ckey)
+
+	return FALSE
 
 /proc/whitelist_lookup(item, ckey)
-	if(!alien_whitelist)
-		return 0
-
-	if(config.usealienwhitelistSQL)
-		//SQL Whitelist
-		if(!(ckey in alien_whitelist))
-			return 0;
-		var/list/whitelisted = alien_whitelist[ckey]
-		if(lowertext(item) in whitelisted)
-			return 1
-	else
-		//Config File Whitelist
-		for(var/s in alien_whitelist)
-			if(findtext(s,"[ckey] - [item]"))
-				return 1
-			if(findtext(s,"[ckey] - All"))
-				return 1
-	return 0
+	return alien_whitelist?[ckey]?[lowertext(item)]
 
 #undef WHITELISTFILE

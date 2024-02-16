@@ -235,7 +235,7 @@ var/global/const/CHARACTER_PREFERENCE_INPUT_TITLE = "Character Preference"
 		return 1
 
 	if (. & TOPIC_UPDATE_PREVIEW)
-		pref_mob.client.prefs.preview_icon = null
+		pref.update_preview_icon()
 	if (. & TOPIC_HARD_REFRESH)
 		pref_mob.client.prefs.open_setup_window(usr)
 	else if (. & TOPIC_REFRESH)
@@ -249,13 +249,12 @@ var/global/const/CHARACTER_PREFERENCE_INPUT_TITLE = "Character Preference"
 
 /datum/category_item/player_setup_item/proc/preference_mob()
 	if(!pref.client)
-		for(var/client/C)
-			if(C.ckey == pref.client_ckey)
-				pref.client = C
-				break
+		pref.client = GLOB.ckey_directory[pref.client_ckey]
 
 	if(pref.client)
 		return pref.client.mob
+
+	return null
 
 /datum/category_item/player_setup_item/proc/preference_species()
 	return all_species[pref.species] || all_species[SPECIES_HUMAN]

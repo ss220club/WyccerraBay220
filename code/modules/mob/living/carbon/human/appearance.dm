@@ -175,7 +175,7 @@
 			if (species.spawn_flags & SPECIES_IS_RESTRICTED)
 				continue
 		if (!(appearance_flags & APPEARANCE_SKIP_ALLOW_LIST_CHECK))
-			if (!is_alien_whitelisted(src, species))
+			if (!is_any_alien_whitelisted(src, species))
 				continue
 		result += name
 	return result

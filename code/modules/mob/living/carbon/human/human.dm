@@ -1329,7 +1329,7 @@
 		var/datum/language/lang = thing
 		if(lang in permitted_languages)
 			continue
-		if(!(lang.flags & RESTRICTED) && (lang.flags & WHITELISTED) && is_alien_whitelisted(src, lang))
+		if(!(lang.flags & RESTRICTED) && (lang.flags & WHITELISTED) && is_any_alien_whitelisted(src, lang))
 			continue
 		if(lang == default_language)
 			default_language = null

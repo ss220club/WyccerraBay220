@@ -260,7 +260,7 @@
 	if (!C?.mob)
 		log_debug("Failed to find a valid client/mob for whitelist checking - Job `[src]` - Client `[C]` - Mob `[C?.mob]`")
 		return FALSE
-	return is_species_whitelisted(C.mob, use_species_whitelist)
+	return is_any_alien_whitelisted(C.mob, all_species[use_species_whitelist])
 
 // Don't use if the map doesn't use branches but jobs do.
 /datum/job/proc/get_branch_rank(datum/species/S)

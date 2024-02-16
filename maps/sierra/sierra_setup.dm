@@ -1,7 +1,7 @@
 /datum/map/sierra/setup_map()
 	..()
 	system_name = generate_system_name()
-	minor_announcement = new(new_sound = sound('sound/AI/torch/commandreport.ogg', volume = 45))
+	minor_announcement = new(new_sound = sound(ANNOUNCER_COMMANDREPORT, volume = 45))
 
 /datum/map/sierra/map_info(victim)
 	to_chat(victim, "<h2>Информация о карте</h2>")

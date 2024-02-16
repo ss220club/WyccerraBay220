@@ -160,7 +160,6 @@
 	id_tag = "example_shuttle_port";
 	pixel_x = -28
 	},
-/obj/shuttle_landmark/lower_level,
 /turf/simulated/floor/plating,
 /area/shuttle/escape)
 "C" = (
@@ -211,12 +210,8 @@
 /obj/machinery/tele_pad,
 /turf/simulated/floor/tiled,
 /area/constructionsite)
-"L" = (
-/obj/machinery/telecomms/server/map_preset/example,
-/turf/simulated/floor/tiled,
-/area/constructionsite)
 "M" = (
-/obj/machinery/telecomms/bus/map_preset/example,
+/obj/machinery/door/airlock/atmos,
 /turf/simulated/floor/tiled,
 /area/constructionsite)
 "N" = (
@@ -230,8 +225,7 @@
 /turf/simulated/floor/tiled,
 /area/constructionsite)
 "P" = (
-/obj/machinery/light,
-/obj/machinery/telecomms/processor/map_preset/example,
+/obj/item/modular_computer/pda/captain,
 /turf/simulated/floor/tiled,
 /area/constructionsite)
 "Q" = (
@@ -250,15 +244,15 @@
 /turf/simulated/floor/tiled,
 /area/constructionsite)
 "U" = (
-/obj/machinery/telecomms/broadcaster/map_preset/example,
+/obj/item/storage/belt/general/full,
 /turf/simulated/floor/tiled,
 /area/constructionsite)
 "V" = (
-/obj/machinery/telecomms/hub/map_preset/example,
+/obj/machinery/vending/cigarette,
 /turf/simulated/floor/tiled,
 /area/constructionsite)
 "W" = (
-/obj/machinery/telecomms/receiver/map_preset/example,
+/obj/item/modular_computer/laptop,
 /turf/simulated/floor/tiled,
 /area/constructionsite)
 
@@ -1062,7 +1056,7 @@ w
 c
 c
 c
-c
+U
 c
 c
 c
@@ -1096,9 +1090,9 @@ w
 c
 c
 g
+P
 c
-c
-c
+M
 c
 c
 Q
@@ -1130,12 +1124,12 @@ w
 c
 c
 c
-c
-c
-c
-c
-c
 W
+c
+V
+c
+c
+c
 b
 a
 a
@@ -1169,7 +1163,7 @@ c
 c
 c
 c
-L
+c
 b
 a
 a
@@ -1203,7 +1197,7 @@ c
 c
 c
 c
-P
+k
 b
 a
 a
@@ -1237,7 +1231,7 @@ r
 c
 c
 c
-M
+c
 b
 a
 a
@@ -1271,7 +1265,7 @@ c
 c
 c
 c
-V
+c
 b
 a
 a
@@ -1305,7 +1299,7 @@ c
 f
 c
 c
-U
+c
 b
 a
 a

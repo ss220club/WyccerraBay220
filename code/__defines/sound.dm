@@ -1,9 +1,5 @@
 ///Announcer audio keys
-//#define ANNOUNCER_AIMALF 'sound/ai/aimalf.ogg'
 #define ANNOUNCER_ALIENS 'sound/wyccstation/announcements/life_signatures.ogg'
-//#define ANNOUNCER_ANIMES 'sound/wyccstation/announcements/anime.ogg'
-//#define ANNOUNCER_GRANOMALIES 'sound/wyccstation/announcements/anomaly_gravity.ogg'
-//#define ANNOUNCER_INTERCEPT 'sound/ai/intercept.ogg'
 #define ANNOUNCER_IONSTORM 'sound/ai/ionstorm.ogg'
 #define ANNOUNCER_METEORS 'sound/wyccstation/announcements/meteors_1.ogg'
 #define ANNOUNCER_OUTBREAK5 'sound/wyccstation/announcements/biohazard_level_5.ogg'
@@ -23,4 +19,9 @@
 #define ANNOUNCER_BLUESPACEJUMP_INIT 'sound/wyccstation/announcements/bluespacejump_initialization.ogg'
 #define ANNOUNCER_BLUESPACEJUMP_PREP 'sound/wyccstation/announcements/bluespacejump_prepare.ogg'
 #define ANNOUNCER_BLUESPACEJUMP_START 'sound/wyccstation/announcements/bluespacejump_start.ogg'
+
+// Currently unused
+
+//#define ANNOUNCER_ANIMES 'sound/wyccstation/announcements/anime.ogg'
+//#define ANNOUNCER_GRANOMALIES 'sound/wyccstation/announcements/anomaly_gravity.ogg'
 //#define ANNOUNCER_NEWAI 'sound/wyccstation/announcements/new_ai_1.ogg'

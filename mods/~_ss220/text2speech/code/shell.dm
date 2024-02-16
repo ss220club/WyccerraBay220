@@ -6,6 +6,42 @@
 #define SHELLEO_ERR ".err"
 #define SHELLEO_OUT ".out"
 
+#define DELAYED_SHELL "./tools/misc/delayed_shell.py"
+
+SUBSYSTEM_DEF(shell)
+	name = "Shell"
+	/// Assotiative list id: callback for shell tasks. When the task is completed, python script sends a world topic that asks to execute the corresponding callback.
+	var/list/shell_callbacks = list()
+	var/last_id = 0
+	var/python_interpreter
+	var/shell_interpreter
+	var/escape_char
+
+/datum/controller/subsystem/shell/Initialize(start_uptime)
+	. = ..()
+	var/static/list/python_interpreters = list("[MS_WINDOWS]" = "python", "[UNIX]" = "python3")
+	var/static/list/shell_interpreters = list("[MS_WINDOWS]" = "pwsh -c", "[UNIX]" = "sh -c")
+	var/static/list/escape_chars = list("[MS_WINDOWS]" = "`", "[UNIX]" = "\\")
+
+	python_interpreter = python_interpreters["[world.system_type]"]
+	shell_interpreter = shell_interpreters["[world.system_type]"]
+	escape_char = escape_chars["[world.system_type]"]
+
+/datum/controller/subsystem/shell/UpdateStat(time)
+	if (PreventUpdateStat(time))
+		return ..()
+	..({"Awaiting [length(shell_callbacks)] tasks"})
+
+
+/datum/controller/subsystem/shell/proc/shelleo_delayed(command, datum/callback/callback)
+	if(!initialized)
+		return
+	command = replace_characters(command, list({"""}={"[SSshell.escape_char]""}, {"'"}={"[SSshell.escape_char]'"}))
+	var/id = "id[last_id++]"
+	shell_callbacks[id] = callback
+	var/shell_command = {"[python_interpreter] [DELAYED_SHELL] -port [world.port] -id [id] -command "[command]""}
+	to_world(list2params(world.shelleo(shell_command)))
+
 /world/proc/shelleo(command)
 	var/static/list/shelleo_ids = list()
 	var/stdout = ""
@@ -14,8 +50,7 @@
 	var/shelleo_id
 	var/out_file = ""
 	var/err_file = ""
-	var/static/list/interpreters = list("[MS_WINDOWS]" = "cmd /c", "[UNIX]" = "sh -c")
-	var/interpreter = interpreters["[world.system_type]"]
+	var/interpreter = SSshell.shell_interpreter
 	if(!interpreter)
 		CRASH("Operating System: [world.system_type] not supported") // If you encounter this error, you are encouraged to update this proc with support for the new operating system
 
@@ -70,20 +105,21 @@
 	if(config.ffmpeg_cpuaffinity)
 		taskset = "taskset -ac [config.ffmpeg_cpuaffinity]"
 
-	var/list/output
+	var/command
 	switch(effect)
 		if(SOUND_EFFECT_RADIO)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log" [filename_output]"})
+			command = {"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log" [filename_output]"}
 		if(SOUND_EFFECT_ROBOT)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5" [filename_output]"})
+			command = {"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5" [filename_output]"}
 		if(SOUND_EFFECT_RADIO_ROBOT)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5, highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log" [filename_output]"})
+			command = {"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5, highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log" [filename_output]"}
 		if(SOUND_EFFECT_MEGAPHONE)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log" [filename_output]"})
+			command = {"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log" [filename_output]"}
 		if(SOUND_EFFECT_MEGAPHONE_ROBOT)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log" [filename_output]"})
+			command = {"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log" [filename_output]"}
 		else
 			CRASH("Invalid sound effect chosen.")
+	var/list/output = SSshell.shelleo_delayed(command)
 	var/errorlevel = output[SHELLEO_ERRORLEVEL]
 	var/stdout = output[SHELLEO_STDOUT]
 	var/stderr = output[SHELLEO_STDERR]

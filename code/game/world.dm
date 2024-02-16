@@ -493,6 +493,15 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 		else
 			return "Database connection failed or not set up"
 
+	else if(copytext(T,1,7) == "ffmpeg")
+		var/input[] = params2list(T)
+		if(input["key"] != config.comms_password)
+			SET_THROTTLE(30 SECONDS, "Bad Comms Key")
+			return "Bad Key"
+
+		var/job_id = text2num(input["id"])
+		to_world("GOT [job_id]")
+		return TRUE
 
 /world/Reboot(reason)
 	/*spawn(0)

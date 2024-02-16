@@ -1,7 +1,7 @@
 /obj/screen/ghost
 	icon = 'icons/mob/screen_ghost.dmi'
 
-/obj/screen/ghost/MouseExited(location, control, params)
+/obj/screen/ghost/MouseEntered(location, control, params)
 	. = ..()
 	flick(icon_state + "_anim", src)
 

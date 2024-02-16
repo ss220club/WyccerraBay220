@@ -55,7 +55,7 @@ GLOBAL_DATUM_INIT(orbit_menu, /datum/orbit_menu, new)
 			data["dead"] += list(serialized)
 			continue
 
-		if(mob.mind == null)
+		if(isnull(mob.mind))
 			data["npcs"] += list(serialized)
 			continue
 

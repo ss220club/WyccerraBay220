@@ -8,4 +8,4 @@
 
 /// from mob/CanPass(): (atom/movable/mover, turf/target, height, air_group)
 #define COMSIG_MOB_CAN_PASS "mob_can_pass"
-	#define COMPONENT_MOB_PASSABLE (1<<0)
+	#define COMPONENT_MOB_PASSABLE FLAG(0)

@@ -13,26 +13,26 @@
 /// Should only be used if you need to perform cleanup not related to the host object.
 /// You do not need this if you are only unregistering signals, for instance.
 /// You would need it if you are doing something like removing the target from a processing list.
-#define ELEMENT_DETACH_ON_HOST_DESTROY (1 << 0)
+#define ELEMENT_DETACH_ON_HOST_DESTROY FLAG(0)
 /**
  * Only elements created with the same arguments given after `argument_hash_start_idx` share an element instance
  * The arguments are the same when the text and number values are the same and all other values have the same ref
  */
-#define ELEMENT_BESPOKE (1 << 1)
+#define ELEMENT_BESPOKE FLAG(1)
 /// Causes all detach arguments to be passed to detach instead of only being used to identify the element
 /// When this is used your Detach proc should have the same signature as your Attach proc
-#define ELEMENT_COMPLEX_DETACH (1 << 2)
+#define ELEMENT_COMPLEX_DETACH FLAG(2)
 /**
  * Elements with this flag will have their datum lists arguments compared as is,
  * without the contents being sorted alpha-numerically first.
  * This is good for those elements where the position of the keys matter, like in the case of color matrices.
  */
-#define ELEMENT_DONT_SORT_LIST_ARGS (1<<3)
+#define ELEMENT_DONT_SORT_LIST_ARGS FLAG(3)
 /**
  * Elements with this flag will be ignored by the dcs_check_list_arguments test.
  * A good example is connect_loc, for which it's pratically undoable unless we force every signal proc to have a different name.
  */
-#define ELEMENT_NO_LIST_UNIT_TEST (1<<4)
+#define ELEMENT_NO_LIST_UNIT_TEST FLAG(4)
 
 // How multiple components of the exact same type are handled in the same datum
 /// old component is deleted (default)

@@ -201,12 +201,12 @@
 /**
  * Middleware for /client/Topic.
  *
- * return bool Whether the topic is passed (TRUE), or cancelled (FALSE).
+ * return bool If TRUE, prevents propagation of the topic call.
  */
 /proc/tgui_Topic(href_list)
 	// Skip non-tgui topics
 	if(!href_list["tgui"])
-		return TRUE
+		return FALSE
 	var/type = href_list["type"]
 	// Unconditionally collect tgui logs
 	if(type == "log")
@@ -224,7 +224,7 @@
 		var/list/windows = usr.client.tgui_windows
 		for(var/window_id in windows)
 			var/datum/tgui_window/window = windows[window_id]
-			if (window.status == TGUI_WINDOW_READY)
+			if(window.status == TGUI_WINDOW_READY)
 				window.on_message(type, null, href_list)
 		return TRUE
 	// Locate window
@@ -237,7 +237,7 @@
 			log_tgui(usr, "Error: Couldn't find the window datum, force closing.")
 			// #endif
 			SStgui.force_close_window(usr, window_id)
-			return FALSE
+			return TRUE
 	// Decode payload
 	var/payload
 	if(href_list["payload"])
@@ -245,4 +245,4 @@
 	// Pass message to window
 	if(window)
 		window.on_message(type, payload, href_list)
-	return FALSE
+	return TRUE

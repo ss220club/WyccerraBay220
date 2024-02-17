@@ -266,6 +266,7 @@ window "preference_window"
 		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-visible = false
+		statusbar = false
 	elem "prerference_browser"
 		type = BROWSER
 		pos = 0,0

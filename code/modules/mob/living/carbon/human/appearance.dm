@@ -197,6 +197,7 @@
 	return species.get_facial_hair_styles(gender)
 
 /mob/living/carbon/human/proc/force_update_limbs()
-	for(var/obj/item/organ/external/O in organs)
-		O.sync_colour_to_human(src)
-	update_body(0)
+	for(var/obj/item/organ/external/organ_to_update as anything in organs)
+		organ_to_update.sync_colour_to_human(src)
+
+	update_body(FALSE)

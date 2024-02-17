@@ -102,18 +102,15 @@
 		mannequin.update_icons()
 
 /datum/preferences/proc/update_preview_icon()
-	var/mob/mannequin = get_mannequin(client_ckey)
+	var/mob/living/carbon/human/dummy/mannequin = get_mannequin(client_ckey)
 	mannequin.delete_inventory(TRUE)
 	dress_preview_mob(mannequin)
 	mannequin.ImmediateOverlayUpdate()
+	show_character_preview(mannequin, mannequin.icon_height)
 
-	if(client.mob)
-		mannequin.forceMove(get_turf(client.mob))
-
-	show_character_preview(mannequin)
-
-/datum/preferences/proc/show_character_preview(mutable_appearance/char_appearance)
+/datum/preferences/proc/show_character_preview(mutable_appearance/char_appearance, char_height)
 	var/vertical_position = 0
+	var/char_height_ratio = char_height / WORLD_ICON_SIZE
 	for(var/dir in GLOB.cardinal)
 		var/obj/screen/preview = LAZYACCESS(character_previews, "[dir]")
 		if(!preview)
@@ -125,12 +122,12 @@
 
 		preview.appearance = char_appearance
 		preview.dir = dir
-		preview.screen_loc = "character_preview_map:0,[++vertical_position]"
+		preview.screen_loc = "character_preview_map:0,[vertical_position * char_height_ratio]"
+		vertical_position++
 
 /datum/category_item/player_setup_item/physical/preview
 	name = "Preview"
 	sort_order = 5
-
 
 /datum/category_item/player_setup_item/physical/preview/load_character(datum/pref_record_reader/R)
 	pref.bgstate = R.read("bgstate")

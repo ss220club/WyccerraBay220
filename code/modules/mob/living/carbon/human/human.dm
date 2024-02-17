@@ -1301,7 +1301,7 @@
 		if(istype(C) && !C.mob_can_equip(src, slot, 1))
 			drop_from_inventory(C)
 	update_emotes()
-	return 1
+	return TRUE
 
 
 /mob/living/carbon/human/proc/update_languages()

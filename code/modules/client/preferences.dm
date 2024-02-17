@@ -191,7 +191,6 @@
 
 	if (href_list["close"])
 		popup = null
-		clear_character_previews()
 
 	else if(href_list["save"])
 		save_preferences()
@@ -274,41 +273,38 @@
 	character.skin_tone = skin_tone
 	character.base_skin = base_skin
 
-	// Replace any missing limbs.
-	for(var/name in BP_ALL_LIMBS)
-		var/obj/item/organ/external/O = character.organs_by_name[name]
-		if(!O && organ_data[name] != "amputated")
-			var/list/organ_data = character.species.has_limbs[name]
-			if(!islist(organ_data)) continue
-			var/limb_path = organ_data["path"]
-			O = new limb_path(character)
-
 	// Destroy/cyborgize organs and limbs. The order is important for preserving low-level choices for robolimb sprites being overridden.
 	for(var/name in BP_BY_DEPTH)
 		var/status = organ_data[name]
-		var/obj/item/organ/external/O = character.organs_by_name[name]
-		if(!O)
+		var/obj/item/organ/external/external_organ = character.organs_by_name[name]
+		if(!external_organ)
 			continue
-		O.status = 0
-		O.model = null
+
+		external_organ.status = 0
+		external_organ.model = null
+		if(is_preview_copy)
+			external_organ.blocks_emissive = EMISSIVE_BLOCK_NONE
+
 		if(status == "amputated")
-			character.organs_by_name[O.organ_tag] = null
-			character.organs -= O
-			if(O.children) // This might need to become recursive.
-				for(var/obj/item/organ/external/child in O.children)
+			character.organs_by_name[external_organ.organ_tag] = null
+			character.organs -= external_organ
+			if(external_organ.children) // This might need to become recursive.
+				for(var/obj/item/organ/external/child in external_organ.children)
 					character.organs_by_name[child.organ_tag] = null
 					character.organs -= child
 					qdel(child)
-			qdel(O)
+			qdel(external_organ)
+
 		else if(status == "cyborg")
 			if(rlimb_data[name])
-				O.robotize(rlimb_data[name])
+				external_organ.robotize(rlimb_data[name])
 			else
-				O.robotize()
+				external_organ.robotize()
 		else //normal organ
-			O.force_icon = initial(O.force_icon)
-			O.SetName(initial(O.name))
-			O.desc = initial(O.desc)
+
+			external_organ.force_icon = initial(external_organ.force_icon)
+			external_organ.SetName(initial(external_organ.name))
+			external_organ.desc = initial(external_organ.desc)
 
 	//For species that don't care about your silly prefs
 	character.species.handle_limbs_setup(character)
@@ -342,23 +338,23 @@
 	character.backpack_setup = new(backpack, backpack_metadata["[backpack]"])
 
 	for(var/N in character.organs_by_name)
-		var/obj/item/organ/external/O = character.organs_by_name[N]
-		O.markings.Cut()
+		var/obj/item/organ/external/external_organ = character.organs_by_name[N]
+		external_organ.markings.Cut()
 
 	for(var/M in body_markings)
 		var/datum/sprite_accessory/marking/mark_datum = GLOB.body_marking_styles_list[M]
 		var/mark_color = "[body_markings[M]]"
 
 		for(var/BP in mark_datum.body_parts)
-			var/obj/item/organ/external/O = character.organs_by_name[BP]
-			if (O)
-				O.markings[mark_datum] = mark_color
+			var/obj/item/organ/external/external_organ = character.organs_by_name[BP]
+			if (external_organ)
+				external_organ.markings[mark_datum] = mark_color
 
 	character.force_update_limbs()
-	character.update_mutations(0)
-	character.update_body(0)
-	character.update_underwear(0)
-	character.update_hair(0)
+	character.update_mutations(FALSE)
+	character.update_body(FALSE)
+	character.update_underwear(FALSE)
+	character.update_hair(FALSE)
 	character.update_icons()
 
 	if(is_preview_copy)

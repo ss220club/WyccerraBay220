@@ -327,7 +327,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human
 	var/list/icon_render_keys = list()
 
-/mob/living/carbon/human/proc/update_body(update_icons=1)
+/mob/living/carbon/human/proc/update_body(update_icons = TRUE)
 	//Update all limbs and visible organs one by one
 	var/list/needs_update = list()
 	var/limb_count_update = FALSE

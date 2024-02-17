@@ -57,13 +57,13 @@
 	spells = list(/spell/noclothes)
 
 /datum/spellbound_type/apprentice/set_antag(datum/mind/M, mob/master)
-	GLOB.wizards.add_antagonist_mind(M,1,ANTAG_APPRENTICE,"<b>You are an apprentice-type Servant! You're just an ordinary Wizard-To-Be, with no special abilities, but do not need robes to cast spells. Follow your teacher's orders!</b>")
+	GLOB.wizards.add_antagonist_mind(M, TRUE, ANTAG_APPRENTICE, "<b>You are an apprentice-type Servant! You're just an ordinary Wizard-To-Be, with no special abilities, but do not need robes to cast spells. Follow your teacher's orders!</b>", forced = TRUE)
 
 /datum/spellbound_type/servant
 	var/spiel = "You don't do anything in particular."
 
 /datum/spellbound_type/servant/set_antag(datum/mind/M, mob/master)
-	GLOB.wizards.add_antagonist_mind(M,1,ANTAG_SERVANT, "<b>You are a [name]-type Servant!</b> [spiel]")
+	GLOB.wizards.add_antagonist_mind(M, TRUE, ANTAG_SERVANT, "<b>You are a [name]-type Servant!</b> [spiel]", forced = TRUE)
 
 /datum/spellbound_type/servant/caretaker
 	name = "Caretaker"

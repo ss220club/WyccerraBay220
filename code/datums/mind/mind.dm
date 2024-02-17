@@ -217,7 +217,7 @@
 			if(src in antag.current_antagonists)
 				to_chat(usr, SPAN_WARNING("\The [src] is already a [antag.role_text]!"))
 				return
-			var/result = antag.can_become_antag_detailed(src, TRUE)
+			var/result = antag.can_become_antag_detailed(src, TRUE, TRUE)
 			if(result)
 				to_chat(usr, SPAN_WARNING("\The [src] could not be made into a [antag.role_text]! [result]."))
 				return

@@ -127,7 +127,7 @@
 	target.visible_message(SPAN_WARNING("The markings below [target] glow a bloody red."))
 
 	to_chat(target, SPAN_OCCULT("Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root."))
-	if(!GLOB.cult.can_become_antag(target.mind, 1))
+	if(!GLOB.cult.can_become_antag(target.mind, TRUE, TRUE))
 		to_chat(target, SPAN_DANGER("Are you going insane?"))
 	else
 		to_chat(target, SPAN_OCCULT("Do you want to join the cult of Nar'Sie? You can choose to ignore offer... <a href='?src=\ref[src];join=1'>Join the cult</a>."))

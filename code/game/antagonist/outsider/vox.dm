@@ -71,10 +71,10 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 
 	return candidates
 
-/datum/antagonist/vox/can_become_antag_detailed(datum/mind/player, ignore_role)
+/datum/antagonist/vox/can_become_antag_detailed(datum/mind/player, ignore_role, forced)
 	if(!is_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
 		return "Player doesn't have vox whitelist"
-	..()
+	. = ..()
 
 /datum/antagonist/vox/equip(mob/living/carbon/human/vox/player)
 	if(!..())

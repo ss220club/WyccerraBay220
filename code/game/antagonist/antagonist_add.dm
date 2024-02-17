@@ -34,14 +34,14 @@
 		player.current.faction = faction
 	return 1
 
-/datum/antagonist/proc/add_antagonist_mind(datum/mind/player, ignore_role, nonstandard_role_type, nonstandard_role_msg)
+/datum/antagonist/proc/add_antagonist_mind(datum/mind/player, ignore_role, nonstandard_role_type, nonstandard_role_msg, forced)
 	if(!istype(player))
 		return 0
 	if(!player.current)
 		return 0
 	if(player in current_antagonists)
 		return 0
-	if(!can_become_antag(player, ignore_role))
+	if(!can_become_antag(player, ignore_role, forced))
 		return 0
 	current_antagonists |= player
 	GLOB.destroyed_event.register(player, src, PROC_REF(remove_antagonist))

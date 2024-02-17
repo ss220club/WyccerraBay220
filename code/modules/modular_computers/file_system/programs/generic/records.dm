@@ -22,6 +22,8 @@
 
 	data["message"] = message
 	if(active_record)
+		if(!isicon(active_record.photo_front) || !isicon(active_record.photo_side))
+			active_record.GeneratePhotos() // Puts dummy photos in there
 		send_rsc(user, active_record.photo_front, "front_[active_record.uid].png")
 		send_rsc(user, active_record.photo_side, "side_[active_record.uid].png")
 		data["pic_edit"] = check_access(user, access_bridge) || check_access(user, access_security)

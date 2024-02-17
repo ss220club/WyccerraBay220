@@ -11,7 +11,10 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 	filetype = "CDB"
 	size = 2
 	var/icon/photo_front = null
+	var/icon/uncropped_photo_front = null
 	var/icon/photo_side = null
+	var/static/icon/mugshot = icon('icons/obj/mugshot.dmi', "background")
+
 	//More variables below.
 
 /datum/computer_file/report/crew_record/New()
@@ -23,15 +26,7 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 	GLOB.all_crew_records.Remove(src)
 
 /datum/computer_file/report/crew_record/proc/load_from_mob(mob/living/carbon/human/H)
-	if(istype(H))
-		H.ImmediateOverlayUpdate()
-		photo_front = getFlatIcon(H, SOUTH, always_use_defdir = 1)
-		photo_side = getFlatIcon(H, WEST, always_use_defdir = 1)
-	else
-		var/mob/living/carbon/human/dummy = new()
-		photo_front = getFlatIcon(dummy, SOUTH, always_use_defdir = 1)
-		photo_side = getFlatIcon(dummy, WEST, always_use_defdir = 1)
-		qdel(dummy)
+	GeneratePhotos(H)
 
 	// Add honorifics, etc.
 	var/formal_name = "Unset"
@@ -126,6 +121,18 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 	// Antag record
 	set_faction(H ? html_decode(H.get_cultural_value(TAG_FACTION)) : "Unset")
 	set_antagRecord(H && H.exploit_record && !jobban_isbanned(H, "Records") ? html_decode(H.exploit_record) : "")
+
+/datum/computer_file/report/crew_record/proc/GeneratePhotos(mob/living/carbon/human/H)
+	if(istype(H))
+		photo_front = getFlatIcon(H, SOUTH, always_use_defdir = 1)
+		photo_front.Blend(mugshot,ICON_UNDERLAY,1,1)
+		photo_side = getFlatIcon(H, WEST, always_use_defdir = 1)
+		photo_side.Blend(mugshot,ICON_UNDERLAY,1,1)
+	else
+		var/mob/living/carbon/human/dummy = new()
+		photo_front = getFlatIcon(dummy, SOUTH, always_use_defdir = 1)
+		photo_side = getFlatIcon(dummy, WEST, always_use_defdir = 1)
+		qdel(dummy)
 
 // Global methods
 // Used by character creation to create a record for new arrivals.

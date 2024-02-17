@@ -103,7 +103,7 @@ var/global/list/outfits_singletons_by_type_
 // end of check_and_try_equip_xeno
 
 /singleton/hierarchy/outfit/proc/equip(mob/living/carbon/human/H, rank, assignment, equip_adjustments)
-	equip_base(H, equip_adjustments)
+	equip_pre_base(H, equip_adjustments)
 
 	rank = id_pda_assignment || rank
 	assignment = id_pda_assignment || assignment || rank
@@ -112,6 +112,14 @@ var/global/list/outfits_singletons_by_type_
 		var/obj/item/card/id/W = id_cards[1]
 		rank = W.rank
 		assignment = W.assignment
+
+	// We set ID info in middle of equip to ensure the face is not obstructed for photo and mug shot is nice!
+	H.update_icons()
+	for(var/id_card in id_cards)
+		H.set_id_info(id_card)
+
+	equip_post_base(H, equip_adjustments)
+
 	equip_pda(H, rank, assignment, equip_adjustments)
 
 	for(var/path in backpack_contents)
@@ -123,12 +131,9 @@ var/global/list/outfits_singletons_by_type_
 		post_equip(H)
 	H.update_icons()
 
-	// We set ID info last to ensure the ID photo is as correct as possible.
-	for(var/id_card in id_cards)
-		H.set_id_info(id_card)
 	return TRUE
 
-/singleton/hierarchy/outfit/proc/equip_base(mob/living/carbon/human/H, equip_adjustments)
+/singleton/hierarchy/outfit/proc/equip_pre_base(mob/living/carbon/human/H, equip_adjustments)
 	pre_equip(H)
 
 	//Start with uniform,suit,backpack for additional slots
@@ -148,10 +153,6 @@ var/global/list/outfits_singletons_by_type_
 		H.equip_to_slot_or_del(new gloves(H),slot_gloves)
 	if(shoes)
 		H.equip_to_slot_or_del(new shoes(H),slot_shoes)
-	if(mask)
-		H.equip_to_slot_or_del(new mask(H),slot_wear_mask)
-	if(head)
-		H.equip_to_slot_or_del(new head(H),slot_head)
 	if(back)
 		H.equip_to_slot_or_del(new back(H),slot_back)
 		var/obj/item/rig/onback = H.back
@@ -159,14 +160,6 @@ var/global/list/outfits_singletons_by_type_
 			onback.wearer = H
 			H.wearing_rig = onback
 			onback.toggle_seals(H, instant = TRUE)
-	if(l_ear)
-		var/l_ear_path = (OUTFIT_ADJUSTMENT_PLAIN_HEADSET & equip_adjustments) && ispath(l_ear, /obj/item/device/radio/headset) ? /obj/item/device/radio/headset : l_ear
-		H.equip_to_slot_or_del(new l_ear_path(H),slot_l_ear)
-	if(r_ear)
-		var/r_ear_path = (OUTFIT_ADJUSTMENT_PLAIN_HEADSET & equip_adjustments) && ispath(r_ear, /obj/item/device/radio/headset) ? /obj/item/device/radio/headset : r_ear
-		H.equip_to_slot_or_del(new r_ear_path(H),slot_r_ear)
-	if(glasses)
-		H.equip_to_slot_or_del(new glasses(H),slot_glasses)
 	if(id)
 		H.equip_to_slot_or_del(new id(H),slot_wear_id)
 	if(l_pocket)
@@ -175,6 +168,20 @@ var/global/list/outfits_singletons_by_type_
 		H.equip_to_slot_or_del(new r_pocket(H),slot_r_store)
 	if(suit_store)
 		H.equip_to_slot_or_del(new suit_store(H),slot_s_store)
+
+/singleton/hierarchy/outfit/proc/equip_post_base(mob/living/carbon/human/H, equip_adjustments)
+	if(l_ear)
+		var/l_ear_path = (OUTFIT_ADJUSTMENT_PLAIN_HEADSET & equip_adjustments) && ispath(l_ear, /obj/item/device/radio/headset) ? /obj/item/device/radio/headset : l_ear
+		H.equip_to_slot_or_del(new l_ear_path(H),slot_l_ear)
+	if(r_ear)
+		var/r_ear_path = (OUTFIT_ADJUSTMENT_PLAIN_HEADSET & equip_adjustments) && ispath(r_ear, /obj/item/device/radio/headset) ? /obj/item/device/radio/headset : r_ear
+		H.equip_to_slot_or_del(new r_ear_path(H),slot_r_ear)
+	if(glasses)
+		H.equip_to_slot_or_del(new glasses(H),slot_glasses)
+	if(mask)
+		H.equip_to_slot_or_del(new mask(H),slot_wear_mask)
+	if(head)
+		H.equip_to_slot_or_del(new head(H),slot_head)
 	if(l_hand)
 		H.put_in_l_hand(new l_hand(H))
 	if(r_hand)

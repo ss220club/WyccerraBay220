@@ -69,13 +69,13 @@ var/global/repository/follow/follow_repository = new()
 	for(var/followed_name in followed_by_name)
 		var/list/followed_things = followed_by_name[followed_name]
 		if(length(followed_things) == 1)
-			ADD_SORTED(L, followed_things[1], /proc/cmp_follow_holder)
+			ADD_SORTED(L, followed_things[1], GLOBAL_PROC_REF(cmp_follow_holder))
 		else
 			for(var/i = 1 to length(followed_things))
 				var/datum/follow_holder/followed_thing = followed_things[i]
 				followed_thing.instance = i
 				followed_thing.get_name(TRUE)
-				ADD_SORTED(L, followed_thing, /proc/cmp_follow_holder)
+				ADD_SORTED(L, followed_thing, GLOBAL_PROC_REF(cmp_follow_holder))
 
 	cache.data = L
 	return L

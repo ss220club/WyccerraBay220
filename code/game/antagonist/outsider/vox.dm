@@ -22,7 +22,7 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 	faction = "vox raider"
 	no_prior_faction = TRUE
 
-/datum/antagonist/vox/add_antagonist(datum/mind/player, ignore_role, do_not_equip, move_to_spawn, do_not_announce, preserve_appearance)
+/datum/antagonist/vox/add_antagonist(datum/mind/player, ignore_role, do_not_equip, move_to_spawn, do_not_announce, preserve_appearance, forced)
 	if(pending_item_spawn)
 		for(var/obj/voxartifactspawner/S as anything in GLOB.vox_artifact_spawners)
 			S.spawn_artifact()

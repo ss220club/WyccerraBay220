@@ -245,6 +245,7 @@ SUBSYSTEM_DEF(tts220)
 	for(var/path in subtypesof(/datum/tts_provider))
 		var/datum/tts_provider/provider = new path
 		tts_providers[provider.name] += provider
+
 	for(var/path in subtypesof(/datum/tts_seed))
 		var/datum/tts_seed/seed = new path
 		if(seed.value == "STUB")
@@ -254,7 +255,8 @@ SUBSYSTEM_DEF(tts220)
 		tts_seeds_names += seed.name
 		tts_seeds_names_by_donator_levels["[seed.required_donator_level]"] += list(seed.name)
 		tts_seeds_by_gender[seed.gender] += seed.name
-	tts_seeds_names = sortTim(tts_seeds_names, /proc/cmp_text_asc)
+
+	tts_seeds_names = sortTim(tts_seeds_names, GLOBAL_PROC_REF(cmp_text_asc))
 
 /datum/controller/subsystem/tts220/Initialize(start_timeofday)
 	is_enabled = config.tts_enabled
@@ -544,16 +546,16 @@ SUBSYSTEM_DEF(tts220)
 	var/static/regex/forbidden_symbols = new(@"[^a-zA-Z0-9а-яА-ЯёЁ,!?+./ \r\n\t:—()-]", "g")
 	. = forbidden_symbols.Replace(., "")
 	var/static/regex/acronyms = new(@"(?<![a-zA-Zа-яёА-ЯЁ])[a-zA-Zа-яёА-ЯЁ]+?(?![a-zA-Zа-яёА-ЯЁ])", "gm")
-	. = replacetext_char(., acronyms, /proc/tts_acronym_replacer)
+	. = replacetext_char(., acronyms, GLOBAL_PROC_REF(tts_acronym_replacer))
 	for(var/job in tts_job_replacements)
 		. = replacetext_char(., job, tts_job_replacements[job])
 	. = rustg_latin_to_cyrillic(.)
 
 	var/static/regex/decimals = new(@"-?\d+\.\d+", "g")
-	. = replacetext_char(., decimals, /proc/dec_in_words)
+	. = replacetext_char(., decimals, GLOBAL_PROC_REF(dec_in_words))
 
 	var/static/regex/numbers = new(@"-?\d+", "g")
-	. = replacetext_char(., numbers, /proc/num_in_words)
+	. = replacetext_char(., numbers, GLOBAL_PROC_REF(num_in_words))
 	if(sanitized_messages_caching)
 		sanitized_messages_cache[hash] = .
 

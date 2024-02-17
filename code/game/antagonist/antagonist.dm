@@ -3,6 +3,7 @@
 	// Text shown when becoming this antagonist.
 	var/list/restricted_jobs = 		list()   // Jobs that cannot be this antagonist at roundstart (depending on config)
 	var/list/blacklisted_jobs =		list(/datum/job/submap)   // Jobs that can NEVER be this antagonist
+	var/list/blacklisted_species =	list(/datum/species/nabber)
 
 	// Strings.
 	var/welcome_text = "Cry havoc and let slip the dogs of war!"

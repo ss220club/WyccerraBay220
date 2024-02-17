@@ -221,7 +221,7 @@
 			if(result)
 				to_chat(usr, SPAN_WARNING("\The [src] could not be made into a [antag.role_text]! [result]."))
 				return
-			if(antag.add_antagonist(src, 1, 1, 0, 1, 1)) // Ignore equipment and role type for this.
+			if(antag.add_antagonist(src, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE)) // Ignore equipment and role type for this.
 				log_admin("[key_name_admin(usr)] made [key_name(src)] into a [antag.role_text].")
 			else
 				to_chat(usr, SPAN_WARNING("\The [src] could not be made into a [antag.role_text]!"))

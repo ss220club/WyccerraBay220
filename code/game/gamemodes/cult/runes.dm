@@ -154,7 +154,7 @@
 /obj/rune/convert/Topic(href, href_list)
 	if(href_list["join"])
 		if(usr.loc == loc && !iscultist(usr))
-			GLOB.cult.add_antagonist(usr.mind, ignore_role = 1, do_not_equip = 1, forced = TRUE)
+			GLOB.cult.add_antagonist(usr.mind, TRUE, TRUE, forced = TRUE)
 
 /obj/rune/teleport
 	cultname = "teleport"

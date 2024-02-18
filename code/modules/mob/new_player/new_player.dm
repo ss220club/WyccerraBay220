@@ -534,9 +534,9 @@
 
 /mob/new_player/proc/close_spawn_windows()
 	close_browser(src, "window=latechoices") //closes late choices window
-	// [SIERRA-REMOVE] - LOBBYSCREEN
-	// panel.close()
-	// [/SIERRA-REMOVE]
+	close_browser(src, "window=preference_window")
+	if(panel)
+		panel.close()
 
 /mob/new_player/proc/check_species_allowed(datum/species/S, show_alert=1)
 	if(!S.is_available_for_join() && !has_admin_rights())

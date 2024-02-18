@@ -15,6 +15,7 @@
 	hud_icon = "hudblank"
 	skill_points = 0
 	no_skill_buffs = TRUE
+	display_outfit_on_preview = FALSE
 	min_skill = list(
 		SKILL_BUREAUCRACY   = SKILL_EXPERIENCED,
 		SKILL_FINANCE       = SKILL_EXPERIENCED,
@@ -38,6 +39,7 @@
 		SKILL_ANATOMY       = SKILL_EXPERIENCED,
 		SKILL_CHEMISTRY     = SKILL_EXPERIENCED
 	)
+
 
 /datum/job/ai/equip(mob/living/carbon/human/H)
 	if(!H)	return 0
@@ -64,6 +66,7 @@
 	hud_icon = "hudblank"
 	skill_points = 0
 	no_skill_buffs = TRUE
+	display_outfit_on_preview = FALSE
 
 /datum/job/cyborg/handle_variant_join(mob/living/carbon/human/H, alt_title)
 	return H && H.Robotize(SSrobots.get_mob_type_by_title(alt_title || title))

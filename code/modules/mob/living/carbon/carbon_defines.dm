@@ -34,10 +34,10 @@
 	var/list/internal_organs = list()
 	/// List of mob external organs
 	var/list/organs = list()
-	/// List of organ names to organs
-	var/list/organs_by_name = list()
 	/// List of internal organ names to organs
 	var/list/internal_organs_by_name = list()
+	/// List of organ names to organs
+	var/list/obj/item/organ/internal/organs_by_name = list()
 
 	var/list/stasis_sources = list()
 	var/stasis_value

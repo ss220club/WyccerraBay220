@@ -108,7 +108,7 @@
 
 	if (SScharacter_setup.initialized && SSchat.initialized && !isnull(client.chatOutput))
 		client.view = client.get_preference_value(/datum/client_preference/client_view)
-		if(client.get_preference_value(/datum/client_preference/goonchat) == GLOB.PREF_YES)
+		if(!client.prefs || client.get_preference_value(/datum/client_preference/goonchat) == GLOB.PREF_YES)
 			client.chatOutput.start()
 
 /mob/living/carbon/Login()

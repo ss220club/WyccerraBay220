@@ -42,7 +42,7 @@
 
 /datum/gear_tweak/color/get_metadata(user, metadata, title = CHARACTER_PREFERENCE_INPUT_TITLE)
 	if(valid_colors)
-		return input(user, "Choose a color.", title, metadata) as null|anything in valid_colors
+		return tgui_input_list(user, "Choose a color.", title, metadata, valid_colors)
 	return input(user, "Choose a color.", title, metadata) as color|null
 
 /datum/gear_tweak/color/tweak_item(user, obj/item/I, metadata)
@@ -97,7 +97,7 @@
 	return valid_paths[1]
 
 /datum/gear_tweak/path/get_metadata(user, metadata, title)
-	return input(user, "Choose a type.", CHARACTER_PREFERENCE_INPUT_TITLE, metadata) as null|anything in valid_paths
+	return tgui_input_list(user, "Choose a type.", CHARACTER_PREFERENCE_INPUT_TITLE, valid_paths, metadata)
 
 /datum/gear_tweak/path/tweak_gear_data(metadata, datum/gear_data/gear_data)
 	if(!(metadata in valid_paths))
@@ -134,7 +134,7 @@
 	for(var/i = length(metadata) to (length(valid_contents) - 1))
 		metadata += "Random"
 	for(var/i = 1 to length(valid_contents))
-		var/entry = input(user, "Choose an entry.", CHARACTER_PREFERENCE_INPUT_TITLE, metadata[i]) as null|anything in (valid_contents[i] + list("Random", "None"))
+		var/entry = tgui_input_list(user, "Choose an entry.", CHARACTER_PREFERENCE_INPUT_TITLE, valid_contents[i] + list("Random", "None"), metadata[i])
 		if(entry)
 			. += entry
 		else
@@ -177,7 +177,7 @@
 	return "Random"
 
 /datum/gear_tweak/reagents/get_metadata(user, list/metadata, title)
-	. = input(user, "Choose an entry.", CHARACTER_PREFERENCE_INPUT_TITLE, metadata) as null|anything in (valid_reagents + list("Random", "None"))
+	. = tgui_input_list(user, "Choose an entry.", CHARACTER_PREFERENCE_INPUT_TITLE, valid_reagents + list("Random", "None"), metadata)
 	if(!.)
 		return metadata
 
@@ -226,8 +226,9 @@
 
 /datum/gear_tweak/custom_name/get_metadata(user, metadata, title)
 	if(valid_custom_names)
-		return input(user, "Choose an item name.", "Character Preference", metadata) as null|anything in valid_custom_names
-	return sanitize(input(user, "Choose the item's name. Leave it blank to use the default name.", "Item Name", metadata) as text|null, MAX_LNAME_LEN, extra = FALSE)
+		return tgui_input_list(user, "Choose an item name.", "Character Preference", valid_custom_names, metadata)
+
+	return sanitize(tgui_input_text(user, "Choose the item's name. Leave it blank to use the default name.", "Item Name", metadata, MAX_LNAME_LEN), extra = FALSE)
 
 /datum/gear_tweak/custom_name/tweak_item(user, obj/item/I, metadata)
 	if(!metadata)
@@ -250,8 +251,9 @@ Custom Description
 
 /datum/gear_tweak/custom_desc/get_metadata(user, metadata, title)
 	if(valid_custom_desc)
-		return input(user, "Choose an item description.", "Character Preference", metadata) as null|anything in valid_custom_desc
-	return sanitize(input(user, "Choose the item's description. Leave it blank to use the default description.", "Item Description", metadata) as message|null, MAX_DESC_LEN, extra = FALSE)
+		return tgui_input_list(user, "Choose an item description.", "Character Preference", valid_custom_desc, metadata)
+
+	return sanitize(tgui_input_text(user, "Choose the item's description. Leave it blank to use the default description.", "Item Description", metadata, MAX_DESC_LEN), extra = FALSE)
 
 /datum/gear_tweak/custom_desc/tweak_item(user, obj/item/I, metadata)
 	if(!metadata)
@@ -316,7 +318,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	var/entry = input(user, "Choose a processor.", CHARACTER_PREFERENCE_INPUT_TITLE) in names
+	var/entry = tgui_input_list(user, "Choose a processor.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -330,7 +332,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = input(user, "Choose a battery.", CHARACTER_PREFERENCE_INPUT_TITLE) in names
+	entry = tgui_input_list(user, "Choose a battery.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -344,7 +346,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = input(user, "Choose a hard drive.", CHARACTER_PREFERENCE_INPUT_TITLE) in names
+	entry = tgui_input_list(user, "Choose a hard drive.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -358,7 +360,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = input(user, "Choose a network card.", CHARACTER_PREFERENCE_INPUT_TITLE) in names
+	entry = tgui_input_list(user, "Choose a network card.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -372,7 +374,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = input(user, "Choose a nanoprinter.", CHARACTER_PREFERENCE_INPUT_TITLE) in names
+	entry = tgui_input_list(user, "Choose a nanoprinter.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -386,7 +388,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = input(user, "Choose a card slot.", CHARACTER_PREFERENCE_INPUT_TITLE) in names
+	entry = tgui_input_list(user, "Choose a card slot.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -400,7 +402,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = input(user, "Choose a tesla link.", CHARACTER_PREFERENCE_INPUT_TITLE) in names
+	entry = tgui_input_list(user, "Choose a tesla link.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 /datum/gear_tweak/tablet/get_default()

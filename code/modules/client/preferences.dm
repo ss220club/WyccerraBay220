@@ -137,10 +137,10 @@
 		dat += "Loading your savefile failed. Please adminhelp for assistance."
 	else
 		dat += "Slot - "
-		dat += "<a href='?src=\ref[src];load=1'>Load slot</a> - "
-		dat += "<a href='?src=\ref[src];save=1'>Save slot</a> - "
-		dat += "<a href='?src=\ref[src];resetslot=1'>Reset slot</a> - "
-		dat += "<a href='?src=\ref[src];reload=1'>Reload slot</a>"
+		dat += "<a href='?src=[ref(src)];load=1'>Load slot</a> - "
+		dat += "<a href='?src=[ref(src)];save=1'>Save slot</a> - "
+		dat += "<a href='?src=[ref(src)];resetslot=1'>Reset slot</a> - "
+		dat += "<a href='?src=[ref(src)];reload=1'>Reload slot</a>"
 
 	dat += "<br>"
 	dat += player_setup.header()
@@ -152,9 +152,7 @@
 	if (!SScharacter_setup.initialized)
 		return
 
-	winshow(user, "preference_window", TRUE)
-
-	popup = new (user, "prerference_browser", "Character Setup", 1000, 800, src)
+	popup = new(user, "preference_window", "Character Setup", 1000, 800, src)
 	var/content = {"
 	<script type='text/javascript'>
 		function update_content(data){
@@ -164,12 +162,12 @@
 	<div id='content'>[get_content(user)]</div>
 	"}
 	popup.set_content(content)
-	popup.open(FALSE)
-	onclose(user, "preference_window", src)
+	popup.open()
+
 	update_preview_icon()
 
 /datum/preferences/proc/update_setup_window(mob/user)
-	send_output(user, url_encode(get_content(user)), "preference_window.prerference_browser:update_content")
+	send_output(user, url_encode(get_content(user)), "preference_window.preference_browser:update_content")
 
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 
@@ -191,6 +189,7 @@
 
 	if (href_list["close"])
 		popup = null
+		clear_character_preview()
 
 	else if(href_list["save"])
 		save_preferences()
@@ -204,6 +203,7 @@
 		load_preferences()
 		load_character()
 		sanitize_preferences()
+		update_preview_icon()
 
 	else if(href_list["load"])
 		if(!IsGuestKey(usr.key))
@@ -214,6 +214,7 @@
 		load_character(text2num(href_list["changeslot"]))
 		sanitize_preferences()
 		close_load_dialog(usr)
+		update_preview_icon()
 
 		if (istype(client.mob, /mob/new_player))
 			var/mob/new_player/M = client.mob
@@ -228,6 +229,7 @@
 
 		load_character(SAVE_RESET)
 		sanitize_preferences()
+		update_preview_icon()
 
 	else if (href_list["changeslot_next"])
 		character_slots_count += 10
@@ -324,7 +326,7 @@
 	character.worn_underwear = list()
 
 	for(var/underwear_category_name in all_underwear)
-		var/datum/category_group/underwear/underwear_category = GLOB.underwear.categories_by_name[underwear_category_name]
+		var/datum/category_group/underwear/underwear_category = LAZYACCESS(GLOB.underwear.categories_by_name, underwear_category_name)
 		if(underwear_category)
 			var/underwear_item_name = all_underwear[underwear_category_name]
 			var/datum/category_item/underwear/UWD = underwear_category.items_by_name[underwear_item_name]
@@ -391,7 +393,7 @@
 		character.set_hydration(rand(140,360))
 
 /datum/preferences/proc/open_load_dialog(mob/user, details)
-	var/dat  = list()
+	var/list/dat  = list()
 	dat += "<body>"
 	dat += "<center>"
 
@@ -409,8 +411,8 @@
 	dat += "<hr>"
 	dat += "</center>"
 	panel = new(user, "character_slots", "Слоты персонажей", 300, 390, src)
-	panel.set_content(jointext(dat,null))
-	panel.open()
+	panel.set_content(dat.Join())
+	panel.open(FALSE)
 
 /datum/preferences/proc/close_load_dialog(mob/user)
 	if(panel)

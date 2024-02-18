@@ -1482,6 +1482,7 @@
 #include "code\modules\asset_cache\asset_cache_item.dm"
 #include "code\modules\asset_cache\asset_list.dm"
 #include "code\modules\asset_cache\assets\asset_changelog.dm"
+#include "code\modules\asset_cache\assets\asset_character_preview.dm"
 #include "code\modules\asset_cache\assets\asset_credits.dm"
 #include "code\modules\asset_cache\assets\asset_fontawesome.dm"
 #include "code\modules\asset_cache\assets\asset_goonchat.dm"

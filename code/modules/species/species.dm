@@ -312,8 +312,8 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 
 /datum/species/New()
 	var/icon/species_icon = icon(icobase)
-	icon_width = species_icon.Height()
 	icon_height = species_icon.Height()
+	icon_width = species_icon.Width()
 
 	if(!codex_description)
 		codex_description = description
@@ -398,8 +398,8 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 	create_organs_for.mob_size = mob_size
 	QDEL_NULL_LIST(create_organs_for.organs)
 	QDEL_NULL_LIST(create_organs_for.internal_organs)
-	QDEL_NULL_ASSOC_LIST(create_organs_for.organs_by_name)
-	QDEL_NULL_ASSOC_LIST(create_organs_for.internal_organs_by_name)
+	create_organs_for.organs_by_name = null
+	create_organs_for.internal_organs_by_name = null
 
 	create_organs_for.organs = list()
 	create_organs_for.internal_organs = list()

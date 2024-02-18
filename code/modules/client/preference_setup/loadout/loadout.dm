@@ -131,7 +131,7 @@ var/global/list/gear_datums = list()
 	if(!user.client)
 		return .
 
-	var/datum/gear_slot/picked_slot =  pref.get_picked_gear_slot()
+	var/datum/gear_slot/picked_slot = pref.get_picked_gear_slot()
 	if(!picked_slot)
 		stack_trace("Something went wrong. `picked_slot` should not be null")
 		return .
@@ -139,31 +139,32 @@ var/global/list/gear_datums = list()
 	var/gear_total_cost = picked_slot.get_total_gear_cost()
 	var/fcolor = gear_total_cost < config.max_gear_cost ? "#e67300" : "#3366cc"
 
-	. += "<table style='width: 100%;'><tr>"
-
-	. += "<td>"
-	. += "<b>Loadout Set: <a href='?src=[ref(src)];prev_slot=1'>&lt;&lt;</a><b><font color = '[fcolor]'>\[[picked_slot.get_slot_number()]\]</font></b><a href='?src=[ref(src)];next_slot=1'>&gt;&gt;</a></b><br>"
-
+	. += "<table style='width: 100%; height: 100%; overflow-y: auto'><tr>"
 	. += "<table style='white-space: nowrap;'><tr>"
 	. += "<td style=\"vertical-align: top;\">"
+
+	. += "<td>"
+
+	. += "<b>Loadout Set: <a href='?src=[ref(src)];prev_slot=1'>&lt;&lt;</a><b><font color = '[fcolor]'>\[[picked_slot.get_slot_number()]\]</font></b><a href='?src=[ref(src)];next_slot=1'>&gt;&gt;</a></b>"
+	var/donation_tier = user.client.donator_info.get_full_donation_tier()
+
+	. += "<td>"
+	. += "<b>Donation tier:</b> [donation_tier]<br>"
+	. += "<a class='gold' href='?src=[ref(src)];donate=1'>Support us!</a><br>"
+	. += "</td>"
+
+	. += "</td>"
 
 	if(config.max_gear_cost < INFINITY)
 		. += "<font color = '[fcolor]'>[gear_total_cost]/[config.max_gear_cost]</font> loadout points spent.<br>"
 
-	. += "<a href='?src=[ref(src)];clear_loadout=1'>Clear Loadout</a><br>"
-	. += "<a href='?src=[ref(src)];random_loadout=1'>Random Loadout</a><br>"
-	. += "<a href='?src=[ref(src)];toggle_hiding=1'>[hide_unavailable_gear ? "Show unavailable" : "Hide unavailable"]</a><br>"
-	. += "<a href='?src=[ref(src)];toggle_donate=1'>[hide_donate_gear ? "Show donate gears" : "Hide donate gears"]</a><br>"
+	. += "<a href='?src=[ref(src)];clear_loadout=1'>Clear Loadout</a>"
+	. += "<a href='?src=[ref(src)];random_loadout=1'>Random Loadout</a>"
+	. += "<a href='?src=[ref(src)];toggle_hiding=1'>[hide_unavailable_gear ? "Show unavailable" : "Hide unavailable"]</a>"
+	. += "<a href='?src=[ref(src)];toggle_donate=1'>[hide_donate_gear ? "Show donate gears" : "Hide donate gears"]</a>"
 	. += "</td>"
 
 	. += "</tr></table>"
-	. += "</td>"
-
-	. += "<td style='width: 90%; text-align: right; vertical-align: top;'>"
-
-	var/donation_tier = user.client.donator_info.get_full_donation_tier()
-	. += "<br><br><b>Donation tier:</b> [donation_tier]<br>"
-	. += "<a class='gold' href='?src=[ref(src)];donate=1'>Support us!</a><br>"
 	. += "</td>"
 
 	. += "</tr></table>"

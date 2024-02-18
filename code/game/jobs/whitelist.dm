@@ -1,15 +1,18 @@
 #define WHITELISTFILE "data/whitelist.txt"
+#define ALIEN_WHITELIST_FILE "config/alienwhitelist.json"
 
 var/global/list/whitelist = list()
 
 /hook/startup/proc/loadWhitelist()
 	if(config.usewhitelist)
 		load_whitelist()
-	return 1
+
+	return TRUE
 
 /proc/load_whitelist()
 	whitelist = file2list(WHITELISTFILE)
-	if(!length(whitelist))	whitelist = null
+	if(!length(whitelist))
+		whitelist = null
 
 /proc/check_whitelist(mob/M)
 	if(!whitelist)
@@ -22,17 +25,17 @@ var/global/list/alien_whitelist = list()
 	if(!config.usealienwhitelist)
 		return TRUE
 
-	if(!load_alienwhitelistSQL())
-		to_world_log("Could not load alienwhitelist via SQL")
-	else
-		load_alienwhitelist()
+	if(load_alienwhitelistSQL())
+		return TRUE
 
-	return FALSE
+	to_world_log("Could not load alienwhitelist via SQL. Reverting to legacy approach (JSON file)")
+
+	return load_alienwhitelist()
 
 /proc/load_alienwhitelist()
-	var/text = file2text("config/alienwhitelist.txt")
+	var/text = file2text(ALIEN_WHITELIST_FILE)
 	if (!text)
-		log_misc("Failed to load config/alienwhitelist.txt")
+		log_misc("Failed to load [ALIEN_WHITELIST_FILE]")
 		return FALSE
 
 	var/list/ckey_to_whitelisted_races = json_decode(text)
@@ -51,16 +54,16 @@ var/global/list/alien_whitelist = list()
 	if(!query.Execute())
 		to_world_log(dbcon_old.ErrorMsg())
 		return FALSE
-	else
-		while(query.NextRow())
-			var/list/row = query.GetRowData()
 
-			var/ckey = row["ckey"]
-			var/race = row["race"]
-			if(islist(alien_whitelist[ckey]))
-				alien_whitelist[ckey][race] = TRUE
-			else
-				alien_whitelist[ckey] = list(race = TRUE)
+	while(query.NextRow())
+		var/list/row = query.GetRowData()
+
+		var/ckey = row["ckey"]
+		var/race = row["race"]
+		if(islist(alien_whitelist[ckey]))
+			alien_whitelist[ckey][race] = TRUE
+		else
+			alien_whitelist[ckey] = list(race = TRUE)
 
 	return TRUE
 

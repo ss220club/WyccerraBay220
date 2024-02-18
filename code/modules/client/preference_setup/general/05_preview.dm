@@ -1,25 +1,28 @@
+#define CHARACTER_PREVIEW_MAP_CONTROL_ID "character_preview_map"
 
 /datum/preferences
-	var/list/background_states = list("000", "FFF", MATERIAL_STEEL, "white")
-	var/icon/bgstate = "000"
 	/// Preference which defines whether to equip preview character with job equipment
 	var/preview_job = TRUE
 	/// Preference which defines whether to equip preview character with selected gear
 	var/preview_gear = TRUE
-	/// Assoc list of character previews as: dir => character_preview
+	/// Height of the icon on preview
+	var/preview_character_height = WORLD_ICON_SIZE
+	/// Preview background currently set. Must be one of the keys from `character_preview_backgrounds` list
+	var/background_icon_name = "steel"
+	/// List of character preview as: dir => preview
 	var/list/character_previews
+	/// List of cached background icons, scaled for different sizes as: `size => list(icon_name => /icon)`
+	var/static/list/preview_backgrounds_cache = list()
+	/// Pool of icons for character preview background
+	var/static/list/character_preview_backgrounds = list(
+		"steel" = icon('icons/turf/flooring/tiles.dmi', "steel"),
+		"tiled_light" = icon('icons/turf/flooring/tiles.dmi', "tiled_light"),
+		"reinforced_light" = icon('icons/turf/flooring/tiles.dmi', "reinforced_light"),
+	)
 
 /datum/preferences/Destroy()
 	QDEL_NULL_ASSOC_LIST(character_previews)
 	. = ..()
-
-
-/datum/preferences/VV_static()
-	. = ..()
-	. += list(
-		"background_states"
-	)
-	return .
 
 /datum/preferences/proc/dress_preview_mob_with_gear(mob/living/carbon/human/mannequin, job_preview_type)
 	var/datum/gear_slot/picked_slot = get_picked_gear_slot()
@@ -32,10 +35,7 @@
 	var/list/accessories = list()
 	for(var/gear_name in gears)
 		var/datum/gear/gear_to_try = gear_datums[gear_name]
-		if(!gear_to_try)
-			continue
-
-		if(!gear_to_try.slot)
+		if(!gear_to_try?.slot)
 			continue
 
 		if(length(gear_to_try.whitelisted) && !(mannequin.species.name in gear_to_try.whitelisted))
@@ -87,15 +87,15 @@
 	if(!job_preview && mannequin.icon)
 		update_icon = TRUE // So we don't end up stuck with a borg/AI icon after setting their priority to non-high
 
-	if(preview_job && job_preview)
+	var/datum/job/job_preview_type = job_preview?.type
+	if(preview_job && job_preview && job_preview_type && initial(job_preview_type.display_outfit_on_preview))
 		update_icon = dress_preview_mob_with_job_equipment(mannequin, job_preview)
 
 	if(!(mannequin.species.appearance_flags && mannequin.species.appearance_flags & SPECIES_APPEARANCE_HAS_UNDERWEAR))
 		if(all_underwear)
 			all_underwear.Cut()
 
-	var/job_preview_type = job_preview?.type
-	if(preview_gear && !(job_preview && (job_preview_type == /datum/job/ai || job_preview_type == /datum/job/cyborg)))
+	if(preview_gear)
 		update_icon = dress_preview_mob_with_gear(mannequin, job_preview_type)
 
 	if(update_icon)
@@ -106,74 +106,192 @@
 	mannequin.delete_inventory(TRUE)
 	dress_preview_mob(mannequin)
 	mannequin.ImmediateOverlayUpdate()
-	show_character_preview(mannequin, mannequin.icon_height)
 
-/datum/preferences/proc/show_character_preview(mutable_appearance/char_appearance, char_height)
-	var/vertical_position = 0
-	var/char_height_ratio = char_height / WORLD_ICON_SIZE
+	preview_character_height = mannequin.icon_height
+	show_character_preview(mannequin)
+
+/datum/preferences/proc/show_character_preview(mutable_appearance/char_appearance)
+	PRIVATE_PROC(TRUE)
+
+	var/char_height_ratio = preview_character_height / WORLD_ICON_SIZE
+	var/preview_character_index = 0
+	var/icon/background_icon = get_scaled_preview_background_icon()
 	for(var/dir in GLOB.cardinal)
-		var/obj/screen/preview = LAZYACCESS(character_previews, "[dir]")
+		var/screen_loc = "[CHARACTER_PREVIEW_MAP_CONTROL_ID]:0,[char_height_ratio * preview_character_index]"
+		var/datum/character_preview/preview = LAZYACCESS(character_previews, "[dir]")
 		if(!preview)
-			preview = new
+			var/obj/screen/background_preview = generate_character_preview_background(screen_loc, background_icon)
+			var/obj/screen/character_preview = generate_character_preview(dir, char_appearance, screen_loc)
+			preview = new(background_preview, character_preview)
 			LAZYSET(character_previews, "[dir]", preview)
 
-			if(client)
-				client.screen |= preview
+		preview.update_character(char_appearance, dir, screen_loc)
+		preview.update_background(screen_loc, background_icon)
+		preview.show_to(client)
+		preview_character_index++
 
-		preview.appearance = char_appearance
-		preview.dir = dir
-		preview.screen_loc = "character_preview_map:0,[vertical_position * char_height_ratio]"
-		vertical_position++
+/datum/preferences/proc/clear_character_preview()
+	PRIVATE_PROC(TRUE)
+
+	for(var/dir in character_previews)
+		var/datum/character_preview/preview = character_previews[dir]
+		if(!preview)
+			continue
+
+		preview.hide_from(client)
+
+		qdel(preview)
+
+	character_previews = null
+
+/datum/preferences/proc/get_scaled_preview_background_icon()
+	PRIVATE_PROC(TRUE)
+	RETURN_TYPE(/icon)
+
+	var/icon/result_icon = character_preview_backgrounds[background_icon_name]
+	if(!result_icon)
+		background_icon_name = pick(character_preview_backgrounds)
+		result_icon = character_preview_backgrounds[background_icon_name]
+
+	if(preview_character_height == WORLD_ICON_SIZE)
+		return result_icon
+
+	var/icon/scaled_icon = LAZYACCESS(preview_backgrounds_cache["[preview_character_height]"], background_icon_name)
+	if(!scaled_icon)
+		scaled_icon = icon(result_icon)
+		scaled_icon.Scale(scaled_icon.Width(), preview_character_height)
+		LAZYSET(preview_backgrounds_cache["[preview_character_height]"], background_icon_name, scaled_icon)
+
+	return scaled_icon
+
+/datum/preferences/proc/generate_character_preview(mutable_appearance/char_appearance, dir, screen_loc)
+	PRIVATE_PROC(TRUE)
+	RETURN_TYPE(/obj/screen)
+
+	var/obj/screen/character_preview = new
+	character_preview.appearance = char_appearance
+	character_preview.plane = HUD_PLANE
+	character_preview.dir = dir
+	character_preview.screen_loc = screen_loc
+
+	return character_preview
+
+/datum/preferences/proc/generate_character_preview_background(screen_loc, icon/background_icon)
+	PRIVATE_PROC(TRUE)
+	RETURN_TYPE(/obj/screen)
+
+	var/obj/screen/background = new
+	background.layer = UNDER_HUD_LAYER
+	background.icon = background_icon
+	background.screen_loc = screen_loc
+
+	return background
+
+/datum/preferences/proc/update_preview_background_icon()
+	var/icon/new_icon = get_scaled_preview_background_icon()
+	for(var/dir in character_previews)
+		var/datum/character_preview/preview = character_previews[dir]
+		if(!preview)
+			stack_trace("Character preview is missing for dir: `[dir]`")
+			continue
+
+		preview.update_background_icon(new_icon)
 
 /datum/category_item/player_setup_item/physical/preview
 	name = "Preview"
 	sort_order = 5
 
-/datum/category_item/player_setup_item/physical/preview/load_character(datum/pref_record_reader/R)
-	pref.bgstate = R.read("bgstate")
-	pref.update_preview_icon()
-
-
-/datum/category_item/player_setup_item/physical/preview/save_character(datum/pref_record_writer/W)
-	W.write("bgstate", pref.bgstate)
-
-
-/datum/category_item/player_setup_item/physical/preview/sanitize_character()
-	if(!pref.bgstate || !(pref.bgstate in pref.background_states))
-		pref.bgstate = pref.background_states[1]
-
-
 /datum/category_item/player_setup_item/physical/preview/OnTopic(query_text, list/query, mob/user)
 	if (!query)
 		return
-	else if (query["cyclebg"])
-		var/index = pref.background_states.Find(pref.bgstate)
-		if (!index || index == length(pref.background_states))
-			pref.bgstate = pref.background_states[1]
-		else
-			pref.bgstate = pref.background_states[index + 1]
-		return TOPIC_REFRESH_UPDATE_PREVIEW
-	else if (query["resize"])
-		pref.client?.cycle_preference(/datum/client_preference/preview_scale)
-		return TOPIC_REFRESH_UPDATE_PREVIEW
-	else if (query["job_preview"])
+
+	if (query["job_preview"])
 		pref.preview_job = !pref.preview_job
 		return TOPIC_REFRESH_UPDATE_PREVIEW
+
 	else if (query["previewgear"])
 		pref.preview_gear = !pref.preview_gear
 		return TOPIC_REFRESH_UPDATE_PREVIEW
+
+	else if(query["set_preview_background"])
+		var/background_name = query["set_preview_background"]
+		if(pref.background_icon_name == background_name || !pref.character_preview_backgrounds[background_name])
+			return TOPIC_NOACTION
+
+		pref.background_icon_name = background_name
+		return TOPIC_UPDATE_PREVIEW_BACKGROUND_ICON
+
 	return ..()
 
+/datum/category_item/player_setup_item/physical/preview/content(mob/user)
+	var/datum/asset/character_preview_asset = get_asset_datum(/datum/asset/simple/character_preview)
+	character_preview_asset.send(user)
 
-// /datum/category_item/player_setup_item/physical/preview/content(mob/user)
-// 	if(!pref.preview_icon)
-// 		pref.update_preview_icon()
-// 	send_rsc(user, pref.preview_icon, "previewicon.png")
-// 	var/width = pref.preview_icon.Width()
-// 	var/height = pref.preview_icon.Height()
-// 	. = "<b>Preview:</b>"
-// 	. += "<br />[BTN("cyclebg", "Cycle Background")]"
-// 	. += " - [BTN("previewgear", "[pref.preview_gear ? "Hide" : "Show"] Loadout")]"
-// 	. += " - [BTN("job_preview", "[pref.preview_job ? "Hide" : "Show"] Uniform")]"
-// 	. += " - [BTN("resize", "Resize")]"
-// 	. += {"<br /><div class="statusDisplay" style="text-align:center"><img src="previewicon.png" width="[width]" height="[height]"></div>"}
+	. = "<b>Preview Toggles:</b>"
+	. += "<br>[BTN("previewgear", "[pref.preview_gear ? "Hide" : "Show"] Loadout")]"
+	. += " - [BTN("job_preview", "[pref.preview_job ? "Hide" : "Show"] Uniform")]"
+	. += "<br>"
+	. = "<b>Preview Background:</b>"
+	for(var/background_name in pref.character_preview_backgrounds)
+		. += VSBTN("set_preview_background", background_name, "<img src='[SSassets.transport.get_asset_url(background_name)]'>", "width: 128px; height: 128px; margin-left: 0.5rem")
+
+/datum/category_item/player_setup_item/physical/preview/load_preferences(datum/pref_record_reader/R)
+	pref.preview_job = R.read("preview_job")
+	pref.preview_gear = R.read("preview_gear")
+
+/datum/category_item/player_setup_item/physical/preview/save_preferences(datum/pref_record_writer/W)
+	W.write("preview_job", pref.preview_job)
+	W.write("preview_gear", pref.preview_gear)
+
+/datum/character_preview
+	/// Background of the character preview image
+	VAR_PRIVATE/obj/screen/background
+	/// Character preview image
+	VAR_PRIVATE/obj/screen/character
+
+/datum/character_preview/New(obj/screen/background, obj/screen/character)
+	ASSERT(istype(background))
+	ASSERT(istype(character))
+
+	src.background = background
+	src.character = character
+
+/datum/character_preview/Destroy()
+	QDEL_NULL(background)
+	QDEL_NULL(character)
+	. = ..()
+
+/datum/character_preview/proc/update_character(mutable_appearance/appearence, dir, screen_loc)
+	ASSERT(appearence)
+	ASSERT(dir)
+	ASSERT(screen_loc)
+
+	character.appearance = appearence
+	character.dir = dir
+	character.plane = HUD_PLANE
+	character.screen_loc = screen_loc
+
+/datum/character_preview/proc/update_background(screen_loc, icon/new_icon)
+	background.screen_loc = screen_loc
+	update_background_icon(new_icon)
+
+/datum/character_preview/proc/update_background_icon(icon/new_icon)
+	background.icon = new_icon
+
+/datum/character_preview/proc/show_to(client/client)
+	client = resolve_client(client)
+	if(!client)
+		return
+
+	client.screen += background
+	client.screen += character
+
+/datum/character_preview/proc/hide_from(client/client)
+	client = resolve_client(client)
+	if(!client)
+		return
+
+	client.screen -= background
+	client.screen -= character
+
+#undef CHARACTER_PREVIEW_MAP_CONTROL_ID

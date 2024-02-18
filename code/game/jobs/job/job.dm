@@ -56,6 +56,8 @@
 	var/required_language
 
 	var/faction = MOB_FACTION_CREW
+	/// If job outfit should be displayed on character preview in preferences
+	var/display_outfit_on_preview = TRUE
 
 /datum/job/New()
 

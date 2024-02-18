@@ -420,6 +420,7 @@ SUBSYSTEM_DEF(tts220)
 	tts_queue -= filename
 
 /datum/controller/subsystem/tts220/proc/play_tts(atom/speaker, mob/listener, filename, is_local = TRUE, effect = SOUND_EFFECT_NONE, preSFX = null, postSFX = null)
+	set waitfor = FALSE
 	if(isnull(listener) || !listener.client)
 		return
 

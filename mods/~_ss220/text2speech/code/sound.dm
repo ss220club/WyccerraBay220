@@ -30,19 +30,33 @@
 		shelleo_ids[shelleo_id] = TRUE
 	out_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_OUT]"
 	err_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_ERR]"
+	errorcode = shelleo_shell(interpreter, command, out_file, err_file)
+	var/list/result = shelleo_filework(out_file, err_file)
+	stdout = result[1]
+	stderr = result[2]
+	shelleo_ids[shelleo_id] = FALSE
+
+	return list(errorcode, stdout, stderr)
+
+/world/proc/shelleo_shell(interpreter, command, out_file, err_file)
+	var/errorcode = 1
 	if(world.system_type == UNIX)
 		errorcode = shell("[interpreter] \"[replacetext(command, "\"", "\\\"")]\" > [out_file] 2> [err_file]")
 	else
 		errorcode = shell("[interpreter] \"[command]\" > [out_file] 2> [err_file]")
+	return errorcode
+
+/world/proc/shelleo_filework(out_file, err_file)
+	var/stdout = ""
+	var/stderr = ""
 	if(fexists(out_file))
 		stdout = file2text(out_file)
 		fdel(out_file)
 	if(fexists(err_file))
 		stderr = file2text(err_file)
 		fdel(err_file)
-	shelleo_ids[shelleo_id] = FALSE
+	return list(stdout, stderr)
 
-	return list(errorcode, stdout, stderr)
 
 /proc/shell_url_scrub(url)
 	var/static/regex/bad_chars_regex = regex("\[^#%&./:=?\\w]*", "g")

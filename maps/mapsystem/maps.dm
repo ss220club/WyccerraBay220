@@ -62,14 +62,6 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 	var/list/map_admin_faxes = list()
 
-	var/shuttle_docked_message
-	var/shuttle_leaving_dock
-	var/shuttle_called_message
-	var/shuttle_recall_message
-	var/emergency_shuttle_docked_message
-	var/emergency_shuttle_leaving_dock
-	var/emergency_shuttle_recall_message
-
 	var/list/station_networks = list() 		// Camera networks that will show up on the console.
 
 	var/list/holodeck_programs = list() // map of string ids to /datum/holodeck_program instances
@@ -335,11 +327,11 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 		if ("company_name") company_name = value
 		if ("company_short") company_short = value
 		if ("shuttle_docked_message") shuttle_docked_message = value
-		if ("shuttle_leaving_dock") shuttle_leaving_dock = value
+		if ("shuttle_leaving_message") shuttle_leaving_message = value
 		if ("shuttle_called_message") shuttle_called_message = value
 		if ("shuttle_recall_message") shuttle_recall_message = value
 		if ("emergency_shuttle_docked_message") emergency_shuttle_docked_message = value
-		if ("emergency_shuttle_leaving_dock") emergency_shuttle_leaving_dock = value
+		if ("emergency_shuttle_leaving_message") emergency_shuttle_leaving_message = value
 		if ("emergency_shuttle_recall_message") emergency_shuttle_recall_message = value
 		if ("starting_money") starting_money = text2num_or_default(value, starting_money)
 		if ("department_money") department_money = text2num_or_default(value, department_money)

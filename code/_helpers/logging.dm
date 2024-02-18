@@ -20,7 +20,13 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 /proc/log_ss_init(text)
 	game_log("SS", "[text]")
 
+//wrapper macros for easier grepping
+#define DIRECT_OUTPUT(A, B) A << B
+#define SEND_TEXT(target, text) DIRECT_OUTPUT(target, text)
+#define WRITE_FILE(file, text) DIRECT_OUTPUT(file, text)
+
 #define WARNING(MSG) warning("[MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr].")
+
 //print a warning message to world.log
 /proc/warning(msg)
 	to_world_log("## WARNING: [msg][log_end]")
@@ -58,7 +64,7 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 /proc/to_debug_listeners(text, prefix = "DEBUG")
 	for(var/client/C as anything in GLOB.admins)
 		if (!C.prefs || C.get_preference_value(/datum/client_preference/staff/show_debug_logs) == GLOB.PREF_SHOW)
-			to_chat(C, SPAN_DEBUG("<b>[prefix]</b>: [text]"))
+			to_chat(C, MESSAGE_TYPE_DEBUG, SPAN_DEBUG("<b>[prefix]</b>: [text]"), TRUE)
 
 /proc/log_game(text)
 	if (config.log_game)

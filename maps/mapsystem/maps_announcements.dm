@@ -1,6 +1,21 @@
 /datum/map
+	var/shuttle_docked_sound
+	var/shuttle_leaving_sound
+	var/shuttle_called_sound
+	var/shuttle_recall_sound
+	var/shuttle_docked_message
+	var/shuttle_leaving_message
+	var/shuttle_called_message
+	var/shuttle_recall_message
+
 	var/emergency_shuttle_called_message
+	var/emergency_shuttle_docked_message
+	var/emergency_shuttle_leaving_message
+	var/emergency_shuttle_recall_message
 	var/emergency_shuttle_called_sound
+	var/emergency_shuttle_docked_sound
+	var/emergency_shuttle_leaving_sound
+	var/emergency_shuttle_recall_sound
 
 	var/command_report_sound
 
@@ -26,7 +41,7 @@
 
 	var/unknown_biological_entities_message = "Unknown biological entities have been detected near the %STATION_NAME%, please stand-by."
 
-	var/lifesign_spawn_sound = 'sound/AI/aliens.ogg'
+	var/lifesign_spawn_sound = ANNOUNCER_ALIENS
 
 /datum/map/proc/emergency_shuttle_called_announcement()
 	evacuation_controller.evac_called.Announce(replacetext(emergency_shuttle_called_message, "%ETA%", "[round(evacuation_controller.get_eta()/60)] minute\s."), new_sound = emergency_shuttle_called_sound)

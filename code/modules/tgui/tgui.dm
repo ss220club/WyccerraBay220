@@ -90,6 +90,7 @@
 	window.acquire_lock(src)
 	if(!window.is_ready())
 		window.initialize(
+			strict_mode = TRUE,
 			fancy = user.get_preference_value(/datum/client_preference/tgui_fancy) == GLOB.PREF_YES,
 			assets = list(
 				get_asset_datum(/datum/asset/simple/tgui),
@@ -224,6 +225,7 @@
 		"refreshing" = FALSE,
 		"map" = (GLOB.using_map && GLOB.using_map.path) ? GLOB.using_map.path : "Unknown",
 		"mapZLevel" = map_z_level,
+		"ref" = "[REF(src)]",
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
@@ -238,7 +240,6 @@
 		),
 		"user" = list(
 			"name" = "[user]",
-			"ckey" = "[user.ckey]",
 			"observer" = isobserver(user),
 		),
 	)

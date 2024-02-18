@@ -189,7 +189,6 @@
 	#include "../../mods/screentips/_screentips.dme"
 	#include "../../mods/tajara/_tajara.dme"
 	#include "../../mods/sauna_props/_sauna_props.dme"
-	#include "../../mods/wyccbay_optimization/_wyccbay_optimization.dme"
 
 	// UNUSED MODS
 	// Keep them in ascending alphabetical order too, please

@@ -20,11 +20,9 @@ SUBSYSTEM_DEF(shell)
 /datum/controller/subsystem/shell/Initialize(start_uptime)
 	. = ..()
 	var/static/list/python_interpreters = list("[MS_WINDOWS]" = "python", "[UNIX]" = "python3")
-	var/static/list/shell_interpreters = list("[MS_WINDOWS]" = "pwsh -c", "[UNIX]" = "sh -c")
 	var/static/list/escape_chars = list("[MS_WINDOWS]" = "`", "[UNIX]" = "\\")
 
 	python_interpreter = python_interpreters["[world.system_type]"]
-	shell_interpreter = shell_interpreters["[world.system_type]"]
 	escape_char = escape_chars["[world.system_type]"]
 
 /datum/controller/subsystem/shell/UpdateStat(time)
@@ -36,9 +34,9 @@ SUBSYSTEM_DEF(shell)
 /datum/controller/subsystem/shell/proc/shelleo_delayed(command, datum/callback/callback)
 	if(!initialized)
 		return
-	command = replace_characters(command, list({"""}={"[SSshell.escape_char]""}, {"'"}={"[SSshell.escape_char]'"}))
 	var/id = "id[last_id++]"
 	shell_callbacks[id] = callback
+	command = replace_characters(command, list({"""}={"[escape_char]""}, {"'"}={"[escape_char]'"}))
 	var/shell_command = {"[python_interpreter] [DELAYED_SHELL] -port [world.port] -id [id] -command "[command]""}
 	to_world(list2params(world.shelleo(shell_command)))
 
@@ -50,9 +48,6 @@ SUBSYSTEM_DEF(shell)
 	var/shelleo_id
 	var/out_file = ""
 	var/err_file = ""
-	var/interpreter = SSshell.shell_interpreter
-	if(!interpreter)
-		CRASH("Operating System: [world.system_type] not supported") // If you encounter this error, you are encouraged to update this proc with support for the new operating system
 
 	for(var/seo_id in shelleo_ids)
 		if(!shelleo_ids[seo_id])
@@ -65,10 +60,8 @@ SUBSYSTEM_DEF(shell)
 		shelleo_ids[shelleo_id] = TRUE
 	out_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_OUT]"
 	err_file = "[SHELLEO_NAME][shelleo_id][SHELLEO_ERR]"
-	if(world.system_type == UNIX)
-		errorcode = shell("[interpreter] \"[replacetext(command, "\"", "\\\"")]\" > [out_file] 2> [err_file]")
-	else
-		errorcode = shell("[interpreter] \"[command]\" > [out_file] 2> [err_file]")
+	var/shell_command = "[command] > [out_file] 2> [err_file]"
+	errorcode = shell(shell_command)
 	if(fexists(out_file))
 		stdout = file2text(out_file)
 		fdel(out_file)

@@ -4,9 +4,7 @@
 	#include "example_radio.dm"
 	#include "example_unit_testing.dm"
 
-	#include "example-1.dmm"
-	#include "example-2.dmm"
-	#include "example-3.dmm"
+	#include "example.dmm"
 
 	#define using_map_DATUM /datum/map/example
 

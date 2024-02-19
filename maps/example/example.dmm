@@ -19,6 +19,10 @@
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
+"aS" = (
+/obj/machinery/smartfridge/foods,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "aX" = (
 /obj/machinery/light_switch{
 	pixel_x = -22;
@@ -95,6 +99,11 @@
 /obj/structure/ladder,
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
+"eY" = (
+/obj/machinery/biogenerator,
+/obj/item/reagent_containers/glass/bucket,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "fw" = (
 /obj/machinery/atmospherics/portables_connector{
 	dir = 8
@@ -144,6 +153,13 @@
 /obj/machinery/seed_storage/all,
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"iK" = (
+/obj/item/mirror{
+	pixel_y = 4
+	},
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "iT" = (
 /obj/structure/lattice,
 /obj/machinery/light/spot,
@@ -157,12 +173,13 @@
 /area/medical/surgery)
 "jj" = (
 /obj/item/modular_computer/laptop,
+/obj/structure/table/glass,
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
 "jo" = (
-/obj/item/rig/ert/fleet,
-/turf/simulated/floor/tiled/techfloor,
-/area/constructionsite)
+/obj/machinery/smartfridge/chemistry,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "jw" = (
 /obj/structure/table/glass,
 /obj/item/storage/box/latexgloves{
@@ -193,6 +210,12 @@
 "km" = (
 /obj/machinery/atmospherics/pipe/simple/visible{
 	dir = 6
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"kn" = (
+/obj/machinery/computer/guestpass{
+	pixel_y = -24
 	},
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
@@ -241,6 +264,10 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"kD" = (
+/obj/machinery/suit_storage_unit/standard_unit,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "kJ" = (
 /obj/machinery/power/apc/high{
 	dir = 8;
@@ -339,6 +366,13 @@
 /obj/item/reagent_containers/glass/beaker/large,
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"oj" = (
+/obj/machinery/jukebox{
+	pixel_y = 18
+	},
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "oA" = (
 /obj/machinery/power/debug_items/infinite_generator,
 /obj/structure/cable,
@@ -437,9 +471,9 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
 "rU" = (
-/obj/item/rig/zero,
-/turf/simulated/floor/tiled/techfloor,
-/area/constructionsite)
+/obj/machinery/smartfridge/seeds,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "sc" = (
 /obj/machinery/light/spot,
 /turf/simulated/floor/tiled/techfloor,
@@ -489,6 +523,10 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"tg" = (
+/obj/machinery/suit_storage_unit/security,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "tn" = (
 /obj/machinery/light/spot{
 	dir = 8
@@ -538,6 +576,10 @@
 "vk" = (
 /turf/simulated/wall/prepainted,
 /area/medical/surgery)
+"vq" = (
+/obj/machinery/power/smes,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "vs" = (
 /obj/machinery/reagent_temperature,
 /turf/simulated/floor/tiled/techmaint,
@@ -625,6 +667,12 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"zY" = (
+/obj/machinery/requests_console{
+	pixel_y = -32
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
@@ -722,6 +770,12 @@
 /obj/machinery/vending/robotics,
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"ES" = (
+/obj/machinery/requests_console{
+	pixel_y = -32
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
 "EW" = (
 /obj/machinery/vending/cigarette,
 /turf/simulated/floor/tiled/techfloor,
@@ -766,6 +820,11 @@
 /obj/machinery/r_n_d/server/robotics,
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"Hd" = (
+/obj/item/airlock_electronics,
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "Hl" = (
 /obj/machinery/body_scanconsole{
 	dir = 1
@@ -844,6 +903,13 @@
 	},
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
+"Ko" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/machinery/computer/modular,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "Kt" = (
 /obj/structure/table/rack,
 /obj/item/reagent_containers/glass/beaker/noreact{
@@ -869,6 +935,18 @@
 /obj/machinery/fabricator,
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"Lu" = (
+/obj/structure/table/glass,
+/obj/item/rig/ert/fleet{
+	pixel_x = -4;
+	pixel_y = 2
+	},
+/obj/item/rig/zero{
+	pixel_y = 2;
+	pixel_x = 4
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "LB" = (
 /obj/machinery/atmospherics/portables_connector{
 	dir = 8
@@ -926,6 +1004,12 @@
 /obj/item/reagent_containers/syringe,
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"Ob" = (
+/obj/machinery/computer/guestpass{
+	pixel_y = -24
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "Od" = (
 /obj/machinery/door/airlock/external/bolted{
 	frequency = 1379
@@ -969,6 +1053,7 @@
 /area/medical/surgery)
 "PP" = (
 /obj/item/modular_computer/pda/captain,
+/obj/structure/table/glass,
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
 "QM" = (
@@ -992,6 +1077,12 @@
 	},
 /turf/simulated/open,
 /area/medical/surgery)
+"Rw" = (
+/obj/machinery/requests_console{
+	pixel_y = -32
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "RQ" = (
 /obj/machinery/atmospherics/pipe/simple/visible{
 	dir = 5
@@ -1022,6 +1113,7 @@
 	dir = 1
 	},
 /obj/floor_decal/industrial/hatch/yellow,
+/obj/item/device/suit_sensor_jammer,
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
 "Ti" = (
@@ -1107,6 +1199,29 @@
 /obj/item/stock_parts/manipulator,
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"Vd" = (
+/obj/machinery/jukebox/old,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Vk" = (
+/obj/item/device/multitool{
+	pixel_x = 12;
+	pixel_y = 2
+	},
+/obj/item/device/multitool/hacktool{
+	pixel_x = 2;
+	pixel_y = 2
+	},
+/obj/item/device/multitool/uplink{
+	pixel_x = -8;
+	pixel_y = 2
+	},
+/obj/structure/table/glass,
+/obj/item/card/id/syndicate{
+	pixel_y = -2
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "Vl" = (
 /obj/machinery/atmospherics/portables_connector{
 	dir = 8
@@ -1200,6 +1315,9 @@
 /obj/structure/closet/fridge,
 /obj/item/reagent_containers/food/condiment/barbecue,
 /obj/item/reagent_containers/food/condiment/enzyme,
+/obj/machinery/computer/guestpass{
+	pixel_y = -24
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
 
@@ -1895,7 +2013,7 @@ cp
 cp
 cp
 cp
-cp
+vq
 pa
 OY
 OY
@@ -1998,9 +2116,9 @@ cp
 cp
 cp
 cp
-cp
+Rw
 pa
-cp
+Vd
 cp
 ic
 cp
@@ -2037,9 +2155,9 @@ cp
 cp
 cp
 cp
-cp
+Ob
 pa
-cp
+oj
 cp
 cp
 cp
@@ -2117,11 +2235,11 @@ cp
 cp
 cp
 pa
+iK
 cp
 cp
 cp
-cp
-cp
+Lu
 pa
 EW
 mO
@@ -2162,7 +2280,7 @@ lO
 Yh
 cp
 cp
-rU
+cp
 cp
 zk
 yW
@@ -2240,7 +2358,7 @@ NL
 Yh
 cp
 cp
-jo
+cp
 cp
 dc
 yW
@@ -2273,11 +2391,11 @@ cp
 cp
 cp
 pa
+Vk
 cp
 cp
 cp
-cp
-cp
+Hd
 pa
 jj
 PP
@@ -2320,7 +2438,7 @@ pa
 pa
 pa
 pa
-ya
+Ko
 cp
 cp
 cp
@@ -2357,8 +2475,8 @@ cp
 cp
 cp
 pa
-cp
-cp
+tg
+kD
 cp
 cp
 cp
@@ -3595,7 +3713,7 @@ va
 QM
 Oa
 Ll
-Ll
+eY
 TG
 Ll
 kA
@@ -3674,9 +3792,9 @@ kq
 Fy
 VE
 Ll
+rU
 Ll
-Ll
-Ll
+aS
 mC
 Ll
 Ll
@@ -3715,7 +3833,7 @@ Ll
 Ll
 Ll
 Ll
-Ll
+zY
 va
 aa
 Ll
@@ -4216,7 +4334,7 @@ JM
 JM
 JM
 va
-Ll
+jo
 Ll
 Ll
 Ll
@@ -5432,7 +5550,7 @@ ZJ
 ZJ
 ZJ
 ZJ
-ZJ
+ES
 vk
 ZJ
 ZJ
@@ -5471,7 +5589,7 @@ ZJ
 ZJ
 ZJ
 ZJ
-ZJ
+kn
 vk
 ZJ
 ZJ

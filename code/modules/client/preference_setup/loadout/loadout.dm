@@ -76,7 +76,7 @@ var/global/list/gear_datums = list()
 	if(!isnull(max_cost) && gear_to_check.cost > max_cost)
 		return FALSE
 
-	if(!gear_to_check.is_allowed_to_equip(pref.client))
+	if(!gear_to_check.allowed_donation_tier(pref.client))
 		return FALSE
 
 	if(!length(gear_to_check.whitelisted))
@@ -137,9 +137,10 @@ var/global/list/gear_datums = list()
 		return .
 
 	var/gear_total_cost = picked_slot.get_total_gear_cost()
+	var/gear_points_left = config.max_gear_cost - gear_total_cost
 	var/fcolor = gear_total_cost < config.max_gear_cost ? "#e67300" : "#3366cc"
 
-	. += "<table style='width: 100%; height: 100%; overflow-y: auto'><tr>"
+	. += "<table style='width: 100%;'><tr>"
 	. += "<table style='white-space: nowrap;'><tr>"
 	. += "<td style=\"vertical-align: top;\">"
 
@@ -194,11 +195,10 @@ var/global/list/gear_datums = list()
 			category_cost += gear_datum.cost
 
 		var/category_class = category_cost ? "linkOn" : ""
-		if(category == current_tab)
+		if(category_name == current_tab)
 			category_class += " selected"
 
-		. += "<a class='[category_class]' href='?src=[ref(src)];select_category=[category_name]'>[category_name] - [category_cost || 0]</a>"
-		. += "<br>"
+		. += "<a class='[category_class] fluid' href='?src=[ref(src)];select_category=[category_name]'>[category_name] - [category_cost || 0]</a>"
 
 	. += "</b></td>"
 
@@ -232,7 +232,7 @@ var/global/list/gear_datums = list()
 		if(ticked)
 			display_class = "linkOn"
 
-		else if(!gear_datum.is_allowed_to_equip(user) && gear_datum.donation_tier)
+		else if(!gear_datum.allowed_donation_tier(user) && gear_datum.donation_tier)
 			display_class = "gold"
 
 		else if(!allowed_to_see)
@@ -244,7 +244,7 @@ var/global/list/gear_datums = list()
 		if(!hide_unavailable_gear || allowed_to_see || ticked)
 			var/entry = {"
 				<tr>
-				<td width=25%><a [display_class ? "class='[display_class]' " : ""]href='?src=[ref(src)];select_gear=[gear_datum.display_name]'>[gear_datum.display_name]</a></td>
+				<td width=25%><a class='[display_class ? "[display_class]" : ""] fluid' href='?src=[ref(src)];select_gear=[gear_datum.display_name]'>[gear_datum.display_name]</a></td>
 				</td></tr>
 			"}
 
@@ -306,11 +306,9 @@ var/global/list/gear_datums = list()
 		. += "</td>"
 		. += "</tr></table>"
 
-
 		if(selected_gear.slot)
 			. += "<b>Slot:</b> [slot_to_description(selected_gear.slot)]<br>"
-		. += "<b>Loadout Points:</b> [selected_gear.cost]<br>"
-
+		. += "<b>Loadout Points:</b> <font class='[gear_points_left >= selected_gear.cost ? "good" : "bad"]'>[selected_gear.cost]</font><br>"
 
 		var/list/selected_jobs = list()
 		for(var/job_title in (pref.job_medium|pref.job_low|pref.job_high))
@@ -363,14 +361,14 @@ var/global/list/gear_datums = list()
 			. += "</i>"
 			. += "<br>"
 
-		if(length(selected_gear.allowed_skills))
+		if(length(selected_gear.required_skills))
 			. += "<b>Has skills restrictions:</b>"
 			. += "<br>"
 			. += "<i>"
 			var/list/skills_required = list()//make it into instances? instead of path
-			for(var/skill in selected_gear.allowed_skills)
+			for(var/skill in selected_gear.required_skills)
 				var/singleton/hierarchy/skill/instance = GET_SINGLETON(skill)
-				skills_required[instance] = selected_gear.allowed_skills[skill]
+				skills_required[instance] = selected_gear.required_skills[skill]
 
 			var/allowed = skill_check(selected_jobs, skills_required)//Checks if a single job has all the skills required
 			var/ind = 0
@@ -386,14 +384,14 @@ var/global/list/gear_datums = list()
 			. += "</i>"
 			. += "<br>"
 
-		if(length(selected_gear.allowed_factions))
+		if(length(selected_gear.required_factions))
 			. += "<b>Has faction restrictions:</b>"
 			. += "<br>"
 			. += "<i>"
 			var/singleton/cultural_info/faction = SSculture.get_culture(pref.cultural_info[TAG_FACTION])
 			var/facname = faction ? faction.name : "Unset"
 
-			if(facname in selected_gear.allowed_factions)
+			if(facname in selected_gear.required_factions)
 				. += SPAN_COLOR("#55cc55", facname)
 			else
 				. += SPAN_COLOR("#808080", facname)
@@ -439,8 +437,9 @@ var/global/list/gear_datums = list()
 
 		. += "<br><b>Actions:</b><br>"
 		var/not_available_message = SPAN_NOTICE("This item will never spawn with you, using your current preferences.")
-		if(selected_gear.is_allowed_to_equip(user))
-			. += "<a [ticked ? "class='linkOn' " : ""]href='?src=[ref(src)];toggle_gear=[selected_gear.display_name]'>[ticked ? "Drop" : "Take"]</a>"
+		if(selected_gear.allowed_donation_tier(user))
+			var/class = ticked ? "linkOn" : (gear_points_left >= selected_gear.cost ? "" : "linkOff")
+			. += "<a [class ? "class='[class]'" : ""] href='?src=[ref(src)];toggle_gear=[selected_gear.display_name]'>[ticked ? "Drop" : "Take"]</a>"
 		else
 			var/trying_on = (pref.trying_on_gear == selected_gear.display_name)
 			if(selected_gear.donation_tier)
@@ -609,7 +608,7 @@ var/global/list/gear_datums = list()
 	if(!G.path)
 		return FALSE
 
-	if(length(G.allowed_roles) || length(G.allowed_skills) || length(G.allowed_branches))
+	if(length(G.allowed_roles) || length(G.required_skills) || length(G.allowed_branches))
 		// Branches are dependent on jobs so here it is
 		ASSERT(SSjobs.initialized)
 		var/list/jobs = new
@@ -631,11 +630,11 @@ var/global/list/gear_datums = list()
 			if(!job_ok)
 				return FALSE
 
-		if (length(G.allowed_skills))
+		if (length(G.required_skills))
 			var/list/skills_required = list()
-			for(var/skill in G.allowed_skills)
+			for(var/skill in G.required_skills)
 				var/singleton/hierarchy/skill/instance = GET_SINGLETON(skill)
-				skills_required[instance] = G.allowed_skills[skill]
+				skills_required[instance] = G.required_skills[skill]
 			if (!skill_check(jobs, skills_required))
 				return FALSE
 
@@ -657,10 +656,10 @@ var/global/list/gear_datums = list()
 			if (!branch_ok)
 				return FALSE
 
-	if (length(G.allowed_factions))
+	if (length(G.required_factions))
 		var/singleton/cultural_info/faction = SSculture.get_culture(pref.cultural_info[TAG_FACTION])
 		var/facname = faction ? faction.name : "Unset"
-		if(!(facname in G.allowed_factions))
+		if(!(facname in G.required_factions))
 			return FALSE
 
 
@@ -671,7 +670,7 @@ var/global/list/gear_datums = list()
 
 /datum/category_item/player_setup_item/loadout/proc/toggle_gear(datum/gear/gear_to_toggle, mob/user)
 	// Check if someone trying to tricking us. However, it's may be just a bug
-	ASSERT(gear_to_toggle?.is_allowed_to_equip(user))
+	ASSERT(gear_to_toggle?.allowed_donation_tier(user))
 
 	var/datum/gear_slot/picked_slot = pref.get_picked_gear_slot()
 

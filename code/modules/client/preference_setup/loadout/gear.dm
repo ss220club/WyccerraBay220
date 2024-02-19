@@ -14,9 +14,9 @@
 	/// Service branches that can spawn with it
 	var/list/allowed_branches
 	/// Skills required to spawn with this item
-	var/list/allowed_skills
+	var/list/required_skills
 	/// Factions required to spawn with this item
-	var/list/allowed_factions
+	var/list/required_factions
 	/// Term to check the whitelist for.
 	var/whitelisted
 	/// Category that will be used to properly sort gear
@@ -61,7 +61,33 @@
 	for(var/datum/gear_tweak/gt in gear_tweaks)
 		. = gt.tweak_description(., metadata["[gt]"])
 
-/datum/gear/proc/is_allowed_to_equip(client/client_to_check)
+/datum/gear/proc/is_permitted_to_equip(mob/living/carbon/human/human_to_check, datum/job/job)
+	if(!allowed_donation_tier(human_to_check))
+		return FALSE
+
+	if(length(allowed_branches) && (!human_to_check.char_branch || !(human_to_check.char_branch.type in allowed_branches)))
+		return FALSE
+
+	if(length(allowed_roles) && !(job.type in allowed_roles))
+		return FALSE
+
+	if(length(required_skills))
+		for(var/required_skill_name in required_skills)
+			var/skill_level = required_skills[required_skill_name]
+			if(!human_to_check.skill_check(required_skill_name, skill_level))
+				return FALSE
+
+	if(length(required_factions))
+		var/singleton/cultural_info/faction = human_to_check.get_cultural_value(TAG_FACTION)
+		if(!faction.name)
+			return FALSE
+
+		if(!(faction.name in required_factions))
+			return FALSE
+
+	return !whitelisted || (human_to_check.species.name in whitelisted)
+
+/datum/gear/proc/allowed_donation_tier(client/client_to_check)
 	client_to_check = resolve_client(client_to_check)
 	ASSERT(client_to_check)
 	ASSERT(client_to_check.donator_info)
@@ -84,7 +110,7 @@
 
 /datum/gear/proc/spawn_on_mob(mob/living/carbon/human/H, metadata)
 	var/obj/item/item_to_equip = spawn_item(H, H, metadata)
-	if(H.equip_to_slot_if_possible(spawn_item(H, H, metadata), slot, TRYEQUIP_REDRAW | TRYEQUIP_DESTROY | TRYEQUIP_FORCE))
+	if(H.equip_to_slot_if_possible(item_to_equip, slot, TRYEQUIP_REDRAW | TRYEQUIP_DESTROY | TRYEQUIP_FORCE))
 		return item_to_equip
 
 	return null

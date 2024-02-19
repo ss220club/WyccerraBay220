@@ -219,7 +219,7 @@
 			return TOPIC_NOACTION
 
 		pref.background_icon_name = background_name
-		return TOPIC_UPDATE_PREVIEW_BACKGROUND_ICON
+		return TOPIC_REFRESH_UPDATE_PREVIEW_BACKGROUND_ICON
 
 	return ..()
 
@@ -231,17 +231,23 @@
 	. += "<br>[BTN("previewgear", "[pref.preview_gear ? "Hide" : "Show"] Loadout")]"
 	. += " - [BTN("job_preview", "[pref.preview_job ? "Hide" : "Show"] Uniform")]"
 	. += "<br>"
-	. = "<b>Preview Background:</b>"
+	. = "<b>Preview Background:</b><br>"
 	for(var/background_name in pref.character_preview_backgrounds)
-		. += VSBTN("set_preview_background", background_name, "<img src='[SSassets.transport.get_asset_url(background_name)]'>", "width: 128px; height: 128px; margin-left: 0.5rem")
+		. += VCBTN( \
+			"set_preview_background", \
+			background_name, \
+			"<img style='width: 48px; height: 48px' class='background_tile' src='[SSassets.transport.get_asset_url(background_name)]'>", \
+			"image_button [background_name == pref.background_icon_name ? "linkOn" : ""]")
 
 /datum/category_item/player_setup_item/physical/preview/load_preferences(datum/pref_record_reader/R)
 	pref.preview_job = R.read("preview_job")
 	pref.preview_gear = R.read("preview_gear")
+	pref.background_icon_name = R.read("background_icon_name")
 
 /datum/category_item/player_setup_item/physical/preview/save_preferences(datum/pref_record_writer/W)
 	W.write("preview_job", pref.preview_job)
 	W.write("preview_gear", pref.preview_gear)
+	W.write("background_icon_name", pref.background_icon_name)
 
 /datum/character_preview
 	/// Background of the character preview image

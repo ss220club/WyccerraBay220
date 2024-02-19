@@ -47,7 +47,7 @@
 
 		var/datum/category_item/item = new item_type(src)
 		LAZYADD(items, item)
-		LAZYADDASSOC(items_by_name, item.name, item)
+		LAZYSET(items_by_name, item.name, item)
 
 	// For whatever reason dd_insertObjectList(items, item) doesn't insert in the correct order
 	// If you change this, confirm that character setup doesn't become completely unordered.

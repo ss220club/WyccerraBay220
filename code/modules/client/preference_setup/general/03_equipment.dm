@@ -44,14 +44,8 @@
 	W.write("sensors_locked", pref.sensors_locked)
 
 /datum/category_item/player_setup_item/physical/equipment/sanitize_character()
-	if(!istype(pref.all_underwear))
-		pref.all_underwear = list()
-
-		for(var/datum/category_group/underwear/WRC in GLOB.underwear.categories)
-			for(var/datum/category_item/underwear/WRI in WRC.items)
-				if(WRI.is_default(pref.gender ? pref.gender : MALE))
-					pref.all_underwear[WRC.name] = WRI.name
-					break
+	if(!length(pref.all_underwear))
+		setup_default_underware()
 
 	var/datum/species/mob_species = all_species[pref.species]
 	if(!(mob_species && mob_species.appearance_flags & SPECIES_APPEARANCE_HAS_UNDERWEAR))
@@ -61,7 +55,7 @@
 		pref.all_underwear_metadata = list()
 
 	for(var/underwear_category in pref.all_underwear)
-		var/datum/category_group/underwear/UWC = GLOB.underwear.categories_by_name[underwear_category]
+		var/datum/category_group/underwear/UWC = LAZYACCESS(GLOB.underwear.categories_by_name, underwear_category)
 		if(!UWC)
 			pref.all_underwear -= underwear_category
 		else
@@ -96,25 +90,40 @@
 	pref.sensors_locked = sanitize_bool(pref.sensors_locked, FALSE)
 
 /datum/category_item/player_setup_item/physical/equipment/content()
-	. = list()
-	. += "<b>Equipment:</b><br>"
-	for(var/datum/category_group/underwear/UWC in GLOB.underwear.categories)
-		var/item_name = (pref.all_underwear && pref.all_underwear[UWC.name]) ? pref.all_underwear[UWC.name] : "None"
-		. += "[UWC.name]: <a href='?src=\ref[src];change_underwear=[UWC.name]'><b>[item_name]</b></a>"
+	var/list/data = list()
+	data += "<b>Equipment:</b><br>"
 
-		var/datum/category_item/underwear/UWI = UWC.items_by_name[item_name]
-		if(UWI)
-			for(var/datum/gear_tweak/gt in UWI.tweaks)
-				. += " <a href='?src=\ref[src];underwear=[UWC.name];tweak=\ref[gt]'>[gt.get_contents(get_underwear_metadata(UWC.name, gt))]</a>"
+	if(LAZYLEN(GLOB.underwear.categories))
+		for(var/datum/category_group/underwear/UWC as anything in GLOB.underwear.categories)
+			var/item_name = LAZYACCESS(pref.all_underwear, UWC.name) || "None"
+			data += "[UWC.name]: <a href='?src=\ref[src];change_underwear=[UWC.name]'><b>[item_name]</b></a>"
 
-		. += "<br>"
-	. += "Backpack Type: <a href='?src=\ref[src];change_backpack=1'><b>[pref.backpack.name]</b></a>"
+			var/datum/category_item/underwear/UWI = UWC.items_by_name[item_name]
+			if(UWI)
+				for(var/datum/gear_tweak/gt in UWI.tweaks)
+					data += " <a href='?src=\ref[src];underwear=[UWC.name];tweak=\ref[gt]'>[gt.get_contents(get_underwear_metadata(UWC.name, gt))]</a>"
+
+			data += "<br>"
+
+	data += "Backpack Type: <a href='?src=\ref[src];change_backpack=1'><b>[pref.backpack.name]</b></a>"
 	for(var/datum/backpack_tweak/bt in pref.backpack.tweaks)
-		. += " <a href='?src=\ref[src];backpack=[pref.backpack.name];tweak=\ref[bt]'>[bt.get_ui_content(get_backpack_metadata(pref.backpack, bt))]</a>"
-	. += "<br>"
-	. += "Default Suit Sensor Setting: <a href='?src=\ref[src];change_sensor_setting=1'>[pref.sensor_setting]</a><br />"
-	. += "Suit Sensors Locked: <a href='?src=\ref[src];toggle_sensors_locked=1'>[pref.sensors_locked ? "Locked" : "Unlocked"]</a><br />"
-	return jointext(.,null)
+		data += " <a href='?src=\ref[src];backpack=[pref.backpack.name];tweak=\ref[bt]'>[bt.get_ui_content(get_backpack_metadata(pref.backpack, bt))]</a>"
+	data += "<br>"
+	data += "Default Suit Sensor Setting: <a href='?src=\ref[src];change_sensor_setting=1'>[pref.sensor_setting]</a><br />"
+	data += "Suit Sensors Locked: <a href='?src=\ref[src];toggle_sensors_locked=1'>[pref.sensors_locked ? "Locked" : "Unlocked"]</a><br />"
+
+	return data.Join()
+
+/datum/category_item/player_setup_item/physical/equipment/proc/setup_default_underware()
+	if(!LAZYLEN(GLOB.underwear.categories))
+		return
+
+	for(var/datum/category_group/underwear/underwear_category as anything in GLOB.underwear.categories)
+		var/datum/category_item/underwear/default = underwear_category.get_default_category_item(pref.gender ? pref.gender : MALE)
+		if(!default)
+			continue
+
+		pref.all_underwear[underwear_category.name] = default.name
 
 /datum/category_item/player_setup_item/physical/equipment/proc/get_underwear_metadata(underwear_category, datum/gear_tweak/gt)
 	var/metadata = pref.all_underwear_metadata[underwear_category]
@@ -150,24 +159,30 @@
 
 /datum/category_item/player_setup_item/physical/equipment/OnTopic(href,list/href_list, mob/user)
 	if(href_list["change_underwear"])
-		var/datum/category_group/underwear/UWC = GLOB.underwear.categories_by_name[href_list["change_underwear"]]
+		var/datum/category_group/underwear/UWC = LAZYACCESS(GLOB.underwear.categories_by_name, href_list["change_underwear"])
 		if(!UWC)
 			return TOPIC_NOACTION
+
 		var/datum/category_item/underwear/selected_underwear = tgui_input_list(user, "Choose underwear", CHARACTER_PREFERENCE_INPUT_TITLE, UWC.items, pref.all_underwear[UWC.name])
 		if(selected_underwear && CanUseTopic(user))
 			pref.all_underwear[UWC.name] = selected_underwear.name
-		return TOPIC_REFRESH_UPDATE_PREVIEW
+			return TOPIC_REFRESH_UPDATE_PREVIEW
+
+		return TOPIC_NOACTION
 	else if(href_list["underwear"] && href_list["tweak"])
 		var/underwear = href_list["underwear"]
-		if(!(underwear in pref.all_underwear))
+		if(!(pref.all_underwear[underwear]))
 			return TOPIC_NOACTION
+
 		var/datum/gear_tweak/gt = locate(href_list["tweak"])
 		if(!gt)
 			return TOPIC_NOACTION
+
 		var/new_metadata = gt.get_metadata(user, get_underwear_metadata(underwear, gt))
 		if(new_metadata)
 			set_underwear_metadata(underwear, gt, new_metadata)
 			return TOPIC_REFRESH_UPDATE_PREVIEW
+
 	else if(href_list["change_backpack"])
 		var/new_backpack = tgui_input_list(user, "Choose backpack style", CHARACTER_PREFERENCE_INPUT_TITLE, backpacks_by_name, pref.backpack)
 		if(!isnull(new_backpack) && CanUseTopic(user))

@@ -1,80 +1,91 @@
 var/global/list/loadout_categories = list()
 var/global/list/gear_datums = list()
 
-/datum/preferences
-	var/list/gear_list //Custom/fluff item loadouts.
-	var/gear_slot = 1  //The current gear save slot
-
-/datum/preferences/proc/Gear()
-	return gear_list[gear_slot]
-
-/datum/loadout_category
-	var/category = ""
-	var/list/gear = list()
-
-/datum/loadout_category/New(cat)
-	category = cat
-	..()
-
 /hook/startup/proc/populate_gear_list()
-
-	//create a list of gear datums to sort
-	for(var/geartype in typesof(/datum/gear)-/datum/gear)
-		var/datum/gear/G = geartype
-		if(initial(G.category) == geartype)
-			continue
-		if(GLOB.using_map.loadout_blacklist && (geartype in GLOB.using_map.loadout_blacklist))
+	for(var/datum/gear/gear_type as anything in subtypesof(/datum/gear))
+		if(initial(gear_type.category) == gear_type)
 			continue
 
-		var/use_name = initial(G.display_name)
-		var/use_category = initial(G.sort_category)
+		if(length(GLOB.using_map.loadout_blacklist) && GLOB.using_map.loadout_blacklist[gear_type])
+			continue
 
-		if(!loadout_categories[use_category])
-			loadout_categories[use_category] = new /datum/loadout_category(use_category)
-		var/datum/loadout_category/LC = loadout_categories[use_category]
-		gear_datums[use_name] = new geartype
-		LC.gear[use_name] = gear_datums[use_name]
+		var/datum/gear/new_gear = new gear_type
+		gear_datums[new_gear.display_name] = new_gear
+
+		var/datum/loadout_category/category = loadout_categories[new_gear.sort_category]
+		if(!category)
+			category = new /datum/loadout_category(new_gear.sort_category)
+			loadout_categories[new_gear.sort_category] = category
+
+		category.add_gear(new_gear)
 
 	loadout_categories = sortAssoc(loadout_categories)
+
 	for(var/loadout_category in loadout_categories)
-		var/datum/loadout_category/LC = loadout_categories[loadout_category]
-		LC.gear = sortAssoc(LC.gear)
-	return 1
+		var/datum/loadout_category/category = loadout_categories[loadout_category]
+		category.sort_gear()
+
+	return TRUE
+
+/datum/preferences
+	var/datum/gear_slots_container/gear_container
+
+/datum/preferences/proc/Gear()
+	var/datum/gear_slot/picked_gear_slot = get_picked_gear_slot()
+	if(!picked_gear_slot)
+		return list()
+
+	return picked_gear_slot.get_gear_entries()
+
+/datum/preferences/proc/get_picked_gear_slot()
+	if(!gear_container)
+		stack_trace("`gear_container` is null")
+		gear_container = new
+
+	return gear_container.get_picked_gear_slot()
 
 /datum/category_item/player_setup_item/loadout
 	name = "Loadout"
 	sort_order = 1
 	var/current_tab = "General"
 	var/hide_unavailable_gear = 0
+	var/hide_donate_gear = FALSE
+	var/datum/gear/selected_gear
+	var/list/selected_tweaks = list()
 
 /datum/category_item/player_setup_item/loadout/load_character(datum/pref_record_reader/R)
-	pref.gear_list = R.read("gear_list")
-	pref.gear_slot = R.read("gear_slot")
+	pref.gear_container = new(R.read("gear_container_size"), R.read("picked_gear_slot"), R.read("gear_slots"))
 
 /datum/category_item/player_setup_item/loadout/save_character(datum/pref_record_writer/W)
-	W.write("gear_list", pref.gear_list)
-	W.write("gear_slot", pref.gear_slot)
+	var/list/gear_slots = list()
+	for(var/datum/gear_slot/slot as anything in pref.gear_container.get_gear_slots())
+		gear_slots += list(slot.get_gear_entries())
 
-/datum/category_item/player_setup_item/loadout/proc/valid_gear_choices(max_cost)
-	. = list()
-	var/mob/preference_mob = preference_mob()
-	for(var/gear_name in gear_datums)
-		var/datum/gear/G = gear_datums[gear_name]
-		var/okay = 1
-		if(G.whitelisted && preference_mob)
-			okay = 0
-			for(var/species in G.whitelisted)
-				if(is_species_whitelisted(preference_mob, species))
-					okay = 1
-					break
-		if(!okay)
-			continue
-		if(max_cost && G.cost > max_cost)
-			continue
-		. += gear_name
+	W.write("gear_container_size", pref.gear_container.get_size())
+	W.write("picked_gear_slot", pref.gear_container.get_picked_gear_slot_number())
+	W.write("gear_slots", gear_slots)
+
+/datum/category_item/player_setup_item/loadout/proc/is_gear_valid(gear_name, max_cost)
+	var/datum/gear/gear_to_check = gear_name
+	if(!istype(gear_to_check))
+		gear_to_check = gear_datums[gear_to_check]
+
+	if(!gear_to_check)
+		return FALSE
+
+	if(!isnull(max_cost) && gear_to_check.cost > max_cost)
+		return FALSE
+
+	if(!gear_to_check.allowed_donation_tier(pref.client))
+		return FALSE
+
+	if(!length(gear_to_check.whitelisted))
+		return TRUE
+
+	return is_any_alien_whitelisted(preference_mob(), gear_to_check.whitelisted)
 
 /datum/category_item/player_setup_item/loadout/proc/skill_check(list/jobs, list/skills_required)
-	for(var/datum/job/J in jobs)
+	for(var/datum/job/J as anything in jobs)
 		. = TRUE
 		for(var/R in skills_required)
 			if(pref.get_total_skill_value(J, R) < skills_required[R])
@@ -84,179 +95,374 @@ var/global/list/gear_datums = list()
 			return
 
 /datum/category_item/player_setup_item/loadout/sanitize_character()
-	pref.gear_slot = sanitize_integer(pref.gear_slot, 1, config.loadout_slots, initial(pref.gear_slot))
-	if(!islist(pref.gear_list)) pref.gear_list = list()
+	if(!pref.gear_container)
+		pref.gear_container = new
 
-	if(length(pref.gear_list) < config.loadout_slots)
-		LIST_RESIZE(pref.gear_list, config.loadout_slots)
+	var/datum/gear_slots_container/gear_container = pref.gear_container
+	gear_container.set_size(config.loadout_slots)
 
-	for(var/index = 1 to config.loadout_slots)
-		var/list/gears = pref.gear_list[index]
+	for(var/datum/gear_slot/current_gear_slot as anything in gear_container.get_gear_slots())
+		var/list/gear_entries = current_gear_slot.get_gear_entries()
+		if(!length(gear_entries))
+			continue
 
-		if(istype(gears))
-			for(var/gear_name in gears)
-				if(!(gear_name in gear_datums))
-					gears -= gear_name
+		var/gear_budget_left = config.max_gear_cost
+		var/list/invalid_gear = list()
+		/// Filtering out invalid slots
 
-			var/total_cost = 0
-			for(var/gear_name in gears)
-				if(!gear_datums[gear_name])
-					gears -= gear_name
-				else if(!(gear_name in valid_gear_choices()))
-					gears -= gear_name
-				else
-					var/datum/gear/G = gear_datums[gear_name]
-					if(total_cost + G.cost > config.max_gear_cost)
-						gears -= gear_name
-					else
-						total_cost += G.cost
-		else
-			pref.gear_list[index] = list()
+		for(var/index = 1 to length(gear_entries))
+			if(!gear_budget_left)
+				invalid_gear += gear_entries.Copy(index)
+				break
 
-/datum/category_item/player_setup_item/loadout/content()
+			var/datum/gear/gear_datum = gear_datums[gear_entries[index]]
+			if(!is_gear_valid(gear_datum, gear_budget_left))
+				invalid_gear += gear_datum.display_name
+				continue
+
+			gear_budget_left -= gear_datum.cost
+
+		/// Here we just set filtered gear names to slot
+		current_gear_slot.remove_gear(invalid_gear)
+
+/datum/category_item/player_setup_item/loadout/content(mob/user)
 	. = list()
-	var/total_cost = 0
-	var/list/gears = pref.gear_list[pref.gear_slot]
-	for(var/i = 1; i <= length(gears); i++)
-		var/datum/gear/G = gear_datums[gears[i]]
-		if(G)
-			total_cost += G.cost
 
-	var/fcolor =  "#3366cc"
-	if(total_cost < config.max_gear_cost)
-		fcolor = "#e67300"
-	. += "<table align = 'center' width = 100%>"
-	. += "<tr><td colspan=3><center>"
-	. += "<a href='?src=\ref[src];prev_slot=1'>\<=</a><b>[SPAN_COLOR(fcolor, "\[[pref.gear_slot]\]")] </b><a href='?src=\ref[src];next_slot=1'>=\></a>"
+	if(!user.client)
+		return .
+
+	var/datum/gear_slot/picked_slot = pref.get_picked_gear_slot()
+	if(!picked_slot)
+		stack_trace("Something went wrong. `picked_slot` should not be null")
+		return .
+
+	var/gear_total_cost = picked_slot.get_total_gear_cost()
+	var/gear_points_left = config.max_gear_cost - gear_total_cost
+	var/fcolor = gear_total_cost < config.max_gear_cost ? "#e67300" : "#3366cc"
+
+	. += "<table style='width: 100%;'><tr>"
+	. += "<table style='white-space: nowrap;'><tr>"
+	. += "<td style=\"vertical-align: top;\">"
+
+	. += "<td>"
+
+	. += "<b>Loadout Set: <a href='?src=[ref(src)];prev_slot=1'>&lt;&lt;</a><b><font color = '[fcolor]'>\[[picked_slot.get_slot_number()]\]</font></b><a href='?src=[ref(src)];next_slot=1'>&gt;&gt;</a></b>"
+	var/donation_tier = user.client.donator_info.get_full_donation_tier()
+
+	. += "<td>"
+	. += "<b>Donation tier:</b> [donation_tier]<br>"
+	. += "<a class='gold' href='?src=[ref(src)];donate=1'>Support us!</a><br>"
+	. += "</td>"
+
+	. += "</td>"
 
 	if(config.max_gear_cost < INFINITY)
-		. += "<b>[SPAN_COLOR(fcolor, "[total_cost]/[config.max_gear_cost]")] loadout points spent.</b>"
+		. += "<font color = '[fcolor]'>[gear_total_cost]/[config.max_gear_cost]</font> loadout points spent.<br>"
 
-	. += "<a href='?src=\ref[src];clear_loadout=1'>Clear Loadout</a>"
-	. += "<a href='?src=\ref[src];toggle_hiding=1'>[hide_unavailable_gear ? "Show all" : "Hide unavailable"]</a></center></td></tr>"
+	. += "<a href='?src=[ref(src)];clear_loadout=1'>Clear Loadout</a>"
+	. += "<a href='?src=[ref(src)];random_loadout=1'>Random Loadout</a>"
+	. += "<a href='?src=[ref(src)];toggle_hiding=1'>[hide_unavailable_gear ? "Show unavailable" : "Hide unavailable"]</a>"
+	. += "<a href='?src=[ref(src)];toggle_donate=1'>[hide_donate_gear ? "Show donate gears" : "Hide donate gears"]</a>"
+	. += "</td>"
 
-	. += "<tr><td colspan=3><center><b>"
-	var/firstcat = 1
-	for(var/category in loadout_categories)
+	. += "</tr></table>"
+	. += "</td>"
 
-		if(firstcat)
-			firstcat = 0
-		else
-			. += " |"
+	. += "</tr></table>"
 
-		var/datum/loadout_category/LC = loadout_categories[category]
+	. += "<table style='height: 100%;'>"
+
+	. += "<tr>"
+	. += "<td><b>Categories:</b></td>"
+	. += "<td><b>Gears:</b></td>"
+	if(selected_gear)
+		. += "<td><b>Selected Item:</b></td>"
+	. += "</tr>"
+
+	. += "<tr style='vertical-align: top;'>"
+
+	// Categories
+
+	. += "<td style='white-space: nowrap; width: 40px;' class='block'><b>"
+	for(var/category_name in loadout_categories)
+		var/datum/loadout_category/category = loadout_categories[category_name]
 		var/category_cost = 0
-		for(var/gear in LC.gear)
-			if(gear in pref.gear_list[pref.gear_slot])
-				var/datum/gear/G = LC.gear[gear]
-				category_cost += G.cost
+		for(var/gear_name in category.get_gear_items())
+			if(!picked_slot.contains(gear_name))
+				continue
 
-		if(category == current_tab)
-			. += " [SPAN_CLASS("linkOn", "[category] - [category_cost]")] "
-		else
-			if(category_cost)
-				. += " <a href='?src=\ref[src];select_category=[category]'>[SPAN_COLOR("#e67300", "[category] - [category_cost]")]</a> "
-			else
-				. += " <a href='?src=\ref[src];select_category=[category]'>[category] - 0</a> "
+			var/datum/gear/gear_datum = gear_datums[gear_name]
+			category_cost += gear_datum.cost
 
-	. += "</b></center></td></tr>"
+		var/category_class = category_cost ? "linkOn" : ""
+		if(category_name == current_tab)
+			category_class += " selected"
 
-	var/datum/loadout_category/LC = loadout_categories[current_tab]
-	. += "<tr><td colspan=3><hr></td></tr>"
-	. += "<tr><td colspan=3><b><center>[LC.category]</center></b></td></tr>"
-	. += "<tr><td colspan=3><hr></td></tr>"
-	var/jobs = list()
-	for(var/job_title in (pref.job_medium|pref.job_low|pref.job_high))
-		var/datum/job/J = SSjobs.get_by_title(job_title)
-		if(J)
-			dd_insertObjectList(jobs, J)
-	for(var/gear_name in LC.gear)
-		if(!(gear_name in valid_gear_choices()))
+		. += "<a class='[category_class] fluid' href='?src=[ref(src)];select_category=[category_name]'>[category_name] - [category_cost || 0]</a>"
+
+	. += "</b></td>"
+
+	// Gears
+
+	. += "<td style='white-space: nowrap; width: 40px;' class='block'>"
+	. += "<table>"
+
+	var/list/purchased_gears = list()
+	var/list/paid_gears = list()
+	var/list/not_paid_gears = list()
+	var/datum/loadout_category/current_category = loadout_categories[current_tab]
+
+	for(var/gear_name in current_category.get_gear_items())
+		if(!is_gear_valid(gear_name))
 			continue
-		var/list/entry = list()
-		var/datum/gear/G = LC.gear[gear_name]
-		var/ticked = (G.display_name in pref.gear_list[pref.gear_slot])
-		entry += "<tr style='vertical-align:top;'><td width=25%><a style='white-space:normal;' [ticked ? "class='linkOn' " : ""]href='?src=\ref[src];toggle_gear=\ref[G]'>[G.display_name]</a></td>"
-		entry += "<td width = 10% style='vertical-align:top'>[G.cost]</td>"
-		entry += "<td>[FONT_NORMAL(G.get_description(get_gear_metadata(G,1)))]"
-		var/allowed = 1
-		if(allowed && G.allowed_roles)
-			var/good_job = 0
-			var/bad_job = 0
-			entry += "<br><i>"
-			var/list/jobchecks = list()
-			for(var/datum/job/J in jobs)
-				if(J.type in G.allowed_roles)
-					jobchecks += SPAN_COLOR("#55cc55", J.title)
-					good_job = 1
-				else
-					jobchecks += SPAN_COLOR("#cc5555", J.title)
-					bad_job = 1
-			allowed = good_job || !bad_job
-			entry += "[english_list(jobchecks)]</i>"
 
-		if(allowed && G.allowed_branches)
+		var/datum/gear/gear_datum = gear_datums[gear_name]
+		if(!gear_datum?.path)
+			continue
+
+		if(hide_donate_gear && gear_datum.donation_tier)
+			continue
+
+		var/ticked = picked_slot.contains(gear_name)
+
+
+		var/display_class = ""
+		var/allowed_to_see = gear_allowed_to_see(gear_datum)
+
+		if(ticked)
+			display_class = "linkOn"
+
+		else if(!gear_datum.allowed_donation_tier(user) && gear_datum.donation_tier)
+			display_class = "gold"
+
+		else if(!allowed_to_see)
+			display_class = "gray"
+
+		if(gear_datum == selected_gear)
+			display_class += " selected"
+
+		if(!hide_unavailable_gear || allowed_to_see || ticked)
+			var/entry = {"
+				<tr>
+				<td width=25%><a class='[display_class ? "[display_class]" : ""] fluid' href='?src=[ref(src)];select_gear=[gear_datum.display_name]'>[gear_datum.display_name]</a></td>
+				</td></tr>
+			"}
+
+			if(gear_datum.donation_tier && user.client.donator_info.donation_tier_available(gear_datum.donation_tier))
+				purchased_gears += entry
+				continue
+
+			if(gear_datum.donation_tier)
+				paid_gears += entry
+				continue
+
+			not_paid_gears += entry
+
+	. += purchased_gears.Join()
+	. += paid_gears.Join()
+	. += not_paid_gears.Join()
+
+	. += "</table>"
+	. += "</td>"
+
+	// Selected gear
+
+	if(selected_gear)
+		var/ticked = picked_slot.contains(selected_gear.display_name)
+
+		var/datum/gear_data/gear_data_to_tweak = new(selected_gear.path)
+		for(var/datum/gear_tweak/gear_tweak_to_apply as anything in selected_gear.gear_tweaks)
+			gear_tweak_to_apply.tweak_gear_data(selected_tweaks["[gear_tweak_to_apply]"], gear_data_to_tweak)
+
+		var/atom/movable/gear_virtual_item = new gear_data_to_tweak.path
+		for(var/datum/gear_tweak/gear_tweak_to_apply as anything in selected_gear.gear_tweaks)
+			gear_tweak_to_apply.tweak_item(user, gear_virtual_item, selected_tweaks["[gear_tweak_to_apply]"])
+
+		var/icon/gear_icon = icon(gear_virtual_item.icon, gear_virtual_item.icon_state)
+		if(gear_virtual_item.color)
+			if(islist(gear_virtual_item.color))
+				gear_icon.MapColors(arglist(gear_virtual_item.color))
+			else
+				gear_icon.Blend(gear_virtual_item.color, ICON_MULTIPLY)
+
+		gear_icon.Scale(gear_icon.Width() * 2, gear_icon.Height() * 2)
+
+		QDEL_NULL(gear_virtual_item)
+
+		. += "<td style='width: 80%;' class='block'>"
+
+		. += "<table><tr>"
+
+		. += "<td>[icon2html(gear_icon, user)]</td>"
+
+		. += "<td style='vertical-align: top;'>"
+		. += "<b>[selected_gear.display_name]</b>"
+
+		var/desc = selected_gear.get_description(selected_tweaks)
+		if(desc)
+			. += "<br>"
+			. += desc
+
+		. += "</td>"
+		. += "</tr></table>"
+
+		if(selected_gear.slot)
+			. += "<b>Slot:</b> [slot_to_description(selected_gear.slot)]<br>"
+		. += "<b>Loadout Points:</b> <font class='[gear_points_left >= selected_gear.cost ? "good" : "bad"]'>[selected_gear.cost]</font><br>"
+
+		var/list/selected_jobs = list()
+		for(var/job_title in (pref.job_medium|pref.job_low|pref.job_high))
+			var/datum/job/job_datum = SSjobs.get_by_title(job_title)
+			if(!job_datum)
+				continue
+
+			BINARY_INSERT(job_datum, selected_jobs, /datum/job, job_datum, title, COMPARE_KEY)
+
+		if(length(selected_gear.allowed_roles))
+			. += "<b>Has jobs restrictions:</b>"
+			. += "<br>"
+			. += "<i>"
+			var/ind = 0
+			for(var/allowed_type in selected_gear.allowed_roles)
+				if(!ispath(allowed_type, /datum/job))
+					log_warning("There is an object called '[allowed_type]' in the list of whitelisted jobs for a gear '[selected_gear.display_name]'. It's not /datum/job.")
+					continue
+				var/datum/job/J = SSjobs.get_by_path(allowed_type) || new allowed_type
+				++ind
+				if(ind > 1)
+					. += ", "
+				if(length(selected_jobs) && (J in selected_jobs))
+					. += SPAN_COLOR("#55cc55", J.title)
+				else
+					. += SPAN_COLOR("#808080", J.title)
+			. += "</i>"
+			. += "<br>"
+
+		if(length(selected_gear.allowed_branches))
+			. += "<b>Has jobs restrictions:</b>"
+			. += "<br>"
+			. += "<i>"
 			var/list/branches = list()
-			for(var/datum/job/J in jobs)
+			for(var/datum/job/J in selected_jobs)
 				if(pref.branches[J.title])
 					branches |= pref.branches[J.title]
-			if(length(branches))
-				var/list/branch_checks = list()
-				var/good_branch = 0
-				entry += "<br><i>"
-				for(var/branch in branches)
-					var/datum/mil_branch/player_branch = GLOB.mil_branches.get_branch(branch)
-					if(player_branch.type in G.allowed_branches)
-						branch_checks += SPAN_COLOR("#55cc55", player_branch.name)
-						good_branch = 1
-					else
-						branch_checks += SPAN_COLOR("#cc5555", player_branch.name)
-				allowed = good_branch
 
-				entry += "[english_list(branch_checks)]</i>"
-
-		if(allowed && G.allowed_skills)
-			var/list/skills_required = list()//make it into instances? instead of path
-			for(var/skill in G.allowed_skills)
-				var/singleton/hierarchy/skill/instance = GET_SINGLETON(skill)
-				skills_required[instance] = G.allowed_skills[skill]
-
-			allowed = skill_check(jobs, skills_required)//Checks if a single job has all the skills required
-
-			entry += "<br><i>"
-			var/list/skill_checks = list()
-			for(var/R in skills_required)
-				var/singleton/hierarchy/skill/S = R
-				var/skill_entry
-				skill_entry += "[S.levels[skills_required[R]]]"
-				if(allowed)
-					skill_entry = SPAN_COLOR("#55cc55", "[skill_entry] [R]")
+			var/ind = 0
+			for(var/branch in branches)
+				++ind
+				if(ind > 1)
+					. += ", "
+				var/datum/mil_branch/player_branch = GLOB.mil_branches.get_branch(branch)
+				if(player_branch.type in selected_gear.allowed_branches)
+					. += SPAN_COLOR("#55cc55", player_branch.name)
 				else
-					skill_entry = SPAN_COLOR("#cc5555", "[skill_entry] [R]")
-				skill_checks += skill_entry
+					. += SPAN_COLOR("#808080", player_branch.name)
 
-			entry += "[english_list(skill_checks)]</i>"
+			. += "</i>"
+			. += "<br>"
 
-		entry += "</tr>"
-		if(ticked)
-			entry += "<tr><td colspan=3>"
-			for(var/datum/gear_tweak/tweak in G.gear_tweaks)
-				var/contents = tweak.get_contents(get_tweak_metadata(G, tweak))
-				if(contents)
-					entry += " <a href='?src=\ref[src];gear=\ref[G];tweak=\ref[tweak]'>[contents]</a>"
-			entry += "</td></tr>"
-		if(!hide_unavailable_gear || allowed || ticked)
-			. += entry
-	. += "</table>"
+		if(length(selected_gear.required_skills))
+			. += "<b>Has skills restrictions:</b>"
+			. += "<br>"
+			. += "<i>"
+			var/list/skills_required = list()//make it into instances? instead of path
+			for(var/skill in selected_gear.required_skills)
+				var/singleton/hierarchy/skill/instance = GET_SINGLETON(skill)
+				skills_required[instance] = selected_gear.required_skills[skill]
+
+			var/allowed = skill_check(selected_jobs, skills_required)//Checks if a single job has all the skills required
+			var/ind = 0
+			for(var/skill in skills_required)
+				var/singleton/hierarchy/skill/S = skill
+				++ind
+				if(ind > 1)
+					. += ", "
+				if(allowed)
+					. += SPAN_COLOR("#55cc55", "[S.levels[skills_required[skill]]] [skill]")
+				else
+					. += SPAN_COLOR("#808080", "[S.levels[skills_required[skill]]] [skill]")
+			. += "</i>"
+			. += "<br>"
+
+		if(length(selected_gear.required_factions))
+			. += "<b>Has faction restrictions:</b>"
+			. += "<br>"
+			. += "<i>"
+			var/singleton/cultural_info/faction = SSculture.get_culture(pref.cultural_info[TAG_FACTION])
+			var/facname = faction ? faction.name : "Unset"
+
+			if(facname in selected_gear.required_factions)
+				. += SPAN_COLOR("#55cc55", facname)
+			else
+				. += SPAN_COLOR("#808080", facname)
+
+			. += "</i>"
+			. += "<br>"
+
+		if(selected_gear.whitelisted)
+			. += "<b>Has species restrictions:</b>"
+			. += "<br>"
+			. += "<i>"
+
+			if(!istype(selected_gear.whitelisted, /list))
+				selected_gear.whitelisted = list(selected_gear.whitelisted)
+
+			var/ind = 0
+			for(var/allowed_species in selected_gear.whitelisted)
+				++ind
+				if(ind > 1)
+					. += ", "
+				if(pref.species && pref.species == allowed_species)
+					. += "<font color='#55cc55'>[allowed_species]</font>"
+				else
+					. += "<font color='#808080'>[allowed_species]</font>"
+			. += "</i>"
+			. += "<br>"
+
+		if(selected_gear.donation_tier)
+			. += "<br>"
+			. += "<b>Donation tier required: [donation_tier_decorated(selected_gear.donation_tier)]</b>"
+			. += "<br>"
+
+		// Tweaks
+		if(length(selected_gear.gear_tweaks))
+			. += "<br><b>Options:</b><br>"
+			for(var/datum/gear_tweak/tweak in selected_gear.gear_tweaks)
+				var/tweak_contents = tweak.get_contents(selected_tweaks["[tweak]"])
+				if(tweak_contents)
+					. += " <a href='?src=[ref(src)];tweak=[ref(tweak)]'>[tweak_contents]</a>"
+					. += "<br>"
+
+		. += "<br>"
+
+		. += "<br><b>Actions:</b><br>"
+		var/not_available_message = SPAN_NOTICE("This item will never spawn with you, using your current preferences.")
+		if(selected_gear.allowed_donation_tier(user))
+			var/class = ticked ? "linkOn" : (gear_points_left >= selected_gear.cost ? "" : "linkOff")
+			. += "<a [class ? "class='[class]'" : ""] href='?src=[ref(src)];toggle_gear=[selected_gear.display_name]'>[ticked ? "Drop" : "Take"]</a>"
+		else
+			var/trying_on = (pref.trying_on_gear == selected_gear.display_name)
+			if(selected_gear.donation_tier)
+				. += "<a [trying_on ? "class='linkOn' " : ""]href='?src=[ref(src)];try_on=1'>Try On</a>"
+			else
+				. += not_available_message
+
+		if(!gear_allowed_to_see(selected_gear))
+			. += "<br>"
+			. += not_available_message
+
+		. += "</td>"
+
+	. += "</tr></table>"
 	. = jointext(.,null)
 
-/datum/category_item/player_setup_item/loadout/proc/get_gear_metadata(datum/gear/G, readonly)
-	var/list/gear = pref.gear_list[pref.gear_slot]
-	. = gear[G.display_name]
-	if(!.)
-		. = list()
-		if(!readonly)
-			gear[G.display_name] = .
+/datum/category_item/player_setup_item/loadout/proc/get_gear_metadata(datum/gear/our_gear)
+	if(!our_gear)
+		stack_trace("`our_gear` should not be null")
+		return list()
+
+	var/datum/gear_slot/picked_gear_slot = pref.get_picked_gear_slot()
+	return picked_gear_slot.get_gear_tweaks(our_gear.display_name)
 
 /datum/category_item/player_setup_item/loadout/proc/get_tweak_metadata(datum/gear/G, datum/gear_tweak/tweak)
 	var/list/metadata = get_gear_metadata(G)
@@ -269,140 +475,212 @@ var/global/list/gear_datums = list()
 	var/list/metadata = get_gear_metadata(G)
 	metadata["[tweak]"] = new_metadata
 
-/datum/category_item/player_setup_item/loadout/OnTopic(href, href_list, user)
+/datum/category_item/player_setup_item/loadout/OnTopic(href, list/href_list, mob/user)
+	ASSERT(istype(user))
+
 	if(href_list["toggle_gear"])
-		var/datum/gear/TG = locate(href_list["toggle_gear"])
-		if(!istype(TG) || gear_datums[TG.display_name] != TG)
-			return TOPIC_REFRESH
-		if(TG.display_name in pref.gear_list[pref.gear_slot])
-			pref.gear_list[pref.gear_slot] -= TG.display_name
-		else
-			var/total_cost = 0
-			for(var/gear_name in pref.gear_list[pref.gear_slot])
-				var/datum/gear/G = gear_datums[gear_name]
-				if(istype(G)) total_cost += G.cost
-			if((total_cost+TG.cost) <= config.max_gear_cost)
-				pref.gear_list[pref.gear_slot] += TG.display_name
+		toggle_gear(gear_datums[href_list["toggle_gear"]], user)
 		return TOPIC_REFRESH_UPDATE_PREVIEW
-	if(href_list["gear"] && href_list["tweak"])
-		var/datum/gear/gear = locate(href_list["gear"])
-		var/datum/gear_tweak/tweak = locate(href_list["tweak"])
-		if(!tweak || !istype(gear) || !(tweak in gear.gear_tweaks) || gear_datums[gear.display_name] != gear)
-			return TOPIC_NOACTION
-		var/metadata = tweak.get_metadata(user, get_tweak_metadata(gear, tweak))
-		if(!metadata || !CanUseTopic(user))
-			return TOPIC_NOACTION
-		set_tweak_metadata(gear, tweak, metadata)
-		return TOPIC_REFRESH_UPDATE_PREVIEW
+
 	if(href_list["next_slot"])
-		pref.gear_slot = pref.gear_slot+1
-		if(pref.gear_slot > config.loadout_slots)
-			pref.gear_slot = 1
+		pref.gear_container.cycle_slot_right()
 		return TOPIC_REFRESH_UPDATE_PREVIEW
+
 	if(href_list["prev_slot"])
-		pref.gear_slot = pref.gear_slot-1
-		if(pref.gear_slot < 1)
-			pref.gear_slot = config.loadout_slots
+		pref.gear_container.cycle_slot_left()
 		return TOPIC_REFRESH_UPDATE_PREVIEW
+
 	if(href_list["select_category"])
 		current_tab = href_list["select_category"]
 		return TOPIC_REFRESH
+
 	if(href_list["clear_loadout"])
-		var/list/gear = pref.gear_list[pref.gear_slot]
-		gear.Cut()
+		var/datum/gear_slot/picked_gear_slot = pref.get_picked_gear_slot()
+		picked_gear_slot.clear()
 		return TOPIC_REFRESH_UPDATE_PREVIEW
+
 	if(href_list["toggle_hiding"])
 		hide_unavailable_gear = !hide_unavailable_gear
 		return TOPIC_REFRESH
+
+	if(href_list["select_gear"])
+		var/datum/gear/gear_to_select = gear_datums[href_list["select_gear"]]
+		if(!gear_to_select)
+			return TOPIC_NOACTION
+
+		selected_gear = gear_to_select
+		var/datum/gear_slot/picked_gear_slot = pref.get_picked_gear_slot()
+
+		selected_tweaks = picked_gear_slot.get_gear_tweaks(selected_gear.display_name)
+		if(!length(selected_tweaks))
+			for(var/datum/gear_tweak/tweak as anything in selected_gear.gear_tweaks)
+				selected_tweaks["[tweak]"] = tweak.get_default()
+
+		pref.trying_on_gear = null
+		pref.trying_on_tweaks.Cut()
+		return TOPIC_REFRESH_UPDATE_PREVIEW
+
+	if(href_list["tweak"])
+		var/datum/gear_tweak/tweak = locate(href_list["tweak"])
+		if(!tweak || !istype(selected_gear) || !(tweak in selected_gear.gear_tweaks))
+			return TOPIC_NOACTION
+
+		var/metadata = tweak.get_metadata(user, get_tweak_metadata(selected_gear, tweak))
+		if(!metadata || !CanUseTopic(user))
+			return TOPIC_NOACTION
+
+		selected_tweaks["[tweak]"] = metadata
+
+		var/datum/gear_slot/picked_slot = pref.get_picked_gear_slot()
+		var/ticked = picked_slot.contains(selected_gear.display_name)
+		if(ticked)
+			set_tweak_metadata(selected_gear, tweak, metadata)
+
+		var/trying_on = (selected_gear.display_name == pref.trying_on_gear)
+		if(trying_on)
+			pref.trying_on_tweaks["[tweak]"] = metadata
+
+		return TOPIC_REFRESH_UPDATE_PREVIEW
+
+	if(href_list["try_on"])
+		if(!istype(selected_gear))
+			return TOPIC_NOACTION
+
+		if(selected_gear.display_name == pref.trying_on_gear)
+			pref.trying_on_gear = null
+			pref.trying_on_tweaks.Cut()
+		else
+			pref.trying_on_gear = selected_gear.display_name
+			pref.trying_on_tweaks = selected_tweaks.Copy()
+
+		return TOPIC_REFRESH_UPDATE_PREVIEW
+
+	if(href_list["random_loadout"])
+		randomize(user)
+		return TOPIC_REFRESH_UPDATE_PREVIEW
+
+	if(href_list["toggle_donate"])
+		hide_donate_gear = !hide_donate_gear
+		return TOPIC_REFRESH
+
+	if(href_list["donate"])
+		var/singleton/modpack/don_loadout/donations = GET_SINGLETON(/singleton/modpack/don_loadout)
+		donations.show_donations_info(user)
+		return TOPIC_NOACTION
+
 	return ..()
 
-/datum/gear
-	var/display_name       //Name/index. Must be unique.
-	var/description        //Description of this gear. If left blank will default to the description of the pathed item.
-	var/path               //Path to item.
-	var/cost = 1           //Number of points used. Items in general cost 1 point, storage/armor/gloves/special use costs 2 points.
-	var/slot               //Slot to equip to.
-	var/list/allowed_roles //Roles that can spawn with this item.
-	var/list/allowed_branches //Service branches that can spawn with it.
-	var/list/allowed_skills //Skills required to spawn with this item.
-	var/whitelisted        //Term to check the whitelist for..
-	var/sort_category = "General"
-	var/flags              //Special tweaks in New
-	var/custom_setup_proc  //Special tweak in New
-	var/category
-	var/list/gear_tweaks = list() //List of datums which will alter the item after it has been spawned.
+/datum/category_item/player_setup_item/loadout/proc/randomize(mob/user)
+	ASSERT(user)
 
-/datum/gear/New()
-	if(HAS_FLAGS(flags, GEAR_HAS_TYPE_SELECTION|GEAR_HAS_SUBTYPE_SELECTION))
-		CRASH("May not have both type and subtype selection tweaks")
-	if(!description)
-		var/obj/O = path
-		description = initial(O.desc)
-	if(flags & GEAR_HAS_COLOR_SELECTION)
-		gear_tweaks += gear_tweak_free_color_choice()
-	if(!(flags & GEAR_HAS_NO_CUSTOMIZATION))
-		gear_tweaks += gear_tweak_free_name(display_name)
-		gear_tweaks += gear_tweak_free_desc(description)
-	if(flags & GEAR_HAS_TYPE_SELECTION)
-		gear_tweaks += new/datum/gear_tweak/path/type(path)
-	if(flags & GEAR_HAS_SUBTYPE_SELECTION)
-		gear_tweaks += new/datum/gear_tweak/path/subtype(path)
-	if(custom_setup_proc)
-		gear_tweaks += new/datum/gear_tweak/custom_setup(custom_setup_proc)
+	pref.trying_on_gear = null
+	pref.trying_on_tweaks.Cut()
 
-/datum/gear/proc/get_description(metadata)
-	. = description
-	for(var/datum/gear_tweak/gt in gear_tweaks)
-		. = gt.tweak_description(., metadata["[gt]"])
+	var/datum/gear_slot/current_slot = pref.get_picked_gear_slot()
+	current_slot.clear()
 
-/datum/gear_data
-	var/path
-	var/location
+	var/list/pool = list()
+	for(var/gear_name in gear_datums)
+		var/datum/gear/gear_datum = gear_datums[gear_name]
+		if(gear_allowed_to_see(gear_datum) && is_gear_valid(gear_datum))
+			pool += gear_datum
 
-/datum/gear_data/New(path, location)
-	src.path = path
-	src.location = location
+	var/points_left = config.max_gear_cost
 
-/datum/gear/proc/spawn_item(user, location, metadata)
-	var/datum/gear_data/gd = new(path, location)
-	for(var/datum/gear_tweak/gt in gear_tweaks)
-		gt.tweak_gear_data(metadata && metadata["[gt]"], gd)
-	var/item = new gd.path(gd.location)
-	for(var/datum/gear_tweak/gt in gear_tweaks)
-		gt.tweak_item(user, item, metadata && metadata["[gt]"])
-	return item
+	while (points_left > 0 && length(pool))
+		var/datum/gear/chosen = pick(pool)
+		var/list/chosen_tweaks = list()
 
-/datum/gear/proc/spawn_on_mob(mob/living/carbon/human/H, metadata)
-	var/obj/item/item = spawn_item(H, H, metadata)
-	if(H.equip_to_slot_if_possible(item, slot, TRYEQUIP_REDRAW | TRYEQUIP_DESTROY | TRYEQUIP_FORCE))
-		. = item
+		for(var/datum/gear_tweak/tweak in chosen.gear_tweaks)
+			chosen_tweaks["[tweak]"] = tweak.get_random()
+
+		current_slot.add_gear(chosen.display_name, chosen_tweaks)
+		points_left -= chosen.cost
+
+		for(var/datum/gear/gear_datum as anything in pool)
+			if(gear_datum.cost <= points_left && gear_datum.slot != chosen.slot)
+				continue
+
+			pool -= gear_datum
+
+/datum/category_item/player_setup_item/loadout/proc/gear_allowed_to_see(datum/gear/G)
+	ASSERT(G)
+	if(!G.path)
+		return FALSE
+
+	if(length(G.allowed_roles) || length(G.required_skills) || length(G.allowed_branches))
+		// Branches are dependent on jobs so here it is
+		ASSERT(SSjobs.initialized)
+		var/list/jobs = new
+		for(var/job_title in (pref.job_medium|pref.job_low|pref.job_high))
+			if(SSjobs.get_by_title(job_title))
+				jobs += SSjobs.get_by_title(job_title)
+
+		// No jobs = Fail
+		// No jobs = No skills = No branches = Fail
+		if(!jobs || !length(jobs))
+			return FALSE
+
+		if (length(G.allowed_roles))
+			var/job_ok = FALSE
+			for(var/datum/job/J in jobs)
+				if(J.type in G.allowed_roles)
+					job_ok = TRUE
+					break
+			if(!job_ok)
+				return FALSE
+
+		if (length(G.required_skills))
+			var/list/skills_required = list()
+			for(var/skill in G.required_skills)
+				var/singleton/hierarchy/skill/instance = GET_SINGLETON(skill)
+				skills_required[instance] = G.required_skills[skill]
+			if (!skill_check(jobs, skills_required))
+				return FALSE
+
+		// It is nesting hell, but it should work fine
+		if (length(G.allowed_branches))
+			var/list/branches = list()
+			for(var/datum/job/J in jobs)
+				if(pref.branches[J.title])
+					branches |= pref.branches[J.title]
+			if (!branches || !length(branches))
+				return FALSE
+			var/branch_ok = FALSE
+			for(var/branch in branches)
+				var/datum/mil_branch/player_branch = GLOB.mil_branches.get_branch(branch)
+				if(player_branch.type in G.allowed_branches)
+					branch_ok = TRUE
+					break
+
+			if (!branch_ok)
+				return FALSE
+
+	if (length(G.required_factions))
+		var/singleton/cultural_info/faction = SSculture.get_culture(pref.cultural_info[TAG_FACTION])
+		var/facname = faction ? faction.name : "Unset"
+		if(!(facname in G.required_factions))
+			return FALSE
 
 
-/datum/gear/proc/spawn_in_storage_or_drop(mob/living/carbon/human/subject, metadata)
-	var/obj/item/item = spawn_item(subject, subject, metadata)
-	item.add_fingerprint(subject)
-	if (istype(item, /obj/item/organ/internal/augment))
-		var/obj/item/organ/internal/augment/augment = item
-		var/obj/item/organ/external/parent = augment.get_valid_parent_organ(subject)
-		if (!parent)
-			to_chat(subject, SPAN_WARNING("Failed to find a valid organ to install \the [augment] into!"))
-			qdel(augment)
-			return
-		var/surgery_step = GET_SINGLETON(/singleton/surgery_step/internal/replace_organ)
-		if (augment.surgery_configure(subject, subject, parent, null, surgery_step))
-			to_chat(subject, SPAN_WARNING("Failed to set up \the [augment] for installation in your [parent.name]!"))
-			qdel(augment)
-			return
-		augment.forceMove(subject)
-		augment.replaced(subject, parent)
-		augment.onRoundstart()
+	if(G.whitelisted && !(pref.species in G.whitelisted))
+		return FALSE
+
+	return TRUE
+
+/datum/category_item/player_setup_item/loadout/proc/toggle_gear(datum/gear/gear_to_toggle, mob/user)
+	// Check if someone trying to tricking us. However, it's may be just a bug
+	ASSERT(gear_to_toggle?.allowed_donation_tier(user))
+
+	var/datum/gear_slot/picked_slot = pref.get_picked_gear_slot()
+
+	var/gear_name = gear_to_toggle.display_name
+	if(picked_slot.contains(gear_name))
+		picked_slot.remove_gear(gear_name)
 		return
-	var/atom/container = subject.equip_to_storage(item)
-	if (subject.equip_to_appropriate_slot(item))
-		to_chat(subject, SPAN_NOTICE("Placing \the [item] in your inventory!"))
-	else if (container)
-		to_chat(subject, SPAN_NOTICE("Placing \the [item] in your [container.name]!"))
-	else if (subject.put_in_hands(item))
-		to_chat(subject, SPAN_NOTICE("Placing \the [item] in your hands!"))
-	else
-		to_chat(subject, SPAN_WARNING("Dropping \the [item] on the ground!"))
+
+	var/total_gear_cost = picked_slot.get_total_gear_cost()
+	if(total_gear_cost + gear_to_toggle.cost > config.max_gear_cost)
+		return
+
+	picked_slot.add_gear(gear_name, selected_tweaks)

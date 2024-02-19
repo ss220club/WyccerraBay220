@@ -234,7 +234,7 @@
 	. += "<br>[BTN("previewgear", "[pref.preview_gear ? "Hide" : "Show"] Loadout")]"
 	. += " - [BTN("job_preview", "[pref.preview_job ? "Hide" : "Show"] Uniform")]"
 	. += "<br>"
-	. = "<b>Preview Background:</b><br>"
+	. += "<b>Preview Background:</b><br>"
 	for(var/background_name in pref.character_preview_backgrounds)
 		. += VCBTN( \
 			"set_preview_background", \

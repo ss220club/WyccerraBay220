@@ -15,6 +15,7 @@
 	item_icons = list(slot_glasses_str = 'mods/resomi/icons/clothing/onmob_eyes_resomi.dmi')
 	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
 	icon_state = "sec_lenses"
+	off_state = "sun_lenses"
 	item_state = null
 	species_restricted = list(SPECIES_RESOMI)
 	flash_protection = FLASH_PROTECTION_MODERATE
@@ -25,6 +26,7 @@
 	item_icons = list(slot_glasses_str = 'mods/resomi/icons/clothing/onmob_eyes_resomi.dmi')
 	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
 	icon_state = "med_lenses"
+	off_state = "sun_lenses"
 	item_state = null
-	flash_protection = FLASH_PROTECTION_MODERATE
 	species_restricted = list(SPECIES_RESOMI)
+	flash_protection = FLASH_PROTECTION_MODERATE

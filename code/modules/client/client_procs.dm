@@ -203,6 +203,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	prefs = SScharacter_setup.preferences_datums[ckey]
 	if(!prefs)
 		prefs = new /datum/preferences(src)
+
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
 	fps = prefs.clientfps
@@ -211,7 +212,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 	. = ..()	//calls mob.Login()
 
-	view = get_preference_value(/datum/client_preference/client_view) || GLOB.PREF_CLIENT_VIEW_LARGE
 	connection_time = world.time
 	connection_realtime = world.realtime
 	connection_timeofday = world.timeofday

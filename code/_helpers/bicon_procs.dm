@@ -13,49 +13,50 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")
 
-/proc/icon2html(thing, target, icon_state, dir, frame = 1, moving = FALSE, realsize = FALSE, class = null)
-	if (!thing)
+/proc/icon2html(icon/thing, target, icon_state, dir, frame = 1, moving = FALSE, realsize = FALSE, class = null)
+	if (!thing || !target)
 		return
-
-	var/key
-	var/icon/I = thing
-	if (!target)
-		return
-	if (target == world)
-		target = GLOB.clients
 
 	var/list/targets
-	if (!islist(target))
-		targets = list(target)
-	else
+	if(target == world)
+		targets = GLOB.clients
+
+	else if (islist(target))
 		targets = target
-		if (!length(targets))
-			return
-	if (!isicon(I))
-		if (isfile(thing)) //special snowflake
+
+	else
+		targets = list(target)
+
+	if(!length(targets))
+		return
+
+	if (!isicon(thing))
+		if (isfile(thing))
 			var/name = "[generate_asset_name(thing)].png"
 			SSassets.transport.register_asset(name, thing)
 			for (var/thing2 in targets)
-				SSassets.transport.send_assets(thing2, key)
-			return "<img class='icon icon-misc [class]' src=\"[url_encode(name)]\">"
+				SSassets.transport.send_assets(thing2, name)
+			return "<img class='icon icon-misc [class]' src='[SSassets.transport.get_asset_url(name)]'>"
+
 		if (ispath(thing))
 			var/atom/A = thing
 			if (isnull(dir))
 				dir = SOUTH
 			if (isnull(icon_state))
 				icon_state = initial(A.icon_state)
-			I = initial(A.icon)
+			thing = initial(A.icon)
+
 		else
 			var/atom/A = thing
 			if (isnull(dir))
 				dir = A.dir
 			if (isnull(icon_state))
 				icon_state = A.icon_state
-			I = A.icon
+			thing = A.icon
 			if (ishuman(thing)) // Shitty workaround for a BYOND issue.
-				var/icon/temp = I
-				I = icon()
-				I.Insert(temp, dir = SOUTH)
+				var/icon/temp = thing
+				thing = icon()
+				thing.Insert(temp, dir = SOUTH)
 				dir = SOUTH
 	else
 		if (isnull(dir))
@@ -63,22 +64,22 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 		if (isnull(icon_state))
 			icon_state = ""
 
-	I = icon(I, icon_state, dir, frame, moving)
+	thing = icon(thing, icon_state, dir, frame, moving)
 
-	key = "[generate_asset_name(I)].png"
-	SSassets.transport.register_asset(key, I)
+	var/key = "[generate_asset_name(thing)].png"
+	SSassets.transport.register_asset(key, thing)
 	for (var/thing2 in targets)
 		SSassets.transport.send_assets(thing2, key)
 
 	if(realsize)
-		return "<img class='icon icon-[icon_state] [class]' style='width:[I.Width()]px;height:[I.Height()]px;min-height:[I.Height()]px' src=\"[url_encode(key)]\">"
+		return "<img class='icon icon-[icon_state] [class]' style='width:[thing.Width()]px;height:[thing.Height()]px;min-height:[thing.Height()]px' src='[SSassets.transport.get_asset_url(key)]'>"
 
-
-	return "<img class='icon icon-[icon_state] [class]' src=\"[url_encode(key)]\">"
+	return "<img class='icon icon-[icon_state] [class]' src='[SSassets.transport.get_asset_url(key)]'>"
 
 /proc/icon2base64html(thing)
 	if (!thing)
 		return
+
 	var/static/list/bicon_cache = list()
 	if (isicon(thing))
 		var/icon/I = thing
@@ -89,7 +90,6 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 			icon_base64 = bicon_cache[icon_md5]
 			if (!icon_base64) // Doesn't exist yet, make it.
 				bicon_cache[icon_md5] = icon_base64 = icon2base64(I)
-
 
 		return "<img class='icon icon-misc' src='data:image/png;base64,[icon_base64]'>"
 

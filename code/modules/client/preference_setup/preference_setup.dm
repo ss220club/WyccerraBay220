@@ -1,6 +1,8 @@
-#define TOPIC_UPDATE_PREVIEW 4
-#define TOPIC_HARD_REFRESH   8 // use to force a browse() call, unblocking some rsc operations
+#define TOPIC_UPDATE_PREVIEW FLAG(2)
+#define TOPIC_HARD_REFRESH FLAG(3) // use to force a browse() call, unblocking some rsc operations
+#define TOPIC_UPDATE_PREVIEW_BACKGROUND_ICON FLAG(4)
 #define TOPIC_REFRESH_UPDATE_PREVIEW (TOPIC_HARD_REFRESH|TOPIC_UPDATE_PREVIEW)
+#define TOPIC_REFRESH_UPDATE_PREVIEW_BACKGROUND_ICON (TOPIC_HARD_REFRESH|TOPIC_UPDATE_PREVIEW_BACKGROUND_ICON)
 
 var/global/const/CHARACTER_PREFERENCE_INPUT_TITLE = "Character Preference"
 
@@ -32,17 +34,17 @@ var/global/const/CHARACTER_PREFERENCE_INPUT_TITLE = "Character Preference"
 
 /datum/category_group/player_setup_category/loadout_preferences
 	name = "Loadout"
-	sort_order = 6
+	sort_order = 5
 	category_item_type = /datum/category_item/player_setup_item/loadout
 
 /datum/category_group/player_setup_category/global_preferences
 	name = "Global"
-	sort_order = 7
+	sort_order = 6
 	category_item_type = /datum/category_item/player_setup_item/player_global
 
 /datum/category_group/player_setup_category/law_pref
 	name = "Laws"
-	sort_order = 8
+	sort_order = 7
 	category_item_type = /datum/category_item/player_setup_item/law_pref
 
 
@@ -51,13 +53,13 @@ var/global/const/CHARACTER_PREFERENCE_INPUT_TITLE = "Character Preference"
 ****************************/
 /datum/category_collection/player_setup_collection
 	category_group_type = /datum/category_group/player_setup_category
-	var/datum/preferences/preferences
+	var/datum/preferences/preferences = null
 	var/datum/category_group/player_setup_category/selected_category = null
 
 /datum/category_collection/player_setup_collection/New(datum/preferences/preferences)
 	src.preferences = preferences
 	..()
-	selected_category = categories[1]
+	selected_category = LAZYACCESS(categories, 1)
 
 /datum/category_collection/player_setup_collection/Destroy()
 	preferences = null
@@ -65,50 +67,72 @@ var/global/const/CHARACTER_PREFERENCE_INPUT_TITLE = "Character Preference"
 	return ..()
 
 /datum/category_collection/player_setup_collection/proc/sanitize_setup()
+	if(!LAZYLEN(categories))
+		return
+
 	for(var/datum/category_group/player_setup_category/PS in categories)
 		PS.sanitize_setup()
 
 /datum/category_collection/player_setup_collection/proc/load_character(datum/pref_record_reader/R)
+	if(!LAZYLEN(categories))
+		return
+
 	for(var/datum/category_group/player_setup_category/PS in categories)
 		PS.load_character(R)
 
 /datum/category_collection/player_setup_collection/proc/save_character(datum/pref_record_writer/W)
+	if(!LAZYLEN(categories))
+		return
+
 	for(var/datum/category_group/player_setup_category/PS in categories)
 		PS.save_character(W)
 
 /datum/category_collection/player_setup_collection/proc/load_preferences(datum/pref_record_reader/R)
+	if(!LAZYLEN(categories))
+		return
+
 	for(var/datum/category_group/player_setup_category/PS in categories)
 		PS.load_preferences(R)
 
 /datum/category_collection/player_setup_collection/proc/save_preferences(datum/pref_record_writer/W)
+	if(!LAZYLEN(categories))
+		return
+
 	for(var/datum/category_group/player_setup_category/PS in categories)
 		PS.save_preferences(W)
 
 /datum/category_collection/player_setup_collection/proc/header()
-	var/dat = ""
-	for(var/datum/category_group/player_setup_category/PS in categories)
+	if(!LAZYLEN(categories))
+		return ""
+
+	var/list/dat = list()
+	for(var/datum/category_group/player_setup_category/PS as anything in categories)
 		if(PS == selected_category)
 			dat += "[PS.name] "	// TODO: Check how to properly mark a href/button selected in a classic browser window
 		else
 			dat += "<a href='?src=\ref[src];category=\ref[PS]'>[PS.name]</a> "
-	return dat
+
+	return dat.Join()
 
 /datum/category_collection/player_setup_collection/proc/content(mob/user)
-	if(selected_category)
-		return selected_category.content(user)
+	if(!selected_category)
+		return null
 
-/datum/category_collection/player_setup_collection/Topic(href,list/href_list)
+	return selected_category.content(user)
+
+/datum/category_collection/player_setup_collection/Topic(href, list/href_list)
 	if(..())
-		return 1
+		return TRUE
+
 	var/mob/user = usr
 	if(!user.client)
-		return 1
+		return TRUE
 
 	if(href_list["category"])
 		var/category = locate(href_list["category"])
 		if(category && (category in categories))
 			selected_category = category
-		. = 1
+		. = TRUE
 
 	if(.)
 		user.client.prefs.update_setup_window(user)
@@ -217,45 +241,53 @@ var/global/const/CHARACTER_PREFERENCE_INPUT_TITLE = "Character Preference"
 /datum/category_item/player_setup_item/proc/sanitize_preferences()
 	return
 
-/datum/category_item/player_setup_item/Topic(href,list/href_list)
+/datum/category_item/player_setup_item/Topic(href, list/href_list)
 	if(..())
-		return 1
+		return TOPIC_HANDLED
+
 	var/mob/pref_mob = preference_mob()
 	if(!pref_mob || !pref_mob.client)
-		return 1
+		return TOPIC_HANDLED
+
 	// If the usr isn't trying to alter their own mob then they must instead be an admin
 	if(usr != pref_mob && !check_rights(R_ADMIN, 0, usr))
-		return 1
+		return TOPIC_HANDLED
 
-	. = OnTopic(href, href_list, usr)
+	var/topic_result = OnTopic(href, href_list, usr)
 
 	// The user might have joined the game or otherwise had a change of mob while tweaking their preferences.
 	pref_mob = preference_mob()
 	if(!pref_mob || !pref_mob.client)
-		return 1
+		return TOPIC_HANDLED
 
-	if (. & TOPIC_UPDATE_PREVIEW)
-		pref_mob.client.prefs.preview_icon = null
-	if (. & TOPIC_HARD_REFRESH)
+	if(topic_result & TOPIC_UPDATE_PREVIEW_BACKGROUND_ICON)
+		pref_mob.client.prefs.update_preview_background_icon()
+
+	if (topic_result & TOPIC_UPDATE_PREVIEW)
+		pref_mob.client.prefs.update_preview_icon()
+
+	if (topic_result & TOPIC_HARD_REFRESH)
 		pref_mob.client.prefs.open_setup_window(usr)
-	else if (. & TOPIC_REFRESH)
+
+	else if (topic_result & TOPIC_REFRESH)
 		pref_mob.client.prefs.update_setup_window(usr)
 
+	return topic_result
+
 /datum/category_item/player_setup_item/CanUseTopic(mob/user)
-	return 1
+	return TRUE
 
 /datum/category_item/player_setup_item/proc/OnTopic(href,list/href_list, mob/user)
 	return TOPIC_NOACTION
 
 /datum/category_item/player_setup_item/proc/preference_mob()
 	if(!pref.client)
-		for(var/client/C)
-			if(C.ckey == pref.client_ckey)
-				pref.client = C
-				break
+		pref.client = GLOB.ckey_directory[pref.client_ckey]
 
 	if(pref.client)
 		return pref.client.mob
+
+	return null
 
 /datum/category_item/player_setup_item/proc/preference_species()
 	return all_species[pref.species] || all_species[SPECIES_HUMAN]

@@ -54,14 +54,16 @@
 /obj/structure/undies_wardrobe/interact(mob/living/carbon/human/H)
 	var/id = H.GetIdCard()
 
-	var/dat = list()
+	var/list/dat = list()
 	dat += "<b>Underwear</b><br><hr>"
-	dat += "You may claim [id ? length(GLOB.underwear.categories) - LAZYACCESS(amount_of_underwear_by_id_card, id) : 0] more article\s this shift.<br><br>"
+	dat += "You may claim [id ? LAZYLEN(GLOB.underwear.categories) - LAZYACCESS(amount_of_underwear_by_id_card, id) : 0] more article\s this shift.<br><br>"
 	dat += "<b>Available Categories</b><br><hr>"
-	for(var/datum/category_group/underwear/UWC in GLOB.underwear.categories)
-		dat += "[UWC.name] <a href='?src=\ref[src];select_underwear=[UWC.name]'>(Select)</a><br>"
-	dat = jointext(dat,null)
-	show_browser(H, dat, "window=wardrobe;size=400x250")
+
+	if(LAZYLEN(GLOB.underwear.categories))
+		for(var/datum/category_group/underwear/UWC in GLOB.underwear.categories)
+			dat += "[UWC.name] <a href='?src=\ref[src];select_underwear=[UWC.name]'>(Select)</a><br>"
+
+	show_browser(H, dat.Join(), "window=wardrobe;size=400x250")
 
 /obj/structure/undies_wardrobe/proc/human_who_can_use_underwear(mob/living/carbon/human/H)
 	if(!istype(H) || !H.species || !(H.species.appearance_flags & SPECIES_APPEARANCE_HAS_UNDERWEAR))
@@ -80,7 +82,7 @@
 
 	var/mob/living/carbon/human/H = usr
 	if(href_list["select_underwear"])
-		var/datum/category_group/underwear/UWC = GLOB.underwear.categories_by_name[href_list["select_underwear"]]
+		var/datum/category_group/underwear/UWC = LAZYACCESS(GLOB.underwear.categories_by_name, href_list["select_underwear"])
 		if(!UWC)
 			return
 		var/datum/category_item/underwear/UWI = input("Select your desired underwear:", "Choose underwear") as null|anything in exlude_none(UWC.items)
@@ -104,7 +106,7 @@
 			return
 
 		var/current_quota = LAZYACCESS(amount_of_underwear_by_id_card, id)
-		if(current_quota >= length(GLOB.underwear.categories))
+		if(current_quota >= LAZYLEN(GLOB.underwear.categories))
 			audible_message("You have already used up your underwear quota for this shift. Please return previously acquired items to increase it.", WARDROBE_BLIND_MESSAGE(H))
 			return
 		LAZYSET(amount_of_underwear_by_id_card, id, ++current_quota)

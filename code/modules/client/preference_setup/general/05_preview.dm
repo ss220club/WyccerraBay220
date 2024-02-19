@@ -107,7 +107,10 @@
 	dress_preview_mob(mannequin)
 	mannequin.ImmediateOverlayUpdate()
 
-	preview_character_height = mannequin.icon_height
+	/// Due to how maps work in BYOND, we should have total height of preview icons multiples of `world.icon_size`.
+	/// Otherwise part of the map will be empty.
+	var/normalized_icon_height = (ceil((mannequin.icon_height * 4 ) / WORLD_ICON_SIZE) * WORLD_ICON_SIZE) / 4
+	preview_character_height = normalized_icon_height
 	show_character_preview(mannequin)
 
 /datum/preferences/proc/show_character_preview(mutable_appearance/char_appearance)

@@ -27,7 +27,8 @@
 		if(slot_wear_mask)
 			sprite_sheets = list(
 				SPECIES_VOX = 'icons/mob/species/vox/onmob_mask_vox.dmi',
-				SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_mask_unathi.dmi'
+				SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_mask_unathi.dmi',
+				SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_mask_resomi.dmi'
 				)
 		else
 			sprite_sheets = list()

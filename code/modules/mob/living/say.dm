@@ -321,7 +321,14 @@ var/global/list/channel_to_radio_key = new
 		eavesdroping_obj -= listening_obj
 		for(var/mob/M in eavesdroping)
 			if(M)
-				M.hear_say(stars(message), verb, speaking, alt_name, italics, src, speech_sound, sound_vol)
+				var/speach
+				var/mob/living/carbon/human/H
+				if(ishuman(M))
+					H = M
+					speach = (H.get_species() == SPECIES_RESOMI ? message : stars(message))
+				else
+					speach = stars(message)
+				M.hear_say(speach, verb, speaking, alt_name, italics, src, speech_sound, sound_vol)
 				if(M.client)
 					speech_bubble_recipients |= M.client
 

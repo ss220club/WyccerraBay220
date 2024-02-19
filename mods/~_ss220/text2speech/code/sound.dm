@@ -57,6 +57,15 @@
 		fdel(err_file)
 	return list(stdout, stderr)
 
+/client/proc/test_shell()
+	set waitfor = FALSE
+	set name = "TEST SHELL"
+	set category = "TEST"
+	if(!check_rights(R_DEBUG))
+		return
+	for(var/i in 1 to 10)
+		world.shelleo("sleep 0.5")
+		to_chat(usr, SPAN_INFO("Shell - [i]"))
 
 /proc/shell_url_scrub(url)
 	var/static/regex/bad_chars_regex = regex("\[^#%&./:=?\\w]*", "g")

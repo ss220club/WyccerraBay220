@@ -423,37 +423,3 @@
 	worn_state = "resomi_greydress"
 	species_restricted = list(SPECIES_RESOMI)
 	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_under_resomi.dmi')
-
-/*	We don't use this suits in actual build, right?
-/obj/item/clothing/under/thermal
-	name = "thermal suit"
-	desc = "Gray thermal suit. Nothing interesting."
-	icon = 'packs/infinity/icons/obj/clothing/obj_under.dmi'
-	item_icons = list(slot_w_uniform_str = 'packs/infinity/icons/mob/onmob/onmob_under.dmi')
-	icon_state = "gray_camo"
-	item_state = "gray_camo"
-	item_flags = ITEM_FLAG_THICKMATERIAL
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
-	cold_protection = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
-	min_cold_protection_temperature = T0C - 75
-	max_heat_protection_temperature = T0C + 50
-	var/max_cooling = 1.2					// in degrees per second - probably don't need to mess with heat capacity here
-	var/thermostat = T0C + 10
-
-
-/obj/item/clothing/under/thermal/resomi
-	name = "small thermal suit"
-	desc = "Looks like very small suit. For children or resomi? This thermal suit is black."
-	icon_state = "thermores_1"
-	item_state = "thermores_1"
-	thermostat = T0C
-	species_restricted = list(SPECIES_RESOMI)
-	sprite_sheets = list(
-		SPECIES_RESOMI = 'packs/infinity/icons/mob/onmob/onmob_under.dmi',
-		)
-
-/obj/item/clothing/under/thermal/resomi/white
-	desc = "Looks like very small suit. For children or resomi? This thermal suit is white. "
-	icon_state = "thermores_2"
-	item_state = "thermores_2"
-*/

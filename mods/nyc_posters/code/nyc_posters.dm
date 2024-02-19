@@ -299,6 +299,7 @@
 
 /singleton/poster/nyc/imperium_we_see
 	// by Derp
+	poster_flags = POSTER_FLAG_CONTRABAND
 	icon_state = "imperium_we_see"
 	name = "Imperium"
 	desc = "A hastily made poster on cheap paper. Someone really dislikes Resomi, \
@@ -307,6 +308,7 @@
 
 /singleton/poster/nyc/shirisai
 	// by Derp
+	poster_flags = POSTER_FLAG_CONTRABAND
 	icon_state = "shirisai"
 	name = "Shirisai"
 	desc = "Shirisai - the home planet of Resomi. A cold and snowy world, mostly covered in tundra. \
@@ -314,6 +316,7 @@
 
 /singleton/poster/nyc/imperium_calls
 	// by Derp
+	poster_flags = POSTER_FLAG_CONTRABAND
 	icon_state = "imperium_calls"
 	name = "Imperium calls"
 	desc = "An old shabby propaganda poster. On the poster you can see some kind of cold planet \
@@ -322,6 +325,7 @@
 
 /singleton/poster/nyc/together
 	// by TiranShot
+	poster_flags = POSTER_FLAG_CONTRABAND
 	icon_state = "together"
 	name = "Together"
 	desc = "A handmade poster. The poster depicts the coat of arms of the new Resomi union in the form \
@@ -479,10 +483,7 @@
 	icon_state = "true_hero"
 	poster_type = /singleton/poster/nyc/good_old_times
 
-
 /* Resomi....... */
-
-/*
 /obj/structure/sign/poster/nyc/imperium_we_see
 	icon_state = "imperium_we_see"
 	poster_type = /singleton/poster/nyc/imperium_we_see
@@ -498,4 +499,3 @@
 /obj/structure/sign/poster/nyc/together
 	icon_state = "together"
 	poster_type = /singleton/poster/nyc/together
-*/

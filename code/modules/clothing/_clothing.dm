@@ -311,7 +311,8 @@ BLIND     // can't see anything
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_hands_vox.dmi',
 		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_hands_gas.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_hands_unathi.dmi'
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_hands_unathi.dmi',
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_hands_resomi.dmi'
 	)
 	blood_overlay_type = "bloodyhands"
 
@@ -624,7 +625,13 @@ BLIND     // can't see anything
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_feet_vox.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_feet_unathi.dmi',
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_feet_resomi.dmi'
 		)
+
+	sprite_sheets_obj = list(
+		SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_feet_resomi.dmi'
+		)
+
 	blood_overlay_type = "shoeblood"
 	var/overshoes = 0
 	var/can_add_cuffs = TRUE
@@ -786,10 +793,14 @@ BLIND     // can't see anything
 	w_class = ITEM_SIZE_NORMAL
 
 	sprite_sheets = list(
-		SPECIES_VOX = 'icons/mob/species/vox/onmob_suit_vox.dmi',
+		SPECIES_VOX    = 'icons/mob/species/vox/onmob_suit_vox.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_suit_unathi.dmi',
-		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_suit_gas.dmi'
-	)
+		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_suit_gas.dmi',
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
+		)
+	sprite_sheets_obj = list(
+		SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+		)
 
 /obj/item/clothing/suit/update_clothing_icon()
 	if (ismob(src.loc))

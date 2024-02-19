@@ -1,42 +1,10 @@
 
-//Shoes
 
-/obj/item/clothing/shoes/Initialize()
+/obj/item/clothing/accessory/necklace/collar/New()
+	sprite_sheets += list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/misc.dmi')
 	. = ..()
-	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_feet_resomi.dmi')
-	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_feet_resomi.dmi')
-
-//Gloves
-/obj/item/clothing/gloves/Initialize()
-	. = ..()
-	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_hands_resomi.dmi')
 
 
-//suit
-/obj/item/clothing/suit/Initialize()
-	. = ..()
-	LAZYSET(sprite_sheets, SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
-	LAZYSET(sprite_sheets_obj, SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
-
-/singleton/item_modifier/space_suit/sol/sierra/Initialize()
-	. = ..()
-	var/helmet_setup = type_setups[/obj/item/clothing/head/helmet/space]
-	LAZYSET((helmet_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi')
-	LAZYSET((helmet_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
-
-	var/suit_setup = type_setups[/obj/item/clothing/suit/space/void]
-	LAZYSET((suit_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
-	LAZYSET((suit_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
-
-/singleton/item_modifier/space_suit/sierra/Initialize()
-	. = ..()
-	var/helmet_setup = type_setups[/obj/item/clothing/head/helmet/space]
-	LAZYSET((helmet_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi')
-	LAZYSET((helmet_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
-
-	var/suit_setup = type_setups[/obj/item/clothing/suit/space/void]
-	LAZYSET((suit_setup[SETUP_SPECIES_OBJ]),  SPECIES_RESOMI, 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi')
-	LAZYSET((suit_setup[SETUP_SPECIES_ONMOB]),  SPECIES_RESOMI, 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
 
 
 /singleton/item_modifier/space_suit/Initialize()

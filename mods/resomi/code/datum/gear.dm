@@ -175,8 +175,3 @@
 	resomi["black coat"] = /obj/item/clothing/suit/storage/toggle/resomicoat
 	resomi["white coat"] = /obj/item/clothing/suit/storage/toggle/resomicoat/white
 	gear_tweaks += new/datum/gear_tweak/path(resomi)
-
-
-/datum/gear/plush_toy/New()
-	toy_list["resomi plush"] = /obj/item/toy/plushie/resomi
-	..()

@@ -173,3 +173,8 @@
 	description = "A piece of cloth tied around the neck. A favorite of Sailors and Partisans everywhere."
 	path = /obj/item/clothing/accessory/neckerchief
 	flags = GEAR_HAS_COLOR_SELECTION
+
+/datum/gear/accessory/skrell_badge
+	display_name = "skrellian SDTF badge"
+	path = /obj/item/clothing/accessory/badge/tags/skrell
+	whitelisted = list(SPECIES_SKRELL)

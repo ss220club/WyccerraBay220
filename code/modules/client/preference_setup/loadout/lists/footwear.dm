@@ -74,3 +74,22 @@
 /datum/gear/shoes/slippers
 	display_name = "bunny slippers"
 	path = /obj/item/clothing/shoes/slippers
+
+/datum/gear/shoes/toeless
+	display_name = "toeless jackboots"
+	path = /obj/item/clothing/shoes/jackboots/unathi
+	category = GEAR_CATEGORY_SHOES_AND_FOOTWEAR
+
+/datum/gear/shoes/wrk_toeless
+	display_name = "toeless workboots"
+	path = /obj/item/clothing/shoes/workboots/toeless
+	category = GEAR_CATEGORY_SHOES_AND_FOOTWEAR
+
+/datum/gear/shoes/clogs_toeless
+	display_name = "toeless foam clogs"
+	path = /obj/item/clothing/shoes/foamclog/toeless
+	flags = GEAR_HAS_COLOR_SELECTION
+
+/datum/gear/shoes/flipflobsters_toeless
+	display_name = "toeless flip flobsters"
+	path = /obj/item/clothing/shoes/foamclog/flipflobster/toeless

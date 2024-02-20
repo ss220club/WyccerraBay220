@@ -2,13 +2,13 @@
 	display_name = "light armored plate carrier"
 	description = "With additional light armor plate"
 	path = /obj/item/clothing/suit/armor/pcarrier/light
-	cost = 25
+	cost = 10
 
 /datum/gear/pmp_w_tape
 	display_name = "music player"
 	description = "With custom tape"
 	path = /obj/item/music_player
-	cost = 0
+	cost = 10
 
 /datum/gear/pmp_w_tape/New()
 	. = ..()
@@ -23,25 +23,23 @@
 	display_name = "boombox"
 	description = "With custom tape"
 	path = /obj/item/music_player/boombox/custom_tape
-	cost = 0
+	cost = 10
 
 /datum/gear/bikehorn
 	display_name = "bike horn"
 	description = "for real aesthetes"
 	path = /obj/item/bikehorn
-	cost = 0
 
 /datum/gear/bikehorn/rubberducky
 	display_name = "rubber duck"
 	description = "QUACK"
 	path = /obj/item/bikehorn/rubberducky
-	cost = 0
 
 /datum/gear/premium_alcohol
 	display_name = "expensive alcohol"
 	description = "sometimes it turns out that the bar is closed, but you want a drink."
 	path = /obj/item/reagent_containers/food/drinks/bottle
-	cost = 0
+	cost = 2
 
 /datum/gear/premium_alcohol/New()
 	. = ..()
@@ -58,7 +56,7 @@
 	display_name = "pizza box"
 	description = "pizza time"
 	path = /obj/item/pizzabox
-	cost = 0
+	cost = 2
 
 /datum/gear/pizzabox/New()
 	. = ..()
@@ -74,7 +72,7 @@
 	display_name = "musical instruments"
 	description = "let's DOOT"
 	path = /obj/item/device/synthesized_instrument
-	cost = 0
+	cost = 2
 
 /datum/gear/musical_instruments/New()
 	. = ..()
@@ -90,19 +88,19 @@
 	display_name = "clown costume"
 	description = "Admit it, you invested so much money just for one clown costume."
 	path = /obj/item/clothing/mask/gas/sexyclown
-	cost = 0
+	cost = 2
 
 /datum/gear/head/kittyears
 	display_name = "kitty ears"
 	path = /obj/item/clothing/head/kitty/fake
-	sort_category = "Earwear"
+	category = GEAR_CATEGORY_EARWEAR
 	allowed_roles = null
-	cost = 0
+	cost = 2
 
 /datum/gear/mre
 	display_name = "MRE"
 	path = /obj/item/storage/mre
-	cost = 0
+	cost = 2
 
 /datum/gear/mre/New()
 	. = ..()
@@ -123,4 +121,4 @@
 	display_name = "replica katana"
 	description = "Ah, I see you're a man of culture as well."
 	path = /obj/item/material/sword/katana/replica
-	cost = 0
+	cost = 2

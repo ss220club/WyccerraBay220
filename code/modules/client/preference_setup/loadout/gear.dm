@@ -19,14 +19,14 @@
 	var/list/required_factions
 	/// Term to check the whitelist for.
 	var/whitelisted
-	/// Category that will be used to properly sort gear
-	var/sort_category = "General"
+	/// Category that will be used to properly group and sort gear.
+	/// All available categories are located at `/code/modules/client/preference_setup/loadout/_defines.dm`.
+	/// If you need to create gear of new category - create new define there.
+	var/category = GEAR_CATEGORY_GENERAL
 	/// Special tweaks in New
 	var/flags
 	/// Special tweak in New
 	var/custom_setup_proc
-	/// Category that will be used to properly group the gear
-	var/category
 	/// Donation tier the player should have to access this gear
 	var/donation_tier = DONATION_TIER_NONE
 	/// List of datums which will alter the item after it has been spawned
@@ -223,6 +223,10 @@
 /datum/gear_slot/proc/add_gear(gear_name, list/tweaks)
 	gear_entries[gear_name] = islist(tweaks) ? tweaks.Copy() : list()
 
+/// Returns amount of gear in the current slot
+/datum/gear_slot/proc/size()
+	return length(gear_entries)
+
 /// Simple objects that represents all gear slots the player has in preferences.
 /datum/gear_slots_container
 	/// Max size of the container. New gear slots are added to `gear_slots` when required
@@ -287,18 +291,22 @@
 	return size
 
 /// Sets `picked_gear_slot` to the `picked_gear_slot + 1`, or to 1 if overflowed
+/// Returns `true`, if slot successfully changed, `false` otherwise
 /datum/gear_slots_container/proc/cycle_slot_right()
 	if(size <= 1)
-		return
+		return FALSE
 
 	picked_gear_slot = sanitize_integer(picked_gear_slot + 1, 1, size, 1)
+	return TRUE
 
 /// Sets `picked_gear_slot` to the `picked_gear_slot - 1`, or to length(gear_slots) if new slot is <= 0
+/// Returns `true`, if slot successfully changed, `false` otherwise
 /datum/gear_slots_container/proc/cycle_slot_left()
 	if(size <= 1)
-		return
+		return FALSE
 
 	picked_gear_slot = sanitize_integer(picked_gear_slot - 1, 1, size, size)
+	return TRUE
 
 /// Create new `/datum/gear_slot` until `gear_slots` length wil be equal to `size`.
 /// If the `gear_slots` is already of desired size, no changes will happen

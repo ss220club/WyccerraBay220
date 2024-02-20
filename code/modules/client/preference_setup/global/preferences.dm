@@ -368,6 +368,11 @@ var/global/list/_client_preferences_by_type
 	key = "CHAT_RLOOC"
 	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
 
+/datum/client_preference/ooc_donation_color
+	description = "OOC donator color"
+	key = "OOC_DONATION_COLOR"
+	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
+
 /********************
 * Admin Preferences *
 ********************/

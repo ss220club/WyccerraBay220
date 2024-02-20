@@ -1,4 +1,4 @@
-/datum/gear/passport/unathi/New()
+/datum/gear/document/passport/unathi/New()
 	..()
 	whitelisted += list(SPECIES_YEOSA)
 	var/list/passports = list()

@@ -19,23 +19,23 @@
 /datum/gear/brush
 	display_name = "hairbrush"
 	path = /obj/item/haircomb/brush
-	sort_category = "Cosmetics"
+	category = GEAR_CATEGORY_COSMETICS
 
 /datum/gear/deodorant
 	display_name = "deodorant"
 	path = /obj/item/reagent_containers/spray/cleaner/deodorant
-	sort_category = "Cosmetics"
+	category = GEAR_CATEGORY_COSMETICS
 
 /datum/gear/lipstick
 	display_name = "lipstick selection"
 	path = /obj/item/lipstick
-	sort_category = "Cosmetics"
+	category = GEAR_CATEGORY_COSMETICS
 	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/comb
 	display_name = "plastic comb"
 	path = /obj/item/haircomb
-	sort_category = "Cosmetics"
+	category = GEAR_CATEGORY_COSMETICS
 	flags = GEAR_HAS_COLOR_SELECTION
 
 // Assorted accessories
@@ -43,18 +43,18 @@
 /datum/gear/corset
 	display_name = "corset selection"
 	path = /obj/item/clothing/accessory/corset
-	sort_category = "Clothing Pieces"
+	category = GEAR_CATEGORY_CLOTHING_PIECES
 	flags = GEAR_HAS_COLOR_SELECTION
 
 /datum/gear/vinylcorset
 	display_name = "vinyl corset"
 	path = /obj/item/clothing/accessory/corset/vinyl
-	sort_category = "Clothing Pieces"
+	category = GEAR_CATEGORY_CLOTHING_PIECES
 
 /datum/gear/choker
 	display_name = "choker selection"
 	path = /obj/item/clothing/accessory/choker
-	sort_category = "Clothing Pieces"
+	category = GEAR_CATEGORY_CLOTHING_PIECES
 	flags = GEAR_HAS_COLOR_SELECTION
 
 /datum/gear/accessory/collar

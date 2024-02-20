@@ -5,11 +5,4 @@
 
 #include "code/donations/donations.dm"
 #include "code/donations/donator.dm"
-#include "code/donations/preferences.dm"
-
-#include "code/loadout/helpers.dm"
-
-#include "code/loadout/categories/categories.dm"
-#include "code/loadout/categories/masks.dm"
-
 #endif

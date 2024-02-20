@@ -1,6 +1,6 @@
 /datum/gear/accessory
-	sort_category = "Accessories"
-	category = /datum/gear/accessory
+	category = GEAR_CATEGORY_ACCESSORIES
+	abstract_type = /datum/gear/accessory
 	slot = slot_tie
 
 
@@ -159,14 +159,12 @@
 /datum/gear/accessory/bracelet
 	display_name = "bracelet, color select"
 	path = /obj/item/clothing/accessory/bracelet
-	cost = 1
 	flags = GEAR_HAS_COLOR_SELECTION
 
 
 /datum/gear/accessory/wristwatch
 	display_name = "wrist watch selection"
 	path = /obj/item/clothing/accessory/wristwatch
-	cost = 1
 	flags = GEAR_HAS_TYPE_SELECTION
 
 
@@ -175,3 +173,8 @@
 	description = "A piece of cloth tied around the neck. A favorite of Sailors and Partisans everywhere."
 	path = /obj/item/clothing/accessory/neckerchief
 	flags = GEAR_HAS_COLOR_SELECTION
+
+/datum/gear/accessory/skrell_badge
+	display_name = "skrellian SDTF badge"
+	path = /obj/item/clothing/accessory/badge/tags/skrell
+	whitelisted = list(SPECIES_SKRELL)

@@ -13,6 +13,48 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")
 
+/proc/register_icon_asset(icon/thing, icon_state, dir, frame = 1, moving = FALSE, realsize = FALSE, class = null)
+	if (!thing)
+		return null
+
+	if (!isicon(thing))
+		if (isfile(thing))
+			var/name = "[generate_asset_name(thing)].png"
+			SSassets.transport.register_asset(name, thing)
+			return name
+
+		if (ispath(thing))
+			var/atom/A = thing
+			if (isnull(dir))
+				dir = SOUTH
+			if (isnull(icon_state))
+				icon_state = initial(A.icon_state)
+			thing = initial(A.icon)
+
+		else
+			var/atom/A = thing
+			if (isnull(dir))
+				dir = A.dir
+			if (isnull(icon_state))
+				icon_state = A.icon_state
+			thing = A.icon
+			if (ishuman(thing)) // Shitty workaround for a BYOND issue.
+				var/icon/temp = thing
+				thing = icon()
+				thing.Insert(temp, dir = SOUTH)
+				dir = SOUTH
+	else
+		if (isnull(dir))
+			dir = SOUTH
+		if (isnull(icon_state))
+			icon_state = ""
+
+	thing = icon(thing, icon_state, dir, frame, moving)
+
+	var/key = "[generate_asset_name(thing)].png"
+	SSassets.transport.register_asset(key, thing)
+	return key
+
 /proc/icon2html(icon/thing, target, icon_state, dir, frame = 1, moving = FALSE, realsize = FALSE, class = null)
 	if (!thing || !target)
 		return

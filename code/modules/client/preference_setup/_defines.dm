@@ -27,6 +27,9 @@ if(!singletons_by_name) \
 /// Styled Button.
 #define SBTN(key, label, style) FBTN(key, 1, label, "", style, "")
 
+/// Classed Button.
+#define CBTN(key, label, class) FBTN(key, 1, label, "", "", class)
+
 /// Value-passing Button.
 #define VBTN(key, value, label) FBTN(key, value, label, "", "", "")
 

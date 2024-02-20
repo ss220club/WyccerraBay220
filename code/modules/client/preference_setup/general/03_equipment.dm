@@ -67,7 +67,7 @@
 		if(!(underwear_metadata in pref.all_underwear))
 			pref.all_underwear_metadata -= underwear_metadata
 
-	if(!pref.backpack || !(pref.backpack.name in backpacks_by_name))
+	if(!pref.backpack || !(backpacks_by_name[pref.backpack.name]))
 		pref.backpack = get_default_outfit_backpack()
 
 	if(!istype(pref.backpack_metadata))
@@ -118,6 +118,7 @@
 	if(!LAZYLEN(GLOB.underwear.categories))
 		return
 
+	LAZYINITLIST(pref.all_underwear)
 	for(var/datum/category_group/underwear/underwear_category as anything in GLOB.underwear.categories)
 		var/datum/category_item/underwear/default = underwear_category.get_default_category_item(pref.gender ? pref.gender : MALE)
 		if(!default)

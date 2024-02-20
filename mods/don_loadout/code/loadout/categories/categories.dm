@@ -1,11 +1,11 @@
 /datum/gear/eyes
-	sort_category = "Glasses"
+	category = GEAR_CATEGORY_GLASSES_AND_EYEWEAR
 
 /datum/gear/shoes
-	sort_category = "Shoes"
+	category = GEAR_CATEGORY_SHOES_AND_FOOTWEAR
 
 /datum/gear/gloves
-	sort_category = "Gloves"
+	category = GEAR_CATEGORY_GLOVES_AND_HANDWEAR
 
 /datum/gear/uniform
-	sort_category = "Uniforms"
+	category = GEAR_CATEGORY_UNIFORMS_AND_CASUAL_DRESS

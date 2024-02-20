@@ -38,6 +38,6 @@
 	/datum/mil_branch/iccgn
 )
 
-/datum/gear/union_card/allowed_branches = list(
+/datum/gear/document/union_card/allowed_branches = list(
 	/datum/mil_branch/civilian
 )

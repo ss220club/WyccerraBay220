@@ -1,8 +1,8 @@
 /datum/gear/gloves
 	cost = 2
 	slot = slot_gloves
-	sort_category = "Gloves and Handwear"
-	category = /datum/gear/gloves
+	category = GEAR_CATEGORY_GLOVES_AND_HANDWEAR
+	abstract_type = /datum/gear/gloves
 
 /datum/gear/gloves/colored
 	display_name = "gloves, colored"

@@ -1,7 +1,7 @@
 
 /datum/gear/skill
-	sort_category = "Skill Badges"
-	category = /datum/gear/skill
+	category = GEAR_CATEGORY_SKILL_BADGES
+	abstract_type = /datum/gear/skill
 	slot = slot_tie
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps

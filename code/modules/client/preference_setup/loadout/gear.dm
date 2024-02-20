@@ -19,14 +19,14 @@
 	var/list/required_factions
 	/// Term to check the whitelist for.
 	var/whitelisted
-	/// Category that will be used to properly sort gear
-	var/sort_category = "General"
+	/// Category that will be used to properly group and sort gear.
+	/// All available categories are located at `/code/modules/client/preference_setup/loadout/_defines.dm`.
+	/// If you need to create gear of new category - create new define there.
+	var/category = GEAR_CATEGORY_GENERAL
 	/// Special tweaks in New
 	var/flags
 	/// Special tweak in New
 	var/custom_setup_proc
-	/// Category that will be used to properly group the gear
-	var/category
 	/// Donation tier the player should have to access this gear
 	var/donation_tier = DONATION_TIER_NONE
 	/// List of datums which will alter the item after it has been spawned

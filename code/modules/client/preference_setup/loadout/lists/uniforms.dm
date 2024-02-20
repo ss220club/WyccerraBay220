@@ -1,7 +1,7 @@
 /datum/gear/uniform
-	sort_category = "Uniforms and Casual Dress"
+	category = GEAR_CATEGORY_UNIFORMS_AND_CASUAL_DRESS
 	slot = slot_w_uniform
-	category = /datum/gear/uniform
+	abstract_type = /datum/gear/uniform
 
 /datum/gear/uniform/jumpsuit
 	display_name = "jumpsuit, colour select"

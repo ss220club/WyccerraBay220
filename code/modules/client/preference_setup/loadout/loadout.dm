@@ -1,9 +1,9 @@
-var/global/list/loadout_categories = list()
+var/global/list/gear_categories = list()
 var/global/list/gear_datums = list()
 
 /hook/startup/proc/populate_gear_list()
 	for(var/datum/gear/gear_type as anything in subtypesof(/datum/gear))
-		if(initial(gear_type.category) == gear_type)
+		if(is_abstract(gear_type))
 			continue
 
 		if(length(GLOB.using_map.loadout_blacklist) && GLOB.using_map.loadout_blacklist[gear_type])
@@ -12,17 +12,17 @@ var/global/list/gear_datums = list()
 		var/datum/gear/new_gear = new gear_type
 		gear_datums[new_gear.display_name] = new_gear
 
-		var/datum/loadout_category/category = loadout_categories[new_gear.sort_category]
+		var/datum/gear_category/category = gear_categories[new_gear.category]
 		if(!category)
-			category = new /datum/loadout_category(new_gear.sort_category)
-			loadout_categories[new_gear.sort_category] = category
+			category = new /datum/gear_category(new_gear.category)
+			gear_categories[new_gear.category] = category
 
 		category.add_gear(new_gear)
 
-	loadout_categories = sortAssoc(loadout_categories)
+	gear_categories = sortAssoc(gear_categories)
 
-	for(var/loadout_category in loadout_categories)
-		var/datum/loadout_category/category = loadout_categories[loadout_category]
+	for(var/gear_category in gear_categories)
+		var/datum/gear_category/category = gear_categories[gear_category]
 		category.sort_gear()
 
 	return TRUE
@@ -52,6 +52,7 @@ var/global/list/gear_datums = list()
 	var/hide_donate_gear = FALSE
 	var/datum/gear/selected_gear
 	var/list/selected_tweaks = list()
+	var/static/list/gear_icons_cache
 
 /datum/category_item/player_setup_item/loadout/load_character(datum/pref_record_reader/R)
 	pref.gear_container = new(R.read("gear_container_size"), R.read("picked_gear_slot"), R.read("gear_slots"))
@@ -108,14 +109,10 @@ var/global/list/gear_datums = list()
 
 		var/gear_budget_left = config.max_gear_cost
 		var/list/invalid_gear = list()
+
 		/// Filtering out invalid slots
-
-		for(var/index = 1 to length(gear_entries))
-			if(!gear_budget_left)
-				invalid_gear += gear_entries.Copy(index)
-				break
-
-			var/datum/gear/gear_datum = gear_datums[gear_entries[index]]
+		for(var/gear_name in gear_entries)
+			var/datum/gear/gear_datum = gear_datums[gear_name]
 			if(!is_gear_valid(gear_datum, gear_budget_left))
 				invalid_gear += gear_datum.display_name
 				continue
@@ -140,18 +137,18 @@ var/global/list/gear_datums = list()
 	var/gear_points_left = config.max_gear_cost - gear_total_cost
 	var/fcolor = gear_total_cost < config.max_gear_cost ? "#e67300" : "#3366cc"
 
-	. += "<table style='width: 100%;'><tr>"
+	. += "<table><tr>"
 	. += "<table style='white-space: nowrap;'><tr>"
 	. += "<td style=\"vertical-align: top;\">"
 
 	. += "<td>"
 
-	. += "<b>Loadout Set: <a href='?src=[ref(src)];prev_slot=1'>&lt;&lt;</a><b><font color = '[fcolor]'>\[[picked_slot.get_slot_number()]\]</font></b><a href='?src=[ref(src)];next_slot=1'>&gt;&gt;</a></b>"
+	. += "<b>Loadout Set: [BTN("prev_slot", "&lt;&lt;")]<b><font color = '[fcolor]'>\[[picked_slot.get_slot_number()]\]</font></b>[BTN("next_slot", "&gt;&gt;")]</b>"
 	var/donation_tier = user.client.donator_info.get_full_donation_tier()
 
 	. += "<td>"
 	. += "<b>Donation tier:</b> [donation_tier]<br>"
-	. += "<a class='gold' href='?src=[ref(src)];donate=1'>Support us!</a><br>"
+	. += CBTN("donate", "Support us!", "gold")
 	. += "</td>"
 
 	. += "</td>"
@@ -159,10 +156,10 @@ var/global/list/gear_datums = list()
 	if(config.max_gear_cost < INFINITY)
 		. += "<font color = '[fcolor]'>[gear_total_cost]/[config.max_gear_cost]</font> loadout points spent.<br>"
 
-	. += "<a href='?src=[ref(src)];clear_loadout=1'>Clear Loadout</a>"
-	. += "<a href='?src=[ref(src)];random_loadout=1'>Random Loadout</a>"
-	. += "<a href='?src=[ref(src)];toggle_hiding=1'>[hide_unavailable_gear ? "Show unavailable" : "Hide unavailable"]</a>"
-	. += "<a href='?src=[ref(src)];toggle_donate=1'>[hide_donate_gear ? "Show donate gears" : "Hide donate gears"]</a>"
+	. += BTN("clear_loadout", "Clear Loadout")
+	. += BTN("random_loadout", "Random Loadout")
+	. += BTN("toggle_hiding", hide_unavailable_gear ? "Show unavailable" : "Hide unavailable")
+	. += BTN("toggle_donate", hide_donate_gear ? "Show donate gears" : "Hide donate gears")
 	. += "</td>"
 
 	. += "</tr></table>"
@@ -183,9 +180,9 @@ var/global/list/gear_datums = list()
 
 	// Categories
 
-	. += "<td style='white-space: nowrap; width: 40px;' class='block'><b>"
-	for(var/category_name in loadout_categories)
-		var/datum/loadout_category/category = loadout_categories[category_name]
+	. += "<td style='white-space: nowrap; class='block'><b>"
+	for(var/category_name in gear_categories)
+		var/datum/gear_category/category = gear_categories[category_name]
 		var/category_cost = 0
 		for(var/gear_name in category.get_gear_items())
 			if(!picked_slot.contains(gear_name))
@@ -198,19 +195,19 @@ var/global/list/gear_datums = list()
 		if(category_name == current_tab)
 			category_class += " selected"
 
-		. += "<a class='[category_class] fluid' href='?src=[ref(src)];select_category=[category_name]'>[category_name] - [category_cost || 0]</a>"
+		. += VCBTN("select_category", category_name, "[category_name] - [category_cost || 0]", "[category_class] fluid")
 
 	. += "</b></td>"
 
 	// Gears
 
-	. += "<td style='white-space: nowrap; width: 40px;' class='block'>"
+	. += "<td style='white-space: nowrap; class='block'>"
 	. += "<table>"
 
 	var/list/purchased_gears = list()
 	var/list/paid_gears = list()
 	var/list/not_paid_gears = list()
-	var/datum/loadout_category/current_category = loadout_categories[current_tab]
+	var/datum/gear_category/current_category = gear_categories[current_tab]
 
 	for(var/gear_name in current_category.get_gear_items())
 		if(!is_gear_valid(gear_name))
@@ -238,13 +235,17 @@ var/global/list/gear_datums = list()
 		else if(!allowed_to_see)
 			display_class = "gray"
 
+		else if(length(gear_datum.whitelisted))
+			display_class = "violet"
+
 		if(gear_datum == selected_gear)
 			display_class += " selected"
 
 		if(!hide_unavailable_gear || allowed_to_see || ticked)
+
 			var/entry = {"
 				<tr>
-				<td width=25%><a class='[display_class ? "[display_class]" : ""] fluid' href='?src=[ref(src)];select_gear=[gear_datum.display_name]'>[gear_datum.display_name]</a></td>
+				<td>[VCBTN("select_gear", gear_datum.display_name, gear_datum.display_name, "[display_class] fluid")]</td>
 				</td></tr>
 			"}
 
@@ -278,22 +279,15 @@ var/global/list/gear_datums = list()
 		for(var/datum/gear_tweak/gear_tweak_to_apply as anything in selected_gear.gear_tweaks)
 			gear_tweak_to_apply.tweak_item(user, gear_virtual_item, selected_tweaks["[gear_tweak_to_apply]"])
 
-		var/icon/gear_icon = icon(gear_virtual_item.icon, gear_virtual_item.icon_state)
-		if(gear_virtual_item.color)
-			if(islist(gear_virtual_item.color))
-				gear_icon.MapColors(arglist(gear_virtual_item.color))
-			else
-				gear_icon.Blend(gear_virtual_item.color, ICON_MULTIPLY)
-
-		gear_icon.Scale(gear_icon.Width() * 2, gear_icon.Height() * 2)
+		var/gear_image = get_gear_image(gear_virtual_item, user)
 
 		QDEL_NULL(gear_virtual_item)
 
-		. += "<td style='width: 80%;' class='block'>"
+		. += "<td class='block'>"
 
 		. += "<table><tr>"
 
-		. += "<td>[icon2html(gear_icon, user)]</td>"
+		. += "<td>[gear_image]</td>"
 
 		. += "<td style='vertical-align: top;'>"
 		. += "<b>[selected_gear.display_name]</b>"
@@ -430,7 +424,7 @@ var/global/list/gear_datums = list()
 			for(var/datum/gear_tweak/tweak in selected_gear.gear_tweaks)
 				var/tweak_contents = tweak.get_contents(selected_tweaks["[tweak]"])
 				if(tweak_contents)
-					. += " <a href='?src=[ref(src)];tweak=[ref(tweak)]'>[tweak_contents]</a>"
+					. += VBTN("tweak", ref(tweak), tweak_contents)
 					. += "<br>"
 
 		. += "<br>"
@@ -439,11 +433,13 @@ var/global/list/gear_datums = list()
 		var/not_available_message = SPAN_NOTICE("This item will never spawn with you, using your current preferences.")
 		if(selected_gear.allowed_donation_tier(user))
 			var/class = ticked ? "linkOn" : (gear_points_left >= selected_gear.cost ? "" : "linkOff")
-			. += "<a [class ? "class='[class]'" : ""] href='?src=[ref(src)];toggle_gear=[selected_gear.display_name]'>[ticked ? "Drop" : "Take"]</a>"
+			var/label = ticked ? "Drop" : "Take"
+			. += VCBTN("toggle_gear", selected_gear.display_name, label, class)
 		else
 			var/trying_on = (pref.trying_on_gear == selected_gear.display_name)
 			if(selected_gear.donation_tier)
-				. += "<a [trying_on ? "class='linkOn' " : ""]href='?src=[ref(src)];try_on=1'>Try On</a>"
+				var/class = trying_on ? "class='linkOn' " : ""
+				. += CBTN("try_on", "Try On", class)
 			else
 				. += not_available_message
 
@@ -684,3 +680,33 @@ var/global/list/gear_datums = list()
 		return
 
 	picked_slot.add_gear(gear_name, selected_tweaks)
+
+/datum/category_item/player_setup_item/loadout/proc/get_gear_image(var/atom/movable/gear_item_prototype, mob/user)
+	ASSERT(istype(gear_item_prototype))
+	ASSERT(user)
+
+	var/list/icon_cache_key_components = list("[gear_item_prototype.icon]", "[gear_item_prototype.icon_state]")
+	if(islist(gear_item_prototype.color))
+		for(var/color in gear_item_prototype.color)
+			icon_cache_key_components += color
+	else
+		icon_cache_key_components += gear_item_prototype.color
+
+	var/cache_key = icon_cache_key_components.Join(":")
+	var/asset_name = LAZYACCESS(gear_icons_cache, cache_key)
+	if(!asset_name)
+		var/icon/gear_icon = icon(gear_item_prototype.icon, gear_item_prototype.icon_state)
+		if(gear_item_prototype.color)
+			if(islist(gear_item_prototype.color))
+				gear_icon.MapColors(arglist(gear_item_prototype.color))
+			else
+				gear_icon.Blend(gear_item_prototype.color, ICON_MULTIPLY)
+
+			gear_icon.Scale(64, 64)
+
+		asset_name = register_icon_asset(gear_icon)
+		LAZYSET(gear_icons_cache, cache_key, asset_name)
+
+
+	SSassets.transport.send_assets(user, asset_name)
+	return "<img class='icon' style='width:64px;height:64px;min-height:64px' src='[SSassets.transport.get_asset_url(asset_name)]'>"

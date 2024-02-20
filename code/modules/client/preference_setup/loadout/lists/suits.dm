@@ -1,7 +1,7 @@
 /datum/gear/suit
 	slot = slot_wear_suit
-	sort_category = "Suits and Overwear"
-	category = /datum/gear/suit
+	category = GEAR_CATEGORY_SUITS_AND_OVERWEAR
+	abstract_type = /datum/gear/suit
 
 /datum/gear/suit/poncho
 	display_name = "poncho selection"

@@ -1,8 +1,8 @@
 
 /datum/gear/shoes
-	sort_category = "Shoes and Footwear"
+	category = GEAR_CATEGORY_SHOES_AND_FOOTWEAR
 	slot = slot_shoes
-	category = /datum/gear/shoes
+	abstract_type = /datum/gear/shoes
 
 /datum/gear/shoes/athletic
 	display_name = "athletic shoes, colour select"

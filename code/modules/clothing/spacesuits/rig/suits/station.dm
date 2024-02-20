@@ -161,7 +161,7 @@
 /obj/item/clothing/shoes/magboots/rig/eva
 	species_restricted = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI,SPECIES_IPC,SPECIES_RESOMI)
 	sprite_sheets = list(
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_feet_unathi.dmi'
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_feet_unathi.dmi',
 		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_feet_resomi.dmi'
 	)
 
@@ -208,6 +208,10 @@
 	max_pressure_protection = FIRESUIT_MAX_PRESSURE
 	min_pressure_protection = 0
 
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi'
+	)
+
 /obj/item/rig/ce/equipped
 
 	initial_modules = list(
@@ -225,15 +229,17 @@
 /obj/item/clothing/head/helmet/space/rig/ce
 	light_overlay = "helmet_light_alt"
 	camera = /obj/machinery/camera/network/helmet
-	species_restricted = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI,SPECIES_IPC)
+	species_restricted = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI,SPECIES_IPC,SPECIES_RESOMI)
 	sprite_sheets = list(
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_head_unathi.dmi',
-		SPECIES_SKRELL = 'icons/mob/species/skrell/onmob_head_skrell.dmi'
+		SPECIES_SKRELL = 'icons/mob/species/skrell/onmob_head_skrell.dmi',
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi'
 	)
 /obj/item/clothing/suit/space/rig/ce
-	species_restricted = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI,SPECIES_IPC)
+	species_restricted = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI,SPECIES_IPC,SPECIES_RESOMI)
 	sprite_sheets = list(
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_suit_unathi.dmi'
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_suit_unathi.dmi',
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
 	)
 	allowed = list(
 		/obj/item/gun,
@@ -250,12 +256,16 @@
 		/obj/item/rpd
 	)
 /obj/item/clothing/shoes/magboots/rig/ce
-	species_restricted = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI,SPECIES_IPC)
+	species_restricted = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI,SPECIES_IPC,SPECIES_RESOMI)
 	sprite_sheets = list(
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_feet_unathi.dmi'
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_feet_unathi.dmi',
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_feet_resomi.dmi'
 	)
 /obj/item/clothing/gloves/rig/ce
 	siemens_coefficient = 0
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_hands_resomi.dmi'
+	)
 
 /obj/item/rig/hazmat
 	name = "\improper AMI control module"

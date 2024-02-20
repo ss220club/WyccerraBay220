@@ -137,7 +137,7 @@ var/global/list/gear_datums = list()
 	var/gear_points_left = config.max_gear_cost - gear_total_cost
 	var/fcolor = gear_total_cost < config.max_gear_cost ? "#e67300" : "#3366cc"
 
-	. += "<table><tr>"
+	. += "<table style='width: 100%;'><tr>"
 	. += "<table style='white-space: nowrap;'><tr>"
 	. += "<td style=\"vertical-align: top;\">"
 
@@ -180,7 +180,7 @@ var/global/list/gear_datums = list()
 
 	// Categories
 
-	. += "<td style='white-space: nowrap; class='block'><b>"
+	. += "<td style='white-space: nowrap; width: 40px;' class='block'><b>"
 	for(var/category_name in gear_categories)
 		var/datum/gear_category/category = gear_categories[category_name]
 		var/category_cost = 0
@@ -201,7 +201,7 @@ var/global/list/gear_datums = list()
 
 	// Gears
 
-	. += "<td style='white-space: nowrap; class='block'>"
+	. += "<td style='white-space: nowrap; width: 40px;' class='block'>"
 	. += "<table>"
 
 	var/list/purchased_gears = list()
@@ -245,7 +245,7 @@ var/global/list/gear_datums = list()
 
 			var/entry = {"
 				<tr>
-				<td>[VCBTN("select_gear", gear_datum.display_name, gear_datum.display_name, "[display_class] fluid")]</td>
+				<td width=25%>[VCBTN("select_gear", gear_datum.display_name, gear_datum.display_name, "[display_class] fluid")]</td>
 				</td></tr>
 			"}
 
@@ -283,7 +283,7 @@ var/global/list/gear_datums = list()
 
 		QDEL_NULL(gear_virtual_item)
 
-		. += "<td class='block'>"
+		. += "<td style='width: 80%;' class='block'>"
 
 		. += "<table><tr>"
 
@@ -301,7 +301,9 @@ var/global/list/gear_datums = list()
 		. += "</tr></table>"
 
 		if(selected_gear.slot)
-			. += "<b>Slot:</b> [slot_to_description(selected_gear.slot)]<br>"
+			var/slot_description = GLOB.slot_descriptions["[selected_gear.slot]"]
+			if(slot_description)
+				. += "<b>Slot:</b> [slot_description]<br>"
 		. += "<b>Loadout Points:</b> <font class='[gear_points_left >= selected_gear.cost ? "good" : "bad"]'>[selected_gear.cost]</font><br>"
 
 		var/list/selected_jobs = list()
@@ -475,23 +477,36 @@ var/global/list/gear_datums = list()
 	ASSERT(istype(user))
 
 	if(href_list["toggle_gear"])
-		toggle_gear(gear_datums[href_list["toggle_gear"]], user)
-		return TOPIC_REFRESH_UPDATE_PREVIEW
+		if(toggle_gear(gear_datums[href_list["toggle_gear"]], user))
+			return TOPIC_REFRESH_UPDATE_PREVIEW
+
+		return TOPIC_NOACTION
 
 	if(href_list["next_slot"])
-		pref.gear_container.cycle_slot_right()
-		return TOPIC_REFRESH_UPDATE_PREVIEW
+		if(pref.gear_container.cycle_slot_right())
+			return TOPIC_REFRESH_UPDATE_PREVIEW
+
+		return TOPIC_NOACTION
 
 	if(href_list["prev_slot"])
-		pref.gear_container.cycle_slot_left()
-		return TOPIC_REFRESH_UPDATE_PREVIEW
+		if(pref.gear_container.cycle_slot_left())
+			return TOPIC_REFRESH_UPDATE_PREVIEW
+
+		return TOPIC_NOACTION
 
 	if(href_list["select_category"])
-		current_tab = href_list["select_category"]
+		var/new_tab = href_list["select_category"]
+		if(new_tab == current_tab)
+			return TOPIC_NOACTION
+
+		current_tab = new_tab
 		return TOPIC_REFRESH
 
 	if(href_list["clear_loadout"])
 		var/datum/gear_slot/picked_gear_slot = pref.get_picked_gear_slot()
+		if(!picked_gear_slot.size())
+			return TOPIC_NOACTION
+
 		picked_gear_slot.clear()
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
@@ -664,6 +679,8 @@ var/global/list/gear_datums = list()
 
 	return TRUE
 
+/// Adds or removes gear from picked gear slot.
+/// Returns `true` if gear successfully added or removed. `False` otherwise
 /datum/category_item/player_setup_item/loadout/proc/toggle_gear(datum/gear/gear_to_toggle, mob/user)
 	// Check if someone trying to tricking us. However, it's may be just a bug
 	ASSERT(gear_to_toggle?.allowed_donation_tier(user))
@@ -673,15 +690,17 @@ var/global/list/gear_datums = list()
 	var/gear_name = gear_to_toggle.display_name
 	if(picked_slot.contains(gear_name))
 		picked_slot.remove_gear(gear_name)
-		return
+		return TRUE
 
 	var/total_gear_cost = picked_slot.get_total_gear_cost()
 	if(total_gear_cost + gear_to_toggle.cost > config.max_gear_cost)
-		return
+		return FALSE
 
 	picked_slot.add_gear(gear_name, selected_tweaks)
+	return TRUE
 
-/datum/category_item/player_setup_item/loadout/proc/get_gear_image(var/atom/movable/gear_item_prototype, mob/user)
+
+/datum/category_item/player_setup_item/loadout/proc/get_gear_image(atom/movable/gear_item_prototype, mob/user)
 	ASSERT(istype(gear_item_prototype))
 	ASSERT(user)
 
@@ -702,11 +721,8 @@ var/global/list/gear_datums = list()
 			else
 				gear_icon.Blend(gear_item_prototype.color, ICON_MULTIPLY)
 
-			gear_icon.Scale(64, 64)
-
 		asset_name = register_icon_asset(gear_icon)
 		LAZYSET(gear_icons_cache, cache_key, asset_name)
-
 
 	SSassets.transport.send_assets(user, asset_name)
 	return "<img class='icon' style='width:64px;height:64px;min-height:64px' src='[SSassets.transport.get_asset_url(asset_name)]'>"

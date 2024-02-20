@@ -13,7 +13,7 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")
 
-/proc/register_icon_asset(icon/thing, icon_state, dir, frame = 1, moving = FALSE, realsize = FALSE, class = null)
+/proc/register_icon_asset(icon/thing, icon_state = "", dir = SOUTH, frame = 1, moving = FALSE, realsize = FALSE, class = null)
 	if (!thing)
 		return null
 
@@ -25,10 +25,9 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 
 		if (ispath(thing))
 			var/atom/A = thing
-			if (isnull(dir))
-				dir = SOUTH
-			if (isnull(icon_state))
+			if (!(icon_state))
 				icon_state = initial(A.icon_state)
+
 			thing = initial(A.icon)
 
 		else
@@ -43,11 +42,6 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 				thing = icon()
 				thing.Insert(temp, dir = SOUTH)
 				dir = SOUTH
-	else
-		if (isnull(dir))
-			dir = SOUTH
-		if (isnull(icon_state))
-			icon_state = ""
 
 	thing = icon(thing, icon_state, dir, frame, moving)
 
@@ -55,7 +49,7 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 	SSassets.transport.register_asset(key, thing)
 	return key
 
-/proc/icon2html(icon/thing, target, icon_state, dir, frame = 1, moving = FALSE, realsize = FALSE, class = null)
+/proc/icon2html(icon/thing, target, icon_state = "", dir = SOUTH, frame = 1, moving = FALSE, realsize = FALSE, class = null)
 	if (!thing || !target)
 		return
 
@@ -100,11 +94,6 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 				thing = icon()
 				thing.Insert(temp, dir = SOUTH)
 				dir = SOUTH
-	else
-		if (isnull(dir))
-			dir = SOUTH
-		if (isnull(icon_state))
-			icon_state = ""
 
 	thing = icon(thing, icon_state, dir, frame, moving)
 

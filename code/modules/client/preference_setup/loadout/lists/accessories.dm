@@ -159,14 +159,12 @@
 /datum/gear/accessory/bracelet
 	display_name = "bracelet, color select"
 	path = /obj/item/clothing/accessory/bracelet
-	cost = 1
 	flags = GEAR_HAS_COLOR_SELECTION
 
 
 /datum/gear/accessory/wristwatch
 	display_name = "wrist watch selection"
 	path = /obj/item/clothing/accessory/wristwatch
-	cost = 1
 	flags = GEAR_HAS_TYPE_SELECTION
 
 

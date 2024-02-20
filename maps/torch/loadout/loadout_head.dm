@@ -32,7 +32,6 @@
 /datum/gear/head/fleetcover
 	display_name = "fleet utilty cover"
 	path = /obj/item/clothing/head/solgov/utility/fleet
-	cost = 1
 	allowed_branches = list(
 		/datum/mil_branch/fleet
 	)
@@ -41,7 +40,6 @@
 /datum/gear/head/fleetcap
 	display_name = "fleet cap"
 	path = /obj/item/clothing/head/soft/solgov/fleet
-	cost = 1
 	allowed_branches = list(
 		/datum/mil_branch/fleet
 	)
@@ -50,7 +48,6 @@
 /datum/gear/head/echat
 	display_name = "EC cap"
 	path = /obj/item/clothing/head/soft/solgov/expedition
-	cost = 1
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps
 	)

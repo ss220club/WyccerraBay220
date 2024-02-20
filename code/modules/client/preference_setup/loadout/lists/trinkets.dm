@@ -2,4 +2,3 @@
 /datum/gear/trinket
 	category = GEAR_CATEGORY_TRINKETS
 	abstract_type = /datum/gear/trinket
-	cost = 1

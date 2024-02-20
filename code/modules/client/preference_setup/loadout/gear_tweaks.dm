@@ -228,7 +228,7 @@
 	if(valid_custom_names)
 		return tgui_input_list(user, "Choose an item name.", "Character Preference", valid_custom_names, metadata)
 
-	return sanitize(tgui_input_text(user, "Choose the item's name. Leave it blank to use the default name.", "Item Name", metadata, MAX_LNAME_LEN), extra = FALSE)
+	return sanitize(tgui_input_text(user, "Choose the item's name. Leave it blank to use the default name.", "Item Name", metadata, MAX_LNAME_LEN, encode = FALSE), extra = FALSE)
 
 /datum/gear_tweak/custom_name/tweak_item(user, obj/item/I, metadata)
 	if(!metadata)
@@ -253,7 +253,7 @@ Custom Description
 	if(valid_custom_desc)
 		return tgui_input_list(user, "Choose an item description.", "Character Preference", valid_custom_desc, metadata)
 
-	return sanitize(tgui_input_text(user, "Choose the item's description. Leave it blank to use the default description.", "Item Description", metadata, MAX_DESC_LEN), extra = FALSE)
+	return sanitize(tgui_input_text(user, "Choose the item's description. Leave it blank to use the default description.", "Item Description", metadata, MAX_DESC_LEN, encode = FALSE), extra = FALSE)
 
 /datum/gear_tweak/custom_desc/tweak_item(user, obj/item/I, metadata)
 	if(!metadata)

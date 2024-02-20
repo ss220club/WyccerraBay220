@@ -29,13 +29,11 @@
 	display_name = "bike horn"
 	description = "for real aesthetes"
 	path = /obj/item/bikehorn
-	cost = 1
 
 /datum/gear/bikehorn/rubberducky
 	display_name = "rubber duck"
 	description = "QUACK"
 	path = /obj/item/bikehorn/rubberducky
-	cost = 1
 
 /datum/gear/premium_alcohol
 	display_name = "expensive alcohol"

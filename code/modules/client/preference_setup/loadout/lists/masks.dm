@@ -31,3 +31,8 @@
 /datum/gear/mask/owl_mask
 	display_name = "owl mask"
 	path = /obj/item/clothing/mask/gas/owl_mask
+
+/datum/gear/mask/vox_mask
+	display_name = "vox breathing mask"
+	path = /obj/item/clothing/mask/gas/vox
+	whitelisted = list(SPECIES_VOX)

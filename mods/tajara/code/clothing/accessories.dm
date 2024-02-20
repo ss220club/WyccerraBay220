@@ -427,7 +427,6 @@
 	display_name = "(Tajara) veil, medical"
 	path = /obj/item/clothing/glasses/hud/health/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/medical/tajblind/New()
 	return
@@ -436,7 +435,6 @@
 	display_name = "(Tajara) veil, industrial"
 	path = /obj/item/clothing/glasses/meson/prescription/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/meson/tajblind/New()
 	return
@@ -445,13 +443,11 @@
 	display_name = "(Tajara) veil, science "
 	path = /obj/item/clothing/glasses/hud/science/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/security/tajblind
 	display_name = "(Tajara) veil, sleek"
 	path = /obj/item/clothing/glasses/hud/security/prot/sunglasses/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/security/tajblind/New()
 	return
@@ -460,7 +456,6 @@
 	display_name = "(Tajara) visor selection"
 	path = /obj/item/clothing/glasses/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/visors/New()
 	..()
@@ -478,13 +473,11 @@
 	display_name = "(Tajara) visor, science "
 	path = /obj/item/clothing/glasses/hud/science/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/medical/tajvisor
 	display_name = "(Tajara) visor, medical"
 	path = /obj/item/clothing/glasses/hud/health/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/medical/tajvisor/New()
 	return
@@ -493,7 +486,6 @@
 	display_name = "(Tajara) visor, security"
 	path = /obj/item/clothing/glasses/hud/security/prot/sunglasses/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/security/tajvisor/New()
 	return
@@ -502,7 +494,6 @@
 	display_name = "(Tajara) visor, industrial"
 	path = /obj/item/clothing/glasses/meson/prescription/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/meson/tajvisor/New()
 	return

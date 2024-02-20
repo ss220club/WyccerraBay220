@@ -223,6 +223,10 @@
 /datum/gear_slot/proc/add_gear(gear_name, list/tweaks)
 	gear_entries[gear_name] = islist(tweaks) ? tweaks.Copy() : list()
 
+/// Returns amount of gear in the current slot
+/datum/gear_slot/proc/size()
+	return length(gear_entries)
+
 /// Simple objects that represents all gear slots the player has in preferences.
 /datum/gear_slots_container
 	/// Max size of the container. New gear slots are added to `gear_slots` when required
@@ -287,18 +291,22 @@
 	return size
 
 /// Sets `picked_gear_slot` to the `picked_gear_slot + 1`, or to 1 if overflowed
+/// Returns `true`, if slot successfully changed, `false` otherwise
 /datum/gear_slots_container/proc/cycle_slot_right()
 	if(size <= 1)
-		return
+		return FALSE
 
 	picked_gear_slot = sanitize_integer(picked_gear_slot + 1, 1, size, 1)
+	return TRUE
 
 /// Sets `picked_gear_slot` to the `picked_gear_slot - 1`, or to length(gear_slots) if new slot is <= 0
+/// Returns `true`, if slot successfully changed, `false` otherwise
 /datum/gear_slots_container/proc/cycle_slot_left()
 	if(size <= 1)
-		return
+		return FALSE
 
 	picked_gear_slot = sanitize_integer(picked_gear_slot - 1, 1, size, size)
+	return TRUE
 
 /// Create new `/datum/gear_slot` until `gear_slots` length wil be equal to `size`.
 /// If the `gear_slots` is already of desired size, no changes will happen

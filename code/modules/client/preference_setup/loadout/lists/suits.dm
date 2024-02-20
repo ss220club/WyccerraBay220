@@ -6,7 +6,6 @@
 /datum/gear/suit/poncho
 	display_name = "poncho selection"
 	path = /obj/item/clothing/suit/poncho/colored
-	cost = 1
 	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/suit/security_poncho
@@ -145,12 +144,10 @@
 /datum/gear/suit/blueapron
 	display_name = "apron, blue"
 	path = /obj/item/clothing/suit/apron
-	cost = 1
 
 /datum/gear/suit/overalls
 	display_name = "apron, overalls"
 	path = /obj/item/clothing/suit/apron/overalls
-	cost = 1
 
 /datum/gear/suit/medcoat
 	display_name = "medical suit selection"
@@ -183,3 +180,40 @@
 /datum/gear/suit/zipper
 	display_name = "sweater, zip up"
 	path = /obj/item/clothing/suit/storage/toggle/zipper
+
+/datum/gear/suit/unathi
+	category = GEAR_CATEGORY_SUITS_AND_OVERWEAR
+	abstract_type = /datum/gear/suit/unathi
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)
+
+/datum/gear/suit/unathi/mantle
+	display_name = "hide mantle (Unathi)"
+	path = /obj/item/clothing/suit/unathi/mantle
+
+/datum/gear/suit/unathi/robe
+	display_name = "roughspun robe (Unathi)"
+	path = /obj/item/clothing/suit/unathi/robe
+
+/datum/gear/suit/unathi/knifeharness
+	display_name = "decorated harness"
+	path = /obj/item/clothing/accessory/storage/knifeharness
+	cost = 5
+
+/datum/gear/suit/unathi/savage_hunter
+	display_name = "savage hunter hides (Male, Unathi)"
+	path = /obj/item/clothing/under/savage_hunter
+	slot = slot_w_uniform
+	cost = 2
+
+/datum/gear/suit/unathi/savage_hunter/female
+	display_name = "savage hunter hides (Female, Unathi)"
+	path = /obj/item/clothing/under/savage_hunter/female
+	slot = slot_w_uniform
+	cost = 2
+
+/datum/gear/suit/lab_xyn_machine
+	display_name = "Xynergy labcoat"
+	path = /obj/item/clothing/suit/storage/toggle/labcoat/xyn_machine
+	slot = slot_wear_suit
+	category = GEAR_CATEGORY_SUITS_AND_OVERWEAR
+	whitelisted = list(SPECIES_IPC)

@@ -564,6 +564,12 @@
 		var/mob/living/L = locate(href_list["debug_mob_ai"])
 		log_debug("AI Debugging toggled [L.ai_holder.debug() ? "ON" : "OFF"] for \the [L]")
 
+	else if(href_list["changetts"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/atom/A = locate(href_list["changetts"])
+		A.change_tts_seed(src.mob, TRUE, TRUE)
+
 	else if (href_list["addmovementhandler"])
 		if (!check_rights(R_DEBUG))
 			return

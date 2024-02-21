@@ -100,6 +100,7 @@
 #include "code\__defines\dcs\signals\signals_atom_movable.dm"
 #include "code\__defines\dcs\signals\signals_datum.dm"
 #include "code\__defines\dcs\signals\signals_mob.dm"
+#include "code\__defines\dcs\signals\signals_object.dm"
 #include "code\__defines\~mods\bloom_light.dm"
 #include "code\__defines\~mods\expanded_culture_descriptor.dm"
 #include "code\__defines\~mods\rust_g.dm"

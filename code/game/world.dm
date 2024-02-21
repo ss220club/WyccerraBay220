@@ -202,11 +202,7 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 			s["adminlist"] = list2params(admins)
 			s["active_players"] = active
 
-		// [SIERRA-ADD] - EX666_ECOSYSTEM
-		if(input["format"] == "json")
-			return json_encode(s)
-		// [/SIERRA-ADD]
-		return list2params(s)
+		return json_encode(s)
 
 	else if(T == "manifest")
 		var/list/positions = list()

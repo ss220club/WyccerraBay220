@@ -10,11 +10,11 @@
 		to_chat(user, SPAN_NOTICE("You load the [I.name] into the storage compartment."));\
 		##slot = I;\
 		update_icon();\
-		SSnano.update_uis(src);\
+		SStgui.update_uis(src);\
 		return\
 	}
 
-#define dispense_clothing(item) if(!isopen){return}if(item){item.dropInto(loc); item = null}
+#define dispense_clothing(item) if(item){item.dropInto(loc); item = null}
 
 /obj/machinery/suit_storage_unit
 	name = "suit storage unit"
@@ -25,15 +25,7 @@
 	density = TRUE
 	idle_power_usage = 50
 	active_power_usage = 200
-	interact_offline = 1
 	req_access = list()
-
-	var/mob/living/carbon/human/occupant = null
-	var/obj/item/clothing/suit/space/suit = null
-	var/obj/item/clothing/head/helmet/space/helmet = null
-	var/obj/item/clothing/shoes/magboots/boots = null
-	var/obj/item/tank/tank = null
-	var/obj/item/clothing/mask/mask = null
 
 	var/isopen = FALSE
 	var/islocked = FALSE
@@ -41,6 +33,13 @@
 	var/issuperUV = FALSE
 	var/panelopen = FALSE
 	var/safetieson = TRUE
+
+	var/mob/living/carbon/human/occupant
+	var/obj/item/clothing/suit/space/suit
+	var/obj/item/clothing/head/helmet/space/helmet
+	var/obj/item/clothing/shoes/magboots/boots
+	var/obj/item/tank/tank
+	var/obj/item/clothing/mask/mask
 
 /obj/machinery/suit_storage_unit/Initialize()
 	. = ..()
@@ -110,7 +109,7 @@
 			panelopen = !panelopen
 			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 			to_chat(user, SPAN_NOTICE("You [panelopen ? "open" : "close"] the unit's maintenance panel."))
-			SSnano.update_uis(src)
+			SStgui.update_uis(src)
 			update_icon()
 		 return TRUE
 
@@ -120,7 +119,7 @@
 			if(do_after(user, (I.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
 				isopen = TRUE
 				to_chat(user, SPAN_NOTICE("You pry the unit open."))
-				SSnano.update_uis(src)
+				SStgui.update_uis(src)
 				update_icon()
 		else if(islocked)
 			to_chat(user, SPAN_WARNING("You can't pry the unit open, it's locked!"))
@@ -132,7 +131,7 @@
 	TRY_INSERT_SUIT_PIECE(tank, tank)
 	TRY_INSERT_SUIT_PIECE(mask, clothing/mask)
 	update_icon()
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 	return TRUE
 
 /obj/machinery/suit_storage_unit/proc/move_target_inside(mob/target, mob/user)
@@ -150,28 +149,28 @@
 			add_fingerprint (target)
 		isopen = FALSE
 		target.remove_grabs_and_pulls()
-		SSnano.update_uis(src)
+		SStgui.update_uis(src)
 		update_icon()
 
 /obj/machinery/suit_storage_unit/user_can_move_target_inside(mob/target, mob/user)
-	if (!isopen)
+	if(!isopen)
 		to_chat(user, SPAN_NOTICE("The unit's doors are shut."))
 		return FALSE
-	if (occupant || suit || tank || (helmet && boots && mask))
+	if(occupant || suit || tank || (helmet && boots && mask))
 		to_chat(user, SPAN_NOTICE("The unit's storage area is too cluttered."))
 		return FALSE
 	return ..()
 
 /obj/machinery/suit_storage_unit/use_grab(obj/item/grab/grab, list/click_params)
-	if (!user_can_move_target_inside(grab.affecting, grab.assailant))
+	if(!user_can_move_target_inside(grab.affecting, grab.assailant))
 		return TRUE
 	move_target_inside(grab.affecting, grab.assailant)
 	return TRUE
 
 /obj/machinery/suit_storage_unit/MouseDrop_T(mob/target, mob/user)
-	if (!ismob(target) || !CanMouseDrop(target, user))
+	if(!ismob(target) || !CanMouseDrop(target, user))
 		return
-	if (user != target)
+	if(user != target)
 		to_chat(user, SPAN_WARNING("You need to grab \the [target] to be able to do that!"))
 		return
 	else if (user_can_move_target_inside(target, user))
@@ -179,17 +178,27 @@
 		return
 
 /obj/machinery/suit_storage_unit/interface_interact(mob/user)
-	ui_interact(user)
+	tgui_interact(user)
 	return TRUE
 
-/obj/machinery/suit_storage_unit/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
+/obj/machinery/suit_storage_unit/tgui_state(mob/user)
+	return GLOB.tgui_default_state
+
+/obj/machinery/suit_storage_unit/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "SuitStorage", name)
+		ui.set_autoupdate(FALSE)
+		ui.open()
+
+/obj/machinery/suit_storage_unit/tgui_data(mob/user)
 	var/list/data = list()
 
-	data["panelopen"] = panelopen
-	data["open"] = isopen
+	data["panel_open"] = panelopen
+	data["door_open"] = isopen
 	data["locked"] = islocked
 	data["uv"] = isUV
-	data["superuv"] = issuperUV
+	data["super_uv"] = issuperUV
 	data["safeties"] = safetieson
 	data["helmet"] = helmet
 	data["suit"] = suit
@@ -197,59 +206,51 @@
 	data["tank"] = tank
 	data["mask"] = mask
 
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if(!ui)
-		ui = new(user, src, ui_key, "suit_storage_unit.tmpl", "Suit Storage Unit", 400, 500)
-		ui.set_initial_data(data)
-		ui.open()
+	return data
 
-/obj/machinery/suit_storage_unit/CanUseTopic(mob/user)
-	if(!user.IsAdvancedToolUser())
-		return STATUS_CLOSE
-	return ..()
+/obj/machinery/suit_storage_unit/tgui_act(action, list/params)
+	if(..())
+		return
+	. = TRUE
 
-/obj/machinery/suit_storage_unit/OnTopic(user, list/href_list, datum/topic_state/state)
-	if(href_list["toggleUV"])
-		toggleUV(user)
-		return TOPIC_REFRESH
-	if(href_list["togglesafeties"])
-		togglesafeties(user)
-		return TOPIC_REFRESH
-	if(href_list["dispense_helmet"])
-		dispense_helmet()
-		update_icon()
-		return TOPIC_REFRESH
-	if(href_list["dispense_suit"])
-		dispense_suit()
-		update_icon()
-		return TOPIC_REFRESH
-	if(href_list["dispense_boots"])
-		dispense_boots()
-		update_icon()
-		return TOPIC_REFRESH
-	if(href_list["dispense_tank"])
-		dispense_tank()
-		update_icon()
-		return TOPIC_REFRESH
-	if(href_list["dispense_mask"])
-		dispense_mask()
-		update_icon()
-		return TOPIC_REFRESH
-	if(href_list["toggle_open"])
-		toggle_open(user)
-		update_icon()
-		return TOPIC_REFRESH
-	if(href_list["toggle_lock"])
-		toggle_lock(user)
-		return TOPIC_REFRESH
-	if(href_list["start_UV"])
-		start_UV(user)
-		update_icon()
-		return TOPIC_REFRESH
-	if(href_list["eject_guy"])
-		eject_occupant(user)
-		update_icon()
-		return TOPIC_REFRESH
+	switch(action)
+		if("dispense_helmet")
+			dispense_helmet()
+			update_icon()
+			return TRUE
+		if("dispense_suit")
+			dispense_suit()
+			update_icon()
+			return TRUE
+		if("dispense_boots")
+			dispense_boots()
+			update_icon()
+			return TRUE
+		if("dispense_tank")
+			dispense_tank()
+			update_icon()
+			return TRUE
+		if("dispense_mask")
+			dispense_mask()
+			update_icon()
+			return TRUE
+		if("toggle_open")
+			toggle_open(usr)
+			update_icon()
+			return TRUE
+		if("toggle_lock")
+			toggle_lock(usr)
+			return TRUE
+		if("start_UV")
+			start_UV(usr)
+			update_icon()
+			return TRUE
+		if("toggleUV")
+			issuperUV = !issuperUV
+			return TRUE
+		if("togglesafeties")
+			safetieson = !safetieson
+			return TRUE
 
 /obj/machinery/suit_storage_unit/proc/dispense_helmet()
 	dispense_clothing(helmet)
@@ -279,37 +280,13 @@
 	if(occupant)
 		eject_occupant(occupant)
 
-/obj/machinery/suit_storage_unit/proc/toggleUV(mob/user)
-	if(!panelopen)
-		return
-	else
-		issuperUV = !issuperUV
-		to_chat(user, issuperUV ? SPAN_WARNING("You crank the dial all the way up to \"15nm\".") : SPAN_NOTICE("You slide the dial back towards \"185nm\"."))
-
-/obj/machinery/suit_storage_unit/proc/togglesafeties(mob/user)
-	if(!panelopen)
-		return
-	else
-		safetieson = !safetieson
-		to_chat(user, SPAN_NOTICE("You push the button. The coloured LED next to it [safetieson ? "turns green" : "turns red"]."))
-
 /obj/machinery/suit_storage_unit/proc/toggle_open(mob/user)
-	if(!is_powered())
-		to_chat(user, SPAN_NOTICE("The unit is offline."))
-		return
-	if(islocked || isUV)
-		to_chat(user, SPAN_NOTICE("Unable to open unit."))
-		return
 	if(occupant)
 		eject_occupant(user)
-		return  // eject_occupant opens the door, so we need to return
 	isopen = !isopen
 	playsound(src, 'sound/machines/suitstorage_cycledoor.ogg', 50, 0)
 
 /obj/machinery/suit_storage_unit/proc/toggle_lock(mob/user)
-	if(!is_powered())
-		to_chat(user, SPAN_NOTICE("The unit is offline."))
-		return
 	if(!allowed(user))
 		FEEDBACK_ACCESS_DENIED(user, src)
 		return
@@ -322,11 +299,6 @@
 	playsound(src, 'sound/machines/suitstorage_lockdoor.ogg', 50, 0)
 
 /obj/machinery/suit_storage_unit/proc/start_UV(mob/user)
-	if(isUV || isopen)
-		return
-	if(!is_powered())
-		to_chat(user, SPAN_NOTICE("The unit is offline."))
-		return
 	if(occupant && safetieson)
 		to_chat(user, SPAN_WARNING("Biological entity detected in the confines of the Unit's storage. Cannot initiate cycle."))
 		return
@@ -339,7 +311,7 @@
 	isUV = TRUE
 	update_use_power(POWER_USE_ACTIVE)
 	update_icon()
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 
 	var/datum/callback/uvburn = CALLBACK(src, PROC_REF(uv_burn))
 	addtimer(uvburn, 5 SECONDS)
@@ -348,23 +320,25 @@
 	addtimer(CALLBACK(src, PROC_REF(uv_finish)), 20 SECONDS)
 
 /obj/machinery/suit_storage_unit/proc/uv_burn()
-	if(occupant)
-		occupant.apply_damage(50, DAMAGE_RADIATION, damage_flags = DAMAGE_FLAG_DISPERSED)
-		var/obj/item/organ/internal/diona/nutrients/rad_organ = locate() in occupant.internal_organs
-		if(!rad_organ)
-			if(occupant.can_feel_pain())
-				occupant.emote("scream")
-			if(issuperUV)
-				var/burndamage = rand(40,60)
-				occupant.take_organ_damage(0,burndamage)
-			else
-				var/burndamage = rand(10,15)
-				occupant.take_organ_damage(0,burndamage)
+	if(!occupant)
+		return
+	occupant.apply_damage(50, DAMAGE_RADIATION, damage_flags = DAMAGE_FLAG_DISPERSED)
+	var/obj/item/organ/internal/diona/nutrients/rad_organ = locate() in occupant.internal_organs
+	if(rad_organ)
+		return
+	if(occupant.can_feel_pain())
+		occupant.emote("scream")
+	if(issuperUV)
+		var/burndamage = rand(40,60)
+		occupant.take_organ_damage(0,burndamage)
+	else
+		var/burndamage = rand(10,15)
+		occupant.take_organ_damage(0,burndamage)
 
 /obj/machinery/suit_storage_unit/proc/uv_finish()
 	isUV = FALSE
 	if(issuperUV)
-		if(helmet )
+		if(helmet)
 			helmet  = null
 		if(suit)
 			suit = null
@@ -377,10 +351,10 @@
 		visible_message(SPAN_WARNING("With a loud whining noise, the Suit Storage Unit's door grinds open. Puffs of ashen smoke come out of its chamber."))
 		set_broken(TRUE)
 		isopen = TRUE
-		islocked = FALSE         //
-		eject_occupant(occupant) // Mixing up these two lines causes bug. DO NOT DO IT.
+		islocked = FALSE
+		eject_occupant(occupant)
 	else
-		if(helmet )
+		if(helmet)
 			helmet.clean_blood()
 		if(suit)
 			suit.clean_blood()
@@ -392,15 +366,9 @@
 			mask.clean_blood()
 	update_use_power(POWER_USE_IDLE)
 	update_icon()
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 
 /obj/machinery/suit_storage_unit/proc/eject_occupant(mob/user)
-	if(islocked)
-		return
-	if(!occupant)
-		return
-	if(!isopen)
-		isopen = TRUE
 	visible_message(SPAN_NOTICE("The suit storage unit spits out [occupant]."))
 	occupant.reset_view()
 	occupant.dropInto(loc)
@@ -412,11 +380,11 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (usr.incapacitated())
+	if(usr.incapacitated())
 		return
 	eject_occupant(usr)
 	add_fingerprint(usr)
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 	update_icon()
 
 /obj/machinery/suit_storage_unit/verb/move_inside()
@@ -424,15 +392,15 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (usr.incapacitated())
+	if(usr.incapacitated())
 		return
-	if (!isopen)
+	if(!isopen)
 		to_chat(usr, SPAN_NOTICE("The unit's doors are shut."))
 		return
-	if (inoperable())
+	if(inoperable())
 		to_chat(usr, SPAN_NOTICE("The unit is not operational."))
 		return
-	if ( (occupant) || (helmet ) || (suit) )
+	if((occupant) || (helmet) || (suit))
 		to_chat(usr, SPAN_WARNING("It's too cluttered inside for you to fit in!"))
 		return
 	visible_message(SPAN_NOTICE("\The [usr] starts squeezing into the suit storage unit!"))
@@ -444,7 +412,7 @@
 		isopen = FALSE
 		update_icon()
 		add_fingerprint(usr)
-		SSnano.update_uis(src)
+		SStgui.update_uis(src)
 
 #undef TRY_INSERT_SUIT_PIECE
 #undef dispense_clothing

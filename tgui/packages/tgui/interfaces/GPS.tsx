@@ -3,7 +3,7 @@ import { useBackend } from '../backend';
 import { Button, Section, Stack, Table, Icon } from '../components';
 import { Window } from '../layouts';
 
-export type GPSData = {
+type GPSData = {
   tracking: BooleanLike;
   can_hide_signal: BooleanLike;
   hide_signal: BooleanLike;

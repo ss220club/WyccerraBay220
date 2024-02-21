@@ -164,7 +164,7 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 		// This is dumb, but spacestation13.com's banners break if player count isn't the 8th field of the reply, so... this has to go here.
 		s["players"] = 0
 		s["stationtime"] = stationtime2text()
-		s["roundduration"] = roundduration2text()
+		s["roundtime"] = roundduration2text()
 		s["map"] = replacetext(GLOB.using_map.full_name, "\improper", "") //Done to remove the non-UTF-8 text macros
 
 		s["roundtime"] = roundduration2text()

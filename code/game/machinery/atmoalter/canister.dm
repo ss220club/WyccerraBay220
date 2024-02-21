@@ -337,7 +337,7 @@
 /obj/machinery/portable_atmospherics/canister/sleeping_agent/roomfiller/New()
 	. = ..()
 	air_contents.gas[GAS_N2O] = 9*4000
-	spawn(1 SECONDS)
+	spawn(10)
 		var/turf/simulated/location = src.loc
 		if(istype(src.loc))
 			while(!location.air)

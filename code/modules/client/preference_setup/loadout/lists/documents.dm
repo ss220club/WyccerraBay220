@@ -24,8 +24,10 @@
 	display_name = "work visa"
 	description = "A work visa issued by the Sol Central Government for the purpose of work."
 	path = /obj/item/paper/workvisa
+	cost = 0
 
 /datum/gear/document/travelvisa
 	display_name = "travel visa"
 	description = "A travel visa issued by the Sol Central Government for the purpose of recreation."
 	path = /obj/item/paper/travelvisa
+	cost = 0

@@ -18,13 +18,20 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	icon_state = "disposal"
 	anchored = TRUE
 	density = TRUE
-	var/datum/gas_mixture/air_contents	// internal reservoir
-	var/mode = 1	// item mode 0=off 1=charging 2=charged
-	var/flush = 0	// true if flush handle is pulled
-	var/obj/structure/disposalpipe/trunk/trunk = null // the attached pipe trunk
-	var/flushing = 0	// true if flushing in progress
-	var/flush_every_ticks = 30 //Every 30 ticks it will look whether it is ready to flush
-	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
+	/// Internal reservoir
+	var/datum/gas_mixture/air_contents
+	/// Item mode 0=off 1=charging 2=charged
+	var/mode = 1
+	// True if flush handle is pulled
+	var/flush = TRUE
+	/// The attached pipe trunk
+	var/obj/structure/disposalpipe/trunk/trunk
+	/// True if flushing in progress
+	var/flushing = FALSE
+	/// Every 30 ticks it will look whether it is ready to flush
+	var/flush_every_ticks = 3 SECONDS
+	/// This var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
+	var/flush_count = 0
 	var/last_sound = 0
 	var/list/allowed_objects = list(
 		/obj/structure/closet,
@@ -213,112 +220,71 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 
 // attempt to move while inside
 /obj/machinery/disposal/relaymove(mob/user as mob)
-	if (user.incapacitated() || src.flushing)
+	if(user.incapacitated() || src.flushing)
 		return
-	if (user.loc == src)
+	if(user.loc == src)
 		src.go_out(user)
 	return
 
 // leave the disposal
 /obj/machinery/disposal/proc/go_out(mob/user)
-
-	if (user.client)
+	if(user.client)
 		user.client.eye = user.client.mob
 		user.client.perspective = MOB_PERSPECTIVE
 	user.forceMove(src.loc)
 	update_icon()
 	return
 
-/obj/machinery/disposal/DefaultTopicState()
-	return GLOB.outside_state
-
-// human interact with machine
-/obj/machinery/disposal/physical_attack_hand(mob/user)
-	// Clumsy folks can only flush it.
-	if(!user.IsAdvancedToolUser(1))
-		flush = !flush
-		update_icon()
-		return TRUE
-
 /obj/machinery/disposal/interface_interact(mob/user)
-	interact(user)
+	tgui_interact(user)
 	return TRUE
 
-// user interaction
-/obj/machinery/disposal/interact(mob/user)
+/obj/machinery/disposal/tgui_state(mob/user)
+	return GLOB.default_state
 
-	src.add_fingerprint(user)
-	if(MACHINE_IS_BROKEN(src))
-		user.unset_machine()
+/obj/machinery/disposal/tgui_interact(mob/user, datum/tgui/ui = null)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "DisposalBin", name)
+		ui.open()
+
+/obj/machinery/disposal/tgui_data(mob/user)
+	var/list/data = list()
+
+	data["isAI"] = isAI(user)
+	data["flushing"] = flush
+	data["mode"] = mode
+	data["pressure"] = round(clamp(100* air_contents.return_pressure() / (SEND_PRESSURE), 0, 100),1)
+
+	return data
+
+/obj/machinery/disposal/tgui_act(action, params)
+	if(..())
+		return
+	. = TRUE
+
+	if(usr.loc == src)
+		to_chat(usr, SPAN_WARNING("Вы не можете дотянуться до панели управления, находясь внутри!"))
 		return
 
-	var/ai = isAI(user)
-	var/dat = ""
+	src.add_fingerprint(usr)
 
-	if(!ai)  // AI can't pull flush handle
-		if(flush)
-			dat += "Disposal handle: <A href='?src=\ref[src];handle=0'>Disengage</A> <B>Engaged</B>"
-		else
-			dat += "Disposal handle: <B>Disengaged</B> <A href='?src=\ref[src];handle=1'>Engage</A>"
+	switch(action)
+		if("eject")
+			eject()
+			return TRUE
+		if("mode")
+			if(mode >= 1)
+				mode = 0
+			else
+				mode = 1
+			update_icon()
+			return TRUE
+		if("flush")
+			flush = !flush
+			return TRUE
 
-		dat += "<BR><HR><A href='?src=\ref[src];eject=1'>Eject contents</A><HR>"
-
-	if(mode <= 0)
-		dat += "Pump: <B>Off</B> <A href='?src=\ref[src];pump=1'>On</A><BR>"
-	else if(mode == 1)
-		dat += "Pump: <A href='?src=\ref[src];pump=0'>Off</A> <B>On</B> (pressurizing)<BR>"
-	else
-		dat += "Pump: <A href='?src=\ref[src];pump=0'>Off</A> <B>On</B> (idle)<BR>"
-
-	var/per = 100* air_contents.return_pressure() / (SEND_PRESSURE)
-
-	dat += "Pressure: [round(per, 1)]%<BR></body>"
-
-
-	user.set_machine(src)
-	var/datum/browser/popup = new(user, "disposal", "Waste Disposal Unit", 360, 170)
-	popup.set_content(dat)
-	popup.open()
-
-// handle machine interaction
-
-/obj/machinery/disposal/CanUseTopic(mob/user, state, href_list)
-	if(user.loc == src)
-		to_chat(user, SPAN_WARNING("You cannot reach the controls from inside."))
-		return STATUS_CLOSE
-	if(isAI(user) && href_list && (href_list["handle"] || href_list["eject"]))
-		return min(STATUS_UPDATE, ..())
-	if(mode==-1 && href_list && !href_list["eject"]) // only allow ejecting if mode is -1
-		to_chat(user, SPAN_WARNING("The disposal units power is disabled."))
-		return min(STATUS_UPDATE, ..())
-	if(flushing)
-		return min(STATUS_UPDATE, ..())
-	return ..()
-
-/obj/machinery/disposal/OnTopic(user, href_list)
-	if(href_list["close"])
-		close_browser(user, "window=disposal")
-		return TOPIC_HANDLED
-
-	if(href_list["pump"])
-		if(text2num(href_list["pump"]))
-			mode = 1
-		else
-			mode = 0
-		update_icon()
-		. = TOPIC_REFRESH
-
-	else if(href_list["handle"])
-		flush = text2num(href_list["handle"])
-		update_icon()
-		. = TOPIC_REFRESH
-
-	else if(href_list["eject"])
-		eject()
-		. = TOPIC_REFRESH
-
-	if(. == TOPIC_REFRESH)
-		interact(user)
+	return TRUE
 
 /obj/machinery/disposal/verb/manual_eject()
 	set src in oview(1)
@@ -551,7 +517,6 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		icon_state = "switch-fwd"
 	else
 		icon_state = "switch-off"
-
 
 /obj/item/disposal_switch_construct
 	name = "disposal switch assembly"

@@ -221,7 +221,7 @@ const Vend = (props, context) => {
     </Dimmer>
   ) : (
     <Dimmer textAlign="center">
-      <Icon name="smile" size="7" color="yellow" />
+      <Icon name="smile" size={7} color="yellow" />
       <Stack.Item color="label" mt={5}>
         <h1>Наслаждайтесь!</h1>
       </Stack.Item>

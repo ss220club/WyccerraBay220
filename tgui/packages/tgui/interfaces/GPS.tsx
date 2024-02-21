@@ -286,7 +286,7 @@ const TurnedOff = ({ emp }) => {
               name={emp ? 'tower-broadcast' : 'power-off'}
               color="gray"
             />
-            <Icon size={5} name={emp ? 'slash' : ''} color="gray" />
+            <Icon size={5} name={emp ? 'slash' : ''} color="red" />
           </Icon.Stack>
           <br />
           {emp

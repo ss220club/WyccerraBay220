@@ -16,7 +16,7 @@
 
 	GLOB.using_map.shuttle_called_message = "Attention all hands: Emergency Bluespace Drive spool up initiated. It will be ready for jump in %ETA%."
 	GLOB.using_map.shuttle_docked_message = "Attention all hands: Bluespace Drive spooled up. Emergency bluespace jump in %ETD%."
-	GLOB.using_map.shuttle_leaving_dock = "Attention all hands: Emergency bluespace jump initiated, emerging in %ETA%."
+	GLOB.using_map.shuttle_leaving_message = "Attention all hands: Emergency bluespace jump initiated, emerging in %ETA%."
 
 /datum/game_mode/meteor/on_meteor_warn()
 	..()

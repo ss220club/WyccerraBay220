@@ -384,6 +384,7 @@
  *  This is used rather than SHOULD_CALL_PARENT as it enforces that subtypes of a type that explicitly returns still call parent
  */
 /atom/proc/examine(mob/user, distance, is_adjacent, infix = "", suffix = "")
+	var/list/examine_info = list()
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src][infix]."
 	if(blood_color && !istype(src, /obj/decal))
@@ -393,14 +394,16 @@
 			f_name = "a "
 		f_name += "[SPAN_COLOR(blood_color, "stained")] [name][infix]!"
 
-	to_chat(user, "[icon2html(src, user)] That's [f_name] [suffix]")
-	to_chat(user, desc)
-	if (get_max_health())
-		examine_damage_state(user)
+	examine_info = "[icon2html(src, user)] That's [f_name] [suffix]"
+	if(desc)
+		examine_info += "\n [desc]"
+	to_chat(user, chat_box_examine(examine_info))
 
-	if (IsFlameSource())
+	if(get_max_health())
+		examine_damage_state(user)
+	if(IsFlameSource())
 		to_chat(user, SPAN_DANGER("It has an open flame."))
-	else if (distance <= 1 && IsHeatSource())
+	else if(distance <= 1 && IsHeatSource())
 		to_chat(user, SPAN_WARNING("It's hot to the touch."))
 
 	return TRUE

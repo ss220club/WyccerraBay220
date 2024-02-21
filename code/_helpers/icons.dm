@@ -419,7 +419,7 @@ as a single icon. Useful for when you want to manipulate an icon via the above a
 The _flatIcons list is a cache for generated icon files.
 */
 
-/proc/getFlatIcon(image/A, defdir=2, deficon=null, defstate="", defblend=BLEND_DEFAULT, always_use_defdir = 0)
+/proc/getFlatIcon(image/A, defdir=2, deficon=null, defstate="", defblend=BLEND_DEFAULT, always_use_defdir = FALSE)
 	RETURN_TYPE(/icon)
 	// We start with a blank canvas, otherwise some icon procs crash silently
 	var/icon/flat = icon('icons/effects/effects.dmi', "icon_state"="nothing") // Final flattened icon
@@ -467,7 +467,7 @@ The _flatIcons list is a cache for generated icon files.
 	var/image/copy
 	// Add the atom's icon itself, without pixel_x/y offsets.
 	if(!noIcon)
-		copy = image(icon=curicon, icon_state=curstate, layer=A.layer, dir=curdir)
+		copy = image(icon(curicon, curstate, curdir, 1), layer=A.layer)
 		copy.color = A.color
 		copy.alpha = A.alpha
 		copy.blend_mode = curblend
@@ -529,6 +529,9 @@ The _flatIcons list is a cache for generated icon files.
 		if(I:plane == EMISSIVE_PLANE) //Just replace this with whatever it is TG is doing these days sometime. Getflaticon breaks emissives
 			continue
 
+		if(I:plane == LIGHTING_EXPOSURE_PLANE) // SS220 Bloom-Lighting
+			continue
+
 		if(I:alpha == 0)
 			continue
 
@@ -538,9 +541,9 @@ The _flatIcons list is a cache for generated icon files.
 		else // 'I' is an appearance object.
 			if(istype(A,/obj/machinery/atmospherics) && (I in A.underlays))
 				var/image/Im = I
-				add = getFlatIcon(new/image(I), Im.dir, curicon, curstate, curblend, 1)
+				add = getFlatIcon(image(I), Im.dir, curicon, curstate, curblend, TRUE)
 			else
-				add = getFlatIcon(new/image(I), curdir, curicon, curstate, curblend, always_use_defdir)
+				add = getFlatIcon(image(I), curdir, curicon, curstate, curblend, always_use_defdir)
 
 		// Find the new dimensions of the flat icon to fit the added overlay
 		addX1 = min(flatX1, I:pixel_x+1)

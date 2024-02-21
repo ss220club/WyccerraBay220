@@ -18,7 +18,7 @@
 		log_debug("\The [src] attempted to convert \the [player.current] to [faction], but failed: Player is already an antagonist.")
 		return
 
-	var/result = faction.can_become_antag_detailed(player, TRUE)
+	var/result = faction.can_become_antag_detailed(player, TRUE, TRUE)
 	if(result)
 		to_chat(src, SPAN_WARNING("\The [player.current] cannot be \a [faction.faction_role_text]!"))
 		log_debug("\The [src] attempted to convert \the [player.current] to [faction], but failed: [result]")
@@ -35,7 +35,7 @@
 	player.rev_cooldown = world.time + 5 SECONDS
 	if (!faction.is_antagonist(player))
 		var/choice = alert(player.current,"Asked by [src]: Do you want to join the [faction.faction_descriptor]?","Join the [faction.faction_descriptor]?","No!","Yes!")
-		if(choice == "Yes!" && faction.add_antagonist_mind(player, 0, faction.faction_role_text, faction.faction_welcome))
+		if(choice == "Yes!" && faction.add_antagonist_mind(player, FALSE, faction.faction_role_text, faction.faction_welcome))
 			to_chat(src, SPAN_NOTICE("\The [player.current] joins the [faction.faction_descriptor]!"))
 			log_debug("\The [src] has successfully converted \the [player.current] to [faction].")
 			return

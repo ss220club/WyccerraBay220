@@ -366,7 +366,7 @@
 
 	var/show_log = alert(src, "Show ion message?", "Message", "Yes", "No")
 	if(show_log == "Yes")
-		command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = 'sound/AI/ionstorm.ogg')
+		command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = ANNOUNCER_IONSTORM)
 
 	IonStorm(0)
 
@@ -588,7 +588,7 @@ Ccomp's first proc.
 
 	var/show_log = alert(src, "Show ion message?", "Message", "Yes", "No")
 	if(show_log == "Yes")
-		command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = 'sound/AI/ionstorm.ogg')
+		command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = ANNOUNCER_IONSTORM)
 
 /client/proc/cmd_admin_rejuvenate(mob/living/M as mob in SSmobs.mob_list)
 	set category = "Special Verbs"
@@ -799,7 +799,7 @@ Ccomp's first proc.
 	if(view == world.view)
 		view = input("Select view range:", "FUCK YE", 7) in list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,128)
 	else
-		view = world.view
+		view = get_preference_value(/datum/client_preference/client_view)
 
 	log_and_message_admins("changed their view range to [view].")
 
@@ -980,9 +980,9 @@ Ccomp's first proc.
 		range = rand(8, 13)
 		var/turf/T
 		if (connected == "Yes")
-			T = pick_area_turf_in_connected_z_levels(list(/proc/is_not_space_area), z_level = zlevel)
+			T = pick_area_turf_in_connected_z_levels(list(GLOBAL_PROC_REF(is_not_space_area)), z_level = zlevel)
 		else
-			T = pick_area_turf_in_single_z_level(list(/proc/is_not_space_area), z_level = zlevel)
+			T = pick_area_turf_in_single_z_level(list(GLOBAL_PROC_REF(is_not_space_area)), z_level = zlevel)
 		explosion(T, range, max_power, turf_breaker = break_turfs)
 		booms = booms - 1
 		sleep(delay SECONDS)

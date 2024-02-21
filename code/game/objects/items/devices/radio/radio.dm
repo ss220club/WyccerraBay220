@@ -288,10 +288,7 @@
 	if(.)
 		SSnano.update_uis(src)
 
-// [SIERRA-EDIT] - ERIS_ANNOUNCER
-// /obj/item/device/radio/proc/autosay(message, from, channel) //BS12 EDIT // SIERRA-EDIT - ORIGINAL
-/obj/item/device/radio/proc/autosay(message, from, channel, zlevel) //BS12 EDIT
-// [/SIERRA-EDIT]
+/obj/item/device/radio/proc/autosay(message, from, channel, zlevel)
 	var/datum/radio_frequency/connection = null
 	if(channel && channels && length(channels) > 0)
 		if (channel == "department")
@@ -302,10 +299,8 @@
 		channel = null
 	if (!istype(connection))
 		return
-	// [SIERRA-ADD] - ERIS_ANNOUNCER
 	if(zlevel)
 		z = zlevel
-	// [/SIERRA-ADD]
 	var/mob/living/silicon/ai/A = new /mob/living/silicon/ai(src, null, null, 1)
 	A.fully_replace_character_name(from)
 	talk_into(A, message, channel,"states")

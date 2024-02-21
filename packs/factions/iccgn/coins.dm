@@ -58,7 +58,6 @@
 		forces for identification, collection, or bragging rights.\
 	"}
 	path = /obj/item/material/coin/challenge/gcc
-	cost = 1
 
 
 /datum/gear/trinket/gcc_challenge_coin/New()

@@ -494,3 +494,6 @@
 
 /// Integer (~ticks * SSMobs/wait fire rate). The default maximum value a mob's confused var can be set to.
 #define CONFUSED_MAX 15
+
+/// Get the client from the var
+#define CLIENT_FROM_VAR(I) (ismob(I) ? I:client : (istype(I, /client) ? I : (istype(I, /datum/mind) ? I:current?:client : null)))

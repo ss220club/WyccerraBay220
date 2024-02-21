@@ -1,13 +1,12 @@
 /datum/gear/skill
-	sort_category = "Skill Badges"
-	category = /datum/gear/skill
+	category = GEAR_CATEGORY_SKILL_BADGES
+	abstract_type = /datum/gear/skill
 	slot = slot_tie
-	// allowed_roles = EXPLORATION_ROLES [INF] by hacso
 
 /datum/gear/skill/botany
 	display_name = "Field Xenobotany Specialist badge"
 	path = /obj/item/clothing/accessory/solgov/skillbadge/botany
-	allowed_skills = list(SKILL_BOTANY = SKILL_TRAINED)
+	required_skills = list(SKILL_BOTANY = SKILL_TRAINED)
 
 /datum/gear/skill/botany/stripe
 	display_name = "Field Xenobotany Specialist voidsuit stripe"
@@ -16,7 +15,7 @@
 /datum/gear/skill/netgun
 	display_name = "Xenofauna Acquisition Specialist badge"
 	path = /obj/item/clothing/accessory/solgov/skillbadge/netgun
-	allowed_skills = list(SKILL_WEAPONS = SKILL_TRAINED)
+	required_skills = list(SKILL_WEAPONS = SKILL_TRAINED)
 
 /datum/gear/skill/netgun/stripe
 	display_name = "Xenofauna Acquisition Specialist voidsuit stripe"
@@ -25,7 +24,7 @@
 /datum/gear/skill/eva
 	display_name = "Void Mobility Specialist badge"
 	path = /obj/item/clothing/accessory/solgov/skillbadge/eva
-	allowed_skills = list(SKILL_EVA = SKILL_TRAINED)
+	required_skills = list(SKILL_EVA = SKILL_TRAINED)
 
 /datum/gear/skill/eva/stripe
 	display_name = "Void Mobility Specialist voidsuit stripe"
@@ -34,7 +33,7 @@
 /datum/gear/skill/medical
 	display_name = "Advanced First Aid Specialist badge"
 	path = /obj/item/clothing/accessory/solgov/skillbadge/medical
-	allowed_skills = list(SKILL_MEDICAL = SKILL_BASIC)
+	required_skills = list(SKILL_MEDICAL = SKILL_BASIC)
 
 /datum/gear/skill/medical/stripe
 	display_name = "Advanced First Aid Specialist voidsuit stripe"
@@ -43,12 +42,12 @@
 /datum/gear/skill/mech
 	display_name = "Exosuit Specialist badge"
 	path = /obj/item/clothing/accessory/solgov/skillbadge/mech
-	allowed_skills = list(SKILL_MECH = HAS_PERK)
+	required_skills = list(SKILL_MECH = HAS_PERK)
 
 /datum/gear/skill/electric
 	display_name = "Electrical Specialist badge"
 	path = /obj/item/clothing/accessory/solgov/skillbadge/electric
-	allowed_skills = list(SKILL_ELECTRICAL = SKILL_TRAINED)
+	required_skills = list(SKILL_ELECTRICAL = SKILL_TRAINED)
 
 /datum/gear/skill/electric/stripe
 	display_name = "Electrical Specialist voidsuit stripe"
@@ -57,4 +56,4 @@
 /datum/gear/skill/science
 	display_name = "Research Specialist badge"
 	path = /obj/item/clothing/accessory/solgov/skillbadge/science
-	allowed_skills = list(SKILL_SCIENCE = SKILL_TRAINED)
+	required_skills = list(SKILL_SCIENCE = SKILL_TRAINED)

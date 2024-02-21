@@ -712,77 +712,112 @@
 			return TRUE
 
 /obj/machinery/power/apc/interface_interact(mob/user)
-	ui_interact(user)
+	tgui_interact(user)
 	return TRUE
 
-/obj/machinery/power/apc/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
-	if(!user)
-		return
+/obj/machinery/power/apc/tgui_state(mob/user)
+	return GLOB.tgui_always_state
+
+/obj/machinery/power/apc/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "APC", "[area.name] - APC")
+		ui.open()
+
+/obj/machinery/power/apc/tgui_data(mob/user)
+	var/list/data = list()
 	var/obj/item/cell/cell = get_cell()
 
-	var/list/data = list(
-		"pChan_Off" = POWERCHAN_OFF,
-		"pChan_Off_T" = POWERCHAN_OFF_TEMP,
-		"pChan_Off_A" = POWERCHAN_OFF_AUTO,
-		"pChan_On" = POWERCHAN_ON,
-		"pChan_On_A" = POWERCHAN_ON_AUTO,
-		"locked" = (locked && !emagged) ? 1 : 0,
-		"isOperating" = operating,
-		"externalPower" = main_status,
-		"powerCellStatus" = cell ? cell.percent() : null,
-		"chargeMode" = chargemode,
-		"chargingStatus" = charging,
-		"totalLoad" = round(lastused_total),
-		"totalCharging" = round(lastused_charging),
-		"coverLocked" = coverlocked,
-		"failTime" = failure_timer * 2,
-		"siliconUser" = (istype(user, /mob/living/silicon) || (isghost(user) && isadmin(user))),
-		"powerChannels" = list(
-			list(
-				"title" = "Equipment",
-				"powerLoad" = lastused_equip,
-				"status" = equipment,
-				"topicParams" = list(
-					"auto" = list("eqp" = 2),
-					"on"   = list("eqp" = 1),
-					"off"  = list("eqp" = 0)
-				)
-			),
-			list(
-				"title" = "Lighting",
-				"powerLoad" = round(lastused_light),
-				"status" = lighting,
-				"topicParams" = list(
-					"auto" = list("lgt" = 2),
-					"on"   = list("lgt" = 1),
-					"off"  = list("lgt" = 0)
-				)
-			),
-			list(
-				"title" = "Environment",
-				"powerLoad" = round(lastused_environ),
-				"status" = environ,
-				"topicParams" = list(
-					"auto" = list("env" = 2),
-					"on"   = list("env" = 1),
-					"off"  = list("env" = 0)
-				)
-			)
-		)
-	)
+	data["hasAccess"] = (has_access(req_access, user.GetAccess()) && !isWireCut(APC_WIRE_IDSCAN))
+	data["locked"] = (locked && !emagged) ? 1 : 0
+	data["isOperating"] = operating
+	data["externalPower"] = main_status
+	data["powerCellStatus"] = cell ? cell.percent() : null
+	data["chargeMode"] = chargemode
+	data["chargingStatus"] = charging
+	data["totalLoad"] = round(lastused_total)
+	data["totalCharging"] = round(lastused_charging)
+	data["coverLocked"] = coverlocked
+	data["failTime"] = failure_timer
+	data["siliconUser"] = (istype(user, /mob/living/silicon) || (isghost(user) && isadmin(user)))
 
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if (!ui)
-		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "apc.tmpl", "[area.name] - APC", 520, data["siliconUser"] ? 465 : 440)
-		// when the ui is first opened this is the data it will use
-		ui.set_initial_data(data)
-		// open the new ui window
-		ui.open()
-		// auto update every Master Controller tick
-		ui.set_auto_update(1)
+	var/list/power_channels = list()
+	power_channels += list(list(
+		"title" = "Оборудование",
+		"powerLoad" = round(lastused_equip),
+		"status" = equipment,
+		"topicParams" = list(
+			"auto" = list("eqp" = 3),
+			"on"   = list("eqp" = 2),
+			"off"  = list("eqp" = 1)
+		)
+	))
+	power_channels += list(list(
+		"title" = "Освещение",
+		"powerLoad" = round(lastused_light),
+		"status" = lighting,
+		"topicParams" = list(
+			"auto" = list("lgt" = 3),
+			"on"   = list("lgt" = 2),
+			"off"  = list("lgt" = 1)
+		)
+	))
+	power_channels += list(list(
+		"title" = "Окружение",
+		"powerLoad" = round(lastused_environ),
+		"status" = environ,
+		"topicParams" = list(
+			"auto" = list("env" = 3),
+			"on"   = list("env" = 2),
+			"off"  = list("env" = 1)
+		)
+	))
+
+	data["powerChannels"] = power_channels
+
+	return data
+
+/obj/machinery/power/apc/tgui_act(action, list/params)
+	if(..())
+		return
+	. = TRUE
+
+	switch(action)
+		if("lock")
+			coverlocked = !coverlocked
+		if("reboot")
+			failure_timer = 0
+			update_icon()
+			update()
+		if("breaker")
+			toggle_breaker()
+		if("cmode")
+			set_chargemode(!chargemode)
+			if(!chargemode)
+				charging = 0
+				update_icon()
+		if("set")
+			var/val = text2num(params["set"])
+			switch(params["chan"])
+				if("Оборудование")
+					equipment = setsubsystem(val)
+				if("Освещение")
+					lighting = setsubsystem(val)
+				if("Окружение")
+					environ = setsubsystem(val)
+			update_icon()
+			update()
+		if("overload")
+			overload_lighting()
+		if("toggleaccess")
+			if(istype(usr, /mob/living/silicon))
+				if(emagged || MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
+					to_chat(usr, "The APC does not respond to the command.")
+			else
+				locked = !locked
+				update_icon()
+		else
+			return FALSE
 
 /obj/machinery/power/apc/proc/report()
 	var/obj/item/cell/cell = get_cell()
@@ -838,61 +873,6 @@
 	if(user.restrained())
 		to_chat(user, SPAN_WARNING("You must have free hands to use [src]."))
 		. = min(., STATUS_UPDATE)
-
-/obj/machinery/power/apc/Topic(href, href_list)
-	if(..())
-		return 1
-
-	if(!istype(usr, /mob/living/silicon) && (locked && !emagged) && !(isghost(usr) && isadmin(usr)))
-		// Shouldn't happen, this is here to prevent href exploits
-		to_chat(usr, "You must unlock the panel to use this!")
-		return 1
-
-	if (href_list["lock"])
-		coverlocked = !coverlocked
-
-	else if( href_list["reboot"] )
-		failure_timer = 0
-		update_icon()
-		update()
-
-	else if (href_list["breaker"])
-		toggle_breaker()
-
-	else if (href_list["cmode"])
-		set_chargemode(!chargemode)
-		if(!chargemode)
-			charging = 0
-			update_icon()
-
-	else if (href_list["eqp"])
-		var/val = text2num(href_list["eqp"])
-		equipment = setsubsystem(val)
-		force_update_channels()
-
-	else if (href_list["lgt"])
-		var/val = text2num(href_list["lgt"])
-		lighting = setsubsystem(val)
-		force_update_channels()
-
-	else if (href_list["env"])
-		var/val = text2num(href_list["env"])
-		environ = setsubsystem(val)
-		force_update_channels()
-
-	else if (href_list["overload"])
-		if(istype(usr, /mob/living/silicon))
-			src.overload_lighting()
-
-	else if (href_list["toggleaccess"])
-		if(istype(usr, /mob/living/silicon))
-			if(emagged || MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
-				to_chat(usr, "The APC does not respond to the command.")
-			else
-				locked = !locked
-				update_icon()
-
-	return STATUS_UPDATE
 
 /obj/machinery/power/apc/proc/force_update_channels()
 	autoflag = -1 // This clears state, forcing a full recalculation

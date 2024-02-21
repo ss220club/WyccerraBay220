@@ -82,7 +82,7 @@ somewhere on that shuttle. Subtypes of these can be then used to perform ship ov
 /obj/machinery/computer/ship/proc/unlook(mob/user)
 	user.reset_view(null, FALSE)
 	if(user.client)
-		user.client.view = world.view
+		user.client.view = user.get_preference_value(/datum/client_preference/client_view)
 	if(linked)
 		for(var/obj/machinery/shipsensors/sensor in linked.sensors)
 			sensor.hide_contacts(user)

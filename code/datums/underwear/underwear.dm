@@ -13,6 +13,13 @@
 /datum/category_group/underwear/dd_SortValue()
 	return sort_order
 
+/datum/category_group/underwear/proc/get_default_category_item(gender)
+	for(var/datum/category_item/underwear/underwear_category_item as anything in items)
+		if(underwear_category_item.is_default(gender))
+			return underwear_category_item
+
+	return null
+
 /datum/category_group/underwear/top
 	name = "Underwear, top"
 	sort_order = 1

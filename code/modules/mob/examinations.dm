@@ -1,7 +1,7 @@
 
 /proc/examinate(mob/user, atom/A)
 	if ((is_blind(user) || user.stat) && !isobserver(user))
-		to_chat(user, SPAN_NOTICE("Something is there but you can't see it."))
+		to_chat(user, chat_box_regular(SPAN_NOTICE("Something is there but you can't see it.")))
 		return
 	user.face_atom(A)
 	if (user.simulated)

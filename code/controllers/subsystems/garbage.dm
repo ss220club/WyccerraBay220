@@ -48,7 +48,7 @@ SUBSYSTEM_DEF(garbage)
 
 /datum/controller/subsystem/garbage/Shutdown()
 	var/list/qdel_log = list()
-	sortTim(details_by_path, cmp = /proc/cmp_qdel_details_time, associative = TRUE)
+	sortTim(details_by_path, cmp = GLOBAL_PROC_REF(cmp_qdel_details_time), associative = TRUE)
 	for (var/path in details_by_path)
 		var/datum/qdel_details/details = details_by_path[path]
 		qdel_log += "Path: [path]"
@@ -201,16 +201,16 @@ SUBSYSTEM_DEF(garbage)
 /// Queue datum D for garbage collection / deletion. Calls the datum's Destroy() and sets its gc_destroyed value.
 /// If not datum passed, `del` will be called
 /proc/qdel(datum/datum)
-	var/static/list/details_by_path = SSgarbage.details_by_path
-	var/static/list/collection_queue = SSgarbage.collection_queue
-	var/static/list/deletion_queue = SSgarbage.deletion_queue
-
 	if (!datum)
 		return
 
 	if(!istype(datum))
 		del(datum)
 		return
+
+	var/static/list/details_by_path = SSgarbage.details_by_path
+	var/static/list/collection_queue = SSgarbage.collection_queue
+	var/static/list/deletion_queue = SSgarbage.deletion_queue
 
 	var/datum/qdel_details/details = details_by_path[datum.type]
 	if (!details)

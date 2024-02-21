@@ -42,7 +42,8 @@ export const ChatPageSettings = (props, context) => {
             content="Mute"
             checked={page.hideUnreadCount}
             icon={page.hideUnreadCount ? 'bell-slash' : 'bell'}
-            tooltip="Disables unread counter"
+            tooltip="Отключает счётчик непрочитанных сообщений у текущей вкладки."
+            tooltipPosition="bottom-end"
             onClick={() =>
               dispatch(
                 updateChatPage({
@@ -55,7 +56,7 @@ export const ChatPageSettings = (props, context) => {
         </Stack.Item>
         <Stack.Item>
           <Button
-            content="Remove"
+            content="Удалить"
             icon="times"
             color="red"
             onClick={() =>
@@ -69,7 +70,7 @@ export const ChatPageSettings = (props, context) => {
         </Stack.Item>
       </Stack>
       <Divider />
-      <Section title="Messages to display" level={2}>
+      <Section title="Отображаемые сообщения">
         {MESSAGE_TYPES.filter(
           (typeDef) => !typeDef.important && !typeDef.admin
         ).map((typeDef) => (

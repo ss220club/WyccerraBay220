@@ -18,7 +18,7 @@
 // [/SIERRA-ADD]
 #define SS_PRIORITY_MOB            95  // Mob Life().
 #define SS_PRIORITY_MACHINERY      95  // Machinery + powernet ticks.
-#define SS_PRIORITY_TGUI           95  // SIERRA TGUI.
+#define SS_PRIORITY_TGUI           95
 #define SS_PRIORITY_AIR            80  // ZAS processing.
 #define SS_PRIORITY_THROWING       75  // Throwing calculation and constant checks
 #define SS_PRIORITY_CHEMISTRY      60  // Multi-tick chemical reactions.
@@ -39,6 +39,7 @@
 #define SS_PRIORITY_SUPPLY         10  // Supply point accumulation.
 #define SS_PRIORITY_TRADE          10  // Adds/removes traders.
 #define SS_PRIORITY_GHOST_IMAGES   10  // Updates ghost client images.
+#define SS_PRIORITY_PING           10
 #define SS_PRIORITY_ZCOPY          10  // Builds appearances for Z-Mimic.
 
 // SS_BACKGROUND

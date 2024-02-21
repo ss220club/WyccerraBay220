@@ -84,7 +84,7 @@ export const SettingsGeneral = (props, context) => {
   return (
     <Section height="150px">
       <LabeledList>
-        <LabeledList.Item label="Theme">
+        <LabeledList.Item label="Тема">
           <Dropdown
             selected={theme}
             options={THEMES}
@@ -97,7 +97,7 @@ export const SettingsGeneral = (props, context) => {
             }
           />
         </LabeledList.Item>
-        <LabeledList.Item label="Font style">
+        <LabeledList.Item label="Шрифт">
           <Stack inline align="baseline">
             <Stack.Item>
               {(!freeFont && (
@@ -127,7 +127,7 @@ export const SettingsGeneral = (props, context) => {
             </Stack.Item>
             <Stack.Item>
               <Button
-                content="Custom font"
+                content="Свой шрифт"
                 icon={freeFont ? 'lock-open' : 'lock'}
                 color={freeFont ? 'good' : 'bad'}
                 onClick={() => {
@@ -137,7 +137,7 @@ export const SettingsGeneral = (props, context) => {
             </Stack.Item>
           </Stack>
         </LabeledList.Item>
-        <LabeledList.Item label="Font size">
+        <LabeledList.Item label="Размер шрифта">
           <NumberInput
             width="4.2em"
             step={1}
@@ -156,7 +156,7 @@ export const SettingsGeneral = (props, context) => {
             }
           />
         </LabeledList.Item>
-        <LabeledList.Item label="Line height">
+        <LabeledList.Item label="Отступ строк">
           <NumberInput
             width="4.2em"
             step={0.01}
@@ -179,18 +179,18 @@ export const SettingsGeneral = (props, context) => {
       <Stack fill>
         <Stack.Item grow mt={0.15}>
           <Button
-            content="Save chat log"
+            content="Сохранить логи"
             icon="save"
-            tooltip="Export current tab history into HTML file"
+            tooltip="Экспортировать историю текущей вкладки, в виде HTML файла."
             onClick={() => dispatch(saveChatToDisk())}
           />
         </Stack.Item>
         <Stack.Item mt={0.15}>
           <Button.Confirm
             icon="trash"
-            confirmContent="Are you sure?"
-            content="Clear chat"
-            tooltip="Erase current tab history"
+            confirmContent="Вы уверены?"
+            content="Очистить чат"
+            tooltip="Очистить историю текущей вкладки."
             onClick={() => dispatch(clearChat())}
           />
         </Stack.Item>
@@ -218,7 +218,7 @@ const TextHighlightSettings = (props, context) => {
               <Button
                 color="transparent"
                 icon="plus"
-                content="Add Highlight Setting"
+                content="Добавить настройку выделения"
                 onClick={() => {
                   dispatch(addHighlightSetting());
                 }}
@@ -230,10 +230,10 @@ const TextHighlightSettings = (props, context) => {
       <Divider />
       <Box>
         <Button icon="check" onClick={() => dispatch(rebuildChat())}>
-          Apply now
+          Применить
         </Button>
         <Box inline fontSize="0.9em" ml={1} color="label">
-          Can freeze the chat for a while.
+          Чат может немного пролагать.
         </Box>
       </Box>
     </Section>
@@ -256,7 +256,7 @@ const TextHighlightSetting = (props, context) => {
       <Stack mb={1} color="label" align="baseline">
         <Stack.Item grow>
           <Button
-            content="Delete"
+            content="Удалить"
             color="transparent"
             icon="times"
             onClick={() =>
@@ -270,45 +270,29 @@ const TextHighlightSetting = (props, context) => {
         </Stack.Item>
         <Stack.Item>
           <Button.Checkbox
-            checked={highlightWholeMessage}
-            content="Whole Message"
-            tooltip="If this option is selected, the entire message will be highlighted in yellow."
-            onClick={() =>
-              dispatch(
-                updateHighlightSetting({
-                  id: id,
-                  highlightWholeMessage: !highlightWholeMessage,
-                })
-              )
-            }
-          />
-        </Stack.Item>
-        <Stack.Item>
-          <Button.Checkbox
-            content="Exact"
-            checked={matchWord}
-            tooltipPosition="bottom-start"
-            tooltip="If this option is selected, only exact matches (no extra letters before or after) will trigger. Not compatible with punctuation. Overriden if regex is used."
-            onClick={() =>
-              dispatch(
-                updateHighlightSetting({
-                  id: id,
-                  matchWord: !matchWord,
-                })
-              )
-            }
-          />
-        </Stack.Item>
-        <Stack.Item>
-          <Button.Checkbox
-            content="Case"
-            tooltip="If this option is selected, the highlight will be case-sensitive."
+            content="Регистр"
+            tooltip="Если выбран этот параметр, выделение будет чувствительно к регистру."
             checked={matchCase}
             onClick={() =>
               dispatch(
                 updateHighlightSetting({
                   id: id,
                   matchCase: !matchCase,
+                })
+              )
+            }
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <Button.Checkbox
+            checked={highlightWholeMessage}
+            content="Целиком"
+            tooltip="Если выбрать этот параметр, все сообщение будет выделено жёлтым цветом."
+            onClick={() =>
+              dispatch(
+                updateHighlightSetting({
+                  id: id,
+                  highlightWholeMessage: !highlightWholeMessage,
                 })
               )
             }

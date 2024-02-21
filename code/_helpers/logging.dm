@@ -20,7 +20,13 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 /proc/log_ss_init(text)
 	game_log("SS", "[text]")
 
+//wrapper macros for easier grepping
+#define DIRECT_OUTPUT(A, B) A << B
+#define SEND_TEXT(target, text) DIRECT_OUTPUT(target, text)
+#define WRITE_FILE(file, text) DIRECT_OUTPUT(file, text)
+
 #define WARNING(MSG) warning("[MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr].")
+
 //print a warning message to world.log
 /proc/warning(msg)
 	to_world_log("## WARNING: [msg][log_end]")
@@ -30,10 +36,7 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 	to_world_log("## TESTING: [msg][log_end]")
 
 /proc/game_log(category, text)
-	// [SIERRA-EDIT] - RUST_G
-	// to_file(global.diary, "\[[time_stamp()]] [game_id] [category]: [text][log_end]") // SIERRA-EDIT - ORIGINAL
 	rustg_log_write_formatted("[GLOB.log_directory]/game.log", "[category]: [text]")
-	// [/SIERRA-EDIT]
 
 /proc/log_admin(text)
 	GLOB.admin_log.Add(text)
@@ -47,8 +50,12 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 
 /proc/log_runtime(text)
 	for (var/client/C as anything in GLOB.admins)
-		if (C.get_preference_value(/datum/client_preference/staff/show_runtime_logs) == GLOB.PREF_SHOW)
+		if (!C.prefs || C.get_preference_value(/datum/client_preference/staff/show_runtime_logs) == GLOB.PREF_SHOW)
 			to_chat(C, append_admin_tools(SPAN_DEBUG("<b>RUNTIME</b>: [text]"), usr, usr?.loc))
+
+/proc/log_signal(text)
+	if(config.log_signals)
+		game_log("SIGNALS", text)
 
 /proc/log_error(text)
 	error(text)
@@ -60,8 +67,8 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 
 /proc/to_debug_listeners(text, prefix = "DEBUG")
 	for(var/client/C as anything in GLOB.admins)
-		if(C.get_preference_value(/datum/client_preference/staff/show_debug_logs) == GLOB.PREF_SHOW)
-			to_chat(C, SPAN_DEBUG("<b>[prefix]</b>: [text]"))
+		if (!C.prefs || C.get_preference_value(/datum/client_preference/staff/show_debug_logs) == GLOB.PREF_SHOW)
+			to_chat(C, MESSAGE_TYPE_DEBUG, SPAN_DEBUG("<b>[prefix]</b>: [text]"), TRUE)
 
 /proc/log_game(text)
 	if (config.log_game)

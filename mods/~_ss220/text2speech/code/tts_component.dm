@@ -70,7 +70,7 @@
 
 	var/new_tts_seed_key
 	if(fancy_voice_input_tgui)
-		new_tts_seed_key = tgui_input_list(chooser, "Выберите голос персонажа", "Преобразуем голос", tts_seeds)
+		new_tts_seed_key = tgui_input_list(chooser, "Выберите голос персонажа", "Преобразуем голос", tts_seeds, tts_seed.name)
 	else
 		new_tts_seed_key = input(chooser, "Выберите голос персонажа", "Преобразуем голос") as null|anything in tts_seed
 	if(!new_tts_seed_key || !SStts220.tts_seeds[new_tts_seed_key])

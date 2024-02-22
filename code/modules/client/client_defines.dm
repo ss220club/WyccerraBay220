@@ -49,6 +49,7 @@
 	var/irc_admin			//IRC admin that spoke with them last.
 	var/mute_irc = 0
 	var/warned_about_multikeying = 0	// Prevents people from being spammed about multikeying every time their mob changes.
+	var/ip_reputation = 0 /// Do we think they're using a proxy/vpn? Only if IP Reputation checking is enabled in config.
 
 		////////////////////////////////////
 		//things that require the database//

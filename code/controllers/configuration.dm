@@ -461,6 +461,18 @@
 	/// python3 script to host assets stored in `data/asset-store/` via http://localhost:58715/
 	var/static/asset_cdn_url = "http://localhost:58715/"
 
+	/// Should we query IPs to get scores? Generates HTTP traffic to an API service.
+	var/static/ip_reputation = FALSE
+	///Left null because you MUST specify one otherwise you're making the internet worse.
+	var/static/ipr_email
+	/// Should we block anyone who meets the minimum score below? Otherwise we just log it (If paranoia logging is on, visibly in chat).
+	var/static/ipr_block_bad_ips = FALSE
+	/// The API returns a value between 0 and 1 (inclusive), with 1 being 'definitely VPN/Tor/Proxy'. Values equal/above this var are considered bad.
+	var/static/ipr_bad_score = 1
+	///Should we allow known players to use VPNs/Proxies? If the player is already banned then obviously they still can't connect.
+	var/static/ipr_allow_existing = FALSE
+	//How many days before a player is considered 'fine' for the purposes of allowing them to use VPNs.
+	var/static/ipr_minimum_age = 5
 
 /datum/configuration/New()
 	load_config()
@@ -937,6 +949,18 @@
 				ffmpeg_cpuaffinity = sanitized
 			if("tts_api_url_silero")
 				tts_api_url_silero = value
+			if("ip_reputation")
+				config.ip_reputation = TRUE
+			if("ipr_email")
+				config.ipr_email = value
+			if("ipr_block_bad_ips")
+				config.ipr_block_bad_ips = TRUE
+			if("ipr_bad_score")
+				config.ipr_bad_score = text2num(value)
+			if("ipr_allow_existing")
+				config.ipr_allow_existing = TRUE
+			if("ipr_minimum_age")
+				config.ipr_minimum_age = text2num(value)
 			// [/SS220-ADD]
 			else
 				log_misc("Unknown setting in config/config.txt: '[name]'")

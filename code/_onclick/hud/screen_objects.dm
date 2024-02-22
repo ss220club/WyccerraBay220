@@ -71,11 +71,13 @@
 
 /obj/screen/storage/Click(location, control, params)
 	if(!usr.canClick())
-		return TRUE
+		return
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
-		return TRUE
+		return
 	if(master)
-		usr.ClickOn(master, params)
+		var/obj/item/I = usr.get_active_hand()
+		if(I)
+			usr.ClickOn(master, params)
 	return TRUE
 
 /obj/screen/storage/container
@@ -83,6 +85,14 @@
 	icon_state = null
 	layer = HUD_ABOVE_ITEM_LAYER
 	mouse_opacity = MOUSE_OPACITY_PRIORITY
+
+/obj/screen/storage/container/Click(location, control, params)
+	. = ..()
+	if(!.)
+		return
+	if(master)
+		usr.ClickOn(master, params)
+	return TRUE
 
 /obj/screen/zone_sel
 	name = "damage zone"

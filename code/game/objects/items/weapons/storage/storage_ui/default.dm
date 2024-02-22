@@ -8,6 +8,7 @@
 	var/obj/screen/storage/stored_start
 	var/obj/screen/storage/stored_continue
 	var/obj/screen/storage/stored_end
+	var/list/obj/screen/storage/containers
 	var/obj/screen/close/closer
 
 /datum/storage_ui/default/New(storage)
@@ -48,6 +49,8 @@
 	stored_end.icon_state = "stored_end"
 	stored_end.layer = HUD_BASE_LAYER
 
+	containers = list()
+
 	closer = new /obj/screen/close(  )
 	closer.master = storage
 	closer.icon_state = "x"
@@ -62,6 +65,7 @@
 	QDEL_NULL(stored_start)
 	QDEL_NULL(stored_continue)
 	QDEL_NULL(stored_end)
+	QDEL_NULL_LIST(containers)
 	QDEL_NULL(closer)
 	. = ..()
 
@@ -105,8 +109,11 @@
 	user.client.screen -= storage_end
 	user.client.screen -= closer
 	user.client.screen -= storage.contents
+	user.client.screen -= containers
+
 	user.client.screen += closer
 	user.client.screen += storage.contents
+	user.client.screen += containers
 	if(storage.storage_slots)
 		user.client.screen += boxes
 	else
@@ -126,11 +133,17 @@
 	user.client.screen -= storage_end
 	user.client.screen -= closer
 	user.client.screen -= storage.contents
+	user.client.screen -= containers
 	if(user.s_active == storage)
 		user.s_active = null
 
 //Creates the storage UI
 /datum/storage_ui/default/prepare_ui()
+	for(var/mob/user in is_seeing)
+		user.client.screen -= containers
+	for(var/container in containers)
+		qdel(container)
+	containers.Cut()
 	//if storage slots is null then use the storage space UI, otherwise use the slots UI
 	if(isnull(storage.storage_slots))
 		space_orient_objs()
@@ -183,6 +196,9 @@
 	boxes.screen_loc = "4:16,2:16 to [4+cols]:16,[2+rows]:16"
 
 	for(var/obj/O in storage.contents)
+		var/obj/screen/storage/container/container = create_container(O)
+		container.screen_loc = "[cx]:16,[cy]:16"
+		containers += container
 		O.screen_loc = "[cx]:16,[cy]:16"
 		O.maptext = ""
 		O.hud_layerise()
@@ -220,17 +236,29 @@
 			offset_x = startpoint + stored_cap_width + (endpoint - startpoint - stored_cap_width * 2) / 2 - 16,
 			scale_x = (endpoint - startpoint - stored_cap_width * 2) / 32
 		)
+		var/obj/screen/storage/container/container = create_container(O, endpoint - startpoint - 1)
+		container.screen_loc = "4:[16 + round(startpoint)],2:16"
 		storage_start.AddOverlays(list(
 			stored_start,
 			stored_continue,
 			stored_end
 		))
+		containers += container
 
-		O.screen_loc = "4:[round((startpoint+endpoint)/2)+2],2:16"
+		O.screen_loc = "4:[round((startpoint+endpoint)/2) + 1],2:16"
 		O.maptext = ""
 		O.hud_layerise()
 
 	closer.screen_loc = "4:[storage_width+19],2:16"
+
+/datum/storage_ui/default/proc/create_container(obj/item/new_master, width = 32)
+	var/obj/screen/storage/container/container = new()
+	container.SetName(new_master.name)
+	container.master = new_master
+	var/icon/new_icon = icon()
+	new_icon.Scale(width, 32)
+	container.icon = new_icon
+	return container
 
 // Sets up numbered display to show the stack size of each stored mineral
 // NOTE: numbered display is turned off currently because it's broken

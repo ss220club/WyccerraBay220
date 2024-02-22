@@ -24,9 +24,12 @@
 	if(!length(predicates))
 		return LAZYCOPY(A.contained_turfs)
 
+	var/list/area_turfs = list()
 	for(var/turf/T as anything in A.contained_turfs)
 		if(all_predicates_true(list(T), predicates))
-			. += T
+			area_turfs += T
+
+	return area_turfs
 
 /proc/get_turfs_in_areas(list/areas, list/predicates)
 	if(!islist(areas))

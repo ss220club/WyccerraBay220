@@ -105,7 +105,6 @@
 	if(moving_status != SHUTTLE_IDLE)
 		return
 
-	message_admins("Long jump shuttle 1")
 	var/obj/shuttle_landmark/start_location = current_location
 
 	moving_status = SHUTTLE_WARMUP
@@ -128,23 +127,18 @@
 
 				to_chat(mob_to_notify, SPAN_NOTICE("The rumble of engines are heard as a shuttle lifts off."))
 
-	message_admins("Long jump shuttle 2")
 	addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/shuttle, launch_shuttle), start_location, interim, destination, travel_time), warmup_time)
 
 /datum/shuttle/proc/launch_shuttle(obj/shuttle_landmark/start_location, obj/shuttle_landmark/interim, obj/shuttle_landmark/destination, travel_time)
-	message_admins("Launching shuttle 1")
 	if(moving_status == SHUTTLE_IDLE)
 		return	//someone cancelled the launch
 
-	message_admins("Launching shuttle 2")
 	if(!fuel_check()) //fuel error (probably out of fuel) occured, so cancel the launch
 		var/datum/shuttle/autodock/self = src
 		if(istype(self))
 			self.cancel_launch(null)
 
 		return
-
-	message_admins("Launching shuttle 3")
 
 	var/start_landing_in = travel_time - landing_time
 	arrive_time = world.time + travel_time
@@ -154,18 +148,13 @@
 		moving_status = SHUTTLE_IDLE
 		return
 
-	message_admins("Launching shuttle 4")
-
 	if(start_landing_in > 0)
 		addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/shuttle, prepare_for_landing), start_location, destination), start_landing_in)
-		message_admins("Launching shuttle 5")
 	else
 		prepare_for_landing(start_location, destination)
-		message_admins("Launching shuttle 6")
 
 /// Plans landing of shuttle and plays landing sound
 /datum/shuttle/proc/prepare_for_landing(obj/shuttle_landmark/start_location, obj/shuttle_landmark/destination)
-	message_admins("Landing shuttle 1")
 	if(sound_landing)
 		playsound(destination, sound_landing, 100, 0, 7)
 		if(!isspace(destination.base_area))
@@ -185,20 +174,15 @@
 
 				to_chat(mob_to_notify, SPAN_NOTICE("The rumble of a shuttle's engines fill the area as a ship manuevers in for a landing."))
 
-	message_admins("Landing shuttle 2")
 	var/landing_in = arrive_time - world.time
 	if(landing_in > 0)
-		message_admins("Landing shuttle 3")
 		addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/shuttle, land_shuttle), start_location, destination), landing_in)
 	else
-		message_admins("Landing shuttle 4")
 		land_shuttle(start_location, destination)
 
 /// Actually moves shuttle to new location from the interim
 /datum/shuttle/proc/land_shuttle(obj/shuttle_landmark/start_location, obj/shuttle_landmark/destination)
-	message_admins("land shuttle shuttle 1")
 	if(!attempt_move(destination))
-		message_admins("land shuttle shuttle 2")
 		/// Something went wrong, so we try to move back
 		attempt_move(start_location)
 

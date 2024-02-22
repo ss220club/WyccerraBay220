@@ -41,13 +41,6 @@
 	if(!f_color)
 		return
 
-	var/total = 0
-	var/start = start_watch()
-	var/area/A = get_area(usr)
-	for(var/i = 1 to 10000)
-		for(var/turf/simulated/floor/bluegrid/turf_to_update in get_area_turfs(A))
-			total++
-
 	for(var/turf/simulated/floor/bluegrid/turf_to_update in get_area_turfs(get_area(usr)))
 		turf_to_update.color = f_color
 

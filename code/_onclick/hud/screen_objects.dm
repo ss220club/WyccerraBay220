@@ -82,9 +82,8 @@
 
 /obj/screen/container
 	name = "you shouldn't see this, report coders"
-	icon = null
-	icon_state = null
-	layer = HUD_ABOVE_ITEM_LAYER
+	icon_state = "blank"
+	layer = HUD_CLICKABLE_LAYER
 	mouse_opacity = MOUSE_OPACITY_PRIORITY
 
 /obj/screen/container/Click(location, control, params)

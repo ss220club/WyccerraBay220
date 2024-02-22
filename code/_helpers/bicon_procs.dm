@@ -6,7 +6,7 @@ GLOBAL_DATUM_INIT(is_http_protocol, /regex, regex("^https?://"))
 	var/static/next_id = 0
 	if(next_id++ > 9)
 		next_id = 0
-	var/savefile_path = "data/tmp/dummy-save-[next_id].sav"
+	var/savefile_path = "data/temp/dummy-save-[next_id].sav"
 	try
 		if(fexists(savefile_path))
 			fdel(savefile_path)

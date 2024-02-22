@@ -382,7 +382,8 @@
 			pass = FALSE
 
 	for(var/obj/machinery/computer/cryopod/C as anything in SSmachines.get_machinery_of_type(/obj/machinery/computer/cryopod))
-		if(!(locate(/obj/machinery/cryopod) in get_area(C)))
+		var/area/cryopod_area = get_area(C)
+		if(!(locate(/obj/machinery/cryopod) in cryopod_area.machinery_list))
 			log_bad("[get_area(C)] lacks a cryopod while holding a control computer.")
 			pass = FALSE
 

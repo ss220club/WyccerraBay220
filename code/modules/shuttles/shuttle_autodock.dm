@@ -127,8 +127,10 @@
 		process_state = IDLE_STATE
 		in_use = null
 		return
-	if (get_travel_time() && landmark_transition)
-		. = long_jump(next_location, landmark_transition, get_travel_time())
+
+	var/travel_time = get_travel_time()
+	if (travel_time && landmark_transition)
+		. = long_jump(next_location, landmark_transition, travel_time)
 	else
 		. = short_jump(next_location)
 	process_state = WAIT_ARRIVE

@@ -47,6 +47,9 @@
 
 /turf/Initialize(mapload, ...)
 	. = ..()
+	var/area/my_area = loc
+	my_area.add_turf_to_cache(src)
+
 	if(dynamic_lighting)
 		luminosity = 0
 	else
@@ -83,6 +86,9 @@
 		crash_with("Improper turf qdel. Do not qdel turfs directly.")
 
 	changing_turf = FALSE
+
+	var/area/my_area = loc
+	my_area.remove_turf_from_cache(src)
 
 	remove_cleanables(FALSE)
 	fluid_update()
@@ -235,7 +241,7 @@ var/global/const/enterloopsanity = 100
 
 /turf/proc/AdjacentTurfs(check_blockage = TRUE)
 	. = list()
-	for(var/turf/t in (trange(1,src) - src))
+	for(var/turf/t in (RANGE_TURFS(src, 1) - src))
 		if(check_blockage)
 			if(!t.density)
 				if(!LinkBlocked(src, t) && !TurfBlockedNonWindow(t))
@@ -459,5 +465,29 @@ var/global/const/enterloopsanity = 100
 	var/area/A = get_area(src)
 	if(A.area_flags & AREA_FLAG_EXTERNAL)
 		return TRUE
+
+/turf/proc/change_area(area/new_area)
+	if(!istype(new_area))
+		CRASH("Area change attempt failed: invalid area supplied.")
+
+	var/area/old_area = get_area(src)
+	if(old_area == new_area)
+		return
+
+	new_area.contents.Add(src)
+	new_area.add_turf_to_cache(src)
+	if(old_area)
+		old_area.remove_turf_from_cache(src)
+		old_area.Exited(src, new_area)
+		for(var/atom/movable/AM in src)
+			old_area.Exited(AM, new_area)  // Note: this _will_ raise exited events.
+
+	new_area.Entered(src, old_area)
+
+	for(var/atom/movable/AM in src)
+		new_area.Entered(AM, old_area) // Note: this will _not_ raise moved or entered events. If you change this, you must also change everything which uses them.
+		if(istype(AM, /obj/machinery))
+			var/obj/machinery/machinery_to_update = AM
+			machinery_to_update.area_changed(old_area, new_area) // They usually get moved events, but this is the one way an area can change without triggering one.
 
 	//TODO: CitRP has some concept of outside based on turfs above. We don't really have any use cases right now, revisit this function if this changes

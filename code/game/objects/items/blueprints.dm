@@ -18,10 +18,19 @@
 	var/const/ROOM_ERR_LOLWAT = 0
 	var/const/ROOM_ERR_SPACE = -1
 	var/const/ROOM_ERR_TOOLARGE = -2
+	/// Typecache of machinery, that should have name set on bluepring propagation
+	var/static/list/machinery_types_to_set_name_typecache = list()
 
 /obj/item/blueprints/Initialize()
 	. = ..()
 	desc = "Blueprints of \the [station_name()]. There is a \"Classified\" stamp and several coffee stains on it."
+	machinery_types_to_set_name_typecache += typecacheof(list(
+			/obj/machinery/alarm,
+			/obj/machinery/power/apc,
+			/obj/machinery/atmospherics/unary/vent_scrubber,
+			/obj/machinery/atmospherics/unary/vent_pump,
+			/obj/machinery/door
+	))
 
 /obj/item/blueprints/attack_self(mob/M as mob)
 	if (!istype(M,/mob/living/carbon/human))
@@ -110,8 +119,9 @@
 	A.power_light = 0
 	A.power_environ = 0
 	A.always_unpowered = 0
-	for(var/T in turfs)
-		ChangeArea(T, A)
+	for(var/turf/T as anything in turfs)
+		T.change_area(A)
+
 	A.always_unpowered = 0
 	interact()
 
@@ -140,21 +150,15 @@
 	qdel(A)
 	interact()
 
-/obj/item/blueprints/proc/set_area_machinery_title(area/A,title,oldtitle)
-	if (!oldtitle) // or replacetext goes to infinite loop
+/obj/item/blueprints/proc/set_area_machinery_title(area/A, title, oldtitle)
+	if (!oldtitle || !A) // or replacetext goes to infinite loop
 		return
 
-	for(var/obj/machinery/alarm/M in A)
-		M.SetName(replacetext(M.name,oldtitle,title))
-	for(var/obj/machinery/power/apc/M in A)
-		M.SetName(replacetext(M.name,oldtitle,title))
-	for(var/obj/machinery/atmospherics/unary/vent_scrubber/M in A)
-		M.SetName(replacetext(M.name,oldtitle,title))
-	for(var/obj/machinery/atmospherics/unary/vent_pump/M in A)
-		M.SetName(replacetext(M.name,oldtitle,title))
-	for(var/obj/machinery/door/M in A)
-		M.SetName(replacetext(M.name,oldtitle,title))
-	//TODO: much much more. Unnamed airlocks, cameras, etc.
+	for(var/obj/machinery/machine as anything in A.machinery_list)
+		if(!is_type_in_typecache(machine, machinery_types_to_set_name_typecache))
+			continue
+
+		machine.SetName(replacetext(machine.name, oldtitle, title))
 
 /obj/item/blueprints/proc/check_tile_is_border(turf/T2,dir)
 	if (istype(T2, /turf/space))

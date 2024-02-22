@@ -451,10 +451,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		moblist.Add(M)
 	for(var/mob/living/simple_animal/M in sortmob)
 		moblist.Add(M)
-//	for(var/mob/living/silicon/hivebot/M in world)
-//		mob_list.Add(M)
-//	for(var/mob/living/silicon/hive_mainframe/M in world)
-//		mob_list.Add(M)
 	return moblist
 
 //Forces a variable to be posative
@@ -620,7 +616,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		areatype = areatemp.type
 
 	var/list/areas = list()
-	for(var/area/N in world)
+	for(var/area/N as anything in GLOB.areas)
 		if(istype(N, areatype)) areas += N
 	return areas
 
@@ -637,7 +633,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		return null
 
 	var/list/atoms = list()
-	for(var/area/N in world)
+	for(var/area/N as anything in GLOB.areas)
 		if(istype(N, areatype))
 			for(var/atom/A in N)
 				atoms += A

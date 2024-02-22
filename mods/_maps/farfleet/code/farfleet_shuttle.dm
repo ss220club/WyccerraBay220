@@ -1,6 +1,6 @@
 /datum/shuttle/autodock/overmap/snz
 	name = "SNZ Speedboat"
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 	dock_target = "snz_shuttle"
 	current_location = "nav_hangar_snz"
 	range = 1

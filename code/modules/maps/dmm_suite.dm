@@ -241,8 +241,9 @@ GLOBAL_DATUM_INIT(maploader, /dmm_suite, new)
 	else
 		if(!measureOnly)
 			if(clear_contents)
-				for(var/atom/to_delete in atoms_to_delete)
+				for(var/atom/to_delete as anything in atoms_to_delete)
 					qdel(to_delete)
+
 		var/datum/map_load_metadata/M = new
 		M.bounds = bounds
 		M.atoms_to_initialise = atoms_to_initialise
@@ -279,7 +280,7 @@ GLOBAL_DATUM_INIT(maploader, /dmm_suite, new)
 		/obj/structure,
 	)
 
-/dmm_suite/proc/parse_grid(model as text, model_key as text, xcrd as num,ycrd as num,zcrd as num, no_changeturf as num, clear_contents as num, initialized_areas_by_type)
+/dmm_suite/proc/parse_grid(model, model_key, xcrd, ycrd, zcrd, no_changeturf, clear_contents, initialized_areas_by_type)
 	/*Method parse_grid()
 	- Accepts a text string containing a comma separated list of type paths of the
 		same construction as those contained in a .dmm file, and instantiates them.

@@ -44,7 +44,8 @@
 /turf/space/LateInitialize(mapload)
 	if(GLOB.using_map.base_floor_area)
 		var/area/new_area = locate(GLOB.using_map.base_floor_area) || new GLOB.using_map.base_floor_area
-		ChangeArea(src, new_area)
+		change_area(src, new_area)
+
 	ChangeTurf(GLOB.using_map.base_floor_type)
 
 // override for space turfs, since they should never hide anything

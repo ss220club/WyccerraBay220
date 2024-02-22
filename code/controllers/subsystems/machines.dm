@@ -166,7 +166,6 @@ SUBSYSTEM_DEF(machines)
 
 
 /datum/controller/subsystem/machines/proc/setup_atmos_machinery(list/machines)
-	set background = TRUE
 	var/list/atmos_machines = list()
 	for (var/obj/machinery/atmospherics/machine in machines)
 		atmos_machines += machine

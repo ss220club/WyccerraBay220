@@ -11,7 +11,7 @@
 
 // Predicates for the pick_area and pick_area_turf proc
 /proc/area_has_disposals_pipe(area/A)
-	for(var/turf/T in A)
+	for(var/turf/T as anything in get_area_turfs(A))
 		if(has_disposals_pipe(T))
 			return TRUE
 	return FALSE

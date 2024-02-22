@@ -22,7 +22,7 @@
 				temperature = T0C
 
 			if(E.planetary_area && istype(loc, world.area))
-				ChangeArea(src, E.planetary_area)
+				change_area(E.planetary_area)
 	..()
 
 /turf/simulated/floor/exoplanet/use_tool(obj/item/C, mob/living/user, list/click_params)
@@ -257,8 +257,10 @@
 	var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
 	if(!istype(E))
 		return
+
 	if(E.planetary_area && istype(loc, world.area))
-		ChangeArea(src, E.planetary_area)
+		change_area(E.planetary_area)
+
 	var/new_x = A.x
 	var/new_y = A.y
 	if(x <= TRANSITIONEDGE)

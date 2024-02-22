@@ -50,7 +50,7 @@
 	if(!origin)
 		return
 	var/list/turfs = list()
-	for(var/turf/T in orange(origin, outer_range))
+	for(var/turf/T as anything in ORANGE_TURFS(origin, outer_range))
 		if(!(T.z in GLOB.using_map.sealed_levels)) // Picking a turf outside the map edge isn't recommended
 			if(T.x >= world.maxx-TRANSITIONEDGE || T.x <= TRANSITIONEDGE)	continue
 			if(T.y >= world.maxy-TRANSITIONEDGE || T.y <= TRANSITIONEDGE)	continue
@@ -157,8 +157,9 @@
 
 		if(target)
 			if(base_area)
-				ChangeArea(target, get_area(source))
-				ChangeArea(source, base_area)
+				target.change_area(get_area(source))
+				source.change_area(base_area)
+
 			transport_turf_contents(source, target)
 
 	//change the old turfs
@@ -184,7 +185,9 @@
 				E.forceMove(new_turf)
 
 	for(var/mob/M in source)
-		if(isEye(M)) continue // If we need to check for more mobs, I'll add a variable
+		if(isEye(M))
+			continue // If we need to check for more mobs, I'll add a variable
+
 		M.forceMove(new_turf)
 
 	if (GLOB.mob_spawners[source])
@@ -208,7 +211,7 @@
 	if (!istype(center))
 		return
 
-	for (var/turf/T in trange(range, center))
+	for (var/turf/T as anything in RANGE_TURFS(center, range))
 		if (!predicates || all_predicates_true(list(T), predicates))
 			. += T
 

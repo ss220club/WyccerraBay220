@@ -1091,24 +1091,28 @@
 
 // overload the lights in this APC area
 /obj/machinery/power/apc/proc/overload_lighting(chance = 100)
-	if(/* !get_connection() || */ !operating || shorted)
+	if(!operating || shorted)
 		return
 	var/amount = use_power_oneoff(20, LOCAL)
-	if(amount <= 0)
-		spawn(0)
-			for(var/obj/machinery/light/L in area)
-				if(prob(chance))
-					L.on = 1
-					L.broken()
-				sleep(1)
+	if(amount > 0)
+		return
 
+	spawn(0)
+		for(var/obj/machinery/light/L in area.machinery_list)
+			if(prob(chance))
+				L.on = TRUE
+				L.broken()
+			sleep(1)
 
 /obj/machinery/power/apc/proc/flicker_lighting(amount = 10)
 	if (!operating || shorted)
 		return
-	for (var/obj/machinery/light/L in area)
-		L.flicker(amount)
 
+	for(var/obj/machinery/light/L as anything in SSmachines.get_machinery_of_type(/obj/machinery/light))
+		if(get_area(L) != area)
+			continue
+
+		L.flicker(amount)
 
 /obj/machinery/power/apc/proc/setsubsystem(val)
 	switch(val)

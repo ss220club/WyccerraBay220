@@ -477,13 +477,6 @@
 	update_turf_above()
 	reset_blockers()
 
-// Proc from old Sierra repo. This is cringe
-/proc/is_type_in_typecache(atom/A, list/L)
-	if(!L || !length(L)|| !A)
-
-		return 0
-	return L[A.type]
-
 /obj/machinery/crusher_piston/proc/can_extend_into(turf/extension_turf)
 	//Check if atom is of a specific Type
 	if(istype(extension_turf,/turf/simulated/wall))

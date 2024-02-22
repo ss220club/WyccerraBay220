@@ -1,8 +1,8 @@
 /proc/count_drones()
 	var/drones = 0
-	for(var/mob/living/silicon/robot/drone/D in world)
-		if(D.key && D.client)
-			drones++
+	for(var/mob/living/silicon/robot/drone/D in GLOB.living_players)
+		drones++
+
 	return drones
 
 /obj/machinery/drone_fabricator

@@ -8,19 +8,48 @@
 		return
 	if(!islist(predicates))
 		predicates = list(predicates)
-	for(var/area/A)
+	for(var/area/A as anything in GLOB.areas)
 		if(all_predicates_true(list(A), predicates))
 			. += A
 
 /proc/get_area_turfs(area/A, list/predicates)
 	RETURN_TYPE(/list)
-	. = list()
 	A = istype(A) ? A : locate(A)
 	if(!A)
-		return
-	for(var/turf/T in A.contents)
-		if(!predicates || all_predicates_true(list(T), predicates))
+		return list()
+
+	if(!LAZYLEN(A.contained_turfs))
+		return list()
+
+	if(!length(predicates))
+		return LAZYCOPY(A.contained_turfs)
+
+	for(var/turf/T as anything in A.contained_turfs)
+		if(all_predicates_true(list(T), predicates))
 			. += T
+
+/proc/get_turfs_in_areas(list/areas, list/predicates)
+	if(!islist(areas))
+		areas = list(areas)
+
+	var/list/turfs = list()
+	for(var/area/current_area as anything in areas)
+		var/list/current_area_turfs = get_area_turfs(current_area, predicates)
+		if(!current_area_turfs)
+			continue
+
+		turfs |= current_area_turfs
+
+	return turfs
+
+/// Returns set of area refs as: area_ref => TRUE
+/// For fast area checking
+/proc/get_area_refs_set(list/areas)
+	var/list/area_refs_set = list()
+	for(var/area/single_area as anything in areas)
+		area_refs_set[ref(single_area)] = TRUE
+
+	return area_refs_set
 
 /proc/get_subarea_turfs(area/A, list/predicates)
 	RETURN_TYPE(/list)
@@ -30,7 +59,7 @@
 		return
 	for(var/sub_area_type in typesof(A))
 		var/area/sub_area = locate(sub_area_type)
-		for(var/turf/T in sub_area.contents)
+		for(var/turf/T in sub_area.contained_turfs)
 			if(!predicates || all_predicates_true(list(T), predicates))
 				. += T
 
@@ -58,7 +87,7 @@
 /proc/pick_area_turf(areatype, list/predicates)
 	RETURN_TYPE(/turf)
 	var/list/turfs = get_area_turfs(areatype, predicates)
-	if(turfs && length(turfs))
+	if(length(turfs))
 		return pick(turfs)
 
 /proc/pick_area(list/predicates)

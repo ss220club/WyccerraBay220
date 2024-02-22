@@ -117,7 +117,7 @@
 	var/list/wall_dirs = list()
 	var/list/other_dirs = list()
 
-	for(var/turf/simulated/wall/W in orange(src, 1))
+	for(var/turf/simulated/wall/W in ORANGE_TURFS(src, 1))
 		switch(can_join_with(W))
 			if(0)
 				continue
@@ -130,7 +130,7 @@
 			W.update_connections()
 			W.update_icon()
 
-	for(var/turf/T in orange(src, 1))
+	for(var/turf/T as anything in ORANGE_TURFS(src, 1))
 		var/success = 0
 		for(var/obj/O in T)
 			for(var/b_type in blend_objects)

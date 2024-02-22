@@ -1,7 +1,7 @@
 #define waypoint_sector(waypoint) map_sectors["[waypoint.z]"]
 
 /datum/shuttle/autodock/overmap
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 
 	var/range = 0	//how many overmap tiles can shuttle go, for picking destinations and returning.
 	var/fuel_consumption = 0 //Amount of moles of gas consumed per trip; If zero, then shuttle is magic and does not need fuel

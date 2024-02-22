@@ -3,6 +3,8 @@
 
 //Picks from the list, with some safeties, and returns the "default" arg if it fails
 #define DEFAULTPICK(L, default) ((islist(L) && length(L)) ? pick(L) : default)
+// Copies a lazy list L if it has at least 1 item, or creates new otherwise
+#define LAZYCOPY(L) length(L) ? L.Copy() : list()
 // Ensures L is initailized after this point
 #define LAZYINITLIST(L) if (!L) L = list()
 // Sets a L back to null iff it is empty

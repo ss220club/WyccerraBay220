@@ -51,12 +51,11 @@ var/global/repository/client/client_repository = new()
 
 /datum/client_lite/proc/rank2text()
 	var/client/C = client_by_ckey(ckey)
-	if(!C || (C && !C.holder))
+	if(!C?.holder)
 		return
+
 	return " \[[C.holder.rank]\]"
 
 /proc/client_by_ckey(ckey)
 	RETURN_TYPE(/client)
-	for(var/client/C)
-		if(C.ckey == ckey)
-			return C
+	return GLOB.ckey_directory[ckey]

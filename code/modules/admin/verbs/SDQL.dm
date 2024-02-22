@@ -107,7 +107,7 @@
 							from_objs += m
 
 				else if(text_starts_with(f, "/area"))
-					for(var/area/m in world)
+					for(var/area/m as anything in GLOB.areas)
 						if(istype(m, f2))
 							from_objs += m
 

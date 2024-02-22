@@ -109,12 +109,15 @@ var/global/intercom_range_display_status = 0
 	for(var/obj/debugging/marker/M in world)
 		qdel(M)
 
-	if(intercom_range_display_status)
-		for(var/obj/item/device/radio/intercom/I in world)
-			for(var/turf/T in orange(7,I))
-				var/obj/debugging/marker/F = new/obj/debugging/marker(T)
-				if (!(F in view(7,I.loc)))
-					qdel(F)
+	if(!intercom_range_display_status)
+		return
+
+	for(var/obj/item/device/radio/intercom/I in world)
+		var/list/atoms_in_view = view(7, I.loc)
+		for(var/turf/T as anything in ORANGE_TURFS(I, 7))
+			var/obj/debugging/marker/F = new/obj/debugging/marker(T)
+			if(!(F in atoms_in_view))
+				qdel(F)
 
 var/global/list/debug_verbs = list (
 		/client/proc/do_not_use_these

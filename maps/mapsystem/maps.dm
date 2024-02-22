@@ -413,12 +413,24 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 #else
 	report_progress("Loading away sites...")
 
+	var/list/selected = select_away_sites()
+	for (var/datum/map_template/template as anything in selected)
+		if (template.load_new_z())
+			report_progress("Loaded away site [template]!")
+		else
+			report_progress("Failed loading away site [template]!")
+#endif
+
+
+/datum/map/proc/select_away_sites()
+	RETURN_TYPE(/list)
+
 	var/list/guaranteed = list()
-	var/list/selected = list()
 	var/list/available = list()
 	var/list/unavailable = list()
 	var/list/by_type = list()
 
+	var/list/selected = list()
 	for (var/site_name in SSmapping.away_sites_templates)
 		var/datum/map_template/ruin/away_site/site = SSmapping.away_sites_templates[site_name]
 		if (site.template_flags & TEMPLATE_FLAG_SPAWN_GUARANTEED)
@@ -430,52 +442,44 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 		by_type[site.type] = site
 
 	var/points = away_site_budget
-	var/players = -min_offmap_players
-	for (var/client/C)
-		++players
+	/// Current amount of players, available to be distributed on away sites
+	var/player_budget = length(GLOB.clients) - min_offmap_players
 
-	for (var/datum/map_template/ruin/away_site/site in guaranteed)
+	for (var/datum/map_template/ruin/away_site/site as anything in guaranteed)
 		var/list/costs = resolve_site_selection(site, selected, available, unavailable, by_type)
 		points -= costs[1]
-		players -= costs[2]
+		player_budget -= costs[2]
 
 	while (points > 0 && length(available))
 		var/datum/map_template/ruin/away_site/site = pickweight(available)
-		if (site.spawn_cost && site.spawn_cost > points || site.player_cost && site.player_cost > players)
+		if (site.spawn_cost && site.spawn_cost > points || site.player_cost && site.player_cost > player_budget)
 			unavailable += site
 			available -= site
 			continue
+
 		var/list/costs = resolve_site_selection(site, selected, available, unavailable, by_type)
 		points -= costs[1]
-		players -= costs[2]
+		player_budget -= costs[2]
 
 	report_progress("Finished selecting away sites ([english_list(selected)]) for [away_site_budget - points] cost of [away_site_budget] budget.")
+	return selected
 
-	for (var/datum/map_template/template in selected)
-		if (template.load_new_z())
-			report_progress("Loaded away site [template]!")
-		else
-			report_progress("Failed loading away site [template]!")
-#endif
 
 /datum/map/proc/build_exoplanets()
 	if(!use_overmap)
 		return
 
-	for(var/i = 0, i < num_exoplanets, i++)
-		var/exoplanet_type = pick(subtypesof(/obj/overmap/visitable/sector/exoplanet))
+	var/static/list/exoplanet_types = subtypesof(/obj/overmap/visitable/sector/exoplanet)
+	for(var/i = 0 to num_exoplanets)
+		var/exoplanet_type = pick(exoplanet_types)
 		var/obj/overmap/visitable/sector/exoplanet/new_planet = new exoplanet_type(null, planet_size[1], planet_size[2])
 		new_planet.build_level()
 
 // Used to apply various post-compile procedural effects to the map.
 /datum/map/proc/refresh_mining_turfs(zlevel)
+	for(var/turf/simulated/mineral/mineral_turf as anything in mining_walls["[zlevel]"])
+		mineral_turf.update_icon()
 
-	set background = 1
-	set waitfor = 0
-
-	for(var/thing in mining_walls["[zlevel]"])
-		var/turf/simulated/mineral/M = thing
-		M.update_icon()
 	for(var/thing in mining_floors["[zlevel]"])
 		var/turf/simulated/floor/asteroid/M = thing
 		if(istype(M))
@@ -570,12 +574,6 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 /datum/map/proc/get_map_info()
 	return "No map information available"
-
-/datum/map/proc/bolt_saferooms()
-	return // overriden by torch
-
-/datum/map/proc/unbolt_saferooms()
-	return // overriden by torch
 
 /datum/map/proc/make_maint_all_access(radstorm = 0) // parameter used by torch
 	maint_all_access = TRUE

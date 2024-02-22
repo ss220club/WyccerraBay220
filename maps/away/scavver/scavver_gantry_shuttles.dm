@@ -46,8 +46,8 @@
 
 /datum/shuttle/autodock/overmap/scavver_gantry
 	name = "ITV The Reclaimer"
-	warmup_time = 5
-	move_time = 95
+	warmup_time = 5 SECONDS
+	move_time = 9.5 SECONDS
 	shuttle_area = list(/area/scavver/lifepod)
 	current_location = "nav_hangar_gantry_one"
 	landmark_transition = "nav_transit_gantry_one"
@@ -59,8 +59,8 @@
 
 /datum/shuttle/autodock/overmap/scavver_gantry/two
 	name = "ITV Vulcan"
-	warmup_time = 5
-	move_time = 35
+	warmup_time = 5 SECONDS
+	move_time = 3.5 SECONDS
 	shuttle_area = list(/area/scavver/escapepod)
 	current_location = "nav_hangar_gantry_two"
 	landmark_transition = "nav_transit_gantry_two"
@@ -72,8 +72,8 @@
 
 /datum/shuttle/autodock/overmap/scavver_gantry/three
 	name = "ITV Spiritus"
-	warmup_time = 5
-	move_time = 35
+	warmup_time = 5 SECONDS
+	move_time = 3.5 SECONDS
 	shuttle_area = list(/area/scavver/harvestpod)
 	current_location = "nav_hangar_gantry_three"
 	landmark_transition = "nav_transit_gantry_three"
@@ -195,7 +195,7 @@
 /datum/shuttle/autodock/ferry/gantry
 	name = "Gantry Lift"
 	shuttle_area = /area/scavver/gantry/lift
-	warmup_time = 3
+	warmup_time = 3 SECONDS
 	waypoint_station = "nav_scavver_gantry_lift_top"
 	waypoint_offsite = "nav_scavver_gantry_lift_bottom"
 	sound_takeoff = 'sound/effects/lift_heavy_start.ogg'

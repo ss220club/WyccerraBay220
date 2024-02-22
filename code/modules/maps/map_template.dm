@@ -51,16 +51,20 @@
 	var/list/obj/machinery/machines = list()
 	var/list/obj/structure/cable/cables = list()
 
-	for(var/atom/A in atoms)
+	for(var/atom/A as anything in atoms)
 		if(istype(A, /turf))
 			turfs += A
-		if(istype(A, /obj/structure/cable))
+
+		else if(istype(A, /obj/structure/cable))
 			cables += A
-		if(istype(A, /obj/machinery/atmospherics))
+
+		else if(istype(A, /obj/machinery/atmospherics))
 			atmos_machines += A
-		if(istype(A, /obj/machinery))
+
+		else if(istype(A, /obj/machinery))
 			machines += A
-		if(istype(A,/obj/landmark/map_load_mark))
+
+		else if(istype(A, /obj/landmark/map_load_mark))
 			LAZYADD(subtemplates_to_spawn, A)
 
 	var/notsuspended
@@ -75,20 +79,20 @@
 	if(notsuspended)
 		SSmachines.wake()
 
-	for (var/i in machines)
-		var/obj/machinery/machine = i
+	for (var/obj/machinery/machine as anything in machines)
 		machine.power_change()
 
-	for (var/i in turfs)
-		var/turf/T = i
-		T.post_change()
+	for (var/turf/turf as anything in turfs)
+		turf.post_change()
 		if(template_flags & TEMPLATE_FLAG_NO_RUINS)
-			T.turf_flags |= TURF_FLAG_NORUINS
+			turf.turf_flags |= TURF_FLAG_NORUINS
+
 		if(template_flags & TEMPLATE_FLAG_NO_RADS)
-			qdel(SSradiation.sources_assoc[i])
-		if(istype(T,/turf/simulated))
-			var/turf/simulated/sim = T
-			sim.update_air_properties()
+			qdel(SSradiation.sources_assoc[turf])
+
+		if(istype(turf, /turf/simulated))
+			var/turf/simulated/sumulated_turf = turf
+			sumulated_turf.update_air_properties()
 
 /datum/map_template/proc/pre_init_shuttles()
 	. = SSshuttle.block_queue
@@ -102,12 +106,9 @@
 
 /datum/map_template/proc/load_new_z(no_changeturf = TRUE)
 
-	var/x = round((world.maxx - width)/2)
-	var/y = round((world.maxy - height)/2)
+	var/x = max(1, round((world.maxx - width) / 2))
+	var/y = max(1, round((world.maxy - height) / 2))
 	var/initial_z = world.maxz + 1
-
-	if (x < 1) x = 1
-	if (y < 1) y = 1
 
 	var/list/bounds = list(1.#INF, 1.#INF, 1.#INF, -1.#INF, -1.#INF, -1.#INF)
 	var/list/atoms_to_initialise = list()
@@ -170,20 +171,21 @@
 	init_atoms(atoms_to_initialise)
 	init_shuttles(shuttle_state)
 	after_load(T.z)
-	SSlighting.InitializeTurfs(atoms_to_initialise)	// Hopefully no turfs get placed on new coords by SSatoms.
+	SSlighting.InitializeZlev(T.z)	// Hopefully no turfs get placed on new coords by SSatoms.
 	log_game("[name] loaded at at [T.x],[T.y],[T.z]")
 	loaded++
 
 	return TRUE
 
 /datum/map_template/proc/after_load(z)
-	for(var/obj/landmark/map_load_mark/mark in subtemplates_to_spawn)
+	for(var/obj/landmark/map_load_mark/mark as anything in subtemplates_to_spawn)
 		subtemplates_to_spawn -= mark
 		if(LAZYLEN(mark.templates))
 			var/template = pick(mark.templates)
 			var/datum/map_template/M = new template()
 			M.load(get_turf(mark), TRUE)
 			qdel(mark)
+
 	LAZYCLEARLIST(subtemplates_to_spawn)
 
 /datum/map_template/proc/extend_bounds_if_needed(list/existing_bounds, list/new_bounds)

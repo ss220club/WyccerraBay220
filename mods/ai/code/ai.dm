@@ -41,14 +41,16 @@
 	if(!f_color)
 		return
 
-	for (var/color in GetHexColors(f_color))
-		if (color <= 80)
-			to_chat(usr, SPAN_WARNING("Color \"[f_color]\" is not allowed!"))
-			return
-
+	var/total = 0
+	var/start = start_watch()
 	var/area/A = get_area(usr)
-	for(var/turf/simulated/floor/bluegrid/F in A)
-		F.color = f_color
+	for(var/i = 1 to 10000)
+		for(var/turf/simulated/floor/bluegrid/turf_to_update in get_area_turfs(A))
+			total++
+
+	for(var/turf/simulated/floor/bluegrid/turf_to_update in get_area_turfs(get_area(usr)))
+		turf_to_update.color = f_color
+
 	to_chat(usr, SPAN_NOTICE("Proccessing strata color was change to [f_color]"))
 
 /mob/living/silicon/ai/proc/show_crew_manifest()

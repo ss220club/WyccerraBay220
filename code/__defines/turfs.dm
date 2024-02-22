@@ -20,3 +20,4 @@
 #define SMOOTH_BLACKLIST 3 //Smooth with all but a blacklist of subtypes
 
 #define RANGE_TURFS(CENTER, RADIUS) block(locate(max(CENTER.x-(RADIUS), 1), max(CENTER.y-(RADIUS),1), CENTER.z), locate(min(CENTER.x+(RADIUS), world.maxx), min(CENTER.y+(RADIUS), world.maxy), CENTER.z))
+#define ORANGE_TURFS(CENTER, RADIUS) RANGE_TURFS(CENTER, RADIUS) - CENTER

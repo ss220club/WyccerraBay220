@@ -3,17 +3,18 @@
 /area
 	/// Integer. Global counter for `uid` values assigned to areas. Increments by one for each new area.
 	var/static/global_uid = 0
-
 	/// Integer. The area's unique ID number. set to the value of `global_uid` + 1 when the area is created.
 	var/uid
-
 	/// Bitflag (Any of `AREA_FLAG_*`). See `code\__defines\misc.dm`.
 	var/area_flags
-
 	/// A lazy list of vent pumps currently in the area
 	var/list/obj/machinery/atmospherics/unary/vent_pump/vent_pumps
+	/// Lazy list of all turfs in area. Updated when new turf created or removed from the area.
+	/// Special case is applied for shuttles, where turfs should move with their area.
+	var/list/turf/contained_turfs
 
 /area/New()
+	LAZYADD(GLOB.areas,	src)
 	icon_state = ""
 	uid = ++global_uid
 
@@ -39,34 +40,17 @@
 	if (turfs_airless)
 		return INITIALIZE_HINT_LATELOAD
 
+/area/Destroy()
+	LAZYREMOVE(GLOB.areas, src)
+	return ..()
+
 /area/LateInitialize(mapload)
 	turfs_airless = FALSE
-
-
-// Changes the area of T to A. Do not do this manually.
-// Area is expected to be a non-null instance.
-/proc/ChangeArea(turf/T, area/A)
-	if(!istype(A))
-		CRASH("Area change attempt failed: invalid area supplied.")
-	var/area/old_area = get_area(T)
-	if(old_area == A)
-		return
-	A.contents.Add(T)
-	if(old_area)
-		old_area.Exited(T, A)
-		for(var/atom/movable/AM in T)
-			old_area.Exited(AM, A)  // Note: this _will_ raise exited events.
-	A.Entered(T, old_area)
-	for(var/atom/movable/AM in T)
-		A.Entered(AM, old_area) // Note: this will _not_ raise moved or entered events. If you change this, you must also change everything which uses them.
-
-	for(var/obj/machinery/M in T)
-		M.area_changed(old_area, A) // They usually get moved events, but this is the one way an area can change without triggering one.
 
 /// Returns list (`/obj/machinery/camera`). A list of all cameras in the area.
 /area/proc/get_cameras()
 	var/list/cameras = list()
-	for (var/obj/machinery/camera/C in src)
+	for(var/obj/machinery/camera/C in machinery_list)
 		cameras += C
 	return cameras
 
@@ -85,24 +69,28 @@
 	else
 		GLOB.atmosphere_alarm.triggerAlarm(src, alarm_source, severity = danger_level)
 
+	var/list/area_alarms = list()
 	//Check all the alarms before lowering atmosalm. Raising is perfectly fine.
-	for (var/obj/machinery/alarm/AA in src)
+	for(var/obj/machinery/alarm/AA in machinery_list)
 		if (AA.operable() && !AA.shorted && AA.report_danger_level)
 			danger_level = max(danger_level, AA.danger_level)
 
-	if(danger_level != atmosalm)
-		if (danger_level < 1 && atmosalm >= 1)
-			//closing the doors on red and opening on green provides a bit of hysteresis that will hopefully prevent fire doors from opening and closing repeatedly due to noise
-			air_doors_open()
-		else if (danger_level >= 2 && atmosalm < 2)
-			air_doors_close()
+		area_alarms += AA
 
-		atmosalm = danger_level
-		for (var/obj/machinery/alarm/AA in src)
-			AA.update_icon()
+	if(atmosalm == danger_level)
+		return FALSE
 
-		return 1
-	return 0
+	if (danger_level < 1 && atmosalm >= 1)
+		//closing the doors on red and opening on green provides a bit of hysteresis that will hopefully prevent fire doors from opening and closing repeatedly due to noise
+		air_doors_open()
+	else if (danger_level >= 2 && atmosalm < 2)
+		air_doors_close()
+
+	atmosalm = danger_level
+	for (var/obj/machinery/alarm/AA as anything in area_alarms)
+		AA.update_icon()
+
+	return TRUE
 
 /// Sets `air_doors_activated` and sets all firedoors in `all_doors` to the closed state. Does nothing if `air_doors_activated` is already set.
 /area/proc/air_doors_close()
@@ -173,14 +161,12 @@
 	if(!eject)
 		eject = 1
 		update_icon()
-	return
 
 /// Clears an active evacuation alarm from the area.
 /area/proc/readyreset()
 	if(eject)
 		eject = 0
 		update_icon()
-	return
 
 /// Sets a party alarm in the area, if one is not already active.
 /area/proc/partyalert()
@@ -188,7 +174,6 @@
 		party = 1
 		update_icon()
 		mouse_opacity = 0
-	return
 
 /// Clears an active party alarm from the area.
 /area/proc/partyreset()
@@ -196,14 +181,13 @@
 		party = 0
 		mouse_opacity = 0
 		update_icon()
-		for(var/obj/machinery/door/firedoor/D in src)
+		for(var/obj/machinery/door/firedoor/D in all_doors)
 			if(!D.blocked)
 				if(D.operating)
 					D.nextstate = FIREDOOR_OPEN
 				else if(D.density)
 					spawn(0)
 					D.open()
-	return
 
 /area/on_update_icon()
 	if ((fire || eject || party) && (!requires_power||power_environ))//If it doesn't require power, can still activate this proc.
@@ -225,20 +209,21 @@
 /area/proc/set_lightswitch(new_switch)
 	if(lightswitch != new_switch)
 		lightswitch = new_switch
-		for(var/obj/machinery/light_switch/L in src)
+		for(var/obj/machinery/light_switch/L in machinery_list)
 			L.sync_state()
 		update_icon()
 		power_change()
 
-/// Calls `set_emergency_lighting(enable)` on all `/obj/machinery/light` in src.
+/// Calls `set_emergency_lighting(enable)` on all `/obj/machinery/light` in contained machinery.
 /area/proc/set_emergency_lighting(enable)
-	for(var/obj/machinery/light/M in src)
+	for(var/obj/machinery/light/M in machinery_list)
 		M.set_emergency_lighting(enable)
 
 
 /area/Entered(A)
 	..()
-	if(!istype(A,/mob/living))	return
+	if(!isliving(A))
+		return
 
 	var/mob/living/L = A
 
@@ -301,42 +286,54 @@
  * **Parameters**:
  * - `gravitystate` Boolean, default `FALSE`. The new state to set `has_gravity` to.
  */
-/area/proc/gravitychange(gravitystate = 0)
-	has_gravity = gravitystate
+/area/proc/gravitychange(gravitystate = FALSE)
+	if(has_gravity == gravitystate)
+		return
 
-	for(var/mob/M in src)
+	has_gravity = gravitystate
+	for(var/mob/target as anything in SSmobs.get_all_mobs())
+		if(get_area(target) != src)
+			continue
+
 		if(has_gravity)
-			thunk(M)
-		M.update_floating()
+			thunk(target)
+
+		target.update_floating()
 
 /// Causes the provided mob to 'slam' down to the floor if certain conditions are not met. Primarily used for gravity changes.
-/area/proc/thunk(mob/mob)
-	if(istype(get_turf(mob), /turf/space)) // Can't fall onto nothing.
+/area/proc/thunk(mob/living/carbon/human/mob_to_thunk)
+	if(!istype(mob_to_thunk))
 		return
 
-	if(mob.Check_Shoegrip())
+	if(isspace(get_turf(mob_to_thunk))) // Can't fall onto nothing.
 		return
 
-	if(istype(mob,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = mob
-		if(!H.buckled && prob(H.skill_fail_chance(SKILL_EVA, 100, SKILL_MASTER)))
-			if(!MOVING_DELIBERATELY(H))
-				H.AdjustStunned(3)
-				H.AdjustWeakened(3)
-			else
-				H.AdjustStunned(1.5)
-				H.AdjustWeakened(1.5)
-			to_chat(mob, SPAN_NOTICE("The sudden appearance of gravity makes you fall to the floor!"))
+	if(mob_to_thunk.Check_Shoegrip())
+		return
+
+	if(mob_to_thunk.buckled || !prob(mob_to_thunk.skill_fail_chance(SKILL_EVA, 100, SKILL_MASTER)))
+		return
+
+	if(!MOVING_DELIBERATELY(mob_to_thunk))
+		mob_to_thunk.AdjustStunned(3)
+		mob_to_thunk.AdjustWeakened(3)
+	else
+		mob_to_thunk.AdjustStunned(1.5)
+		mob_to_thunk.AdjustWeakened(1.5)
+
+	to_chat(mob_to_thunk, SPAN_NOTICE("The sudden appearance of gravity makes you fall to the floor!"))
 
 /// Trigger for the prison break event. Causes lighting to overload and dooes to open. Has no effect if the area lacks an APC or the APC is turned off.
 /area/proc/prison_break()
 	var/obj/machinery/power/apc/theAPC = get_apc()
 	if(theAPC && theAPC.operating)
-		for(var/obj/machinery/power/apc/temp_apc in src)
+		for(var/obj/machinery/power/apc/temp_apc in machinery_list)
 			temp_apc.overload_lighting(70)
-		for(var/obj/machinery/door/airlock/temp_airlock in src)
+
+		for(var/obj/machinery/door/airlock/temp_airlock in all_doors)
 			temp_airlock.prison_open()
-		for(var/obj/machinery/door/window/temp_windoor in src)
+
+		for(var/obj/machinery/door/window/temp_windoor in all_doors)
 			temp_windoor.open()
 
 /// Returns boolean. Whether or not the area is considered to have gravity.
@@ -369,7 +366,7 @@
 /area/proc/get_dimensions()
 	var/list/res = list("x"=1,"y"=1)
 	var/list/min = list("x"=world.maxx,"y"=world.maxy)
-	for(var/turf/T in src)
+	for(var/turf/T as anything in contained_turfs)
 		res["x"] = max(T.x, res["x"])
 		res["y"] = max(T.y, res["y"])
 		min["x"] = min(T.x, min["x"])
@@ -380,10 +377,24 @@
 
 /// Returns boolean. Whether or not there are any turfs (`/turf`) in src.
 /area/proc/has_turfs()
-	return !!(locate(/turf) in src)
+	return length(contained_turfs)
 
 /// Returns boolean. Whether or not the area can be modified by player actions.
 /area/proc/can_modify_area()
 	if (src && src.area_flags & AREA_FLAG_NO_MODIFY)
 		return FALSE
 	return TRUE
+
+/// Adds new turf to area turf cache
+/area/proc/add_turf_to_cache(turf/turf_to_add)
+	if(!istype(turf_to_add))
+		CRASH("Wrong type supplied to `/area/proc/add_turf`: `[turf_to_add?.type]`")
+
+	LAZYADD(contained_turfs, turf_to_add)
+
+/// Removes turf from area turf cache
+/area/proc/remove_turf_from_cache(turf/turf_to_remove)
+	if(!istype(turf_to_remove))
+		CRASH("Wrong type supplied to `/area/proc/add_turf`: `[turf_to_remove?.type]`")
+
+	LAZYREMOVE(contained_turfs, turf_to_remove)

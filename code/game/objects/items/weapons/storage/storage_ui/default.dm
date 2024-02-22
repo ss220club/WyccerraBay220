@@ -8,7 +8,7 @@
 	var/obj/screen/storage/stored_start
 	var/obj/screen/storage/stored_continue
 	var/obj/screen/storage/stored_end
-	var/list/obj/screen/storage/containers
+	var/list/obj/screen/containers
 	var/obj/screen/close/closer
 
 /datum/storage_ui/default/New(storage)
@@ -196,7 +196,7 @@
 	boxes.screen_loc = "4:16,2:16 to [4+cols]:16,[2+rows]:16"
 
 	for(var/obj/O in storage.contents)
-		var/obj/screen/storage/container/container = create_container(O)
+		var/obj/screen/container/container = create_container(O)
 		container.screen_loc = "[cx]:16,[cy]:16"
 		containers += container
 		O.screen_loc = "[cx]:16,[cy]:16"
@@ -236,7 +236,7 @@
 			offset_x = startpoint + stored_cap_width + (endpoint - startpoint - stored_cap_width * 2) / 2 - 16,
 			scale_x = (endpoint - startpoint - stored_cap_width * 2) / 32
 		)
-		var/obj/screen/storage/container/container = create_container(O, endpoint - startpoint - 1)
+		var/obj/screen/container/container = create_container(O, endpoint - startpoint - 1)
 		container.screen_loc = "4:[16 + round(startpoint)],2:16"
 		storage_start.AddOverlays(list(
 			stored_start,
@@ -252,7 +252,7 @@
 	closer.screen_loc = "4:[storage_width+19],2:16"
 
 /datum/storage_ui/default/proc/create_container(obj/item/new_master, width = 32)
-	var/obj/screen/storage/container/container = new()
+	var/obj/screen/container/container = new()
 	container.SetName(new_master.name)
 	container.master = new_master
 	var/icon/new_icon = icon()

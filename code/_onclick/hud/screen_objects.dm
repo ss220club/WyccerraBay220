@@ -78,6 +78,12 @@
 		usr.ClickOn(master, params)
 	return TRUE
 
+/obj/screen/storage/container
+	icon = null
+	icon_state = null
+	layer = HUD_ABOVE_ITEM_LAYER
+	mouse_opacity = MOUSE_OPACITY_PRIORITY
+
 /obj/screen/zone_sel
 	name = "damage zone"
 	icon_state = "zone_sel"

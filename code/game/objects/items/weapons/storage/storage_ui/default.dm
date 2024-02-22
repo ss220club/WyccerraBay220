@@ -141,9 +141,7 @@
 /datum/storage_ui/default/prepare_ui()
 	for(var/mob/user in is_seeing)
 		user.client.screen -= containers
-	for(var/container in containers)
-		qdel(container)
-	containers.Cut()
+	QDEL_LIST(containers)
 	//if storage slots is null then use the storage space UI, otherwise use the slots UI
 	if(isnull(storage.storage_slots))
 		space_orient_objs()

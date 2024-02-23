@@ -77,7 +77,7 @@ SUBSYSTEM_DEF(pathfinder)
 	LAZYINITLIST(SSpathfinder.debugged_turfs)
 	path = get_path_to(usr, current, 120)
 	if(LAZYLEN(path))
-		for(var/turf/T in path)
+		for(var/turf/T as anything in path)
 			LAZYADD(SSpathfinder.debugged_turfs, T)
 			T.AddOverlays(SSpathfinder.path_overlay)
 	else

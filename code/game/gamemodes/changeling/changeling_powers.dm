@@ -674,7 +674,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	if(!isturf(src.loc) || !isturf(M.loc))
 		to_chat(src, SPAN_WARNING("We cannot reach \the [M] with a sting!"))
 		return 0 //One is inside, the other is outside something.
-	if(!get_path_to(src, M, sting_range))	//If we can't find a path, fail
+	if(!length(get_path_to(src, M, sting_range)))	//If we can't find a path, fail
 		to_chat(src, SPAN_WARNING("We cannot find a path to sting \the [M] by!"))
 		return 0
 	return 1

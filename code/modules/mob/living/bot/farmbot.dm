@@ -120,6 +120,7 @@
 			if(confirmTarget(tray))
 				target = tray
 				return
+
 		if(!target && refills_water && tank && tank.reagents.total_volume < tank.reagents.maximum_volume)
 			for(var/obj/structure/hygiene/sink/source in view(7, src))
 				target = source
@@ -127,7 +128,7 @@
 
 /mob/living/bot/farmbot/calcTargetPath()
 	target_path = get_path_to(src, target, max_target_dist, min_target_dist = 1, id = botcard)	// We need to land NEXT to the tray, because the tray itself is impassable
-	if(!target_path)
+	if(!length(target_path))
 		ignore_list |= target
 		target = null
 		target_path = list()

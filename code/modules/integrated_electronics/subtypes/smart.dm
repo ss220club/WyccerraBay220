@@ -121,7 +121,7 @@
 	var/turf/a_loc = get_turf(assembly)
 	var/list/P = get_path_to(assembly, locate(get_pin_data(IC_INPUT, 1), get_pin_data(IC_INPUT, 2), a_loc.z), 200, id=idc, exclude=get_turf(get_pin_data_as_type(IC_INPUT, 3, /atom)))
 
-	if(!P)
+	if(!length(P))
 		activate_pin(3)
 		return
 	else

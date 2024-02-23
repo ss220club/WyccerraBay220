@@ -43,7 +43,7 @@
 	forget_path()
 	var/list/new_path = get_path_to(holder, target, max_distance, get_to, holder.IGetID(), exclude = obstacles)
 
-	if (new_path && length(new_path))
+	if (length(new_path))
 		path = new_path
 		ai_log("get_path() : Made new path.", AI_LOG_DEBUG)
 		if (path_display)

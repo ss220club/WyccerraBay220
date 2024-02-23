@@ -543,11 +543,11 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	var/request = "http://check.getipintel.net/check.php?ip=[address]&contact=[config.ipr_email]"
 	var/http[] = world.Export(request)
 
-
+	/*DEBUG
 	world.log << "Requested this: [request]"
 	for(var/entry in http)
 		world.log << "[entry] : [http[entry]]"
-
+	*/
 
 	if(!http || !islist(http)) //If we couldn't check, the service might be down, fail-safe.
 		log_admin("Couldn't connect to getipintel.net to check [address] for [key]")

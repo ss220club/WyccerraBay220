@@ -3,7 +3,7 @@
 	name = "fire coderbus"               //name of the subsystem
 	var/init_order = SS_INIT_DEFAULT  //order of initialization. Higher numbers are initialized first, lower numbers later. Use defines in __DEFINES/subsystems.dm for easy understanding of order.
 	var/wait = 20                        //time to wait (in deciseconds) between each call to fire(). Must be a positive integer.
-	var/priority = SS_PRIORITY_DEFAULT //When mutiple subsystems need to run in the same tick, higher priority subsystems will run first and be given a higher share of the tick before MC_TICK_CHECK triggers a sleep
+	var/priority = FIRE_PRIORITY_DEFAULT //When mutiple subsystems need to run in the same tick, higher priority subsystems will run first and be given a higher share of the tick before MC_TICK_CHECK triggers a sleep
 
 	var/flags = 0                        //see MC.dm in __DEFINES Most flags must be set on world start to take full effect. (You can also restart the mc to force them to process again)
 	// Similar to can_fire, but intended explicitly for subsystems that are asleep. Using this var instead of can_fire
@@ -84,7 +84,7 @@
 //	(we loop thru a linked list until we get to the end or find the right point)
 //	(this lets us sort our run order correctly without having to re-sort the entire already sorted list)
 /datum/controller/subsystem/proc/enqueue()
-	var/SS_priority = priority
+	var/FIRE_PRIORITY = priority
 	var/SS_flags = flags
 	var/datum/controller/subsystem/queue_node
 	var/queue_node_priority
@@ -97,13 +97,13 @@
 		if (queue_node_flags & (SS_TICKER|SS_BACKGROUND) == SS_TICKER)
 			if (!(SS_flags & SS_TICKER))
 				continue
-			if (queue_node_priority < SS_priority)
+			if (queue_node_priority < FIRE_PRIORITY)
 				break
 
 		else if (queue_node_flags & SS_BACKGROUND)
 			if (!(SS_flags & SS_BACKGROUND))
 				break
-			if (queue_node_priority < SS_priority)
+			if (queue_node_priority < FIRE_PRIORITY)
 				break
 
 		else
@@ -111,16 +111,16 @@
 				continue
 			if (SS_flags & SS_TICKER)
 				break
-			if (queue_node_priority < SS_priority)
+			if (queue_node_priority < FIRE_PRIORITY)
 				break
 
 	queued_time = world.time
-	queued_priority = SS_priority
+	queued_priority = FIRE_PRIORITY
 	state = SS_QUEUED
 	if (SS_flags & SS_BACKGROUND) //update our running total
-		Master.queue_priority_count_bg += SS_priority
+		Master.queue_priority_count_bg += FIRE_PRIORITY
 	else
-		Master.queue_priority_count += SS_priority
+		Master.queue_priority_count += FIRE_PRIORITY
 
 	queue_next = queue_node
 	if (!queue_node)//we stopped at the end, add to tail

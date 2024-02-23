@@ -4,7 +4,7 @@
 SUBSYSTEM_DEF(throwing)
 	name = "Throwing"
 	wait = 1
-	priority = SS_PRIORITY_THROWING
+	priority = FIRE_PRIORITY_THROWING
 	flags = SS_NO_INIT | SS_KEEP_TIMING
 
 	/// An atom => thrownthing map of current throws

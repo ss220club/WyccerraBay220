@@ -37,7 +37,7 @@ if(Datum.is_processing) {\
 SUBSYSTEM_DEF(machines)
 	name = "Machines"
 	init_order = SS_INIT_MACHINES
-	priority = SS_PRIORITY_MACHINERY
+	priority = FIRE_PRIORITY_MACHINERY
 	flags = SS_KEEP_TIMING
 	var/static/current_step = SSMACHINES_PIPENETS
 	var/static/cost_pipenets = 0

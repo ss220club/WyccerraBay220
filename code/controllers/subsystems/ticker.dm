@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(ticker)
 	name = "Ticker"
 	wait = 10
-	priority = SS_PRIORITY_TICKER
+	priority = FIRE_PRIORITY_TICKER
 	init_order = SS_INIT_TICKER
 	flags = SS_NO_TICK_CHECK | SS_KEEP_TIMING
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME

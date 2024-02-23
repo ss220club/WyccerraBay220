@@ -1,7 +1,7 @@
 //ported from TG 30/03/2020
 SUBSYSTEM_DEF(spacedrift)
 	name = "Space Drift"
-	priority = SS_PRIORITY_SPACEDRIFT
+	priority = FIRE_PRIORITY_SPACEDRIFT
 	wait = 5
 	flags = SS_NO_INIT|SS_KEEP_TIMING
 

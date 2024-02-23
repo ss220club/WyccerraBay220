@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(ai)
 	name = "AI"
 	init_order = SS_INIT_AI
-	priority = SS_PRIORITY_AI
+	priority = FIRE_PRIORITY_AI
 	wait = 2 SECONDS
 	var/static/list/datum/ai_holder/ai_holders = list()
 	var/static/list/datum/ai_holder/queue = list()

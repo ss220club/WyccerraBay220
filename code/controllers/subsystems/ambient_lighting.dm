@@ -100,7 +100,7 @@ SUBSYSTEM_DEF(ambient_lighting) //A simple SS that handles updating ambient ligh
 		return
 
 	if (T.z > length(member_turfs_by_z))
-		member_turfs_by_z.len = T.z
+		LIST_RESIZE(member_turfs_by_z, T.z)
 
 	LAZYADD(member_turfs_by_z[T.z], T)
 	T.ambient_bitflag |= FLAG(global_index)

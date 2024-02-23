@@ -34,13 +34,13 @@ SUBSYSTEM_DEF(pathfinder)
 		var/datum/pathfind/path = currentrun[length(currentrun)]
 		if(!path.search_step()) // Something's wrong
 			path.early_exit()
-			currentrun.len--
+			LIST_DEC(currentrun)
 			continue
 		if(MC_TICK_CHECK)
 			return
 		path.finished()
 		// Next please
-		currentrun.len--
+		LIST_DEC(currentrun)
 
 /// Initiates a pathfind. Returns true if we're good, FALSE if something's failed
 /datum/controller/subsystem/pathfinder/proc/pathfind(atom/movable/caller, atom/end, max_distance = 30, min_target_dist, id=null, simulated_only = TRUE, turf/exclude, skip_first=TRUE, diagonal_safety=TRUE, datum/callback/on_finish)

@@ -49,8 +49,8 @@
 #define STEP_NOT_HERE_BUT_THERE(cur_turf, dirA, dirB) ((!CAN_STEP(cur_turf, get_step(cur_turf, dirA)) && CAN_STEP(cur_turf, get_step(cur_turf, dirB))))
 
 //z-level turftype defines
-#define OPEN_SPACE_TURF	(1<<0)
-#define STAIR_TURF		(1<<1)
+#define OPEN_SPACE_TURF FLAG(0)
+#define STAIR_TURF FLAG(1)
 
 /// The JPS Node datum represents a turf that we find interesting enough to add to the open list and possibly search for new tiles from
 /datum/jps_node

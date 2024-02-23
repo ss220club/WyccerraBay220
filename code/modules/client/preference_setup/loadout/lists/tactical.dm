@@ -1,6 +1,6 @@
 /datum/gear/tactical
-	sort_category = "Tactical Equipment"
-	category = /datum/gear/tactical
+	category = GEAR_CATEGORY_TACTICAL_EQUIPMENT
+	abstract_type = /datum/gear/tactical
 	slot = slot_tie
 
 /datum/gear/tactical/helm_covers

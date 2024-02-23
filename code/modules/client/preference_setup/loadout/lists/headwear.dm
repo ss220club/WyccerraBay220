@@ -1,7 +1,7 @@
 /datum/gear/head
-	sort_category = "Hats and Headwear"
+	category = GEAR_CATEGORY_HATS_AND_HEADWEAR
 	slot = slot_head
-	category = /datum/gear/head
+	abstract_type = /datum/gear/head
 
 /datum/gear/head/beret
 	display_name = "beret, colour select"
@@ -183,3 +183,10 @@
 	path = /obj/item/clothing/head/deckcrew
 	flags = GEAR_HAS_TYPE_SELECTION
 	description = "A helmet with ear protection and a visor, used in hangars on many ships."
+
+/datum/gear/head/skrell_helmet
+	display_name = "Skrellian helmet"
+	path = /obj/item/clothing/head/helmet/skrell
+	whitelisted = list(SPECIES_SKRELL)
+	category = GEAR_CATEGORY_HATS_AND_HEADWEAR
+	allowed_roles = list(/datum/job/hos, /datum/job/warden, /datum/job/officer, /datum/job/detective)

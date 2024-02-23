@@ -15,8 +15,8 @@
 
 
 /mob/living/carbon/human/Initialize(mapload, new_species = null)
-	grasp_limbs = list()
-	stance_limbs = list()
+	LAZYINITLIST(grasp_limbs)
+	LAZYINITLIST(stance_limbs)
 
 	if(!dna)
 		dna = new /datum/dna(null)
@@ -1301,7 +1301,7 @@
 		if(istype(C) && !C.mob_can_equip(src, slot, 1))
 			drop_from_inventory(C)
 	update_emotes()
-	return 1
+	return TRUE
 
 
 /mob/living/carbon/human/proc/update_languages()
@@ -1329,7 +1329,7 @@
 		var/datum/language/lang = thing
 		if(lang in permitted_languages)
 			continue
-		if(!(lang.flags & RESTRICTED) && (lang.flags & WHITELISTED) && is_alien_whitelisted(src, lang))
+		if(!(lang.flags & RESTRICTED) && (lang.flags & WHITELISTED) && is_any_alien_whitelisted(src, lang))
 			continue
 		if(lang == default_language)
 			default_language = null

@@ -55,6 +55,9 @@
 	/// log world.log to game log
 	var/static/log_world_output = FALSE
 
+	/// log signals messages
+	var/static/log_signals = FALSE
+
 	/// Allows admins with relevant permissions to have their own ooc colour
 	var/static/allow_admin_ooccolor = FALSE
 
@@ -98,6 +101,9 @@
 
 	/// Length of time before round start (in seconds)
 	var/static/pre_game_time = 180
+
+	/// If we want to bypass gamemode vote
+	var/static/bypass_gamemode_vote = FALSE
 
 	/// vote does not default to nochange/norestart (tbi)
 	var/static/vote_no_default = FALSE
@@ -559,6 +565,8 @@
 				log_adminwarn = TRUE
 			if ("log_world_output")
 				log_world_output = TRUE
+			if ("log_signals")
+				log_signals = TRUE
 			if ("log_hrefs")
 				log_hrefs = TRUE
 			if ("log_runtime")
@@ -629,6 +637,8 @@
 				vote_autogamemode_timeleft = text2num(value)
 			if ("pre_game_time")
 				pre_game_time = text2num(value)
+			if ("bypass_gamemode_vote")
+				bypass_gamemode_vote = TRUE
 			if ("ert_admin_only")
 				ert_admin_call_only = TRUE
 			if ("respawn_delay")

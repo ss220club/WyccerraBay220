@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(vote)
 	name = "Voting"
 	wait = 1 SECOND
-	priority = SS_PRIORITY_VOTE
+	priority = FIRE_PRIORITY_VOTE
 	flags = SS_NO_TICK_CHECK | SS_KEEP_TIMING
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
 

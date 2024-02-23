@@ -70,7 +70,7 @@ var/global/list/ghost_traps
 	if (!species_whitelist)
 		return
 	var/datum/species/S = new species_whitelist()
-	if (!is_alien_whitelisted(candidate, S))
+	if (!is_any_alien_whitelisted(candidate, S))
 		. = FALSE
 
 // Print a message to all ghosts with the right prefs/lack of bans.

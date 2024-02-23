@@ -12,7 +12,7 @@
 	//doohickeys for savefiles
 	var/is_guest = FALSE
 	var/default_slot = 1				//Holder so it doesn't default to slot 1, rather the last one used
-
+	var/character_slots_count = 0
 	// Cache, mapping slot record ids to character names
 	// Saves reading all the slot records when listing
 	var/list/slot_names = null
@@ -33,9 +33,10 @@
 	var/client_ckey = null
 
 	var/datum/browser/popup
-
 	var/datum/category_collection/player_setup_collection/player_setup
 	var/datum/browser/panel
+	var/datum/gear/trying_on_gear
+	var/list/trying_on_tweaks = list()
 
 /datum/preferences/New(client/C)
 	if(istype(C))
@@ -136,10 +137,10 @@
 		dat += "Loading your savefile failed. Please adminhelp for assistance."
 	else
 		dat += "Slot - "
-		dat += "<a href='?src=\ref[src];load=1'>Load slot</a> - "
-		dat += "<a href='?src=\ref[src];save=1'>Save slot</a> - "
-		dat += "<a href='?src=\ref[src];resetslot=1'>Reset slot</a> - "
-		dat += "<a href='?src=\ref[src];reload=1'>Reload slot</a>"
+		dat += "<a href='?src=[ref(src)];load=1'>Load slot</a> - "
+		dat += "<a href='?src=[ref(src)];save=1'>Save slot</a> - "
+		dat += "<a href='?src=[ref(src)];resetslot=1'>Reset slot</a> - "
+		dat += "<a href='?src=[ref(src)];reload=1'>Reload slot</a>"
 
 	dat += "<br>"
 	dat += player_setup.header()
@@ -150,7 +151,8 @@
 /datum/preferences/proc/open_setup_window(mob/user)
 	if (!SScharacter_setup.initialized)
 		return
-	popup = new (user, "preferences_browser", "Character Setup", 1200, 800, src)
+
+	popup = new(user, "preference_window", "Character Setup", 1000, 800, src)
 	var/content = {"
 	<script type='text/javascript'>
 		function update_content(data){
@@ -162,8 +164,10 @@
 	popup.set_content(content)
 	popup.open()
 
+	update_preview_icon()
+
 /datum/preferences/proc/update_setup_window(mob/user)
-	send_output(user, url_encode(get_content(user)), "preferences_browser.browser:update_content")
+	send_output(user, url_encode(get_content(user)), "preference_window.preference_browser:update_content")
 
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 
@@ -181,51 +185,69 @@
 
 /datum/preferences/Topic(href, list/href_list)
 	if(..())
-		return 1
+		return TRUE
 
 	if (href_list["close"])
 		popup = null
+		clear_character_preview()
 
-	if(href_list["save"])
+	else if(href_list["save"])
 		save_preferences()
 		save_character()
-		// [SIERRA-ADD] - LOBBYSCREEN
-		if (istype(client.mob, /mob/new_player))
+
+		if(istype(client.mob, /mob/new_player))
 			var/mob/new_player/M = client.mob
 			M.new_player_panel()
-		// [/SIERRA-ADD]
+
 	else if(href_list["reload"])
 		load_preferences()
 		load_character()
 		sanitize_preferences()
+		update_preview_icon()
+
 	else if(href_list["load"])
 		if(!IsGuestKey(usr.key))
 			open_load_dialog(usr, href_list["details"])
-			return 1
+			return TRUE
+
 	else if(href_list["changeslot"])
 		load_character(text2num(href_list["changeslot"]))
 		sanitize_preferences()
 		close_load_dialog(usr)
-
-		if (winget(usr, "preferences_browser", "is-visible") == "true")
-			open_setup_window(usr)
+		update_preview_icon()
 
 		if (istype(client.mob, /mob/new_player))
 			var/mob/new_player/M = client.mob
 			M.new_player_panel()
 
 		if (href_list["details"])
-			return 1
+			return TRUE
+
 	else if(href_list["resetslot"])
 		if(real_name != input("This will reset the current slot. Enter the character's full name to confirm."))
-			return 0
+			return FALSE
+
 		load_character(SAVE_RESET)
 		sanitize_preferences()
+		update_preview_icon()
+
+	else if (href_list["changeslot_next"])
+		character_slots_count += 10
+		if(character_slots_count >= config.character_slots)
+			character_slots_count = 0
+		open_load_dialog(usr, href_list["details"])
+
+	else if (href_list["changeslot_prev"])
+		character_slots_count -= 10
+		if(character_slots_count < 0)
+			character_slots_count = config.character_slots - config.character_slots % 10
+		open_load_dialog(usr, href_list["details"])
+
 	else
-		return 0
+		return FALSE
 
 	update_setup_window(usr)
-	return 1
+	return TRUE
 
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, is_preview_copy = FALSE)
 	// Sanitizing rather than saving as someone might still be editing when copy_to occurs.
@@ -253,41 +275,38 @@
 	character.skin_tone = skin_tone
 	character.base_skin = base_skin
 
-	// Replace any missing limbs.
-	for(var/name in BP_ALL_LIMBS)
-		var/obj/item/organ/external/O = character.organs_by_name[name]
-		if(!O && organ_data[name] != "amputated")
-			var/list/organ_data = character.species.has_limbs[name]
-			if(!islist(organ_data)) continue
-			var/limb_path = organ_data["path"]
-			O = new limb_path(character)
-
 	// Destroy/cyborgize organs and limbs. The order is important for preserving low-level choices for robolimb sprites being overridden.
 	for(var/name in BP_BY_DEPTH)
 		var/status = organ_data[name]
-		var/obj/item/organ/external/O = character.organs_by_name[name]
-		if(!O)
+		var/obj/item/organ/external/external_organ = character.organs_by_name[name]
+		if(!external_organ)
 			continue
-		O.status = 0
-		O.model = null
+
+		external_organ.status = 0
+		external_organ.model = null
+		if(is_preview_copy)
+			external_organ.blocks_emissive = EMISSIVE_BLOCK_NONE
+
 		if(status == "amputated")
-			character.organs_by_name[O.organ_tag] = null
-			character.organs -= O
-			if(O.children) // This might need to become recursive.
-				for(var/obj/item/organ/external/child in O.children)
+			character.organs_by_name[external_organ.organ_tag] = null
+			character.organs -= external_organ
+			if(external_organ.children) // This might need to become recursive.
+				for(var/obj/item/organ/external/child in external_organ.children)
 					character.organs_by_name[child.organ_tag] = null
 					character.organs -= child
 					qdel(child)
-			qdel(O)
+			qdel(external_organ)
+
 		else if(status == "cyborg")
 			if(rlimb_data[name])
-				O.robotize(rlimb_data[name])
+				external_organ.robotize(rlimb_data[name])
 			else
-				O.robotize()
+				external_organ.robotize()
 		else //normal organ
-			O.force_icon = initial(O.force_icon)
-			O.SetName(initial(O.name))
-			O.desc = initial(O.desc)
+
+			external_organ.force_icon = initial(external_organ.force_icon)
+			external_organ.SetName(initial(external_organ.name))
+			external_organ.desc = initial(external_organ.desc)
 
 	//For species that don't care about your silly prefs
 	character.species.handle_limbs_setup(character)
@@ -307,7 +326,7 @@
 	character.worn_underwear = list()
 
 	for(var/underwear_category_name in all_underwear)
-		var/datum/category_group/underwear/underwear_category = GLOB.underwear.categories_by_name[underwear_category_name]
+		var/datum/category_group/underwear/underwear_category = LAZYACCESS(GLOB.underwear.categories_by_name, underwear_category_name)
 		if(underwear_category)
 			var/underwear_item_name = all_underwear[underwear_category_name]
 			var/datum/category_item/underwear/UWD = underwear_category.items_by_name[underwear_item_name]
@@ -321,23 +340,23 @@
 	character.backpack_setup = new(backpack, backpack_metadata["[backpack]"])
 
 	for(var/N in character.organs_by_name)
-		var/obj/item/organ/external/O = character.organs_by_name[N]
-		O.markings.Cut()
+		var/obj/item/organ/external/external_organ = character.organs_by_name[N]
+		external_organ.markings.Cut()
 
 	for(var/M in body_markings)
 		var/datum/sprite_accessory/marking/mark_datum = GLOB.body_marking_styles_list[M]
 		var/mark_color = "[body_markings[M]]"
 
 		for(var/BP in mark_datum.body_parts)
-			var/obj/item/organ/external/O = character.organs_by_name[BP]
-			if (O)
-				O.markings[mark_datum] = mark_color
+			var/obj/item/organ/external/external_organ = character.organs_by_name[BP]
+			if (external_organ)
+				external_organ.markings[mark_datum] = mark_color
 
 	character.force_update_limbs()
-	character.update_mutations(0)
-	character.update_body(0)
-	character.update_underwear(0)
-	character.update_hair(0)
+	character.update_mutations(FALSE)
+	character.update_body(FALSE)
+	character.update_underwear(FALSE)
+	character.update_hair(FALSE)
 	character.update_icons()
 
 	if(is_preview_copy)
@@ -374,22 +393,26 @@
 		character.set_hydration(rand(140,360))
 
 /datum/preferences/proc/open_load_dialog(mob/user, details)
-	var/dat  = list()
+	var/list/dat  = list()
 	dat += "<body>"
-	dat += "<tt><center>"
+	dat += "<center>"
 
-	dat += "<b>Select a character slot to load</b><hr>"
-	for(var/i=1, i<= config.character_slots, i++)
-		var/name = (slot_names && slot_names[get_slot_key(i)]) || "Character[i]"
-		if(i==default_slot)
+	dat += "<b>Выберите слот для загрузки</b><hr>"
+	for(var/i = 1, i <= 10, i++)
+		var/name = (slot_names && slot_names[get_slot_key(i + character_slots_count)]) || "Персонаж [i + character_slots_count]"
+		if((i + character_slots_count) == default_slot)
 			name = "<b>[name]</b>"
-		dat += "<a href='?src=\ref[src];changeslot=[i];[details?"details=1":""]'>[name]</a><br>"
-
+		if(i + character_slots_count <= config.character_slots)
+			dat += "<a href='?src=\ref[src];changeslot=[i + character_slots_count];[details?"details=1":""]'>[name]</a><br>"
+	if(config.character_slots>10)
+		dat += "<br><a href='?src=\ref[src];changeslot_prev=1'> <b>&lt;</b> </a>"
+		dat += " <b>[character_slots_count + 1]</b> - <b>[character_slots_count + 10]</b> "
+		dat += "<a href='?src=\ref[src];changeslot_next=1'> <b>&gt;</b> </a><br>"
 	dat += "<hr>"
-	dat += "</center></tt>"
-	panel = new(user, "Character Slots", "Character Slots", 300, 390, src)
-	panel.set_content(jointext(dat,null))
-	panel.open()
+	dat += "</center>"
+	panel = new(user, "character_slots", "Слоты персонажей", 300, 390, src)
+	panel.set_content(dat.Join())
+	panel.open(FALSE)
 
 /datum/preferences/proc/close_load_dialog(mob/user)
 	if(panel)

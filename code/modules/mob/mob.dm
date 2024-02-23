@@ -738,11 +738,12 @@
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
 	//It just makes sense for now. ~Carn
-	if( update_icon )	//forces a full overlay update
-		update_icon = 0
+	if(update_icon)	//forces a full overlay update
+		update_icon = FALSE
 		regenerate_icons()
 	else if( lying != lying_prev )
 		update_icons()
+	SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
 
 /mob/proc/reset_layer()
 	if(lying)

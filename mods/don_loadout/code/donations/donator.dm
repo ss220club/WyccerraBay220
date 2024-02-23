@@ -9,16 +9,22 @@
 
 /proc/donation_tier_decorated(tier)
 	if(tier == DONATION_TIER_NONE)
-		return null
+		return "None"
 
+	var/tier_text
 	switch(tier)
-		if(DONATION_TIER_ONE)   . = "Tier I"
-		if(DONATION_TIER_TWO)   . = "Tier II"
-		if(DONATION_TIER_THREE) . = "Tier III"
-		if(DONATION_TIER_FOUR)  . = "Tier IV"
-		if(DONATION_TIER_ADMIN) . = "Admin"
+		if(DONATION_TIER_ONE)
+			tier_text = "Tier I"
+		if(DONATION_TIER_TWO)
+			tier_text = "Tier II"
+		if(DONATION_TIER_THREE)
+			tier_text = "Tier III"
+		if(DONATION_TIER_FOUR)
+			tier_text = "Tier IV"
+		if(DONATION_TIER_ADMIN)
+			tier_text = "Admin"
 
-	return SPAN_CLASS(donation_tier_to_css_class(tier), .)
+	return SPAN_CLASS(donation_tier_to_css_class(tier), tier_text)
 
 /client
 	var/datum/donator_info/donator_info = new
@@ -54,15 +60,5 @@
 	return donation_tier_decorated(donation_type)
 
 /datum/donator_info/proc/donation_tier_available(required)
-	ASSERT(required in DONATION_TIER_ALL_TIERS)
-
-	if(!(donation_type in DONATION_TIER_ALL_TIERS))
-		return FALSE
-
-	for(var/type in DONATION_TIER_ALL_TIERS)
-		if(type == required)
-			return TRUE
-		if(type == donation_type)
-			return FALSE
-
-	CRASH("This code should not be accessible")
+	ASSERT(required)
+	return donation_type >= required

@@ -50,7 +50,7 @@
 
 	//Update their traitor status.
 	if(host.mind && !neutered)
-		GLOB.borers.add_antagonist_mind(host.mind, 1, GLOB.borers.faction_role_text, GLOB.borers.faction_welcome)
+		GLOB.borers.add_antagonist_mind(host.mind, TRUE, GLOB.borers.faction_role_text, GLOB.borers.faction_welcome)
 
 	if(istype(host, /mob/living/carbon/human))
 		var/obj/item/organ/I = H.internal_organs_by_name[BP_BRAIN]

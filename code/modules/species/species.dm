@@ -311,6 +311,9 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 */
 
 /datum/species/New()
+	var/icon/species_icon = icon(icobase)
+	icon_height = species_icon.Height()
+	icon_width = species_icon.Width()
 
 	if(!codex_description)
 		codex_description = description
@@ -390,47 +393,43 @@ The slots that you can use are found in items_clothing.dm and are the inventory 
 		if (extendedtank)	H.equip_to_slot_or_del(new /obj/item/storage/box/engineer(H), slot_r_hand)
 		else	H.equip_to_slot_or_del(new /obj/item/storage/box/survival(H), slot_r_hand)
 
-/datum/species/proc/create_organs(mob/living/carbon/human/H) //Handles creation of mob organs.
+/datum/species/proc/create_organs(mob/living/carbon/human/create_organs_for) //Handles creation of mob organs.
 
-	H.mob_size = mob_size
-	for(var/obj/item/organ/organ in H.contents)
-		if((organ in H.organs) || (organ in H.internal_organs))
-			qdel(organ)
+	create_organs_for.mob_size = mob_size
+	QDEL_NULL_LIST(create_organs_for.organs)
+	QDEL_NULL_LIST(create_organs_for.internal_organs)
+	create_organs_for.organs_by_name = null
+	create_organs_for.internal_organs_by_name = null
 
-	if(H.organs)                  H.organs.Cut()
-	if(H.internal_organs)         H.internal_organs.Cut()
-	if(H.organs_by_name)          H.organs_by_name.Cut()
-	if(H.internal_organs_by_name) H.internal_organs_by_name.Cut()
-
-	H.organs = list()
-	H.internal_organs = list()
-	H.organs_by_name = list()
-	H.internal_organs_by_name = list()
+	create_organs_for.organs = list()
+	create_organs_for.internal_organs = list()
+	create_organs_for.organs_by_name = list()
+	create_organs_for.internal_organs_by_name = list()
 
 	for(var/limb_type in has_limbs)
 		var/list/organ_data = has_limbs[limb_type]
 		var/limb_path = organ_data["path"]
-		new limb_path(H)
+		new limb_path(create_organs_for)
 
 	for(var/organ_tag in has_organ)
 		var/organ_type = has_organ[organ_tag]
-		var/obj/item/organ/O = new organ_type(H)
-		if(organ_tag != O.organ_tag)
-			warning("[O.type] has a default organ tag \"[O.organ_tag]\" that differs from the species' organ tag \"[organ_tag]\". Updating organ_tag to match.")
-			O.organ_tag = organ_tag
-		H.internal_organs_by_name[organ_tag] = O
+		var/obj/item/organ/new_organ = new organ_type(create_organs_for)
+		if(organ_tag != new_organ.organ_tag)
+			warning("[new_organ.type] has a default organ tag \"[new_organ.organ_tag]\" that differs from the species' organ tag \"[organ_tag]\". Updating organ_tag to match.")
+			new_organ.organ_tag = organ_tag
+		create_organs_for.internal_organs_by_name[organ_tag] = new_organ
 
-	for(var/name in H.organs_by_name)
-		H.organs |= H.organs_by_name[name]
+	for(var/name in create_organs_for.organs_by_name)
+		create_organs_for.organs |= create_organs_for.organs_by_name[name]
 
-	for(var/name in H.internal_organs_by_name)
-		H.internal_organs |= H.internal_organs_by_name[name]
+	for(var/name in create_organs_for.internal_organs_by_name)
+		create_organs_for.internal_organs |= create_organs_for.internal_organs_by_name[name]
 
-	for(var/obj/item/organ/O in (H.organs|H.internal_organs))
-		O.owner = H
-		post_organ_rejuvenate(O, H)
+	for(var/obj/item/organ/organ_to_post_rejuvenate as anything in (create_organs_for.organs|create_organs_for.internal_organs))
+		organ_to_post_rejuvenate.owner = create_organs_for
+		post_organ_rejuvenate(organ_to_post_rejuvenate, create_organs_for)
 
-	H.sync_organ_dna()
+	create_organs_for.sync_organ_dna()
 
 /datum/species/proc/hug(mob/living/carbon/human/H,mob/living/target)
 

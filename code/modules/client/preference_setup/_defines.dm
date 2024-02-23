@@ -12,29 +12,35 @@ if(!singletons_by_name) \
 }
 
 /// Full Options Button.
-#define FBTN(key, value, label, title, style) \
-"[title ? "[title]: " : ""]<a href=\"?src=\ref[src];[key]=[value]\"[style ? " style=\"[style]\"" : ""]>[label]</a>"
+#define FBTN(key, value, label, title, style, class) \
+"[title ? "[title]: " : ""]<a [class ? "class='[class]'" : ""]  href=\"?src=\ref[src];[key]=[value]\"[style ? " style=\"[style]\"" : ""]>[label]</a>"
 
 /// Value-passing Styled Button.
-#define VSBTN(key, value, label, style) FBTN(key, value, label, "", style)
+#define VSBTN(key, value, label, style) FBTN(key, value, label, "", style, "")
 
 /// Styled Titled Button.
-#define STBTN(key, label, title, style) FBTN(key, 1, label, title, style)
+#define STBTN(key, label, title, style) FBTN(key, 1, label, title, style, "")
 
 /// Value-passing Titled Button.
-#define VTBTN(key, value, label, title) FBTN(key, value, label, title, "")
+#define VTBTN(key, value, label, title) FBTN(key, value, label, title, "", "")
 
 /// Styled Button.
-#define SBTN(key, label, style) FBTN(key, 1, label, "", style)
+#define SBTN(key, label, style) FBTN(key, 1, label, "", style, "")
+
+/// Classed Button.
+#define CBTN(key, label, class) FBTN(key, 1, label, "", "", class)
 
 /// Value-passing Button.
-#define VBTN(key, value, label) FBTN(key, value, label, "", "")
+#define VBTN(key, value, label) FBTN(key, value, label, "", "", "")
+
+/// Value-passing Classed Button.
+#define VCBTN(key, value, label, class) FBTN(key, value, label, "", "", class)
 
 /// Titled Button.
-#define TBTN(key, label, title) FBTN(key, 1, label, title, "")
+#define TBTN(key, label, title) FBTN(key, 1, label, title, "", "")
 
 /// Simple Button.
-#define BTN(key, label) FBTN(key, 1, label, "", "")
+#define BTN(key, label) FBTN(key, 1, label, "", "", "")
 
 #define COLOR_PREVIEW(color) \
 "<table style=\"display: inline; font-size: 13px; color: [color]\" bgcolor=\"[color]\"><tr><td>__</td></tr></table>"

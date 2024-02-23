@@ -129,13 +129,22 @@
 		grenade_type = pickweight(grenade_types)
 		grenades += new grenade_type(src)
 
-//Underslung grenade launcher to be used with the Z8
 /obj/item/gun/launcher/grenade/underslung
 	name = "underslung grenade launcher"
 	desc = "Not much more than a tube and a firing mechanism, this grenade launcher is designed to be fitted to a rifle."
 	w_class = ITEM_SIZE_NORMAL
 	force = 5
 	max_grenades = 0
+
+/obj/item/gun/launcher/grenade/underslung/Initialize()
+	. = ..()
+	if(istype(loc, /obj/item/gun))
+		RegisterSignal(loc, COMSIG_GUN_TOGGLE_SAFETY, PROC_REF(update_safety))
+
+/obj/item/gun/launcher/grenade/underslung/proc/update_safety(obj/item/gun/parent, safety_state)
+	SIGNAL_HANDLER
+	src.safety_state = safety_state
+	update_icon()
 
 /obj/item/gun/launcher/grenade/underslung/attack_self()
 	return

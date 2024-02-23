@@ -1,4 +1,9 @@
 #define DEBUG
+
+// Flags
+#define ALL (~0) //For convenience.
+#define NONE 0
+
 // Turf-only flags.
 #define TURF_FLAG_NOJAUNT FLAG(0) // This is used in literally one place, turf.dm, to block ethereal jaunt.
 #define TURF_FLAG_NORUINS FLAG(1)

@@ -26,7 +26,7 @@
 	else
 		M = new /mob/living/carbon/human(get_turf(source))
 	M.ckey = source.ckey
-	add_antagonist(M.mind, 1, 0, 1) // Equip them and move them to spawn.
+	add_antagonist(M.mind, 1, 0, 1, forced = TRUE) // Equip them and move them to spawn.
 	return M
 
 /datum/antagonist/proc/create_id(assignment, mob/living/carbon/human/player, equip = 1)

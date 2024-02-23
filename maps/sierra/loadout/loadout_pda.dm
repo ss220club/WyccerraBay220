@@ -86,7 +86,6 @@
 
 /datum/gear/utility/modular_scanner
 	display_name = "Scanner module, paper"
-	cost = 1
 	path = /obj/item/stock_parts/computer/scanner/paper
 
 /datum/gear/utility/modular_scanner/chemical

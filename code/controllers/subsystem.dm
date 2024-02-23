@@ -84,7 +84,7 @@
 //	(we loop thru a linked list until we get to the end or find the right point)
 //	(this lets us sort our run order correctly without having to re-sort the entire already sorted list)
 /datum/controller/subsystem/proc/enqueue()
-	var/FIRE_PRIORITY = priority
+	var/SS_priority = priority
 	var/SS_flags = flags
 	var/datum/controller/subsystem/queue_node
 	var/queue_node_priority
@@ -97,13 +97,13 @@
 		if (queue_node_flags & (SS_TICKER|SS_BACKGROUND) == SS_TICKER)
 			if (!(SS_flags & SS_TICKER))
 				continue
-			if (queue_node_priority < FIRE_PRIORITY)
+			if (queue_node_priority < SS_priority)
 				break
 
 		else if (queue_node_flags & SS_BACKGROUND)
 			if (!(SS_flags & SS_BACKGROUND))
 				break
-			if (queue_node_priority < FIRE_PRIORITY)
+			if (queue_node_priority < SS_priority)
 				break
 
 		else
@@ -111,16 +111,16 @@
 				continue
 			if (SS_flags & SS_TICKER)
 				break
-			if (queue_node_priority < FIRE_PRIORITY)
+			if (queue_node_priority < SS_priority)
 				break
 
 	queued_time = world.time
-	queued_priority = FIRE_PRIORITY
+	queued_priority = SS_priority
 	state = SS_QUEUED
 	if (SS_flags & SS_BACKGROUND) //update our running total
-		Master.queue_priority_count_bg += FIRE_PRIORITY
+		Master.queue_priority_count_bg += SS_priority
 	else
-		Master.queue_priority_count += FIRE_PRIORITY
+		Master.queue_priority_count += SS_priority
 
 	queue_next = queue_node
 	if (!queue_node)//we stopped at the end, add to tail

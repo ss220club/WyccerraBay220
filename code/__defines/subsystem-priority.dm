@@ -10,21 +10,21 @@
 #define FIRE_PRIORITY_TICKER 800 // Gameticker.
 #define FIRE_PRIORITY_TGUI 750
 #define FIRE_PRIORITY_NANO 749 // Updates to nanoui uis.
+#define FIRE_PRIORITY_MOB 700  // Mob Life().
 
-#define FIRE_PRIORITY_PROCESSING 700 // Default priority for all processing subsystems
+#define FIRE_PRIORITY_PROCESSING 650 // Default priority for all processing subsystems
 
-#define FIRE_PRIORITY_MOB 650  // Mob Life().
 #define FIRE_PRIORITY_MACHINERY 600  // Machinery + powernet ticks.
-#define FIRE_PRIORITY_PLANTS 550
 #define FIRE_PRIORITY_AIR 500  // ZAS processing.
-#define FIRE_PRIORITY_THROWING 450  // Throwing calculation and constant checks
-#define FIRE_PRIORITY_CHEMISTRY 400  // Multi-tick chemical reactions.
+#define FIRE_PRIORITY_SPACEDRIFT 450 // Drifting things
+#define FIRE_PRIORITY_PLANTS 400
+#define FIRE_PRIORITY_THROWING 350  // Throwing calculation and constant checks
+#define FIRE_PRIORITY_CHEMISTRY 300  // Multi-tick chemical reactions.
 
 #define FIRE_PRIORITY_DEFAULT 50 // Default priority for all subsystems
 
 #define FIRE_PRIORITY_VINES 50 // Spreading vine effects.
 #define FIRE_PRIORITY_PSYCHICS 45 // Psychic complexus processing.
-#define FIRE_PRIORITY_SPACEDRIFT 45 // Drifting things
 #define FIRE_PRIORITY_TURF 30   // Radioactive walls/blob.
 #define FIRE_PRIORITY_EVAC 30   // Processes the evac controller.
 #define FIRE_PRIORITY_CIRCUIT 30   // Processing Circuit's ticks and all that

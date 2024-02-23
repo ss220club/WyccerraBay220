@@ -2,7 +2,7 @@
 SUBSYSTEM_DEF(pathfinder)
 	name = "Pathfinder"
 	init_order = SS_INIT_PATHFINDER
-	priority = SS_PRIORITY_PATHFINDER
+	priority = FIRE_PRIORITY_PATHFINDER
 	wait = 0.5
 	/// List of pathfind datums we are currently trying to process
 	var/list/datum/pathfind/active_pathing = list()
@@ -18,11 +18,9 @@ SUBSYSTEM_DEF(pathfinder)
 /datum/controller/subsystem/pathfinder/Initialize()
 	space_type_cache = typecacheof(/turf/space)
 	path_overlay = new('icons/misc/debug_group.dmi', "cyan")
-	. = ..()
 
-/datum/controller/subsystem/pathfinder/UpdateStat(time)
-	..("P:[length(active_pathing)]")
-	return ..()
+/datum/controller/subsystem/pathfinder/UpdateStat(text)
+	return ..("P:[length(active_pathing)]")
 
 // This is another one of those subsystems (hey lighting) in which one "Run" means fully processing a queue
 // We'll use a copy for this just to be nice to people reading the mc panel

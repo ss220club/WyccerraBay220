@@ -8,7 +8,7 @@ SUBSYSTEM_DEF(chat)
 	flags = SS_TICKER|SS_NO_INIT
 	wait = 1
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
-	priority = SS_PRIORITY_CHAT
+	priority = FIRE_PRIORITY_CHAT
 	init_order = SS_INIT_CHAT
 
 

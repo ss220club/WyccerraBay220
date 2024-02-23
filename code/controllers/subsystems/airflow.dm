@@ -13,7 +13,7 @@ SUBSYSTEM_DEF(airflow)
 	name = "Airflow"
 	wait = 1
 	flags = SS_NO_INIT
-	priority = SS_PRIORITY_AIRFLOW
+	priority = FIRE_PRIORITY_AIRFLOW
 
 	var/static/list/atom/movable/movables = list()
 	var/static/list/atom/movable/queue = list()

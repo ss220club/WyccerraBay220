@@ -6,7 +6,7 @@ SUBSYSTEM_DEF(zcopy)
 	name = "Z-Copy"
 	wait = 1
 	init_order = SS_INIT_ZCOPY
-	priority = SS_PRIORITY_ZCOPY
+	priority = FIRE_PRIORITY_ZCOPY
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
 
 	var/list/queued_turfs = list()
@@ -612,7 +612,7 @@ SUBSYSTEM_DEF(zcopy)
 			found_oo += D
 			temp_objects += D
 
-	sortTim(found_oo, /proc/cmp_planelayer)
+	sortTim(found_oo, GLOBAL_PROC_REF(cmp_planelayer))
 
 	var/list/atoms_list_list = list()
 	for (var/thing in found_oo)

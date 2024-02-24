@@ -16,22 +16,20 @@
 // Subsystems shutdown in the reverse of the order they initialize in
 // The numbers just define the ordering, they are meaningless otherwise.
 
-#define SS_INIT_EARLY            19
-#define SS_INIT_GARBAGE          18
-#define SS_INIT_CHEMISTRY        17
-#define SS_INIT_MATERIALS        16
-#define SS_INIT_PLANTS           15
-#define SS_INIT_ANTAGS           14
-#define SS_INIT_CULTURE          13
-#define SS_INIT_MISC             12
-#define SS_INIT_SKYBOX           11
-#define SS_INIT_MAPPING          10
-#define SS_INIT_JOBS             9
-#define SS_INIT_ASSETS           8
-#define SS_INIT_CHAR_SETUP       7
-// [SIERRA-ADD] - SSINPUT - Input must be after char setup
-#define SS_INIT_INPUT            6
-// [/SIERRA-ADD]
+#define SS_INIT_EARLY            20
+#define SS_INIT_GARBAGE          19
+#define SS_INIT_CHEMISTRY        18
+#define SS_INIT_MATERIALS        17
+#define SS_INIT_PLANTS           16
+#define SS_INIT_ANTAGS           15
+#define SS_INIT_CULTURE          14
+#define SS_INIT_MISC             13
+#define SS_INIT_SKYBOX           12
+#define SS_INIT_MAPPING          11
+#define SS_INIT_JOBS             10
+#define SS_INIT_ASSETS           9
+#define SS_INIT_CHAR_SETUP       8
+#define SS_INIT_INPUT            7
 #define SS_INIT_CIRCUIT          6
 #define SS_INIT_GRAPH            5
 #define SS_INIT_OPEN_SPACE       4
@@ -55,5 +53,6 @@
 #define SS_INIT_TICKER          -20
 #define SS_INIT_AI              -21
 #define SS_INIT_AIFAST          -22
+#define SS_INIT_PING            -85
 #define SS_INIT_CHAT            -90 // Should be lower to ensure chat remains smooth during init.
 #define SS_INIT_UNIT_TESTS      -100

@@ -9,6 +9,9 @@
 		// Treacherous Voyage - Jon Luc Hefferman		--,
 		/singleton/audio/track/treacherous_voyage,
 
+		// Duke Gneiss - Exploring		--,
+		/singleton/audio/track/exploring,
+
 		// Duke Gneiss - Downtown		--,
 		/singleton/audio/track/downtown,
 
@@ -33,6 +36,14 @@
 
 
 	// TRACKS //
+
+/singleton/audio/track/exploring
+	source = 'maps/sierra/sound/music/lobby/Gneiss-Exploring.ogg'
+	author = "Duke Gneiss"
+	title = "Exploring"
+	license = /singleton/license/cc_by_nc_sa_3_0
+	url = "https://soundcloud.com/dukegneiss/exploring"
+
 /singleton/audio/track/downtown
 	source = 'maps/sierra/sound/music/lobby/Gneiss-Downtown.ogg'
 	author = "Duke Gneiss"

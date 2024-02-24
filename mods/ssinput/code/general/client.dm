@@ -68,53 +68,39 @@
 				if("South")
 					movement_keys[key] = SOUTH
 				if("Say")
-					winset(src, "default-\ref[key]", "parent=default;name=[key];command=say")
+					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=say")
 					communication_hotkeys += key
 				if("OOC")
-					winset(src, "default-\ref[key]", "parent=default;name=[key];command=ooc")
+					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=ooc")
 					communication_hotkeys += key
 				if("Me")
-					winset(src, "default-\ref[key]", "parent=default;name=[key];command=me")
+					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=me")
 					communication_hotkeys += key
 
 	// winget() does not work for F1 and F2
 	for(var/key in communication_hotkeys)
-		if(!(key in list("F1","F2")) && !winget(src, "default-\ref[key]", "command"))
-			to_chat(src, "You probably entered the game with a different keyboard layout.\n<a href='?src=\ref[src];reset_macros=1'>Please switch to the English layout and click here to fix the communication hotkeys.</a>")
+		if(!(key in list("F1","F2")) && !winget(src, "default-[REF(key)]", "command"))
+			to_chat(src, "You probably entered the game with a different keyboard layout.\n<a href='?src=[REF(src)];reset_macros=1'>Please switch to the English layout and click here to fix the communication hotkeys.</a>")
 			break
-
 
 /client/verb/ToggleHotkeyMode()
 	set hidden = TRUE
 	prefs.hotkeys = !prefs.hotkeys
 	update_hotkey_mode()
 
-
 /client/proc/update_hotkey_mode()
-	if (prefs.hotkeys)
+	if(prefs.hotkeys)
 		// If hotkey mode is enabled, then clicking the map will automatically
 		// unfocus the text bar. This removes the red color from the text bar
 		// so that the visual focus indicator matches reality.
 		winset(src, "mainwindow.mainwindow", "macro=default")
 		winset(src, "mapwindow.map", "focus=true")
 		winset(src, "outputwindow.hotkeytoggle", "is-checked=true")
-		if (prefs.dark_theme)
-			winset(src, "outputwindow.input", "background-color = #ffffff; background-color = [COLOR_DARKMODE_BACKGROUND]")
-			winset(src, "outputwindow.input", "text-color = #000000; text-color = [COLOR_DARKMODE_TEXT]")
-		else
-			winset(src, "outputwindow.input", "background-color = [COLOR_DARKMODE_BACKGROUND]; background-color = #ffffff")
-			winset(src, "outputwindow.input", "text-color = [COLOR_DARKMODE_TEXT]; text-color = #000000")
+		winset(src, "outputwindow.input", " border=line")
 	else
 		winset(src, "mainwindow.mainwindow", "macro=macro")
 		winset(src, "outputwindow.hotkeytoggle", "is-checked=false")
-		winset(src, "outputwindow.input", "focus=true")
-		winset(src, "outputwindow.input", "text-color = #000000; background-color = #d3b5b5")
-
-/client/proc/update_client_theme()
-	if (prefs.dark_theme)
-		force_dark_theme()
-	else
-		force_white_theme()
+		winset(src, "outputwindow.input", "focus=true; border=sunken")
 
 // Я срал, Глист, на читаемость и отладку
 // Это уже протестировано и мы просто ждём пока на оффбей зальют эти кейбинды вонючие

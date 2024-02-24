@@ -30,8 +30,7 @@ GLOBAL_DATUM_INIT(tgui_default_state, /datum/tgui_state/default, new)
 		return
 
 	// Robots can interact with anything they can see.
-	var/list/clientviewlist = getviewsize(client.view)
-	if((src_object in view(src)) && (get_dist(src, src_object) <= min(clientviewlist[1],clientviewlist[2])))
+	if((src_object in view(src)) && (get_dist(src, src_object) <= get_lesser_view_size_component(client.view)))
 		return STATUS_INTERACTIVE
 	return STATUS_DISABLED // Otherwise they can keep the UI open.
 
@@ -42,11 +41,11 @@ GLOBAL_DATUM_INIT(tgui_default_state, /datum/tgui_state/default, new)
 
 	// The AI can interact with anything it can see nearby, or with cameras while wireless control is enabled.
 	var/can_see = (src_object in view(client.view, src))
-	if (!can_see)
-		if (is_in_chassis())
+	if(!can_see)
+		if(is_in_chassis())
 			can_see = cameranet && cameranet.is_turf_visible(get_turf(src_object))
 		else
-			can_see = get_dist(src_object, src) <= client.view
+			can_see = get_dist(src_object, src) <= get_lesser_view_size_component(client.view)
 
 	if(!control_disabled && can_see)
 		return STATUS_INTERACTIVE
@@ -64,7 +63,7 @@ GLOBAL_DATUM_INIT(tgui_default_state, /datum/tgui_state/default, new)
 	else
 		return ..()
 
-/mob/observer/dead/default_can_use_tgui_topic()
-	if(check_rights(R_ADMIN, 0, src))
+/mob/observer/ghost/default_can_use_tgui_topic()
+	if(can_admin_interact())
 		return STATUS_INTERACTIVE				// Admins are more equal
 	return STATUS_UPDATE						// Ghosts can view updates

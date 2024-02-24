@@ -164,7 +164,7 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 		// This is dumb, but spacestation13.com's banners break if player count isn't the 8th field of the reply, so... this has to go here.
 		s["players"] = 0
 		s["stationtime"] = stationtime2text()
-		s["roundduration"] = roundduration2text()
+		s["roundtime"] = roundduration2text()
 		s["map"] = replacetext(GLOB.using_map.full_name, "\improper", "") //Done to remove the non-UTF-8 text macros
 
 		s["roundtime"] = roundduration2text()
@@ -495,25 +495,17 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 
 
 /world/Reboot(reason)
-	/*spawn(0)
-		sound_to(world, sound(pick('sound/AI/newroundsexy.ogg','sound/misc/apcdestroyed.ogg','sound/misc/bangindonk.ogg')))// random end sounds!! - LastyBatsy
-
-		*/
-
 	Master.Shutdown()
 
-	var/datum/chatOutput/co
-	for(var/client/C in GLOB.clients)
-		co = C.chatOutput
-		if(co)
-			co.ehjax_send(data = "roundrestart")
-	if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
-		for(var/client/C in GLOB.clients)
+	for(var/thing in GLOB.clients)
+		if(!thing)
+			continue
+		var/client/C = thing
+		C?.tgui_panel?.send_roundrestart()
+		if(config.server) //if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
 			send_link(C, "byond://[config.server]")
 
-	// [SIERRA-ADD] - RUST_G - Past this point, no logging procs can be used, at risk of data loss.
 	rustg_log_close_all()
-	//[/SIERRA-ADD]
 	if(config.wait_for_sigusr1_reboot && reason != 3)
 		text2file("foo", "reboot_called")
 		to_world(SPAN_DANGER("World reboot waiting for external scripts. Please be patient."))
@@ -527,10 +519,9 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 	// [/SIERRA-ADD]
 	..(reason)
 
-
 /hook/startup/proc/loadMode()
 	world.load_mode()
-	return 1
+	return TRUE
 
 /world/proc/load_mode()
 	if(!fexists("data/mode.txt"))

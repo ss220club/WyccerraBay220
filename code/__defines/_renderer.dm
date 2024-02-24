@@ -140,6 +140,11 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	group = RENDER_GROUP_SCENE
 	plane = SPACE_PLANE
 
+/atom/movable/renderer/space_dust
+	name = "Space Dust"
+	group = RENDER_GROUP_SCENE
+	plane = DUST_PLANE
+
 /atom/movable/renderer/skybox
 	name = "Skybox"
 	group = RENDER_GROUP_SCENE

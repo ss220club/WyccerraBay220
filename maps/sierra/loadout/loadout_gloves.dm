@@ -29,3 +29,9 @@
 	glovtype["black insulated"] = /obj/item/clothing/gloves/insulated/black
 	glovtype["white insulated"] = /obj/item/clothing/gloves/insulated/white
 	gear_tweaks += new/datum/gear_tweak/path(glovtype)
+
+/datum/gear/gloves/nabber
+	display_name = "(GAS) Three-fingered insulated gloves"
+	path = /obj/item/clothing/gloves/nabber
+	whitelisted = list(SPECIES_NABBER)
+	cost = 3

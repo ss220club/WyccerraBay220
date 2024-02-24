@@ -45,6 +45,7 @@
 
 // Interfaces
 @include meta.load-css('./interfaces/ListInput.scss');
+@include meta.load-css('./interfaces/Vending.scss');
 
 // Layouts
 @include meta.load-css('./layouts/Layout.scss');
@@ -53,8 +54,7 @@
 
 // NT Theme
 .Layout__content {
-  // From 'packages/tgui/assets/bg-nanotrasen.svg', converted to base64 manually to stop webpack exploding
-  background-image: url('../assets/bg-nanotrasen.svg');
+  background-image: url('../assets/bg-sierra_paper.svg');
   background-size: 70%;
   background-position: center;
   background-repeat: no-repeat;

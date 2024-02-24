@@ -56,8 +56,10 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		return
 
 	// Tgui Topic middleware
-	if(!tgui_Topic(href_list))
+	if(tgui_Topic(href_list))
 		return
+	if(href_list["reload_tguipanel"])
+		nuke_chat()
 
 	//Admin PM
 	if(href_list["priv_msg"])
@@ -106,7 +108,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
-		if("chat")		return chatOutput.Topic(href, href_list)
 
 	switch(href_list["action"])
 		if("openLink")
@@ -136,6 +137,9 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	///////////
 /client/New(TopicData)
 	TopicData = null							//Prevent calls to client.Topic from connect
+
+	// Create tgui panel. Dpn't put it bellow to_chat() procs, will runtime
+	tgui_panel = new(src, "browseroutput")
 
 	switch (connection)
 		if ("seeker", "web") // check for invalid connection type. do nothing if valid
@@ -182,7 +186,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	GLOB.clients += src
 	GLOB.ckey_directory[ckey] = src
 
-	//SS220 edit
 	// Automatic admin rights for people connecting locally.
 	// Concept stolen from /tg/ with deepest gratitude.
 	var/local_connection = (config.auto_local_admin && (isnull(address) || GLOB.localhost_addresses[address]))
@@ -200,6 +203,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	prefs = SScharacter_setup.preferences_datums[ckey]
 	if(!prefs)
 		prefs = new /datum/preferences(src)
+
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
 	fps = prefs.clientfps
@@ -208,7 +212,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 	. = ..()	//calls mob.Login()
 
-	view = get_preference_value(/datum/client_preference/client_view) || GLOB.PREF_CLIENT_VIEW_LARGE
 	connection_time = world.time
 	connection_realtime = world.realtime
 	connection_timeofday = world.timeofday
@@ -258,6 +261,9 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	if(SSinput.initialized)
 		set_macros()
 
+	// Initialize tgui panel
+	tgui_panel.initialize()
+
 	// This turns out to be a touch too much when a bunch of people are connecting at once from a restart during init.
 	if (GAME_STATE & RUNLEVELS_DEFAULT)
 		spawn()
@@ -292,7 +298,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		GLOB.admins -= src
 	if (watched_variables_window)
 		STOP_PROCESSING(SSprocessing, watched_variables_window)
-	QDEL_NULL(chatOutput)
 	GLOB.ckey_directory -= ckey
 	ticket_panels -= src
 	GLOB.clients -= src

@@ -417,7 +417,7 @@
 
 /obj/machinery/examine(mob/user)
 	. = ..()
-	if (panel_open)
+	if(panel_open)
 		to_chat(user, SPAN_NOTICE("The service panel is open."))
 	if(component_parts && hasHUD(user, HUD_SCIENCE))
 		display_parts(user)

@@ -1,6 +1,6 @@
 /datum/gear/augment
-	sort_category = "Augments"
-	category = /datum/gear/augment
+	category = GEAR_CATEGORY_AUGMENTS
+	abstract_type = /datum/gear/augment
 	cost = 2
 
 

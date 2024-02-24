@@ -14,7 +14,7 @@
 
 	my_client = null
 	logout_time = world.time
-	return 1
+	return TRUE
 
 /mob/proc/handle_admin_logout()
 	if(admin_datums[ckey] && GAME_STATE == RUNLEVEL_GAME) //Only report this stuff if we are currently playing.

@@ -301,8 +301,8 @@
 		if (on)
 			AddOverlays(emissive_appearance(icon, _state))
 			lamps_plane = LIGHTING_LAMPS_PLANE // SS220 Bloom-Light
-			AddOverlays(overlay_image(icon, _state, color, plane = LIGHTING_LAMPS_GLARE)) // SS220 Bloom-Light
-		AddOverlays(overlay_image(icon, _state, color, plane = lamps_plane)) // SS220 Bloom-Light (layer edit)
+			AddOverlays(overlay_image(icon, _state, light_color, plane = LIGHTING_LAMPS_GLARE)) // SS220 Bloom-Light
+		AddOverlays(overlay_image(icon, _state, light_color, plane = lamps_plane)) // SS220 Bloom-Light (layer edit)
 
 	if(on)
 

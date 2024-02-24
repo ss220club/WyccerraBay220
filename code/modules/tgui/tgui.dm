@@ -69,9 +69,6 @@
 	src.parent_ui = parent_ui
 	if(parent_ui)
 		parent_ui.children += src
-	// Deprecated
-	if(ui_x && ui_y)
-		src.window_size = list(ui_x, ui_y)
 
 /**
  * public
@@ -93,13 +90,13 @@
 	window.acquire_lock(src)
 	if(!window.is_ready())
 		window.initialize(
+			strict_mode = TRUE,
 			fancy = user.get_preference_value(/datum/client_preference/tgui_fancy) == GLOB.PREF_YES,
 			assets = list(
 				get_asset_datum(/datum/asset/simple/tgui),
 			))
 	else
 		window.send_message("ping")
-
 	send_assets()
 	window.send_message("update", get_payload(
 		with_data = TRUE,
@@ -228,6 +225,7 @@
 		"refreshing" = FALSE,
 		"map" = (GLOB.using_map && GLOB.using_map.path) ? GLOB.using_map.path : "Unknown",
 		"mapZLevel" = map_z_level,
+		"ref" = "[REF(src)]",
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
@@ -242,7 +240,6 @@
 		),
 		"user" = list(
 			"name" = "[user]",
-			"ckey" = "[user.ckey]",
 			"observer" = isobserver(user),
 		),
 	)

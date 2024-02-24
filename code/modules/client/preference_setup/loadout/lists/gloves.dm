@@ -1,8 +1,8 @@
 /datum/gear/gloves
 	cost = 2
 	slot = slot_gloves
-	sort_category = "Gloves and Handwear"
-	category = /datum/gear/gloves
+	category = GEAR_CATEGORY_GLOVES_AND_HANDWEAR
+	abstract_type = /datum/gear/gloves
 
 /datum/gear/gloves/colored
 	display_name = "gloves, colored"
@@ -69,3 +69,38 @@
 	display_name = "gloves, work"
 	path = /obj/item/clothing/gloves/thick
 	cost = 3
+
+/datum/gear/gloves/colored/modified
+	display_name = "modified gloves, colored"
+	path = /obj/item/clothing/gloves/color/modified
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)
+
+/datum/gear/gloves/latex/modified
+	display_name = "modified gloves, latex"
+	path = /obj/item/clothing/gloves/latex/modified
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)
+
+/datum/gear/gloves/nitrile/modified
+	display_name = "modified gloves, nitrile"
+	path = /obj/item/clothing/gloves/latex/nitrile/modified
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)
+
+/datum/gear/gloves/rainbow/modified
+	display_name = "modified gloves, rainbow"
+	path = /obj/item/clothing/gloves/rainbow/modified
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)
+
+/datum/gear/gloves/evening/modified
+	display_name = "modified gloves, evening"
+	path = /obj/item/clothing/gloves/color/evening/modified
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)
+
+/datum/gear/gloves/botany/modified
+	display_name = "modified gloves, botany"
+	path = /obj/item/clothing/gloves/thick/botany/modified
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)
+
+/datum/gear/gloves/work/modified
+	display_name = "modified gloves, work"
+	path = /obj/item/clothing/gloves/thick/modified
+	whitelisted = list(SPECIES_UNATHI, SPECIES_YEOSA)

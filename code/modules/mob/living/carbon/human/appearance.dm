@@ -175,7 +175,7 @@
 			if (species.spawn_flags & SPECIES_IS_RESTRICTED)
 				continue
 		if (!(appearance_flags & APPEARANCE_SKIP_ALLOW_LIST_CHECK))
-			if (!is_alien_whitelisted(src, species))
+			if (!is_any_alien_whitelisted(src, species))
 				continue
 		result += name
 	return result
@@ -197,6 +197,7 @@
 	return species.get_facial_hair_styles(gender)
 
 /mob/living/carbon/human/proc/force_update_limbs()
-	for(var/obj/item/organ/external/O in organs)
-		O.sync_colour_to_human(src)
-	update_body(0)
+	for(var/obj/item/organ/external/organ_to_update as anything in organs)
+		organ_to_update.sync_colour_to_human(src)
+
+	update_body(FALSE)

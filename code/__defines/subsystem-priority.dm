@@ -3,59 +3,53 @@
 // SS_BACKGROUND handles high server load differently than Normal and SS_TICKER do.
 // Higher priority also means a larger share of a given tick before sleep checks.
 
-#define SS_PRIORITY_DEFAULT 50          // Default priority for all processes levels
+#define FIRE_PRIORITY_INPUT 1000 // Input MUST ALWAYS BE HIGHEST PRIORITY!!!
+#define FIRE_PRIORITY_TIMER 950
+#define FIRE_PRIORITY_OVERLAYS 900
+#define FIRE_PRIORITY_CHAT 850  // Chat
+#define FIRE_PRIORITY_TICKER 800 // Gameticker.
+#define FIRE_PRIORITY_TGUI 750
+#define FIRE_PRIORITY_NANO 749 // Updates to nanoui uis.
+#define FIRE_PRIORITY_MOB 700  // Mob Life().
 
-// SS_TICKER
-#define SS_PRIORITY_TIMER 30
-#define SS_PRIORITY_OVERLAYS 20
-#define SS_PRIORITY_ICON_UPDATE 10
-#define SS_PRIORITY_OVERMAP 12 // Handles overmap processing. Keeps things smooth during highpop, ideally.
+#define FIRE_PRIORITY_PROCESSING 650 // Default priority for all processing subsystems
 
-// Normal
-#define SS_PRIORITY_TICKER         100 // Gameticker.
-// [SIERRA-ADD] - SSINPUT
-#define SS_PRIORITY_INPUT          99 // Input things.
-// [/SIERRA-ADD]
-#define SS_PRIORITY_MOB            95  // Mob Life().
-#define SS_PRIORITY_MACHINERY      95  // Machinery + powernet ticks.
-#define SS_PRIORITY_TGUI           95  // SIERRA TGUI.
-#define SS_PRIORITY_AIR            80  // ZAS processing.
-#define SS_PRIORITY_THROWING       75  // Throwing calculation and constant checks
-#define SS_PRIORITY_CHEMISTRY      60  // Multi-tick chemical reactions.
-#define SS_PRIORITY_LIGHTING       50  // Queued lighting engine updates.
-#define SS_PRIORITY_SPACEDRIFT     45  // Drifting things
-#define SS_PRIORITY_CHAT           40  // Chat
-#define SS_PRIORITY_AI             25  // Mob AI
-#define SS_PRIORITY_ALARM          20  // Alarm processing.
-#define SS_PRIORITY_EVENT          20  // Event processing and queue handling.
-#define SS_PRIORITY_SHUTTLE        20  // Shuttle movement.
-#define SS_PRIORITY_CIRCUIT_COMP   20  // Processing circuit component do_work.
-#define SS_PRIORITY_TEMPERATURE    20  // Cooling and heating of atoms.
-#define SS_PRIORITY_RADIATION      20  // Radiation processing and cache updates.
-#define SS_PRIORITY_OPEN_SPACE     20  // Open turf updates.
-#define SS_PRIORITY_AIRFLOW        15  // Object movement from ZAS airflow.
-#define SS_PRIORITY_PRESENCE       10  // z-level player presence testing
-#define SS_PRIORITY_VOTE           10  // Vote management.
-#define SS_PRIORITY_SUPPLY         10  // Supply point accumulation.
-#define SS_PRIORITY_TRADE          10  // Adds/removes traders.
-#define SS_PRIORITY_GHOST_IMAGES   10  // Updates ghost client images.
-#define SS_PRIORITY_ZCOPY          10  // Builds appearances for Z-Mimic.
+#define FIRE_PRIORITY_MACHINERY 600  // Machinery + powernet ticks.
+#define FIRE_PRIORITY_AIR 500  // ZAS processing.
+#define FIRE_PRIORITY_SPACEDRIFT 450 // Drifting things
+#define FIRE_PRIORITY_PLANTS 400
+#define FIRE_PRIORITY_THROWING 350  // Throwing calculation and constant checks
+#define FIRE_PRIORITY_CHEMISTRY 300  // Multi-tick chemical reactions.
 
-// SS_BACKGROUND
-#define SS_PRIORITY_OBJECTS       100  // processing_objects processing.
-#define SS_PRIORITY_PROCESSING    95   // Generic datum processor. Replaces objects processor.
-#define SS_PRIORITY_PLANTS        90   // Plant processing, slow ticks.
-#define SS_PRIORITY_VINES         50   // Spreading vine effects.
-#define SS_PRIORITY_PSYCHICS      45   // Psychic complexus processing.
-#define SS_PRIORITY_NANO          40   // Updates to nanoui uis.
-#define SS_PRIORITY_TURF          30   // Radioactive walls/blob.
-#define SS_PRIORITY_EVAC          30   // Processes the evac controller.
-#define SS_PRIORITY_CIRCUIT       30   // Processing Circuit's ticks and all that
-#define SS_PRIORITY_GRAPH         30   // Merging and splitting of graphs
-#define SS_PRIORITY_CHAR_SETUP    25   // Writes player preferences to savefiles.
-#define SS_PRIORITY_GARBAGE       20   // Garbage collection.
-#define SS_PRIORITY_INACTIVITY    10  // Idle kicking.
+#define FIRE_PRIORITY_DEFAULT 50 // Default priority for all subsystems
 
+#define FIRE_PRIORITY_VINES 50 // Spreading vine effects.
+#define FIRE_PRIORITY_PSYCHICS 45 // Psychic complexus processing.
+#define FIRE_PRIORITY_TURF 30   // Radioactive walls/blob.
+#define FIRE_PRIORITY_EVAC 30   // Processes the evac controller.
+#define FIRE_PRIORITY_CIRCUIT 30   // Processing Circuit's ticks and all that
+#define FIRE_PRIORITY_GRAPH 30   // Merging and splitting of graphs
+#define FIRE_PRIORITY_CHAR_SETUP 25   // Writes player preferences to savefiles.
+#define FIRE_PRIORITY_AI 25  // Mob AI
+#define FIRE_PRIORITY_GARBAGE 20   // Garbage collection.
+#define FIRE_PRIORITY_ALARM 20  // Alarm processing.
+#define FIRE_PRIORITY_EVENT 20  // Event processing and queue handling.
+#define FIRE_PRIORITY_SHUTTLE 20  // Shuttle movement.
+#define FIRE_PRIORITY_CIRCUIT_COMP 20  // Processing circuit component do_work.
+#define FIRE_PRIORITY_TEMPERATURE 20  // Cooling and heating of atoms.
+#define FIRE_PRIORITY_RADIATION 20  // Radiation processing and cache updates.
+#define FIRE_PRIORITY_OPEN_SPACE 20  // Open turf updates.
+#define FIRE_PRIORITY_AIRFLOW 15  // Object movement from ZAS airflow.
+#define FIRE_PRIORITY_OVERMAP 12
+#define FIRE_PRIORITY_ICON_UPDATE 10
+#define FIRE_PRIORITY_INACTIVITY 10  // Idle kicking.
+#define FIRE_PRIORITY_PRESENCE 10  // z-level player presence testing
+#define FIRE_PRIORITY_VOTE 10  // Vote management.
+#define FIRE_PRIORITY_SUPPLY 10  // Supply point accumulation.
+#define FIRE_PRIORITY_TRADE 10  // Adds/removes traders.
+#define FIRE_PRIORITY_GHOST_IMAGES 10  // Updates ghost client images.
+#define FIRE_PRIORITY_PING 10
+#define FIRE_PRIORITY_ZCOPY 10  // Builds appearances for Z-Mimic.
 
 // Subsystem fire priority, from lowest to highest priority
 // If the subsystem isn't listed here it's either DEFAULT or PROCESS (if it's a processing subsystem child)

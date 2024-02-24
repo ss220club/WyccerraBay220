@@ -75,6 +75,6 @@
 
 /datum/preferences/proc/sanitize_preferences()
 	player_setup.sanitize_setup()
-	return 1
+	return TRUE
 
 #undef PREF_SER_VERSION

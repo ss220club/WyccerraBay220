@@ -92,3 +92,6 @@
 
 /datum/gear/suit/unathi/security_jacket
 	allowed_roles = SECURITY_ROLES
+
+/datum/gear/suit/lab_xyn_machine
+	allowed_branches = list(/datum/mil_branch/contractor)

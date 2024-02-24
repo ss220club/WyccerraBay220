@@ -51,11 +51,15 @@
 		switch(href_list["flavor_text"])
 			if("open")
 			if("general")
-				var/msg = tgui_input_text(usr, "Give a general description of your character. This will be shown regardless of clothing. Do not include OOC information here.", "Flavor Text", pref.flavor_texts[href_list["flavor_text"]])
+				var/msg = tgui_input_text(
+					usr,
+					"Give a general description of your character. This will be shown regardless of clothing. Do not include OOC information here.",
+					"Flavor Text", pref.flavor_texts[href_list["flavor_text"]],
+					encode = FALSE)
 				if(msg && CanUseTopic(user))
 					pref.flavor_texts[href_list["flavor_text"]] = msg
 			else
-				var/msg = tgui_input_text(usr, "Set the flavor text for your [href_list["flavor_text"]].", "Flavor Text", pref.flavor_texts[href_list["flavor_text"]])
+				var/msg = tgui_input_text(usr, "Set the flavor text for your [href_list["flavor_text"]].", "Flavor Text", pref.flavor_texts[href_list["flavor_text"]], encode = FALSE)
 				if(msg && CanUseTopic(user))
 					pref.flavor_texts[href_list["flavor_text"]] = msg
 		SetFlavorText(user)
@@ -65,11 +69,11 @@
 		switch(href_list["flavour_text_robot"])
 			if("open")
 			if("Default")
-				var/msg = tgui_input_text(usr, "Set the default flavour text for your robot. It will be used for any module without individual setting.", "Flavour Text", pref.flavour_texts_robot["Default"])
+				var/msg = tgui_input_text(usr, "Set the default flavour text for your robot. It will be used for any module without individual setting.", "Flavour Text", pref.flavour_texts_robot["Default"], encode = FALSE)
 				if(msg && CanUseTopic(user))
 					pref.flavour_texts_robot[href_list["flavour_text_robot"]] = msg
 			else
-				var/msg = tgui_input_text(usr, "Set the flavour text for your robot with [href_list["flavour_text_robot"]] module. If you leave this empty, default flavour text will be used for this module.", "Flavour Text", pref.flavour_texts_robot[href_list["flavour_text_robot"]])
+				var/msg = tgui_input_text(usr, "Set the flavour text for your robot with [href_list["flavour_text_robot"]] module. If you leave this empty, default flavour text will be used for this module.", "Flavour Text", pref.flavour_texts_robot[href_list["flavour_text_robot"]], encode = FALSE)
 				if(msg && CanUseTopic(user))
 					pref.flavour_texts_robot[href_list["flavour_text_robot"]] = msg
 		SetFlavourTextRobot(user)

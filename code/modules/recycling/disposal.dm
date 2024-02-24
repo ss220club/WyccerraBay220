@@ -242,7 +242,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 /obj/machinery/disposal/tgui_state(mob/user)
 	return GLOB.default_state
 
-/obj/machinery/disposal/tgui_interact(mob/user, datum/tgui/ui = null)
+/obj/machinery/disposal/tgui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "DisposalBin", name)

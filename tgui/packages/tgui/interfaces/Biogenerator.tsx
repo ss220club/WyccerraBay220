@@ -1,6 +1,6 @@
 import { BooleanLike } from '../../common/react';
 import { capitalizeAll } from 'common/string';
-import { useBackend } from '../backend';
+import { useBackend, useSharedState } from '../backend';
 import {
   Button,
   Section,
@@ -10,6 +10,7 @@ import {
   LabeledList,
   ProgressBar,
   Dimmer,
+  NumberInput,
 } from '../components';
 import { Window } from '../layouts';
 
@@ -111,9 +112,7 @@ export const Biogenerator = (props, context) => {
             </Section>
           </Stack.Item>
           <Stack.Item grow>
-            <Section fill scrollable title="Продукты">
-              {container ? <BiogenProducts /> : <BiogenNoBeaker />}
-            </Section>
+            {container ? <BiogenProducts /> : <BiogenNoBeaker />}
           </Stack.Item>
         </Stack>
       </Window.Content>
@@ -123,32 +122,60 @@ export const Biogenerator = (props, context) => {
 
 const BiogenProducts = (props, context) => {
   const { act, data } = useBackend<BiogenData>(context);
+  let [vendAmount, setVendAmount] = useSharedState(context, 'vendAmount', 1);
   return (
-    <>
+    <Section
+      fill
+      scrollable
+      title="Продукты"
+      buttons={
+        <>
+          <Stack.Item inline mr="5px" color="silver">
+            Количество партии:
+          </Stack.Item>
+          <NumberInput
+            animated
+            value={vendAmount}
+            width="32px"
+            minValue={1}
+            maxValue={10}
+            stepPixelSize={10}
+            onChange={(e, value) => setVendAmount(value)}
+          />
+        </>
+      }
+    >
       {data.types.map((type, typeIndex) => (
         <Collapsible key={typeIndex} title={type.type_name} open>
           {type.products.map((product, productIndex) => (
             <Stack
               key={productIndex}
-              py="2px"
+              py={0.5}
               className="candystripe"
               align="center"
             >
-              <Stack.Item basis="70%" ml="2px">
+              <Stack.Item basis="70%" ml={0.5}>
                 {capitalizeAll(product.name)}
               </Stack.Item>
-              <Stack.Item textAlign="right" basis="20%">
-                {product.cost} <Icon name="leaf" color="good" size={1.2} />
+              <Stack.Item mr={1} textAlign="right" basis="20%">
+                {product.cost * vendAmount}
+                <Icon ml={1} name="leaf" color="green" size={1.2} />
               </Stack.Item>
               <Stack.Item basis="6%">
                 <Button
                   fluid
                   icon="angle-down"
-                  disabled={product.cost > data.biomass}
+                  disabled={data.biomass < product.cost * vendAmount}
+                  tooltip={
+                    data.biomass < product.cost * vendAmount &&
+                    'Не хватает биомассы для производства.'
+                  }
+                  tooltipPosition="bottom-end"
                   onClick={() =>
                     act('create', {
                       type: type.type_name,
                       product_index: productIndex + 1,
+                      amount: vendAmount,
                     })
                   }
                 />
@@ -157,22 +184,24 @@ const BiogenProducts = (props, context) => {
           ))}
         </Collapsible>
       ))}
-    </>
+    </Section>
   );
 };
 
 const BiogenNoBeaker = () => {
   return (
-    <Stack fill bold textAlign="center">
-      <Stack.Item grow fontSize={1.5} align="center" color="label">
-        <Icon.Stack>
-          <Icon size={5} name="bucket" color="blue" />
-          <Icon size={5} name="slash" color="red" />
-        </Icon.Stack>
-        <br />
-        Отсутствует ёмкость
-      </Stack.Item>
-    </Stack>
+    <Section fill>
+      <Stack fill bold textAlign="center">
+        <Stack.Item grow fontSize={1.5} align="center" color="label">
+          <Icon.Stack>
+            <Icon size={5} name="bucket" color="blue" />
+            <Icon size={5} name="slash" color="red" />
+          </Icon.Stack>
+          <br />
+          Отсутствует ёмкость
+        </Stack.Item>
+      </Stack>
+    </Section>
   );
 };
 

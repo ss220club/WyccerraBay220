@@ -65,9 +65,6 @@
 	QDEL_NULL(beaker)
 	QDEL_NULL_LIST(stored_plants)
 
-/obj/machinery/biogenerator/on_reagent_change()			//When the reagents change, change the icon as well.
-	update_icon()
-
 /obj/machinery/biogenerator/on_update_icon()
 	ClearOverlays()
 	if(panel_open)
@@ -166,9 +163,13 @@
 	data["processing"] = processing
 	data["biomass"] = biomass
 	data["storedPlants"] = length(stored_plants) ? TRUE : FALSE
-	data["container"] = beaker ? TRUE : FALSE
-	data["containerContent"] = beaker.reagents.total_volume
-	data["containerMaxContent"] = beaker.reagents.maximum_volume
+
+	if(beaker)
+		data["container"] = TRUE
+		data["containerContent"] = beaker.reagents.total_volume
+		data["containerMaxContent"] = beaker.reagents.maximum_volume
+	else
+		data["container"] = FALSE
 
 	return data
 
@@ -212,12 +213,13 @@
 		if("create")
 			var/type = params["type"]
 			var/product_index = text2num(params["product_index"])
+			var/amount = text2num(params["amount"])
 			if(isnull(products[type]))
 				return FALSE
 			var/list/sub_products = products[type]
 			if(product_index < 1 || product_index > length(sub_products))
 				return TRUE
-			create_product(type, sub_products[product_index])
+			create_product(type, sub_products[product_index], amount)
 			return TRUE
 
 /obj/machinery/biogenerator/proc/activate()
@@ -254,18 +256,21 @@
 	beaker = null
 	update_icon()
 
-/obj/machinery/biogenerator/proc/create_product(type, path)
+/obj/machinery/biogenerator/proc/create_product(type, path, amount)
 	processing = TRUE
 	SStgui.update_uis(src)
 	var/cost = products[type][path]
-	cost = round(cost / efficiency)
+	cost = round((cost * amount) / efficiency)
 	biomass -= cost
 	update_icon()
-	addtimer(CALLBACK(src, PROC_REF(drop_product), path), 3 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(drop_product), path, amount), (3 SECONDS * amount) / efficiency)
 
-/obj/machinery/biogenerator/proc/drop_product(path)
-	var/atom/movable/result = new path
-	result.dropInto(loc)
+/obj/machinery/biogenerator/proc/drop_product(path, amount)
+	if(ispath(path, /obj/item/stack))
+		new path(get_turf(src), amount)
+	else
+		for(var/i in 1 to amount)
+			new path(get_turf(src))
 	processing = FALSE
 	SStgui.update_uis(src)
 	update_icon()

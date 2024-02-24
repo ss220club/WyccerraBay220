@@ -12,7 +12,6 @@ SUBSYSTEM_DEF(xenoarch)
 
 	var/list/artifact_turfs = list()
 	var/static/excavation_turf_chance = 0.5
-	var/static/minimal_distance_between_turfs = 3
 	var/list/banned_levels = map.admin_levels + map.escape_levels
 	for(var/z_level_index in mining_walls)
 		if(text2num(z_level_index) in banned_levels)
@@ -22,7 +21,6 @@ SUBSYSTEM_DEF(xenoarch)
 		if(!length(mining_turfs))
 			continue
 
-		var/list/site_turfs = list()
 		for(var/turf/simulated/mineral/mineral_turf as anything in mining_turfs)
 			if (!mineral_turf.density)
 				continue
@@ -30,20 +28,10 @@ SUBSYSTEM_DEF(xenoarch)
 			if (!mineral_turf.geologic_data)
 				mineral_turf.geologic_data = new(mineral_turf)
 
-			var/has_space = TRUE
-			for(var/turf/site_turf as anything in site_turfs)
-				var/distance_between_turfs = get_dist_euclidian(site_turf, mineral_turf)
-				if(distance_between_turfs > 3)
-					continue
-
-				has_space = FALSE
-				break
-
-			if(!has_space)
+			if(!prob(excavation_turf_chance))
 				continue
 
-			site_turfs += mineral_turf
-
+			xeno_digsite_turfs += mineral_turf
 			var/list/possible_site_turfs = list()
 			for(var/turf/simulated/mineral/T in RANGE_TURFS(mineral_turf, 2))
 				if(!T.density)
@@ -85,8 +73,6 @@ SUBSYSTEM_DEF(xenoarch)
 				artifact_turfs += T
 
 			CHECK_TICK
-
-		xeno_digsite_turfs += site_turfs
 
 	var/xeno_artifact_turfs_amount = min(rand(6, 12), length(artifact_turfs))
 	for (var/i = 1 to xeno_artifact_turfs_amount)

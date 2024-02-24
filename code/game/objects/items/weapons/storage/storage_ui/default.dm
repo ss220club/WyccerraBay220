@@ -1,6 +1,8 @@
 /// length of sprite for start and end of the box representing the stored item
 #define STORED_CAP_WIDTH 4
 
+GLOBAL_LIST_EMPTY(storage_container_icons_size)
+
 /datum/storage_ui/default
 	var/list/is_seeing = list() //List of mobs which are currently seeing the contents of this item's storage
 
@@ -212,7 +214,7 @@
 	for(var/obj/item/O in storage.contents)
 		startpoint = endpoint + 1
 		endpoint += storage_width * O.get_storage_cost()/storage.max_storage_space
-		var/obj/screen/container/container = create_container(O, endpoint - startpoint)
+		var/obj/screen/container/container = create_container(O, floor(endpoint - startpoint))
 		container.screen_loc = "4:[16 + round(startpoint)],2:16"
 		containers += container
 
@@ -230,6 +232,10 @@
 	if(width == 32)
 		return container
 
+	if(GLOB.storage_container_icons_size["[width]"])
+		container.icon = GLOB.storage_container_icons_size["[width]"]
+		return container
+
 	var/icon/new_icon = icon('icons/mob/screen1.dmi', "blank")
 	new_icon.Scale(width, 32)
 
@@ -242,6 +248,8 @@
 	new_icon.Blend(stored_start, ICON_OVERLAY)
 	new_icon.Blend(stored_continue, ICON_OVERLAY, x = STORED_CAP_WIDTH + 1)
 	new_icon.Blend(stored_end, ICON_OVERLAY, x = width + 1 - STORED_CAP_WIDTH)
+
+	GLOB.storage_container_icons_size += list("[width]" = new_icon)
 
 	container.icon = new_icon
 	return container

@@ -15,7 +15,7 @@
 /datum/asset/simple/tgfont
 	keep_local_name = TRUE
 	assets = list(
-		"tgfont.eot" = file("tgui/packages/tgfont/dist/tgfont.eot"),
-		"tgfont.woff2" = file("tgui/packages/tgfont/dist/tgfont.woff2"),
-		"tgfont.css" = file("tgui/packages/tgfont/dist/tgfont.css"),
+		"tgfont.eot" = file("tgui/packages/tgfont/static/tgfont.eot"),
+		"tgfont.woff2" = file("tgui/packages/tgfont/static/tgfont.woff2"),
+		"tgfont.css" = file("tgui/packages/tgfont/static/tgfont.css"),
 	)

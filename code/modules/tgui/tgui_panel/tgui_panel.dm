@@ -43,6 +43,7 @@
 	initialized_at = world.time
 	// Perform a clean initialization
 	window.initialize(assets = list(
+			strict_mode = TRUE,
 			get_asset_datum(/datum/asset/simple/tgui_panel),
 		))
 	window.send_asset(get_asset_datum(/datum/asset/simple/namespaced/fontawesome))

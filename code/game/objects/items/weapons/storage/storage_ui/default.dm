@@ -248,7 +248,7 @@
 	new_icon.Blend(stored_continue, ICON_OVERLAY, x = STORED_CAP_WIDTH + 1)
 	new_icon.Blend(stored_end, ICON_OVERLAY, x = width + 1 - STORED_CAP_WIDTH)
 
-	storage_container_icons_size += list("[width]" = new_icon)
+	storage_container_icons_size["[width]"] = new_icon
 
 	container.icon = new_icon
 	return container

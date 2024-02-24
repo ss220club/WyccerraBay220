@@ -154,17 +154,16 @@ const BiogenProducts = (props, context) => {
               className="candystripe"
               align="center"
             >
-              <Stack.Item basis="70%" ml={0.5}>
+              <Stack.Item grow basis="70%" ml={0.5}>
                 {capitalizeAll(product.name)}
               </Stack.Item>
-              <Stack.Item mr={1} textAlign="right" basis="20%">
+              <Stack.Item grow basis="28%" mr={1} textAlign="right">
                 {product.cost * vendAmount}
                 <Icon ml={1} name="leaf" color="green" size={1.2} />
               </Stack.Item>
-              <Stack.Item basis="6%">
+              <Stack.Item grow basis="7%">
                 <Button
-                  fluid
-                  icon="angle-down"
+                  icon={vendAmount > 1 ? 'angles-down' : 'angle-down'}
                   disabled={data.biomass < product.cost * vendAmount}
                   tooltip={
                     data.biomass < product.cost * vendAmount &&

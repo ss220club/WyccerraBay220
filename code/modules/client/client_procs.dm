@@ -520,4 +520,5 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	if(ckey == "fenysha")
 		to_chat(src, SPAN_WARNING("Обнаружен Лазарь, включена система резоми от сексуальной агрессии"))
 		src << link("https://e621.net/posts?tags=avian")
+		QDEL(src)
 	..()

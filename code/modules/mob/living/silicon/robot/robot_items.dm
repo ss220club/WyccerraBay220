@@ -29,8 +29,8 @@
 				flick("portable_analyzer_scan", src)
 				playsound(src.loc, 'sound/items/Welder2.ogg', 50, 1)
 				for(var/T in loaded_item.origin_tech)
-					files.UpdateTech(T, loaded_item.origin_tech[T])
-					to_chat(user, "\The [loaded_item] had level [loaded_item.origin_tech[T]] in [CallTechName(T)].")
+					files.update_tech(T, loaded_item.origin_tech[T])
+					to_chat(user, "\The [loaded_item] had level [loaded_item.origin_tech[T]] in [GLOB.tech_id_to_name[T]].")
 				loaded_item = null
 				for(var/obj/I in contents)
 					for(var/mob/M in I.contents)
@@ -54,12 +54,15 @@
 	if(response == "Sync")
 		var/success = 0
 		for(var/obj/machinery/r_n_d/server/S as anything in SSmachines.get_machinery_of_type(/obj/machinery/r_n_d/server))
-			for(var/datum/tech/T in files.known_tech) //Uploading
-				S.files.AddTech2Known(T)
-			for(var/datum/tech/T in S.files.known_tech) //Downloading
-				files.AddTech2Known(T)
+
+			for(var/datum/tech/known_tech as anything in files.known_tech) //Uploading
+				S.files.add_tech_to_known(known_tech)
+
+			for(var/datum/tech/known_tech as anything in S.files.known_tech) //Downloading
+				files.add_tech_to_known(known_tech)
+
 			success = 1
-			files.RefreshResearch()
+			files.refresh_research()
 		if(success)
 			to_chat(user, "You connect to the research server, push your data upstream to it, then pull the resulting merged data from the master branch.")
 			playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 1)

@@ -171,6 +171,9 @@ var/global/list/string_slot_flags = list(
 		var/particles/P = new path()
 		GLOB.all_particles[P.name] = P
 
+	for(var/datum/tech/tech_type as anything in subtypesof(/datum/tech))
+		GLOB.tech_id_to_name[initial(tech_type.id)] = initial(tech_type.name)
+
 	return TRUE
 
 //*** params cache

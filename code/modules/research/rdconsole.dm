@@ -184,7 +184,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				screen = 1
 				return
 			screen = 1.2
-			files.AddTech2Known(t_disk.stored)
+			files.add_tech_to_known(t_disk.stored)
 			updateUsrDialog()
 
 	else if(href_list["clear_tech"]) //Erase data on the technology disk.
@@ -201,15 +201,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		. = TOPIC_REFRESH
 
 	else if(href_list["copy_tech"]) //Copys some technology data from the research holder to the disk.
-		. = TOPIC_REFRESH
 		if(!t_disk)
 			screen = 1
-			return
-		for(var/datum/tech/T in files.known_tech)
-			if(href_list["copy_tech_ID"] == T.id)
-				t_disk.stored = T
-				break
+			return TOPIC_REFRESH
+
+		var/datum/tech/known_tech = files.known_tech_lookup[href_list["copy_tech_ID"]]
+		if(known_tech)
+			t_disk.stored = known_tech
+
 		screen = 1.2
+		return TOPIC_REFRESH
 
 	else if(href_list["updt_design"]) //Updates the research holder with design data from the design disk.
 		. = TOPIC_REFRESH
@@ -222,7 +223,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				screen = 1
 				return
 			screen = 1.4
-			files.AddDesign2Known(d_disk.blueprint)
+			files.add_design_to_known(d_disk.blueprint)
 			updateUsrDialog()
 
 	else if(href_list["clear_design"]) //Erases data on the design disk.
@@ -240,15 +241,21 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		. = TOPIC_REFRESH
 
 	else if(href_list["copy_design"]) //Copy design data from the research holder to the design disk.
-		. = TOPIC_REFRESH
 		if(!d_disk)
 			screen = 1
-			return
-		for(var/datum/design/D in files.known_designs)
-			if(href_list["copy_design_ID"] == D.id)
-				d_disk.blueprint = D
-				break
+			return TOPIC_REFRESH
+
+		var/design_to_copy_id = href_list["copy_design_ID"]
+		if(!design_to_copy_id)
+			return TOPIC_NOACTION
+
+		var/datum/design/design_to_copy = files.known_designs_lookup[design_to_copy_id]
+		if(!design_to_copy)
+			return TOPIC_NOACTION
+
+		d_disk.blueprint = design_to_copy
 		screen = 1.4
+		return TOPIC_REFRESH
 
 	else if(href_list["eject_item"]) //Eject the item inside the destructive analyzer.
 		. = TOPIC_REFRESH
@@ -291,21 +298,27 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					for(var/obj/machinery/r_n_d/server/S as anything in SSmachines.get_machinery_of_type(/obj/machinery/r_n_d/server))
 						var/server_processed = 0
 						if((id in S.id_with_upload) || istype(S, /obj/machinery/r_n_d/server/centcom))
-							for(var/datum/tech/T in files.known_tech)
-								S.files.AddTech2Known(T)
-							for(var/datum/design/D in files.known_designs)
-								S.files.AddDesign2Known(D)
-							S.files.RefreshResearch()
+							for(var/datum/tech/known_tech as anything in files.known_tech)
+								S.files.add_tech_to_known(known_tech)
+
+							for(var/datum/design/D as anything in files.known_designs)
+								S.files.add_design_to_known(D)
+
+							S.files.refresh_research()
 							server_processed = 1
+
 						if((id in S.id_with_download) && !istype(S, /obj/machinery/r_n_d/server/centcom))
-							for(var/datum/tech/T in S.files.known_tech)
-								files.AddTech2Known(T)
-							for(var/datum/design/D in S.files.known_designs)
-								files.AddDesign2Known(D)
-							files.RefreshResearch()
+							for(var/datum/tech/known_tech as anything in S.files.known_tech)
+								files.add_tech_to_known(known_tech)
+
+							for(var/datum/design/D as anything in S.files.known_designs)
+								files.add_design_to_known(D)
+
+							files.refresh_research()
 							server_processed = 1
 						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
 							S.produce_heat()
+
 					screen = 1.6
 					interact(user)
 
@@ -317,7 +330,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		. = TOPIC_REFRESH
 		CHECK_LATHE
 		var/datum/design/being_built = null
-		for(var/datum/design/D in files.known_designs)
+		for(var/datum/design/D as anything in files.known_designs)
 			if(D.id == href_list["build"])
 				being_built = D
 				break
@@ -329,7 +342,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		. = TOPIC_REFRESH
 		CHECK_IMPRINTER
 		var/datum/design/being_built = null
-		for(var/datum/design/D in files.known_designs)
+		for(var/datum/design/D as anything in files.known_designs)
 			if(D.id == href_list["imprint"])
 				being_built = D
 				break
@@ -490,7 +503,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		screen = 1.0
 		return
 	for(var/T in linked_destroy.loaded_item.origin_tech)
-		files.UpdateTech(T, linked_destroy.loaded_item.origin_tech[T])
+		files.update_tech(T, linked_destroy.loaded_item.origin_tech[T])
+
 	if(linked_lathe && linked_destroy.loaded_item.matter) // Also sends salvaged materials to a linked protolathe, if any.
 		for(var/t in linked_destroy.loaded_item.matter)
 			if(t in linked_lathe.materials)
@@ -526,23 +540,25 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/proc/GetResearchLevelsInfo()
 	var/dat
 	dat += "<UL>"
-	for(var/datum/tech/T in files.known_tech)
-		if(T.level < 1)
+	for(var/datum/tech/known_tech as anything in files.known_tech)
+		if(known_tech.level < 1)
 			continue
+
 		dat += "<LI>"
-		dat += "[T.name]"
+		dat += "[known_tech.name]"
 		dat += "<UL>"
-		dat +=  "<LI>Level: [T.level]"
-		dat +=  "<LI>Summary: [T.desc]"
+		dat +=  "<LI>Level: [known_tech.level]"
+		dat +=  "<LI>Summary: [known_tech.desc]"
 		dat += "</UL>"
 	return dat
 
 /obj/machinery/computer/rdconsole/proc/GetResearchListInfo()
 	var/dat
 	dat += "<UL>"
-	for(var/datum/design/D in files.known_designs)
-		if(D.build_path)
-			dat += "<LI><B>[D.name]</B>: [D.desc]"
+	for(var/datum/design/known_design as anything in files.known_designs)
+		if(known_design.build_path)
+			dat += "<LI><B>[known_design.name]</B>: [known_design.desc]"
+
 	dat += "</UL>"
 	return dat
 
@@ -553,7 +569,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/interact(mob/user)
 	user.set_machine(src)
 	var/dat = list()
-	files.RefreshResearch()
+	files.refresh_research()
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(2 to 2.9)
 			if(isnull(linked_destroy))
@@ -647,9 +663,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "<A href='?src=\ref[src];menu=1.2'>Return to Disk Operations</A><HR>"
 			dat += "Load Technology to Disk:<BR><BR>"
 			dat += "<UL>"
-			for(var/datum/tech/T in files.known_tech)
-				dat += "<LI>[T.name] "
-				dat += "\[<A href='?src=\ref[src];copy_tech=1;copy_tech_ID=[T.id]'>copy to disk</A>\]"
+			for(var/datum/tech/known_tech as anything in files.known_tech)
+				dat += "<LI>[known_tech.name] "
+				dat += "\[<A href='?src=\ref[src];copy_tech=1;copy_tech_ID=[known_tech.id]'>copy to disk</A>\]"
 			dat += "</UL>"
 
 		if(1.4) //Design Disk menu.
@@ -683,7 +699,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "<A href='?src=\ref[src];menu=1.4'>Return to Disk Operations</A><HR>"
 			dat += "Load Design to Disk:<BR><BR>"
 			dat += "<UL>"
-			for(var/datum/design/D in files.known_designs)
+			for(var/datum/design/D as anything in files.known_designs)
 				if(D.build_path)
 					dat += "<LI>[D.name] "
 					dat += "<A href='?src=\ref[src];copy_design=1;copy_design_ID=[D.id]'>\[copy to disk\]</A>"
@@ -744,12 +760,14 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += "Origin Tech:"
 			dat += "<UL>"
-			for(var/T in linked_destroy.loaded_item.origin_tech)
-				dat += "<LI>[CallTechName(T)] [linked_destroy.loaded_item.origin_tech[T]]"
-				for(var/datum/tech/F in files.known_tech)
-					if(F.name == CallTechName(T))
-						dat += " (Current: [F.level])"
-						break
+			for(var/origin_tech_id in linked_destroy.loaded_item.origin_tech)
+				dat += "<LI>[GLOB.tech_id_to_name[origin_tech_id]] [linked_destroy.loaded_item.origin_tech[origin_tech_id]]"
+				var/datum/tech/known_tech = files.known_tech_lookup[origin_tech_id]
+				if(!known_tech)
+					continue
+
+				dat += " (Current: [known_tech.level])"
+
 			dat += "</UL>"
 			dat += "<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> || "
 			dat += "<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "
@@ -774,7 +792,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "<B>Chemical Volume:</B> [linked_lathe.reagents.total_volume] (MAX: [linked_lathe.reagents.maximum_volume])<HR>"
 			dat += "<UL>"
 
-			for(var/datum/design/D in files.known_designs)
+			for(var/datum/design/D as anything in files.known_designs)
 				if(!D.build_path || !(D.build_type & PROTOLATHE))
 					continue
 
@@ -806,14 +824,17 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						saved_origins[D.build_path] = origin_tech
 						qdel(I)
 
-					for (var/T in origin_tech)
-						for (var/datum/tech/F in files.known_tech)
-							if (F.name == CallTechName(T))
-								if (F.level <= origin_tech[T])
-									dat += SPAN_COLOR(COLOR_GREEN, " [F.name] = [origin_tech[T]] ")
-								else
-									dat += " [F.name] = [origin_tech[T]] "
-								break
+					for(var/origin_tech_id in origin_tech)
+						var/datum/tech/known_tech_item = files.known_tech_lookup[origin_tech_id]
+						if(!known_tech_item)
+							continue
+
+						var/origin_tech_level = origin_tech[origin_tech_id]
+						if(origin_tech_level >= known_tech_item.level)
+							dat += SPAN_COLOR(COLOR_GREEN, " [known_tech_item.name] = [origin_tech_level] ")
+						else
+							dat += " [known_tech_item.name] = [origin_tech_level] "
+
 			dat += "</UL>"
 
 		if(3.2) //Protolathe Material Storage Sub-menu
@@ -884,45 +905,48 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Material Amount: [linked_imprinter.TotalMaterials()] cm<sup>3</sup><BR>"
 			dat += "Chemical Volume: [linked_imprinter.reagents.total_volume]<HR>"
 			dat += "<UL>"
-			for(var/datum/design/D in files.known_designs)
-				if(!D.build_path || !(D.build_type & IMPRINTER))
+			for(var/datum/design/known_design as anything in files.known_designs)
+				if(!known_design.build_path || !(known_design.build_type & IMPRINTER))
 					continue
 
-				if (imprinter_search != "" && !findtext(D.name, imprinter_search))
+				if (imprinter_search != "" && !findtext(known_design.name, imprinter_search))
 					continue
 
 				var/temp_dat
-				for(var/M in D.materials)
-					temp_dat += ", [D.materials[M]*linked_imprinter.mat_efficiency] [CallMaterialName(M)]"
-				for(var/T in D.chemicals)
-					temp_dat += ", [D.chemicals[T]*linked_imprinter.mat_efficiency] [CallReagentName(T)]"
+				for(var/M in known_design.materials)
+					temp_dat += ", [known_design.materials[M]*linked_imprinter.mat_efficiency] [CallMaterialName(M)]"
+				for(var/T in known_design.chemicals)
+					temp_dat += ", [known_design.chemicals[T]*linked_imprinter.mat_efficiency] [CallReagentName(T)]"
 				if(temp_dat)
 					temp_dat = " \[[copytext(temp_dat,3)]\]"
-				if(linked_imprinter.canBuild(D))
-					dat += "<LI><B><A href='?src=\ref[src];imprint=[D.id]'>[D.name]</A></B>[temp_dat]"
+				if(linked_imprinter.canBuild(known_design))
+					dat += "<LI><B><A href='?src=\ref[src];imprint=[known_design.id]'>[known_design.name]</A></B>[temp_dat]"
 				else
-					dat += "<LI><B>[D.name]</B>[temp_dat]"
+					dat += "<LI><B>[known_design.name]</B>[temp_dat]"
 
 				if (imprinter_show_tech)
 					var/list/origin_tech
 
-					if (saved_origins[D.build_path])
-						origin_tech = saved_origins[D.build_path]
+					if (saved_origins[known_design.build_path])
+						origin_tech = saved_origins[known_design.build_path]
 
 					if (!origin_tech)
-						var/obj/item/I = new D.build_path
+						var/obj/item/I = new known_design.build_path
 						origin_tech = I.origin_tech
-						saved_origins[D.build_path] = origin_tech
+						saved_origins[known_design.build_path] = origin_tech
 						qdel(I)
 
-					for (var/T in origin_tech)
-						for (var/datum/tech/F in files.known_tech)
-							if (F.name == CallTechName(T))
-								if (F.level <= origin_tech[T] )
-									dat += SPAN_COLOR(COLOR_GREEN, " [F.name] = [origin_tech[T]] ")
-								else
-									dat += " [F.name] = [origin_tech[T]] "
-								break
+					for(var/origin_tech_id in origin_tech)
+						var/datum/tech/known_tech_item = files.known_tech_lookup[origin_tech_id]
+						if(!known_tech_item)
+							continue
+
+						var/origin_tech_level = origin_tech[origin_tech_id]
+						if(origin_tech_level >= known_tech_item.level)
+							dat += SPAN_COLOR(COLOR_GREEN, " [known_tech_item.name] = [origin_tech_level] ")
+						else
+							dat += " [known_tech_item.name] = [origin_tech_level] "
+
 			dat += "</UL>"
 
 		if(4.2)
@@ -964,11 +988,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "Empty"
 			else
 				var/tmp = 1
-				for(var/datum/design/D in linked_imprinter.queue)
+				for(var/datum/design/design_in_queue in linked_imprinter.queue)
 					if(tmp == 1)
-						dat += "<B>1: [D.name]</B><BR>"
+						dat += "<B>1: [design_in_queue.name]</B><BR>"
 					else
-						dat += "[tmp]: [D.name] <A href='?src=\ref[src];removeI=[tmp]'>(Remove)</A><BR>"
+						dat += "[tmp]: [design_in_queue.name] <A href='?src=\ref[src];removeI=[tmp]'>(Remove)</A><BR>"
 					++tmp
 
 		///////////////////Research Information Browser////////////////////

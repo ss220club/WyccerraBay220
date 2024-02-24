@@ -4,7 +4,7 @@ The research datum is the "folder" where all the research information is stored 
 various procs used to manipulate it. It has four variables and seven procs:
 
 Variables:
-- possible_tech is a list of all the /datum/tech that can potentially be researched by the player. The RefreshResearch() proc
+- possible_tech is a list of all the /datum/tech that can potentially be researched by the player. The refresh_research() proc
 (explained later) only goes through those when refreshing what you know. Generally, possible_tech contains ALL of the existing tech
 but it is possible to add tech to the game that DON'T start in it (example: Xeno tech). Generally speaking, you don't want to mess
 with these since they should be the default version of the datums. They're actually stored in a list rather then using typesof to
@@ -15,17 +15,17 @@ list, it can't be improved. All the tech in this list are visible to the player.
 - known_designs is functionally identical to known_tech except it's for /datum/design
 
 Procs:
-- TechHasReqs: Used by other procs (specifically RefreshResearch) to see whether all of a tech's requirements are currently in
+- TechHasReqs: Used by other procs (specifically refresh_research) to see whether all of a tech's requirements are currently in
 known_tech and at a high enough level.
-- DesignHasReqs: Same as TechHasReqs but for /datum/design and known_design.
-- AddTech2Known: Adds a /datum/tech to known_tech. It checks to see whether it already has that tech (if so, it just replaces it). If
+- design_available: Same as TechHasReqs but for /datum/design and known_design.
+- add_tech_to_known: Adds a /datum/tech to known_tech. It checks to see whether it already has that tech (if so, it just replaces it). If
 it doesn't have it, it adds it. Note: It does NOT check possible_tech at all. So if you want to add something strange to it (like
 a player made tech?) you can.
-- AddDesign2Known: Same as AddTech2Known except for /datum/design and known_designs.
-- RefreshResearch: This is the workhorse of the R&D system. It updates the /datum/research holder and adds any unlocked tech paths
+- add_design_to_known: Same as add_tech_to_known except for /datum/design and known_designs.
+- refresh_research: This is the workhorse of the R&D system. It updates the /datum/research holder and adds any unlocked tech paths
 and designs you have reached the requirements for. It only checks through possible_tech and possible_designs, however, so it won't
 accidentally add "secret" tech to it.
-- UpdateTech is used as part of the actual researching process. It takes an ID and finds techs with that same ID in known_tech. When
+- update_tech is used as part of the actual researching process. It takes an ID and finds techs with that same ID in known_tech. When
 it finds it, it checks to see whether it can improve it at all. If the known_tech's level is less then or equal to
 the inputted level, it increases the known tech's level to the inputted level -1 or know tech's level +1 (whichever is higher).
 
@@ -44,176 +44,128 @@ research holder datum.
 **	Includes all the helper procs and basic tech processing.  **
 ***************************************************************/
 
-/datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
-	var/list/known_tech = list()			//List of locally known tech. Datum/tech go here.
-	var/list/possible_designs = list()		//List of all designs.
-	var/list/known_designs = list()			//List of available designs.
+//Holder for all the existing, archived, and known tech. Individual to console.
+/datum/research
+	/// List of available designs as: design_id => design. For faster lookup
+	var/list/known_designs_lookup = list()
+	/// Designs sorted by `sort_string`.
+	var/list/known_designs = list()
+	/// List of locally known tech as: tech.id => /datum/tech. For faster lookup
+	var/list/known_tech_lookup = list()
+	/// List of locally known techs. For faster iteration
+	var/list/known_tech = list()
+	/// List of all existing designs.
+	var/static/list/possible_designs = list()
 
-/datum/research/New()		//Insert techs into possible_tech here. Known_tech automatically updated.
-	for(var/T in typesof(/datum/tech) - /datum/tech)
-		known_tech += new T(src)
-	for(var/D in typesof(/datum/design) - /datum/design)
-		possible_designs += new D(src)
-	RefreshResearch()
+//Insert techs into possible_tech here. Known_tech automatically updated.
+/datum/research/New()
+	if(!length(possible_designs))
+		for(var/design_path in subtypesof(/datum/design))
+			possible_designs += new design_path(src)
 
-/datum/research/techonly
+	initialize_tech()
+	refresh_research()
+
+/datum/research/proc/initialize_tech()
+	for(var/tech_path in subtypesof(/datum/tech))
+		var/datum/tech/new_tech = new tech_path(src)
+		known_tech_lookup[new_tech.id] = new_tech
+		known_tech += new_tech
 
 /datum/research/techonly/New()
-	for(var/T in typesof(/datum/tech) - /datum/tech)
-		known_tech += new T(src)
-	RefreshResearch()
+	initialize_tech()
+	refresh_research()
 
-//Checks to see if design has all the required pre-reqs.
-//Input: datum/design; Output: 0/1 (false/true)
-/datum/research/proc/DesignHasReqs(datum/design/D)
-	if(length(D.req_tech) == 0)
-		return 1
+/// Checks to see if design has all the required pre-reqs.
+/// Input: datum/design; Output: TRUE/FALSE
+/datum/research/proc/design_available(datum/design/design_to_check)
+	if(!length(design_to_check.req_tech))
+		return TRUE
 
-	var/list/k_tech = list()
+	for(var/required_tech_id in design_to_check.req_tech)
+		var/datum/tech/known_tech_item = known_tech_lookup[required_tech_id]
+		var/known_tech_level = known_tech_item.level
+		if(!known_tech_level || known_tech_level < design_to_check.req_tech[required_tech_id])
+			return FALSE
 
-	for(var/datum/tech/known in known_tech)
-		k_tech[known.id] = known.level
-
-	for(var/req in D.req_tech)
-		if(isnull(k_tech[req]) || k_tech[req] < D.req_tech[req])
-			return 0
-
-	return 1
+	return TRUE
 
 //Adds a tech to known_tech list. Checks to make sure there aren't duplicates and updates existing tech's levels if needed.
 //Input: datum/tech; Output: Null
-/datum/research/proc/AddTech2Known(datum/tech/T)
-	for(var/datum/tech/known in known_tech)
-		if(T.id == known.id)
-			if(T.level > known.level)
-				known.level = T.level
-			return
-	return
+/datum/research/proc/add_tech_to_known(datum/tech/tech_to_add)
+	ASSERT(istype(tech_to_add))
 
-/datum/research/proc/AddDesign2Known(datum/design/D)
-	if(!length(known_designs)) // Special case
-		known_designs.Add(D)
+	var/datum/tech/known_tech_item = known_tech_lookup[tech_to_add.id]
+	if(!known_tech_item)
+		known_tech_lookup[tech_to_add.id] = tech_to_add
+		known_tech += tech_to_add
 		return
-	for(var/i = 1 to length(known_designs))
-		var/datum/design/A = known_designs[i]
-		if(A.id == D.id) // We are guaranteed to reach this if the ids are the same, because sort_string will also be the same
-			return
-		if(A.sort_string > D.sort_string)
-			known_designs.Insert(i, D)
-			return
-	known_designs.Add(D)
-	return
+
+	if(tech_to_add.level > known_tech_item.level)
+		known_tech_item.level = tech_to_add.level
+
+/datum/research/proc/add_design_to_known(datum/design/design_to_add)
+	if(!istype(design_to_add))
+		return
+
+	var/datum/design/existing_design = known_designs_lookup[design_to_add.id]
+	if(existing_design)
+		return
+
+	known_designs_lookup[design_to_add.id] = design_to_add
+	BINARY_INSERT(design_to_add, known_designs, /datum/design, design_to_add, id, COMPARE_KEY)
+
+/datum/research/proc/remove_design(design_id)
+	ASSERT(design_id)
+
+	var/datum/design/design_to_remove = known_designs_lookup[design_id]
+	if(!design_to_remove)
+		return FALSE
+
+	known_designs_lookup -= design_id
+	known_designs -= design_to_remove
+
+	return TRUE
+
+/datum/research/proc/reset_tech(tech_id)
+	ASSERT(tech_id)
+
+	var/datum/tech/tech_to_reset = known_tech_lookup[tech_id]
+	if(!tech_to_reset)
+		return FALSE
+
+	if(tech_to_reset.level <= 0)
+		return FALSE
+
+	tech_to_reset.level = 1
+	return TRUE
 
 //Refreshes known_tech and known_designs list
 //Input/Output: n/a
-/datum/research/proc/RefreshResearch()
-	for(var/datum/design/PD in possible_designs)
-		if(DesignHasReqs(PD))
-			AddDesign2Known(PD)
-	for(var/datum/tech/T in known_tech)
-		T = clamp(T.level, 0, 20)
-	return
+/datum/research/proc/refresh_research()
+	for(var/datum/design/possible_design as anything in possible_designs)
+		if(design_available(possible_design))
+			add_design_to_known(possible_design)
+
+	for(var/datum/tech/tech_to_refresh as anything in known_tech)
+		tech_to_refresh.level = clamp(tech_to_refresh.level, 0, 20)
 
 //Refreshes the levels of a given tech.
 //Input: Tech's ID and Level; Output: null
-/datum/research/proc/UpdateTech(ID, level)
+/datum/research/proc/update_tech(tech_id, level)
+	ASSERT(tech_id)
+	ASSERT(level)
+
 	// If a "brain expansion" event is active, we gain 1 extra level
-	for(var/datum/event/E in SSevent.active_events)
-		if(istype(E, /datum/event/brain_expansion))
-			level += 1
-			break
+	if(SSevent.is_event_of_type_active(/datum/event/brain_expansion))
+		level++
 
-	for(var/datum/tech/KT in known_tech)
-		if(KT.id == ID && KT.level <= level)
-			KT.level = max(KT.level + 1, level - 1)
-	return
+	var/datum/tech/tech_to_update = known_tech_lookup[tech_id]
+	if(!tech_to_update)
+		stack_trace("Tech with id `[tech_id]` being update, while not present in research tree")
+		return
 
-// A simple helper proc to find the name of a tech with a given ID.
-/proc/CallTechName(ID)
-	for(var/T in subtypesof(/datum/tech))
-		var/datum/tech/check_tech = T
-		if(initial(check_tech.id) == ID)
-			return  initial(check_tech.name)
+	if(tech_to_update.level > level)
+		return
 
-/***************************************************************
-**						Technology Datums					  **
-**	Includes all the various technoliges and what they make.  **
-***************************************************************/
-
-/datum/tech //Datum of individual technologies.
-	var/name = "name"					//Name of the technology.
-	var/desc = "description"			//General description of what it does and what it makes.
-	var/id = "id"						//An easily referenced ID. Must be alphanumeric, lower-case, and no symbols.
-	var/level = 1						//A simple number scale of the research level. Level 0 = Secret tech.
-
-/datum/tech/materials
-	name = "Materials"
-	desc = "Development of new and improved materials."
-	id = TECH_MATERIAL
-
-/datum/tech/engineering
-	name = "Engineering"
-	desc = "Development of new and improved engineering parts."
-	id = TECH_ENGINEERING
-
-/datum/tech/phorontech
-	name = "Phoron Technology"
-	desc = "Manipulation of the mysterious substance colloqually known as 'phoron'."
-	id = TECH_PHORON
-
-/datum/tech/powerstorage
-	name = "Power Manipulation Technology"
-	desc = "The various technologies behind the storage and generation of electicity."
-	id = TECH_POWER
-
-/datum/tech/bluespace
-	name = "'Blue-space' Technology"
-	desc = "Devices that utilize the sub-reality known as 'blue-space'"
-	id = TECH_BLUESPACE
-
-/datum/tech/biotech
-	name = "Biological Technology"
-	desc = "Deeper mysteries of life and organic substances."
-	id = TECH_BIO
-
-/datum/tech/combat
-	name = "Combat Systems"
-	desc = "Offensive and defensive systems."
-	id = TECH_COMBAT
-
-/datum/tech/magnets
-	name = "Electromagnetic Spectrum Technology"
-	desc = "Electromagnetic spectrum and magnetic devices. No clue how they actually work, though."
-	id = TECH_MAGNET
-
-/datum/tech/programming
-	name = "Data Theory"
-	desc = "Computer and artificial intelligence and data storage systems."
-	id = TECH_DATA
-
-/datum/tech/esoteric
-	name = "Esoteric Technology"
-	desc = "A miscellaneous tech category filled with information on non-standard designs, personal projects and half-baked ideas."
-	id = TECH_ESOTERIC
-	level = 0
-
-/obj/item/disk/tech_disk
-	name = "fabricator data disk"
-	desc = "A disk for storing fabricator learning data for backup."
-	icon = 'icons/obj/datadisks.dmi'
-	icon_state = "datadisk2"
-	item_state = "card-id"
-	w_class = ITEM_SIZE_SMALL
-	matter = list(MATERIAL_PLASTIC = 30, MATERIAL_STEEL = 30, MATERIAL_GLASS = 10)
-	var/datum/tech/stored
-
-
-/obj/item/disk/design_disk
-	name = "component design disk"
-	desc = "A disk for storing device design data for construction in lathes."
-	icon = 'icons/obj/datadisks.dmi'
-	icon_state = "datadisk2"
-	item_state = "card-id"
-	w_class = ITEM_SIZE_SMALL
-	matter = list(MATERIAL_PLASTIC = 30, MATERIAL_STEEL = 30, MATERIAL_GLASS = 10)
-	var/datum/design/blueprint
+	tech_to_update.level = max(tech_to_update.level + 1, level - 1)

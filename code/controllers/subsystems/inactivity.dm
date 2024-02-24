@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(inactivity)
 	name = "Inactivity"
 	wait = 1 MINUTE
-	priority = SS_PRIORITY_INACTIVITY
+	priority = FIRE_PRIORITY_INACTIVITY
 	flags = SS_BACKGROUND
 
 	/// The current run of clients to check for inactivity.

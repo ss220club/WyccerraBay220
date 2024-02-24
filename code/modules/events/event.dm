@@ -145,12 +145,10 @@
 
 /datum/event/New(datum/event_meta/EM)
 	// event needs to be responsible for this, as stuff like APLUs currently make their own events for curious reasons
-	SSevent.active_events += src
+	SSevent.register_event(src)
 
 	event_meta = EM
-	severity = event_meta.severity
-	if(severity < EVENT_LEVEL_MUNDANE) severity = EVENT_LEVEL_MUNDANE
-	if(severity > EVENT_LEVEL_MAJOR) severity = EVENT_LEVEL_MAJOR
+	severity = clamp(event_meta.severity, EVENT_LEVEL_MUNDANE, EVENT_LEVEL_MAJOR)
 
 	startedAt = world.time
 

@@ -1,6 +1,6 @@
 SUBSYSTEM_DEF(graphs)
 	name = "Graphs"
-	priority = SS_PRIORITY_GRAPH
+	priority = FIRE_PRIORITY_GRAPH
 	flags = SS_KEEP_TIMING | SS_NO_INIT
 	wait = 1
 

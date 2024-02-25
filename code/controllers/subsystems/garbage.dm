@@ -206,6 +206,7 @@ SUBSYSTEM_DEF(garbage)
 
 	if(!istype(datum))
 		crash_with("qdel() can only handle /datum (sub)types, was passed: [log_info_line(datum)]")
+		return
 
 	var/static/list/details_by_path = SSgarbage.details_by_path
 	var/static/list/collection_queue = SSgarbage.collection_queue

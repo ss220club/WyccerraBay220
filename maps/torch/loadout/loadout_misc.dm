@@ -2,8 +2,6 @@
 	display_name = "sol challenge coin selection"
 	description = "A selection of challenge coins for identification, collection or simply bragging rights"
 	path = /obj/item/material/coin/challenge
-	cost = 1
-
 
 /datum/gear/trinket/scg_challenge_coin/New()
 	..()
@@ -22,8 +20,6 @@
 	display_name = "misc challenge coin selection"
 	description = "A selection of challenge coins for identification, collection or simply bragging rights"
 	path = /obj/item/material/coin/challenge/misc
-	cost = 1
-
 
 /datum/gear/trinket/misc_challenge_coin/New()
 	..()
@@ -38,6 +34,6 @@
 	/datum/mil_branch/iccgn
 )
 
-/datum/gear/union_card/allowed_branches = list(
+/datum/gear/document/union_card/allowed_branches = list(
 	/datum/mil_branch/civilian
 )

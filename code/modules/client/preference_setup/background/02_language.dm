@@ -90,13 +90,13 @@
 
 	for(var/thing in all_languages)
 		var/datum/language/lang = all_languages[thing]
-		if(user.has_admin_rights() || (!(lang.flags & RESTRICTED) && (lang.flags & WHITELISTED) && is_alien_whitelisted(user, lang)))
+		if(user.has_admin_rights() || (!(lang.flags & RESTRICTED) && (lang.flags & WHITELISTED) && is_any_alien_whitelisted(user, lang)))
 			allowed_languages[thing] = TRUE
 
 /datum/category_item/player_setup_item/background/languages/proc/is_allowed_language(mob/user, datum/language/lang)
 	if(isnull(allowed_languages) || isnull(free_languages))
 		rebuild_language_cache(user)
-	if(!user || ((lang.flags & RESTRICTED) && is_alien_whitelisted(user, lang)))
+	if(!user || ((lang.flags & RESTRICTED) && is_any_alien_whitelisted(user, lang)))
 		return TRUE
 	return allowed_languages[lang.name]
 

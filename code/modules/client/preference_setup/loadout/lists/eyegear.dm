@@ -1,6 +1,6 @@
 /datum/gear/eyes
-	sort_category = "Glasses and Eyewear"
-	category = /datum/gear/eyes
+	category = GEAR_CATEGORY_GLASSES_AND_EYEWEAR
+	abstract_type = /datum/gear/eyes
 	slot = slot_glasses
 	cost = 2
 

@@ -5,7 +5,7 @@
 /datum/gear/accessory/pilot_pin
 	display_name = "pilot's qualification pin"
 	path = /obj/item/clothing/accessory/solgov/specialty/pilot
-	allowed_skills = list(SKILL_PILOT = SKILL_EXPERIENCED)
+	required_skills = list(SKILL_PILOT = SKILL_EXPERIENCED)
 
 /datum/gear/accessory/armband_security
 	allowed_roles = SECURITY_ROLES
@@ -31,42 +31,6 @@
 
 /datum/gear/accessory/stethoscope
 	allowed_roles = STERILE_ROLES
-
-/datum/gear/passport/scg
-	display_name = "passports selection - SCG"
-	description = "A selection of SCG passports."
-	path = /obj/item/passport/scg
-	flags = GEAR_HAS_TYPE_SELECTION
-	custom_setup_proc = TYPE_PROC_REF(/obj/item/passport, set_info)
-	cost = 0
-
-/datum/gear/passport/iccg
-	display_name = "passports selection - ICCG"
-	description = "A selection of ICCG passports."
-	path = /obj/item/passport/iccg
-	flags = GEAR_HAS_TYPE_SELECTION
-	custom_setup_proc = TYPE_PROC_REF(/obj/item/passport, set_info)
-	cost = 0
-
-/datum/gear/passport
-	display_name = "passports selection - independent"
-	description = "A selection of independent regions passports."
-	path = /obj/item/passport/independent
-	flags = GEAR_HAS_SUBTYPE_SELECTION
-	custom_setup_proc = TYPE_PROC_REF(/obj/item/passport, set_info)
-	cost = 0
-
-/datum/gear/workvisa
-	display_name = "work visa"
-	description = "A work visa issued by the Sol Central Government for the purpose of work."
-	path = /obj/item/paper/workvisa
-	cost = 0
-
-/datum/gear/travelvisa
-	display_name = "travel visa"
-	description = "A travel visa issued by the Sol Central Government for the purpose of recreation."
-	path = /obj/item/paper/travelvisa
-	cost = 0
 
 /datum/gear/utility/holster_belt
 	display_name = "holser belt"

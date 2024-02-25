@@ -22,7 +22,7 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 	faction = "vox raider"
 	no_prior_faction = TRUE
 
-/datum/antagonist/vox/add_antagonist(datum/mind/player, ignore_role, do_not_equip, move_to_spawn, do_not_announce, preserve_appearance)
+/datum/antagonist/vox/add_antagonist(datum/mind/player, ignore_role, do_not_equip, move_to_spawn, do_not_announce, preserve_appearance, forced)
 	if(pending_item_spawn)
 		for(var/obj/voxartifactspawner/S as anything in GLOB.vox_artifact_spawners)
 			S.spawn_artifact()
@@ -44,7 +44,7 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 		if (player_is_antag(player))
 			log_debug("[key_name(player)] is not eligible to become a [role_text]: They are already an antagonist!")
 			continue
-		if(!is_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
+		if(!is_any_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
 			log_debug("[player.current.ckey] is not whitelisted")
 			continue
 		var/result = can_become_antag_detailed(player)
@@ -65,16 +65,16 @@ GLOBAL_LIST_EMPTY(vox_artifact_spawners)
 		else if (player in pending_antagonists)
 		else if(!can_become_antag(player))
 		else if(player_is_antag(player))
-		else if(!is_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
+		else if(!is_any_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
 		else
 			candidates |= player
 
 	return candidates
 
-/datum/antagonist/vox/can_become_antag_detailed(datum/mind/player, ignore_role)
-	if(!is_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
+/datum/antagonist/vox/can_become_antag_detailed(datum/mind/player, ignore_role, forced)
+	if(!is_any_alien_whitelisted(player.current, all_species[SPECIES_VOX]))
 		return "Player doesn't have vox whitelist"
-	..()
+	. = ..()
 
 /datum/antagonist/vox/equip(mob/living/carbon/human/vox/player)
 	if(!..())

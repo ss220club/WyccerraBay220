@@ -18,9 +18,6 @@ SUBSYSTEM_DEF(skybox)
 	/// whether the current skybox collected an extra appearance from an overmap feature
 	var/static/use_overmap_details = TRUE
 
-	/// The skybox icon file to use for stars. Expects to be 736x736
-	var/static/star_path = 'icons/skybox/skybox.dmi'
-
 	/// The skybox icon state to use for stars
 	var/static/star_state = "stars"
 
@@ -40,10 +37,13 @@ SUBSYSTEM_DEF(skybox)
 		dust.plane = DUST_PLANE
 		dust.alpha = 80
 		dust.blend_mode = BLEND_ADD
+
 		var/mutable_appearance/space = new /mutable_appearance(/turf/space)
+		space.plane = SPACE_PLANE
 		space.icon_state = "white"
 		space.AddOverlays(dust)
 		space_appearance_cache[index] = space.appearance
+
 	background_color = RANDOM_RGB
 
 

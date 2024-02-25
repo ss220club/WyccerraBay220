@@ -11,6 +11,8 @@
 #define LAZYREMOVE(L, I) if(L) { L -= I; if(!length(L)) { L = null; } }
 // Adds I to L, initalizing L if necessary
 #define LAZYADD(L, I) if(!L) { L = list(); } L += I;
+///Add an item to the list if not already present, if the list is null it will initialize it
+#define LAZYOR(L, I) if(!L) { L = list(); } L |= I;
 // Insert I into L at position X, initalizing L if necessary
 #define LAZYINSERT(L, I, X) if(!L) { L = list(); } L.Insert(X, I);
 // Adds I to L, initalizing L if necessary, if I is not already in L
@@ -37,7 +39,7 @@
 #define LAZYREMOVEASSOC(L, K, V) if(L) { if(L[K]) { L[K] -= V; if(!length(L[K])) L -= K; } if(!length(L)) L = null; }
 
 /****
-* Binary search sorted insert
+* Binary search sorted insert from TG
 * INPUT: Object to be inserted
 * LIST: List to insert object into
 * TYPECONT: The typepath of the contents of the list

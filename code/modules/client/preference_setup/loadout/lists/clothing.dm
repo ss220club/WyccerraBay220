@@ -1,7 +1,7 @@
 
 /datum/gear/clothing
-	sort_category = "Clothing Pieces"
-	category = /datum/gear/clothing
+	category = GEAR_CATEGORY_CLOTHING_PIECES
+	abstract_type = /datum/gear/clothing
 	slot = slot_tie
 
 /datum/gear/clothing/flannel

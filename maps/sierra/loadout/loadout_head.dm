@@ -6,11 +6,6 @@
 
 /datum/gear/head/welding
 	allowed_roles = TECHNICAL_ROLES
-/*
-/datum/gear/head/scp_cap
-	allowed_roles = list(/datum/job/detective, /datum/job/officer)
-	allowed_branches = list(/datum/mil_branch/contractor)
-*/
 
 /datum/gear/head/beret_selection
 	display_name = "contractor beret selection"
@@ -30,3 +25,15 @@
 
 /datum/gear/suit/unathi/security_cap
 	allowed_roles = SECURITY_ROLES
+
+/datum/gear/head/skrell_helmet
+	allowed_roles = ARMORED_ROLES
+
+/datum/gear/head/skrell_helmet/New()
+	..()
+	var/list/helmets = list()
+	helmets["black skrellian helmet"] = /obj/item/clothing/head/helmet/skrell
+	helmets["navy skrellian helmet"] = /obj/item/clothing/head/helmet/skrell/navy
+	helmets["green skrellian helmet"] = /obj/item/clothing/head/helmet/skrell/green
+	helmets["tan skrellian helmet"] = /obj/item/clothing/head/helmet/skrell/tan
+	gear_tweaks += new/datum/gear_tweak/path(helmets)

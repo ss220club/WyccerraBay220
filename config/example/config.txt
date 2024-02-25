@@ -161,6 +161,9 @@ VOTE_AUTOGAMEMODE_TIMELEFT 160
 # Should be bigger than VOTE_AUTOGAMEMODE_TIMELEFT + VOTE_PERIOD.
 PRE_GAME_TIME 180
 
+## If we want to bypass gamemode vote
+BYPASS_GAMEMODE_VOTE
+
 ## prevents dead players from voting or starting votes
 #NO_DEAD_VOTE
 

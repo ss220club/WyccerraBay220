@@ -228,7 +228,6 @@
 /datum/gear/uniform/resomi
 	display_name = "(Resomi) smock, grey"
 	path = /obj/item/clothing/under/resomi
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
 /datum/gear/uniform/resomi/New()
@@ -297,7 +296,6 @@
 /datum/gear/eyes/resomi
 	display_name = "(Resomi) sun lenses"
 	path = /obj/item/clothing/glasses/sunglasses/lenses
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
 /datum/gear/eyes/resomi/lenses_sec
@@ -312,13 +310,11 @@
 	display_name = "(Resomi) small mantle"
 	path = /obj/item/clothing/accessory/scarf/resomi
 	flags = GEAR_HAS_COLOR_SELECTION
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
 /datum/gear/suit/resomi_cloak
 	display_name = "(Resomi) small cloak"
 	path = /obj/item/clothing/suit/storage/toggle/Resomicoat
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
 /datum/gear/suit/resomi_cloak/New()
@@ -331,7 +327,6 @@
 /datum/gear/shoes/resomi
 	display_name = "(Resomi) small workboots"
 	path = /obj/item/clothing/shoes/workboots/resomi
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
 /datum/gear/shoes/resomi/footwraps
@@ -346,28 +341,24 @@
 
 /datum/gear/suit/resomicloak
 	display_name = "(Resomi) standard/job cloaks"
-	sort_category = "Xenowear"
 	path = /obj/item/clothing/suit/storage/resomicloak
 	whitelisted = list(SPECIES_RESOMI)
 	flags = GEAR_HAS_SUBTYPE_SELECTION
 
 /datum/gear/suit/resomicloak_alt
 	display_name = "(Resomi) alt cloaks"
-	sort_category = "Xenowear"
 	path = /obj/item/clothing/suit/storage/resomicloak_alt
 	whitelisted = list(SPECIES_RESOMI)
 	flags = GEAR_HAS_SUBTYPE_SELECTION
 
 /datum/gear/suit/resomicloak_belted
 	display_name = "(Resomi) belted cloaks"
-	sort_category = "Xenowear"
 	path = /obj/item/clothing/suit/storage/resomicloak_belted
 	whitelisted = list(SPECIES_RESOMI)
 	flags = GEAR_HAS_SUBTYPE_SELECTION
 
 /datum/gear/suit/resomicloak
 	display_name = "(Resomi) Hooded Cloak"
-	sort_category = "Xenowear"
 	path = /obj/item/clothing/suit/storage/hooded/resomi
 	whitelisted = list(SPECIES_RESOMI)
 	flags = GEAR_HAS_SUBTYPE_SELECTION
@@ -377,7 +368,6 @@
 	display_name = "(Resomi) small labcoat"
 	path = /obj/item/clothing/suit/storage/toggle/Resomilabcoat
 	flags = GEAR_HAS_COLOR_SELECTION
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_RESOMI)
 
 /obj/item/toy/plushie/resomi

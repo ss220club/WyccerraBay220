@@ -204,7 +204,7 @@
 			desc_comp += "[SPAN_NOTICE("Testing potentials:")]<BR>"
 			//var/list/techlvls = params2list(origin_tech)
 			for(var/T in origin_tech)
-				desc_comp += "Tech: Level [origin_tech[T]] [CallTechName(T)] <BR>"
+				desc_comp += "Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]] <BR>"
 		else
 			desc_comp += "No tech origins detected.<BR>"
 
@@ -825,7 +825,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	if(!user.client)
 		return
 
-	user.client.view = world.view
+	user.client.view = user.get_preference_value(/datum/client_preference/client_view)
 	if(!user.hud_used.hud_shown)
 		user.toggle_zoom_hud()
 

@@ -24,11 +24,9 @@
 	if(client && (stat != DEAD || screen.allstate))
 		if(screen.scale_to_view)
 			var/list/viewsize = getviewsize(client.view)
-			var/scale_x = viewsize[1] / (480 / world.icon_size)
-			var/scale_y = viewsize[2] / (480 / world.icon_size)
-			var/matrix/M = matrix()
-			M.Scale(scale_x, scale_y)
-			screen.transform = M
+			var/scale_x = viewsize[1] / (screen.icon_width / world.icon_size)
+			var/scale_y = viewsize[2] / (screen.icon_height / world.icon_size)
+			screen.SetTransform(scale_x = scale_x, scale_y = scale_y)
 
 		client.screen += screen
 	return screen
@@ -75,8 +73,14 @@
 	mouse_opacity = 0
 	var/severity = 0
 	var/allstate = 0 //shows if it should show up for dead people too
-	/// If the fullscreen image should be scaled client view wise
+	/// If the fullscreen image should be scaled to client view sise
 	var/scale_to_view = FALSE
+
+/obj/screen/fullscreen/Initialize()
+	. = ..()
+	var/icon/screen_icon = icon(icon)
+	icon_width = screen_icon.Width()
+	icon_height = screen_icon.Height()
 
 /obj/screen/fullscreen/Destroy()
 	severity = 0

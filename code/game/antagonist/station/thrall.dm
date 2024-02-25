@@ -18,7 +18,7 @@ GLOBAL_DATUM_INIT(thralls, /datum/antagonist/thrall, new)
 	obey.explanation_text = "Obey your master, [controller.real_name], in all things."
 	player.objectives |= obey
 
-/datum/antagonist/thrall/add_antagonist(datum/mind/player, ignore_role, do_not_equip, move_to_spawn, do_not_announce, preserve_appearance, mob/new_controller)
+/datum/antagonist/thrall/add_antagonist(datum/mind/player, ignore_role, do_not_equip, move_to_spawn, do_not_announce, preserve_appearance, forced, mob/new_controller)
 	if(!new_controller)
 		return 0
 	. = ..()

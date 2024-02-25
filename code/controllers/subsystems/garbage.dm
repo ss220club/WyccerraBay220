@@ -199,14 +199,13 @@ SUBSYSTEM_DEF(garbage)
 
 
 /// Queue datum D for garbage collection / deletion. Calls the datum's Destroy() and sets its gc_destroyed value.
-/// If not datum passed, `del` will be called
+/// If not datum passed, proc will crash
 /proc/qdel(datum/datum)
-	if (!datum)
+	if(!datum)
 		return
 
 	if(!istype(datum))
-		del(datum)
-		return
+		crash_with("qdel() can only handle /datum (sub)types, was passed: [log_info_line(datum)]")
 
 	var/static/list/details_by_path = SSgarbage.details_by_path
 	var/static/list/collection_queue = SSgarbage.collection_queue

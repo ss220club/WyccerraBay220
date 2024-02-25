@@ -270,7 +270,7 @@ var/global/const/NO_EMAG_ACT = -50
 	if(side)
 		user.client.screen += side
 
-	var/datum/browser/popup = new(user, "id_card_window", name, 600, 250)
+	var/datum/browser/popup = new(user, "id_card_window", name, 600, 200)
 	popup.set_content(dat())
 	popup.open()
 
@@ -287,11 +287,9 @@ var/global/const/NO_EMAG_ACT = -50
 	M.ImmediateOverlayUpdate()
 	var/mutable_appearance/mob_appearance = new/mutable_appearance(M)
 	var/start = REALTIMEOFDAY
-	for(var/i = 0 to 10000)
 		front = generate_preview_photo(mob_appearance, SOUTH, 0)
 		side = generate_preview_photo(mob_appearance, WEST, 1)
 
-	message_admins("Stop: [round(0.1 * (REALTIMEOFDAY - start), 0.1)]")
 
 /obj/item/card/id/proc/generate_preview_photo(mutable_appearance/mob_appearance, dir, horizontal_position = 0)
 	var/obj/screen/preview_image = new
@@ -299,7 +297,6 @@ var/global/const/NO_EMAG_ACT = -50
 	preview_image.dir = dir
 	preview_image.plane = HUD_PLANE
 	preview_image.screen_loc = "id_card_map:[horizontal_position],0"
-
 	return preview_image
 
 /mob/proc/set_id_info(obj/item/card/id/id_card)

@@ -250,7 +250,11 @@ var/global/const/NO_EMAG_ACT = -50
 		return STATUS_INTERACTIVE
 
 /obj/item/card/id/OnTopic(mob/user, list/href_list)
-	if(href_list["look_at_id"])
+	if(href_list["close"])
+		clear_id_photos_from_user_screen(user)
+		return TOPIC_NOACTION
+
+	else if(href_list["look_at_id"])
 		if(istype(user))
 			examinate(user, src)
 			return TOPIC_HANDLED
@@ -265,12 +269,8 @@ var/global/const/NO_EMAG_ACT = -50
 	return 0
 
 /obj/item/card/id/proc/show(mob/user)
-	if(front)
-		user.client.screen += front
-	if(side)
-		user.client.screen += side
-
-	var/datum/browser/popup = new(user, "id_card_window", name, 600, 200)
+	add_id_photos_to_user_screen(user)
+	var/datum/browser/popup = new(user, "id_card_window", name, 600, 200, src)
 	popup.set_content(dat())
 	popup.open()
 
@@ -286,18 +286,34 @@ var/global/const/NO_EMAG_ACT = -50
 /obj/item/card/id/proc/set_id_photo(mob/M)
 	M.ImmediateOverlayUpdate()
 	var/mutable_appearance/mob_appearance = new/mutable_appearance(M)
-	var/start = REALTIMEOFDAY
-		front = generate_preview_photo(mob_appearance, SOUTH, 0)
-		side = generate_preview_photo(mob_appearance, WEST, 1)
+	front = generate_id_photo(mob_appearance, SOUTH, 0)
+	side = generate_id_photo(mob_appearance, WEST, 1)
 
-
-/obj/item/card/id/proc/generate_preview_photo(mutable_appearance/mob_appearance, dir, horizontal_position = 0)
+/obj/item/card/id/proc/generate_id_photo(mutable_appearance/mob_appearance, dir, horizontal_position = 0)
 	var/obj/screen/preview_image = new
 	preview_image.appearance = mob_appearance
 	preview_image.dir = dir
 	preview_image.plane = HUD_PLANE
 	preview_image.screen_loc = "id_card_map:[horizontal_position],0"
 	return preview_image
+
+/obj/item/card/id/proc/add_id_photos_to_user_screen(mob/user)
+	if(!user?.client)
+		return
+
+	if(front)
+		user.client.screen += front
+	if(side)
+		user.client.screen += side
+
+/obj/item/card/id/proc/clear_id_photos_from_user_screen(mob/user)
+	if(!user?.client)
+		return
+
+	if(front)
+		user.client.screen -= front
+	if(side)
+		user.client.screen -= side
 
 /mob/proc/set_id_info(obj/item/card/id/id_card)
 	id_card.age = 0

@@ -452,3 +452,31 @@ window "preference_window"
 		anchor2 = 100,100
 		right-click = false
 		saved-params = "zoom;letterbox;zoom-mode"
+
+window "id_card_window"
+	elem "id_card_window"
+		type = MAIN
+		pos = 291,0
+		size = 600x264
+		anchor1 = none
+		anchor2 = none
+		background-color = none
+		saved-params = "pos;size;is-minimized;is-maximized"
+		is-visible = false
+		statusbar = false
+	elem "id_card_browser"
+		type = BROWSER
+		pos = 0,0
+		size = 600x264
+		anchor1 = 0,0
+		anchor2 = 100,100
+		background-color = none
+		saved-params = ""
+	elem "id_card_map"
+		type = MAP
+		pos = 344,50
+		size = 256x128
+		anchor1 = 0,0
+		anchor2 = 50,50
+		background-color = #262626
+		saved-params = "zoom;letterbox;zoom-mode"

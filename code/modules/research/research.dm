@@ -113,7 +113,7 @@ research holder datum.
 		return
 
 	known_designs_lookup[design_to_add.id] = design_to_add
-	BINARY_INSERT(design_to_add, known_designs, /datum/design, design_to_add, id, COMPARE_KEY)
+	BINARY_INSERT(design_to_add, known_designs, /datum/design, design_to_add, sort_string, COMPARE_KEY)
 
 /datum/research/proc/remove_design(design_id)
 	ASSERT(design_id)

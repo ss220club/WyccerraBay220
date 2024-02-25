@@ -830,6 +830,20 @@ BLIND     // can't see anything
 	item_flags = ITEM_FLAG_WASHER_ALLOWED
 	w_class = ITEM_SIZE_NORMAL
 	force = 0
+	sprite_sheets = list(
+		SPECIES_VOX = 'icons/mob/species/vox/onmob_under_vox.dmi',
+		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_under_gas.dmi',
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_under_unathi.dmi'
+	)
+
+	valid_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_HOLSTER,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DEPT,ACCESSORY_SLOT_DECOR,ACCESSORY_SLOT_MEDAL,ACCESSORY_SLOT_INSIGNIA)
+	restricted_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_HOLSTER,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DEPT)
+
+	//convenience var for defining the icon state for the overlay used when the clothing is worn.
+	//Also used by rolling/unrolling.
+	var/worn_state = null
+	//Whether the clothing item has gender-specific states when worn.
+	var/gender_icons = 0
 	var/has_sensor = SUIT_HAS_SENSORS //For the crew computer 2 = unable to change mode
 	var/sensor_mode = SUIT_SENSOR_OFF
 		/*
@@ -838,30 +852,21 @@ BLIND     // can't see anything
 		3 = Report location
 		*/
 	var/displays_id = 1
-	var/rolled_down = -1 //0 = unrolled, 1 = rolled, -1 = cannot be toggled
-	var/rolled_sleeves = -1 //0 = unrolled, 1 = rolled, -1 = cannot be toggled
-	sprite_sheets = list(
-		SPECIES_VOX = 'icons/mob/species/vox/onmob_under_vox.dmi',
-		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_under_gas.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_under_unathi.dmi'
-	)
+	var/rolled_down = UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED
+	var/rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED
 
-	//convenience var for defining the icon state for the overlay used when the clothing is worn.
-	//Also used by rolling/unrolling.
-	var/worn_state = null
-	//Whether the clothing item has gender-specific states when worn.
-	var/gender_icons = 0
-	valid_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_HOLSTER,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DEPT,ACCESSORY_SLOT_DECOR,ACCESSORY_SLOT_MEDAL,ACCESSORY_SLOT_INSIGNIA)
-	restricted_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_HOLSTER,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DEPT)
-
-/obj/item/clothing/under/New()
-	..()
+/obj/item/clothing/under/Initialize()
+	. = ..()
 	update_rolldown_status()
 	update_rollsleeves_status()
-	if(rolled_down == -1)
-		verbs -= /obj/item/clothing/under/verb/rollsuit
-	if(rolled_sleeves == -1)
-		verbs -= /obj/item/clothing/under/verb/rollsleeves
+
+	set_extension(src, /datum/extension/interactive/multitool/items/clothing)
+	if(worn_state)
+		if(!item_state_slots)
+			item_state_slots = list()
+		item_state_slots[slot_w_uniform_str] = worn_state
+	else
+		worn_state = icon_state
 
 /obj/item/clothing/under/inherit_custom_item_data(datum/custom_item/citem)
 	. = ..()
@@ -898,22 +903,9 @@ BLIND     // can't see anything
 		return
 	..()
 
-/obj/item/clothing/under/New()
-	..()
-	if(worn_state)
-		if(!item_state_slots)
-			item_state_slots = list()
-		item_state_slots[slot_w_uniform_str] = worn_state
-	else
-		worn_state = icon_state
-	//autodetect rollability
-	if(rolled_down < 0)
-		if(("[worn_state]_d_s") in icon_states(GLOB.default_onmob_icons[slot_w_uniform_str]))
-			rolled_down = 0
-
 /obj/item/clothing/under/proc/update_rolldown_status()
 	var/mob/living/carbon/human/H
-	if(istype(src.loc, /mob/living/carbon/human))
+	if(ishuman(src.loc))
 		H = src.loc
 
 	var/icon/under_icon
@@ -928,15 +920,20 @@ BLIND     // can't see anything
 
 	// The _s is because the icon update procs append it.
 	if(("[worn_state]_d_s") in icon_states(under_icon))
-		if(rolled_down != 1)
-			rolled_down = 0
+		if(rolled_down != UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED)
+			rolled_down = UNDER_ROLLDOWN_STATUS_UNROLLED
 	else
-		rolled_down = -1
-	if(H) update_clothing_icon()
+		rolled_down = UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED
+
+	if(H)
+		update_clothing_icon()
+
+	if(rolled_down == UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED)
+		verbs -= /obj/item/clothing/under/verb/rollsuit
 
 /obj/item/clothing/under/proc/update_rollsleeves_status()
 	var/mob/living/carbon/human/H
-	if(istype(src.loc, /mob/living/carbon/human))
+	if(ishuman(src.loc))
 		H = src.loc
 
 	var/icon/under_icon
@@ -951,11 +948,15 @@ BLIND     // can't see anything
 
 	// The _s is because the icon update procs append it.
 	if(("[worn_state]_r_s") in icon_states(under_icon))
-		if(rolled_sleeves != 1)
-			rolled_sleeves = 0
+		if(rolled_sleeves != SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED)
+			rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_UNROLLED
 	else
-		rolled_sleeves = -1
-	if(H) update_clothing_icon()
+		rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED
+	if(H)
+		update_clothing_icon()
+
+	if(rolled_sleeves == SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED)
+		verbs -= /obj/item/clothing/under/verb/rollsleeves
 
 /obj/item/clothing/under/update_clothing_icon()
 	if (ismob(src.loc))
@@ -1035,37 +1036,45 @@ BLIND     // can't see anything
 	set name = "Roll Down Jumpsuit"
 	set category = "Object"
 	set src in usr
-	if(!istype(usr, /mob/living)) return
-	if(usr.stat) return
+	if(!isliving(usr))
+	 	return
 
-	update_rolldown_status()
-	if(rolled_down == -1)
+	if(usr.stat)
+		return
+
+	if(rolled_down == UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED)
 		to_chat(usr, SPAN_NOTICE("You cannot roll down [src]!"))
-	if((rolled_sleeves == 1) && !(rolled_down))
-		rolled_sleeves = 0
+
+	if((rolled_sleeves == SLEEVES_ROLLDOWN_STATUS_ROLLED) && !(rolled_down))
+		rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_UNROLLED
 		return
 
 	rolled_down = !rolled_down
+
 	if(rolled_down)
 		body_parts_covered &= LOWER_TORSO|LEGS|FEET
 		item_state_slots[slot_w_uniform_str] = worn_state + get_gender_suffix("_d_s")
 	else
 		body_parts_covered = initial(body_parts_covered)
 		item_state_slots[slot_w_uniform_str] = worn_state + get_gender_suffix()
+
 	update_clothing_icon()
 
 /obj/item/clothing/under/verb/rollsleeves()
 	set name = "Roll Up Sleeves"
 	set category = "Object"
 	set src in usr
-	if(!istype(usr, /mob/living)) return
-	if(usr.stat) return
+	if(!isliving(usr))
+		return
 
-	update_rollsleeves_status()
-	if(rolled_sleeves == -1)
+	if(usr.stat)
+		return
+
+	if(rolled_sleeves == SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED)
 		to_chat(usr, SPAN_NOTICE("You cannot roll up your [src]'s sleeves!"))
 		return
-	if(rolled_down == 1)
+
+	if(rolled_down == UNDER_ROLLDOWN_STATUS_ROLLED)
 		to_chat(usr, SPAN_NOTICE("You must roll up your [src] first!"))
 		return
 

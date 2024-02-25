@@ -67,9 +67,9 @@
 
 		if(istype(loc,/obj/item/clothing/under))
 			var/obj/item/clothing/under/C = loc
-			if (on_rolled_down && C.rolled_down > 0)
+			if (on_rolled_down && C.rolled_down > UNDER_ROLLDOWN_STATUS_UNROLLED)
 				tmp_icon_state = on_rolled_down
-			else if (on_rolled_sleeves && C.rolled_sleeves > 0)
+			else if (on_rolled_sleeves && C.rolled_sleeves == SLEEVES_ROLLDOWN_STATUS_ROLLED)
 				tmp_icon_state = on_rolled_sleeves
 
 		var/use_sprite_sheet = accessory_icons[slot]

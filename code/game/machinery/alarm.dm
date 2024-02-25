@@ -104,6 +104,13 @@
 	var/environment_type = /singleton/environment_data
 	var/report_danger_level = 1
 
+	//Used to cache the previous gas mixture result, and evaluate if we can skip processing or not
+	var/previous_environment_group_multiplier = null
+	var/previous_environment_temperature = null
+	var/previous_environment_total_moles = null
+	var/previous_environment_volume = null
+	var/list/previous_environment_gas = list()
+
 /obj/machinery/alarm/cold
 	target_temperature = T0C+4
 
@@ -192,6 +199,27 @@
 	//Handle temperature adjustment here.
 	if(environment.return_pressure() > ONE_ATMOSPHERE*0.05)
 		handle_heating_cooling(environment)
+
+	var/is_same_environment = TRUE
+	for(var/k in environment.gas)
+		if(environment.gas[k] != previous_environment_gas[k])
+			is_same_environment = FALSE
+			previous_environment_gas = environment.gas.Copy()
+			break
+	if(is_same_environment)
+		if(	(environment.temperature != previous_environment_temperature) ||\
+			(environment.group_multiplier != previous_environment_group_multiplier) ||\
+			(environment.total_moles != previous_environment_total_moles) ||\
+			(environment.volume != previous_environment_volume)
+		)
+			is_same_environment = FALSE
+			previous_environment_group_multiplier = environment.group_multiplier
+			previous_environment_temperature = environment.temperature
+			previous_environment_total_moles = environment.total_moles
+			previous_environment_volume = environment.volume
+
+	if(is_same_environment)
+		return
 
 	var/old_level = danger_level
 	danger_level = overall_danger_level(environment)

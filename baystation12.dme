@@ -1941,7 +1941,6 @@
 #include "code\modules\fabrication\fabricator_hacked.dm"
 #include "code\modules\fabrication\fabricator_intake.dm"
 #include "code\modules\fabrication\fabricator_microlathe.dm"
-#include "code\modules\fabrication\fabricator_topic.dm"
 #include "code\modules\fabrication\fabricator_ui.dm"
 #include "code\modules\fabrication\designs\_design.dm"
 #include "code\modules\fabrication\designs\general\designs_arms_ammo.dm"

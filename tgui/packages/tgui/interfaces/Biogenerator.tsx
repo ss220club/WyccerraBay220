@@ -161,8 +161,9 @@ const BiogenProducts = (props, context) => {
                 {product.cost * vendAmount}
                 <Icon ml={1} name="leaf" color="green" size={1.2} />
               </Stack.Item>
-              <Stack.Item grow basis="7%">
+              <Stack.Item>
                 <Button
+                  width={1.7}
                   icon={vendAmount > 1 ? 'angles-down' : 'angle-down'}
                   disabled={data.biomass < product.cost * vendAmount}
                   tooltip={

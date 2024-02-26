@@ -4,13 +4,17 @@
  * @license MIT
  */
 
+import { KEY_ENTER, KEY_ESCAPE } from 'common/keycodes';
 import { classes } from 'common/react';
 import { Component, createRef } from 'inferno';
 import { Box } from './Box';
-import { KEY_ESCAPE, KEY_ENTER } from 'common/keycodes';
 
-export const toInputValue = (value) =>
-  typeof value !== 'number' && typeof value !== 'string' ? '' : String(value);
+// prettier-ignore
+export const toInputValue = value => (
+  typeof value !== 'number' && typeof value !== 'string'
+    ? ''
+    : String(value)
+);
 
 export class Input extends Component {
   constructor() {
@@ -66,6 +70,11 @@ export class Input extends Component {
         return;
       }
       if (e.keyCode === KEY_ESCAPE) {
+        if (this.props.onEscape) {
+          this.props.onEscape(e);
+          return;
+        }
+
         this.setEditing(false);
         e.target.value = toInputValue(this.props.value);
         e.target.blur();
@@ -79,9 +88,8 @@ export class Input extends Component {
     const input = this.inputRef.current;
     if (input) {
       input.value = toInputValue(nextValue);
-      input.selectionStart = 0;
-      input.selectionEnd = input.value.length;
     }
+
     if (this.props.autoFocus || this.props.autoSelect) {
       setTimeout(() => {
         input.focus();
@@ -118,12 +126,6 @@ export class Input extends Component {
       value,
       maxLength,
       placeholder,
-      autofocus,
-      disabled,
-      // Multiline props
-      multiline,
-      cols = 32,
-      rows = 4,
       ...boxProps
     } = props;
     // Box props
@@ -134,38 +136,21 @@ export class Input extends Component {
           'Input',
           fluid && 'Input--fluid',
           monospace && 'Input--monospace',
-          disabled && 'Input--disabled',
           className,
         ])}
         {...rest}
       >
         <div className="Input__baseline">.</div>
-        {multiline ? (
-          <textarea
-            ref={this.inputRef}
-            className="Input__textarea"
-            placeholder={placeholder}
-            onInput={this.handleInput}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            maxLength={maxLength}
-            cols={cols}
-            rows={rows}
-            disabled={disabled}
-          />
-        ) : (
-          <input
-            ref={this.inputRef}
-            className="Input__input"
-            placeholder={placeholder}
-            onInput={this.handleInput}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            onKeyDown={this.handleKeyDown}
-            maxLength={maxLength}
-            disabled={disabled}
-          />
-        )}
+        <input
+          ref={this.inputRef}
+          className="Input__input"
+          placeholder={placeholder}
+          onInput={this.handleInput}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
+          onKeyDown={this.handleKeyDown}
+          maxLength={maxLength}
+        />
       </Box>
     );
   }

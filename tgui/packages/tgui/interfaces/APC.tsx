@@ -80,7 +80,7 @@ export const APCWindow = (props, context) => {
     powerStatusMap[data.chargingStatus] || powerStatusMap[0];
   const adjustedCellChange = data.powerCellStatus / 100;
   return (
-    <Window width={475} height={395} theme="hephaestus">
+    <Window width={475} height={400} theme="hephaestus">
       <Window.Content scrollable>
         <Stack fill vertical>
           <NoticeBox>

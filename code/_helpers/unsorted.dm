@@ -951,11 +951,7 @@ GLOBAL_LIST_INIT(duplicate_object_disallowed_vars, list(
 
 /proc/dir_to_cardinal(dir)
 	if(dir & (dir - 1)) // diagonal
-		switch(dir)
-			if(SOUTHEAST, NORTHEAST)
-				return EAST
-			if(SOUTHWEST, NORTHWEST)
-				return WEST
+		return dir & ~(dir & dir - 1)
 	return dir
 
 /*

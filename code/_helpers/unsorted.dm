@@ -949,6 +949,15 @@ GLOBAL_LIST_INIT(duplicate_object_disallowed_vars, list(
 		if(NORTHWEST)
 			return SOUTHEAST
 
+/proc/dir_to_cardinal(dir)
+	if(dir & (dir - 1)) // diagonal
+		switch(dir)
+			if(SOUTHEAST, NORTHEAST)
+				return EAST
+			if(SOUTHWEST, NORTHWEST)
+				return WEST
+	return dir
+
 /*
 Checks if that loc and dir has a item on the wall
 */

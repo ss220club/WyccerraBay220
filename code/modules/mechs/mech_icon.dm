@@ -81,7 +81,7 @@
 			draw_pilot.appearance_flags = KEEP_TOGETHER
 			if(body && i <= LAZYLEN(body.pilot_positions))
 				var/list/offset_values = body.pilot_positions[i]
-				var/list/directional_offset_values = offset_values["[dir]"]
+				var/list/directional_offset_values = offset_values["[dir_to_cardinal(dir)]"]
 				draw_pilot.pixel_x = pilot.default_pixel_x + directional_offset_values["x"]
 				draw_pilot.pixel_y = pilot.default_pixel_y + directional_offset_values["y"]
 				draw_pilot.pixel_z = 0
@@ -91,7 +91,7 @@
 			//Masks are 48x48 and pilots 32x32 (in theory at least) so some math is required for centering
 			var/diff_x = 8 - draw_pilot.pixel_x
 			var/diff_y = 8 - draw_pilot.pixel_y
-			draw_pilot.filters = filter(type = "alpha", icon = icon(body.on_mech_icon, "[body.icon_state]_pilot_mask[hatch_closed ? "" : "_open"]", dir), x = diff_x, y = diff_y)
+			draw_pilot.filters = filter(type = "alpha", icon = icon(body.on_mech_icon, "[body.icon_state]_pilot_mask[hatch_closed ? "" : "_open"]", dir_to_cardinal(dir)), x = diff_x, y = diff_y)
 
 			LAZYADD(pilot_overlays, draw_pilot)
 		if(update_overlays && LAZYLEN(pilot_overlays))

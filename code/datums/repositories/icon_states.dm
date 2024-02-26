@@ -66,7 +66,7 @@ GLOBAL_DATUM_INIT(icon_states_repository, /repository/icon_states, new)
 /*
  * Private
  *
- * Tries to find cache of icon states in `icon`. If none found - new one generated.
+ * Tries to find cache of icon states in `icon`. If none found - new one is generated.
  *
  ** Returns: cached set of icon states for passed icon.
  */

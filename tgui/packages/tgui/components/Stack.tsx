@@ -16,18 +16,20 @@ import {
 } from './Flex';
 
 type StackProps = FlexProps & {
-  vertical?: boolean;
   fill?: boolean;
+  vertical?: boolean;
+  zebra?: boolean;
 };
 
 export const Stack = (props: StackProps) => {
-  const { className, vertical, fill, ...rest } = props;
+  const { className, fill, vertical, zebra, ...rest } = props;
   return (
     <div
       className={classes([
         'Stack',
         fill && 'Stack--fill',
         vertical ? 'Stack--vertical' : 'Stack--horizontal',
+        zebra && 'Stack--zebra',
         className,
         computeFlexClassName(props),
       ])}

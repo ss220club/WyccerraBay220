@@ -17,7 +17,8 @@
 /obj/machinery/fabricator/tgui_data(mob/user)
 	var/list/data = list()
 
-	data["category"] =   show_category
+	data["category"] = show_category
+	data["categories"] = SSfabrication.get_categories(fabricator_class)
 	data["functional"] = is_functioning()
 
 	if(is_functioning())
@@ -95,11 +96,8 @@
 		return
 	. = TRUE
 	switch(action)
-		if(change_category)
-			var/choice = input("Which category do you wish to display?") as null|anything in SSfabrication.get_categories(fabricator_class)|"All"
-			if(!choice || !CanUseTopic(user, state))
-				return FALSE
-			show_category = choice
+		if("change_category")
+			show_category = params["category"]
 			return TRUE
 		if("make")
 			try_queue_build(locate(params["make"]), text2num(params["multiplier"]))
@@ -112,14 +110,12 @@
 			return TRUE
 
 /obj/machinery/fabricator/proc/try_cancel_build(datum/fabricator_build_order/order)
-	if(!istype(order) && !currently_building = order && !is_functioning())
-		return
-	if(!order in queued_orders)
-		return
-	for(var/mat in order.earmarked_materials)
-		stored_material[mat] = min(stored_material[mat] + (order.earmarked_materials[mat] * 0.9), storage_capacity[mat])
-	queued_orders -= order
-	qdel(order)
+	if(istype(order) && currently_building != order && is_functioning())
+		if(order in queued_orders)
+			for(var/mat in order.earmarked_materials)
+				stored_material[mat] = min(stored_material[mat] + (order.earmarked_materials[mat] * 0.9), storage_capacity[mat])
+			queued_orders -= order
+		qdel(order)
 
 /obj/machinery/fabricator/proc/try_dump_material(mat_name)
 	for(var/mat_path in stored_substances_to_names)

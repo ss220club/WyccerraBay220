@@ -22,7 +22,7 @@
 		author = _author
 
 /obj/decal/writing/Initialize()
-	var/list/random_icon_states = icon_states(icon)
+	var/list/random_icon_states = ICON_STATES(icon)
 	for(var/obj/decal/writing/W in loc)
 		random_icon_states.Remove(W.icon_state)
 	if(length(random_icon_states))

@@ -253,8 +253,6 @@ var/global/list/ai_verbs_default = list(
 	var/lines = splittext(file, "\n")
 
 	var/custom_index = 1
-	var/custom_icon_states = icon_states(CUSTOM_ITEM_SYNTH)
-
 	for(var/line in lines)
 	// split & clean up
 		var/list/Entry = splittext(line, ":")
@@ -270,11 +268,11 @@ var/global/list/ai_verbs_default = list(
 			var/alive_icon_state = "[Entry[3]]-ai"
 			var/dead_icon_state = "[Entry[3]]-ai-crash"
 
-			if(!(alive_icon_state in custom_icon_states))
+			if(!ICON_HAS_STATE(CUSTOM_ITEM_SYNTH, alive_icon_state))
 				to_chat(src, SPAN_WARNING("Custom display entry found but the icon state '[alive_icon_state]' is missing!"))
 				continue
 
-			if(!(dead_icon_state in custom_icon_states))
+			if(!ICON_HAS_STATE(CUSTOM_ITEM_SYNTH, dead_icon_state))
 				dead_icon_state = ""
 
 			selected_sprite = new/singleton/ai_icon("Custom Icon [custom_index++]", alive_icon_state, dead_icon_state, COLOR_WHITE, CUSTOM_ITEM_SYNTH)

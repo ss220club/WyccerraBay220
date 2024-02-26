@@ -818,6 +818,8 @@ BLIND     // can't see anything
 ///////////////////////////////////////////////////////////////////////
 //Under clothing
 /obj/item/clothing/under
+	abstract_type = /obj/item/clothing/under
+
 	icon = 'icons/obj/clothing/obj_under.dmi'
 	item_icons = list(
 		slot_l_hand_str = 'icons/mob/onmob/items/lefthand_uniforms.dmi',
@@ -873,6 +875,11 @@ BLIND     // can't see anything
 	worn_state = icon_state
 	update_rolldown_status()
 
+/obj/item/clothing/under/equipped(mob/user)
+	. = ..()
+	update_rolldown_status()
+	update_rollsleeves_status()
+
 /obj/item/clothing/under/proc/get_gender_suffix(suffix = "_s")
 	. = suffix
 	var/mob/living/carbon/human/H
@@ -891,7 +898,7 @@ BLIND     // can't see anything
 	else
 		. = icon_state
 	if(!findtext(.,"_s", -2)) // If we don't already have our suffix
-		if((icon_state + "_f_s") in icon_states(GLOB.default_onmob_icons[slot_w_uniform_str]))
+		if(ICON_HAS_STATE(GLOB.default_onmob_icons[slot_w_uniform_str], icon_state + "_f_s"))
 			. +=  get_gender_suffix()
 		else
 			. += "_s"
@@ -919,8 +926,8 @@ BLIND     // can't see anything
 		under_icon = GLOB.default_onmob_icons[slot_w_uniform_str]
 
 	// The _s is because the icon update procs append it.
-	if(("[worn_state]_d_s") in icon_states(under_icon))
-		if(rolled_down != UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED)
+	if(ICON_HAS_STATE(under_icon, "[worn_state]_d_s"))
+		if(rolled_down == UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED)
 			rolled_down = UNDER_ROLLDOWN_STATUS_UNROLLED
 	else
 		rolled_down = UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED
@@ -947,8 +954,8 @@ BLIND     // can't see anything
 		under_icon = GLOB.default_onmob_icons[slot_w_uniform_str]
 
 	// The _s is because the icon update procs append it.
-	if(("[worn_state]_r_s") in icon_states(under_icon))
-		if(rolled_sleeves != SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED)
+	if(ICON_HAS_STATE(under_icon, "[worn_state]_r_s"))
+		if(rolled_sleeves == SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED)
 			rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_UNROLLED
 	else
 		rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED
@@ -1037,7 +1044,7 @@ BLIND     // can't see anything
 	set category = "Object"
 	set src in usr
 	if(!isliving(usr))
-	 	return
+		return
 
 	if(usr.stat)
 		return

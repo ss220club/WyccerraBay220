@@ -83,7 +83,7 @@
 	generic_filth = TRUE
 
 /obj/decal/cleanable/vomit/New()
-	random_icon_states = icon_states(icon)
+	random_icon_states = ICON_STATES(icon)
 	..()
 	atom_flags |= ATOM_FLAG_OPEN_CONTAINER
 	create_reagents(30, src)

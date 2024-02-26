@@ -25,9 +25,6 @@
 		if(isnull(decals[thing]))
 			decals[thing] = color
 
-	// Create a list of valid icon states for decals
-	var/list/icon_states = icon_states(decal_icon)
-
 	// Declare storage vars for icons.
 	var/icon/open_icon
 	var/icon/closed_emagged_icon
@@ -45,10 +42,12 @@
 	if(decal_icon)
 		for(var/thing in decals)
 			var/icon/this_decal_icon
-			if (icon_states.Find("[thing]_open"))
+			if (ICON_HAS_STATE(decal_icon, "[thing]_open"))
 				this_decal_icon = icon(decal_icon, "[thing]_open")
-			else if (icon_states.Find(thing))
+
+			else if(ICON_HAS_STATE(decal_icon, thing))
 				this_decal_icon = icon(decal_icon, thing)
+
 			if(this_decal_icon)
 				this_decal_icon.Blend(decals[thing], BLEND_ADD)
 				open_icon.Blend(this_decal_icon, ICON_OVERLAY)
@@ -62,10 +61,12 @@
 	if(decal_icon)
 		for(var/thing in decals)
 			var/icon/this_decal_icon
-			if (icon_states.Find("[thing]_closed"))
+			if(ICON_HAS_STATE(decal_icon, "[thing]_closed"))
 				this_decal_icon = icon(decal_icon, "[thing]_closed")
-			else if (icon_states.Find(thing))
+
+			else if(ICON_HAS_STATE(decal_icon, thing))
 				this_decal_icon = icon(decal_icon, thing)
+
 			if(this_decal_icon)
 				this_decal_icon.Blend(decals[thing], BLEND_ADD)
 				closed_emagged_icon.Blend(this_decal_icon, ICON_OVERLAY)

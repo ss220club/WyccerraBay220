@@ -72,7 +72,7 @@
 			I.color = reinf_color
 			AddOverlays(I)
 		else
-			if("[material.wall_icon_reinf]0" in icon_states('icons/turf/wall_masks.dmi'))
+			if(ICON_HAS_STATE('icons/turf/wall_masks.dmi', "[material.wall_icon_reinf]0"))
 				// Directional icon
 				for(var/i = 1 to 4)
 					I = image('icons/turf/wall_masks.dmi', "[material.wall_icon_reinf][wall_connections[i]]", dir = SHIFTL(1, i - 1))

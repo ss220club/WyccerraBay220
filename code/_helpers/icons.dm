@@ -444,8 +444,8 @@ The _flatIcons list is a cache for generated icon files.
 	else
 		curstate = defstate
 
-	if(!noIcon && !(curstate in icon_states(curicon)))
-		if("" in icon_states(curicon))
+	if(!noIcon && !ICON_HAS_STATE(curicon, curstate))
+		if(ICON_HAS_STATE(curicon, ""))
 			curstate = ""
 		else
 			noIcon = TRUE // Do not render this object.

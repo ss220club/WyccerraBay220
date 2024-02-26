@@ -843,7 +843,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	if(slot == slot_r_hand_str || slot == slot_l_hand_str)
 		return 0
 
-	if(icon_state in icon_states(sprite_sheets[bodytype]))
+	if(ICON_HAS_STATE(sprite_sheets[bodytype], icon_state))
 		return 1
 
 	return (slot != slot_wear_suit_str && slot != slot_head_str)

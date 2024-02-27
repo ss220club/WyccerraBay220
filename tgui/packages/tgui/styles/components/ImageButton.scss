@@ -1,0 +1,101 @@
+/**
+ * Copyright (c) 2024 Aylong (https://github.com/AyIong)
+ * SPDX-License-Identifier: MIT
+ */
+
+@use '../base.scss';
+@use '../colors.scss';
+@use '../functions.scss' as *;
+
+$color-default: colors.bg(base.$color-bg-section) !default;
+$color-disabled: #4d1717 !default;
+$color-selected: colors.bg(colors.$green) !default;
+$bg-map: colors.$bg-map !default;
+
+@mixin button-color($color) {
+  $luminance: luminance($color);
+
+  transition:
+    color 100ms,
+    background-color 100ms;
+  background-color: rgba($color, 0.15);
+  border: base.em(1px) solid rgba(lighten($color, 50%), 0.2);
+
+  &:focus {
+    transition:
+      color 250ms,
+      background-color 250ms;
+  }
+
+  &:hover {
+    background-color: rgba(lighten($color, 25%), 0.25);
+  }
+}
+
+.SpriteButton {
+  display: inline-block;
+}
+
+@each $color-name, $color-value in $bg-map {
+  .SpriteButton--color--#{$color-name} {
+    @include button-color($color-value);
+  }
+}
+
+.SpriteButton--color--default {
+  @include button-color(rgba(lighten($color-default, 100%), 0.2));
+}
+
+.SpriteButton--disabled {
+  background-color: rgba($color-disabled, 0.25) !important;
+  border: base.em(1px) solid rgba(lighten($color-disabled, 100%), 0.15);
+}
+
+.SpriteButton--selected {
+  @include button-color($color-selected);
+  border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
+}
+
+.SpriteButton__content {
+  height: 1.6em;
+  padding-top: 2px;
+  border: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.SpriteButton__content--ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin content-color($color) {
+  $luminance: luminance($color);
+  $text-color: if($luminance > 0.4, rgba(0, 0, 0, 1), rgba(255, 255, 255, 1));
+
+  color: $text-color;
+  background-color: darken($color, 2.5%);
+  border-top: base.em(1px) solid (rgba(lighten($color, 33%), 1));
+}
+
+@each $color-name, $color-value in $bg-map {
+  .SpriteButton__content--color--#{$color-name} {
+    @include content-color(rgba($color-value, 1));
+  }
+}
+
+.SpriteButton__content--color--default {
+  @include content-color(rgba(lighten($color-default, 80%), 1));
+}
+
+.SpriteButton__content--disabled {
+  background-color: $color-disabled !important;
+  color: rgba(200, 200, 200, 0.75);
+  border-top: base.em(1px) solid rgba(lighten($color-disabled, 100%), 0.5);
+}
+
+.SpriteButton__content--selected {
+  background-color: $color-selected !important;
+  border-top: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.5);
+}

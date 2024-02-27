@@ -12,7 +12,7 @@ SUBSYSTEM_DEF(overlays)
 	name = "Overlays"
 	flags = SS_TICKER
 	wait = 1 // ticks
-	priority = SS_PRIORITY_OVERLAYS
+	priority = FIRE_PRIORITY_OVERLAYS
 	init_order = SS_INIT_OVERLAYS
 
 	/// The queue of atoms that need under/overlay updates.

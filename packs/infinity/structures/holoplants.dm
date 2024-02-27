@@ -27,7 +27,7 @@ GLOBAL_LIST_INIT(recomended_holoplants_colors, list(COLOR_PALE_RED_GRAY,COLOR_BL
 /obj/structure/holoplant/proc/parse_icon()
 	possible_states = list()
 	emagged_states = list()
-	var/list/states = icon_states(icon)
+	var/list/states = ICON_STATES(icon)
 	for(var/i in states)
 		var/list/state_splittext = splittext(i, "-")
 		if(length(state_splittext) > 1)

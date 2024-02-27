@@ -47,7 +47,7 @@ var/global/list/mining_floors = list()
 
 /turf/simulated/mineral/Destroy()
 	LAZYREMOVEASSOC(mining_walls, "[z]", src)
-	GLOB.xeno_artifact_turfs -= src
+	SSxenoarch.xeno_artifact_turfs -= src
 	return ..()
 
 /turf/simulated/mineral/can_build_cable()

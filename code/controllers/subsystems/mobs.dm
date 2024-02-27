@@ -1,6 +1,6 @@
 SUBSYSTEM_DEF(mobs)
 	name = "Mobs"
-	priority = SS_PRIORITY_MOB
+	priority = FIRE_PRIORITY_MOB
 	flags = SS_NO_INIT | SS_KEEP_TIMING
 	wait = 2 SECONDS
 	/// List of all mobs currently present in world

@@ -1,6 +1,6 @@
 SUBSYSTEM_DEF(chemistry)
 	name = "Chemistry"
-	priority = SS_PRIORITY_CHEMISTRY
+	priority = FIRE_PRIORITY_CHEMISTRY
 	init_order = SS_INIT_CHEMISTRY
 	wait = 0.5 SECONDS
 	var/static/list/reactions_by_id = list()

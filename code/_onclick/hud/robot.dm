@@ -198,6 +198,7 @@ var/global/obj/screen/robot_inventory
 					A.screen_loc = "CENTER[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:7"
 				else
 					A.screen_loc = "CENTER+[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:7"
+				A.mouse_opacity = MOUSE_OPACITY_PRIORITY
 				A.hud_layerise()
 
 				x++
@@ -212,5 +213,6 @@ var/global/obj/screen/robot_inventory
 			if (!r.IsHolding(A))
 				//Module is not currently active
 				r.client.screen -= A
+				A.mouse_opacity = initial(A.mouse_opacity)
 		r.shown_robot_modules = 0
 		r.client.screen -= r.robot_modules_background

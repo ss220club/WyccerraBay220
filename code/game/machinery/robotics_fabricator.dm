@@ -26,7 +26,11 @@
 	var/progress = 0
 	var/busy = 0
 
+	/// Set of all categories available in mechfab as: category_name => TRUE. For fast lookup
+	var/list/categories_lookup = list()
+	/// Cached list of all categories available in mechfab. Currently used only for UI
 	var/list/categories = list()
+	/// Currently set category
 	var/category = null
 	var/manufacturer = null
 	var/sync_message = ""
@@ -115,14 +119,21 @@
 		return
 
 	if(href_list["build"])
-		add_to_queue(text2num(href_list["build"]))
+		if(add_to_queue(href_list["build"]))
+			return TOPIC_REFRESH
+
+		return TOPIC_NOACTION
 
 	if(href_list["remove"])
 		remove_from_queue(text2num(href_list["remove"]))
 
 	if(href_list["category"])
-		if(href_list["category"] in categories)
-			category = href_list["category"]
+		var/category_name = href_list["category"]
+		if(categories_lookup[category_name])
+			category = category_name
+			return TOPIC_REFRESH
+
+		return TOPIC_NOACTION
 
 	if(href_list["manufacturer"])
 		if(href_list["manufacturer"] in all_robolimbs)
@@ -202,10 +213,15 @@
 	else
 		busy = 0
 
-/obj/machinery/robotics_fabricator/proc/add_to_queue(index)
-	var/datum/design/D = files.known_designs[index]
-	queue += D
+/obj/machinery/robotics_fabricator/proc/add_to_queue(id)
+	var/datum/design/design_to_build = files.known_designs_lookup[id]
+	if(!design_to_build)
+		stack_trace("Invalid design ID passed to robotics fabricator to enque: [id]")
+		return FALSE
+
+	queue += design_to_build
 	update_busy()
+	return TRUE
 
 /obj/machinery/robotics_fabricator/proc/remove_from_queue(index)
 	if(index == 1)
@@ -248,12 +264,22 @@
 		. += D.name
 
 /obj/machinery/robotics_fabricator/proc/get_build_options()
-	. = list()
-	for(var/i = 1 to length(files.known_designs))
-		var/datum/design/D = files.known_designs[i]
-		if(!D.build_path || !(D.build_type & MECHFAB))
+	var/list/data = list()
+
+	for(var/datum/design/known_design as anything in files.known_designs)
+		if(!known_design.build_path || !(known_design.build_type & MECHFAB))
 			continue
-		. += list(list("name" = D.name, "id" = i, "category" = D.category, "resourses" = get_design_resourses(D), "time" = get_design_time(D)))
+
+		var/list/design_data = list()
+		design_data["name"] = known_design.name
+		design_data["id"] = known_design.id
+		design_data["category"] = known_design.category
+		design_data["resourses"] = get_design_resourses(known_design)
+		design_data["time"] = get_design_time(known_design)
+
+		data += list(design_data)
+
+	return data
 
 /obj/machinery/robotics_fabricator/proc/get_design_resourses(datum/design/D)
 	var/list/F = list()
@@ -269,12 +295,17 @@
 
 /obj/machinery/robotics_fabricator/proc/update_categories()
 	categories = list()
-	for(var/datum/design/D in files.known_designs)
-		if(!D.build_path || !(D.build_type & MECHFAB))
+	for(var/datum/design/known_design as anything in files.known_designs)
+		if(!known_design.build_path || !(known_design.build_type & MECHFAB))
 			continue
-		categories |= D.category
-	if(!category || !(category in categories))
-		category = categories[1]
+
+		categories_lookup[known_design.category] = TRUE
+
+	for(var/category_name in categories_lookup)
+		categories += category_name
+
+	if(!category || !(categories_lookup[category]))
+		category = categories_lookup[1]
 
 /obj/machinery/robotics_fabricator/proc/get_materials()
 	. = list()
@@ -321,13 +352,21 @@
 
 /obj/machinery/robotics_fabricator/proc/sync()
 	sync_message = "Error: no console found."
-	for(var/obj/machinery/computer/rdconsole/RDC in get_area_all_atoms(get_area(src)))
+	var/area/fabricator_area = get_area(src)
+	for(var/obj/machinery/computer/rdconsole/RDC as anything in SSmachines.get_machinery_of_type(/obj/machinery/computer/rdconsole))
 		if(!RDC.sync)
 			continue
-		for(var/datum/tech/T in RDC.files.known_tech)
-			files.AddTech2Known(T)
-		for(var/datum/design/D in RDC.files.known_designs)
-			files.AddDesign2Known(D)
-		files.RefreshResearch()
+
+		if(fabricator_area != get_area(RDC))
+			continue
+
+		for(var/datum/tech/known_tech as anything in RDC.files.known_tech)
+			files.add_tech_to_known(known_tech)
+
+		for(var/datum/design/known_design as anything in RDC.files.known_designs)
+			files.add_design_to_known(known_design)
+
+		files.refresh_research()
 		sync_message = "Sync complete."
+
 	update_categories()

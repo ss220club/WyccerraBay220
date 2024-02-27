@@ -49,7 +49,7 @@
 	name = "cult hood"
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
-	flags_inv = HIDEFACE
+	flags_inv = HIDEFACE | BLOCKHAIR
 	body_parts_covered = HEAD
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,

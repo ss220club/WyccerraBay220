@@ -78,7 +78,7 @@
 	//TODO:  Change death state to health_dead for all these icon files.  This is a stop gap.
 	if(healths)
 		healths.ClearOverlays()
-		if("health7" in icon_states(healths.icon))
+		if(ICON_HAS_STATE(healths.icon, "health7"))
 			healths.icon_state = "health7"
 		else
 			healths.icon_state = "health6"

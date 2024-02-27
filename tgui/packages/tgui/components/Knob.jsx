@@ -22,6 +22,7 @@ export const Knob = (props) => {
     format,
     maxValue,
     minValue,
+    unclamped,
     onChange,
     onDrag,
     step,
@@ -38,7 +39,6 @@ export const Knob = (props) => {
     size = 1,
     bipolar,
     children,
-    popUpPosition,
     ...rest
   } = props;
   return (
@@ -49,6 +49,7 @@ export const Knob = (props) => {
         format,
         maxValue,
         minValue,
+        unclamped,
         onChange,
         onDrag,
         step,
@@ -76,7 +77,7 @@ export const Knob = (props) => {
         const scaledDisplayValue = scale(displayValue, minValue, maxValue);
         const effectiveColor =
           color || keyOfMatchingRange(fillValue ?? value, ranges) || 'default';
-        const rotation = (scaledDisplayValue - 0.5) * 270;
+        const rotation = Math.min((scaledDisplayValue - 0.5) * 270, 225);
         return (
           <div
             className={classes([
@@ -106,14 +107,7 @@ export const Knob = (props) => {
               </div>
             </div>
             {dragging && (
-              <div
-                className={classes([
-                  'Knob__popupValue',
-                  popUpPosition && 'Knob__popupValue--' + popUpPosition,
-                ])}
-              >
-                {displayElement}
-              </div>
+              <div className="Knob__popupValue">{displayElement}</div>
             )}
             <svg
               className="Knob__ring Knob__ringTrackPivot"
@@ -128,10 +122,12 @@ export const Knob = (props) => {
               <circle
                 className="Knob__ringFill"
                 style={{
-                  'stroke-dashoffset':
+                  'stroke-dashoffset': Math.max(
                     ((bipolar ? 2.75 : 2.0) - scaledFillValue * 1.5) *
-                    Math.PI *
-                    50,
+                      Math.PI *
+                      50,
+                    0
+                  ),
                 }}
                 cx="50"
                 cy="50"

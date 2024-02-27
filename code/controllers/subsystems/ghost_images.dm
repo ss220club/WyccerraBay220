@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(ghost_images)
 	name = "Ghost Images"
 	flags = SS_NO_INIT
-	priority = SS_PRIORITY_GHOST_IMAGES
+	priority = FIRE_PRIORITY_GHOST_IMAGES
 	wait = 1
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
 

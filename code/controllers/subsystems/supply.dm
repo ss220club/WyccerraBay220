@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(supply)
 	name = "Supply"
 	wait = 20 SECONDS
-	priority = SS_PRIORITY_SUPPLY
+	priority = FIRE_PRIORITY_SUPPLY
 	//Initializes at default time
 	flags = SS_NO_TICK_CHECK
 

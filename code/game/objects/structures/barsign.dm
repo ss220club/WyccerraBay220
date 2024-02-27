@@ -7,7 +7,7 @@
 	var/cult = 0
 
 /obj/structure/sign/double/barsign/proc/get_valid_states(initial=1)
-	. = icon_states(icon)
+	. = ICON_STATES(icon)
 	. -= "on"
 	. -= "narsiebistro"
 	. -= "empty"

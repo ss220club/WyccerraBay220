@@ -1,6 +1,6 @@
 import { BooleanLike } from 'common/react';
 import { useBackend } from '../backend';
-import { Button, LabeledList, Section, Box, ProgressBar } from '../components';
+import { Button, LabeledList, Section, ProgressBar } from '../components';
 import { Window } from '../layouts';
 
 type Data = {
@@ -18,29 +18,26 @@ export const DisposalBin = (props, context) => {
   let stateText;
   if (mode === 2) {
     stateColor = 'good';
-    stateText = 'Ready';
+    stateText = 'Готово';
   } else if (mode <= 0) {
     stateColor = 'bad';
-    stateText = 'N/A';
+    stateText = 'Выключено';
   } else if (mode === 1) {
     stateColor = 'average';
-    stateText = 'Pressurizing';
+    stateText = 'Нагнетание';
   } else {
     stateColor = 'average';
-    stateText = 'Idle';
+    stateText = 'Простой';
   }
   return (
-    <Window width={300} height={250}>
+    <Window width={215} height={255}>
       <Window.Content>
-        <Section>
-          <Box bold m={1}>
-            Status
-          </Box>
+        <Section title="Статус">
           <LabeledList>
-            <LabeledList.Item label="State" color={stateColor}>
+            <LabeledList.Item label="Состояние" color={stateColor}>
               {stateText}
             </LabeledList.Item>
-            <LabeledList.Item label="Pressure">
+            <LabeledList.Item label="Давление">
               <ProgressBar
                 ranges={{
                   bad: [-Infinity, 0],
@@ -53,47 +50,35 @@ export const DisposalBin = (props, context) => {
               />
             </LabeledList.Item>
           </LabeledList>
-          <Box bold m={1}>
-            Controls
-          </Box>
+        </Section>
+        <Section title="Управление">
           <LabeledList>
-            <LabeledList.Item label="Handle">
+            <LabeledList.Item label="Спуск">
               <Button
-                icon="toggle-off"
+                width={8}
+                icon={flushing ? 'toggle-on' : 'toggle-off'}
                 disabled={isAI || panel_open}
-                content="Disengaged"
-                selected={flushing ? null : 'selected'}
-                onClick={() => act('disengageHandle')}
-              />
-              <Button
-                icon="toggle-on"
-                disabled={isAI || panel_open}
-                content="Engaged"
-                selected={flushing ? 'selected' : null}
-                onClick={() => act('engageHandle')}
+                content={flushing ? 'Включен' : 'Отключен'}
+                color={flushing ? 'good' : 'bad'}
+                onClick={() => act('flush')}
               />
             </LabeledList.Item>
-            <LabeledList.Item label="Power">
+            <LabeledList.Item label="Питание">
               <Button
-                icon="toggle-off"
+                width={8}
+                icon={mode ? 'toggle-on' : 'toggle-off'}
                 disabled={mode === -1}
-                content="Off"
-                selected={mode ? null : 'selected'}
-                onClick={() => act('pumpOff')}
-              />
-              <Button
-                icon="toggle-on"
-                disabled={mode === -1}
-                content="On"
-                selected={mode ? 'selected' : null}
-                onClick={() => act('pumpOn')}
+                content={mode ? 'Включено' : 'Отключено'}
+                color={mode ? 'good' : 'bad'}
+                onClick={() => act('mode')}
               />
             </LabeledList.Item>
-            <LabeledList.Item label="Eject">
+            <LabeledList.Item label="Содержимое">
               <Button
+                width={8}
                 icon="sign-out-alt"
                 disabled={isAI}
-                content="Eject Contents"
+                content="Извлечь"
                 onClick={() => act('eject')}
               />
             </LabeledList.Item>

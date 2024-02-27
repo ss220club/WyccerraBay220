@@ -10,11 +10,19 @@
 	/// A lazy list of vent pumps currently in the area
 	var/list/obj/machinery/atmospherics/unary/vent_pump/vent_pumps
 	/// Lazy list of all turfs in area. Updated when new turf created or removed from the area.
-	/// Special case is applied for shuttles, where turfs should move with their area.
-	var/list/turf/contained_turfs
+	/// For faster lookup and cleanup, turfs are grouped by z level.
+	/// Contains list of lists, where index represents z-level number.
+	var/list/turf/contained_turfs_by_z
+	/// Due to size of some area turfs lists, it's quite expensive to clean them up right away.
+	/// So we will do it in subsystem, or right away, if area turfs requested.
+	/// Has the same structure as `contained_turfs_by_z`.
+	var/list/turf/turfs_to_uncontain_by_z
 
 /area/New()
 	LAZYADD(GLOB.areas,	src)
+	LAZYINITLIST(contained_turfs_by_z)
+	LAZYINITLIST(turfs_to_uncontain_by_z)
+
 	icon_state = ""
 	uid = ++global_uid
 
@@ -363,10 +371,11 @@
 	return 0
 
 /// Returns List (axis => Integer). The width and height, in tiles, of the area, indexed by axis. Axis is `"x"` or `"y"`.
+/// The `z` of the lowest z-level area located at is used
 /area/proc/get_dimensions()
 	var/list/res = list("x"=1,"y"=1)
 	var/list/min = list("x"=world.maxx,"y"=world.maxy)
-	for(var/turf/T as anything in contained_turfs)
+	for(var/turf/T as anything in get_turfs_from_z(z))
 		res["x"] = max(T.x, res["x"])
 		res["y"] = max(T.y, res["y"])
 		min["x"] = min(T.x, min["x"])
@@ -377,7 +386,15 @@
 
 /// Returns boolean. Whether or not there are any turfs (`/turf`) in src.
 /area/proc/has_turfs()
-	return length(contained_turfs)
+	for(var/z_level in 1 to length(contained_turfs_by_z))
+		if(z_level > length(turfs_to_uncontain_by_z))
+			if(length(contained_turfs_by_z[z_level]))
+				return TRUE
+
+		else if(length(contained_turfs_by_z[z_level]) - length(turfs_to_uncontain_by_z[z_level]) > 0)
+			return TRUE
+
+	return FALSE
 
 /// Returns boolean. Whether or not the area can be modified by player actions.
 /area/proc/can_modify_area()
@@ -388,13 +405,61 @@
 /// Adds new turf to area turf cache
 /area/proc/add_turf_to_cache(turf/turf_to_add)
 	if(!istype(turf_to_add))
-		CRASH("Wrong type supplied to `/area/proc/add_turf`: `[turf_to_add?.type]`")
+		CRASH("Invalid turf `[log_info_line(turf_to_add)]` supplied to [log_info_line(src)]: ")
 
-	LAZYADD(contained_turfs, turf_to_add)
+	ASSERT_LIST_LEN(contained_turfs_by_z, turf_to_add.z, list())
+	contained_turfs_by_z[turf_to_add.z] += turf_to_add
 
 /// Removes turf from area turf cache
 /area/proc/remove_turf_from_cache(turf/turf_to_remove)
 	if(!istype(turf_to_remove))
-		CRASH("Wrong type supplied to `/area/proc/add_turf`: `[turf_to_remove?.type]`")
+		CRASH("Invalid turf `[log_info_line(turf_to_remove)]` supplied to [log_info_line(src)]: ")
 
-	LAZYREMOVE(contained_turfs, turf_to_remove)
+	var/cached_z_levels = length(contained_turfs_by_z)
+	if(turf_to_remove.z > cached_z_levels)
+		return
+
+	ASSERT_LIST_LEN(turfs_to_uncontain_by_z, turf_to_remove.z, list())
+	turfs_to_uncontain_by_z[turf_to_remove.z] += turf_to_remove
+
+/// Returns all area turfs from specific z-level
+/area/proc/get_turfs_from_z(z_level)
+	if(!canonize_cached_turfs_by_z(z_level))
+		return list()
+
+	return contained_turfs_by_z[z_level]
+
+/// Returs list of all turfs located at this area
+/area/proc/get_turfs_from_all_z()
+	canonize_cached_turfs_for_all_z()
+
+	var/list/contained_turfs = list()
+	for(var/z_level in contained_turfs_by_z)
+		contained_turfs += contained_turfs_by_z[z_level]
+
+	return contained_turfs
+
+/// Makes sure that turfs located at area are up to date for all z levels
+/area/proc/canonize_cached_turfs_for_all_z()
+	PRIVATE_PROC(TRUE)
+
+	for(var/z_level in 1 to length(turfs_to_uncontain_by_z))
+		if(!canonize_cached_turfs_by_z(z_level))
+			LIST_RESIZE(turfs_to_uncontain_by_z, z_level - 1)
+			break
+
+/// Makes sure that turfs located at area are up to date for specific z level
+/// Returns FALSE if passed z_level doesn't require canonization, TRUE if cache is valid
+/area/proc/canonize_cached_turfs_by_z(z_level)
+	PRIVATE_PROC(TRUE)
+
+	if(z_level > length(contained_turfs_by_z) || z_level > length(turfs_to_uncontain_by_z))
+		return FALSE
+
+	var/list/turfs_to_uncontain = turfs_to_uncontain_by_z[z_level]
+	if(!length(turfs_to_uncontain))
+		return TRUE
+
+	contained_turfs_by_z[z_level] -= turfs_to_uncontain
+	turfs_to_uncontain.Cut()
+	return TRUE

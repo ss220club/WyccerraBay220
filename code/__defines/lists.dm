@@ -80,3 +80,16 @@
 
 /// Passed into BINARY_INSERT to compare values
 #define COMPARE_VALUE __BIN_LIST[__BIN_LIST[__BIN_MID]]
+
+/// Asserts that passed list has at least len of `LEN`.
+/// If the list has len less than `LEN`, it's len is changed to `LEN` and is prefilled with `FILLER`
+#define ASSERT_LIST_LEN(LIST, LEN, FILLER)\
+	if(!islist(LIST)) {\
+		stack_trace("Attempted to assert len of non list entity: [LIST]")\
+	} else if(length(LIST) < LEN) {\
+		var/__OLD_LIST_LEN = length(LIST);\
+		LIST_RESIZE(LIST, LEN);\
+		for(var/__INDEX in __OLD_LIST_LEN + 1 to LEN) {\
+			LIST[__INDEX] = FILLER\
+		}\
+	}\

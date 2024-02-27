@@ -354,7 +354,7 @@
 
 /obj/rune/defile/cast(mob/living/user)
 	speak_incantation(user, "Ia! Ia! Zasan therium viortia!")
-	for(var/turf/T in range(1, src))
+	for(var/turf/T as anything in RANGE_TURFS(src, 1))
 		if(T.holy)
 			T.holy = 0
 		else
@@ -632,7 +632,7 @@
 	else
 		for(var/mob/living/M in cultists)
 			M.say("Ia! Ia! Zasan therium viortia! Razan gilamrua kioha!")
-		for(var/turf/T in range(5, src))
+		for(var/turf/T as anything in RANGE_TURFS(src, 5))
 			if(T.holy)
 				T.holy = 0
 			else
@@ -814,7 +814,7 @@
 			if(prob(5))
 				M.say(pick("Hakkrutju gopoenjim.", "Nherasai pivroiashan.", "Firjji prhiv mazenhor.", "Tanah eh wakantahe.", "Obliyae na oraie.", "Miyf hon vnor'c.", "Wakabai hij fen juswix."))
 
-		for(var/turf/T in range(min(the_end_comes, 15)))
+		for(var/turf/T as anything in RANGE_TURFS(src, min(the_end_comes, 15)))
 			if(prob(the_end_comes / 3))
 				T.cultify()
 		sleep(10)

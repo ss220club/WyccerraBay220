@@ -18,14 +18,15 @@
 	if(!A)
 		return list()
 
-	if(!LAZYLEN(A.contained_turfs))
+	if(!A.has_turfs())
 		return list()
 
+	var/list/all_area_turfs = A.get_turfs_from_all_z()
 	if(!length(predicates))
-		return LAZYCOPY(A.contained_turfs)
+		return all_area_turfs
 
 	var/list/area_turfs = list()
-	for(var/turf/T as anything in A.contained_turfs)
+	for(var/turf/T as anything in all_area_turfs)
 		if(all_predicates_true(list(T), predicates))
 			area_turfs += T
 
@@ -60,10 +61,18 @@
 	A = istype(A) ? A.type : A
 	if(!ispath(A))
 		return
+
 	for(var/sub_area_type in typesof(A))
 		var/area/sub_area = locate(sub_area_type)
-		for(var/turf/T in sub_area.contained_turfs)
-			if(!predicates || all_predicates_true(list(T), predicates))
+		if(!sub_area.has_turfs())
+			continue
+
+		var/list/all_area_turfs = sub_area.get_turfs_from_all_z()
+		if(!length(predicates))
+			. += all_area_turfs
+
+		for(var/turf/T as anything in all_area_turfs)
+			if(all_predicates_true(list(T), predicates))
 				. += T
 
 /proc/group_areas_by_name(list/predicates)

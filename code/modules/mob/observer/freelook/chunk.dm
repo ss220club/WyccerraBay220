@@ -63,7 +63,8 @@
 	src.y = y
 	src.z = z
 
-	for(var/turf/t in range(10, locate(x + 8, y + 8, z)))
+	for(var/turf/t as anything in RANGE_TURFS(locate(x + 8, y + 8, z), 10))
+		/// Todo: remove this unnecessary check
 		if(t.x >= x && t.y >= y && t.x < x + 16 && t.y < y + 16)
 			turfs[t] = t
 

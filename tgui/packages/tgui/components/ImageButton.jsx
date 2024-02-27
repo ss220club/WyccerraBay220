@@ -33,12 +33,12 @@ export const ImageButton = (props) => {
   let buttonContent = (
     <div
       className={classes([
-        'SpriteButton',
-        selected && 'SpriteButton--selected',
-        disabled && 'SpriteButton--disabled',
+        'ImageButton',
+        selected && 'ImageButton--selected',
+        disabled && 'ImageButton--disabled',
         color && typeof color === 'string'
-          ? 'SpriteButton--color--' + color
-          : 'SpriteButton--color--default',
+          ? 'ImageButton--color--' + color
+          : 'ImageButton--color--default',
         className,
         computeBoxClassName(rest),
       ])}
@@ -55,13 +55,13 @@ export const ImageButton = (props) => {
       {content && (
         <div
           className={classes([
-            'SpriteButton__content',
-            ellipsis && 'SpriteButton__content--ellipsis',
-            selected && 'SpriteButton__content--selected',
-            disabled && 'SpriteButton__content--disabled',
+            'ImageButton__content',
+            ellipsis && 'ImageButton__content--ellipsis',
+            selected && 'ImageButton__content--selected',
+            disabled && 'ImageButton__content--disabled',
             color && typeof color === 'string'
-              ? 'SpriteButton__content--color--' + color
-              : 'SpriteButton__content--color--default',
+              ? 'ImageButton__content--color--' + color
+              : 'ImageButton__content--color--default',
             className,
             computeBoxClassName(rest),
           ])}

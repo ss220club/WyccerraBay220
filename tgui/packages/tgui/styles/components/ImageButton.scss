@@ -32,31 +32,31 @@ $bg-map: colors.$bg-map !default;
   }
 }
 
-.SpriteButton {
+.ImageButton {
   display: inline-block;
 }
 
 @each $color-name, $color-value in $bg-map {
-  .SpriteButton--color--#{$color-name} {
+  .ImageButton--color--#{$color-name} {
     @include button-color($color-value);
   }
 }
 
-.SpriteButton--color--default {
+.ImageButton--color--default {
   @include button-color(rgba(lighten($color-default, 100%), 0.2));
 }
 
-.SpriteButton--disabled {
+.ImageButton--disabled {
   background-color: rgba($color-disabled, 0.25) !important;
   border: base.em(1px) solid rgba(lighten($color-disabled, 100%), 0.15);
 }
 
-.SpriteButton--selected {
+.ImageButton--selected {
   @include button-color($color-selected);
   border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
 }
 
-.SpriteButton__content {
+.ImageButton__content {
   height: 1.6em;
   padding-top: 2px;
   border: 0;
@@ -65,7 +65,7 @@ $bg-map: colors.$bg-map !default;
   font-weight: bold;
 }
 
-.SpriteButton__content--ellipsis {
+.ImageButton__content--ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -80,22 +80,22 @@ $bg-map: colors.$bg-map !default;
 }
 
 @each $color-name, $color-value in $bg-map {
-  .SpriteButton__content--color--#{$color-name} {
+  .ImageButton__content--color--#{$color-name} {
     @include content-color(rgba($color-value, 1));
   }
 }
 
-.SpriteButton__content--color--default {
+.ImageButton__content--color--default {
   @include content-color(rgba(lighten($color-default, 80%), 1));
 }
 
-.SpriteButton__content--disabled {
+.ImageButton__content--disabled {
   background-color: $color-disabled !important;
   color: rgba(200, 200, 200, 0.75);
   border-top: base.em(1px) solid rgba(lighten($color-disabled, 100%), 0.5);
 }
 
-.SpriteButton__content--selected {
+.ImageButton__content--selected {
   background-color: $color-selected !important;
   border-top: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.5);
 }

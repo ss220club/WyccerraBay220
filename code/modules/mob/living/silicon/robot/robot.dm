@@ -219,8 +219,7 @@
 		//Custom_sprite check and entry
 
 		if (custom_sprite)
-			var/list/valid_states = icon_states(CUSTOM_ITEM_SYNTH)
-			if("[ckey]-[modtype]" in valid_states)
+			if(ICON_HAS_STATE(CUSTOM_ITEM_SYNTH, "[ckey]-[modtype]"))
 				module_sprites["Custom"] = "[src.ckey]-[modtype]"
 				icon = CUSTOM_ITEM_SYNTH
 				icontype = "Custom"
@@ -874,7 +873,7 @@
 	ClearOverlays()
 	if(stat == CONSCIOUS)
 		var/eye_icon_state = "eyes-[module_sprites[icontype]]"
-		if(eye_icon_state in icon_states(icon))
+		if(ICON_HAS_STATE(icon, eye_icon_state))
 			if(!eye_overlays)
 				eye_overlays = list()
 			var/image/eye_overlay = eye_overlays[eye_icon_state]

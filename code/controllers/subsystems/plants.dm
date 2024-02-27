@@ -73,7 +73,7 @@ SUBSYSTEM_DEF(plants)
 
 
 /datum/controller/subsystem/plants/Initialize(start_uptime)
-	for (var/state in icon_states('icons/obj/flora/hydroponics_growing.dmi'))
+	for (var/state in ICON_STATES('icons/obj/flora/hydroponics_growing.dmi'))
 		var/split = findtext_char(state, "-")
 		if (!split)
 			continue
@@ -85,7 +85,7 @@ SUBSYSTEM_DEF(plants)
 		if (!plant_sprites[plant] || plant_sprites[plant] < growth_level)
 			plant_sprites[plant] = growth_level
 
-	for (var/state in icon_states('icons/obj/flora/hydroponics_products.dmi'))
+	for (var/state in ICON_STATES('icons/obj/flora/hydroponics_products.dmi'))
 		var/split = findtext_char(state, "-")
 		if (!split)
 			continue

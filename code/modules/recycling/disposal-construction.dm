@@ -93,7 +93,7 @@
 	set_dir(turn(dir, 180))
 
 /obj/structure/disposalconstruct/on_update_icon()
-	if("con[built_icon_state]" in icon_states(icon))
+	if(ICON_HAS_STATE(icon, "con[built_icon_state]"))
 		icon_state = "con[built_icon_state]"
 	else
 		icon_state = built_icon_state

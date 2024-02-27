@@ -101,14 +101,11 @@
 	var/attack_ignore_harm_check = FALSE
 
 
-/obj/item/New()
-	..()
+/obj/item/Initialize()
+	. = ..()
 	if(randpixel && (!pixel_x && !pixel_y) && isturf(loc)) //hopefully this will prevent us from messing with mapper-set pixel_x/y
 		pixel_x = rand(-randpixel, randpixel)
 		pixel_y = rand(-randpixel, randpixel)
-
-/obj/item/Initialize()
-	. = ..()
 	if(islist(armor))
 		for(var/type in armor)
 			if(armor[type]) // Don't set it if it gives no armor anyway, which is many items.
@@ -846,7 +843,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	if(slot == slot_r_hand_str || slot == slot_l_hand_str)
 		return 0
 
-	if(icon_state in icon_states(sprite_sheets[bodytype]))
+	if(ICON_HAS_STATE(sprite_sheets[bodytype], icon_state))
 		return 1
 
 	return (slot != slot_wear_suit_str && slot != slot_head_str)

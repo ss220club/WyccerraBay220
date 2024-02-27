@@ -140,7 +140,7 @@
 	if(!location)
 		location = parent
 	if(effect == SOUND_EFFECT_RADIO)
-		if(parent == speaker && !(isrobot(parent) || isAI(parent)))
+		if(listener == speaker && !issilicon(parent)) // don't hear both radio and whisper from yourself
 			return
 
 	effect = get_effect(effect)

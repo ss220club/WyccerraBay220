@@ -107,7 +107,6 @@
 
 	var/datum/browser/popup = new(usr, "spaceheater", "External Cooling Device Control Panel")
 	popup.set_content(jointext(dat, null))
-	popup.set_title_image(usr.browse_rsc_icon(src.icon, "sheater-standby"))
 	popup.open()
 
 

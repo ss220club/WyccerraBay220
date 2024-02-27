@@ -49,3 +49,10 @@
 				cur_command = null // the door will just keep trying otherwise
 				return 0
 	return ..()
+
+/obj/machinery/door/airlock/lift/CanPathingPass(obj/item/card/id/ID, to_dir, atom/movable/caller, no_id = FALSE)
+	/// Until cross Z-level pathfinding fixed.
+	if(istype(caller, /mob/living/bot))
+		return FALSE
+
+	return ..()

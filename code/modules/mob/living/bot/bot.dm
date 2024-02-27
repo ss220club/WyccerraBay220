@@ -12,6 +12,8 @@
 	skin_amount = 0
 	bone_material = null
 	bone_amount = 0
+	layer = HIDING_MOB_LAYER
+
 
 	var/obj/item/card/id/botcard = null
 	var/list/botcard_access = list()
@@ -33,6 +35,10 @@
 
 	var/wait_if_pulled = 0 // Only applies to moving to the target
 	var/will_patrol = 0 // If set to 1, will patrol, duh
+	/// Amount of patrol path searches we have already failed
+	var/patrol_path_search_failures = 0
+	/// Max amount of patrol path searches, before we turn off the patrol mode
+	var/patrol_path_search_threshold = 25
 	var/patrol_speed = 1 // How many times per tick we move when patrolling
 	var/target_speed = 2 // Ditto for chasing the target
 	var/min_target_dist = 1 // How close we try to get to the target
@@ -42,9 +48,12 @@
 
 	var/target_patience = 5
 	var/frustration = 0
-	var/max_frustration = 0
+	var/max_frustration = 5
 
 	layer = HIDING_MOB_LAYER
+
+	/// Blacklist set of navigation beacon codes
+	var/list/navigation_beacons_blacklist = list()
 
 
 /mob/living/bot/Initialize(mapload)
@@ -257,10 +266,14 @@
 		resetTarget()
 		lookForTargets()
 		if(will_patrol && !pulledby && !target)
-			if(patrol_path && length(patrol_path))
+			if(length(patrol_path))
 				for(var/i = 1 to patrol_speed)
 					sleep(20 / (patrol_speed + 1))
-					handlePatrol()
+					if(makeStep(patrol_path))
+						frustration = 0
+					else if(max_frustration)
+						frustration++
+
 				if(max_frustration && frustration > max_frustration * patrol_speed)
 					handleFrustrated(0)
 			else
@@ -287,13 +300,11 @@
 			frustration = 0
 		else if(max_frustration)
 			++frustration
-	return
 
 /mob/living/bot/proc/handleFrustrated(targ)
 	obstacle = targ ? target_path[1] : patrol_path[1]
 	target_path = list()
 	patrol_path = list()
-	return
 
 /mob/living/bot/proc/lookForTargets()
 	return
@@ -307,37 +318,58 @@
 		return 0
 	return 1
 
-/mob/living/bot/proc/handlePatrol()
-	makeStep(patrol_path)
-	return
-
 /mob/living/bot/proc/startPatrol()
-	var/turf/T = getPatrolTurf()
-	if(T)
-		patrol_path = get_path_to(src, T, max_patrol_dist, id = botcard, exclude = obstacle)
+	var/obj/machinery/navbeacon/target = get_patrol_target()
+	if(target)
+		patrol_path = get_path_to(src, get_turf(target), max_patrol_dist, id = botcard, exclude = obstacle)
 		obstacle = null
 
-/mob/living/bot/proc/getPatrolTurf()
-	var/minDist = INFINITY
+	if(length(patrol_path))
+		patrol_path_search_failures = 0
+		return
+
+	if(target)
+		add_navpoint_code_to_blacklist(target.location)
+
+	patrol_path_search_failures++
+	if(patrol_path_search_failures >= patrol_path_search_threshold)
+		will_patrol = FALSE
+
+/mob/living/bot/proc/get_patrol_target()
 	var/obj/machinery/navbeacon/targ = locate() in get_turf(src)
 
-	if(!targ)
-		for(var/obj/machinery/navbeacon/N in navbeacons)
-			if(!N.codes["patrol"])
-				continue
-			if(get_dist(src, N) < minDist)
-				minDist = get_dist(src, N)
-				targ = N
-
-	if(targ && targ.codes["next_patrol"])
-		for(var/obj/machinery/navbeacon/N in navbeacons)
-			if(N.location == targ.codes["next_patrol"])
-				targ = N
-				break
-
 	if(targ)
-		return get_turf(targ)
-	return null
+		var/target_navbeacon_codes = targ.codes["next_patrol"]
+		if(target_navbeacon_codes && !navigation_beacons_blacklist[target_navbeacon_codes])
+			for(var/obj/machinery/navbeacon/N in navbeacons)
+				if(N.location != target_navbeacon_codes)
+					continue
+
+				return N
+
+			add_navpoint_code_to_blacklist(target_navbeacon_codes)
+
+	var/minDist = INFINITY
+	for(var/obj/machinery/navbeacon/N in navbeacons)
+		if(!N.codes["patrol"])
+			continue
+
+		if(navigation_beacons_blacklist[N.location])
+			continue
+
+		var/dist = get_dist(src, N)
+		if(dist < minDist)
+			minDist = dist
+			targ = N
+
+	return targ
+
+/mob/living/bot/proc/add_navpoint_code_to_blacklist(code)
+	navigation_beacons_blacklist[code] = TRUE
+	addtimer(CALLBACK(src, PROC_REF(remove_navpoint_code_from_blacklist), code), 10 MINUTES)
+
+/mob/living/bot/proc/remove_navpoint_code_from_blacklist(code)
+	navigation_beacons_blacklist -= code
 
 /mob/living/bot/proc/handleIdle()
 	return

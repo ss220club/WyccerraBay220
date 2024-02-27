@@ -1397,7 +1397,7 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/CanPathingPass(obj/item/card/id/ID, to_dir, atom/movable/caller, no_id = FALSE)
 	//Airlock is passable if it is open (!density), bot has access, and is not bolted shut or powered off)
-	return !density || (check_access(ID) && !locked && arePowerSystemsOn() && !no_id)
+	return !density || (!no_id && !locked && arePowerSystemsOn() && check_access(ID))
 
 // Public access
 

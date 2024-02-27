@@ -38,11 +38,11 @@ type Product = {
   image: string;
 };
 
-const category = {
-  common: 1,
-  contaraband: 2,
-  antag: 3,
-  premium: 4,
+const CATEGORY = {
+  Common: 1,
+  Contaraband: 2,
+  Antag: 3,
+  Premium: 4,
 };
 
 export const Vending = (props, context) => {
@@ -125,16 +125,16 @@ const VendingMain = (props, context) => {
               imageSize="64px"
               disabled={product.ammount <= 0}
               color={
-                product.category === category.contaraband
+                product.category === CATEGORY.Contaraband
                   ? 'violet'
-                  : product.category === category.premium
+                  : product.category === CATEGORY.Premium
                     ? 'gold'
                     : ''
               }
               content={
                 product.price > 0
                   ? `${product.price} ₸`
-                  : product.category === category.premium
+                  : product.category === CATEGORY.Premium
                     ? 'Coin'
                     : 'Free'
               }

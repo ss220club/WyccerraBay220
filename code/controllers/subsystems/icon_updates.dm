@@ -9,7 +9,7 @@ SUBSYSTEM_DEF(icon_update)
 	var/list/queue_refs = list()	// Atoms
 	var/list/queue_args = list()	// null or args
 
-/datum/controller/subsystem/icon_update/UpdateStat(start_uptime)
+/datum/controller/subsystem/icon_update/UpdateStat(time)
 	if (PreventUpdateStat(time))
 		return ..()
 	..("queue: [queue_refs.len]")

@@ -54,11 +54,6 @@
 	. = ..()
 
 	if(cache_turf_in_area)
-		// if(global_turfs_cache[ref(src)])
-		// 	stack_trace("Turf added to cache multiple times during init")
-		// else
-		// 	global_turfs_cache[ref(src)] = TRUE
-
 		var/area/my_area = loc
 		my_area.add_turf_to_cache(src)
 

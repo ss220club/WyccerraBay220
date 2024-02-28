@@ -208,12 +208,8 @@
 
 	testing("[src] moving to [destination]. Areas are [english_list(shuttle_area)]")
 
-	var/list/translation = list()
-	for(var/area/A in shuttle_area)
-		testing("Moving [A]")
-		translation += get_turf_translation(get_turf(current_location), get_turf(destination), get_area_turfs(A))
-
 	var/old_location = current_location
+	var/list/translation = get_turf_translation(get_turf(current_location), get_turf(destination), get_turfs())
 	GLOB.shuttle_pre_move_event.raise_event(src, old_location, destination)
 	shuttle_moved(destination, translation)
 	GLOB.shuttle_moved_event.raise_event(src, old_location, destination)
@@ -229,6 +225,14 @@
 		area.retally_power()
 	// - BANDAID
 	return TRUE
+
+/// Returns list of all turfs that shuttle posses
+/datum/shuttle/proc/get_turfs()
+	var/list/shuttle_turfs = list()
+	for(var/area/area_on_shuttle as anything in shuttle_area)
+		shuttle_turfs += get_area_turfs(area_on_shuttle)
+
+	return shuttle_turfs
 
 //just moves the shuttle from A to B, if it can be moved
 //A note to anyone overriding move in a subtype. shuttle_moved() must absolutely not, under any circumstances, fail to move the shuttle.
@@ -255,7 +259,7 @@
 			continue
 
 		//in case someone put a hole in the shuttle and you were lucky enough to be under it
-		for(var/atom/movable/target in dst_turf)
+		for(var/atom/movable/target as anything in dst_turf)
 			if(!target.simulated)
 				continue
 
@@ -263,7 +267,7 @@
 
 	var/list/old_powernets = list()
 	var/has_z_level_above = HasAbove(current_location.z)
-	for(var/turf/old_turf as anything in get_turfs_in_areas(shuttle_area))
+	for(var/turf/old_turf as anything in get_turfs())
 		// if there was a zlevel above our origin, erase our ceiling now we're leaving
 		if(has_z_level_above)
 			var/turf/turf_above = GetAbove(old_turf)
@@ -289,7 +293,7 @@
 	// if there's a zlevel above our destination, paint in a ceiling on it so we retain our air
 	if(HasAbove(current_location.z))
 		var/list/area_refs_set = get_area_refs_set(shuttle_area)
-		var/list/destination_turfs = get_turfs_in_areas(shuttle_area)
+		var/list/destination_turfs = get_turfs()
 		for(var/turf/destination_turf as anything in destination_turfs)
 			var/turf/turf_above = GetAbove(destination_turf)
 

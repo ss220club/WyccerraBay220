@@ -440,15 +440,15 @@ GLOBAL_DATUM_INIT(maploader, /dmm_suite, new)
 ////////////////
 
 //Instance an atom at (x,y,z) and gives it the variables in attributes
-/dmm_suite/proc/instance_atom(path,list/attributes, turf/crds, no_changeturf)
+/dmm_suite/proc/instance_atom(path, list/attributes, turf/loc, no_changeturf)
 	if (LAZYLEN(attributes))
 		GLOB._preloader.setup(attributes, path)
 
-	if(crds)
-		if(!no_changeturf && ispath(path, /turf))
-			. = crds.ChangeTurf(path, FALSE, TRUE)
+	if(loc)
+		if(ispath(path, /turf))
+			. = create_turf(path, loc, no_changeturf)
 		else
-			. = create_atom(path, crds)//first preloader pass
+			. = create_atom(path, loc)//first preloader pass
 
 	if(GLOB.use_preloader && .)//second preloader pass, for those atoms that don't ..() in New()
 		GLOB._preloader.load(.)
@@ -459,9 +459,12 @@ GLOBAL_DATUM_INIT(maploader, /dmm_suite, new)
 		stoplag()
 		SSatoms.map_loader_begin()
 
-/dmm_suite/proc/create_atom(path, crds)
+/dmm_suite/proc/create_atom(path, loc)
 	// Doing this async is impossible, as we must return the ref.
-	return new path (crds)
+	return new path(loc)
+
+/dmm_suite/proc/create_turf(path, turf/loc, no_changeturf)
+	return no_changeturf ? new path(loc, FALSE) : loc.ChangeTurf(path, FALSE, TRUE)
 
 //text trimming (both directions) helper proc
 //optionally removes quotes before and after the text (for variable name)

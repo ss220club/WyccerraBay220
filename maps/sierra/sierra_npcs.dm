@@ -3,8 +3,8 @@
 	id = "Punitelli"
 	item_path = /mob/living/carbon/human/monkey/punitelli
 
-/mob/living/carbon/human/monkey/punitelli/New()
-	..()
+/mob/living/carbon/human/monkey/punitelli/Initialize(mapload, ...)
+	. = ..()
 	name = "Warrant Officer Punitelli"
 	real_name = name
 	var/obj/item/clothing/C

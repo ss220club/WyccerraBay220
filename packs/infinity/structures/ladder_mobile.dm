@@ -72,8 +72,8 @@
 /obj/structure/ladder/mobile
 	icon = 'packs/infinity/icons/obj/mobile_ladder.dmi'
 
-/obj/structure/ladder/mobile/New()
-	..()
+/obj/structure/ladder/mobile/Initialize(mapload, ...)
+	. = ..()
 	update_icon()
 
 /obj/structure/ladder/mobile/on_update_icon()

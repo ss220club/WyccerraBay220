@@ -11,7 +11,7 @@
 	var/list/obj/machinery/atmospherics/unary/vent_pump/vent_pumps
 	/// Lazy list of all turfs in area. Updated when new turf created or removed from the area.
 	/// For faster lookup and cleanup, turfs are grouped by z level.
-	/// Contains list of lists, where index represents z-level number.
+	/// Looks like: z_level -> contained_turfs_list
 	var/list/turf/contained_turfs_by_z
 	/// Due to size of some area turfs lists, it's quite expensive to clean them up right away.
 	/// So we will do it in subsystem, or right away, if area turfs requested.
@@ -386,12 +386,12 @@
 
 /// Returns boolean. Whether or not there are any turfs (`/turf`) in src.
 /area/proc/has_turfs()
-	for(var/z_level in 1 to length(contained_turfs_by_z))
-		if(z_level > length(turfs_to_uncontain_by_z))
-			if(length(contained_turfs_by_z[z_level]))
-				return TRUE
+	for(var/z_level in contained_turfs_by_z)
+		var/list/turfs_to_uncontain = LAZYACCESS(turfs_to_uncontain_by_z, z_level)
+		if(!LAZYLEN(turfs_to_uncontain))
+			return TRUE
 
-		else if(length(contained_turfs_by_z[z_level]) - length(turfs_to_uncontain_by_z[z_level]) > 0)
+		if((LAZYLEN(contained_turfs_by_z[z_level]) - LAZYLEN(turfs_to_uncontain)) > 0)
 			return TRUE
 
 	return FALSE
@@ -407,27 +407,22 @@
 	if(!istype(turf_to_add))
 		CRASH("Invalid turf `[log_info_line(turf_to_add)]` supplied to [log_info_line(src)]: ")
 
-	ASSERT_LIST_LEN(contained_turfs_by_z, turf_to_add.z, list())
-	contained_turfs_by_z[turf_to_add.z] += turf_to_add
+	LAZYADDASSOCLIST(contained_turfs_by_z, "[turf_to_add.z]", turf_to_add)
 
 /// Removes turf from area turf cache
 /area/proc/remove_turf_from_cache(turf/turf_to_remove)
 	if(!istype(turf_to_remove))
 		CRASH("Invalid turf `[log_info_line(turf_to_remove)]` supplied to [log_info_line(src)]: ")
 
-	var/cached_z_levels = length(contained_turfs_by_z)
-	if(turf_to_remove.z > cached_z_levels)
+	if(!LAZYACCESS(contained_turfs_by_z, "[turf_to_remove.z]"))
 		return
 
-	ASSERT_LIST_LEN(turfs_to_uncontain_by_z, turf_to_remove.z, list())
-	turfs_to_uncontain_by_z[turf_to_remove.z] += turf_to_remove
+	LAZYADDASSOCLIST(turfs_to_uncontain_by_z, "[turf_to_remove.z]", turf_to_remove)
 
 /// Returns all area turfs from specific z-level
 /area/proc/get_turfs_from_z(z_level)
-	if(!canonize_cached_turfs_by_z(z_level))
-		return list()
-
-	return contained_turfs_by_z[z_level]
+	canonize_cached_turfs_by_z(z_level)
+	return LAZYACCESS(contained_turfs_by_z, "[z_level]")
 
 /// Returs list of all turfs located at this area
 /area/proc/get_turfs_from_all_z()
@@ -443,23 +438,23 @@
 /area/proc/canonize_cached_turfs_for_all_z()
 	PRIVATE_PROC(TRUE)
 
-	for(var/z_level in 1 to length(turfs_to_uncontain_by_z))
-		if(!canonize_cached_turfs_by_z(z_level))
-			LIST_RESIZE(turfs_to_uncontain_by_z, z_level - 1)
-			break
+	for(var/z_level in turfs_to_uncontain_by_z)
+		canonize_cached_turfs_by_z(z_level)
 
 /// Makes sure that turfs located at area are up to date for specific z level
 /// Returns FALSE if passed z_level doesn't require canonization, TRUE if cache is valid
 /area/proc/canonize_cached_turfs_by_z(z_level)
 	PRIVATE_PROC(TRUE)
 
-	if(z_level > length(contained_turfs_by_z) || z_level > length(turfs_to_uncontain_by_z))
-		return FALSE
+	var/list/contained_turfs = LAZYACCESS(contained_turfs_by_z, "[z_level]")
+	if(!LAZYLEN(contained_turfs))
+		LAZYREMOVE(turfs_to_uncontain_by_z, "[z_level]")
+		return
 
-	var/list/turfs_to_uncontain = turfs_to_uncontain_by_z[z_level]
-	if(!length(turfs_to_uncontain))
-		return TRUE
+	var/list/turfs_to_uncontain = LAZYACCESS(turfs_to_uncontain_by_z, "[z_level]")
+	if(LAZYLEN(turfs_to_uncontain))
+		contained_turfs -= turfs_to_uncontain
+		LAZYREMOVE(turfs_to_uncontain_by_z, "[z_level]")
 
-	contained_turfs_by_z[z_level] -= turfs_to_uncontain
-	turfs_to_uncontain.Cut()
-	return TRUE
+	if(!LAZYLEN(contained_turfs))
+		LAZYREMOVE(contained_turfs_by_z, "[z_level]")

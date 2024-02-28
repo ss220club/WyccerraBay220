@@ -74,7 +74,7 @@
 	desc = "This obviously wasn't made for your feet. Looks pretty old."
 	initial_gas = null
 
-/turf/simulated/floor/fixed/alium/ruin/Initialize()
+/turf/simulated/floor/fixed/alium/ruin/Initialize(mapload, cache_turf_in_area = TRUE)
 	. = ..()
 	if(prob(10))
 		ChangeTurf(get_base_turf_by_area(src))

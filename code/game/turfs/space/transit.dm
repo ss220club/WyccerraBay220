@@ -20,7 +20,7 @@
 	pushdirection = SOUTH  // south because the space tile is scrolling south
 	var/static/list/phase_shift_by_x
 
-/turf/space/transit/north/Initialize()
+/turf/space/transit/north/Initialize(mapload, cache_turf_in_area = TRUE)
 	. = ..()
 	if(!phase_shift_by_x)
 		phase_shift_by_x = get_cross_shift_list(15)
@@ -34,12 +34,12 @@
 	pushdirection = WEST
 	var/static/list/phase_shift_by_y
 
-/turf/space/transit/east/New()
-	..()
+/turf/space/transit/east/Initialize(mapload, cache_turf_in_area = TRUE)
+	. = ..()
 	if(!phase_shift_by_y)
 		phase_shift_by_y = get_cross_shift_list(15)
 
 	var/y_shift = phase_shift_by_y[src.y % (length(phase_shift_by_y) - 1) + 1]
-	var/transit_state = (world.maxx - src.x + y_shift)%15 + 1
+	var/transit_state = (world.maxx - src.x + y_shift) % 15 + 1
 
 	icon_state = "speedspace_ew_[transit_state]"

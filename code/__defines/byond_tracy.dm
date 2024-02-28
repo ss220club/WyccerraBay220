@@ -4,9 +4,9 @@
 
 // In case you need to start the capture as soon as the server boots, uncomment the following lines and recompile:
 
-// /world/New()
-// 	prof_init()
-// 	. = ..()
+/world/New()
+	prof_init()
+	. = ..()
 
 /client/proc/profiler_start()
 	set name = "Start Tracy Profiler"

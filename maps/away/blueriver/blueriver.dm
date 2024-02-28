@@ -139,7 +139,7 @@
 	icon_state = "floor"
 	temperature = 233
 
-/turf/simulated/floor/away/blueriver/alienfloor/Initialize()
+/turf/simulated/floor/away/blueriver/alienfloor/Initialize(mapload, cache_turf_in_area = TRUE)
 	.=..()
 
 	set_light(5, 0.7, l_color = "#0066ff")
@@ -153,7 +153,7 @@
 	density = TRUE
 	temperature = 233
 
-/turf/unsimulated/wall/away/blueriver/livingwall/Initialize()
+/turf/unsimulated/wall/away/blueriver/livingwall/Initialize(mapload, cache_turf_in_area = TRUE)
 	.=..()
 
 	if(prob(80))
@@ -169,7 +169,7 @@
 	opacity = 0
 	dynamic_lighting = 0
 
-/turf/unsimulated/wall/supermatter/no_spread/Initialize()
+/turf/unsimulated/wall/supermatter/no_spread/Initialize(mapload, cache_turf_in_area = TRUE)
 	.=..()
 
 	icon_state = "bluespacecrystal[rand(1,3)]"

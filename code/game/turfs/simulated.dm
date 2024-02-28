@@ -43,8 +43,8 @@
 		B.clean_blood()
 	..()
 
-/turf/simulated/New()
-	..()
+/turf/simulated/Initialize(mapload, cache_turf_in_area = TRUE)
+	. = ..()
 	if(istype(loc, /area/chapel))
 		holy = 1
 	levelupdate()
@@ -205,7 +205,7 @@
 	damage_health(damage, attack.get_damage_type(), attack.damage_flags())
 	return TRUE
 
-/turf/simulated/Initialize()
+/turf/simulated/Initialize(mapload, cache_turf_in_area = TRUE)
 	if(GAME_STATE >= RUNLEVEL_GAME)
 		fluid_update()
 	. = ..()

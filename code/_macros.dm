@@ -86,6 +86,8 @@
 
 #define isspaceturf(A) istype(A, /turf/space)
 
+#define issimulatedturf(A) istype(A, /turf/simulated)
+
 #define isopenturf(A) istype(A, /turf/simulated/open)
 
 #define ispAI(A) istype(A, /mob/living/silicon/pai)

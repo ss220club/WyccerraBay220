@@ -34,8 +34,8 @@
 		return TRUE
 	return ..()
 
-/turf/simulated/floor/fixed/alium/New()
-	..()
+/turf/simulated/floor/fixed/alium/Initialize(mapload, cache_turf_in_area = TRUE)
+	. = ..()
 	var/material/A = SSmaterials.get_material_by_name(MATERIAL_ALIENALLOY)
 	if(!A)
 		return

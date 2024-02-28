@@ -17,18 +17,18 @@
 		above.update_mimic()
 
 //Creates a new turf
-/turf/proc/ChangeTurf(turf/N, tell_universe = TRUE, force_lighting_update = FALSE, keep_air = FALSE)
-	if (!N)
+/turf/proc/ChangeTurf(turf/replacement_turf, tell_universe = TRUE, force_lighting_update = FALSE, keep_air = FALSE)
+	if (!replacement_turf)
 		return
 
-	if(isturf(N) && !N.flooded && N.flood_object)
+	if(isturf(replacement_turf) && !replacement_turf.flooded && replacement_turf.flood_object)
 		QDEL_NULL(flood_object)
 
 	// This makes sure that turfs are not changed to space when one side is part of a zone
-	if(N == /turf/space)
+	if(ispath(replacement_turf, /turf/space))
 		var/turf/below = GetBelow(src)
-		if(istype(below) && !istype(below,/turf/space))
-			N = /turf/simulated/open
+		if(istype(below) && !isspaceturf(below))
+			replacement_turf = /turf/simulated/open
 
 	var/old_density = density
 	var/old_air = air
@@ -44,62 +44,62 @@
 	var/old_permit_ao = permit_ao
 	var/old_zflags = z_flags
 
-	if(isspaceturf(N) || isopenspace(N))
+	if(isspaceturf(replacement_turf) || isopenspace(replacement_turf))
 		QDEL_NULL(turf_fire)
 	else
 		old_turf_fire = turf_fire
 
-	//log_debug("Replacing [src.type] with [N]")
-
 	changing_turf = TRUE
 
-	if(connections) connections.erase_all()
+	if(connections)
+		connections.erase_all()
 
 	ClearOverlays()
 	underlays.Cut()
-	if(istype(src,/turf/simulated))
+	if(issimulatedturf(src))
 		//Yeah, we're just going to rebuild the whole thing.
 		//Despite this being called a bunch during explosions,
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
-		if(S.zone) S.zone.rebuild()
+		if(S.zone)
+			S.zone.rebuild()
 
 	if(ambient_bitflag) //Should remove everything about current bitflag, let it be recalculated by SS later
 		SSambient_lighting.clean_turf(src)
 
 	// Run the Destroy() chain.
 	qdel(src)
-	var/turf/simulated/W = new N(src)
+	var/turf/simulated/new_turf = new replacement_turf(src, FALSE)
 
 	if (permit_ao)
 		regenerate_ao()
 
 	if (keep_air)
-		W.air = old_air
+		new_turf.air = old_air
 
-	if(ispath(N, /turf/simulated))
+	if(ispath(replacement_turf, /turf/simulated))
 		if(old_hotspot)
 			hotspot = old_hotspot
-		if (istype(W,/turf/simulated/floor))
-			W.RemoveLattice()
+		if (istype(new_turf,/turf/simulated/floor))
+			new_turf.RemoveLattice()
 	else if(hotspot)
 		qdel(hotspot)
 
 
 	if(tell_universe)
-		GLOB.universe.OnTurfChange(W)
+		GLOB.universe.OnTurfChange(new_turf)
 
 	SSair.mark_for_update(src) //handle the addition of the new turf.
 
-	for(var/turf/space/space_turf in RANGE_TURFS(W,1))
+	for(var/turf/space/space_turf in RANGE_TURFS(new_turf,1))
 		space_turf.update_starlight()
 
-	W.above = old_above
+	new_turf.above = old_above
 
-	W.post_change()
-	. = W
+	new_turf.post_change()
+	. = new_turf
 
-	W.ao_neighbors = old_ao_neighbors
+	new_turf.ao_neighbors = old_ao_neighbors
 	// lighting stuff
 
 	if(SSlighting.initialized)
@@ -117,12 +117,12 @@
 			else
 				lighting_clear_overlay()
 
-	W.setup_local_ambient()
+	new_turf.setup_local_ambient()
 	if(z_flags != old_zflags)
-		W.rebuild_zbleed()
+		new_turf.rebuild_zbleed()
 	// end of lighting stuff
 
-	for(var/turf/T in RANGE_TURFS(src, 1))
+	for(var/turf/T as anything in RANGE_TURFS(src, 1))
 		T.update_icon()
 
 	if(density != old_density)
@@ -140,8 +140,9 @@
 	updateVisibility(src, FALSE)
 
 /turf/proc/transport_properties_from(turf/other)
-	if(!istype(other, src.type))
-		return 0
+	if(!istype(other, type))
+		return FALSE
+
 	src.set_dir(other.dir)
 	src.icon_state = other.icon_state
 	src.icon = other.icon
@@ -150,7 +151,8 @@
 	if(other.decals)
 		src.decals = other.decals.Copy()
 		src.update_icon()
-	return 1
+
+	return TRUE
 
 //I would name this copy_from() but we remove the other turf from their air zone for some reason
 /turf/simulated/transport_properties_from(turf/simulated/other)

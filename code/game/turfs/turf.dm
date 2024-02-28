@@ -42,13 +42,25 @@
 	var/has_dense_atom
 	var/has_opaque_atom
 
+	/// Whether or not decals can be applied to turf
+	var/decals_available = FALSE
+
 	/// Reference to the turf fire on the turf
 	var/obj/turf_fire/turf_fire
 
-/turf/Initialize(mapload, ...)
+	var/static/list/global_turfs_cache = list()
+
+/turf/Initialize(mapload, cache_turf_in_area = TRUE)
 	. = ..()
-	var/area/my_area = loc
-	my_area.add_turf_to_cache(src)
+
+	if(cache_turf_in_area)
+		// if(global_turfs_cache[ref(src)])
+		// 	stack_trace("Turf added to cache multiple times during init")
+		// else
+		// 	global_turfs_cache[ref(src)] = TRUE
+
+		var/area/my_area = loc
+		my_area.add_turf_to_cache(src)
 
 	if(dynamic_lighting)
 		luminosity = 0
@@ -70,6 +82,9 @@
 	if (z_flags & ZM_MIMIC_BELOW)
 		setup_zmimic(mapload)
 
+	if(mapload)
+		setup_local_ambient()
+
 /turf/on_update_icon()
 	update_flood_overlay()
 	queue_ao(FALSE)
@@ -86,9 +101,6 @@
 		crash_with("Improper turf qdel. Do not qdel turfs directly.")
 
 	changing_turf = FALSE
-
-	var/area/my_area = loc
-	my_area.remove_turf_from_cache(src)
 
 	remove_cleanables(FALSE)
 	fluid_update()
@@ -474,15 +486,12 @@ var/global/const/enterloopsanity = 100
 	if(old_area == new_area)
 		return
 
-	new_area.contents.Add(src)
-	new_area.add_turf_to_cache(src)
-	if(old_area)
-		old_area.remove_turf_from_cache(src)
-		old_area.Exited(src, new_area)
-		for(var/atom/movable/AM in src)
-			old_area.Exited(AM, new_area)  // Note: this _will_ raise exited events.
+	old_area.remove_turf_from_cache(src)
+	for(var/atom/movable/AM in src)
+		old_area.Exited(AM, new_area)  // Note: this _will_ raise exited events.
 
-	new_area.Entered(src, old_area)
+	new_area.contents += src
+	new_area.add_turf_to_cache(src)
 
 	for(var/atom/movable/AM in src)
 		new_area.Entered(AM, old_area) // Note: this will _not_ raise moved or entered events. If you change this, you must also change everything which uses them.

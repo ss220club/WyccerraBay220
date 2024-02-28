@@ -639,26 +639,28 @@ Turf and target are seperate in case you want to teleport some distance from a t
 				atoms += A
 	return atoms
 
-/area/proc/move_contents_to(area/A)
-	//Takes: Area.
-	//Returns: Nothing.
-	//Notes: Attempts to move the contents of one area to another area.
-	//       Movement based on lower left corner.
+//Takes: Area.
+//Returns: Nothing.
+//Notes: Attempts to move the contents of one area to another area.
+//       Movement based on lower left corner.
+/area/proc/move_contents_to(area/new_location)
+	if(!new_location)
+		return
 
-	if(!A || !src) return
-
-	var/list/turfs_src = get_area_turfs("\ref[src]")
-
-	if(!length(turfs_src)) return
+	var/list/area_turfs = get_area_turfs(src)
+	if(!length(area_turfs))
+		return
 
 	//figure out a suitable origin - this assumes the shuttle areas are the exact same size and shape
 	//might be worth doing this with a shuttle core object instead of areas, in the future
-	var/src_origin = locate(src.x, src.y, src.z)
-	var/trg_origin = locate(A.x, A.y, A.z)
+	var/turf/src_origin = locate(x, y, z)
+	var/turf/target_origin = locate(new_location.x, new_location.y, new_location.z)
 
-	if(src_origin && trg_origin)
-		var/translation = get_turf_translation(src_origin, trg_origin, turfs_src)
-		translate_turfs(translation, null)
+	if(!src_origin || !target_origin)
+		return
+
+	var/translation = get_turf_translation(src_origin, target_origin, area_turfs)
+	translate_turfs(translation, null)
 
 
 GLOBAL_LIST_INIT(duplicate_object_disallowed_vars, list(

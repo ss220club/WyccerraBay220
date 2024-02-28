@@ -84,7 +84,7 @@ GLOBAL_DATUM_INIT(xeno_state, /datum/topic_state/admin_state/xeno, new)
 
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "mods-xeno_whitelist.tmpl", "XenoWhitelist Panel", 3000, 1000, src, state = state)
+		ui = new(user, src, ui_key, "xeno_whitelist.tmpl", "XenoWhitelist Panel", 3000, 1000, src, state = state)
 		ui.set_initial_data(data)
 		ui.open()
 	myui = ui

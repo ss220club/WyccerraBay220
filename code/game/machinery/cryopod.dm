@@ -248,20 +248,21 @@
 			launch()
 		..()
 
-/obj/machinery/cryopod/New()
-	announce = new /obj/item/device/radio/intercom(src)
-	..()
-
 /obj/machinery/cryopod/Destroy()
 	if(occupant)
 		occupant.forceMove(loc)
 	. = ..()
 
-/obj/machinery/cryopod/Initialize()
+/obj/machinery/cryopod/Initialize(mapload, ...)
+	. = ..()
+	announce = new /obj/item/device/radio/intercom(src)
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/machinery/cryopod/LateInitialize(mapload, ...)
 	. = ..()
 	find_control_computer()
 
-/obj/machinery/cryopod/proc/find_control_computer(urgent=0)
+/obj/machinery/cryopod/proc/find_control_computer(urgent = FALSE)
 	var/area/my_area = get_area(src)
 	if(my_area)
 		control_computer = locate(/obj/machinery/computer/cryopod) in my_area.machinery_list

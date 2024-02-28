@@ -100,6 +100,35 @@
 			newitem.forceMove(S)
 			return S
 
+// This proc is for inserting items when game is active, as opposed to proc above, which I think is used for outfits.
+/mob/proc/equip_to_storage_active(obj/item/I)
+	// Try put it in their backpack
+	if(istype(src.back,/obj/item/storage))
+		var/obj/item/storage/backpack = src.back
+		if(backpack.can_be_inserted(I, null, 1))
+			backpack.handle_item_insertion(I)
+			if (backpack.use_sound) // Play sound if item is inserted into the backpack.
+				playsound(backpack.loc, backpack.use_sound, 50, 1, -5)
+			return TRUE
+		// If you can't insert object into the backpack - look for other storage spaces inside of it, like boxes.
+		for(var/obj/item/storage/S in backpack.contents)
+			if(S.can_be_inserted(I, null, 1))
+				S.handle_item_insertion(I)
+				if (S.use_sound)
+					playsound(S.loc, S.use_sound, 50, 1, -5)
+				return TRUE
+
+	// Try to place it in any item that can store stuff, on the mob.
+	for(var/obj/item/storage/S in src.contents)
+		if(S.can_be_inserted(I, null, 1))
+			S.handle_item_insertion(I)
+			if (S.use_sound)
+				playsound(S.loc, S.use_sound, 50, 1, -5)
+			return TRUE
+
+	return FALSE
+
+
 /mob/proc/equip_to_storage_or_drop(obj/item/newitem)
 	var/stored = equip_to_storage(newitem)
 	if(!stored && newitem)

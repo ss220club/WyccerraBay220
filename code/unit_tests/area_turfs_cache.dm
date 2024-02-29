@@ -6,7 +6,7 @@
 /datum/unit_test/areas_turf_cache_should_be_valid
 	name = "AREA: Area turf cache should be valid"
 	async = TRUE
-	var/failed = FALSE
+	var/list/failed_turfs = list()
 
 
 /datum/unit_test/areas_turf_cache_should_be_valid/start_test()
@@ -24,8 +24,8 @@
 	assign_turfs_with_area_they_are_cached_in()
 	validate_all_turfs_loc()
 
-	if(failed)
-		fail("Area turf cache is invalid with.")
+	if(length(failed_turfs))
+		fail("Area turf cache is invalid with: [length(failed_turfs)] failed turfs")
 	else
 		pass("Area turf cache is valid.")
 
@@ -37,7 +37,7 @@
 		for(var/turf/turf_to_validate as anything in area_to_check.get_turfs_from_all_z())
 			if(turf_to_validate.in_contents_of)
 				log_bad("Turf: [log_info_line(turf_to_validate)] is already present in area: [log_info_line(turf_to_validate.in_contents_of)]")
-				failed = TRUE
+				failed_turfs[turf_to_validate] = TRUE
 
 			turf_to_validate.in_contents_of = area_to_check
 
@@ -48,4 +48,4 @@
 		var/area/expected_area = turf_to_validate.loc
 		if(expected_area != turf_to_validate.in_contents_of)
 			log_bad("Turf: [log_info_line(turf_to_validate)] is expected to be cached in [log_info_line(expected_area)] but instead is in [log_info_line(turf_to_validate.in_contents_of)]")
-			failed = TRUE
+			failed_turfs[turf_to_validate] = TRUE

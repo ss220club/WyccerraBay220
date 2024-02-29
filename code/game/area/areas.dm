@@ -421,12 +421,12 @@
 
 /// Returns all area turfs from specific z-level
 /area/proc/get_turfs_from_z(z_level)
-	canonize_cached_turfs_by_z(z_level)
+	cannonize_cached_turfs_by_z(z_level)
 	return LAZYACCESS(contained_turfs_by_z, "[z_level]")
 
 /// Returs list of all turfs located at this area
 /area/proc/get_turfs_from_all_z()
-	canonize_cached_turfs_for_all_z()
+	cannonize_cached_turfs_for_all_z()
 
 	var/list/contained_turfs = list()
 	for(var/z_level in contained_turfs_by_z)
@@ -435,15 +435,15 @@
 	return contained_turfs
 
 /// Makes sure that turfs located at area are up to date for all z levels
-/area/proc/canonize_cached_turfs_for_all_z()
+/area/proc/cannonize_cached_turfs_for_all_z()
 	PRIVATE_PROC(TRUE)
 
 	for(var/z_level in turfs_to_uncontain_by_z)
-		canonize_cached_turfs_by_z(z_level)
+		cannonize_cached_turfs_by_z(z_level)
 
 /// Makes sure that turfs located at area are up to date for specific z level
 /// Returns FALSE if passed z_level doesn't require canonization, TRUE if cache is valid
-/area/proc/canonize_cached_turfs_by_z(z_level)
+/area/proc/cannonize_cached_turfs_by_z(z_level)
 	PRIVATE_PROC(TRUE)
 
 	var/list/contained_turfs = LAZYACCESS(contained_turfs_by_z, "[z_level]")

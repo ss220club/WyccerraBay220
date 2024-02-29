@@ -21,3 +21,6 @@
 
 #define RANGE_TURFS(CENTER, RADIUS) block(locate(max(CENTER.x-(RADIUS), 1), max(CENTER.y-(RADIUS),1), CENTER.z), locate(min(CENTER.x+(RADIUS), world.maxx), min(CENTER.y+(RADIUS), world.maxy), CENTER.z))
 #define ORANGE_TURFS(CENTER, RADIUS) RANGE_TURFS(CENTER, RADIUS) - CENTER
+
+///Returns all currently loaded turfs
+#define ALL_TURFS(...) block(locate(1, 1, 1), locate(world.maxx, world.maxy, world.maxz))

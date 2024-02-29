@@ -48,3 +48,4 @@
 		var/area/expected_area = turf_to_validate.loc
 		if(expected_area != turf_to_validate.in_contents_of)
 			log_bad("Turf: [log_info_line(turf_to_validate)] is expected to be cached in [log_info_line(expected_area)] but instead is in [log_info_line(turf_to_validate.in_contents_of)]")
+			failed = TRUE

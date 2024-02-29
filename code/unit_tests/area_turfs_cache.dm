@@ -1,9 +1,7 @@
-#if defined(UNIT_TESTS) || defined(SPACEMAN_DMM)
-	/// For the area_contents list unit test
-	/// Allows us to know our area without needing to preassign it
-	/// Sorry for the mess
-	/turf/var/area/in_contents_of
-#endif
+/// For the area_contents list unit test
+/// Allows us to know our area without needing to preassign it
+/// Sorry for the mess
+/turf/var/area/in_contents_of
 
 /datum/unit_test/areas_turf_cache_should_be_valid
 	name = "AREA: Area turf cache should be valid"
@@ -27,7 +25,7 @@
 	validate_all_turfs_loc()
 
 	if(failed)
-		fail("Area turf cache is invalid with: total_non_cached_turfs: [total_non_cached_turfs] and total_incorrectly_cached_turfs: [total_incorrectly_cached_turfs]")
+		fail("Area turf cache is invalid with.")
 	else
 		pass("Area turf cache is valid.")
 
@@ -38,7 +36,7 @@
 	for(var/area/area_to_check as anything in GLOB.areas)
 		for(var/turf/turf_to_validate as anything in area_to_check.get_turfs_from_all_z())
 			if(turf_to_validate.in_contents_of)
-				log_bad("Turf: [log_info_line(turf_to_validate)] is already present in area: [log_info_line(in_contents_of)]")
+				log_bad("Turf: [log_info_line(turf_to_validate)] is already present in area: [log_info_line(turf_to_validate.in_contents_of)]")
 				failed = TRUE
 
 			turf_to_validate.in_contents_of = area_to_check
@@ -47,6 +45,6 @@
 	PRIVATE_PROC(TRUE)
 
 	for(var/turf/turf_to_validate as anything in ALL_TURFS())
-		var/area/excepted_area = turf_to_validate.loc
+		var/area/expected_area = turf_to_validate.loc
 		if(expected_area != turf_to_validate.in_contents_of)
 			log_bad("Turf: [log_info_line(turf_to_validate)] is expected to be cached in [log_info_line(expected_area)] but instead is in [log_info_line(turf_to_validate.in_contents_of)]")

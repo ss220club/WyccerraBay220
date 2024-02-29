@@ -49,18 +49,18 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/Initialize(mapload, _color)
 	. = ..()
-	var/dash = findtext(icon_state, "-")
-	d1 = text2num( copytext( icon_state, 1, dash ) )
-	d2 = text2num( copytext( icon_state, dash+1 ) )
 	var/turf/turf = loc
 	if (!isturf(turf))
 		return INITIALIZE_HINT_QDEL
+
 	if (level == ATOM_LEVEL_UNDER_TILE)
-		hide(!turf.is_plating() && !turf.is_open())
+		hide(!turf.is_plating() && !turf.is_open(), FALSE)
+
 	GLOB.cable_list += src
 	if (_color)
 		color = _color
 
+	update_icon()
 
 /obj/structure/cable/drain_power(drain_check, surge, amount = 0)
 
@@ -106,8 +106,6 @@ By design, d1 is the smallest direction and d2 is the highest
 			to_chat(user, SPAN_WARNING("[get_wattage()] in power network."))
 		else
 			to_chat(user, SPAN_WARNING("The cable is not powered."))
-	return
-
 ///////////////////////////////////
 // General procedures
 ///////////////////////////////////
@@ -120,10 +118,12 @@ By design, d1 is the smallest direction and d2 is the highest
 	return "[round(powernet.avail)] W"
 
 //If underfloor, hide the cable
-/obj/structure/cable/hide(i)
-	if(istype(loc, /turf))
-		set_invisibility(i ? INVISIBILITY_ABSTRACT : 0)
-	update_icon()
+/obj/structure/cable/hide(should_hide, force_update_icon = TRUE)
+	if(isturf(loc))
+		set_invisibility(should_hide ? INVISIBILITY_ABSTRACT : 0)
+
+	if(force_update_icon)
+		update_icon()
 
 /obj/structure/cable/hides_under_flooring()
 	return 1

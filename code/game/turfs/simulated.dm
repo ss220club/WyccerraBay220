@@ -45,8 +45,12 @@
 
 /turf/simulated/Initialize(mapload, cache_turf_in_area = TRUE)
 	. = ..()
+	if(GAME_STATE >= RUNLEVEL_GAME)
+		fluid_update()
+
 	if(istype(loc, /area/chapel))
-		holy = 1
+		holy = TRUE
+
 	levelupdate()
 
 /turf/simulated/proc/AddTracks(typepath,bloodDNA,comingdir,goingdir,bloodcolor=COLOR_BLOOD_HUMAN)
@@ -205,10 +209,7 @@
 	damage_health(damage, attack.get_damage_type(), attack.damage_flags())
 	return TRUE
 
-/turf/simulated/Initialize(mapload, cache_turf_in_area = TRUE)
-	if(GAME_STATE >= RUNLEVEL_GAME)
-		fluid_update()
-	. = ..()
+
 
 /turf/simulated/damage_health(damage, damage_type, damage_flags, severity, skip_can_damage_check = FALSE)
 	if (HAS_FLAGS(damage_flags, DAMAGE_FLAG_TURF_BREAKER))

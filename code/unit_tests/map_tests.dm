@@ -152,9 +152,10 @@
 		if(C.icon_state != expected_icon_state)
 			bad_cables |= C
 			log_bad("[log_info_line(C)] has an invalid icon state. Expected [expected_icon_state], was [C.icon_state]")
+
 		if(!ICON_HAS_STATE(C.icon, C.icon_state))
 			bad_cables |= C
-			log_bad("[log_info_line(C)] has an non-existing icon state.")
+			log_bad("[log_info_line(C)] has an non-existing icon state [C.icon_state].")
 
 	if(length(bad_cables))
 		fail("Found [length(bad_cables)] cable\s with an unexpected icon state.")

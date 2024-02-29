@@ -2862,9 +2862,13 @@
 /area/magshield/east)
 "hH" = (
 /obj/structure/cable{
+	d1 = 5;
+	d2 = 8;
 	icon_state = "5-8"
 	},
 /obj/structure/cable{
+	d1 = 2;
+	d2 = 5;
 	icon_state = "2-5"
 	},
 /turf/simulated/floor,

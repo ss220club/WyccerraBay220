@@ -48,6 +48,6 @@
 		return 0
 
 	for(var/turf/incorrectly_cached_turf as anything in area_incorrectly_cached_turfs)
-		log_bad("Non cached turf detected: [log_info_line(incorrectly_cached_turf)] in area: [log_info_line(get_area(incorrectly_cached_turf))]")
+		log_bad("Incorrectly cached turf detected: [log_info_line(incorrectly_cached_turf)] in area: [log_info_line(get_area(incorrectly_cached_turf))]")
 
 	return incorrectly_cached_turfs

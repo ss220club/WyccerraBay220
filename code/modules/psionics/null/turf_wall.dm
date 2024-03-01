@@ -13,6 +13,6 @@
 /turf/simulated/wall/nullglass
 	color = "#ff6088"
 
-/turf/simulated/wall/nullglass/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/wall/nullglass/Initialize(mapload, added_to_area_cache)
 	color = null
 	..(mapload, MATERIAL_NULLGLASS)

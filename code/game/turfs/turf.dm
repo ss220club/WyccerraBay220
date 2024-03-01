@@ -48,14 +48,28 @@
 	/// Reference to the turf fire on the turf
 	var/obj/turf_fire/turf_fire
 
-	var/static/list/global_turfs_cache = list()
+	/// Let me quote BYOND reference here (https://www.byond.com/docs/ref/#/turf):
+	///
+	/// ***
+	/// "Turfs cannot be moved. They can only be created or destroyed by changing world.maxx, world.maxy, or world.maxz.
+	/// When you create a new turf with new(), it always replaces the old one."
+	/// ***
+	///
+	/// I did testing of how turfs are replaced, and found out that they keep their `ref`,
+	/// so there is no need to recache turf in area on replacement. We only need it on turf area change.
+	/// To make turf cache consistent, we need to somehow keep a track if turf was already cached, or not.
+	/// So there is this variable - we will set it to `TRUE` the first time turf is added to area cache
+	/// and then provide it in `turf` constructor on `/turf/proc/ChangeTurf` to understand, the turf is cached or not.
+	/// The alternative decision is to cache turf only where it's needed, but it's too much work to do with it.
+	var/added_to_area_cache = FALSE
 
-/turf/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/Initialize(mapload, added_to_area_cache = FALSE)
 	. = ..()
 
-	if(cache_turf_in_area)
+	if(!added_to_area_cache)
 		var/area/my_area = loc
 		my_area.add_turf_to_cache(src)
+		src.added_to_area_cache = TRUE
 
 	if(dynamic_lighting)
 		luminosity = 0

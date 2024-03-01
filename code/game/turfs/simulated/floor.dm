@@ -38,7 +38,7 @@
 /turf/simulated/floor/protects_atom(atom/A)
 	return (A.level == ATOM_LEVEL_UNDER_TILE && !is_plating()) || ..()
 
-/turf/simulated/floor/Initialize(mapload, cache_turf_in_area = TRUE, floortype)
+/turf/simulated/floor/Initialize(mapload, added_to_area_cache, floortype)
 	var/area/area = get_area(src)
 	if (map_airless || area?.turfs_airless)
 		initial_gas = null

@@ -39,7 +39,7 @@ var/global/list/mining_floors = list()
 
 	has_resources = 1
 
-/turf/simulated/mineral/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/mineral/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	LAZYADDASSOCLIST(mining_walls, "[z]", src)
 	MineralSpread()
@@ -384,7 +384,7 @@ var/global/list/mining_floors = list()
 /turf/simulated/mineral/random
 	name = "mineral deposit"
 
-/turf/simulated/mineral/random/Initialize(mapload, cache_turf_in_area = TRUE, mineral_name, default_mineral_list = GLOB.weighted_minerals_sparse)
+/turf/simulated/mineral/random/Initialize(mapload, added_to_area_cache, mineral_name, default_mineral_list = GLOB.weighted_minerals_sparse)
 	if(!mineral_name && LAZYLEN(default_mineral_list))
 		mineral_name = pickweight(default_mineral_list)
 
@@ -395,8 +395,8 @@ var/global/list/mining_floors = list()
 
 	. = ..()
 
-/turf/simulated/mineral/random/high_chance/Initialize(mapload, cache_turf_in_area = TRUE, mineral_name, default_mineral_list)
-	. = ..(mapload, cache_turf_in_area, mineral_name, GLOB.weighted_minerals_rich)
+/turf/simulated/mineral/random/high_chance/Initialize(mapload, added_to_area_cache, mineral_name, default_mineral_list)
+	. = ..(mapload, added_to_area_cache, mineral_name, GLOB.weighted_minerals_rich)
 
 /**********************Asteroid**************************/
 
@@ -419,7 +419,7 @@ var/global/list/mining_floors = list()
 	var/overlay_detail
 	has_resources = 1
 
-/turf/simulated/floor/asteroid/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/floor/asteroid/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	LAZYADDASSOCLIST(mining_floors, "[z]", src)
 	if(prob(20))

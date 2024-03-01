@@ -884,6 +884,17 @@
 	},
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
+"Ko" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Kr" = (
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "Kt" = (
 /obj/structure/table/rack,
 /obj/item/reagent_containers/glass/beaker/noreact{
@@ -1932,8 +1943,8 @@ cp
 cp
 kr
 cp
-cp
-cp
+Kr
+Kr
 Wt
 aX
 sN
@@ -1971,8 +1982,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2010,8 +2021,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2049,8 +2060,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2088,8 +2099,8 @@ cp
 cp
 cp
 cp
-cp
-bZ
+Kr
+Ko
 cp
 cp
 cp

@@ -43,7 +43,7 @@
 		B.clean_blood()
 	..()
 
-/turf/simulated/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	if(GAME_STATE >= RUNLEVEL_GAME)
 		fluid_update()

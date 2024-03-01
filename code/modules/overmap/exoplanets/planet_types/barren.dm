@@ -36,7 +36,7 @@
 	if(prob(20))
 		AddOverlays(image('icons/turf/flooring/decals.dmi', "asteroid[rand(0,9)]"))
 
-/turf/simulated/floor/exoplanet/barren/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/floor/exoplanet/barren/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	update_icon()
 

@@ -13,7 +13,7 @@
 	z_eventually_space = TRUE
 	var/starlit = FALSE
 
-/turf/space/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/space/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	update_starlight()
 

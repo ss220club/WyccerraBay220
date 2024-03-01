@@ -10,7 +10,7 @@
 /turf/simulated/floor/exoplanet/can_engrave()
 	return FALSE
 
-/turf/simulated/floor/exoplanet/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/floor/exoplanet/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	if(!GLOB.using_map.use_overmap)
 		return
@@ -63,7 +63,7 @@
 			if(prob(40))
 				ChangeTurf(get_base_turf_by_area(src))
 
-/turf/simulated/floor/exoplanet/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/floor/exoplanet/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	update_icon(1)
 
@@ -133,7 +133,7 @@
 	dirt_color = "#e3e7e8"
 	footstep_type = /singleton/footsteps/snow
 
-/turf/simulated/floor/exoplanet/snow/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/floor/exoplanet/snow/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	icon_state = pick("snow[rand(1,12)]","snow0")
 
@@ -153,7 +153,7 @@
 	color = "#799c4b"
 	footstep_type = /singleton/footsteps/grass
 
-/turf/simulated/floor/exoplanet/grass/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/floor/exoplanet/grass/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	if(GLOB.using_map.use_overmap)
 		var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
@@ -185,7 +185,7 @@
 	dirt_color = "#ae9e66"
 	footstep_type = /singleton/footsteps/sand
 
-/turf/simulated/floor/exoplanet/desert/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/floor/exoplanet/desert/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	icon_state = "desert[rand(0,5)]"
 
@@ -229,7 +229,7 @@
 	icon_state = null
 	permit_ao = FALSE
 
-/turf/simulated/planet_edge/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/simulated/planet_edge/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
 	if(!istype(E))

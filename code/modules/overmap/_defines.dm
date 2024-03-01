@@ -19,7 +19,7 @@ var/global/list/map_sectors = list()
 	opacity = 1
 	density = TRUE
 
-/turf/unsimulated/map/Initialize(mapload, cache_turf_in_area = TRUE)
+/turf/unsimulated/map/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	name = "[x]-[y]"
 	var/list/numbers = list()

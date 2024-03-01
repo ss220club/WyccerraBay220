@@ -70,7 +70,7 @@
 
 	// Run the Destroy() chain.
 	qdel(src)
-	var/turf/simulated/new_turf = new replacement_turf(src, FALSE)
+	var/turf/simulated/new_turf = new replacement_turf(src, added_to_area_cache)
 
 	if (permit_ao)
 		regenerate_ao()

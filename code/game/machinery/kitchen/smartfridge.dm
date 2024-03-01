@@ -187,7 +187,8 @@
 			items += list(list(
 				"display_name" = I.item_name,
 				"vend" = i,
-				"quantity" = count))
+				"quantity" = count
+				))
 
 	if(length(items) > 0)
 		data["contents"] = items

@@ -1,7 +1,8 @@
 /turf/proc/ReplaceWithLattice(material)
 	var base_turf = get_base_turf_by_area(src, TRUE)
 	if(type != base_turf)
-		src.ChangeTurf(get_base_turf_by_area(src, TRUE))
+		ChangeTurf(get_base_turf_by_area(src, TRUE))
+
 	if(!locate(/obj/structure/lattice) in src)
 		new /obj/structure/lattice(src, material)
 
@@ -18,7 +19,7 @@
 
 //Creates a new turf
 /turf/proc/ChangeTurf(turf/replacement_turf, tell_universe = TRUE, force_lighting_update = FALSE, keep_air = FALSE)
-	if (!replacement_turf)
+	if(!replacement_turf)
 		return
 
 	if(isturf(replacement_turf) && !replacement_turf.flooded && replacement_turf.flood_object)

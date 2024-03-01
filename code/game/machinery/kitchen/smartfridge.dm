@@ -167,7 +167,7 @@
 /obj/machinery/smartfridge/tgui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "SmartFridge", name, 400, 500)
+		ui = new(user, src, "SmartFridge", name)
 		ui.set_autoupdate(FALSE)
 		ui.open()
 
@@ -184,7 +184,10 @@
 		var/datum/stored_items/I = item_records[i]
 		var/count = I.get_amount()
 		if(count > 0)
-			items.Add(list(list("display_name" = html_encode(capitalize(I.item_name)), "vend" = i, "quantity" = count)))
+			items += list(list(
+				"display_name" = I.item_name,
+				"vend" = i,
+				"quantity" = count))
 
 	if(length(items) > 0)
 		data["contents"] = items

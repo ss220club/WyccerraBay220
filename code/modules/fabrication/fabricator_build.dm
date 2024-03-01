@@ -40,10 +40,10 @@
 	updateUsrDialog()
 
 /obj/machinery/fabricator/proc/try_queue_build(datum/fabricator_recipe/recipe, multiplier)
-
 	// Do some basic sanity checking.
 	if(!is_functioning() || !istype(recipe) || !(recipe in SSfabrication.get_recipes(fabricator_class)))
-		return
+		return FALSE
+
 	multiplier = sanitize_integer(multiplier, 1, 100, 1)
 	if(!ispath(recipe, /obj/item/stack) && multiplier > 1)
 		multiplier = 1
@@ -51,14 +51,14 @@
 	// Check if sufficient resources exist.
 	for(var/material in recipe.resources)
 		if(stored_material[material] < round(recipe.resources[material] * mat_efficiency) * multiplier)
-			return
+			return FALSE
 
 	// Generate and track a new order.
 	var/datum/fabricator_build_order/order = new
 	order.remaining_time = recipe.build_time
-	order.target_recipe =  recipe
-	order.multiplier =     multiplier
-	queued_orders +=       order
+	order.target_recipe = recipe
+	order.multiplier = multiplier
+	queued_orders += order
 
 	// Remove/earmark resources.
 	for(var/material in recipe.resources)
@@ -70,3 +70,5 @@
 		get_next_build()
 	else
 		start_building()
+
+	return TRUE

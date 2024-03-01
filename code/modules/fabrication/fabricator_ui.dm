@@ -1,5 +1,3 @@
-#define PRINT_MULTIPLIER_DIVISOR 5
-
 /obj/machinery/fabricator/interface_interact(mob/user)
 	tgui_interact(user)
 	return TRUE
@@ -16,118 +14,150 @@
 
 /obj/machinery/fabricator/tgui_data(mob/user)
 	var/list/data = list()
+	var/functional = is_functioning()
+	data["functional"] = functional
+	if(functional)
+		data["material_efficiency"] = mat_efficiency
+		data["material_storage"] = get_material_ui_data()
+		data["current_build"] = get_current_build_ui_data()
+		data["build_queue"] = get_build_queue_ui_data()
 
-	data["category"] = show_category
+	return data
+
+/// Should go to UI_STATIC_DATA, and ONLY be updated when new fab recipe list is changed (in this case - when fab is hacked)
+/obj/machinery/fabricator/tgui_static_data(mob/user)
+	var/list/recipes = list()
+	for(var/datum/fabricator_recipe/available_recipe as anything in SSfabrication.get_recipes(fabricator_class))
+		if(available_recipe.hidden && !(fab_status_flags & FAB_HACKED))
+			continue
+
+		var/list/cost = list()
+		for(var/required_resource in available_recipe.resources)
+			var/list/resource = list()
+			resource["name"] = stored_substances_to_names[required_resource]
+			resource["amount"] = available_recipe.resources[required_resource]
+			if(ispath(required_resource, /material))
+				var/material/solid_material = required_resource
+				resource["units_per_sheet"] = solid_material.units_per_sheet
+
+			cost += list(resource)
+
+		var/list/recipe = list()
+		recipe["name"] = available_recipe.name
+		recipe["category"] = available_recipe.category
+		recipe["reference"] = "[ref(available_recipe)]"
+		recipe["hidden"] = available_recipe.hidden
+		recipe["cost"] = cost
+
+		recipes += list(recipe)
+
+	var/list/data = list()
+	data["recipes"] = recipes
 	data["categories"] = SSfabrication.get_categories(fabricator_class)
-	data["functional"] = is_functioning()
-
-	if(is_functioning())
-		var/current_storage =  list()
-		data["material_storage"] =  current_storage
-		for(var/material in stored_material)
-			var/list/material_data = list()
-			var/mat_name = capitalize(stored_substances_to_names[material])
-			material_data["name"] =        mat_name
-			material_data["stored"] =      stored_material[material]
-			material_data["max"] =         storage_capacity[material]
-			material_data["eject_key"] = stored_substances_to_names[material]
-			material_data["eject_label"] =   ispath(material, /material) ? "Eject" : "Flush"
-			data["material_storage"] += list(material_data)
-
-		var/list/current_build = list()
-		data["current_build"] = current_build
-		if(currently_building)
-			current_build["name"] =       currently_building.target_recipe.name
-			current_build["multiplier"] = currently_building.multiplier
-			current_build["progress"] =   "[100-round((currently_building.remaining_time/currently_building.target_recipe.build_time)*100)]%"
-		else
-			current_build["name"] =       "Nothing."
-			current_build["multiplier"] = "-"
-			current_build["progress"] =   "-"
-
-		data["build_queue"] = list()
-		if(length(queued_orders))
-			for(var/datum/fabricator_build_order/order in queued_orders)
-				var/list/order_data = list()
-				order_data["name"] = order.target_recipe.name
-				order_data["multiplier"] = order.multiplier
-				order_data["reference"] = "\ref[order]"
-				data["build_queue"] += list(order_data)
-		else
-			var/list/order_data = list()
-			order_data["name"] = "Nothing."
-			order_data["multiplier"] = "-"
-			data["build_queue"] += list(order_data)
-
-		data["build_options"] = list()
-		for(var/datum/fabricator_recipe/R in SSfabrication.get_recipes(fabricator_class))
-			if(R.hidden && !(fab_status_flags & FAB_HACKED) || (show_category != "All" && show_category != R.category))
-				continue
-			var/list/build_option = list()
-			var/max_sheets = 0
-			build_option["name"] =      R.name
-			build_option["reference"] = "\ref[R]"
-			build_option["illegal"] =   R.hidden
-			if(!length(R.resources))
-				build_option["cost"] = "No resources required."
-				max_sheets = 100
-			else
-				//Make sure it's buildable and list required resources.
-				var/list/material_components = list()
-				for(var/material in R.resources)
-					var/sheets = round(stored_material[material]/round(R.resources[material]*mat_efficiency))
-					if(isnull(max_sheets) || max_sheets > sheets)
-						max_sheets = sheets
-					if(stored_material[material] < round(R.resources[material]*mat_efficiency))
-						build_option["unavailable"] = 1
-					material_components += "[round(R.resources[material] * mat_efficiency)] [stored_substances_to_names[material]]"
-				build_option["cost"] = "[capitalize(jointext(material_components, ", "))]."
-			if(ispath(R.path, /obj/item/stack) && max_sheets >= PRINT_MULTIPLIER_DIVISOR)
-				var/obj/item/stack/R_stack = R.path
-				build_option["multipliers"] = list()
-				for(var/i = 1 to floor(min(R_stack.max_amount, max_sheets)/PRINT_MULTIPLIER_DIVISOR))
-					var/mult = i * PRINT_MULTIPLIER_DIVISOR
-					build_option["multipliers"] += list(list("label" = "x[mult]", "multiplier" = mult))
-			data["build_options"] += list(build_option)
 	return data
 
 /obj/machinery/fabricator/tgui_act(action, list/params)
 	if(..())
-		return
-	. = TRUE
+		return TRUE
+
 	switch(action)
-		if("change_category")
-			show_category = params["category"]
-			return TRUE
 		if("make")
-			try_queue_build(locate(params["make"]), text2num(params["multiplier"]))
-			return TRUE
+			return try_queue_build(locate(params["make"]), text2num(params["multiplier"]))
 		if("cancel")
-			try_cancel_build(locate(params["cancel"]))
-			return TRUE
+			return cancel_build(locate(params["cancel"]))
 		if("eject_mat")
-			try_dump_material(params["eject_mat"])
-			return TRUE
+			return eject_material(params["eject_mat"])
 
-/obj/machinery/fabricator/proc/try_cancel_build(datum/fabricator_build_order/order)
-	if(istype(order) && currently_building != order && is_functioning())
-		if(order in queued_orders)
-			for(var/mat in order.earmarked_materials)
-				stored_material[mat] = min(stored_material[mat] + (order.earmarked_materials[mat] * 0.9), storage_capacity[mat])
-			queued_orders -= order
+	return FALSE
+
+
+/obj/machinery/fabricator/proc/get_material_ui_data()
+	PRIVATE_PROC(TRUE)
+
+	var/list/data = list()
+	for(var/material in stored_material)
+		var/list/material_data = list()
+		/// FABRICATOR UI TODO: add material image asset
+		material_data["name"] = stored_substances_to_names[material]
+		material_data["stored"] = stored_material[material]
+		material_data["max"] = storage_capacity[material]
+
+		var/is_material = ispath(material, /material)
+		if(is_material)
+			var/material/solid_material = material
+			material_data["units_per_sheet"] = solid_material.units_per_sheet
+			material_data["refundable"] = TRUE
+		else
+			material_data["refundable"] = FALSE
+
+		data += list(material_data)
+
+	return data
+
+/obj/machinery/fabricator/proc/get_current_build_ui_data()
+	PRIVATE_PROC(TRUE)
+
+	var/list/data = list()
+	if(currently_building)
+		/// FABRICATOR UI TODO: add image asset for each fabricator recipe
+		data["name"] = currently_building.target_recipe.name
+		data["multiplier"] = currently_building.multiplier
+		data["progress"] = "[Percent(currently_building.target_recipe.build_time - currently_building.remaining_time, currently_building.target_recipe.build_time, 0)]%"
+	else
+		data = null
+
+	return data
+
+/obj/machinery/fabricator/proc/get_build_queue_ui_data()
+	PRIVATE_PROC(TRUE)
+
+	var/list/data = list()
+	for(var/datum/fabricator_build_order/order as anything in queued_orders)
+		var/list/order_data = list()
+		order_data["name"] = order.target_recipe.name
+		order_data["multiplier"] = order.multiplier
+		order_data["reference"] = "[ref(order)]"
+		data += list(order_data)
+
+	return data
+
+/obj/machinery/fabricator/proc/cancel_build(datum/fabricator_build_order/order)
+	if(!istype(order) || currently_building == order || !is_functioning())
+		return FALSE
+
+	if(!(order in queued_orders))
 		qdel(order)
+		return FALSE
 
-/obj/machinery/fabricator/proc/try_dump_material(mat_name)
-	for(var/mat_path in stored_substances_to_names)
-		if(stored_substances_to_names[mat_path] != mat_name)
-			return
-		if(ispath(mat_path, /material))
-			var/material/mat = SSmaterials.get_material_by_name(mat_name)
-			if(mat && stored_material[mat_path] > mat.units_per_sheet && mat.stack_type)
-				var/sheet_count = floor(stored_material[mat_path]/mat.units_per_sheet)
-				stored_material[mat_path] -= sheet_count * mat.units_per_sheet
-				mat.place_sheet(get_turf(src), sheet_count)
-		else if(!isnull(stored_material[mat_path]))
-			stored_material[mat_path] = 0
+	for(var/material_to_refund_path in order.earmarked_materials)
+		stored_material[material_to_refund_path] = min(stored_material[material_to_refund_path] + (order.earmarked_materials[material_to_refund_path] * 0.9), storage_capacity[material_to_refund_path])
 
-#undef PRINT_MULTIPLIER_DIVISOR
+	queued_orders -= order
+	qdel(order)
+
+	return TRUE
+
+
+/obj/machinery/fabricator/proc/eject_material(mat_name)
+	var/material/material_to_eject = SSmaterials.get_material_by_name(mat_name)
+	if(!material_to_eject)
+		return FALSE
+
+	var/stored_material_amount = stored_material[material_to_eject.type]
+	if(!stored_material_amount)
+		return FALSE
+
+	/// If we have solid material - we can get it printed back
+	if(istype(material_to_eject, /material))
+		if(stored_material_amount < material_to_eject.units_per_sheet || !material_to_eject.stack_type)
+			return FALSE
+
+		var/sheet_count = floor(stored_material_amount / material_to_eject.units_per_sheet)
+		stored_material[material_to_eject.type] -= sheet_count * material_to_eject.units_per_sheet
+		material_to_eject.place_sheet(get_turf(src), sheet_count)
+
+	/// If the material is liquid or something - we can't
+	else
+		stored_material[material_to_eject.type] = 0
+
+	return TRUE

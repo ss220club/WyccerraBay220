@@ -1,7 +1,7 @@
 /datum/fabricator_recipe
 	var/name
 	var/path
-	var/hidden
+	var/hidden = FALSE
 	var/category = "General"
 	var/list/resources
 	var/list/fabricator_types = list(
@@ -32,4 +32,3 @@
 		for(var/datum/reagent/R in I.reagents.reagent_list)
 			resources[R.type] = R.volume * FABRICATOR_EXTRA_COST_FACTOR
 	qdel(I)
-

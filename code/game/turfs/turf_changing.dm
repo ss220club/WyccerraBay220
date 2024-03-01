@@ -8,33 +8,53 @@
 
 // Removes all signs of lattice on the pos of the turf -Donkieyo
 /turf/proc/RemoveLattice()
-	var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-	if(L)
-		qdel(L)
+	var/obj/structure/lattice/lattice_to_remove = locate() in src
+	QDEL_NULL(lattice_to_remove)
+
+// Turf specific behavior after turf change
 // Called after turf replaces old one
 /turf/proc/post_change()
+	SHOULD_CALL_PARENT(TRUE)
+
 	levelupdate()
 	if (above)
 		above.update_mimic()
 
+// Turf specific behavior before turf change
+// Called just before turf replaces old one
+/turf/proc/pre_change()
+	SHOULD_CALL_PARENT(TRUE)
+
+	if(connections)
+		connections.erase_all()
+
+	ClearOverlays()
+	underlays.Cut()
+
+	if(ambient_bitflag) //Should remove everything about current bitflag, let it be recalculated by SS later
+		SSambient_lighting.clean_turf(src)
+
 //Creates a new turf
-/turf/proc/ChangeTurf(turf/replacement_turf, tell_universe = TRUE, force_lighting_update = FALSE, keep_air = FALSE)
-	if(!replacement_turf)
+/turf/proc/ChangeTurf(turf/replacement_turf_type, tell_universe = TRUE, force_lighting_update = FALSE, keep_air = FALSE)
+	if(!ispath(replacement_turf_type))
 		return
 
-	if(isturf(replacement_turf) && !replacement_turf.flooded && replacement_turf.flood_object)
+	if(!initial(replacement_turf_type.flooded) && initial(replacement_turf_type.flood_object))
 		QDEL_NULL(flood_object)
 
 	// This makes sure that turfs are not changed to space when one side is part of a zone
-	if(ispath(replacement_turf, /turf/space))
-		var/turf/below = GetBelow(src)
-		if(istype(below) && !isspaceturf(below))
-			replacement_turf = /turf/simulated/open
+	if(ispath(replacement_turf_type, /turf/space) || ispath(replacement_turf_type, /turf/simulated/open))
+		QDEL_NULL(turf_fire)
+
+		if(ispath(replacement_turf_type, /turf/space))
+			var/turf/below = GetBelow(src)
+			if(istype(below) && !isspaceturf(below))
+				replacement_turf_type = /turf/simulated/open
 
 	var/old_density = density
 	var/old_air = air
 	var/old_hotspot = hotspot
-	var/old_turf_fire = null
+	var/old_turf_fire = turf_fire
 	var/old_opacity = opacity
 	var/old_dynamic_lighting = TURF_IS_DYNAMICALLY_LIT_UNSAFE(src)
 	var/old_affecting_lights = affecting_lights
@@ -45,60 +65,39 @@
 	var/old_permit_ao = permit_ao
 	var/old_zflags = z_flags
 
-	if(isspaceturf(replacement_turf) || isopenspace(replacement_turf))
-		QDEL_NULL(turf_fire)
-	else
-		old_turf_fire = turf_fire
-
 	changing_turf = TRUE
 
-	if(connections)
-		connections.erase_all()
-
-	ClearOverlays()
-	underlays.Cut()
-	if(issimulatedturf(src))
-		//Yeah, we're just going to rebuild the whole thing.
-		//Despite this being called a bunch during explosions,
-		//the zone will only really do heavy lifting once.
-		var/turf/simulated/S = src
-		if(S.zone)
-			S.zone.rebuild()
-
-	if(ambient_bitflag) //Should remove everything about current bitflag, let it be recalculated by SS later
-		SSambient_lighting.clean_turf(src)
+	pre_change()
 
 	// Run the Destroy() chain.
 	qdel(src)
-	var/turf/simulated/new_turf = new replacement_turf(src, added_to_area_cache)
-
-	if (permit_ao)
-		regenerate_ao()
-
-	if (keep_air)
-		new_turf.air = old_air
-
-	if(ispath(replacement_turf, /turf/simulated))
-		if(old_hotspot)
-			hotspot = old_hotspot
-		if (istype(new_turf,/turf/simulated/floor))
-			new_turf.RemoveLattice()
-	else if(hotspot)
-		qdel(hotspot)
-
+	var/turf/new_turf = new replacement_turf_type(src, added_to_area_cache)
 
 	if(tell_universe)
 		GLOB.universe.OnTurfChange(new_turf)
 
-	SSair.mark_for_update(src) //handle the addition of the new turf.
-
-	for(var/turf/space/space_turf in RANGE_TURFS(new_turf,1))
-		space_turf.update_starlight()
+	for(var/turf/starlighted_turf as anything in RANGE_TURFS(new_turf, 1))
+		if(starlighted_turf.permit_starlight)
+			starlighted_turf.update_starlight()
 
 	new_turf.above = old_above
 
+	if(keep_air)
+		new_turf.air = old_air
+
+	SSair.mark_for_update(src) //handle the addition of the new turf.
+
+	if(simulated)
+		if(old_hotspot)
+			hotspot = old_hotspot
+	else
+		QDEL_NULL(hotspot)
+
 	new_turf.post_change()
 	. = new_turf
+
+	if(permit_ao)
+		regenerate_ao()
 
 	new_turf.ao_neighbors = old_ao_neighbors
 	// lighting stuff
@@ -123,14 +122,15 @@
 		new_turf.rebuild_zbleed()
 	// end of lighting stuff
 
-	for(var/turf/T as anything in RANGE_TURFS(src, 1))
-		T.update_icon()
+	for(var/turf/turf_to_update_icon_for as anything in RANGE_TURFS(src, 1))
+		turf_to_update_icon_for.queue_icon_update()
 
 	if(density != old_density)
 		GLOB.density_set_event.raise_event(src, old_density, density)
 
 	if(!density)
 		turf_fire = old_turf_fire
+
 	else if(old_turf_fire)
 		QDEL_NULL(old_turf_fire)
 

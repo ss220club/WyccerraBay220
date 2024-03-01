@@ -52,6 +52,10 @@
 	if(floortype)
 		set_flooring(GET_SINGLETON(floortype))
 
+/turf/simulated/floor/post_change()
+	. = ..()
+	RemoveLattice()
+
 /turf/simulated/floor/proc/set_flooring(singleton/flooring/newflooring)
 	make_plating(defer_icon_update = 1)
 	flooring = newflooring

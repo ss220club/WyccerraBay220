@@ -4,6 +4,8 @@
 
 	layer = TURF_LAYER
 
+	simulated = FALSE
+
 	var/turf_flags
 
 	var/holy = 0
@@ -47,6 +49,12 @@
 
 	/// Reference to the turf fire on the turf
 	var/obj/turf_fire/turf_fire
+
+	/// Whether or not we calculate starlight on specific turf
+	var/permit_starlight = FALSE
+
+	/// If this turf is currently startlit or not
+	var/starlit = FALSE
 
 	/// Let me quote BYOND reference here (https://www.byond.com/docs/ref/#/turf):
 	///
@@ -509,3 +517,26 @@ var/global/const/enterloopsanity = 100
 			machinery_to_update.area_changed(old_area, new_area) // They usually get moved events, but this is the one way an area can change without triggering one.
 
 	//TODO: CitRP has some concept of outside based on turfs above. We don't really have any use cases right now, revisit this function if this changes
+
+/turf/proc/remove_starlight()
+	if(!starlit)
+		return
+
+	replace_ambient_light(SSskybox.background_color, null, config.starlight, 0)
+	starlit = FALSE
+
+/turf/proc/update_starlight()
+	if(!config.starlight || !permit_starlight)
+		return
+
+	//We only need starlight on turfs adjacent to dynamically lit turfs, for example space near bulkhead
+	for (var/turf/T as anything in RANGE_TURFS(src, 1))
+		if (!isloc(T.loc) || !TURF_IS_DYNAMICALLY_LIT_UNSAFE(T))
+			continue
+
+		add_ambient_light(SSskybox.background_color, config.starlight)
+		starlit = TRUE
+		return
+
+	if(TURF_IS_AMBIENT_LIT_UNSAFE(src))
+		remove_starlight()

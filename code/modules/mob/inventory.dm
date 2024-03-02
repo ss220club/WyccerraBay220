@@ -105,7 +105,7 @@
 	// Try put it in their backpack
 	if(istype(back, /obj/item/storage))
 		var/obj/item/storage/backpack = back
-		if(backpack.can_be_inserted(item_to_equip, null, TRUE))
+		if(backpack.can_be_inserted(item_to_equip, src))
 			backpack.handle_item_insertion(item_to_equip)
 			if(backpack.use_sound) // Play sound if item is inserted into the backpack.
 				playsound(src, backpack.use_sound, 50, 1, -5)

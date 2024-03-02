@@ -3366,6 +3366,7 @@
 #include "code\unit_tests\_defines.dm"
 #include "code\unit_tests\_includes.dm"
 #include "code\unit_tests\_unit_test.dm"
+#include "code\unit_tests\_unit_tests.dm"
 #include "code\unit_tests\alt_appearances_test.dm"
 #include "code\unit_tests\area_tests.dm"
 #include "code\unit_tests\atmospherics_tests.dm"

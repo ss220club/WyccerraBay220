@@ -126,7 +126,11 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	data["announceAuth"] = announceAuth
 	return data
 
-/obj/machinery/requests_console/OnTopic(action, list/params)
+/obj/machinery/requests_console/tgui_act(action, list/params, datum/tgui/ui, datum/tgui_state/state)
+	if(..())
+		return
+	. = TRUE
+
 	switch(action)
 		if("writeInput")
 			if(reject_bad_text(params["write"]))

@@ -273,6 +273,14 @@
 		update_icon()
 		update_material()
 
+/*
+/obj/structure/table/CanPathingPass(obj/item/card/id/ID, to_dir, atom/movable/caller, no_id = FALSE)
+	. = !density
+	if(caller)
+		. = . || (caller.pass_flags & PASSTABLE)
+*/
+
+
 /obj/structure/table/proc/update_desc()
 	if(material)
 		name = "[material.display_name] table"

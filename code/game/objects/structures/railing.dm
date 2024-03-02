@@ -369,3 +369,6 @@
 
 /obj/structure/railing/set_color(color)
 	src.color = color ? color : material.icon_colour
+
+/obj/structure/railing/CanPathingPass(obj/item/card/id/ID, to_dir, atom/movable/caller, no_id = FALSE)
+	return !density || (dir != to_dir)

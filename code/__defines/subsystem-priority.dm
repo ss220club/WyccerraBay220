@@ -13,16 +13,13 @@
 #define FIRE_PRIORITY_MOB 700  // Mob Life().
 
 #define FIRE_PRIORITY_PROCESSING 650 // Default priority for all processing subsystems
-
 #define FIRE_PRIORITY_MACHINERY 600  // Machinery + powernet ticks.
-#define FIRE_PRIORITY_AIR 500  // ZAS processing.
 #define FIRE_PRIORITY_SPACEDRIFT 450 // Drifting things
+#define FIRE_PRIORITY_AIR 500  // ZAS processing.
 #define FIRE_PRIORITY_PLANTS 400
 #define FIRE_PRIORITY_THROWING 350  // Throwing calculation and constant checks
 #define FIRE_PRIORITY_CHEMISTRY 300  // Multi-tick chemical reactions.
-
 #define FIRE_PRIORITY_DEFAULT 50 // Default priority for all subsystems
-
 #define FIRE_PRIORITY_VINES 50 // Spreading vine effects.
 #define FIRE_PRIORITY_PSYCHICS 45 // Psychic complexus processing.
 #define FIRE_PRIORITY_TURF 30   // Radioactive walls/blob.
@@ -30,7 +27,8 @@
 #define FIRE_PRIORITY_CIRCUIT 30   // Processing Circuit's ticks and all that
 #define FIRE_PRIORITY_GRAPH 30   // Merging and splitting of graphs
 #define FIRE_PRIORITY_CHAR_SETUP 25   // Writes player preferences to savefiles.
-#define FIRE_PRIORITY_AI 25  // Mob AI
+#define FIRE_PRIORITY_PATHFINDER 24
+#define FIRE_PRIORITY_AI 23  // Mob AI
 #define FIRE_PRIORITY_GARBAGE 20   // Garbage collection.
 #define FIRE_PRIORITY_ALARM 20  // Alarm processing.
 #define FIRE_PRIORITY_EVENT 20  // Event processing and queue handling.

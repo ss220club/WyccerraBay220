@@ -1395,6 +1395,10 @@ About the new airlock wires panel:
 		window_color = GLASS_COLOR
 	update_icon()
 
+/obj/machinery/door/airlock/CanPathingPass(obj/item/card/id/ID, to_dir, atom/movable/caller, no_id = FALSE)
+	//Airlock is passable if it is open (!density), bot has access, and is not bolted shut or powered off)
+	return !density || (!no_id && !locked && arePowerSystemsOn() && check_access(ID))
+
 // Public access
 
 /singleton/public_access/public_method/airlock_toggle_bolts

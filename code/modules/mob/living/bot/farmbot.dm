@@ -120,17 +120,15 @@
 			if(confirmTarget(tray))
 				target = tray
 				return
+
 		if(!target && refills_water && tank && tank.reagents.total_volume < tank.reagents.maximum_volume)
 			for(var/obj/structure/hygiene/sink/source in view(7, src))
 				target = source
 				return
 
-/mob/living/bot/farmbot/calcTargetPath() // We need to land NEXT to the tray, because the tray itself is impassable
-	for(var/trayDir in list(NORTH, SOUTH, EAST, WEST))
-		target_path = AStar(get_turf(loc), get_step(get_turf(target), trayDir), TYPE_PROC_REF(/turf, CardinalTurfsWithAccess), TYPE_PROC_REF(/turf, Distance), 0, max_target_dist, id = botcard)
-		if(target_path)
-			break
-	if(!target_path)
+/mob/living/bot/farmbot/calcTargetPath()
+	target_path = get_path_to(src, target, max_target_dist, min_target_dist = 1, id = botcard)	// We need to land NEXT to the tray, because the tray itself is impassable
+	if(!length(target_path))
 		ignore_list |= target
 		target = null
 		target_path = list()

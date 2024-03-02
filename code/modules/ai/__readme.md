@@ -1,4 +1,3 @@
-/*
 [Summary]
 
 This module contains an AI implementation designed to be (at the base level) mobtype-agnostic,
@@ -10,7 +9,6 @@ support them.
 When designing a new mob, all that is needed to give a mob an AI is to set
 its 'ai_holder' variable to the path of the AI that is desired.
 
-
 [Seperation]
 
 In previous iterations of AI systems, the AI is generally written into the mob's code directly,
@@ -19,38 +17,36 @@ to the mob's own ticker, meaning it could only decide every two seconds.
 
 Instead, this version has the code for the AI held inside an /datum/ai_holder object,
 which is carried by the mob it controls. This gives some advantages;
-	All /mob/living mobs can potentially have an AI applied to them, and utilize the
-	same base code while adding specialized code on top.
+All /mob/living mobs can potentially have an AI applied to them, and utilize the
+same base code while adding specialized code on top.
 
-	Interfaces allow the base AI code to not need to know what particular mode it's controlling.
+    Interfaces allow the base AI code to not need to know what particular mode it's controlling.
 
-	The processing of the AI is independant of the mob's Life() cycle, which allows for a
-	different clock rate.
+    The processing of the AI is independant of the mob's Life() cycle, which allows for a
+    different clock rate.
 
-	Seperating the AI from the mob simplies the mob's code greatly.
+    Seperating the AI from the mob simplies the mob's code greatly.
 
-	It is more logical to think that a mob is the 'body', where as its ai_holder is
-	the 'mind'.
+    It is more logical to think that a mob is the 'body', where as its ai_holder is
+    the 'mind'.
 
-	AIs can be applied or disabled on the fly by instantiating or deleting the
-	ai_holder, if needed.
-
+    AIs can be applied or disabled on the fly by instantiating or deleting the
+    ai_holder, if needed.
 
 The current implementation also has some disadvantages, but they can perhaps be resolved
 in the future.
-	AI-driven mob movement and attack speed is tied to half-second delays due to the
-	AI subsystem ticking at that rate. Porting the timer subsystem and integrating
-	callbacks into basic AI actions (moving, attacking) can potentially resolve that.
+AI-driven mob movement and attack speed is tied to half-second delays due to the
+AI subsystem ticking at that rate. Porting the timer subsystem and integrating
+callbacks into basic AI actions (moving, attacking) can potentially resolve that.
 
-	It can be difficult to modify AI variables at mob instantiation without an ugly
-	delay, as the ai_holder might not exist yet.
-
+    It can be difficult to modify AI variables at mob instantiation without an ugly
+    delay, as the ai_holder might not exist yet.
 
 [Flow of Processing]
 
 Terrible visual representation here;
-AI Subsystem	-> Every 0.5s -> /datum/ai_holder/handle_tactics()	-> switch(stance)...
-				-> Every 2.0s -> /datum/ai_holder/handle_strategicals()	-> switch(stance)...
+AI Subsystem -> Every 0.5s -> /datum/ai_holder/handle_tactics() -> switch(stance)...
+-> Every 2.0s -> /datum/ai_holder/handle_strategicals() -> switch(stance)...
 
 The AI datum is not processed by the mob itself, but instead it is directly processed
 by a new AI subsystem. The AI subsystem contains a list of all active ai_holder
@@ -89,7 +85,7 @@ noticable due to the mob appearing to do things inbetween those two seconds.
 The purpose of having two tracks is to allow for 'fast' and 'slow' actions
 to be more easily encapsulated, and ensures that all ai_holders are syncronized
 with each other, as opposed to having individual tick counters inside all of
-the ai_holder instances.  It should be noted that handle_tactics() is always
+the ai_holder instances. It should be noted that handle_tactics() is always
 called first, before handle_strategicals() every two seconds.
 
 [Process Skipping]
@@ -116,7 +112,6 @@ ai_holder, should not be sleep()ed, as it will block the AI Subsystem
 from processing the other ai_holders until the sleep() finishes.
 Delays on the mob typically have set waitfor = FALSE, or spawn() is used.
 
-
 [Stances]
 
 The AI has a large number of states that it can be in, called stances.
@@ -132,7 +127,7 @@ avoid infinite loops (I.E. Stance A switches to Stance B, which then
 switches to Stance A, and so on...), and the delay is very short so
 it should not be an issue.
 
-See code/__defines/ai.dm for a list of stance defines, and descriptions
+See code/\_\_defines/ai.dm for a list of stance defines, and descriptions
 about their purpose. Generally, each stance has its own file in the AI
 module folder and are mostly self contained, however some files instead
 deal with general things that other stances may require, such as targeting
@@ -196,6 +191,3 @@ To use a specific subtype on a mob, all that is needed is setting the mob's
 ai_holder to the subtype desired, and it will create that subtype when
 the mob is initialize()d. Switching to a subtype 'live' will require additional
 effort on the coder.
-
-
-*/

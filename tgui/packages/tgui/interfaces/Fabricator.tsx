@@ -4,6 +4,7 @@ import { useBackend, useLocalState, useSharedState } from '../backend';
 import {
   Box,
   Button,
+  NoticeBox,
   Section,
   Stack,
   Input,
@@ -64,22 +65,27 @@ export const Fabricator = (props, context) => {
     <Window width={800} height={600}>
       <Window.Content>
         <Stack fill>
-          <Stack.Item grow basis="25%">
+          <Stack.Item basis="25%">
             <Stack fill vertical>
               <Stack.Item grow>
                 <FabCategories />
               </Stack.Item>
+              <Stack.Item textAlign="center">
+                <NoticeBox color="blue">
+                  Результаты поиска зависят от выбранной категории
+                </NoticeBox>
+              </Stack.Item>
             </Stack>
           </Stack.Item>
-          <Stack.Item grow basis="50%">
+          <Stack.Item basis="50%">
             <FabDesigns />
           </Stack.Item>
-          <Stack.Item grow basis="25%">
+          <Stack.Item basis="25%">
             <Stack fill vertical>
-              <Stack.Item grow basis="53%">
+              <Stack.Item>
                 <FabResources />
               </Stack.Item>
-              <Stack.Item grow basis="47%">
+              <Stack.Item grow>
                 <FabQueue />
               </Stack.Item>
             </Stack>
@@ -95,12 +101,19 @@ const FabCategories = (props, context) => {
   const [tab, setTab] = useSharedState(context, 'tab', 'All');
   return (
     <Section fill scrollable title="Категории">
-      <Tabs vertical>
-        <Tabs.Tab selected={'All' === tab} onClick={() => setTab('All')}>
+      <Tabs vertical textAlign="center">
+        <Tabs.Tab
+          height={3}
+          selected={'All' === tab}
+          onClick={() => setTab('All')}
+        >
           All
         </Tabs.Tab>
         {data.categories.map((category) => (
           <Tabs.Tab
+            mt={1}
+            height={3}
+            color="blue"
             selected={category === tab}
             key={category}
             onClick={() => setTab(category)}
@@ -180,13 +193,25 @@ const FabResources = (props, context) => {
   const { act, data } = useBackend<FabricatorData>(context);
   const { material_storage } = data;
   return (
-    <Section fill scrollable title="Ресурсы">
+    <Section fill title="Ресурсы">
       {material_storage.map((material) => (
         <ImageButton
+          mb={0}
+          height="57px"
           key={material.name}
           title={capitalizeAll(material.name)}
-          content={`${material.stored} / ${material.max}`}
           selected={material.stored === material.max}
+          content={
+            <ProgressBar
+              width={11}
+              color="grey"
+              value={material.stored}
+              minValue={0}
+              maxValue={material.max}
+            >
+              {material.stored} / {material.max}
+            </ProgressBar>
+          }
           disabled={!material.stored}
           onClick={() => act('eject_mat', { eject_mat: material.name })}
         />

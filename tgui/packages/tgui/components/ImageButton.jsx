@@ -78,7 +78,6 @@ export const ImageButton = (props) => {
             ])}
           >
             {disabled ? disabledContent : content}
-            <br />
             {children}
           </div>
         ) : (
@@ -99,7 +98,6 @@ export const ImageButton = (props) => {
               className={classes(['ImageButton__content__horizontal--content'])}
             >
               {content}
-              <br />
               {children}
             </div>
           </div>

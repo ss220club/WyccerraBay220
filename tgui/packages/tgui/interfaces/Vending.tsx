@@ -90,7 +90,7 @@ const VendingMain = (props, context) => {
     product.name.toLowerCase().includes(searchText.toLowerCase())
   );
   return (
-    <Window width={products.length > 25 ? '401' : '384'} height={550}>
+    <Window width={products.length > 25 ? '401' : '384'} height={535}>
       {!vend_ready || data.mode ? <Vend /> : ''}
       <Window.Content>
         <Section
@@ -120,6 +120,7 @@ const VendingMain = (props, context) => {
           {filteredProducts.map((product) => (
             <ImageButton
               key={product.key}
+              vertical
               m={0.5}
               image={product.image}
               imageSize="64px"

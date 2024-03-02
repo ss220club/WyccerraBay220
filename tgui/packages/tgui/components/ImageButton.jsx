@@ -12,15 +12,17 @@ export const ImageButton = (props) => {
   const {
     className,
     color,
+    title,
+    vertical,
+    content,
+    selected,
     disabled,
     disabledContent,
     image,
     imageSize,
-    selected,
     tooltip,
     tooltipPosition,
     ellipsis,
-    content,
     children,
     onClick,
     ...rest
@@ -33,7 +35,7 @@ export const ImageButton = (props) => {
   let buttonContent = (
     <div
       className={classes([
-        'ImageButton',
+        vertical ? 'ImageButton__vertical' : 'ImageButton__horizontal',
         selected && 'ImageButton--selected',
         disabled && 'ImageButton--disabled',
         color && typeof color === 'string'
@@ -45,30 +47,54 @@ export const ImageButton = (props) => {
       tabIndex={!disabled && '0'}
       {...computeBoxProps(rest)}
     >
-      <img
-        src={`data:image/jpeg;base64,${image}`}
-        style={{
-          width: imageSize,
-          '-ms-interpolation-mode': 'nearest-neighbor',
-        }}
-      />
-      {content && (
-        <div
-          className={classes([
-            'ImageButton__content',
-            ellipsis && 'ImageButton__content--ellipsis',
-            selected && 'ImageButton__content--selected',
-            disabled && 'ImageButton__content--disabled',
-            color && typeof color === 'string'
-              ? 'ImageButton__content--color--' + color
-              : 'ImageButton__content--color--default',
-            className,
-            computeBoxClassName(rest),
-          ])}
-        >
-          {disabled ? disabledContent : content}
-        </div>
-      )}
+      <div className={classes(['ImageButton__image'])}>
+        <img
+          src={`data:image/jpeg;base64,${image}`}
+          style={{
+            width: imageSize,
+            '-ms-interpolation-mode': 'nearest-neighbor',
+          }}
+        />
+      </div>
+      {content &&
+        (vertical ? (
+          <div
+            className={classes([
+              'ImageButton__content__vertical',
+              ellipsis && 'ImageButton__content--ellipsis',
+              selected && 'ImageButton__content--selected',
+              disabled && 'ImageButton__content--disabled',
+              color && typeof color === 'string'
+                ? 'ImageButton__content--color--' + color
+                : 'ImageButton__content--color--default',
+              className,
+              computeBoxClassName(rest),
+            ])}
+          >
+            {disabled ? disabledContent : content}
+          </div>
+        ) : (
+          <div className={classes(['ImageButton__content__horizontal'])}>
+            {title && (
+              <div
+                className={classes(['ImageButton__content__horizontal--title'])}
+              >
+                {title}
+                <div
+                  className={classes([
+                    'ImageButton__content__horizontal--divider',
+                  ])}
+                />
+              </div>
+            )}
+            <div
+              className={classes(['ImageButton__content__horizontal--content'])}
+            >
+              {content}
+            </div>
+          </div>
+        ))}
+
       {children}
     </div>
   );

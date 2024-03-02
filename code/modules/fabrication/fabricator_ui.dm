@@ -98,7 +98,7 @@
 		/// FABRICATOR UI TODO: add image asset for each fabricator recipe
 		data["name"] = currently_building.target_recipe.name
 		data["multiplier"] = currently_building.multiplier
-		data["progress"] = "[Percent(currently_building.target_recipe.build_time - currently_building.remaining_time, currently_building.target_recipe.build_time, 0)]%"
+		data["progress"] = "[Percent(currently_building.target_recipe.build_time - currently_building.remaining_time, currently_building.target_recipe.build_time, 0)]"
 	else
 		data = null
 

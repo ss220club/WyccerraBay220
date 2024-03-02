@@ -11,6 +11,7 @@ import { Tooltip } from './Tooltip';
 export const ImageButton = (props) => {
   const {
     className,
+    asset,
     color,
     title,
     vertical,
@@ -19,6 +20,7 @@ export const ImageButton = (props) => {
     disabled,
     disabledContent,
     image,
+    imageAsset,
     imageSize,
     tooltip,
     tooltipPosition,
@@ -48,13 +50,17 @@ export const ImageButton = (props) => {
       {...computeBoxProps(rest)}
     >
       <div className={classes(['ImageButton__image'])}>
-        <img
-          src={`data:image/jpeg;base64,${image}`}
-          style={{
-            width: imageSize,
-            '-ms-interpolation-mode': 'nearest-neighbor',
-          }}
-        />
+        {asset ? (
+          <div className={classes([imageAsset, image])} />
+        ) : (
+          <img
+            src={`data:image/jpeg;base64,${image}`}
+            style={{
+              width: imageSize,
+              '-ms-interpolation-mode': 'nearest-neighbor',
+            }}
+          />
+        )}
       </div>
       {content &&
         (vertical ? (

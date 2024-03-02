@@ -95,11 +95,17 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	. = ..()
 
 /obj/machinery/requests_console/interface_interact(mob/user)
-	ui_interact(user)
+	tgui_interact(user)
 	return TRUE
 
-/obj/machinery/requests_console/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
-	var/data[0]
+/obj/machinery/requests_console/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "RequestConsole", name)
+		ui.open()
+
+/obj/machinery/requests_console/tgui_data(mob/user)
+	var/list/data = list()
 
 	data["department"] = department
 	data["screen"] = screen
@@ -118,75 +124,77 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	data["msgStamped"] = msgStamped
 	data["msgVerified"] = msgVerified
 	data["announceAuth"] = announceAuth
+	return data
 
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if (!ui)
-		ui = new(user, src, ui_key, "request_console.tmpl", "[department] Request Console", 520, 410)
-		ui.set_initial_data(data)
-		ui.open()
+/obj/machinery/requests_console/OnTopic(action, list/params)
+	switch(action)
+		if("writeInput")
+			if(reject_bad_text(params["write"]))
+				recipient = params["write"] //write contains the string of the receiving department's name
 
-/obj/machinery/requests_console/OnTopic(href, href_list)
-	if(reject_bad_text(href_list["write"]))
-		recipient = href_list["write"] //write contains the string of the receiving department's name
+				var/new_message = sanitize(input("Write your message:", "Awaiting Input", ""))
+				if(new_message)
+					message = new_message
+					screen = RCS_MESSAUTH
+					switch(params["priority"])
+						if("1") priority = 1
+						if("2")	priority = 2
+						else	priority = 0
+				else
+					reset_message(1)
+				return TRUE
 
-		var/new_message = sanitize(input("Write your message:", "Awaiting Input", ""))
-		if(new_message)
-			message = new_message
-			screen = RCS_MESSAUTH
-			switch(href_list["priority"])
-				if("1") priority = 1
-				if("2")	priority = 2
-				else	priority = 0
-		else
+		if("writeAnnouncement")
+			var/new_message = sanitize(input("Write your message:", "Awaiting Input", ""))
+			if(new_message)
+				message = new_message
+			else
+				reset_message(1)
+			return TRUE
+
+		if("sendAnnouncement")
+			if(!announcementConsole)	return
+			announcement.Announce(message, msg_sanitized = 1)
 			reset_message(1)
-		return TOPIC_REFRESH
+			return TRUE
 
-	if(href_list["writeAnnouncement"])
-		var/new_message = sanitize(input("Write your message:", "Awaiting Input", ""))
-		if(new_message)
-			message = new_message
-		else
-			reset_message(1)
-		return TOPIC_REFRESH
+		if("department")
+			if(!message)
+				return
+			var/log_msg = message
+			screen = RCS_SENTFAIL
+			var/obj/machinery/message_server/MS = get_message_server(get_z(src))
+			if(MS)
+				if(MS.send_rc_message(ckey(params["department"]),department,log_msg,msgStamped,msgVerified,priority))
+					screen = RCS_SENTPASS
+					message_log += "<B>Message sent to [recipient]</B><BR>[message]"
+			else
+				audible_message(text("[icon2html(src, viewers(get_turf(src)))] *The Requests Console beeps: 'NOTICE: No server detected!'"),,4)
+			return TRUE
 
-	if(href_list["sendAnnouncement"])
-		if(!announcementConsole)	return
-		announcement.Announce(message, msg_sanitized = 1)
-		reset_message(1)
-		return TOPIC_REFRESH
+		//Handle screen switching
+		if("setScreen")
+			var/tempScreen = text2num(params["setScreen"])
+			if(tempScreen == RCS_ANNOUNCE && !announcementConsole)
+				return
+			if(tempScreen == RCS_VIEWMSGS)
+				for (var/obj/machinery/requests_console/Console in allConsoles)
+					if (Console.department == department)
+						Console.newmessagepriority = 0
+						Console.icon_state = "req_comp0"
+						Console.set_light(1)
+			if(tempScreen == RCS_MAINMENU)
+				reset_message()
+			screen = tempScreen
+			return TRUE
 
-	if( href_list["department"] && message )
-		var/log_msg = message
-		screen = RCS_SENTFAIL
-		var/obj/machinery/message_server/MS = get_message_server(get_z(src))
-		if(MS)
-			if(MS.send_rc_message(ckey(href_list["department"]),department,log_msg,msgStamped,msgVerified,priority))
-				screen = RCS_SENTPASS
-				message_log += "<B>Message sent to [recipient]</B><BR>[message]"
-		else
-			audible_message(text("[icon2html(src, viewers(get_turf(src)))] *The Requests Console beeps: 'NOTICE: No server detected!'"),,4)
-		return TOPIC_REFRESH
+		//Handle silencing the console
+		if("toggleSilent")
+			silent = !silent
+			return TRUE
 
-	//Handle screen switching
-	if(href_list["setScreen"])
-		var/tempScreen = text2num(href_list["setScreen"])
-		if(tempScreen == RCS_ANNOUNCE && !announcementConsole)
-			return
-		if(tempScreen == RCS_VIEWMSGS)
-			for (var/obj/machinery/requests_console/Console in allConsoles)
-				if (Console.department == department)
-					Console.newmessagepriority = 0
-					Console.icon_state = "req_comp0"
-					Console.set_light(1)
-		if(tempScreen == RCS_MAINMENU)
-			reset_message()
-		screen = tempScreen
-		return TOPIC_REFRESH
-
-	//Handle silencing the console
-	if(href_list["toggleSilent"])
-		silent = !silent
-		return TOPIC_REFRESH
+/obj/machinery/requests_console/tgui_state(mob/user)
+	return GLOB.default_state
 
 /obj/machinery/requests_console/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (isid(O))

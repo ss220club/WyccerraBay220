@@ -5,7 +5,7 @@ import { Window } from '../layouts';
 
 type Data = {
   department: string;
-  message_log: string;
+  message_log: string[];
   newmessagepriority: number;
   open: BooleanLike;
   screen: number;
@@ -250,15 +250,9 @@ const MessageResponse = (props, context) => {
 
 const MessageLog = (props, context) => {
   const { act, data } = useBackend<Data>(context);
-
-  let list2iterate;
-  let sectionTitle;
-  switch (props.type) {
-    case 'MESSAGES':
-      list2iterate = data.message_log;
-      sectionTitle = 'Message Log';
-      break;
-  }
+  const { message_log } = data;
+  let list2iterate = message_log;
+  let sectionTitle = 'Message Log';
 
   return (
     <Stack.Item grow textAlign="center">
@@ -274,14 +268,12 @@ const MessageLog = (props, context) => {
           />
         }
       >
-        {list2iterate.map((m) => (
-          <Box key={m} textAlign="left">
-            {m.map((i, key) => {
-              return <div key={key}>{i}</div>;
-            })}
-            <hr />
-          </Box>
-        ))}
+        <Box textAlign="left">
+          {message_log.map((message, index) => {
+            return <div key={index}>{message}</div>;
+          })}
+          <hr />
+        </Box>
       </Section>
     </Stack.Item>
   );

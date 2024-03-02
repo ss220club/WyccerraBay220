@@ -16,7 +16,6 @@ import {
 import { Window } from '../layouts';
 
 export type FabricatorData = {
-  functional: BooleanLike;
   material_efficiency: number;
   categories: string[];
   material_storage: Material[];
@@ -30,6 +29,7 @@ type Material = {
   name: string;
   stored: number;
   max: number;
+  image: string;
   units_per_sheet: number;
 };
 
@@ -46,10 +46,11 @@ type Queue = {
 };
 
 type Recipe = {
-  hidden: BooleanLike;
   name: string;
+  hidden: BooleanLike;
   category: string;
   reference: string;
+  image: string;
   cost: Cost[];
 };
 
@@ -173,6 +174,8 @@ const FabDesigns = (props, context) => {
         <Section fill scrollable title={`Рецепты - ${tab}`} textAlign="center">
           {filteredRecipes.map((recipe) => (
             <ImageButton
+              image={recipe.image}
+              imageSize={'64px'}
               key={recipe.reference}
               title={capitalizeAll(recipe.name)}
               content={getRequiredResources(recipe)}
@@ -196,6 +199,8 @@ const FabResources = (props, context) => {
     <Section fill title="Ресурсы">
       {material_storage.map((material) => (
         <ImageButton
+          image={material.image}
+          imageSize={'64px'}
           mb={0}
           height="57px"
           key={material.name}

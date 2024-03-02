@@ -10,20 +10,16 @@
 
 /obj/machinery/fabricator/tgui_data(mob/user)
 	var/list/data = list()
-	var/functional = is_functioning()
-	data["functional"] = functional
-	if(functional)
-		data["material_efficiency"] = mat_efficiency
-		data["material_storage"] = get_material_ui_data()
-		data["current_build"] = get_current_build_ui_data()
-		data["build_queue"] = get_build_queue_ui_data()
-
+	data["material_efficiency"] = mat_efficiency
+	data["material_storage"] = get_material_ui_data()
+	data["current_build"] = get_current_build_ui_data()
+	data["build_queue"] = get_build_queue_ui_data()
 	return data
 
 /// Should go to UI_STATIC_DATA, and ONLY be updated when new fab recipe list is changed (in this case - when fab is hacked)
 /obj/machinery/fabricator/tgui_static_data(mob/user)
 	var/list/recipes = list()
-	for(var/datum/fabricator_recipe/available_recipe as anything in SSfabrication.get_recipes(fabricator_class))
+	for(var/singleton/fabricator_recipe/available_recipe as anything in SSfabrication.get_recipes(fabricator_class))
 		if(available_recipe.hidden && !(fab_status_flags & FAB_HACKED))
 			continue
 
@@ -43,6 +39,7 @@
 		recipe["category"] = available_recipe.category
 		recipe["reference"] = "[ref(available_recipe)]"
 		recipe["hidden"] = available_recipe.hidden
+		recipe["image"] = available_recipe.image
 		recipe["cost"] = cost
 
 		recipes += list(recipe)
@@ -66,22 +63,22 @@
 
 	return FALSE
 
-
 /obj/machinery/fabricator/proc/get_material_ui_data()
 	PRIVATE_PROC(TRUE)
 
 	var/list/data = list()
 	for(var/material in stored_material)
 		var/list/material_data = list()
-		/// FABRICATOR UI TODO: add material image asset
-		material_data["name"] = stored_substances_to_names[material]
+
+		var/material_name = stored_substances_to_names[material]
+		material_data["name"] = material_name
 		material_data["stored"] = stored_material[material]
 		material_data["max"] = storage_capacity[material]
 
-		var/is_material = ispath(material, /material)
-		if(is_material)
-			var/material/solid_material = material
+		if(ispath(material, /material))
+			var/material/solid_material = SSmaterials.get_material_by_name(material_name)
 			material_data["units_per_sheet"] = solid_material.units_per_sheet
+			material_data["image"] = solid_material.get_stack_image()
 			material_data["refundable"] = TRUE
 		else
 			material_data["refundable"] = FALSE

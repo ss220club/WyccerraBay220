@@ -735,6 +735,10 @@
 	},
 /turf/simulated/floor,
 /area/constructionsite)
+"Di" = (
+/obj/machinery/fabricator/micro,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "Dn" = (
 /obj/structure/hygiene/sink{
 	pixel_y = -12
@@ -951,6 +955,12 @@
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
+"Nz" = (
+/obj/item/stack/material/steel/fifty,
+/obj/item/stack/material/plastic/fifty,
+/obj/item/stack/material/glass/fifty,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "NA" = (
 /obj/machinery/atmospherics/portables_connector{
 	dir = 8
@@ -4201,7 +4211,7 @@ Ll
 Ll
 Ll
 Ll
-Ll
+Nz
 Ll
 Ya
 va
@@ -4239,7 +4249,7 @@ va
 Ll
 Ll
 Ll
-Ll
+Di
 Lq
 Ll
 sL

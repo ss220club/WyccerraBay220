@@ -123,7 +123,7 @@ const VendingMain = (props, context) => {
               vertical
               m={0.5}
               image={product.image}
-              imageSize="64px"
+              imageSize={'64px'}
               disabled={product.ammount <= 0}
               color={
                 product.category === CATEGORY.Contaraband

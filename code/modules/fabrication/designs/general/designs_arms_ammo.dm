@@ -1,140 +1,182 @@
-/datum/fabricator_recipe/arms_ammo
-	path = /obj/item/syringe_cartridge
+/singleton/fabricator_recipe/arms_ammo
+	abstract_type = /singleton/fabricator_recipe/arms_ammo
 	category = "Arms and Ammunition"
 
-/datum/fabricator_recipe/arms_ammo/shotgun_holder
+/singleton/fabricator_recipe/arms_ammo/syringe_cartridge
+	id =  "syringe_cartridge"
+	path = /obj/item/syringe_cartridge
+
+/singleton/fabricator_recipe/arms_ammo/shotgun_holder
+	id =  "shotgun_holder"
 	path = /obj/item/ammo_magazine/shotholder/empty
 
-/datum/fabricator_recipe/arms_ammo/shotgun_blanks
+/singleton/fabricator_recipe/arms_ammo/shotgun_blanks
+	id =  "shotgun_blanks"
 	name = "ammunition (shotgun, blank)"
 	path = /obj/item/ammo_casing/shotgun/blank
 
-/datum/fabricator_recipe/arms_ammo/flaregun
+/singleton/fabricator_recipe/arms_ammo/flaregun
+	id =  "flaregun"
 	name = "flare launcher"
 	path = /obj/item/gun/projectile/flare
 
-/datum/fabricator_recipe/arms_ammo/hidden
-	path = /obj/item/material/hatchet/machete/steel
+/singleton/fabricator_recipe/arms_ammo/hidden
+	abstract_type = /singleton/fabricator_recipe/arms_ammo/hidden
 	hidden = TRUE
 
-/datum/fabricator_recipe/arms_ammo/hidden/shotgun
+/singleton/fabricator_recipe/arms_ammo/hidden/machete
+	id =  "machete"
+	path = /obj/item/material/hatchet/machete/steel
+
+/singleton/fabricator_recipe/arms_ammo/hidden/shotgun
+	id =  "shotgun"
 	name = "ammunition (shotgun, beanbag)"
 	path = /obj/item/ammo_casing/shotgun/beanbag
 
-/datum/fabricator_recipe/arms_ammo/shotgun_flash
+/singleton/fabricator_recipe/arms_ammo/shotgun_flash
+	id =  "shotgun_flash"
 	name = "ammunition (shotgun, flash)"
 	path = /obj/item/ammo_casing/shotgun/flash
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_smg_rubber
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_smg_rubber
+	id =  "magazine_smg_rubber"
 	name = "ammunition (SMG rubber) top mounted"
 	path = /obj/item/ammo_magazine/smg_top/rubber
 
-/datum/fabricator_recipe/arms_ammo/hidden/flamethrower
+/singleton/fabricator_recipe/arms_ammo/hidden/flamethrower
+	id =  "flamethrower"
 	path = /obj/item/flamethrower/full
 
-/datum/fabricator_recipe/arms_ammo/hidden/speedloader
+/singleton/fabricator_recipe/arms_ammo/hidden/speedloader
+	id =  "speedloader"
 	name = "ammunition (speedloader)"
 	path = /obj/item/ammo_magazine/speedloader
 
-/datum/fabricator_recipe/arms_ammo/hidden/speedloader_small
+/singleton/fabricator_recipe/arms_ammo/hidden/speedloader_small
+	id =  "speedloader_small"
 	name = "ammunition (speedloader, holdout)"
 	path = /obj/item/ammo_magazine/speedloader/small
 
-/datum/fabricator_recipe/arms_ammo/hidden/speedloader_magnum
+/singleton/fabricator_recipe/arms_ammo/hidden/speedloader_magnum
+	id =  "speedloader_magnum"
 	name = "ammunition (speedloader, magnum)"
 	path = /obj/item/ammo_magazine/speedloader/magnum
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_pistol
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_pistol
+	id =  "magazine_pistol"
 	name = "ammunition (pistol)"
 	path = /obj/item/ammo_magazine/pistol
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_pistol_rubber
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_pistol_rubber
+	id =  "magazine_pistol_rubber"
 	name = "ammunition (pistol, rubber)"
 	path = /obj/item/ammo_magazine/pistol/rubber
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_pistol_double
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_pistol_double
+	id =  "magazine_pistol_double"
 	name = "ammunition (pistol, doublestack)"
 	path = /obj/item/ammo_magazine/pistol/double
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_pistol_double_rubber
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_pistol_double_rubber
+	id =  "magazine_pistol_double_rubber"
 	name = "ammunition (pistol, doublestack. rubber)"
 	path = /obj/item/ammo_magazine/pistol/double/rubber
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_small
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_small
+	id =  "magazine_small"
 	name = "ammunition (holdout)"
 	path = /obj/item/ammo_magazine/pistol/small
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_magnum
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_magnum
+	id =  "magazine_magnum"
 	name = "ammunition (magnum)"
 	path = /obj/item/ammo_magazine/magnum
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_smg
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_smg
+	id =  "magazine_smg"
 	name = "ammunition (submachine gun)"
 	path = /obj/item/ammo_magazine/smg
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_uzi
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_uzi
+	id =  "magazine_uzi"
 	name = "ammunition (machine pistol)"
 	path = /obj/item/ammo_magazine/machine_pistol
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_smg_topmounted
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_smg_topmounted
+	id =  "magazine_smg_topmounted"
 	name = "ammunition (SMG, top mounted)"
 	path = /obj/item/ammo_magazine/smg_top
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_arifle
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_arifle
+	id =  "magazine_arifle"
 	name = "ammunition (rifle magazine)"
 	path = /obj/item/ammo_magazine/rifle
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_bullpupheavy
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_bullpupheavy
+	id =  "magazine_bullpupheavy"
 	name = "ammunition (heavy bullpup rifle)"
 	path = /obj/item/ammo_magazine/mil_rifle/heavy
 
-/datum/fabricator_recipe/arms_ammo/hidden/magazine_bullpuplight
+/singleton/fabricator_recipe/arms_ammo/hidden/magazine_bullpuplight
+	id =  "magazine_bullpuplight"
 	name = "ammunition (light bullpup rifle)"
 	path = /obj/item/ammo_magazine/mil_rifle/light
 
-/datum/fabricator_recipe/arms_ammo/hidden/shotgun
+/singleton/fabricator_recipe/arms_ammo/hidden/shotgun
+	id =  "shotgun"
 	name = "ammunition (slug, shotgun)"
 	path = /obj/item/ammo_casing/shotgun
 
-/datum/fabricator_recipe/arms_ammo/hidden/shotgun_pellet
+/singleton/fabricator_recipe/arms_ammo/hidden/shotgun_pellet
+	id =  "shotgun_pellet"
 	name = "ammunition (shell, shotgun)"
 	path = /obj/item/ammo_casing/shotgun/pellet
 
-/datum/fabricator_recipe/arms_ammo/hidden/tacknife
+/singleton/fabricator_recipe/arms_ammo/hidden/tacknife
+	id =  "tacknife"
 	path = /obj/item/material/knife/combat
 
-/datum/fabricator_recipe/arms_ammo/hidden/stunshell
+/singleton/fabricator_recipe/arms_ammo/hidden/stunshell
+	id =  "stunshell"
 	name = "ammunition (stun cartridge, shotgun)"
 	path = /obj/item/ammo_casing/shotgun/stunshell
 
-/datum/fabricator_recipe/arms_ammo/hidden/flechette
+/singleton/fabricator_recipe/arms_ammo/hidden/flechette
+	id =  "flechette"
 	name = "ammunition (flechette rifle)"
 	path = /obj/item/magnetic_ammo
 
-/datum/fabricator_recipe/arms_ammo/hidden/skrellian_rifle_flechette
+/singleton/fabricator_recipe/arms_ammo/hidden/skrellian_rifle_flechette
+	id =  "skrellian_rifle_flechette"
 	name = "ammunition (skrellian rifle, flechette)"
 	path = /obj/item/magnetic_ammo/skrell
 
-/datum/fabricator_recipe/arms_ammo/hidden/skrellian_rifle_slug
+/singleton/fabricator_recipe/arms_ammo/hidden/skrellian_rifle_slug
+	id =  "skrellian_rifle_slug"
 	name = "ammunition (skrellian rifle, slug)"
 	path = /obj/item/magnetic_ammo/skrell/slug
 
-/datum/fabricator_recipe/arms_ammo/hidden/stripperclip
+/singleton/fabricator_recipe/arms_ammo/hidden/stripperclip
+	id =  "stripperclip"
 	name = "ammunition (rifle stripper clip)"
 	path = /obj/item/ammo_magazine/speedloader/clip
 
-/datum/fabricator_recipe/arms_ammo/hidden/pistolstripperclip
+/singleton/fabricator_recipe/arms_ammo/hidden/pistolstripperclip
+	id =  "pistolstripperclip"
 	name = "ammunition (magnum pistol stripper clip)"
 	path = /obj/item/ammo_magazine/speedloader/pclip
 
-/datum/fabricator_recipe/arms_ammo/hidden/broomstickstripperclip
+/singleton/fabricator_recipe/arms_ammo/hidden/broomstickstripperclip
+	id =  "broomstickstripperclip"
 	name = "ammunition (holdout pistol stripper clip)"
 	path = /obj/item/ammo_magazine/speedloader/hpclip
 
-/datum/fabricator_recipe/arms_ammo/hidden/rifleinternalclip
+/singleton/fabricator_recipe/arms_ammo/hidden/rifleinternalclip
+	id =  "rifleinternalclip"
 	name = "ammunition (en-bloc clip)"
 	path = /obj/item/ammo_magazine/iclipr
 
-/datum/fabricator_recipe/arms_ammo/hidden/beandrum
+/singleton/fabricator_recipe/arms_ammo/hidden/beandrum
+	id =  "beandrum"
 	name = "ammunition (drum magazine, beanbag)"
 	path = /obj/item/ammo_magazine/shotgunmag/beanbag

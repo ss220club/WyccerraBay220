@@ -31,7 +31,7 @@ GLOBAL_DATUM_INIT(icon_states_repository, /repository/icon_states, new)
 /repository/icon_states/proc/is_icon_empty(icon)
 	ASSERT(icon)
 
-	return !!length(get_cached_icon_states(icon))
+	return !length(get_cached_icon_states(icon))
 
 /*
  * Checks if the `icon_state` is in `icon`

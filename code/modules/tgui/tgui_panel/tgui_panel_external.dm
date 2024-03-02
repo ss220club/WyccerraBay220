@@ -39,10 +39,11 @@
 	set name = "Refresh TGUI"
 	set category = "Special Verbs"
 
-	if(alert(usr,
+	var/choice = alert(usr,
 		"Используйте ТОЛЬКО если у вас проблема с TGUI.\
 		Это интерфейсы с глазом слева-сверху.\
-		В противном случае, вы можете получить белое окно, которое закроется только после перезахода!", "Refresh TGUI", "Refresh", "Cancel") != "Refresh")
+		В противном случае, вы можете получить белое окно, которое закроется только после перезахода!", "Refresh TGUI", "Refresh", "Cancel")
+	if(choice != "Refresh")
 		return
 	var/refreshed_count = 0
 	for(var/window_id in tgui_windows)

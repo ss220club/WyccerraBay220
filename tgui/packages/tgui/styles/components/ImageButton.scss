@@ -47,6 +47,7 @@ $bg-map: colors.$bg-map !default;
   display: flex;
   width: 100%;
   margin-top: 0.5em;
+  align-items: center;
 
   &:first-child {
     margin-top: 0;
@@ -101,11 +102,11 @@ $bg-map: colors.$bg-map !default;
 
 .ImageButton__content__horizontal--content {
   margin: base.em(6px);
-  margin-top: 0;
 }
 
 .ImageButton__content__horizontal--divider {
   margin: base.em(6px);
+  margin-bottom: 0;
   border-top: Divider.$thickness solid Divider.$color;
 }
 

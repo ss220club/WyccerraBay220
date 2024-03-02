@@ -1,7 +1,3 @@
-/obj/machinery/fabricator/interface_interact(mob/user)
-	tgui_interact(user)
-	return TRUE
-
 /obj/machinery/fabricator/tgui_state(mob/user)
 	return GLOB.default_state
 
@@ -139,6 +135,18 @@
 
 
 /obj/machinery/fabricator/proc/eject_material(mat_name)
+	if(!is_functioning())
+		return FALSE
+
+	var/datum/reagent/reagent_type = SSchemistry.get_reagent_type_by_name(mat_name)
+	if(reagent_type)
+		var/amount = stored_material[reagent_type]
+		if(!amount)
+			return FALSE
+
+		stored_material[reagent_type] = 0
+		return TRUE
+
 	var/material/material_to_eject = SSmaterials.get_material_by_name(mat_name)
 	if(!material_to_eject)
 		return FALSE
@@ -147,17 +155,11 @@
 	if(!stored_material_amount)
 		return FALSE
 
-	/// If we have solid material - we can get it printed back
-	if(istype(material_to_eject, /material))
-		if(stored_material_amount < material_to_eject.units_per_sheet || !material_to_eject.stack_type)
-			return FALSE
+	if(stored_material_amount < material_to_eject.units_per_sheet || !material_to_eject.stack_type)
+		return FALSE
 
-		var/sheet_count = floor(stored_material_amount / material_to_eject.units_per_sheet)
-		stored_material[material_to_eject.type] -= sheet_count * material_to_eject.units_per_sheet
-		material_to_eject.place_sheet(get_turf(src), sheet_count)
-
-	/// If the material is liquid or something - we can't
-	else
-		stored_material[material_to_eject.type] = 0
+	var/sheet_count = floor(stored_material_amount / material_to_eject.units_per_sheet)
+	stored_material[material_to_eject.type] -= sheet_count * material_to_eject.units_per_sheet
+	material_to_eject.place_sheet(get_turf(src), sheet_count)
 
 	return TRUE

@@ -23,9 +23,9 @@ This saves us from having to call add_fingerprint() any time something is put in
 				update_inv_r_hand(0)
 		else if(H.equip_to_storage_active(I))
 			if(hand)
-				update_inv_l_hand(0)
+				update_inv_l_hand(FALSE)
 			else
-				update_inv_r_hand(0)
+				update_inv_r_hand(FALSE)
 		else
 			to_chat(H, SPAN_WARNING("You are unable to equip that."))
 

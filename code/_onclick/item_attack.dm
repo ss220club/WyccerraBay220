@@ -353,6 +353,11 @@ avoid code duplication. This includes items that may sometimes act as a standard
  */
 /atom/proc/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	SHOULD_CALL_PARENT(TRUE)
+	var/item_interact_result = src.item_interaction(user, tool, click_params)
+	if(item_interact_result & ITEM_INTERACT_SUCCESS)
+		return TRUE
+	if(item_interact_result & ITEM_INTERACT_BLOCKING)
+		return FALSE
 	return FALSE
 
 

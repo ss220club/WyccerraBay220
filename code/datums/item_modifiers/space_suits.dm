@@ -10,13 +10,13 @@
 				SPECIES_HUMAN = 'icons/obj/clothing/obj_head.dmi',
 				SPECIES_UNATHI = 'icons/obj/clothing/species/unathi/obj_head_unathi.dmi',
 				SPECIES_SKRELL = 'icons/obj/clothing/species/skrell/obj_head_skrell.dmi',
-				SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
+				SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
 				),
 			SETUP_SPECIES_ONMOB = list(
 				SPECIES_HUMAN = 'icons/mob/onmob/onmob_head.dmi',
 				SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_head_unathi.dmi',
 				SPECIES_SKRELL = 'icons/mob/species/skrell/onmob_head_skrell.dmi',
-				SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi'
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_head_resomi.dmi'
 				)
 		),
 		/obj/item/clothing/suit/space/void = list(
@@ -28,13 +28,13 @@
 				SPECIES_HUMAN = 'icons/obj/clothing/obj_suit.dmi',
 				SPECIES_UNATHI = 'icons/obj/clothing/species/unathi/obj_suit_unathi.dmi',
 				SPECIES_SKRELL = 'icons/obj/clothing/species/skrell/obj_suit_skrell.dmi',
-				SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+				SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 				),
 			SETUP_SPECIES_ONMOB = list(
 				SPECIES_HUMAN = 'icons/mob/onmob/onmob_suit.dmi',
 				SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_suit_unathi.dmi',
 				SPECIES_SKRELL = 'icons/mob/onmob/onmob_suit.dmi',
-				SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_suit_resomi.dmi'
 				)
 		)
 	)

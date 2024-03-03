@@ -30,8 +30,3 @@
 			"ж" = list("ш")
 		)
 	autohiss_exempt = list(LANGUAGE_RESOMI)
-
-//TODO: RESOMI MISC FILE
-/datum/trader/trading_beacon/New()
-	..()
-	speech[TRADER_HAIL_START + SPECIES_RESOMI] = "Greetings, I am MERCHANT, Artifical Intelligence onboard ORIGIN. We wish to trade with you, no more."

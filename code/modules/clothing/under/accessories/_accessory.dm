@@ -19,8 +19,12 @@
 	var/list/accessory_icons = list(slot_w_uniform_str = 'icons/mob/onmob/onmob_accessories.dmi', slot_wear_suit_str = 'icons/mob/onmob/onmob_accessories.dmi')
 	sprite_sheets = list(
 		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_accessories_gas.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_accessories_unathi.dmi'
-		)
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_accessories_unathi.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_accessories_resomi.dmi'
+	)
+	sprite_sheets_obj = list(
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_accessories_resomi.dmi'
+	)
 	/// String (One of `ACCESSORY_ROLLED_*` or a valid icon state). The icon_state or flag to use when the attached uniform is rolled down.
 	var/on_rolled_down = ACCESSORY_ROLLED_DEFAULT
 	/// String (One of `ACCESSORY_ROLLED_*` or a valid icon state). The icon_state or flag to use when the attached uniform has its sleeves rolled up.

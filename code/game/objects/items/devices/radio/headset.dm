@@ -21,8 +21,9 @@
 	var/ks2type = null
 
 	sprite_sheets = list(
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_ears_unathi.dmi'
-		)
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_ears_unathi.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_ears_resomi.dmi'
+	)
 
 /obj/item/device/radio/headset/Initialize()
 	. = ..()

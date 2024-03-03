@@ -28,6 +28,10 @@
 	/// Can this backpack be opened while worn on the back?
 	var/worn_access = TRUE
 
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_back_resomi.dmi'
+	)
+
 /obj/item/storage/backpack/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	if (use_sound)
 		playsound(loc, use_sound, 50, 1, -5)

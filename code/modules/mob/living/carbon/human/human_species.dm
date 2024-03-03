@@ -33,6 +33,10 @@
 	head_hair_style = "Long Vox Quills"
 	. = ..(mapload, SPECIES_VOX)
 
+/mob/living/carbon/human/resomi/Initialize(mapload)
+	head_hair_style = "Resomi Plumage"
+	. = ..(mapload, SPECIES_RESOMI)
+
 /mob/living/carbon/human/diona/Initialize(mapload)
 	. = ..(mapload, SPECIES_DIONA)
 

@@ -31,6 +31,7 @@
 	gender_icons = 1
 	sprite_sheets = list(
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_under_corporate_unathi.dmi',
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_under_resomi.dmi'
 		)
 	accessories = list(/obj/item/clothing/accessory/tunic)
 
@@ -55,6 +56,7 @@
 	gender_icons = 1
 	sprite_sheets = list(
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_under_corporate_unathi.dmi',
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_under_resomi.dmi'
 		)
 
 /obj/item/clothing/under/rank/ntpilot

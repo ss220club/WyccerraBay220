@@ -15,6 +15,10 @@
 	var/overlay_flags
 	attack_verb = list("whipped", "lashed", "disciplined")
 
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_belt_resomi.dmi'
+	)
+
 /obj/item/storage/belt/verb/toggle_layer()
 	set name = "Switch Belt Layer"
 	set category = "Object"

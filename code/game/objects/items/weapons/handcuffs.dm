@@ -18,6 +18,10 @@
 	var/cuff_sound = 'sound/weapons/handcuffs.ogg'
 	var/cuff_type = "handcuffs"
 
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'icons/mob/species/resomi/misc.dmi'
+	)
+
 /obj/item/handcuffs/get_icon_state(mob/user_mob, slot)
 	if(slot == slot_handcuffed_str)
 		return "handcuff1"

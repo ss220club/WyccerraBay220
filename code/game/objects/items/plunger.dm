@@ -12,6 +12,10 @@
 	hitsound = 'sound/effects/plunger.ogg'
 	matter = list("steel" = 5000)
 
+/obj/item/clothing/mask/plunger/equipped(M, slot)
+	..()
+	sprite_sheets[SPECIES_RESOMI] = (slot == slot_head ? 'icons/mob/species/resomi/onmob_head_resomi.dmi' : 'icons/mob/species/resomi/onmob_mask_resomi.dmi')
+
 /obj/item/device/plunger/robot
 	name = "plunger"
 	desc = "a plunger. It unclogs things."

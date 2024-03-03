@@ -9,7 +9,7 @@
 /obj/item/clothing/head/helmet/skrell/navy
 	name = "navy skrellian helmet"
 	desc = "A navy blue helmet built for use by a Skrell. This one appears to be fairly standard and reliable."
-	icon = 'packs/infinity/icons/obj/clothing/species/skrell/obj_head_skrell.dmi'
+	icon = 'icons/obj/clothing/species/skrell/obj_head_skrell.dmi'
 	icon_state = "helmet_skrell_navy"
 
 	item_icons = list(
@@ -21,7 +21,7 @@
 /obj/item/clothing/head/helmet/skrell/green
 	name = "green skrellian helmet"
 	desc = "A green helmet built for use by a Skrell. This one appears to be fairly standard and reliable."
-	icon = 'packs/infinity/icons/obj/clothing/species/skrell/obj_head_skrell.dmi'
+	icon = 'icons/obj/clothing/species/skrell/obj_head_skrell.dmi'
 	icon_state = "helmet_skrell_green"
 
 	item_icons = list(
@@ -33,7 +33,7 @@
 /obj/item/clothing/head/helmet/skrell/tan
 	name = "tan skrellian helmet"
 	desc = "A tan helmet built for use by a Skrell. This one appears to be fairly standard and reliable."
-	icon = 'packs/infinity/icons/obj/clothing/species/skrell/obj_head_skrell.dmi'
+	icon = 'icons/obj/clothing/species/skrell/obj_head_skrell.dmi'
 	icon_state = "helmet_skrell_tan"
 
 	item_icons = list(

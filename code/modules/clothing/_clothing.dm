@@ -237,7 +237,8 @@
 	slot_flags = SLOT_EARS | SLOT_TWOEARS
 	volume_multiplier = 0.1
 	sprite_sheets = list(
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_ears_unathi.dmi'
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_ears_unathi.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_ears_resomi.dmi'
 	)
 
 
@@ -267,6 +268,10 @@ BLIND     // can't see anything
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_eyes_vox.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_eyes_unathi.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_eyes_resomi.dmi'
+	)
+	sprite_sheets_obj = list(
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
 	)
 
 /obj/item/clothing/glasses/get_icon_state(mob/user_mob, slot)
@@ -312,7 +317,7 @@ BLIND     // can't see anything
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_hands_vox.dmi',
 		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_hands_gas.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_hands_unathi.dmi',
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_hands_resomi.dmi'
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_hands_resomi.dmi'
 	)
 	blood_overlay_type = "bloodyhands"
 
@@ -413,7 +418,11 @@ BLIND     // can't see anything
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_head_vox.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_head_unathi.dmi',
-		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_head_gas.dmi'
+		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_head_gas.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_head_resomi.dmi'
+	)
+	sprite_sheets_obj = list(
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
 	)
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
@@ -542,6 +551,7 @@ BLIND     // can't see anything
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_mask_vox.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_mask_unathi.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_mask_resomi.dmi'
 		)
 
 	var/voicechange = 0
@@ -625,11 +635,11 @@ BLIND     // can't see anything
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_feet_vox.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_feet_unathi.dmi',
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_feet_resomi.dmi'
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_feet_resomi.dmi'
 		)
 
 	sprite_sheets_obj = list(
-		SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_feet_resomi.dmi'
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_feet_resomi.dmi'
 		)
 
 	blood_overlay_type = "shoeblood"
@@ -796,10 +806,10 @@ BLIND     // can't see anything
 		SPECIES_VOX    = 'icons/mob/species/vox/onmob_suit_vox.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_suit_unathi.dmi',
 		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_suit_gas.dmi',
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_suit_resomi.dmi'
 		)
 	sprite_sheets_obj = list(
-		SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 		)
 
 /obj/item/clothing/suit/update_clothing_icon()
@@ -846,7 +856,11 @@ BLIND     // can't see anything
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_under_vox.dmi',
 		SPECIES_NABBER = 'icons/mob/species/nabber/onmob_under_gas.dmi',
-		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_under_unathi.dmi'
+		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_under_unathi.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_under_resomi.dmi'
+	)
+	sprite_sheets_obj = list(
+		SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_under_resomi.dmi'
 	)
 
 	valid_accessory_slots = list(ACCESSORY_SLOT_UTILITY,ACCESSORY_SLOT_HOLSTER,ACCESSORY_SLOT_ARMBAND,ACCESSORY_SLOT_RANK,ACCESSORY_SLOT_DEPT,ACCESSORY_SLOT_DECOR,ACCESSORY_SLOT_MEDAL,ACCESSORY_SLOT_INSIGNIA)

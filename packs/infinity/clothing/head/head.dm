@@ -49,7 +49,7 @@
 	body_parts_covered = HEAD
 
 	sprite_sheets = list(
-		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi',
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_head_resomi.dmi',
 		// SIERRA TODO: SPECIES_UNATHI = 'icons/mob/onmob/Unathi/head_infinity.dmi'
 		)
 

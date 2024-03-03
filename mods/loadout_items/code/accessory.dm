@@ -135,6 +135,9 @@ ranks - ec
 	)
 
 	var/renameable = FALSE
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'icons/mob/species/resomi/misc.dmi'
+	)
 
 /obj/item/clothing/accessory/necklace/collar/gold
 	name = "golden tag collar"

@@ -68,8 +68,8 @@ ID мода: HARDSUITS
 
 ### Используемые файлы, не содержащиеся в модпаке
 
-- `packs/infinity/icons/obj/clothing/species/erosan/hats.dmi`
-- `packs/infinity/icons/obj/clothing/species/erosan/suits.dmi`
+- `icons/obj/clothing/species/erosan/hats.dmi`
+- `icons/obj/clothing/species/erosan/suits.dmi`
 <!--
   Будь то немодульный файл или модульный файл, который не содержится в папке,
   принадлежащей этому конкретному моду, он должен быть упомянут здесь.

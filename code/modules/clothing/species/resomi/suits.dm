@@ -1,6 +1,6 @@
 /obj/item/clothing/suit/storage/toggle/resomicoat
 	name = "small coat"
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	icon = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 	desc = "A cloak that seems too small to fit a human."
 	icon_state = "resomicoat"
 	//icon_open = "resomicoat_open"
@@ -15,7 +15,7 @@
 
 /obj/item/clothing/suit/storage/toggle/resomilabcoat
 	name = "small labcoat"
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	icon = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 	desc = "A labcoat that seems too small to fit a human."
 	icon_state = "resomi_labcoat"
 	//icon_open = "resomi_labcoat_open"
@@ -30,7 +30,7 @@
 /obj/item/clothing/suit/storage/resomicloak
 	name = "black and orange cloak"
 	desc = "It drapes over a Resomes's shoulders and closes at the neck with pockets convienently placed inside."
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	icon = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 	icon_state = "tesh_cloak_bo"
 	slots = 2
 	species_restricted = list(SPECIES_RESOMI)
@@ -267,7 +267,7 @@
 	item_state = "tesh_cloak_iaa"
 
 /obj/item/clothing/suit/storage/resomicloak_alt
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	icon = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 	name = "resomi cloak dretrowave"
 	desc = "A soft Resomi cloak"
 	icon_state = "tesh_cloak_dretrowave"
@@ -388,7 +388,7 @@
 /obj/item/clothing/suit/storage/resomicloak_belted
 	name = "belted cloak"
 	desc = "A more ridged and stylized Resomi cloak."
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	icon = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 	icon_state = "tesh_beltcloak_bo"
 	body_parts_covered = UPPER_TORSO|ARMS|LOWER_TORSO
 	species_restricted = list(SPECIES_RESOMI)
@@ -565,7 +565,7 @@
 /obj/item/clothing/suit/storage/hooded/resomi
 	name = "Hooded Resomi Cloak"
 	desc = "A soft resomi cloak with an added hood."
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	icon = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 	icon_state = "tesh_hcloak_bo"
 	//item_state_slots = list(slot_r_hand_str = "tesh_hcloak_bo", slot_l_hand_str = "tesh_hcloak_bo")
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
@@ -574,7 +574,7 @@
 	hoodtype = /obj/item/clothing/head/resomi/resomi_hood
 	//allowed = list (/obj/item/weapon/pen, /obj/item/weapon/paper, /obj/item/device/flashlight,/obj/item/weapon/tank/emergency/oxygen, /obj/item/weapon/storage/fancy/cigarettes, /obj/item/weapon/storage/box/matches, /obj/item/weapon/reagent_containers/food/drinks/flask)
 	species_restricted = list(SPECIES_RESOMI)
-	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi')
+	sprite_sheets = list(SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_suit_resomi.dmi')
 
 /obj/item/clothing/suit/storage/hooded/resomi/New()
 	..()
@@ -745,12 +745,12 @@
 /obj/item/clothing/head/resomi/resomi_hood
 	name = "Cloak Hood"
 	desc = "A hood attached to a resomi cloak."
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
+	icon = 'icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
 	icon_state = "tesh_hcloak_bo_hood"
 	flags_inv = BLOCKHAIR | HIDEEARS
 	body_parts_covered = HEAD
 	species_restricted = list(SPECIES_RESOMI)
-	sprite_sheets = list(SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi')
+	sprite_sheets = list(SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_head_resomi.dmi')
 
 /obj/item/clothing/head/resomi/resomi_hood/polychromic_hood
 	name = "polychromic hood"

@@ -215,7 +215,7 @@ var/global/list/holder_mob_icon_cache = list()
 	return (scooper.mob_size > src.mob_size && a_intent == I_HELP)
 
 /obj/item/holder/human
-	icon = 'mods/resomi/icons/holder_complex.dmi'
+	icon = 'icons/mob/human_races/species/resomi/holder_complex.dmi'
 	var/list/generate_for_slots = list(slot_l_hand_str, slot_r_hand_str, slot_back_str)
 	w_class = ITEM_SIZE_LARGE
 	slot_flags = SLOT_BACK

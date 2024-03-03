@@ -221,6 +221,10 @@ var/global/const/NO_EMAG_ACT = -50
 	var/detail_color
 	var/extra_details
 
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_id_resomi.dmi'
+	)
+
 /obj/item/card/id/Initialize()
 	.=..()
 	if(job_access_type)

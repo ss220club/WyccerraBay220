@@ -1,8 +1,8 @@
 /obj/item/clothing/glasses/sunglasses/lenses
 	name = "small sun lenses"
 	desc = "It looks fitted to nonhuman proportions. Usually, you can(?) see them in resomis' or monkeys' eyes."
-	item_icons = list(slot_glasses_str = 'mods/resomi/icons/clothing/onmob_eyes_resomi.dmi')
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
+	item_icons = list(slot_glasses_str = 'icons/mob/species/resomi/onmob_eyes_resomi.dmi')
+	icon = 'icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
 	icon_state = "sun_lenses"
 	item_state = null
 	species_restricted = list(SPECIES_RESOMI)
@@ -12,8 +12,8 @@
 /obj/item/clothing/glasses/sunglasses/sechud/lenses
 	name = "small sechud lenses"
 	desc = "Lenses with a HUD. This one has a sechud."
-	item_icons = list(slot_glasses_str = 'mods/resomi/icons/clothing/onmob_eyes_resomi.dmi')
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
+	item_icons = list(slot_glasses_str = 'icons/mob/species/resomi/onmob_eyes_resomi.dmi')
+	icon = 'icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
 	icon_state = "sec_lenses"
 	off_state = "sun_lenses"
 	item_state = null
@@ -23,8 +23,8 @@
 /obj/item/clothing/glasses/hud/health/lenses
 	name = "small medhud lenses"
 	desc = "A small lenses that scans the creatures in view and provides accurate data about their health status."
-	item_icons = list(slot_glasses_str = 'mods/resomi/icons/clothing/onmob_eyes_resomi.dmi')
-	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
+	item_icons = list(slot_glasses_str = 'icons/mob/species/resomi/onmob_eyes_resomi.dmi')
+	icon = 'icons/obj/clothing/species/resomi/obj_eyes_resomi.dmi'
 	icon_state = "med_lenses"
 	off_state = "sun_lenses"
 	item_state = null

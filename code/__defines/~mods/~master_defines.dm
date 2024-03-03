@@ -42,8 +42,3 @@
 // LOADOUT_ITEMS - Start
 #define ACCESSORY_SLOT_OVER     "Over"
 // LOADOUT_ITEMS - End
-
-// RESOMI - Start
-#define SPECIES_RESOMI  "Resomi"
-#define LANGUAGE_RESOMI "Schechi"
-// RESOMI - End

@@ -10,13 +10,13 @@
 				SPECIES_HUMAN = 'icons/obj/clothing/obj_head.dmi',
 				SPECIES_UNATHI = 'packs/infinity/icons/obj/clothing/species/erosan/hats.dmi',
 				SPECIES_SKRELL = 'icons/obj/clothing/species/skrell/obj_head_skrell.dmi',
-				SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
+				SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
 				),
 			SETUP_SPECIES_ONMOB = list(
 				SPECIES_HUMAN = 'icons/mob/onmob/onmob_head.dmi',
 				SPECIES_UNATHI = 'mods/hardsuits/icons/voidsuits/onmob_head_unathi.dmi',
 				SPECIES_SKRELL = 'icons/mob/species/skrell/onmob_head_skrell.dmi',
-				SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi'
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_head_resomi.dmi'
 				)
 		),
 		/obj/item/clothing/suit/space/void = list(
@@ -28,13 +28,13 @@
 				SPECIES_HUMAN = 'icons/obj/clothing/obj_suit.dmi',
 				SPECIES_UNATHI = 'packs/infinity/icons/obj/clothing/species/erosan/suits.dmi',
 				SPECIES_SKRELL = 'icons/obj/clothing/species/skrell/obj_suit_skrell.dmi',
-				SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+				SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 				),
 			SETUP_SPECIES_ONMOB = list(
 				SPECIES_HUMAN = 'icons/mob/onmob/onmob_suit.dmi',
 				SPECIES_UNATHI = 'mods/hardsuits/icons/voidsuits/onmob_suit_unathi.dmi',
 				SPECIES_SKRELL = 'icons/mob/onmob/onmob_suit.dmi',
-				SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_suit_resomi.dmi'
 				)
 		)
 	)
@@ -148,13 +148,13 @@
 				SPECIES_HUMAN = 'maps/torch/icons/obj/obj_head_solgov.dmi',
 				SPECIES_UNATHI = 'packs/infinity/icons/obj/clothing/species/erosan/hats.dmi',
 				SPECIES_SKRELL = 'maps/torch/icons/obj/skrell/obj_head_solgov_skrell.dmi',
-				SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
+				SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_head_resomi.dmi'
 				),
 			SETUP_SPECIES_ONMOB = list(
 				SPECIES_HUMAN = 'maps/torch/icons/mob/onmob_head_solgov.dmi',
 				SPECIES_UNATHI = 'mods/hardsuits/icons/voidsuits/onmob_head_unathi.dmi',
 				SPECIES_SKRELL = 'maps/torch/icons/mob/skrell/onmob_head_solgov_skrell.dmi',
-				SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_head_resomi.dmi'
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_head_resomi.dmi'
 				)
 		),
 		/obj/item/clothing/suit/space/void = list(
@@ -166,13 +166,13 @@
 				SPECIES_HUMAN = 'maps/torch/icons/obj/obj_suit_solgov.dmi',
 				SPECIES_UNATHI = 'packs/infinity/icons/obj/clothing/species/erosan/suits.dmi',
 				SPECIES_SKRELL = 'maps/torch/icons/obj/skrell/obj_suit_solgov_skrell.dmi',
-				SPECIES_RESOMI = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+				SPECIES_RESOMI = 'icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
 				),
 			SETUP_SPECIES_ONMOB = list(
 				SPECIES_HUMAN = 'maps/torch/icons/mob/onmob_suit_solgov.dmi',
 				SPECIES_UNATHI = 'mods/hardsuits/icons/voidsuits/onmob_suit_unathi.dmi',
 				SPECIES_SKRELL = 'maps/torch/icons/mob/skrell/onmob_suit_solgov_skrell.dmi',
-				SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_suit_resomi.dmi'
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_suit_resomi.dmi'
 				)
 		)
 	)

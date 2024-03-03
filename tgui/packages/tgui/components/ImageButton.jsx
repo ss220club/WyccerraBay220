@@ -6,6 +6,7 @@
 
 import { classes, pureComponentHooks } from 'common/react';
 import { computeBoxClassName, computeBoxProps } from './Box';
+import { Icon } from './Icon';
 import { Tooltip } from './Tooltip';
 
 export const ImageButton = (props) => {
@@ -37,71 +38,85 @@ export const ImageButton = (props) => {
   let buttonContent = (
     <div
       className={classes([
-        vertical ? 'ImageButton__vertical' : 'ImageButton__horizontal',
-        selected && 'ImageButton--selected',
-        disabled && 'ImageButton--disabled',
-        color && typeof color === 'string'
-          ? 'ImageButton--color--' + color
-          : 'ImageButton--color--default',
-        className,
-        computeBoxClassName(rest),
+        children && 'ImageButton__children',
+        vertical && 'ImageButton__vertical',
       ])}
-      tabIndex={!disabled && '0'}
-      {...computeBoxProps(rest)}
     >
-      <div className={classes(['ImageButton__image'])}>
-        {asset ? (
-          <div className={classes([imageAsset, image])} />
-        ) : (
-          <img
-            src={`data:image/jpeg;base64,${image}`}
-            style={{
-              width: imageSize,
-              '-ms-interpolation-mode': 'nearest-neighbor',
-            }}
-          />
-        )}
-      </div>
-      {content &&
-        (vertical ? (
-          <div
-            className={classes([
-              'ImageButton__content__vertical',
-              ellipsis && 'ImageButton__content--ellipsis',
-              selected && 'ImageButton__content--selected',
-              disabled && 'ImageButton__content--disabled',
-              color && typeof color === 'string'
-                ? 'ImageButton__content--color--' + color
-                : 'ImageButton__content--color--default',
-              className,
-              computeBoxClassName(rest),
-            ])}
-          >
-            {disabled ? disabledContent : content}
-            {children}
-          </div>
-        ) : (
-          <div className={classes(['ImageButton__content__horizontal'])}>
-            {title && (
-              <div
-                className={classes(['ImageButton__content__horizontal--title'])}
-              >
-                {title}
+      <div
+        className={classes([
+          vertical ? '' : 'ImageButton__horizontal',
+          selected && 'ImageButton--selected',
+          disabled && 'ImageButton--disabled',
+          color && typeof color === 'string'
+            ? 'ImageButton--color--' + color
+            : 'ImageButton--color--default',
+          className,
+          computeBoxClassName(rest),
+        ])}
+        tabIndex={!disabled && '0'}
+        {...computeBoxProps(rest)}
+      >
+        <div className={classes(['ImageButton__image'])}>
+          {asset ? (
+            <div className={classes([imageAsset, image])} />
+          ) : (
+            <img
+              src={`data:image/jpeg;base64,${image}`}
+              style={{
+                width: imageSize,
+                '-ms-interpolation-mode': 'nearest-neighbor',
+              }}
+            />
+          )}
+        </div>
+        {content &&
+          (vertical ? (
+            <div
+              className={classes([
+                'ImageButton__content__vertical',
+                ellipsis && 'ImageButton__content--ellipsis',
+                selected && 'ImageButton__content--selected',
+                disabled && 'ImageButton__content--disabled',
+                color && typeof color === 'string'
+                  ? 'ImageButton__content--color--' + color
+                  : 'ImageButton__content--color--default',
+                className,
+                computeBoxClassName(rest),
+              ])}
+            >
+              {disabled ? disabledContent : content}
+            </div>
+          ) : (
+            <div className={classes(['ImageButton__content__horizontal'])}>
+              {title && (
                 <div
                   className={classes([
-                    'ImageButton__content__horizontal--divider',
+                    'ImageButton__content__horizontal--title',
                   ])}
-                />
+                >
+                  {title}
+                  <div
+                    className={classes([
+                      'ImageButton__content__horizontal--divider',
+                    ])}
+                  />
+                </div>
+              )}
+              <div
+                className={classes([
+                  'ImageButton__content__horizontal--content',
+                ])}
+              >
+                {content}
               </div>
-            )}
-            <div
-              className={classes(['ImageButton__content__horizontal--content'])}
-            >
-              {content}
-              {children}
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
+      {children && (
+        <div className={classes(['ImageButton__children--item'])}>
+          {children}
+        </div>
+      )}
     </div>
   );
 
@@ -117,3 +132,91 @@ export const ImageButton = (props) => {
 };
 
 ImageButton.defaultHooks = pureComponentHooks;
+
+/**
+ *
+ * That's VERY fucking expensive thing!
+ * Use it only in places, where it really needed.
+ * Otherwise, the window opening time may increase by a third!
+ * Most of the blame is on Icon.
+ * Maybe it's also because I'm a bit crooked.
+ * (с) Aylong
+ *
+ */
+export const ImageButtonItem = (props) => {
+  const {
+    className,
+    color,
+    content,
+    selected,
+    disabled,
+    disabledContent,
+    tooltip,
+    tooltipPosition,
+    icon,
+    iconColor,
+    iconPosition,
+    iconRotation,
+    iconSize,
+    onClick,
+    children,
+    ...rest
+  } = props;
+  rest.onClick = (e) => {
+    if (!disabled && onClick) {
+      onClick(e);
+    }
+  };
+  let itemContent = (
+    <div
+      className={classes([
+        'ImageButton__item',
+        selected && 'ImageButton__item--selected',
+        disabled && 'ImageButton__item--disabled',
+        color && typeof color === 'string'
+          ? 'ImageButton__item--color--' + color
+          : 'ImageButton__item--color--default',
+        className,
+        computeBoxClassName(rest),
+      ])}
+      tabIndex={!disabled && '0'}
+      {...computeBoxProps(rest)}
+    >
+      <div>
+        {icon && iconPosition === 'top' && (
+          <Icon
+            mb={0.5}
+            name={icon}
+            color={iconColor}
+            rotation={iconRotation}
+            size={iconSize}
+          />
+        )}
+        <div>
+          {disabled ? disabledContent : content}
+          {children}
+        </div>
+        {icon && iconPosition !== 'top' && (
+          <Icon
+            mt={0.5}
+            name={icon}
+            color={iconColor}
+            rotation={iconRotation}
+            size={iconSize}
+          />
+        )}
+      </div>
+    </div>
+  );
+  if (tooltip) {
+    itemContent = (
+      <Tooltip content={tooltip} position={tooltipPosition}>
+        {itemContent}
+      </Tooltip>
+    );
+  }
+
+  return itemContent;
+};
+
+ImageButton.Item = ImageButtonItem;

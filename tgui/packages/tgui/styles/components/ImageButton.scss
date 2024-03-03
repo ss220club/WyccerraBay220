@@ -33,6 +33,23 @@ $bg-map: colors.$bg-map !default;
   }
 }
 
+.ImageButton__children {
+  display: -ms-flexbox;
+  margin-top: 0.5em;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0.5em;
+  }
+}
+
+.ImageButton__children--item {
+  display: -ms-flexbox;
+}
+
 .ImageButton__image {
   line-height: 0;
   align-self: center;
@@ -44,7 +61,6 @@ $bg-map: colors.$bg-map !default;
 
 .ImageButton__horizontal {
   display: -ms-flexbox;
-  display: flex;
   width: 100%;
   margin-top: 0.5em;
   align-items: center;
@@ -143,4 +159,56 @@ $bg-map: colors.$bg-map !default;
 .ImageButton__content--selected {
   background-color: $color-selected !important;
   border-top: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.5);
+}
+
+.ImageButton__item {
+  display: -ms-flexbox;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin item-color($color) {
+  $luminance: luminance($color);
+
+  transition:
+    color 100ms,
+    background-color 100ms;
+  background-color: rgba($color, 0.3);
+  border: base.em(1px) solid rgba(lighten($color, 50%), 0.2);
+  border-left: 0;
+
+  &:focus {
+    transition:
+      color 250ms,
+      background-color 250ms;
+  }
+
+  &:hover {
+    background-color: rgba(lighten($color, 25%), 0.4);
+  }
+}
+
+@each $color-name, $color-value in $bg-map {
+  .ImageButton__item--color--#{$color-name} {
+    @include item-color(rgba($color-value, 1));
+  }
+}
+
+.ImageButton__item--color--default {
+  @include item-color(rgba(lighten($color-default, 100%), 1));
+}
+
+.ImageButton__item--disabled {
+  background-color: rgba($color-disabled, 0.4) !important;
+  border: base.em(1px) solid rgba(lighten($color-disabled, 100%), 0.15);
+  border-left: 0;
+}
+
+.ImageButton__item--selected {
+  @include item-color($color-selected);
+  border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
+  border-left: 0;
 }

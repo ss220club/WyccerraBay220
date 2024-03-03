@@ -38,10 +38,14 @@
 
 			turf_to_validate.in_contents_of = area_to_check
 
+			CHECK_TICK
+
 	for(var/turf/turf_to_validate as anything in ALL_TURFS())
 		if(!turf_to_validate.in_contents_of)
 			log_bad("Found turf [log_info_line(turf_to_validate)] in contents of [log_info_line(turf_to_validate.loc)] but not in it's cache")
 			failed = TRUE
+
+		CHECK_TICK
 
 	if(failed)
 		fail("Area turf cache is invalid.")

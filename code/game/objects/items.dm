@@ -28,8 +28,6 @@
 	var/force = 0
 	var/attack_cooldown = DEFAULT_WEAPON_COOLDOWN
 	var/melee_accuracy_bonus = 0
-	/// Used to determine how fast an item completes a certain action. Lower values are faster.
-	var/toolspeed = 1
 
 	var/heat_protection = 0 //flags which determine which body parts are protected from heat. Use the HEAD, UPPER_TORSO, LOWER_TORSO, etc. flags. See setup.dm
 	var/cold_protection = 0 //flags which determine which body parts are protected from cold. Use the HEAD, UPPER_TORSO, LOWER_TORSO, etc. flags. See setup.dm
@@ -102,6 +100,8 @@
 
 	///How a tool acts when you use it on something, such as wirecutters cutting wires while multitools measure power
 	var/tool_behaviour = null
+	///How fast does the tool work
+	var/toolspeed = 1
 
 /obj/item/Initialize()
 	. = ..()

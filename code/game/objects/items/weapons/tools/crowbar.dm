@@ -17,6 +17,7 @@
 	matter = list(MATERIAL_STEEL = 140)
 	center_of_mass = "x=16;y=20"
 	attack_verb = list("attacked", "bashed", "battered", "bludgeoned", "whacked")
+	tool_behaviour = TOOL_CROWBAR
 
 /obj/item/crowbar/red
 	icon_state = "red_crowbar"

@@ -63,13 +63,16 @@ type Cost = {
 export const Fabricator = (props, context) => {
   const { act, data } = useBackend<FabricatorData>(context);
   return (
-    <Window width={800} height={600}>
+    <Window width={780} height={545}>
       <Window.Content>
         <Stack fill>
           <Stack.Item basis="25%">
             <Stack fill vertical>
               <Stack.Item grow>
                 <FabCategories />
+              </Stack.Item>
+              <Stack.Item m={0}>
+                <FabFilters />
               </Stack.Item>
               <Stack.Item textAlign="center">
                 <NoticeBox color="blue">
@@ -127,10 +130,43 @@ const FabCategories = (props, context) => {
   );
 };
 
+const FabFilters = (props, context) => {
+  const { act, data } = useBackend<FabricatorData>(context);
+  const [tab, setTab] = useSharedState(context, 'tab', 'All');
+  const [hideUnavailable, setHideUnavailable] = useSharedState(
+    context,
+    'hideUnavailable',
+    false
+  );
+  const [compactMode, setCompactMode] = useSharedState(
+    context,
+    'compactMode',
+    false
+  );
+  return (
+    <Section>
+      <Button.Checkbox
+        fluid
+        checked={compactMode}
+        content={'Компактный режим'}
+        onClick={() => setCompactMode(!compactMode)}
+      />
+      <Button.Checkbox
+        fluid
+        checked={hideUnavailable}
+        content={'Скрыть недоступное'}
+        onClick={() => setHideUnavailable(!hideUnavailable)}
+      />
+    </Section>
+  );
+};
+
 const FabDesigns = (props, context) => {
   const { act, data } = useBackend<FabricatorData>(context);
-  const [tab, setTab] = useLocalState(context, 'tab', 'All');
   const [searchText, setSearchText] = useLocalState(context, 'searchText', '');
+  const [tab] = useLocalState(context, 'tab', 'All');
+  const [hideUnavailable] = useLocalState(context, 'hideUnavailable', '');
+  const [compactMode] = useLocalState(context, 'compactMode', '');
 
   const filteredRecipes = data.recipes
     .filter(
@@ -172,20 +208,28 @@ const FabDesigns = (props, context) => {
       </Stack.Item>
       <Stack.Item grow>
         <Section fill scrollable title={`Рецепты - ${tab}`} textAlign="center">
-          {filteredRecipes.map((recipe) => (
-            <ImageButton
-              image={recipe.image}
-              imageSize={'64px'}
-              key={recipe.reference}
-              title={capitalizeAll(recipe.name)}
-              content={getRequiredResources(recipe)}
-              color={recipe.hidden && 'brown'}
-              disabled={!checkResourcesAvailability(recipe)}
-              onClick={() =>
-                act('make', { make: recipe.reference, multiplier: 1 })
-              }
-            />
-          ))}
+          {filteredRecipes.map((recipe) =>
+            hideUnavailable && !checkResourcesAvailability(recipe) ? null : (
+              <ImageButton
+                bold={compactMode ? true : false}
+                image={recipe.image}
+                imageSize={compactMode ? '32px' : '64px'}
+                key={recipe.reference}
+                title={compactMode ? '' : capitalizeAll(recipe.name)}
+                content={
+                  compactMode
+                    ? capitalizeAll(recipe.name)
+                    : getRequiredResources(recipe)
+                }
+                tooltip={compactMode ? getRequiredResources(recipe) : ''}
+                color={recipe.hidden && 'brown'}
+                disabled={!checkResourcesAvailability(recipe)}
+                onClick={() =>
+                  act('make', { make: recipe.reference, multiplier: 1 })
+                }
+              />
+            )
+          )}
         </Section>
       </Stack.Item>
     </Stack>
@@ -200,7 +244,7 @@ const FabResources = (props, context) => {
       {material_storage.map((material) => (
         <ImageButton
           image={material.image}
-          imageSize={'64px'}
+          imageSize={'58px'}
           mb={0}
           height="57px"
           key={material.name}
@@ -208,13 +252,12 @@ const FabResources = (props, context) => {
           selected={material.stored === material.max}
           content={
             <ProgressBar
-              width={11}
               color="grey"
               value={material.stored}
               minValue={0}
               maxValue={material.max}
             >
-              {material.stored} / {material.max}
+              {material.stored}
             </ProgressBar>
           }
           disabled={!material.stored}
@@ -271,10 +314,10 @@ const FabQueue = (props, context) => {
         </Stack>
       ) : (
         <Stack fill bold textAlign="center">
-          <Stack.Item grow fontSize={1.5} align="center" color="label">
-            <Icon.Stack>
-              <Icon size={5} name="bars" color="gray" />
-              <Icon size={5} name="slash" color="red" />
+          <Stack.Item grow fontSize={1.25} align="center" color="label">
+            <Icon.Stack mb={-5}>
+              <Icon size={4} name="bars" color="gray" />
+              <Icon size={4} name="slash" color="red" />
             </Icon.Stack>
             <br />
             Очередь пуста

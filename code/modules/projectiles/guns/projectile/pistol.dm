@@ -204,7 +204,6 @@
 			mode_name="semi auto",
 			burst=1,
 			fire_delay=5,
-			move_delay=null,
 			one_hand_penalty=3,
 			burst_accuracy=null,
 			dispersion=null

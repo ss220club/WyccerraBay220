@@ -77,6 +77,39 @@
 /obj/structure/heavy_vehicle_frame/set_dir()
 	..(SOUTH)
 
+/obj/structure/heavy_vehicle_frame/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+
+	// Remove reinforcement
+	if(is_reinforced == FRAME_REINFORCED)
+		user.visible_message(
+			SPAN_NOTICE("\The [user] starts removing \the [src]'s reinforcements with \a [tool]."),
+			SPAN_NOTICE("You start removing \the [src]'s reinforcements with \the [tool].")
+		)
+		if (!user.do_skilled(0.5, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+			return
+		material.place_sheet(loc, 10)
+		material = null
+		is_reinforced = FALSE
+		user.visible_message(
+			SPAN_NOTICE("\The [user] removes \the [src]'s reinforcements with \a [tool]."),
+			SPAN_NOTICE("You remove \the [src]'s reinforcements with \the [tool].")
+		)
+		return
+
+	// Remove component
+	var/input = input(user, "Which component would you like to remove?", "[src] - Remove Component") as null|anything in list(arms, body, legs, head)
+	if (!input || !user.use_sanity_check(src, tool) || !uninstall_component(input, user))
+		return
+	if (input == arms)
+		arms = null
+	else if (input == body)
+		body = null
+	else if (input == legs)
+		legs = null
+	else if (input == head)
+		head = null
+	update_icon()
 
 /obj/structure/heavy_vehicle_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
@@ -108,39 +141,6 @@
 			SPAN_NOTICE("\The [user] wires \the [src] with \a [tool]."),
 			SPAN_NOTICE("You wires \the [src] with \the [tool].")
 		)
-		return TRUE
-
-	// Crowbar - Remove components
-	if (isCrowbar(tool))
-		// Remove reinforcement
-		if (is_reinforced == FRAME_REINFORCED)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] starts removing \the [src]'s reinforcements with \a [tool]."),
-				SPAN_NOTICE("You start removing \the [src]'s reinforcements with \the [tool].")
-			)
-			if (!user.do_skilled(0.5, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-				return TRUE
-			material.place_sheet(loc, 10)
-			material = null
-			is_reinforced = FALSE
-			user.visible_message(
-				SPAN_NOTICE("\The [user] removes \the [src]'s reinforcements with \a [tool]."),
-				SPAN_NOTICE("You remove \the [src]'s reinforcements with \the [tool].")
-			)
-			return TRUE
-		// Remove component
-		var/input = input(user, "Whick component would you like to remove?", "[src] - Remove Component") as null|anything in list(arms, body, legs, head)
-		if (!input || !user.use_sanity_check(src, tool) || !uninstall_component(input, user))
-			return TRUE
-		if (input == arms)
-			arms = null
-		else if (input == body)
-			body = null
-		else if (input == legs)
-			legs = null
-		else if (input == head)
-			head = null
-		update_icon()
 		return TRUE
 
 	// Material Stack - Install reinforcements

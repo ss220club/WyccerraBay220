@@ -89,6 +89,11 @@ var/global/list/rad_collectors = list()
 	else
 		to_chat(user, SPAN_WARNING("The controls are locked!"))
 
+/obj/machinery/power/rad_collector/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(P && !locked)
+		eject()
+
 /obj/machinery/power/rad_collector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/tank/phoron))
 		if(!anchored)
@@ -102,11 +107,6 @@ var/global/list/rad_collectors = list()
 		P = W
 		update_icon()
 		return TRUE
-
-	if (isCrowbar(W))
-		if(P && !locked)
-			eject()
-			return TRUE
 
 	if (isWrench(W))
 		if(P)

@@ -46,16 +46,16 @@
 	if(!closed)
 		to_chat(user, "The lid is open.")
 
-/obj/machinery/beehive/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if (isCrowbar(I))
-		closed = !closed
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [closed ? "closes" : "opens"] \the [src]."),
-			SPAN_NOTICE("You [closed ? "close" : "open"] \the [src].")
-		)
-		update_icon()
-		return TRUE
+/obj/machinery/beehive/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	closed = !closed
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [closed ? "closes" : "opens"] \the [src]."),
+		SPAN_NOTICE("You [closed ? "close" : "open"] \the [src].")
+	)
+	update_icon()
 
+/obj/machinery/beehive/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if (istype(I, /obj/item/bee_smoker))
 		if(closed)
 			to_chat(user, SPAN_NOTICE("You need to open \the [src] with a crowbar before smoking the bees."))

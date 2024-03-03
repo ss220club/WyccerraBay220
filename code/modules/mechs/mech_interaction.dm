@@ -322,6 +322,35 @@
 	remove_pilot(user)
 	return 1
 
+/mob/living/exosuit/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Crowbar - Force open locked cockpit
+	if(!body)
+		USE_FEEDBACK_FAILURE("\The [src] has no cockpit to force.")
+		return
+	if(!hatch_locked)
+		USE_FEEDBACK_FAILURE("\The [src]'s cockpit isn't locked. You don't need to force it.")
+		return
+	user.visible_message(
+		SPAN_WARNING("\The [user] starts forcing \the [src]'s emergency [body.hatch_descriptor] release using \a [tool]."),
+		SPAN_WARNING("You start forcing \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
+	)
+	if(!user.do_skilled((tool.toolspeed * 5) SECONDS, list(SKILL_DEVICES, SKILL_EVA), src) || !user.use_sanity_check(src, tool))
+		return
+	if(!body)
+		USE_FEEDBACK_FAILURE("\The [src] has no cockpit to force.")
+		return
+	playsound(src, 'sound/machines/bolts_up.ogg', 25, TRUE)
+	hatch_locked = FALSE
+	hatch_closed = FALSE
+	for(var/mob/pilot in pilots)
+		eject(pilot, TRUE)
+	hud_open.update_icon()
+	update_icon()
+	user.visible_message(
+		SPAN_WARNING("\The [user] forces \the [src]'s emergency [body.hatch_descriptor] release using \a [tool]."),
+		SPAN_WARNING("You force \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
+	)
 
 /mob/living/exosuit/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Repair burn damage
@@ -340,36 +369,6 @@
 			USE_FEEDBACK_FAILURE("\The [src]'s [input_fix.name] no longer needs repair.")
 			return TRUE
 		input_fix.repair_burn_generic(tool, user)
-		return TRUE
-
-	// Crowbar - Force open locked cockpit
-	if (isCrowbar(tool))
-		if (!body)
-			USE_FEEDBACK_FAILURE("\The [src] has no cockpit to force.")
-			return TRUE
-		if (!hatch_locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s cockpit isn't locked. You don't need to force it.")
-			return TRUE
-		user.visible_message(
-			SPAN_WARNING("\The [user] starts forcing \the [src]'s emergency [body.hatch_descriptor] release using \a [tool]."),
-			SPAN_WARNING("You start forcing \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 5) SECONDS, list(SKILL_DEVICES, SKILL_EVA), src) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!body)
-			USE_FEEDBACK_FAILURE("\The [src] has no cockpit to force.")
-			return TRUE
-		playsound(src, 'sound/machines/bolts_up.ogg', 25, TRUE)
-		hatch_locked = FALSE
-		hatch_closed = FALSE
-		for (var/mob/pilot in pilots)
-			eject(pilot, TRUE)
-		hud_open.update_icon()
-		update_icon()
-		user.visible_message(
-			SPAN_WARNING("\The [user] forces \the [src]'s emergency [body.hatch_descriptor] release using \a [tool]."),
-			SPAN_WARNING("You force \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
-		)
 		return TRUE
 
 	// Exosuit Customization Kit - Customize the exosuit

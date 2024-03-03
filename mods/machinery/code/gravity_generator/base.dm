@@ -167,6 +167,16 @@
 		P.main_part = src
 		parts += P
 
+/obj/machinery/gravity_generator/main/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!do_after(user, 5 SECONDS, middle) || !user.use_sanity_check(src, tool))
+		return
+
+	playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+	panel_open = !panel_open
+	update_icon()
+	to_chat(user, SPAN_NOTICE("You [panel_open ? "open" : "close"] the maintenance hatch."))
+
 // Fixing the gravity generator.
 /obj/machinery/gravity_generator/main/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	switch(broken_state)
@@ -266,17 +276,6 @@
 				update_icon()
 
 				return TRUE
-
-	if(isCrowbar(tool))
-		if(!do_after(user, 5 SECONDS, middle) || !user.use_sanity_check(src, tool))
-			return TRUE
-
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
-		panel_open = !panel_open
-		update_icon()
-		to_chat(user, SPAN_NOTICE("You [panel_open ? "open" : "close"] the maintenance hatch."))
-
-		return TRUE
 
 	return ..()
 

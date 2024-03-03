@@ -60,23 +60,18 @@ var/global/solar_gen_rate = 1500
 		set_max_health(health_max * 2)
 	update_icon()
 
-
-
-/obj/machinery/power/solar/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isCrowbar(W))
-		playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
-		user.visible_message(SPAN_NOTICE("[user] begins to take the glass off the solar panel."))
-		if(do_after(user, (W.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			var/obj/item/solar_assembly/S = locate() in src
-			if(S)
-				S.dropInto(loc)
-				S.give_glass()
-			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			user.visible_message(SPAN_NOTICE("[user] takes the glass off the solar panel."))
-			qdel(src)
-		return TRUE
-
-	return ..()
+/obj/machinery/power/solar/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
+	user.visible_message(SPAN_NOTICE("[user] begins to take the glass off the solar panel."))
+	if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		var/obj/item/solar_assembly/S = locate() in src
+		if(S)
+			S.dropInto(loc)
+			S.give_glass()
+		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+		user.visible_message(SPAN_NOTICE("[user] takes the glass off the solar panel."))
+		qdel(src)
 
 /obj/machinery/power/solar/on_update_icon()
 	..()
@@ -220,6 +215,12 @@ var/global/solar_gen_rate = 1500
 		S.amount = 2
 		glass_type = null
 
+/obj/item/solar_assembly/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(tracker)
+		new /obj/item/tracker_electronics(src.loc)
+		tracker = FALSE
+		user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))
 
 /obj/item/solar_assembly/attackby(obj/item/W, mob/user)
 
@@ -259,12 +260,6 @@ var/global/solar_gen_rate = 1500
 			tracker = 1
 			qdel(W)
 			user.visible_message(SPAN_NOTICE("[user] inserts the electronics into the solar assembly."))
-			return 1
-	else
-		if(isCrowbar(W))
-			new /obj/item/tracker_electronics(src.loc)
-			tracker = 0
-			user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))
 			return 1
 	..()
 

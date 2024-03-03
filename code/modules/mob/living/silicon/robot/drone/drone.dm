@@ -190,13 +190,11 @@ var/global/list/mob_hat_cache = list()
 	new_hat.forceMove(src)
 	update_icon()
 
+/mob/living/silicon/robot/drone/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+	USE_FEEDBACK_FAILURE("\The [src] is hermetically sealed. You can't open the case.")
 
 /mob/living/silicon/robot/drone/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Block interaction
-	if (isCrowbar(tool))
-		USE_FEEDBACK_FAILURE("\The [src] is hermetically sealed. You can't open the case.")
-		return TRUE
-
 	// Hat - Equip hat
 	if (istype(tool, /obj/item/clothing/head))
 		if (hat)

@@ -468,6 +468,105 @@
 	if (use_call == "weapon")
 		spark_system.start()
 
+/mob/living/silicon/robot/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (opened)
+		// Close cover
+		if (cell)
+			user.visible_message(
+				SPAN_NOTICE("\The [user] starts closing \the [src]'s maintenance hatch with \a [tool]."),
+				SPAN_NOTICE("You start closing \the [src]'s maintenance hatch with \a [tool]."),
+			)
+			if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+				return
+			if (!opened)
+				USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is already closed.")
+				return
+			if (!cell)
+				USE_FEEDBACK_FAILURE("\The [src]'s cell needs to remain in place to close \his maintenance hatch.")
+				return
+			opened = FALSE
+			update_icon()
+			user.visible_message(
+				SPAN_NOTICE("\The [user] closes \the [src]'s maintenance hatch with \a [tool]."),
+				SPAN_NOTICE("You close \the [src]'s maintenance hatch with \a [tool]."),
+			)
+			return
+
+		// Remove MMI
+		if (wiresexposed && wires.IsAllCut())
+			if (!mmi)
+				USE_FEEDBACK_FAILURE("\The [src] has no brain to remove.")
+				return
+			user.visible_message(
+				SPAN_NOTICE("\The [user] starts removing \the [src]'s [mmi.name] with \a [tool]."),
+				SPAN_NOTICE("You start removing \the [src]'s [mmi.name] with \a [tool]."),
+			)
+			if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+				return
+			if (!mmi)
+				USE_FEEDBACK_FAILURE("\The [src] has no longer has a brain to remove.")
+				return
+			user.visible_message(
+				SPAN_NOTICE("\The [user] removes \the [src]'s [mmi.name] with \a [tool]."),
+				SPAN_NOTICE("You remove \the [src]'s [mmi.name] with \a [tool]."),
+			)
+			dismantle(user)
+			return
+
+		// Remove component
+		var/list/removable_components = list()
+		for (var/key in components)
+			if (key == "power cell")
+				continue
+			var/datum/robot_component/component = components[key]
+			if (component.installed != 0)
+				removable_components += key
+		if (!length(removable_components))
+			USE_FEEDBACK_FAILURE("\The [src] has no components to remove.")
+			return
+		var/input = input(user, "Whick component do you want to pry out?", "[name] - Remove Component") as null|anything in removable_components
+		if (!input || !user.use_sanity_check(src, tool))
+			return
+		var/datum/robot_component/component = components[input]
+		if (component.installed == 0)
+			USE_FEEDBACK_FAILURE("\The [src] no longer has \a [input] to remove.")
+			return
+		var/obj/item/robot_parts/robot_component/removed_component = component.wrapped
+		if (istype(removed_component))
+			removed_component.brute = component.brute_damage
+			removed_component.burn = component.electronics_damage
+		removed_component.forceMove(loc)
+		if (component.installed == 1)
+			component.uninstall()
+		component.installed = 0
+		component.wrapped = null
+		user.visible_message(
+			SPAN_NOTICE("\The [user] removes \a [removed_component] from \the [src]'s [component.name] slot with \a [tool]."),
+			SPAN_NOTICE("You remove \a [removed_component] from \the [src]'s [component.name] slot with \the [tool].")
+		)
+		return
+
+	// Open the panel
+	if (locked)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is locked and cannot be opened.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts prying open \the [src]'s maintenance hatch with \a [tool]."),
+		SPAN_NOTICE("You start prying open \the [src]'s maintenance hatch with \a [tool].")
+	)
+	if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+		return
+	if (locked)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is locked and cannot be opened.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] pries open \the [src]'s maintenance hatch with \a [tool]."),
+		SPAN_NOTICE("You pry open \the [src]'s maintenance hatch with \a [tool].")
+	)
+	opened = TRUE
+	update_icon()
+	return
 
 /mob/living/silicon/robot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Components - Attempt to install
@@ -531,109 +630,6 @@
 			SPAN_NOTICE("\The [user] repairs some of the electronics in \the [src] with [cable.get_vague_name(FALSE)]."),
 			SPAN_NOTICE("You repair some of the electronics in \the [src] with some [cable.get_exact_name(1)]."),
 		)
-		return TRUE
-
-	// Crowbar
-	// - Toggle cover
-	// - Remove MMI
-	// - Remove components
-	if (isCrowbar(tool))
-		if (opened)
-			// Close cover
-			if (cell)
-				user.visible_message(
-					SPAN_NOTICE("\The [user] starts closing \the [src]'s maintenance hatch with \a [tool]."),
-					SPAN_NOTICE("You start closing \the [src]'s maintenance hatch with \a [tool]."),
-				)
-				if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-					return TRUE
-				if (!opened)
-					USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is already closed.")
-					return TRUE
-				if (!cell)
-					USE_FEEDBACK_FAILURE("\The [src]'s cell needs to remain in place to close \his maintenance hatch.")
-					return TRUE
-				opened = FALSE
-				update_icon()
-				user.visible_message(
-					SPAN_NOTICE("\The [user] closes \the [src]'s maintenance hatch with \a [tool]."),
-					SPAN_NOTICE("You close \the [src]'s maintenance hatch with \a [tool]."),
-				)
-				return TRUE
-
-			// Remove MMI
-			if (wiresexposed && wires.IsAllCut())
-				if (!mmi)
-					USE_FEEDBACK_FAILURE("\The [src] has no brain to remove.")
-					return TRUE
-				user.visible_message(
-					SPAN_NOTICE("\The [user] starts removing \the [src]'s [mmi.name] with \a [tool]."),
-					SPAN_NOTICE("You start removing \the [src]'s [mmi.name] with \a [tool]."),
-				)
-				if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-					return TRUE
-				if (!mmi)
-					USE_FEEDBACK_FAILURE("\The [src] has no longer has a brain to remove.")
-					return TRUE
-				user.visible_message(
-					SPAN_NOTICE("\The [user] removes \the [src]'s [mmi.name] with \a [tool]."),
-					SPAN_NOTICE("You remove \the [src]'s [mmi.name] with \a [tool]."),
-				)
-				dismantle(user)
-				return TRUE
-
-			// Remove component
-			var/list/removable_components = list()
-			for (var/key in components)
-				if (key == "power cell")
-					continue
-				var/datum/robot_component/component = components[key]
-				if (component.installed != 0)
-					removable_components += key
-			if (!length(removable_components))
-				USE_FEEDBACK_FAILURE("\The [src] has no components to remove.")
-				return TRUE
-			var/input = input(user, "Whick component do you want to pry out?", "[name] - Remove Component") as null|anything in removable_components
-			if (!input || !user.use_sanity_check(src, tool))
-				return TRUE
-			var/datum/robot_component/component = components[input]
-			if (component.installed == 0)
-				USE_FEEDBACK_FAILURE("\The [src] no longer has \a [input] to remove.")
-				return TRUE
-			var/obj/item/robot_parts/robot_component/removed_component = component.wrapped
-			if (istype(removed_component))
-				removed_component.brute = component.brute_damage
-				removed_component.burn = component.electronics_damage
-			removed_component.forceMove(loc)
-			if (component.installed == 1)
-				component.uninstall()
-			component.installed = 0
-			component.wrapped = null
-			user.visible_message(
-				SPAN_NOTICE("\The [user] removes \a [removed_component] from \the [src]'s [component.name] slot with \a [tool]."),
-				SPAN_NOTICE("You remove \a [removed_component] from \the [src]'s [component.name] slot with \the [tool].")
-			)
-			return TRUE
-
-		// Open the panel
-		if (locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is locked and cannot be opened.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts prying open \the [src]'s maintenance hatch with \a [tool]."),
-			SPAN_NOTICE("You start prying open \the [src]'s maintenance hatch with \a [tool].")
-		)
-		if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is locked and cannot be opened.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pries open \the [src]'s maintenance hatch with \a [tool]."),
-			SPAN_NOTICE("You pry open \the [src]'s maintenance hatch with \a [tool].")
-		)
-		opened = TRUE
-		update_icon()
 		return TRUE
 
 	// Encryption key - Passthrough to radio

@@ -60,20 +60,18 @@
 	active_power_usage = 1500
 	field_type = /obj/structure/atmospheric_retention_field/impassable
 
+/obj/machinery/atmospheric_field_generator/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(isactive)
+		USE_FEEDBACK_FAILURE("You can't open the ARF-G whilst it's running!")
+		return
+	to_chat(user, SPAN_NOTICE("You [hatch_open? "close" : "open"] \the [src]'s access hatch."))
+	hatch_open = !hatch_open
+	update_icon()
+	if(alwaysactive && wires_intact)
+		generate_field()
 
 /obj/machinery/atmospheric_field_generator/use_tool(obj/item/tool, mob/user, list/click_params)
-	if(isCrowbar(tool) && isactive)
-		USE_FEEDBACK_FAILURE("You can't open the ARF-G whilst it's running!")
-		return TRUE
-
-	if(isCrowbar(tool) && !isactive)
-		to_chat(user, SPAN_NOTICE("You [hatch_open? "close" : "open"] \the [src]'s access hatch."))
-		hatch_open = !hatch_open
-		update_icon()
-		if(alwaysactive && wires_intact)
-			generate_field()
-		return TRUE
-
 	if(hatch_open && isMultitool(tool))
 		to_chat(user, SPAN_NOTICE("You toggle \the [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
 		alwaysactive = !alwaysactive

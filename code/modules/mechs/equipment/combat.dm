@@ -558,18 +558,19 @@
 	if(owner && holding)
 		update_icon()
 
-/obj/item/mech_equipment/mounted_system/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
-	if(!CanPhysicallyInteract(user))	return
+/obj/item/mech_equipment/mounted_system/flamethrower/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/flamethrower/full/mech/FM = holding
+	if(FM.beaker)
+		user.visible_message(SPAN_NOTICE("\The [user] pries out \the [FM.beaker] using \the [tool]."))
+		FM.beaker.dropInto(get_turf(user))
+		FM.beaker = null
 
+/obj/item/mech_equipment/mounted_system/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
+	if(!CanPhysicallyInteract(user))
+		return
 	var/obj/item/flamethrower/full/mech/FM = holding
 	if(istype(FM))
-		if(isCrowbar(W) && FM.beaker)
-			if(FM.beaker)
-				user.visible_message(SPAN_NOTICE("\The [user] pries out \the [FM.beaker] using \the [W]."))
-				FM.beaker.dropInto(get_turf(user))
-				FM.beaker = null
-			return
-
 		if (istype(W, /obj/item/reagent_containers) && W.is_open_container() && (W.w_class <= FM.max_beaker))
 			if(FM.beaker)
 				to_chat(user, SPAN_NOTICE("There is already a tank inserted!"))

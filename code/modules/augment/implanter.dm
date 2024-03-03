@@ -30,34 +30,28 @@
 	to_chat(user, SPAN_BOLD("It contains:"))
 	augment.examine(arglist(args))
 
-
-/obj/item/device/augment_implanter/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Remove augment
-	if (isCrowbar(tool))
-		if (!augment)
-			USE_FEEDBACK_FAILURE("\The [src] has no augment to remove.")
-			return TRUE
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts to remove \a [augment] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You start to remove \a [augment] from \the [src] with \the [tool].")
-		)
-		if (!do_after(user, (tool.toolspeed * 10) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!augment)
-			USE_FEEDBACK_FAILURE("\The [src] has no augment to remove.")
-			return TRUE
-		user.put_in_hands(augment)
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [augment] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \a [augment] from \the [src] with \the [tool].")
-		)
-		augment = null
-		return TRUE
-
-	return ..()
-
+/obj/item/device/augment_implanter/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!augment)
+		USE_FEEDBACK_FAILURE("\The [src] has no augment to remove.")
+		return
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts to remove \a [augment] from \a [src] with \a [tool]."),
+		SPAN_NOTICE("You start to remove \a [augment] from \the [src] with \the [tool].")
+	)
+	if (!do_after(user, (tool.toolspeed * 10) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+		return
+	if (!augment)
+		USE_FEEDBACK_FAILURE("\The [src] has no augment to remove.")
+		return
+	user.put_in_hands(augment)
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \a [augment] from \a [src] with \a [tool]."),
+		SPAN_NOTICE("You remove \a [augment] from \the [src] with \the [tool].")
+	)
+	augment = null
 
 /obj/item/device/augment_implanter/attack_self(mob/living/carbon/human/user)
 	if (working)

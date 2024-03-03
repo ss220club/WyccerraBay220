@@ -91,6 +91,19 @@
 		T.update_icon()
 	. = ..()
 
+/obj/structure/table/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!carpeted)
+		USE_FEEDBACK_FAILURE("\The [src] has no carpeting to remove.")
+		return TRUE
+	new /obj/item/stack/tile/carpet(loc)
+	carpeted = FALSE
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes the carpting from \the [src] with \a [tool]."),
+		SPAN_NOTICE("You remove the carpting from \the [src] with \the [tool].")
+	)
+	return TRUE
 
 /obj/structure/table/use_weapon(obj/item/weapon, mob/user, list/click_params)
 	// Carpet - Add carpeting
@@ -110,20 +123,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] pads \the [src] with \a [weapon]."),
 			SPAN_NOTICE("You pad \the [src] with \the [weapon].")
-		)
-		return TRUE
-
-	// Crowbar - Remove carpeting
-	if (isCrowbar(weapon))
-		if (!carpeted)
-			USE_FEEDBACK_FAILURE("\The [src] has no carpeting to remove.")
-			return TRUE
-		new /obj/item/stack/tile/carpet(loc)
-		carpeted = FALSE
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes the carpting from \the [src] with \a [weapon]."),
-			SPAN_NOTICE("You remove the carpting from \the [src] with \the [weapon].")
 		)
 		return TRUE
 

@@ -199,6 +199,21 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 		if(PLAYER_STATE_PAUSE)
 			set_mode(PLAYER_STATE_PLAY)
 
+/obj/item/music_player/crowbar_act(mob/living/user, obj/item/tool)
+	switch(panel)
+		if(PANEL_OPENED)
+			user.visible_message(SPAN_NOTICE("\The [user] re-attaches \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You re-attach \the [src]'s front panel."))
+			playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+			panel = PANEL_UNSCREWED
+			update_icon()
+			return ITEM_INTERACT_SUCCESS
+		if(PANEL_UNSCREWED)
+			user.visible_message(SPAN_NOTICE("\The [user] unhinges \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You unhinge \the [src]'s front panel."))
+			playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+			panel = PANEL_OPENED
+			update_icon()
+			return ITEM_INTERACT_SUCCESS
+
 /obj/item/music_player/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	if(istype(tool, /obj/item/music_tape))
 		var/obj/item/music_tape/C = tool
@@ -279,22 +294,6 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 					if("Adjust player")
 						if(!broken)
 							AdjustFrequency(tool, user)
-				return TRUE
-
-	if(isCrowbar(tool))
-		switch(panel)
-			if(PANEL_OPENED)
-				user.visible_message(SPAN_NOTICE("\The [user] re-attaches \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You re-attach \the [src]'s front panel."))
-				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
-				panel = PANEL_UNSCREWED
-				update_icon()
-				return TRUE
-
-			if(PANEL_UNSCREWED)
-				user.visible_message(SPAN_NOTICE("\The [user] unhinges \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You unhinge \the [src]'s front panel."))
-				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
-				panel = PANEL_OPENED
-				update_icon()
 				return TRUE
 
 	if(istype(tool, /obj/item/stack/nanopaste))

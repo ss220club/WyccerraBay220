@@ -21,37 +21,35 @@
 	// Allows us to create "north bump" "south bump" etc. named objects, for more comfortable mapping.
 	name = "telescreen"
 
-/obj/item/modular_computer/telescreen/attackby(obj/item/W as obj, mob/user as mob)
-	if(isCrowbar(W))
-		if(anchored)
-			shutdown_computer()
-			anchored = FALSE
-			screen_on = FALSE
-			pixel_x = 0
-			pixel_y = 0
-			to_chat(user, "You unsecure \the [src].")
-		else
-			var/choice = input(user, "Where do you want to place \the [src]?", "Offset selection") in list("North", "South", "West", "East", "This tile", "Cancel")
-			var/valid = FALSE
-			switch(choice)
-				if("North")
-					valid = TRUE
-					pixel_y = 32
-				if("South")
-					valid = TRUE
-					pixel_y = -32
-				if("West")
-					valid = TRUE
-					pixel_x = -32
-				if("East")
-					valid = TRUE
-					pixel_x = 32
-				if("This tile")
-					valid = TRUE
+/obj/item/modular_computer/telescreen/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(anchored)
+		shutdown_computer()
+		anchored = FALSE
+		screen_on = FALSE
+		pixel_x = 0
+		pixel_y = 0
+		to_chat(user, "You unsecure \the [src].")
+		return
 
-			if(valid)
-				anchored = TRUE
-				screen_on = TRUE
-				to_chat(user, "You secure \the [src].")
-			return
-	..()
+	var/choice = input(user, "Where do you want to place \the [src]?", "Offset selection") in list("North", "South", "West", "East", "This tile", "Cancel")
+	var/valid = FALSE
+	switch(choice)
+		if("North")
+			valid = TRUE
+			pixel_y = 32
+		if("South")
+			valid = TRUE
+			pixel_y = -32
+		if("West")
+			valid = TRUE
+			pixel_x = -32
+		if("East")
+			valid = TRUE
+			pixel_x = 32
+		if("This tile")
+			valid = TRUE
+	if(valid)
+		anchored = TRUE
+		screen_on = TRUE
+		to_chat(user, "You secure \the [src].")

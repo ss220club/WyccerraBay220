@@ -25,6 +25,9 @@
 				ChangeArea(src, E.planetary_area)
 	..()
 
+/turf/simulated/floor/exoplanet/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+
 /turf/simulated/floor/exoplanet/use_tool(obj/item/C, mob/living/user, list/click_params)
 	if(diggable && istype(C,/obj/item/shovel))
 		visible_message(SPAN_NOTICE("\The [user] starts digging \the [src]"))
@@ -46,7 +49,7 @@
 		ChangeTurf(/turf/simulated/floor, FALSE, FALSE, TRUE)
 		return TRUE
 
-	else if (isCrowbar(C) || isWelder(C) || istype(C, /obj/item/gun/energy/plasmacutter))
+	else if (isWelder(C) || istype(C, /obj/item/gun/energy/plasmacutter))
 		return
 	else
 		return ..()

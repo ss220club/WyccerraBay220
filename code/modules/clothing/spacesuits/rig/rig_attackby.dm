@@ -1,3 +1,11 @@
+/obj/item/rig/crowbar_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(!open && locked)
+		to_chat(user, SPAN_NOTICE("The access panel is locked shut."))
+		return
+	open = !open
+	to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the access panel."))
+
 /obj/item/rig/attackby(obj/item/W as obj, mob/user as mob)
 
 	if(!istype(user,/mob/living)) return 0
@@ -28,16 +36,6 @@
 
 		locked = !locked
 		to_chat(user, "You [locked ? "lock" : "unlock"] \the [src] access panel.")
-		return
-
-	else if(isCrowbar(W))
-
-		if(!open && locked)
-			to_chat(user, "The access panel is locked shut.")
-			return
-
-		open = !open
-		to_chat(user, "You [open ? "open" : "close"] the access panel.")
 		return
 
 	else if(isScrewdriver(W))

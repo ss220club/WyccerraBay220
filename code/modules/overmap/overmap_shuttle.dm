@@ -143,19 +143,17 @@
 	else
 		icon_state = icon_closed
 
+/obj/structure/fuel_port/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	opened = !opened
+	playsound(src, opened ? 'sound/effects/locker_open.ogg' : 'sound/effects/locker_close.ogg', 50, TRUE)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [opened ? "opens" : "closes"] \the [src] with \a [tool]."),
+		SPAN_NOTICE("You [opened ? "open" : "close"] \the [src] with \the [tool].")
+	)
 
 /obj/structure/fuel_port/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Toggle open
-	if (isCrowbar(tool))
-		opened = !opened
-		playsound(src, opened ? 'sound/effects/locker_open.ogg' : 'sound/effects/locker_close.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [opened ? "opens" : "closes"] \the [src] with \a [tool]."),
-			SPAN_NOTICE("You [opened ? "open" : "close"] \the [src] with \the [tool].")
-		)
-		return TRUE
-
 	// Tank - Insert tank
 	if (istype(tool, /obj/item/tank))
 		if (!opened)

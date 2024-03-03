@@ -495,15 +495,12 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	junctions.Cut()
 	return ..()
 
-/obj/machinery/disposal_switch/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isCrowbar(I))
-		var/obj/item/disposal_switch_construct/C = new/obj/item/disposal_switch_construct(src.loc, id_tag)
-		transfer_fingerprints_to(C)
-		user.visible_message(SPAN_NOTICE("\The [user] deattaches \the [src]."))
-		qdel(src)
-		return TRUE
-
-	return ..()
+/obj/machinery/disposal_switch/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/disposal_switch_construct/C = new/obj/item/disposal_switch_construct(src.loc, id_tag)
+	transfer_fingerprints_to(C)
+	user.visible_message(SPAN_NOTICE("\The [user] deattaches \the [src]."))
+	qdel(src)
 
 /obj/machinery/disposal_switch/interface_interact(mob/user)
 	if(!CanInteract(user, DefaultTopicState()))

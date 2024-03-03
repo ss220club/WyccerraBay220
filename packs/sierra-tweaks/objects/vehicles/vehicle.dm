@@ -79,38 +79,40 @@
 	health = clamp(health, 0, maxhealth)
 	healthcheck()
 
+/obj/vehicle/crowbar_act(mob/living/user, obj/item/tool)
+	if(cell && open)
+		remove_cell(user)
+		return ITEM_INTERACT_SUCCESS
+
+/obj/vehicle/screwdriver_act(mob/living/user, obj/item/tool)
+	if(!locked)
+		open = !open
+		update_icon()
+		to_chat(user, SPAN_NOTICE("Maintenance panel is now [open ? "opened" : "closed"]."))
+		return ITEM_INTERACT_SUCCESS
+
+/obj/vehicle/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/T = tool
+	if(!T.welding)
+		to_chat(user, SPAN_NOTICE("Unable to repair while [src] is off."))
+		return
+	if(health >= maxhealth)
+		to_chat(user, SPAN_NOTICE("[src] does not need a repair."))
+		return
+	if(!open)
+		to_chat(user, SPAN_NOTICE("Unable to repair with the maintenance panel closed."))
+		return
+	adjust_health(10)
+	user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
+	user.visible_message(SPAN_WARNING("\The [user] repairs \the [src]!"), SPAN_NOTICE("You repair \the [src]!"))
+
 /obj/vehicle/use_tool(obj/item/tool, mob/user, list/click_params)
 	if(istype(tool, /obj/item/hand_labeler))
 		return ..()
 
-	if(isScrewdriver(tool) && !locked)
-		open = !open
-		update_icon()
-		to_chat(user, SPAN_NOTICE("Maintenance panel is now [open ? "opened" : "closed"]."))
-		return TRUE
-
-	else if(isCrowbar(tool) && cell && open)
-		remove_cell(user)
-		return TRUE
-
 	else if(istype(tool, /obj/item/cell) && !cell && open)
 		insert_cell(tool, user)
-		return TRUE
-
-	else if(isWelder(tool))
-		var/obj/item/weldingtool/T = tool
-		if(T.welding)
-			if(health < maxhealth)
-				if(open)
-					adjust_health(10)
-					user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-					user.visible_message(SPAN_WARNING("\The [user] repairs \the [src]!"), SPAN_NOTICE("You repair \the [src]!"))
-				else
-					to_chat(user, SPAN_NOTICE("Unable to repair with the maintenance panel closed."))
-			else
-				to_chat(user, SPAN_NOTICE("[src] does not need a repair."))
-		else
-			to_chat(user, SPAN_NOTICE("Unable to repair while [src] is off."))
 		return TRUE
 
 	else if(hasvar(tool, "force") && hasvar(tool, "damtype"))

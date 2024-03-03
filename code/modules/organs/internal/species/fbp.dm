@@ -66,6 +66,14 @@
 	if(cell)
 		cell.emp_act(severity)
 
+/obj/item/organ/internal/cell/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(open)
+		if(cell)
+			user.put_in_hands(cell)
+			to_chat(user, SPAN_NOTICE("You remove \the [cell] from \the [src]."))
+			cell = null
+
 /obj/item/organ/internal/cell/attackby(obj/item/W, mob/user)
 	if(isScrewdriver(W))
 		if(open)
@@ -74,13 +82,6 @@
 		else
 			open = 1
 			to_chat(user, SPAN_NOTICE("You unscrew the battery panel."))
-
-	if(isCrowbar(W))
-		if(open)
-			if(cell)
-				user.put_in_hands(cell)
-				to_chat(user, SPAN_NOTICE("You remove \the [cell] from \the [src]."))
-				cell = null
 
 	if (istype(W, /obj/item/cell))
 		if(open)

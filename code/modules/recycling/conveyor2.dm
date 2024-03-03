@@ -94,23 +94,21 @@
 		if(AM.loc == src.loc) // prevents the object from being affected if it's not currently here.
 			step(A,movedir)
 
+/obj/machinery/conveyor/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!MACHINE_IS_BROKEN(src))
+		var/obj/item/conveyor_construct/C = new/obj/item/conveyor_construct(src.loc)
+		C.id = id
+		transfer_fingerprints_to(C)
+	to_chat(user, SPAN_NOTICE("You remove the conveyor belt."))
+	qdel(src)
+
 // attack with item, place item on conveyor
 /obj/machinery/conveyor/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if ((. = ..()))
 		return
-
-	if(isCrowbar(I))
-		if(!MACHINE_IS_BROKEN(src))
-			var/obj/item/conveyor_construct/C = new/obj/item/conveyor_construct(src.loc)
-			C.id = id
-			transfer_fingerprints_to(C)
-		to_chat(user, SPAN_NOTICE("You remove the conveyor belt."))
-		qdel(src)
-		return TRUE
-
-	else
-		user.unequip_item(get_turf(src))
-		return TRUE
+	user.unequip_item(get_turf(src))
+	return TRUE
 
 // attack with hand, move pulled object onto conveyor
 /obj/machinery/conveyor/physical_attack_hand(mob/user)
@@ -241,16 +239,13 @@
 		last_pos = position
 		position = 0
 
-/obj/machinery/conveyor_switch/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isCrowbar(I))
-		var/obj/item/conveyor_switch_construct/C = new/obj/item/conveyor_switch_construct(src.loc)
-		C.id = id
-		transfer_fingerprints_to(C)
-		to_chat(user, SPAN_NOTICE("You deattach the conveyor switch."))
-		qdel(src)
-		return TRUE
-
-	return ..()
+/obj/machinery/conveyor_switch/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/conveyor_switch_construct/C = new/obj/item/conveyor_switch_construct(src.loc)
+	C.id = id
+	transfer_fingerprints_to(C)
+	to_chat(user, SPAN_NOTICE("You deattach the conveyor switch."))
+	qdel(src)
 
 /obj/machinery/conveyor_switch/oneway
 	var/convdir = 1 //Set to 1 or -1 depending on which way you want the convayor to go. (In other words keep at 1 and set the proper dir on the belts.)

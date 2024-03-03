@@ -41,6 +41,10 @@
 #define APC_UPOVERLAY_LOCKED 8
 #define APC_UPOVERLAY_OPERATING 16
 
+#define COVER_CLOSED 0
+#define COVER_OPEN 1
+#define COVER_REMOVED 2
+
 // Various APC types
 /obj/machinery/power/apc/inactive
 	lighting = 0
@@ -95,7 +99,7 @@
 	var/area/area
 	var/areastring = null
 	var/cell_type = /obj/item/cell/standard
-	var/opened = 0 //0=closed, 1=opened, 2=cover removed
+	var/opened = COVER_CLOSED
 	var/shorted = 0
 	var/lighting = POWERCHAN_ON_AUTO
 	var/equipment = POWERCHAN_ON_AUTO
@@ -183,7 +187,7 @@
 	if (building==0)
 		init_round_start()
 	else
-		opened = 1
+		opened = COVER_OPEN
 		operating = 0
 		set_stat(MACHINE_STAT_MAINT, TRUE)
 		queue_icon_update()
@@ -421,51 +425,51 @@
 
 //attack with an item - open/close cover, insert cell, or (un)lock interface
 
+/obj/machinery/power/apc/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(opened) // Closes or removes board.
+		if (has_electronics == 1)
+			if (terminal())
+				to_chat(user, SPAN_WARNING("Disconnect the wires first."))
+				return
+			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
+			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
+
+			if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && (has_electronics == 1) && !terminal()) // redo all checks.
+				has_electronics = 0
+				if (MACHINE_IS_BROKEN(src))
+					user.visible_message(\
+						SPAN_WARNING("\The [user] has broken the power control board inside \the [src]!"),\
+						SPAN_NOTICE("You break the charred power control board and remove the remains."),\
+						"You hear a crack!")
+				else
+					user.visible_message(\
+						SPAN_WARNING("\The [user] has removed the power control board from \the [src]!"),\
+						SPAN_NOTICE("You remove the power control board."))
+					new /obj/item/module/power_control(loc)
+			return
+
+		else if (opened != COVER_REMOVED) //cover isn't removed
+			opened = COVER_CLOSED
+			user.visible_message(SPAN_NOTICE("\The [user] pries the cover shut on \the [src]."), SPAN_NOTICE("You pry the cover shut."))
+			update_icon()
+			return
+
+	if(MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden))
+		to_chat(user, SPAN_WARNING("The cover appears broken or stuck."))
+		return
+	if(coverlocked && !(GET_FLAGS(stat, MACHINE_STAT_MAINT)))
+		to_chat(user, SPAN_WARNING("The cover is locked and cannot be opened."))
+		return
+	opened = COVER_CLOSED
+	user.visible_message(SPAN_NOTICE("\The [user] pries the cover open on \the [src]."), SPAN_NOTICE("You pry the cover open."))
+	update_icon()
+
 /obj/machinery/power/apc/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return attack_robot(user)
 	if(istype(W, /obj/item/inducer))
 		return FALSE // inducer.dm use_after handles this
-
-	if(isCrowbar(W))//bypass when on harm intend to actually make use of the cover hammer off check further down.
-		if(opened) // Closes or removes board.
-			if (has_electronics == 1)
-				if (terminal())
-					to_chat(user, SPAN_WARNING("Disconnect the wires first."))
-					return TRUE
-				playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-				to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
-
-				if(do_after(user, (W.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && (has_electronics == 1) && !terminal()) // redo all checks.
-					has_electronics = 0
-					if (MACHINE_IS_BROKEN(src))
-						user.visible_message(\
-							SPAN_WARNING("\The [user] has broken the power control board inside \the [src]!"),\
-							SPAN_NOTICE("You break the charred power control board and remove the remains."),\
-							"You hear a crack!")
-					else
-						user.visible_message(\
-							SPAN_WARNING("\The [user] has removed the power control board from \the [src]!"),\
-							SPAN_NOTICE("You remove the power control board."))
-						new /obj/item/module/power_control(loc)
-				return TRUE
-
-			else if (opened != 2) //cover isn't removed
-				opened = 0 // Closes panel.
-				user.visible_message(SPAN_NOTICE("\The [user] pries the cover shut on \the [src]."), SPAN_NOTICE("You pry the cover shut."))
-				update_icon()
-				return TRUE
-
-		if(MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden))
-			to_chat(user, SPAN_WARNING("The cover appears broken or stuck."))
-			return TRUE
-		if(coverlocked && !(GET_FLAGS(stat, MACHINE_STAT_MAINT)))
-			to_chat(user, SPAN_WARNING("The cover is locked and cannot be opened."))
-			return TRUE
-		opened = 1
-		user.visible_message(SPAN_NOTICE("\The [user] pries the cover open on \the [src]."), SPAN_NOTICE("You pry the cover open."))
-		update_icon()
-		return TRUE
 
 	// Exposes wires for hacking and attaches/detaches the circuit.
 	if(isScrewdriver(W))
@@ -583,8 +587,8 @@
 			return TRUE
 		if(emagged)
 			emagged = FALSE
-			if(opened==2)
-				opened = 1
+			if(opened == COVER_REMOVED)
+				opened = COVER_CLOSED
 			user.visible_message(\
 				SPAN_WARNING("[user.name] has replaced the damaged APC frontal panel with a new one."),\
 				SPAN_NOTICE("You replace the damaged APC frontal panel with a new one."))
@@ -609,8 +613,8 @@
 				if(hacker && hacker.hacked_apcs && (src in hacker.hacked_apcs))
 					hacker.hacked_apcs -= src
 					hacker = null
-				if (opened==2)
-					opened = 1
+				if (opened == COVER_REMOVED)
+					opened = COVER_OPEN
 				queue_icon_update()
 			return TRUE
 
@@ -622,7 +626,7 @@
 			&& W.force >= 5 \
 			&& W.w_class >= 3.0 \
 			&& prob(W.force) )
-		opened = 2
+		opened = COVER_REMOVED
 		user.visible_message(SPAN_DANGER("The APC cover was knocked down with the [W.name] by [user.name]!"), \
 			SPAN_DANGER("You knock down the APC cover with your [W.name]!"), \
 			"You hear a bang")
@@ -652,7 +656,7 @@
 				to_chat(user, SPAN_NOTICE("You manage to disable the lock on \the [src]!"))
 			if(50 to 70)
 				to_chat(user, SPAN_NOTICE("You manage to bash the lid open!"))
-				opened = 1
+				opened = COVER_CLOSED
 			if(90 to 100)
 				to_chat(user, SPAN_WARNING("There's a nasty sound and \the [src] goes cold..."))
 				set_broken(TRUE)
@@ -1149,3 +1153,7 @@
 
 
 #undef APC_UPDATE_ICON_COOLDOWN
+
+#undef COVER_CLOSED
+#undef COVER_OPEN
+#undef COVER_REMOVED

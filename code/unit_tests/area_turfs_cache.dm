@@ -44,6 +44,6 @@
 			failed = TRUE
 
 	if(failed)
-		fail("Area turf cache is valid.")
+		fail("Area turf cache is invalid.")
 	else
-		pass("Area turf cache is invalid.")
+		pass("Area turf cache is valid.")

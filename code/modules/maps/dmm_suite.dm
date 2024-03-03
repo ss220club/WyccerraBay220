@@ -464,7 +464,7 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 	return new path(loc)
 
 /datum/dmm_suite/proc/create_turf(path, turf/loc, no_changeturf)
-	return no_changeturf ? new path(loc, FALSE) : loc.ChangeTurf(path, FALSE, TRUE)
+	return no_changeturf ? loc.force_change_turf(path) : loc.ChangeTurf(path, FALSE, TRUE)
 
 //text trimming (both directions) helper proc
 //optionally removes quotes before and after the text (for variable name)

@@ -34,6 +34,14 @@
 	if(ambient_bitflag) //Should remove everything about current bitflag, let it be recalculated by SS later
 		SSambient_lighting.clean_turf(src)
 
+/// Replaces current turf without additional checks and copying current turf's state
+/// Returns newly created turf, of itself, if invalid turf path passed
+/turf/proc/force_change_turf(turf/replacement_turf_type)
+	if(!istype(replacement_turf_type))
+		return src
+
+	return new replacement_turf_type(src, added_to_area_cache)
+
 //Creates a new turf
 /turf/proc/ChangeTurf(turf/replacement_turf_type, tell_universe = TRUE, force_lighting_update = FALSE, keep_air = FALSE)
 	if(!ispath(replacement_turf_type))

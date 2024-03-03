@@ -408,6 +408,7 @@
 		CRASH("Invalid turf `[log_info_line(turf_to_add)]` supplied to [log_info_line(src)]: ")
 
 	LAZYADDASSOCLIST(contained_turfs_by_z, "[turf_to_add.z]", turf_to_add)
+	turf_to_add.added_to_area_cache = TRUE
 
 /// Removes turf from area turf cache
 /area/proc/remove_turf_from_cache(turf/turf_to_remove)

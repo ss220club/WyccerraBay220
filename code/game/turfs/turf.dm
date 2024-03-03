@@ -74,10 +74,10 @@
 /turf/Initialize(mapload, added_to_area_cache = FALSE)
 	. = ..()
 
-	if(!added_to_area_cache)
+	src.added_to_area_cache = added_to_area_cache
+	if(!src.added_to_area_cache)
 		var/area/my_area = loc
 		my_area.add_turf_to_cache(src)
-		src.added_to_area_cache = TRUE
 
 	if(dynamic_lighting)
 		luminosity = 0

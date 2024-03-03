@@ -113,10 +113,7 @@ SUBSYSTEM_DEF(machines)
 		CRASH("Null machinery was tried to be unregistered")
 
 	machinery -= machine
-	var/list/machinery_of_type = machinery_by_type[machine.type]
-	machinery_of_type -= machine
-	if(!length(machinery_of_type))
-		machinery_by_type -= machine.type
+	LAZYREMOVEASSOC(machinery_by_type, machine.type, machine)
 
 	var/area/A = get_area(machine)
 	if(A)

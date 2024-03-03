@@ -70,7 +70,7 @@
 	abstract_type = /singleton/trait
 
 /singleton/trait/New()
-	if(type == abstract_type)
+	if(IsAbstract())
 		CRASH("Invalid initialization")
 
 /singleton/trait/proc/Validate(level)

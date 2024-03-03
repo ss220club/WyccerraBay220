@@ -22,7 +22,7 @@
 	var/dat
 	dat += "<B>Maintenance Units</B><BR>"
 
-	for(var/mob/living/silicon/robot/drone/D in world)
+	for(var/mob/living/silicon/robot/drone/D as anything in SSmobs.get_mobs_by_type(/mob/living/silicon/robot/drone))
 		if(D.z != src.z)
 			continue
 		dat += "<BR>[D.real_name] ([D.stat == 2 ? SPAN_COLOR("red", "INACTIVE") : SPAN_COLOR("green", "ACTIVE")])"
@@ -64,7 +64,7 @@
 	else if (href_list["ping"])
 
 		to_chat(usr, SPAN_NOTICE("You issue a maintenance request for all active drones, highlighting [drone_call_area]."))
-		for(var/mob/living/silicon/robot/drone/D in world)
+		for(var/mob/living/silicon/robot/drone/D as anything in SSmobs.get_mobs_by_type(/mob/living/silicon/robot/drone))
 			if(D.client && D.stat == 0)
 				to_chat(D, "-- Maintenance drone presence requested in: [drone_call_area].")
 

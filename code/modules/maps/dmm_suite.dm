@@ -88,18 +88,18 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 // z_offset: A number representing the z-level on which to start loading the map (Optional).
 // cropMap: When true, the map will be cropped to fit the existing world dimensions (Optional).
 // measureOnly: When true, no changes will be made to the world (Optional).
-// no_changeturf: When true, turf/AfterChange won't be called on loaded turfs
-/datum/dmm_suite/proc/load_map(dmm_file, x_offset, y_offset, z_offset, cropMap, measureOnly, no_changeturf, clear_contents, lower_crop_x, lower_crop_y, upper_crop_x, upper_crop_y, initialized_areas_by_type)
+// force_change_turf: When TRUE, turfs are force replaced (no additional checks, no turf state copying. Check `/turf/proc/force_change_turf` for details)
+/datum/dmm_suite/proc/load_map(dmm_file, x_offset, y_offset, z_offset, cropMap, measureOnly, force_change_turf, clear_contents, lower_crop_x, lower_crop_y, upper_crop_x, upper_crop_y, initialized_areas_by_type)
 	//How I wish for RAII
 	Master.StartLoadingMap()
 	space_key = null
 	initialized_areas_by_type = initialized_areas_by_type || list()
 	if(!(world.area in initialized_areas_by_type))
 		initialized_areas_by_type[world.area] = locate(world.area)
-	. = load_map_impl(dmm_file, x_offset, y_offset, z_offset, cropMap, measureOnly, no_changeturf, clear_contents, lower_crop_x, upper_crop_x, lower_crop_y, upper_crop_y, initialized_areas_by_type)
+	. = load_map_impl(dmm_file, x_offset, y_offset, z_offset, cropMap, measureOnly, force_change_turf, clear_contents, lower_crop_x, upper_crop_x, lower_crop_y, upper_crop_y, initialized_areas_by_type)
 	Master.StopLoadingMap()
 
-/datum/dmm_suite/proc/load_map_impl(dmm_file, x_offset, y_offset, z_offset, cropMap, measureOnly, no_changeturf, clear_contents, x_lower = -INFINITY, x_upper = INFINITY, y_lower = -INFINITY, y_upper = INFINITY, initialized_areas_by_type)
+/datum/dmm_suite/proc/load_map_impl(dmm_file, x_offset, y_offset, z_offset, cropMap, measureOnly, force_change_turf, clear_contents, x_lower = -INFINITY, x_upper = INFINITY, y_lower = -INFINITY, y_upper = INFINITY, initialized_areas_by_type)
 	var/tfile = dmm_file//the map file we're creating
 	if(isfile(tfile))
 		tfile = file2text(tfile)
@@ -164,8 +164,8 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 					continue
 				else
 					world.maxz = zcrd //create a new z_level if needed
-				if(!no_changeturf)
-					WARNING("Z-level expansion occurred without no_changeturf set, this may cause problems when /turf/post_change is called.")
+				if(!force_change_turf)
+					WARNING("Z-level expansion occurred without force_change_turf set, this may cause problems when /turf/post_change is called.")
 
 			bounds[MAP_MINX] = min(bounds[MAP_MINX], clamp(xcrdStart, x_lower, x_upper))
 			bounds[MAP_MINZ] = min(bounds[MAP_MINZ], zcrd)
@@ -217,11 +217,11 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 
 							if(xcrd >= 1)
 								var/model_key = copytext(line, tpos, tpos + key_len)
-								var/no_afterchange = no_changeturf || zexpansion
+								var/no_afterchange = force_change_turf || zexpansion
 								if(!no_afterchange || (model_key != space_key))
 									if(!grid_models[model_key])
 										throw EXCEPTION("Undefined model key in DMM.")
-									var/datum/grid_load_metadata/M = parse_grid(grid_models[model_key], model_key, xcrd, ycrd, zcrd, no_changeturf || zexpansion, clear_contents, initialized_areas_by_type)
+									var/datum/grid_load_metadata/M = parse_grid(grid_models[model_key], model_key, xcrd, ycrd, zcrd, force_change_turf || zexpansion, clear_contents, initialized_areas_by_type)
 									if (M)
 										atoms_to_initialise += M.atoms_to_initialise
 										atoms_to_delete += M.atoms_to_delete
@@ -279,7 +279,7 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 		/obj/structure,
 	)
 
-/datum/dmm_suite/proc/parse_grid(model, model_key, xcrd, ycrd, zcrd, no_changeturf, clear_contents, initialized_areas_by_type)
+/datum/dmm_suite/proc/parse_grid(model, model_key, xcrd, ycrd, zcrd, force_change_turf, clear_contents, initialized_areas_by_type)
 	/*Method parse_grid()
 	- Accepts a text string containing a comma separated list of type paths of the
 		same construction as those contained in a .dmm file, and instantiates them.
@@ -348,14 +348,14 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 
 		//check and see if we can just skip this turf
 		//So you don't have to understand this horrid statement, we can do this if
-		// 1. no_changeturf is set
+		// 1. force_change_turf is set
 		// 2. the space_key isn't set yet
 		// 3. there are exactly 2 members
 		// 4. with no attributes
 		// 5. and the members are world.turf and world.area
 		// Basically, if we find an entry like this: "XXX" = (/turf/default, /area/default)
 		// We can skip calling this proc every time we see XXX
-		if(no_changeturf && !space_key && length(members) == 2 && length(members_attributes) == 2 && length(members_attributes[1]) == 0 && length(members_attributes[2]) == 0 && (world.area in members) && (world.turf in members))
+		if(force_change_turf && !space_key && length(members) == 2 && length(members_attributes) == 2 && length(members_attributes[1]) == 0 && length(members_attributes[2]) == 0 && (world.area in members) && (world.turf in members))
 			space_key = model_key
 			return
 
@@ -405,7 +405,7 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 	var/turf/T
 	if(members[first_turf_index] != /turf/template_noop)
 		is_not_noop = TRUE
-		T = instance_atom(members[first_turf_index], members_attributes[first_turf_index], turf_to_update, no_changeturf)
+		T = instance_atom(members[first_turf_index], members_attributes[first_turf_index], turf_to_update, force_change_turf)
 		atoms_to_initialise += T
 
 	if(T)
@@ -413,7 +413,7 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 		index = first_turf_index + 1
 		while(index <= length(members) - 1) // Last item is an /area
 			var/underlay = T.appearance
-			T = instance_atom(members[index], members_attributes[index], turf_to_update, no_changeturf)//instance new turf
+			T = instance_atom(members[index], members_attributes[index], turf_to_update, force_change_turf)//instance new turf
 			T.underlays += underlay
 			index++
 			atoms_to_initialise += T
@@ -426,7 +426,7 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 
 	//finally instance all remainings objects/mobs
 	for(index in 1 to first_turf_index-1)
-		atoms_to_initialise += instance_atom(members[index], members_attributes[index], turf_to_update, no_changeturf)
+		atoms_to_initialise += instance_atom(members[index], members_attributes[index], turf_to_update, force_change_turf)
 	//Restore initialization to the previous valsue
 	SSatoms.map_loader_stop()
 
@@ -440,13 +440,13 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 ////////////////
 
 //Instance an atom at (x,y,z) and gives it the variables in attributes
-/datum/dmm_suite/proc/instance_atom(path, list/attributes, turf/loc, no_changeturf)
+/datum/dmm_suite/proc/instance_atom(path, list/attributes, turf/loc, force_change_turf)
 	if (LAZYLEN(attributes))
 		GLOB._preloader.setup(attributes, path)
 
 	if(loc)
 		if(ispath(path, /turf))
-			. = create_turf(path, loc, no_changeturf)
+			. = create_turf(path, loc, force_change_turf)
 		else
 			. = create_atom(path, loc)
 
@@ -463,8 +463,8 @@ GLOBAL_DATUM_INIT(maploader, /datum/dmm_suite, new)
 	// Doing this async is impossible, as we must return the ref.
 	return new path(loc)
 
-/datum/dmm_suite/proc/create_turf(path, turf/loc, no_changeturf)
-	return no_changeturf ? loc.force_change_turf(path) : loc.ChangeTurf(path, FALSE, TRUE)
+/datum/dmm_suite/proc/create_turf(path, turf/loc, force_change_turf)
+	return force_change_turf ? loc.force_change_turf(path) : loc.ChangeTurf(path, FALSE, TRUE)
 
 //text trimming (both directions) helper proc
 //optionally removes quotes before and after the text (for variable name)

@@ -37,7 +37,7 @@
 /// Replaces current turf without additional checks and copying current turf's state
 /// Returns newly created turf, of itself, if invalid turf path passed
 /turf/proc/force_change_turf(turf/replacement_turf_type)
-	if(!istype(replacement_turf_type))
+	if(!ispath(replacement_turf_type))
 		return src
 
 	return new replacement_turf_type(src, added_to_area_cache)
@@ -45,7 +45,7 @@
 //Creates a new turf
 /turf/proc/ChangeTurf(turf/replacement_turf_type, tell_universe = TRUE, force_lighting_update = FALSE, keep_air = FALSE)
 	if(!ispath(replacement_turf_type))
-		return
+		return src
 
 	if(!initial(replacement_turf_type.flooded) && initial(replacement_turf_type.flood_object))
 		QDEL_NULL(flood_object)

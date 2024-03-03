@@ -3,22 +3,22 @@
 /// Sorry for the mess
 /turf/var/area/in_contents_of
 
-/datum/unit_test/areas_turf_cache_should_be_consisten
+/datum/unit_test/areas_turf_cache_should_be_consistent
 	name = "AREA: Area turf cache should be consistent"
 	async = TRUE
 	var/failed = FALSE
 
 
-/datum/unit_test/areas_turf_cache_should_be_consisten/start_test()
+/datum/unit_test/areas_turf_cache_should_be_consistent/start_test()
 	invoke_async(src, PROC_REF(run_test))
 	return TRUE
 
 
-/datum/unit_test/areas_turf_cache_should_be_consisten/check_result()
+/datum/unit_test/areas_turf_cache_should_be_consistent/check_result()
 	return reported
 
 
-/datum/unit_test/areas_turf_cache_should_be_consisten/proc/run_test()
+/datum/unit_test/areas_turf_cache_should_be_consistent/proc/run_test()
 	PRIVATE_PROC(TRUE)
 
 	for(var/area/area_to_check as anything in GLOB.areas)

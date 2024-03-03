@@ -403,7 +403,7 @@
 /datum/unit_test/camera_nil_c_tag_check/start_test()
 	var/pass = TRUE
 
-	for(var/obj/machinery/camera/C in world)
+	for(var/obj/machinery/camera/C as anything in SSmachines.get_machinery_of_type(/obj/machinery/camera))
 		if(!C.c_tag)
 			log_bad("Following camera does not have a c_tag set: [log_info_line(C)]")
 			pass = FALSE
@@ -424,7 +424,7 @@
 	var/cameras_by_ctag = list()
 	var/checked_cameras = 0
 
-	for(var/obj/machinery/camera/C in world)
+	for(var/obj/machinery/camera/C as anything in SSmachines.get_machinery_of_type(/obj/machinery/camera))
 		if(!C.c_tag)
 			continue
 		checked_cameras++
@@ -514,7 +514,7 @@
 
 /datum/unit_test/simple_pipes_shall_not_face_north_or_west/start_test()
 	var/failures = 0
-	for(var/obj/machinery/atmospherics/pipe/simple/pipe in world) // Pipes are removed from the SSmachines list during init.
+	for(var/obj/machinery/atmospherics/pipe/simple/pipe as anything in SSmachines.get_machinery_of_type(/obj/machinery/atmospherics/pipe/simple)) // Pipes are removed from the SSmachines list during init.
 		if(!istype(pipe, /obj/machinery/atmospherics/pipe/simple/hidden) && !istype(pipe, /obj/machinery/atmospherics/pipe/simple/visible))
 			continue
 		if(pipe.dir == NORTH || pipe.dir == WEST)
@@ -554,7 +554,7 @@
 
 /datum/unit_test/station_pipes_shall_not_leak/start_test()
 	var/failures = 0
-	for(var/obj/machinery/atmospherics/pipe/P in world)
+	for(var/obj/machinery/atmospherics/pipe/P as anything in SSmachines.get_machinery_of_type(/obj/machinery/atmospherics/pipe))
 		if(P.leaking && isStationLevel(P.z))
 			failures++
 			log_bad("Following pipe is leaking: [log_info_line(P)]")
@@ -836,18 +836,20 @@
 
 /datum/unit_test/doors_shall_be_on_appropriate_turfs/start_test()
 	var/bad_doors = 0
-	for(var/obj/machinery/door/D in world)
-		if(QDELETED(D))
+	for(var/obj/machinery/door/door_to_check as anything in SSmachines.get_machinery_of_type(/obj/machinery/door))
+		if(QDELETED(door_to_check))
 			continue
-		if(!istype(D.loc, /turf))
+
+		if(!isturf(door_to_check.loc))
 			bad_doors++
-			log_bad("Invalid door turf: [log_info_line(D.loc)]]")
+			log_bad("Invalid door turf: [log_info_line(door_to_check.loc)]]")
 		else
 			var/is_bad_door = FALSE
-			for(var/L in D.locs)
-				if(istype(L, /turf/simulated/open) || isspaceturf(L))
+			for(var/door_loc in door_to_check.locs)
+				if(istype(door_loc, /turf/simulated/open) || isspaceturf(door_loc))
 					is_bad_door = TRUE
-					log_bad("Invalid door turf: [log_info_line(L)]]")
+					log_bad("Invalid door turf: [log_info_line(door_loc)]]")
+
 			if(is_bad_door)
 				bad_doors++
 

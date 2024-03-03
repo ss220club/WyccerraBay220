@@ -591,32 +591,27 @@
 	else
 		to_chat(user, SPAN_NOTICE("The glass is already open."))
 
-
-/obj/structure/broken_cryo/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Open cryopod
-	if (isCrowbar(tool))
-		if (!closed)
-			USE_FEEDBACK_FAILURE("\The [src] is already open.")
-			return TRUE
-		busy = TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts prying \the [src]'s cover off with \a [tool]."),
-			SPAN_NOTICE("You start prying \the [src]'s cover off with \the [tool].")
-		)
-		if (!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		closed = FALSE
-		update_icon()
-		var/obj/dead = new remains_type(loc)
-		dead.dir = dir
-		user.visible_message(
-			SPAN_NOTICE("\The [user] opens \the [src]'s cover with \a [tool], exposing \a [dead]."),
-			SPAN_NOTICE("You open \the [src]'s cover with \the [tool], exposing \a [dead].")
-		)
-		return TRUE
-
-	return ..()
-
+/obj/structure/broken_cryo/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!closed)
+		USE_FEEDBACK_FAILURE("\The [src] is already open.")
+		return
+	busy = TRUE
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts prying \the [src]'s cover off with \a [tool]."),
+		SPAN_NOTICE("You start prying \the [src]'s cover off with \the [tool].")
+	)
+	if (!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+		return
+	closed = FALSE
+	update_icon()
+	var/obj/dead = new remains_type(loc)
+	dead.dir = dir
+	user.visible_message(
+		SPAN_NOTICE("\The [user] opens \the [src]'s cover with \a [tool], exposing \a [dead]."),
+		SPAN_NOTICE("You open \the [src]'s cover with \the [tool], exposing \a [dead].")
+	)
+	return
 
 /obj/structure/broken_cryo/on_update_icon()
 	icon_state = initial(icon_state)

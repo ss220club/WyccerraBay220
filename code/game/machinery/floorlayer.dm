@@ -37,39 +37,38 @@
 	)
 	return TRUE
 
-/obj/machinery/floorlayer/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWrench(W))
-		var/m = input("Choose work mode", "Mode") as null|anything in mode
-		mode[m] = !mode[m]
-		var/O = mode[m]
-		user.visible_message(
-			SPAN_NOTICE("\The [user] has set \the [src] [m] mode [!O?"off":"on"]."),
-			SPAN_NOTICE("You set \the [src] [m] mode [!O?"off":"on"].")
-		)
-		return TRUE
+/obj/machinery/floorlayer/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!length(contents))
+		to_chat(user, SPAN_NOTICE("\The [src] is empty."))
+	else
+		var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in contents
+		if(E)
+			to_chat(user, SPAN_NOTICE("You remove the [E] from /the [src]."))
+			E.dropInto(loc)
+			T = null
 
+/obj/machinery/floorlayer/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	T = input("Choose tile type.", "Tiles") as null|anything in contents
+
+/obj/machinery/floorlayer/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/m = input("Choose work mode", "Mode") as null|anything in mode
+	mode[m] = !mode[m]
+	var/O = mode[m]
+	user.visible_message(
+		SPAN_NOTICE("\The [user] has set \the [src] [m] mode [!O?"off":"on"]."),
+		SPAN_NOTICE("You set \the [src] [m] mode [!O?"off":"on"].")
+	)
+
+/obj/machinery/floorlayer/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/stack/tile))
 		if(!user.unEquip(W, T))
 			return TRUE
 		to_chat(user, SPAN_NOTICE("\The [W] successfully loaded."))
 		TakeTile(T)
 		return TRUE
-
-	if(isCrowbar(W))
-		if(!length(contents))
-			to_chat(user, SPAN_NOTICE("\The [src] is empty."))
-		else
-			var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in contents
-			if(E)
-				to_chat(user, SPAN_NOTICE("You remove the [E] from /the [src]."))
-				E.dropInto(loc)
-				T = null
-		return TRUE
-
-	if(isScrewdriver(W))
-		T = input("Choose tile type.", "Tiles") as null|anything in contents
-		return TRUE
-
 	return ..()
 
 /obj/machinery/floorlayer/examine(mob/user)

@@ -100,6 +100,8 @@
 
 	var/attack_ignore_harm_check = FALSE
 
+	///How a tool acts when you use it on something, such as wirecutters cutting wires while multitools measure power
+	var/tool_behaviour = null
 
 /obj/item/Initialize()
 	. = ..()

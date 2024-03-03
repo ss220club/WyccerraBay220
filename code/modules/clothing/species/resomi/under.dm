@@ -412,7 +412,7 @@
 	worn_state = "resomi_blackutility_com"
 	species_restricted = list(SPECIES_RESOMI)
 	sprite_sheets = list(SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_under_resomi.dmi')
-	accessories = list(/obj/item/clothing/accessory/solgov/department/command)
+	//accessories = list(/obj/item/clothing/accessory/solgov/department/command)
 
 /obj/item/clothing/under/solgov/mildress/expeditionary/resomi
 	name = "small expeditionary dress uniform"

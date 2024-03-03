@@ -1636,7 +1636,6 @@
 #include "code\modules\client\preference_setup\loadout\lists\resomi_lists\documents.dm"
 #include "code\modules\client\preference_setup\loadout\lists\resomi_lists\eyegear.dm"
 #include "code\modules\client\preference_setup\loadout\lists\resomi_lists\footwear.dm"
-#include "code\modules\client\preference_setup\loadout\lists\resomi_lists\storage.dm"
 #include "code\modules\client\preference_setup\loadout\lists\resomi_lists\suits.dm"
 #include "code\modules\client\preference_setup\loadout\lists\resomi_lists\tactical.dm"
 #include "code\modules\client\preference_setup\loadout\lists\resomi_lists\uniforms.dm"

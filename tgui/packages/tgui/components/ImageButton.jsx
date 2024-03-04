@@ -38,80 +38,69 @@ export const ImageButton = (props) => {
   let buttonContent = (
     <div
       className={classes([
-        vertical ? 'ImageButton--vertical' : 'ImageButton--horizontal',
+        vertical ? 'ImageButton__vertical' : 'ImageButton__horizontal',
+        selected && 'ImageButton--selected',
+        disabled && 'ImageButton--disabled',
+        color && typeof color === 'string'
+          ? 'ImageButton--color--' + color
+          : 'ImageButton--color--default',
+        className,
+        computeBoxClassName(rest),
       ])}
+      tabIndex={!disabled && '0'}
+      {...computeBoxProps(rest)}
     >
-      <div
-        className={classes([
-          vertical ? 'ImageButton__vertical' : 'ImageButton__horizontal',
-          selected && 'ImageButton--selected',
-          disabled && 'ImageButton--disabled',
-          color && typeof color === 'string'
-            ? 'ImageButton--color--' + color
-            : 'ImageButton--color--default',
-          className,
-          computeBoxClassName(rest),
-        ])}
-        tabIndex={!disabled && '0'}
-        {...computeBoxProps(rest)}
-      >
-        <div className={classes(['ImageButton__image'])}>
-          {asset ? (
-            <div className={classes([imageAsset, image])} />
-          ) : (
-            <img
-              src={`data:image/jpeg;base64,${image}`}
-              style={{
-                width: imageSize,
-                '-ms-interpolation-mode': 'nearest-neighbor',
-              }}
-            />
-          )}
-        </div>
-        {content &&
-          (vertical ? (
-            <div
-              className={classes([
-                'ImageButton__content__vertical',
-                ellipsis && 'ImageButton__content--ellipsis',
-                selected && 'ImageButton__content--selected',
-                disabled && 'ImageButton__content--disabled',
-                color && typeof color === 'string'
-                  ? 'ImageButton__content--color--' + color
-                  : 'ImageButton__content--color--default',
-                className,
-                computeBoxClassName(rest),
-              ])}
-            >
-              {disabled ? disabledContent : content}
-            </div>
-          ) : (
-            <div className={classes(['ImageButton__content__horizontal'])}>
-              {title && (
+      <div className={classes(['ImageButton__image'])}>
+        {asset ? (
+          <div className={classes([imageAsset, image])} />
+        ) : (
+          <img
+            src={`data:image/jpeg;base64,${image}`}
+            style={{
+              width: imageSize,
+              '-ms-interpolation-mode': 'nearest-neighbor',
+            }}
+          />
+        )}
+      </div>
+      {content &&
+        (vertical ? (
+          <div
+            className={classes([
+              'ImageButton__content__vertical',
+              ellipsis && 'ImageButton__content--ellipsis',
+              selected && 'ImageButton__content--selected',
+              disabled && 'ImageButton__content--disabled',
+              color && typeof color === 'string'
+                ? 'ImageButton__content--color--' + color
+                : 'ImageButton__content--color--default',
+              className,
+              computeBoxClassName(rest),
+            ])}
+          >
+            {disabled ? disabledContent : content}
+          </div>
+        ) : (
+          <div className={classes(['ImageButton__content__horizontal'])}>
+            {title && (
+              <div
+                className={classes(['ImageButton__content__horizontal--title'])}
+              >
+                {title}
                 <div
                   className={classes([
-                    'ImageButton__content__horizontal--title',
+                    'ImageButton__content__horizontal--divider',
                   ])}
-                >
-                  {title}
-                  <div
-                    className={classes([
-                      'ImageButton__content__horizontal--divider',
-                    ])}
-                  />
-                </div>
-              )}
-              <div
-                className={classes([
-                  'ImageButton__content__horizontal--content',
-                ])}
-              >
-                {content}
+                />
               </div>
+            )}
+            <div
+              className={classes(['ImageButton__content__horizontal--content'])}
+            >
+              {content}
             </div>
-          ))}
-      </div>
-      {children}
+          </div>
+        ))}
     </div>
   );
 
@@ -123,20 +112,27 @@ export const ImageButton = (props) => {
     );
   }
 
-  return buttonContent;
+  return (
+    <div
+      className={classes([
+        vertical ? 'ImageButton--vertical' : 'ImageButton--horizontal',
+      ])}
+    >
+      {buttonContent}
+      {children}
+    </div>
+  );
 };
 
 ImageButton.defaultHooks = pureComponentHooks;
 
 /**
- *
  * That's VERY fucking expensive thing!
  * Use it only in places, where it really needed.
  * Otherwise, the window opening time may increase by a third!
  * Most of the blame is on Icon.
  * Maybe it's also because I'm a bit crooked.
  * (с) Aylong
- *
  */
 export const ImageButtonItem = (props) => {
   const {

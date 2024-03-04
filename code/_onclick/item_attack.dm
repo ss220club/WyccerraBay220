@@ -53,9 +53,6 @@ avoid code duplication. This includes items that may sometimes act as a standard
 
 	use_call = "use"
 	. = use_before(atom, user, click_params)
-	if(!. && user.a_intent == I_HURT)
-		use_call = "weapon"
-		. = atom.use_weapon(src, user, click_params)
 	if(!.)
 		use_call = "tool"
 		var/item_interact_result = atom.item_interaction(user, src, click_params)
@@ -63,6 +60,9 @@ avoid code duplication. This includes items that may sometimes act as a standard
 			. = TRUE
 		if(item_interact_result & ITEM_INTERACT_BLOCKING)
 			. = FALSE
+	if(!. && user.a_intent == I_HURT)
+		use_call = "weapon"
+		. = atom.use_weapon(src, user, click_params)
 	if(!.)
 		use_call = "tool"
 		. = atom.use_tool(src, user, click_params)

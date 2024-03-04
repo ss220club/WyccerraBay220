@@ -63,13 +63,13 @@
 		MM.amount = m
 		user.visible_message(SPAN_NOTICE("[user] removes [m] sheet\s of metal from the \the [src]."), SPAN_NOTICE("You remove [m] sheet\s of metal from \the [src]"))
 
-/obj/machinery/pipelayer/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWrench(W))
-		P_type_t = input("Choose pipe type", "Pipe type") as null|anything in Pipes
-		P_type = Pipes[P_type_t]
-		user.visible_message(SPAN_NOTICE("[user] has set \the [src] to manufacture [P_type_t]."), SPAN_NOTICE("You set \the [src] to manufacture [P_type_t]."))
-		return TRUE
+/obj/machinery/pipelayer/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	P_type_t = input("Choose pipe type", "Pipe type") as null|anything in Pipes
+	P_type = Pipes[P_type_t]
+	user.visible_message(SPAN_NOTICE("[user] has set \the [src] to manufacture [P_type_t]."), SPAN_NOTICE("You set \the [src] to manufacture [P_type_t]."))
 
+/obj/machinery/pipelayer/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/stack/material) && W.get_material_name() == MATERIAL_STEEL)
 		var/result = load_metal(W)
 		if(isnull(result))

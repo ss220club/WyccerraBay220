@@ -207,6 +207,30 @@
 		SPAN_NOTICE("You remove \the [circuit] from \the [src] with \the [tool].")
 	)
 
+/obj/item/device/radio/intercom/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (buildstage < 2)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to expose.")
+		return
+	wiresexposed = !wiresexposed
+	b_stat = !b_stat
+	update_icon()
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [wiresexposed ? "opens" : "closes"] \a [src]'s wiring panel with \a [tool]."),
+		SPAN_NOTICE("You [wiresexposed ? "open" : "close"] \the [src]'s wiring panel with \the [tool].")
+	)
+
+/obj/item/device/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	new /obj/item/frame/intercom(get_turf(src))
+	playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \a [src] from the wall with \a [tool]."),
+		SPAN_NOTICE("You remove \the [src] from the wall with \the [tool].")
+	)
+	qdel(src)
+
 /obj/item/device/radio/intercom/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
 	if (isCoil(tool))
@@ -246,21 +270,6 @@
 		qdel(tool)
 		return TRUE
 
-	// Screwdriver - Toggle wire panel
-	if (isScrewdriver(tool))
-		if (buildstage < 2)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to expose.")
-			return TRUE
-		wiresexposed = !wiresexposed
-		b_stat = !b_stat
-		update_icon()
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [wiresexposed ? "opens" : "closes"] \a [src]'s wiring panel with \a [tool]."),
-			SPAN_NOTICE("You [wiresexposed ? "open" : "close"] \the [src]'s wiring panel with \the [tool].")
-		)
-		return TRUE
-
 	// Wirecutters - Cut wiring
 	if (isWirecutter(tool))
 		if (buildstage < 2)
@@ -278,17 +287,6 @@
 			SPAN_NOTICE("\The [user] cuts \a [src]'s wiring with \a [tool]."),
 			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
 		)
-		return TRUE
-
-	// Wrench - Remove from wall
-	if (isWrench(tool))
-		new /obj/item/frame/intercom(get_turf(src))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [src] from the wall with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src] from the wall with \the [tool].")
-		)
-		qdel(src)
 		return TRUE
 
 	return ..()

@@ -265,17 +265,14 @@
 	frequency =  1380
 	locked = 1
 
-/obj/machinery/door/airlock/external/escapepod/use_tool(obj/item/C, mob/living/user, list/click_params)
+/obj/machinery/door/airlock/external/escapepod/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if(p_open && !arePowerSystemsOn())
-		if(isWrench(C))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-			user.visible_message(SPAN_WARNING("[user.name] starts frantically pumping the bolt override mechanism!"), SPAN_WARNING("You start frantically pumping the bolt override mechanism!"))
-			if(do_after(user, 16 SECONDS, src, DO_REPAIR_CONSTRUCT))
-				visible_message("\The [src] bolts [locked ? "disengage" : "engage"]!")
-				locked = !locked
-			return TRUE
-
-	return ..()
+		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+		user.visible_message(SPAN_WARNING("[user.name] starts frantically pumping the bolt override mechanism!"), SPAN_WARNING("You start frantically pumping the bolt override mechanism!"))
+		if(do_after(user, 16 SECONDS, src, DO_REPAIR_CONSTRUCT))
+			visible_message("\The [src] bolts [locked ? "disengage" : "engage"]!")
+			locked = !locked
 
 /obj/machinery/door/airlock/external/bolted
 	locked = 1

@@ -64,18 +64,27 @@
 					C.update_icon()
 					break
 
-/obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
+/obj/item/camera_assembly/wrench_act(mob/living/user, obj/item/tool)
+	. = ..()
 	switch(state)
 		if(ASSEMBLY_NONE)
-			// State 0
-			if(isWrench(W) && isturf(src.loc))
-				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-				to_chat(user, "You wrench the assembly into place.")
-				anchored = TRUE
-				state = ASSEMBLY_WRENCHED
-				update_icon()
-				auto_turn()
+			if(!isturf(loc))
 				return
+			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			to_chat(user, "You wrench the assembly into place.")
+			anchored = TRUE
+			state = ASSEMBLY_WRENCHED
+			update_icon()
+			auto_turn()
+		if(ASSEMBLY_WRENCHED)
+			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			to_chat(user, "You unattach the assembly from its place.")
+			anchored = FALSE
+			update_icon()
+			state = ASSEMBLY_NONE
+
+/obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
+	switch(state)
 		if(ASSEMBLY_WRENCHED)
 			// State 1
 			if(isWelder(W))
@@ -83,13 +92,6 @@
 					to_chat(user, "You weld the assembly securely into place.")
 					anchored = TRUE
 					state = ASSEMBLY_WELDED
-				return
-			else if(isWrench(W))
-				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-				to_chat(user, "You unattach the assembly from its place.")
-				anchored = FALSE
-				update_icon()
-				state = ASSEMBLY_NONE
 				return
 		if(ASSEMBLY_WELDED)
 			// State 2

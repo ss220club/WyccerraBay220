@@ -116,6 +116,18 @@
 	if(modded)
 		to_chat(user, SPAN_WARNING("Someone has wrenched open its tap - it's spilling everywhere!"))
 
+/obj/structure/reagent_dispensers/watertank/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	modded = !modded
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [modded ? "opens" : "closes"] \the [src]'s valve with \a [tool]."),
+		SPAN_NOTICE("You [user] [modded ? "open" : "close"] \the [src]'s valve with \the [tool].")
+	)
+	if (modded)
+		log_and_message_admins("opened a water tank at [get_area(src)], leaking water", user, get_turf(src))
+		START_PROCESSING(SSprocessing, src)
+	else
+		STOP_PROCESSING(SSprocessing, src)
 
 /obj/structure/reagent_dispensers/watertank/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Robot Arm - Attach arm for farmbot
@@ -131,20 +143,6 @@
 			SPAN_NOTICE("You attach \a [tool] to \the [src].")
 		)
 		qdel(tool)
-		return TRUE
-
-	// Wrench - Toggle valve
-	if (isWrench(tool))
-		modded = !modded
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [modded ? "opens" : "closes"] \the [src]'s valve with \a [tool]."),
-			SPAN_NOTICE("You [user] [modded ? "open" : "close"] \the [src]'s valve with \the [tool].")
-		)
-		if (modded)
-			log_and_message_admins("opened a water tank at [get_area(src)], leaking water", user, get_turf(src))
-			START_PROCESSING(SSprocessing, src)
-		else
-			STOP_PROCESSING(SSprocessing, src)
 		return TRUE
 
 	return ..()
@@ -210,6 +208,16 @@
 
 	return ..()
 
+/obj/structure/reagent_dispensers/fueltank/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	modded = !modded
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [modded ? "opens" : "closes"] \the [src]'s valve with \a [tool]."),
+		SPAN_NOTICE("You [user] [modded ? "open" : "close"] \the [src]'s valve with \the [tool].")
+	)
+	if (modded)
+		log_and_message_admins("opened a fuel tank at [get_area(src)], leaking fuel.")
+		leak_fuel(amount_per_transfer_from_this)
 
 /obj/structure/reagent_dispensers/fueltank/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Assembly Holder - Attach assembly
@@ -243,18 +251,6 @@
 	// Flame Source - Warn against kaboom
 	if (IsFlameSource(tool))
 		USE_FEEDBACK_FAILURE("You refrain from heating up \the [src] with \the [tool].")
-		return TRUE
-
-	// Wrench - Toggle valve
-	if (isWrench(tool))
-		modded = !modded
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [modded ? "opens" : "closes"] \the [src]'s valve with \a [tool]."),
-			SPAN_NOTICE("You [user] [modded ? "open" : "close"] \the [src]'s valve with \the [tool].")
-		)
-		if (modded)
-			log_and_message_admins("opened a fuel tank at [get_area(src)], leaking fuel.")
-			leak_fuel(amount_per_transfer_from_this)
 		return TRUE
 
 	return ..()

@@ -19,9 +19,11 @@
 /// Return any ITEM_INTERACT_ flags as relevant (see tools.dm)
 #define COMSIG_ITEM_INTERACTING_WITH_ATOM "item_interacting_with_atom"
 /// Sent from [atom/proc/item_interaction], when this atom is left-clicked on by a mob with a tool of a specific tool type
-/// Args: (mob/living/user, obj/item/tool, list/recipes)
+/// Args: (mob/living/user, obj/item/tool)
 /// Return any ITEM_INTERACT_ flags as relevant (see tools.dm)
 #define COMSIG_ATOM_TOOL_ACT(tooltype) "tool_act_[tooltype]"
+/// This is called after the act
+#define COMSIG_ATOM_TOOL_ACT_RESULT(tooltype) "tool_act_result_[tooltype]"
 // Notifies tools that something is happening.
 // Sucessful actions against an atom.
 ///Called from /atom/proc/tool_act (atom)

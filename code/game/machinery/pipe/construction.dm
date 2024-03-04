@@ -129,12 +129,10 @@ Buildable meters
 		P.node4.build_network()
 	return 0
 
-/obj/item/pipe/attackby(obj/item/W as obj, mob/user as mob)
-	if(!isWrench(W))
-		return ..()
+/obj/item/pipe/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if (!isturf(loc))
-		return 1
-
+		return
 	sanitize_dir()
 	var/obj/machinery/atmospherics/fake_machine = constructed_path
 	var/pipe_dir = base_pipe_initialize_directions(dir, initial(fake_machine.connect_dir_type))
@@ -142,7 +140,8 @@ Buildable meters
 	for(var/obj/machinery/atmospherics/M in loc)
 		if((M.initialize_directions & pipe_dir) && M.check_connect_types_construction(M,src))	// matches at least one direction on either type of pipe & same connection type
 			to_chat(user, SPAN_WARNING("There is already a pipe of the same type at this location."))
-			return 1
+			return
+
 	// no conflicts found
 
 	var/pipefailtext = SPAN_WARNING("There's nothing to connect this pipe section to!") //(with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)"
@@ -158,19 +157,19 @@ Buildable meters
 
 	if(P.pipe_class == PIPE_CLASS_UNARY)
 		if(build_unary(P, pipefailtext))
-			return 1
+			return
 
 	if(P.pipe_class == PIPE_CLASS_BINARY)
 		if(build_binary(P, pipefailtext))
-			return 1
+			return
 
 	if(P.pipe_class == PIPE_CLASS_TRINARY)
 		if(build_trinary(P, pipefailtext))
-			return 1
+			return
 
 	if(P.pipe_class == PIPE_CLASS_QUATERNARY)
 		if(build_quaternary(P, pipefailtext))
-			return 1
+			return
 
 	if(P.pipe_class == PIPE_CLASS_OMNI)
 		P.atmos_init()
@@ -210,9 +209,8 @@ Buildable meters
 /obj/item/machine_chassis
 	var/build_type
 
-/obj/item/machine_chassis/attackby(obj/item/W, mob/user)
-	if(!isWrench(W))
-		return ..()
+/obj/item/machine_chassis/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	var/obj/machinery/machine = new build_type(get_turf(src), dir, FALSE)
 	machine.apply_component_presets()
 	machine.RefreshParts()

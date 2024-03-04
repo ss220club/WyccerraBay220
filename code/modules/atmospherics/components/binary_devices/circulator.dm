@@ -93,42 +93,40 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/circulator/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWrench(W))
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-		anchored = !anchored
-		user.visible_message("[user.name] [anchored ? "secures" : "unsecures"] the bolts holding [src.name] to the floor.", \
-					"You [anchored ? "secure" : "unsecure"] the bolts holding [src] to the floor.", \
-					"You hear a ratchet")
+/obj/machinery/atmospherics/binary/circulator/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+	anchored = !anchored
+	user.visible_message("[user.name] [anchored ? "secures" : "unsecures"] the bolts holding [src.name] to the floor.", \
+				"You [anchored ? "secure" : "unsecure"] the bolts holding [src] to the floor.", \
+				"You hear a ratchet")
 
-		if(anchored)
-			temperature_overlay = null
-			if(dir & (NORTH|SOUTH))
-				initialize_directions = NORTH|SOUTH
-			else if(dir & (EAST|WEST))
-				initialize_directions = EAST|WEST
+	if(anchored)
+		temperature_overlay = null
+		if(dir & (NORTH|SOUTH))
+			initialize_directions = NORTH|SOUTH
+		else if(dir & (EAST|WEST))
+			initialize_directions = EAST|WEST
 
-			atmos_init()
-			build_network()
-			if (node1)
-				node1.atmos_init()
-				node1.build_network()
-			if (node2)
-				node2.atmos_init()
-				node2.build_network()
-		else
-			if(node1)
-				node1.disconnect(src)
-				qdel(network1)
-			if(node2)
-				node2.disconnect(src)
-				qdel(network2)
+		atmos_init()
+		build_network()
+		if (node1)
+			node1.atmos_init()
+			node1.build_network()
+		if (node2)
+			node2.atmos_init()
+			node2.build_network()
+	else
+		if(node1)
+			node1.disconnect(src)
+			qdel(network1)
+		if(node2)
+			node2.disconnect(src)
+			qdel(network2)
 
-			node1 = null
-			node2 = null
-		update_icon()
-		return TRUE
-	return ..()
+		node1 = null
+		node2 = null
+	update_icon()
 
 /obj/machinery/atmospherics/binary/circulator/verb/rotate_clockwise()
 	set category = "Object"

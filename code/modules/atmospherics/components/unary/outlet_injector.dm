@@ -202,16 +202,15 @@
 /obj/machinery/atmospherics/unary/outlet_injector/hide(i)
 	update_underlays()
 
+/obj/machinery/atmospherics/unary/outlet_injector/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	new /obj/item/pipe(loc, src)
+	qdel(src)
+
 /obj/machinery/atmospherics/unary/outlet_injector/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(isMultitool(O))
 		var/datum/browser/popup = new (user, "Vent Configuration Utility", "[src] Configuration Panel", 600, 200)
 		popup.set_content(jointext(get_console_data(),"<br>"))
 		popup.open()
 		return TRUE
-
-	if(isWrench(O))
-		new /obj/item/pipe(loc, src)
-		qdel(src)
-		return TRUE
-
 	return ..()

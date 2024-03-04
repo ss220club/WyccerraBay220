@@ -352,6 +352,55 @@
 		SPAN_WARNING("You force \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
 	)
 
+/mob/living/exosuit/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!maintenance_protocols)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
+		return
+	if (!body?.cell)
+		USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts removing \the [src]'s power cell with \a [tool]."),
+		SPAN_NOTICE("You start removing \the [src]'s power cell with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+		return
+	if (!maintenance_protocols)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
+		return
+	if (!body?.cell)
+		USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
+		return
+	user.put_in_hands(body.cell)
+	power = MECH_POWER_OFF
+	hud_power_control.update_icon()
+	body.cell = null
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \the [src]'s power cell with \a [tool]."),
+		SPAN_NOTICE("You remove \the [src]'s power cell with \the [tool].")
+	)
+
+/mob/living/exosuit/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!maintenance_protocols)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts removing \the [src]'s securing bolts with \a [tool]."),
+		SPAN_NOTICE("You start removing \the [src]'s securing bolts with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 6) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+		return
+	if (!maintenance_protocols)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \the [src]'s securing bolts with \a [tool], dismantling it."),
+		SPAN_NOTICE("You remove \the [src]'s securing bolts with \the [tool], dismantling it.")
+	)
+	dismantle()
+
 /mob/living/exosuit/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Repair burn damage
 	if (isCoil(tool))
@@ -450,36 +499,6 @@
 		)
 		return TRUE
 
-	// Screwdriver - Remove cell
-	if (isScrewdriver(tool))
-		if (!maintenance_protocols)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
-			return TRUE
-		if (!body?.cell)
-			USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \the [src]'s power cell with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s power cell with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-			return
-		if (!maintenance_protocols)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
-			return TRUE
-		if (!body?.cell)
-			USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
-			return TRUE
-		user.put_in_hands(body.cell)
-		power = MECH_POWER_OFF
-		hud_power_control.update_icon()
-		body.cell = null
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [src]'s power cell with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src]'s power cell with \the [tool].")
-		)
-		return TRUE
-
 	// Welding Tool - Repair physical damage
 	if (isWelder(tool))
 		if (!getBruteLoss())
@@ -496,27 +515,6 @@
 			USE_FEEDBACK_FAILURE("\The [src]'s [input_fix.name] no longer needs repair.")
 			return TRUE
 		input_fix.repair_brute_generic(tool, user)
-		return TRUE
-
-	// Wrench - Toggle securing bolts
-	if (isWrench(tool))
-		if (!maintenance_protocols)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \the [src]'s securing bolts with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s securing bolts with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 6) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!maintenance_protocols)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [src]'s securing bolts with \a [tool], dismantling it."),
-			SPAN_NOTICE("You remove \the [src]'s securing bolts with \the [tool], dismantling it.")
-		)
-		dismantle()
 		return TRUE
 
 	return ..()

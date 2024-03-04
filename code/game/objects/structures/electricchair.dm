@@ -14,24 +14,21 @@
 	return
 
 
-/obj/structure/bed/chair/e_chair/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/bed/chair/e_chair/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Wrench - Dismantle electric chair
-	if (isWrench(tool))
-		var/obj/structure/bed/chair/chair = new /obj/structure/bed/chair(loc)
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		chair.set_dir(dir)
-		part.dropInto(loc)
-		part.master = null
-		transfer_fingerprints_to(chair)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [part] from \the [chair] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [part] from \the [chair] with \the [tool].")
-		)
-		part = null
-		qdel_self()
-		return TRUE
-
-	return ..()
+	var/obj/structure/bed/chair/chair = new /obj/structure/bed/chair(loc)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	chair.set_dir(dir)
+	part.dropInto(loc)
+	part.master = null
+	transfer_fingerprints_to(chair)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \the [part] from \the [chair] with \a [tool]."),
+		SPAN_NOTICE("You remove \the [part] from \the [chair] with \the [tool].")
+	)
+	part = null
+	qdel(src)
 
 
 /obj/structure/bed/chair/e_chair/verb/toggle()

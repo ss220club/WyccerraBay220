@@ -108,13 +108,14 @@ field_generator power level display
 
 	..()
 
+/obj/machinery/field_generator/wrench_act(mob/living/user, obj/item/tool)
+	if(state == 2) //Anchoring code handled at level of obj/use_tool()
+		to_chat(user, SPAN_WARNING(" The [src.name] needs to be unwelded from the floor."))
+		return ITEM_INTERACT_SUCCESS
+
 /obj/machinery/field_generator/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(active)
 		to_chat(user, "The [src] needs to be off.")
-		return TRUE
-
-	if (isWrench(W) && state == 2) //Anchoring code handled at level of obj/use_tool()
-		to_chat(user, SPAN_WARNING(" The [src.name] needs to be unwelded from the floor."))
 		return TRUE
 
 	if (isWelder(W))

@@ -76,6 +76,100 @@
 		SPAN_NOTICE("You dislodge \the [src] with \a [tool].")
 	)
 
+/obj/structure/girder/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Screwdriver
+	// - Unsecure support struts
+	// - Allow reinforcement
+	switch(state)
+		if(GIRDER_STATE_NORMAL)
+			if(!anchored)
+				USE_FEEDBACK_FAILURE("\The [src] needs to be anchored before you can add reinforcements.")
+				return
+			if(reinf_material)
+				USE_FEEDBACK_FAILURE("\The [src] already has \a [reinf_material.adjective_name] reinforcement.")
+				return
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+			reinforcing = !reinforcing
+			user.visible_message(
+				SPAN_NOTICE("\The [user] adjusts \the [src] with \a [tool]. It can now be [reinforcing ? "reinforced" : "constructed"]."),
+				SPAN_NOTICE("You adjust \the [src] with \the [tool]. It can now be [reinforcing ? "reinforced" : "constructed"].")
+			)
+		if(GIRDER_STATE_REINFORCEMENT_UNSECURED)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+			user.visible_message(
+				SPAN_NOTICE("\The [user] starts securing \the [src]'s support struts with \a [tool]."),
+				SPAN_NOTICE("You starts securing \the [src]'s support struts with \the [tool].")
+			)
+			if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+				return
+			if(state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
+				USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+				return
+			state = GIRDER_STATE_REINFORCED
+			user.visible_message(
+				SPAN_NOTICE("\The [user] secures \the [src]'s support struts with \a [tool]."),
+				SPAN_NOTICE("You secure \the [src]'s support struts with \the [tool].")
+			)
+		if(GIRDER_STATE_REINFORCED)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+			user.visible_message(
+				SPAN_NOTICE("\The [user] starts unsecuring \the [src]'s support struts with \a [tool]."),
+				SPAN_NOTICE("You starts unsecuring \the [src]'s support struts with \the [tool].")
+			)
+			if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+				return
+			if(state != GIRDER_STATE_REINFORCED)
+				USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+				return
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+			state = GIRDER_STATE_REINFORCEMENT_UNSECURED
+			user.visible_message(
+				SPAN_NOTICE("\The [user] unsecures \the [src]'s support struts with \a [tool]."),
+				SPAN_NOTICE("You unsecure \the [src]'s support struts with \the [tool].")
+			)
+
+/obj/structure/girder/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Wrench - Dismantle girder
+	if(state != GIRDER_STATE_NORMAL)
+		USE_FEEDBACK_FAILURE("\The [src]'s reinforcements must be removed before it can be dismantled.")
+		return
+	if(anchored)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+		user.visible_message(
+			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
+			SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
+		)
+		if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+			return
+		if(state != GIRDER_STATE_NORMAL || !anchored)
+			USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+			return
+		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+		user.visible_message(
+			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+		)
+		dismantle()
+		return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts securing \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start securing \the [src] with \the [tool].")
+	)
+	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if(state != GIRDER_STATE_NORMAL || anchored)
+		USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+		return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] secures \the [src] with \a [tool]."),
+		SPAN_NOTICE("You secure \the [src] with \the [tool].")
+	)
+	reset_girder()
+
 /obj/structure/girder/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Diamond Drill, Plasmacutter, Psiblade (Paramount) - Slice girder
 	if (istype(tool, /obj/item/pickaxe/diamonddrill) || istype(tool, /obj/item/gun/energy/plasmacutter) || istype(tool, /obj/item/psychic_power/psiblade/master/grand/paramount))
@@ -107,61 +201,6 @@
 		construct_wall(tool, user)
 		return TRUE
 
-	// Screwdriver
-	// - Unsecure support struts
-	// - Allow reinforcement
-	if (isScrewdriver(tool))
-		switch (state)
-			if (GIRDER_STATE_NORMAL)
-				if (!anchored)
-					USE_FEEDBACK_FAILURE("\The [src] needs to be anchored before you can add reinforcements.")
-					return TRUE
-				if (reinf_material)
-					USE_FEEDBACK_FAILURE("\The [src] already has \a [reinf_material.adjective_name] reinforcement.")
-					return TRUE
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-				reinforcing = !reinforcing
-				user.visible_message(
-					SPAN_NOTICE("\The [user] adjusts \the [src] with \a [tool]. It can now be [reinforcing ? "reinforced" : "constructed"]."),
-					SPAN_NOTICE("You adjust \the [src] with \the [tool]. It can now be [reinforcing ? "reinforced" : "constructed"].")
-				)
-				return TRUE
-			if (GIRDER_STATE_REINFORCEMENT_UNSECURED)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-				user.visible_message(
-					SPAN_NOTICE("\The [user] starts securing \the [src]'s support struts with \a [tool]."),
-					SPAN_NOTICE("You starts securing \the [src]'s support struts with \the [tool].")
-				)
-				if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-					return TRUE
-				if (state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
-					USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-					return TRUE
-				state = GIRDER_STATE_REINFORCED
-				user.visible_message(
-					SPAN_NOTICE("\The [user] secures \the [src]'s support struts with \a [tool]."),
-					SPAN_NOTICE("You secure \the [src]'s support struts with \the [tool].")
-				)
-				return TRUE
-			if (GIRDER_STATE_REINFORCED)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-				user.visible_message(
-					SPAN_NOTICE("\The [user] starts unsecuring \the [src]'s support struts with \a [tool]."),
-					SPAN_NOTICE("You starts unsecuring \the [src]'s support struts with \the [tool].")
-				)
-				if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-					return TRUE
-				if (state != GIRDER_STATE_REINFORCED)
-					USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-					return TRUE
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-				state = GIRDER_STATE_REINFORCEMENT_UNSECURED
-				user.visible_message(
-					SPAN_NOTICE("\The [user] unsecures \the [src]'s support struts with \a [tool]."),
-					SPAN_NOTICE("You unsecure \the [src]'s support struts with \the [tool].")
-				)
-				return TRUE
-
 	// Wirecutters - Remove reinforcement
 	if (isWirecutter(tool))
 		switch (state)
@@ -189,47 +228,6 @@
 					SPAN_NOTICE("You remove \the [src]'s support struts with \the [tool].")
 				)
 				return TRUE
-
-	// Wrench - Dismantle girder
-	if (isWrench(tool))
-		if (state != GIRDER_STATE_NORMAL)
-			USE_FEEDBACK_FAILURE("\The [src]'s reinforcements must be removed before it can be dismantled.")
-			return TRUE
-		if (anchored)
-			playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-				SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
-			)
-			if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-				return TRUE
-			if (state != GIRDER_STATE_NORMAL || !anchored)
-				USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-				return TRUE
-			playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-				SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-			)
-			dismantle()
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts securing \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start securing \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (state != GIRDER_STATE_NORMAL || anchored)
-			USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] secures \the [src] with \a [tool]."),
-			SPAN_NOTICE("You secure \the [src] with \the [tool].")
-		)
-		reset_girder()
-		return TRUE
 
 	return ..()
 

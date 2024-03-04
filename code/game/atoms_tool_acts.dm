@@ -27,14 +27,10 @@
 	if(!tool_type) // here on only deals with ... tools
 		return NONE
 
-	/* TODO: check if needed
-	var/list/processing_recipes = list()
-	var/signal_result = SEND_SIGNAL(src, COMSIG_ATOM_TOOL_ACT(tool_type), user, tool, processing_recipes)
+	var/signal_result = SEND_SIGNAL(src, COMSIG_ATOM_TOOL_ACT(tool_type), user, tool)
 	if(signal_result)
 		return signal_result
-	if(length(processing_recipes))
-		process_recipes(user, tool, processing_recipes)
-	*/
+
 	if(QDELETED(tool))
 		return ITEM_INTERACT_SUCCESS // Safe-ish to assume that if we deleted our item something succeeded
 
@@ -63,6 +59,7 @@
 	log_game()
 	log_tool("[key_name(user)] used [tool] on [src] at [x], [y], [z]")
 	SEND_SIGNAL(tool, COMSIG_TOOL_ATOM_ACTED_PRIMARY(tool_type), src)
+	SEND_SIGNAL(tool, COMSIG_ATOM_TOOL_ACT_RESULT(tool_type), user, tool, act_result)
 	return act_result
 
 /**

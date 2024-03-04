@@ -266,6 +266,61 @@
 		SPAN_NOTICE("You pry \the [src] [construction_state ? "into" : "out of"] its frame with \the [tool].")
 	)
 
+/obj/structure/window/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Reinforced Window
+	if (reinf_material)
+		switch(construction_state)
+			if (CONSTRUCT_STATE_UNANCHORED)
+				if (!can_install_here(user))
+					return
+				set_anchored(!anchored)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+				user.visible_message(
+					SPAN_NOTICE("\The [user] [!anchored ? "un" : null]fastens \the [src] [!anchored ? "from" : "to"] the floor with \a [tool]."),
+					SPAN_NOTICE("You [!anchored ? "un" : null]fasten \the [src] [!anchored ? "from" : "to"] the floor with \the [tool].")
+				)
+				return
+			if (CONSTRUCT_STATE_ANCHORED)
+				construction_state = CONSTRUCT_STATE_COMPLETE
+			if (CONSTRUCT_STATE_COMPLETE)
+				construction_state = CONSTRUCT_STATE_ANCHORED
+		update_nearby_icons()
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+		user.visible_message(
+			SPAN_NOTICE("\The [user] [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fastens \the [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with \a [tool]."),
+			SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fasten \the [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with \the [tool].")
+		)
+		return
+	// Regular Windows
+	if (!anchored && !can_install_here(user))
+		return
+	if (anchored)
+		construction_state = CONSTRUCT_STATE_UNANCHORED
+	else
+		construction_state = CONSTRUCT_STATE_ANCHORED
+	set_anchored(!anchored)
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [!anchored ? "un" : null]fastens \the [src] [!anchored ? "from" : "to"] the floor with \a [tool]."),
+		SPAN_NOTICE("You [!anchored ? "un" : null]fasten \the [src] [!anchored ? "from" : "to"] the floor with \the [tool].")
+	)
+
+/obj/structure/window/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (anchored || construction_state)
+		USE_FEEDBACK_FAILURE("\The [src] must be detached from the floor[reinf_material ? " and its frame" : null] before you can dismantle it.")
+		return
+	if (polarized)
+		USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can dismantle it.")
+		return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+	)
+	dismantle()
+
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window
 	if (isCoil(tool))
@@ -356,47 +411,6 @@
 		dismantle()
 		return TRUE
 
-	// Screwdriver - Fasten window
-	if (isScrewdriver(tool))
-		// Reinforced Window
-		if (reinf_material)
-			switch(construction_state)
-				if (CONSTRUCT_STATE_UNANCHORED)
-					if (!can_install_here(user))
-						return TRUE
-					set_anchored(!anchored)
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-					user.visible_message(
-						SPAN_NOTICE("\The [user] [!anchored ? "un" : null]fastens \the [src] [!anchored ? "from" : "to"] the floor with \a [tool]."),
-						SPAN_NOTICE("You [!anchored ? "un" : null]fasten \the [src] [!anchored ? "from" : "to"] the floor with \the [tool].")
-					)
-					return TRUE
-				if (CONSTRUCT_STATE_ANCHORED)
-					construction_state = CONSTRUCT_STATE_COMPLETE
-				if (CONSTRUCT_STATE_COMPLETE)
-					construction_state = CONSTRUCT_STATE_ANCHORED
-			update_nearby_icons()
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fastens \the [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with \a [tool]."),
-				SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fasten \the [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with \the [tool].")
-			)
-			return TRUE
-		// Regular Windows
-		if (!anchored && !can_install_here(user))
-			return TRUE
-		if (anchored)
-			construction_state = CONSTRUCT_STATE_UNANCHORED
-		else
-			construction_state = CONSTRUCT_STATE_ANCHORED
-		set_anchored(!anchored)
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [!anchored ? "un" : null]fastens \the [src] [!anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You [!anchored ? "un" : null]fasten \the [src] [!anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		return TRUE
-
 	// Wirecutters - Remove wiring
 	if (isWirecutter(tool))
 		if (!polarized)
@@ -412,22 +426,6 @@
 			SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
 			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
 		)
-		return TRUE
-
-	// Wrench - Dismantle
-	if (isWrench(tool))
-		if (anchored || construction_state)
-			USE_FEEDBACK_FAILURE("\The [src] must be detached from the floor[reinf_material ? " and its frame" : null] before you can dismantle it.")
-			return TRUE
-		if (polarized)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can dismantle it.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		dismantle()
 		return TRUE
 
 	// Welding Tool - Finalize repairs

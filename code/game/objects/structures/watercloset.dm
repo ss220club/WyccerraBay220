@@ -327,6 +327,24 @@
 		for (var/atom/movable/G in src.loc)
 			G.clean_blood()
 
+/obj/structure/hygiene/shower/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/input = input(user, "What setting would you like to set the temperature valve to?", "[name] Water Temperature Valve") as null|anything in temperature_settings
+	if (!input || !user.use_sanity_check(src, tool))
+		return TRUE
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts adjusting \the [src]'s temperature with \a [tool]."),
+		SPAN_NOTICE("You start adjusting \the [src]'s temperature with \the [tool].")
+	)
+	if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return TRUE
+	watertemp = input
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] adjusts \the [src]'s temperature with \a [tool]."),
+		SPAN_NOTICE("You set \the [src]'s temperature to [watertemp] with \the [tool].")
+	)
 
 /obj/structure/hygiene/shower/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Gas Scanner - Fetch temperature
@@ -334,26 +352,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] scans \the [src] with \a [tool]."),
 			SPAN_NOTICE("You scan \the [src] with \the [tool]. The water temperature seems to be [watertemp].")
-		)
-		return TRUE
-
-	// Wrench - Set temperature
-	if (isWrench(tool))
-		var/input = input(user, "What setting would you like to set the temperature valve to?", "[name] Water Temperature Valve") as null|anything in temperature_settings
-		if (!input || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts adjusting \the [src]'s temperature with \a [tool]."),
-			SPAN_NOTICE("You start adjusting \the [src]'s temperature with \the [tool].")
-		)
-		if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		watertemp = input
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \the [src]'s temperature with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s temperature to [watertemp] with \the [tool].")
 		)
 		return TRUE
 
@@ -676,22 +674,17 @@
 	var/fill_level = 500
 	var/open = FALSE
 
-
-/obj/structure/hygiene/faucet/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/hygiene/faucet/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Wrench - Disconnect faucet
-	if (isWrench(tool))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		var/obj/item/faucet/faucet = new(loc)
-		transfer_fingerprints_to(faucet)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] detaches \the [src] from the floor with \a [tool]."),
-			SPAN_NOTICE("You detach \the [src] from the floor with \the [tool].")
-		)
-		qdel_self()
-		return TRUE
-
-	return ..()
-
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	var/obj/item/faucet/faucet = new(loc)
+	transfer_fingerprints_to(faucet)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] detaches \the [src] from the floor with \a [tool]."),
+		SPAN_NOTICE("You detach \the [src] from the floor with \the [tool].")
+	)
+	qdel_self()
 
 /obj/structure/hygiene/faucet/attack_hand(mob/user)
 	. = ..()
@@ -719,22 +712,20 @@
 	obj_flags = OBJ_FLAG_ROTATABLE
 	var/constructed_type = /obj/structure/hygiene/faucet
 
-/obj/item/faucet/attackby(obj/item/thing, mob/user)
-	if(isWrench(thing))
-		var/turf/simulated/floor/F = loc
-		if (istype(F) && istype(F.flooring, /singleton/flooring/pool))
-			var/obj/O = new constructed_type (loc)
-			O.dir = dir
-			playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-			user.visible_message(
-				SPAN_WARNING("\The [user] wrenches \the [src] down."),
-				SPAN_WARNING("You wrench \the [src] down.")
-			)
-			qdel(src)
-		else
-			to_chat(user, SPAN_WARNING("\The [src] can only be secured to pool tiles!"))
-		return TRUE
-	return ..()
+/obj/item/faucet/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/turf/simulated/floor/F = loc
+	if (istype(F) && istype(F.flooring, /singleton/flooring/pool))
+		var/obj/O = new constructed_type (loc)
+		O.dir = dir
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		user.visible_message(
+			SPAN_WARNING("\The [user] wrenches \the [src] down."),
+			SPAN_WARNING("You wrench \the [src] down.")
+		)
+		qdel(src)
+	else
+		to_chat(user, SPAN_WARNING("\The [src] can only be secured to pool tiles!"))
 
 /obj/structure/hygiene/faucet/proc/water_flow()
 	if(!isturf(src.loc))

@@ -70,6 +70,21 @@
 		USE_FEEDBACK_FAILURE("\The [grille] blocks access to \the [src].")
 		return FALSE
 
+/obj/structure/wall_frame/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return TRUE
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+	)
+	dismantle()
 
 /obj/structure/wall_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Rods - Place Grille
@@ -84,23 +99,6 @@
 			USE_FEEDBACK_FAILURE("\The [stack] cannot be used to make a window.")
 			return TRUE
 		place_window(user, loc, tool)
-		return TRUE
-
-	// Wrench - Dismantle
-	if (isWrench(tool))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		dismantle()
 		return TRUE
 
 	// Plasmacutter - Dismantle

@@ -79,32 +79,33 @@
 		transfer_fingerprints_to(newlight)
 		qdel(src)
 
+/obj/machinery/light_construct/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	switch(stage)
+		if (LIGHT_STAGE_EMPTY)
+			playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
+			to_chat(user, SPAN_NOTICE("You begin deconstructing \the [src]."))
+			if (!user.do_skilled((tool.toolspeed * 3) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			new /obj/item/stack/material/steel( get_turf(loc), sheets_refunded )
+			user.visible_message(
+				SPAN_NOTICE("\The [user] deconstructs \the [src]."),
+				SPAN_NOTICE("You deconstruct \the [src]!"),
+				SPAN_ITALIC("You hear ratcheting and metal scraping.")
+			)
+			playsound(loc, 'sound/items/Deconstruct.ogg', 75, TRUE)
+			qdel(src)
+			return
+
+		if (LIGHT_STAGE_WIRED)
+			to_chat(user, SPAN_WARNING("You have to remove the wires first."))
+			return
+
+		if (LIGHT_STAGE_COMPLETE)
+			to_chat(user, SPAN_WARNING("You have to unscrew the case first."))
+			return
+
 /obj/machinery/light_construct/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWrench(W))
-		switch(stage)
-			if (LIGHT_STAGE_EMPTY)
-				playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
-				to_chat(user, SPAN_NOTICE("You begin deconstructing \the [src]."))
-				if (!user.do_skilled((W.toolspeed * 3) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT))
-					return TRUE
-				new /obj/item/stack/material/steel( get_turf(loc), sheets_refunded )
-				user.visible_message(
-					SPAN_NOTICE("\The [user] deconstructs \the [src]."),
-					SPAN_NOTICE("You deconstruct \the [src]!"),
-					SPAN_ITALIC("You hear ratcheting and metal scraping.")
-				)
-				playsound(loc, 'sound/items/Deconstruct.ogg', 75, TRUE)
-				qdel(src)
-				return TRUE
-
-			if (LIGHT_STAGE_WIRED)
-				to_chat(user, SPAN_WARNING("You have to remove the wires first."))
-				return TRUE
-
-			if (LIGHT_STAGE_COMPLETE)
-				to_chat(user, SPAN_WARNING("You have to unscrew the case first."))
-				return TRUE
-
 	if(isWirecutter(W))
 		if (stage != LIGHT_STAGE_WIRED)
 			to_chat(user, SPAN_WARNING("There are no exposed wires to cut!"))

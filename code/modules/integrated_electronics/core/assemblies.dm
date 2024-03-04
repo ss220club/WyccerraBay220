@@ -437,6 +437,46 @@
 			else
 				visible_message(SPAN_NOTICE("\The [user] points \the [src] towards \the [target]."))
 
+/obj/item/device/electronic_assembly/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	for(var/obj/item/integrated_circuit/manipulation/hatchlock/hatchlock in assembly_components)
+		if(hatchlock.lock_enabled)
+			USE_FEEDBACK_FAILURE("\The [src]'s [hatchlock.name] is locked and prevents you from opening the panel.")
+			return
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	opened = !opened
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [opened ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
+		SPAN_NOTICE("You [opened ? "open" : "close"] \the [src]'s panel with \the [tool].")
+	)
+
+/obj/item/device/electronic_assembly/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
+		USE_FEEDBACK_FAILURE("\The [src] can't be anchored.")
+		return
+	if(!isturf(loc))
+		USE_FEEDBACK_FAILURE("\The [src] needs to be on the floor to be anchored.")
+		return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts wrenching \a [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
+		SPAN_NOTICE("You start wrenching \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
+	)
+	if(!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if(!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
+		USE_FEEDBACK_FAILURE("\The [src] can't be anchored.")
+		return
+	if(!isturf(loc))
+		USE_FEEDBACK_FAILURE("\The [src] needs to be on the floor to be anchored.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] wrenches \a [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
+		SPAN_NOTICE("You wrenches \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
+	)
+	anchored = !anchored
 
 /obj/item/device/electronic_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Assembly Detailer - Set color
@@ -484,49 +524,6 @@
 			SPAN_NOTICE("\The [user] installs \a [tool] into \a [src]."),
 			SPAN_NOTICE("You install \the [tool] into \the [src].")
 		)
-		return TRUE
-
-	// Screwdriver - Toggle panel
-	if (isScrewdriver(tool))
-		for (var/obj/item/integrated_circuit/manipulation/hatchlock/hatchlock in assembly_components)
-			if (hatchlock.lock_enabled)
-				USE_FEEDBACK_FAILURE("\The [src]'s [hatchlock.name] is locked and prevents you from opening the panel.")
-				return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		opened = !opened
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [opened ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
-			SPAN_NOTICE("You [opened ? "open" : "close"] \the [src]'s panel with \the [tool].")
-		)
-		return TRUE
-
-	// Wrench - Toggle anchoring bolts
-	if (isWrench(tool))
-		if (!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
-			USE_FEEDBACK_FAILURE("\The [src] can't be anchored.")
-			return TRUE
-		if (!isturf(loc))
-			USE_FEEDBACK_FAILURE("\The [src] needs to be on the floor to be anchored.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts wrenching \a [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You start wrenching \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		if (!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
-			USE_FEEDBACK_FAILURE("\The [src] can't be anchored.")
-			return TRUE
-		if (!isturf(loc))
-			USE_FEEDBACK_FAILURE("\The [src] needs to be on the floor to be anchored.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] wrenches \a [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You wrenches \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		anchored = !anchored
 		return TRUE
 
 	// Cable Coil - Repair damage

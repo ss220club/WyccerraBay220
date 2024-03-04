@@ -1,5 +1,5 @@
 /obj/item/rig/crowbar_act(mob/living/user, obj/item/tool)
-	. = ..()
+	. = ITEM_INTERACT_SUCCESS
 	if(!open && locked)
 		to_chat(user, SPAN_NOTICE("The access panel is locked shut."))
 		return
@@ -11,8 +11,72 @@
 	p_open = !p_open
 	to_chat(user, "You [p_open ? "open" : "close"] the wire cover.")
 
-/obj/item/rig/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/rig/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!open)
+		return
+	var/list/current_mounts = list()
+	if(cell) current_mounts   += "cell"
+	if(air_supply) current_mounts += "tank"
+	if(istype(chest, /obj/item/clothing/suit/space/rig))
+		if(length(chest?.storage?.contents)) current_mounts += "storage"
+	if(installed_modules && length(installed_modules)) current_mounts += "system module"
+	var/to_remove = input("Which would you like to modify?") as null|anything in current_mounts
+	if(!to_remove)
+		return
+	if(istype(src.loc,/mob/living/carbon/human) && to_remove != "cell" && to_remove != "tank")
+		var/mob/living/carbon/human/H = src.loc
+		if(H.back == src)
+			to_chat(user, "You can't remove an installed device while the hardsuit is being worn.")
+			return
+	switch(to_remove)
+		if("cell")
+			if(cell)
+				to_chat(user, "You detach \the [cell] from \the [src]'s battery mount.")
+				for(var/obj/item/rig_module/module in installed_modules)
+					module.deactivate()
+				user.put_in_hands(cell)
+				cell = null
+			else
+				to_chat(user, "There is nothing loaded in that mount.")
+		if("tank")
+			if(!air_supply)
+				to_chat(user, "There is no tank to remove.")
+				return
+			user.put_in_hands(air_supply)
+			to_chat(user, "You detach and remove \the [air_supply].")
+			air_supply = null
+		if("storage")
+			if (!length(chest?.storage?.contents))
+				to_chat(user, "There is nothing in the storage to remove.")
+				return
+			chest.storage.DoQuickEmpty()
+			user.visible_message(
+				SPAN_ITALIC("\The [user] ejects the contents of \a [src]'s storage."),
+				SPAN_ITALIC("You eject the contents of \the [src]'s storage."),
+				SPAN_ITALIC("You hear things clatter to the floor."),
+				range = 5
+			)
+		if("system module")
+			var/list/possible_removals = list()
+			for(var/obj/item/rig_module/module in installed_modules)
+				if(module.permanent)
+					continue
+				possible_removals[module.name] = module
+			if(!length(possible_removals))
+				to_chat(user, "There are no installed modules to remove.")
+				return
+			var/removal_choice = input("Which module would you like to remove?") as null|anything in possible_removals
+			if(!removal_choice)
+				return
+			var/obj/item/rig_module/removed = possible_removals[removal_choice]
+			to_chat(user, "You detach \the [removed] from \the [src].")
+			removed.dropInto(loc)
+			removed.removed()
+			installed_modules -= removed
+			update_icon()
 
+/obj/item/rig/attackby(obj/item/W as obj, mob/user as mob)
 	if(!istype(user,/mob/living)) return 0
 
 	if(electrified != 0)
@@ -52,8 +116,6 @@
 		return
 
 	if(open)
-
-
 		// Air tank.
 		if(istype(W,/obj/item/tank)) //Todo, some kind of check for suits without integrated air supplies.
 
@@ -97,81 +159,6 @@
 			W.forceMove(src)
 			src.cell = W
 			return
-
-		else if(isWrench(W))
-
-			var/list/current_mounts = list()
-			if(cell) current_mounts   += "cell"
-			if(air_supply) current_mounts += "tank"
-			if(istype(chest, /obj/item/clothing/suit/space/rig))
-				if (length(chest?.storage?.contents)) current_mounts += "storage"
-			if(installed_modules && length(installed_modules)) current_mounts += "system module"
-			var/to_remove = input("Which would you like to modify?") as null|anything in current_mounts
-			if(!to_remove)
-				return
-
-			if(istype(src.loc,/mob/living/carbon/human) && to_remove != "cell" && to_remove != "tank")
-				var/mob/living/carbon/human/H = src.loc
-				if(H.back == src)
-					to_chat(user, "You can't remove an installed device while the hardsuit is being worn.")
-					return
-
-			switch(to_remove)
-
-				if("cell")
-
-					if(cell)
-						to_chat(user, "You detach \the [cell] from \the [src]'s battery mount.")
-						for(var/obj/item/rig_module/module in installed_modules)
-							module.deactivate()
-						user.put_in_hands(cell)
-						cell = null
-					else
-						to_chat(user, "There is nothing loaded in that mount.")
-
-				if("tank")
-					if(!air_supply)
-						to_chat(user, "There is no tank to remove.")
-						return
-
-					user.put_in_hands(air_supply)
-					to_chat(user, "You detach and remove \the [air_supply].")
-					air_supply = null
-
-				if ("storage")
-					if (!length(chest?.storage?.contents))
-						to_chat(user, "There is nothing in the storage to remove.")
-						return
-					chest.storage.DoQuickEmpty()
-					user.visible_message(
-						SPAN_ITALIC("\The [user] ejects the contents of \a [src]'s storage."),
-						SPAN_ITALIC("You eject the contents of \the [src]'s storage."),
-						SPAN_ITALIC("You hear things clatter to the floor."),
-						range = 5
-					)
-
-				if("system module")
-
-					var/list/possible_removals = list()
-					for(var/obj/item/rig_module/module in installed_modules)
-						if(module.permanent)
-							continue
-						possible_removals[module.name] = module
-
-					if(!length(possible_removals))
-						to_chat(user, "There are no installed modules to remove.")
-						return
-
-					var/removal_choice = input("Which module would you like to remove?") as null|anything in possible_removals
-					if(!removal_choice)
-						return
-
-					var/obj/item/rig_module/removed = possible_removals[removal_choice]
-					to_chat(user, "You detach \the [removed] from \the [src].")
-					removed.dropInto(loc)
-					removed.removed()
-					installed_modules -= removed
-					update_icon()
 
 		else if(istype(W,/obj/item/stack/nanopaste)) //EMP repair
 			var/obj/item/stack/S = W

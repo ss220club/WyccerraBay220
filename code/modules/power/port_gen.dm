@@ -293,6 +293,11 @@
 		return SPAN_WARNING("You cannot do this while \the [src] is running!")
 	return ..()
 
+/obj/machinery/power/port_gen/pacman/wrench_act(mob/living/user, obj/item/tool)
+	if(active)
+		to_chat(SPAN_WARNING("Turn off \the [src] before wrenching its bolts."))
+		return ITEM_INTERACT_SUCCESS
+
 /obj/machinery/power/port_gen/pacman/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(istype(O, sheet_path))
 		var/obj/item/stack/addstack = O
@@ -304,10 +309,6 @@
 		sheets += amount
 		addstack.use(amount)
 		updateUsrDialog()
-		return TRUE
-
-	if(isWrench(O) && active)
-		to_chat(SPAN_WARNING("Turn off \the [src] before wrenching its bolts."))
 		return TRUE
 
 	return ..()

@@ -73,6 +73,12 @@
 	)
 	ignite()
 
+/obj/machinery/atmospherics/pipe/cap/sparker/wrench_act(mob/living/user, obj/item/tool)
+	if(signaler || disabled)
+		to_chat(user, SPAN_NOTICE("Remove signalers and check the wiring before unwrenching \the [src]."))
+		return ITEM_INTERACT_SUCCESS
+	. = ..()
+
 /obj/machinery/atmospherics/pipe/cap/sparker/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (isScrewdriver(W) && !signaler)
 		disabled = !disabled
@@ -111,10 +117,6 @@
 		)
 		signaler = null
 		update_icon()
-		return TRUE
-
-	if (isWrench(W) && (signaler || disabled))
-		to_chat(user, SPAN_NOTICE("Remove signalers and check the wiring before unwrenching \the [src]."))
 		return TRUE
 
 	return ..()

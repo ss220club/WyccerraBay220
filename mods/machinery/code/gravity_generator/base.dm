@@ -198,6 +198,27 @@
 		set_broken_state(0)
 		update_icon()
 
+/obj/machinery/gravity_generator/main/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(broken_state == GRAV_NEEDS_WRENCH)
+		user.visible_message(
+			SPAN_NOTICE("[user] screws the parts back."),
+			SPAN_NOTICE("You begin to screw the parts back.")
+		)
+		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
+
+		if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || broken_state != GRAV_NEEDS_WRENCH)
+			return TRUE
+
+		health += 250
+		user.visible_message(
+			SPAN_NOTICE("[user] screwed the parts back."),
+			SPAN_NOTICE("You screwed the parts back.")
+		)
+		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
+		set_broken_state(GRAV_NEEDS_SCREWDRIVER)
+		update_icon()
+
 /obj/machinery/gravity_generator/main/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	switch(broken_state)
 		if(GRAV_NEEDS_PLASTEEL)
@@ -251,29 +272,6 @@
 				update_icon()
 
 				return TRUE
-
-		if(GRAV_NEEDS_WRENCH)
-			if(isWrench(tool))
-				user.visible_message(
-					SPAN_NOTICE("[user] screws the parts back."),
-					SPAN_NOTICE("You begin to screw the parts back.")
-				)
-				playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
-
-				if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || broken_state != GRAV_NEEDS_WRENCH)
-					return TRUE
-
-				health += 250
-				user.visible_message(
-					SPAN_NOTICE("[user] screwed the parts back."),
-					SPAN_NOTICE("You screwed the parts back.")
-				)
-				playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
-				set_broken_state(GRAV_NEEDS_SCREWDRIVER)
-				update_icon()
-
-				return TRUE
-
 	return ..()
 
 /obj/machinery/gravity_generator/part/attack_ghost(mob/user)

@@ -39,19 +39,15 @@
 	var/list/fail_message = list(", lifting them part of the way and then letting them drop", ", unable to even budge them")
 
 
-/obj/structure/fitness/weightlifter/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/fitness/weightlifter/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Wrench - Set weight level
-	if (isWrench(tool))
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, TRUE)
-		weight = (weight % max_weight) + 1
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \the [src]'s weight level with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s weight level to [weight] with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, TRUE)
+	weight = (weight % max_weight) + 1
+	user.visible_message(
+		SPAN_NOTICE("\The [user] adjusts \the [src]'s weight level with \a [tool]."),
+		SPAN_NOTICE("You set \the [src]'s weight level to [weight] with \the [tool].")
+	)
 
 /obj/structure/fitness/weightlifter/attack_hand(mob/living/carbon/human/user)
 	if(!istype(user))

@@ -239,6 +239,63 @@
 	)
 	return TRUE
 
+/obj/structure/railing/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Screwdriver - Toggle Anchored
+	if (!density)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can unanchor it.")
+		return
+	playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts [anchored ? "un" : null]fastening \the [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
+		SPAN_NOTICE("You start [anchored ? "un" : null]fastening \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 1) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (!density)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can unanchor it.")
+		return
+	playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [anchored ? "un" : null]fastens \the [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
+		SPAN_NOTICE("You [anchored ? "un" : null]fasten \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
+	)
+	anchored = !anchored
+	update_icon()
+
+/obj/structure/railing/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Wrench
+	// - Dismantle (Unanchored)
+	// - Toggle Density (Anchored)
+	if (anchored)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+		set_density(!density)
+		update_icon()
+		user.visible_message(
+			SPAN_NOTICE("\The [user] [density ? "closes" : "opens"] \the [src] with \a [tool]."),
+			SPAN_NOTICE("You [density ? "close" : "open"] \the [src] with \the [tool].")
+		)
+		return
+	// Dismantle
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (anchored)
+		USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+		return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	var/obj/new_sheet = material.place_sheet(loc, 2)
+	transfer_fingerprints_to(new_sheet)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+	)
+	qdel(src)
 
 /obj/structure/railing/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Welding Tool - Repair
@@ -262,65 +319,6 @@
 			SPAN_NOTICE("\The [user] repairs \the [src] with \a [tool]."),
 			SPAN_NOTICE("You repair \the [src] with \the [tool].")
 		)
-		return TRUE
-
-	// Wrench
-	// - Dismantle (Unanchored)
-	// - Toggle Density (Anchored)
-	if (isWrench(tool))
-		// Toggle
-		if (anchored)
-			playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-			set_density(!density)
-			update_icon()
-			user.visible_message(
-				SPAN_NOTICE("\The [user] [density ? "closes" : "opens"] \the [src] with \a [tool]."),
-				SPAN_NOTICE("You [density ? "close" : "open"] \the [src] with \the [tool].")
-			)
-			return TRUE
-		// Dismantle
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		var/obj/new_sheet = material.place_sheet(loc, 2)
-		transfer_fingerprints_to(new_sheet)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		qdel_self()
-		return TRUE
-
-	// Screwdriver - Toggle Anchored
-	if (isScrewdriver(tool))
-		if (!density)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can unanchor it.")
-			return TRUE
-		playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts [anchored ? "un" : null]fastening \the [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You start [anchored ? "un" : null]fastening \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 1) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!density)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can unanchor it.")
-			return TRUE
-		playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [anchored ? "un" : null]fastens \the [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You [anchored ? "un" : null]fasten \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		anchored = !anchored
-		update_icon()
 		return TRUE
 
 	return ..()

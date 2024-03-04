@@ -189,11 +189,6 @@
 	if (damtype == DAMAGE_BURN)
 		. |= DAMAGE_FLAG_LASER
 
-/obj/wrench_act(mob/living/user, obj/item/tool)
-	if(HAS_FLAGS(obj_flags, OBJ_FLAG_ANCHORABLE))
-		wrench_floor_bolts(user, tool)
-		return ITEM_INTERACT_SUCCESS
-
 /**
  * Whether or not the object can be anchored in its current state/position. Assumes the anchorable flag has already been checked.
  *
@@ -211,16 +206,18 @@
 		return FALSE
 	return TRUE
 
-
-/obj/proc/wrench_floor_bolts(mob/user, obj/item/tool, delay = 2 SECONDS)
-	if (!can_anchor(tool, user))
+/obj/proc/wrench_floor_bolts(obj/item, mob/user, obj/item/tool, act_result, delay = 2 SECONDS)
+	SIGNAL_HANDLER
+	if(act_result)
+		return
+	if(!can_anchor(tool, user))
 		return
 	user.visible_message(
 		SPAN_NOTICE("\The [user] begins [anchored ? "un" : ""]securing \the [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
 		SPAN_NOTICE("You begin [anchored ? "un" : ""]securing \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
 	)
 	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-	if (!user.do_skilled((tool.toolspeed * delay), SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!user.do_skilled((tool.toolspeed * delay), SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 		return
 	user.visible_message(
 		SPAN_NOTICE("\The [user] [anchored ? "un" : ""]secures \the [src] [anchored ? "from" : "to"] the floor with \a [tool]."),

@@ -85,6 +85,21 @@
 /obj/structure/noticeboard/on_update_icon()
 	icon_state = "[base_icon_state][LAZYLEN(notices)]"
 
+/obj/structure/noticeboard/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start dismantling \the [src] with \a [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 5) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \a [tool].")
+	)
+	dismantle()
 
 /obj/structure/noticeboard/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Paper, Photo - Attach
@@ -129,23 +144,6 @@
 			SPAN_NOTICE("\The [user] adjusts \the [src]'s positioning with \a [tool]."),
 			SPAN_NOTICE("You set \the [src]'s positioning to [choice] with \the [tool].")
 		)
-		return TRUE
-
-	// Wrench - Dismantle board
-	if (isWrench(tool))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dismantling \the [src] with \a [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 5) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \a [tool].")
-		)
-		dismantle()
 		return TRUE
 
 	return ..()

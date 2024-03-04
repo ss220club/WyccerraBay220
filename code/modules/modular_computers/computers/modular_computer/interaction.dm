@@ -132,6 +132,16 @@
 		return
 	uninstall_component(user, H)
 
+/obj/item/modular_computer/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/list/components = get_all_components()
+	if(length(components))
+		to_chat(user, "Remove all components from \the [src] before disassembling it.")
+		return
+	new /obj/item/stack/material/steel( get_turf(src.loc), steel_sheet_cost )
+	src.visible_message("\The [src] has been disassembled by [user].")
+	qdel(src)
+
 /obj/item/modular_computer/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/card/id)) // ID Card, try to insert it.
 		var/obj/item/card/id/I = W
@@ -175,15 +185,6 @@
 			try_install_component(user, C)
 		else
 			to_chat(user, "This component is too large for \the [src].")
-	if(isWrench(W))
-		var/list/components = get_all_components()
-		if(length(components))
-			to_chat(user, "Remove all components from \the [src] before disassembling it.")
-			return
-		new /obj/item/stack/material/steel( get_turf(src.loc), steel_sheet_cost )
-		src.visible_message("\The [src] has been disassembled by [user].")
-		qdel(src)
-		return
 	if(isWelder(W))
 		var/obj/item/weldingtool/WT = W
 		var/damage = get_damage_value()

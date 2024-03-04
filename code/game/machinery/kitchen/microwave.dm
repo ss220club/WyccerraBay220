@@ -55,6 +55,23 @@
 *   Item Adding
 ********************/
 
+/obj/machinery/microwave/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(broken == 1)
+		user.visible_message( \
+			SPAN_NOTICE("\The [user] starts to fix part of the microwave."), \
+			SPAN_NOTICE("You start to fix part of the microwave.") \
+		)
+		if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+			user.visible_message( \
+				SPAN_NOTICE("\The [user] fixes the microwave."), \
+				SPAN_NOTICE("You have fixed the microwave.") \
+			)
+			broken = 0 // Fix it!
+			dirtiness = 0 // just to be sure
+			update_icon()
+			atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER
+
 /obj/machinery/microwave/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (broken > 0)
 		// Start repairs by using a screwdriver
@@ -69,23 +86,6 @@
 					SPAN_NOTICE("You have fixed part of the microwave.") \
 				)
 				broken = 1 // Fix it a bit
-			return TRUE
-
-		// Finish repairs using a wrench
-		if (broken == 1 && isWrench(O))
-			user.visible_message( \
-				SPAN_NOTICE("\The [user] starts to fix part of the microwave."), \
-				SPAN_NOTICE("You start to fix part of the microwave.") \
-			)
-			if (do_after(user, (O.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				user.visible_message( \
-					SPAN_NOTICE("\The [user] fixes the microwave."), \
-					SPAN_NOTICE("You have fixed the microwave.") \
-				)
-				broken = 0 // Fix it!
-				dirtiness = 0 // just to be sure
-				update_icon()
-				atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER
 			return TRUE
 
 		// Otherwise, we can't add anything to the micrwoave

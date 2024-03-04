@@ -101,36 +101,31 @@
 
 	. = ..()
 
-/obj/machinery/atmospherics/pipe/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (istype(W, /obj/item/pipe))
-		user.unEquip(W, loc)
-		return TRUE
-
-	if (!isWrench(W))
-		return ..()
-
+/obj/machinery/atmospherics/pipe/wrench_act(mob/living/user, obj/item/tool)
+	SHOULD_CALL_PARENT(TRUE)
+	. = ITEM_INTERACT_SUCCESS
 	var/turf/T = src.loc
-	if (level==ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
+	if(level==ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
 		to_chat(user, SPAN_WARNING("You must remove the plating first."))
 		return TRUE
-	if (clamp)
+	if(clamp)
 		to_chat(user, SPAN_WARNING("You must remove \the [clamp] first."))
 		return TRUE
 
 	var/datum/gas_mixture/int_air = return_air()
 	var/datum/gas_mixture/env_air = loc.return_air()
 
-	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+	if((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
 		to_chat(user, SPAN_WARNING("You cannot unwrench \the [src], it is too exerted due to internal pressure."))
 		return TRUE
 
 	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src]..."))
 
-	if (!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
+	if(!do_after(user, (tool.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
 		return TRUE
 
-	if (clamp)
+	if(clamp)
 		to_chat(user, SPAN_WARNING("You must remove \the [clamp] first."))
 		return TRUE
 
@@ -140,11 +135,16 @@
 		"You hear a ratchet.")
 
 	new /obj/item/pipe(loc, src)
-	for (var/obj/machinery/meter/meter in T)
-		if (meter.target == src)
+	for(var/obj/machinery/meter/meter in T)
+		if(meter.target == src)
 			meter.dismantle()
 	qdel(src)
-	return TRUE
+
+/obj/machinery/atmospherics/pipe/use_tool(obj/item/W, mob/living/user, list/click_params)
+	if(istype(W, /obj/item/pipe))
+		user.unEquip(W, loc)
+		return TRUE
+	. = ..()
 
 /obj/machinery/atmospherics/get_color()
 	return pipe_color

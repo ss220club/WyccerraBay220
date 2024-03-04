@@ -293,14 +293,13 @@ var/global/list/turret_icons
 			to_chat(user, SPAN_NOTICE("You remove the turret but did not manage to salvage anything."))
 		qdel(src)
 
-/obj/machinery/porta_turret/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isWrench(I))
-		if(enabled || raised)
-			to_chat(user, SPAN_WARNING("You cannot unsecure an active turret!"))
-			return TRUE
-		else return ..()
+/obj/machinery/porta_turret/wrench_act(mob/living/user, obj/item/tool)
+	if(enabled || raised)
+		to_chat(user, SPAN_WARNING("You cannot unsecure an active turret!"))
+		return ITEM_INTERACT_SUCCESS
 
-	else if (isid(I) ||istype(I, /obj/item/modular_computer))
+/obj/machinery/porta_turret/use_tool(obj/item/I, mob/living/user, list/click_params)
+	if (isid(I) ||istype(I, /obj/item/modular_computer))
 		//Behavior lock/unlock mangement
 		if(allowed(user))
 			locked = !locked
@@ -616,7 +615,6 @@ var/global/list/turret_icons
 	var/finish_name="turret"	//the name applied to the product turret
 	var/installation = null		//the gun type installed
 	var/gun_charge = 0			//the gun charge of the gun type installed
-
 
 /obj/machinery/porta_turret_construct/use_tool(obj/item/I, mob/living/user, list/click_params)
 	//this is a bit unwieldy but self-explanatory

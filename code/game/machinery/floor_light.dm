@@ -36,16 +36,23 @@ var/global/list/floor_light_cache = list()
 	anchored = TRUE
 	use_power = POWER_USE_ACTIVE
 
+/obj/machinery/floor_light/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	anchored = !anchored
+	if(use_power)
+		update_use_power(POWER_USE_OFF)
+		queue_icon_update()
+	visible_message(SPAN_NOTICE("\The [user] has [anchored ? "attached" : "detached"] \the [src]."))
+
+/obj/machinery/floor_light/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+	to_chat(user, SPAN_NOTICE("You dismantle the floor light."))
+	new /obj/item/stack/material/steel(src.loc, 1)
+	new /obj/item/stack/material/glass(src.loc, 1)
+	qdel(src)
 
 /obj/machinery/floor_light/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isScrewdriver(W))
-		anchored = !anchored
-		if(use_power)
-			update_use_power(POWER_USE_OFF)
-			queue_icon_update()
-		visible_message(SPAN_NOTICE("\The [user] has [anchored ? "attached" : "detached"] \the [src]."))
-		return TRUE
-
 	if (isWelder(W) && (health_damaged() || MACHINE_IS_BROKEN(src)))
 		var/obj/item/weldingtool/WT = W
 		if(!WT.can_use(1, user))
@@ -59,15 +66,6 @@ var/global/list/floor_light_cache = list()
 		set_broken(FALSE)
 		revive_health()
 		return TRUE
-
-	if (isWrench(W))
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-		to_chat(user, SPAN_NOTICE("You dismantle the floor light."))
-		new /obj/item/stack/material/steel(src.loc, 1)
-		new /obj/item/stack/material/glass(src.loc, 1)
-		qdel(src)
-		return TRUE
-
 	return ..()
 
 /obj/machinery/floor_light/on_death()

@@ -105,34 +105,30 @@
 	playsound(src.loc, "[GLOB.machinery_exposed_sound[2]]", 20)
 	update_icon()
 
-/obj/machinery/sealgen/use_tool(obj/item/W, mob/living/user, list/click_params)
+/obj/machinery/sealgen/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!anchored && (!isturf(src.loc) || is_space_turf(src.loc)))
+		to_chat(user, SPAN_WARNING("\The [src] can't be anchored here."))
+		return
+	anchored = !anchored
+	to_chat(user, "You [anchored ? "wrench \the [src] to" : "unwrench \the [src] from"] \the [get_turf(src)]")
+	if(!anchored)
+		off()
 
+/obj/machinery/sealgen/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isMultitool(W) && !locked)
 		field_color = input(usr, "Choose field colour.", "Field color", initial(field_color)) as color|null
 		to_chat(usr, SPAN_NOTICE("You change \the [src] field <font color='[field_color]'>color.</font>"))
 		colorize()
 		return
-
 	if(isWirecutter(W) && hatch_open)
 		wires.Interact(user)
 		return
-
 	if(isid(W) && allowed(usr))
 		locked = !locked
 		to_chat(user, "You [locked ? "lock" : "unlock"] \the [src].")
 		return
-
-	if(isWrench(W))
-		if(!anchored && (!isturf(src.loc) || is_space_turf(src.loc)))
-			to_chat(user, SPAN_WARNING("\The [src] can't be anchored here."))
-			return
-		anchored = !anchored
-		to_chat(user, "You [anchored ? "wrench \the [src] to" : "unwrench \the [src] from"] \the [get_turf(src)]")
-		if(!anchored)
-			off()
-		return
-
-	..()
+	. = ..()
 
 //Actual field
 

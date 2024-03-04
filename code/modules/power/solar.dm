@@ -222,24 +222,22 @@ var/global/solar_gen_rate = 1500
 		tracker = FALSE
 		user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))
 
-/obj/item/solar_assembly/attackby(obj/item/W, mob/user)
-
+/obj/item/solar_assembly/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if(!anchored && isturf(loc))
-		if(isWrench(W))
-			anchored = TRUE
-			pixel_x = 0
-			pixel_y = 0
-			pixel_z = 0
-			user.visible_message(SPAN_NOTICE("[user] wrenches the solar assembly into place."))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-			return 1
-	else
-		if(isWrench(W))
-			anchored = FALSE
-			user.visible_message(SPAN_NOTICE("[user] unwrenches the solar assembly from it's place."))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-			return 1
+		anchored = TRUE
+		pixel_x = 0
+		pixel_y = 0
+		pixel_z = 0
+		user.visible_message(SPAN_NOTICE("[user] wrenches the solar assembly into place."))
+		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+		return
+	anchored = FALSE
+	user.visible_message(SPAN_NOTICE("[user] unwrenches the solar assembly from it's place."))
+	playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 
+/obj/item/solar_assembly/attackby(obj/item/W, mob/user)
+	if(anchored || isturf(loc))
 		if(istype(W, /obj/item/stack/material) && W.get_material_name() == MATERIAL_GLASS)
 			var/obj/item/stack/material/S = W
 			if(S.use(2))
@@ -253,14 +251,14 @@ var/global/solar_gen_rate = 1500
 			else
 				to_chat(user, SPAN_WARNING("You need two sheets of glass to put them into a solar panel."))
 				return
-			return 1
+			return TRUE
 
 	if(!tracker)
 		if(istype(W, /obj/item/tracker_electronics))
 			tracker = 1
 			qdel(W)
 			user.visible_message(SPAN_NOTICE("[user] inserts the electronics into the solar assembly."))
-			return 1
+			return TRUE
 	..()
 
 //

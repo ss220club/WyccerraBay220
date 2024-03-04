@@ -111,6 +111,108 @@
 		head = null
 	update_icon()
 
+/obj/structure/heavy_vehicle_frame/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Check for basic components.
+	if (!(arms && legs && head && body))
+		USE_FEEDBACK_FAILURE("\The [src] is still missing parts and cannot be completed.")
+		return
+	// Check for wiring.
+	if (is_wired < FRAME_WIRED_ADJUSTED)
+		if (is_wired == FRAME_WIRED)
+			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be adjusted before you can complete it.")
+		else
+			USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can complete it.")
+		return
+	// Check for basing metal internal plating.
+	if (is_reinforced < FRAME_REINFORCED_WELDED)
+		if (is_reinforced == FRAME_REINFORCED)
+			USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be secured before you can complete it.")
+		else if (is_reinforced == FRAME_REINFORCED_SECURE)
+			USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be welded before you can complete it.")
+		else
+			USE_FEEDBACK_FAILURE("\The [src] needs internal reinforcement before you can complete it.")
+		return
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts finishing \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start finishing \the [src] with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 5) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+		return
+	// Check for basic components.
+	if (!(arms && legs && head && body))
+		USE_FEEDBACK_FAILURE("\The [src] is still missing parts and cannot be completed.")
+		return
+	// Check for wiring.
+	if (is_wired < FRAME_WIRED_ADJUSTED)
+		if (is_wired == FRAME_WIRED)
+			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be adjusted before you can complete it.")
+		else
+			USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can complete it.")
+		return
+	// Check for basing metal internal plating.
+	if (is_reinforced < FRAME_REINFORCED_WELDED)
+		if (is_reinforced == FRAME_REINFORCED)
+			USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be secured before you can complete it.")
+		else if (is_reinforced == FRAME_REINFORCED_SECURE)
+			USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be welded before you can complete it.")
+		else
+			USE_FEEDBACK_FAILURE("\The [src] needs internal reinforcement before you can complete it.")
+		return
+	var/mob/living/exosuit/exosuit = new(get_turf(src), src)
+	transfer_fingerprints_to(exosuit)
+	arms = null
+	legs = null
+	head = null
+	body = null
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] finishes constructing \the [exosuit] with \a [tool]."),
+		SPAN_NOTICE("You finish constructing \the [exosuit] with \the [tool].")
+	)
+	qdel(src)
+
+/obj/structure/heavy_vehicle_frame/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!is_reinforced)
+		USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to secure or remove.")
+		return
+	if (is_reinforced == FRAME_REINFORCED_WELDED)
+		USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcements are welded in place and can't be removed.")
+		return
+	var/current_state = is_reinforced
+	var/input
+	if (is_reinforced == FRAME_REINFORCED_SECURE)
+		input = "Remove Reinforcements"
+	else
+		input = input(user, "What would you like to do with the reinforcements?", "[src] - Reinforcements") as null|anything in list("Secure Reinforcements", "Remove Reinforcements")
+		if (!input || !user.use_sanity_check(src, tool))
+			return
+		if (current_state != is_reinforced)
+			USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+			return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts [input == "Secure Reinforcements" ? "securing" : "removing"] \the [src]'s internal reinforcements with \a [tool]."),
+		SPAN_NOTICE("You start [input == "Secure Reinforcements" ? "securing" : "removing"] \the [src]'s internal reinforcements with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+		return
+	if (current_state != is_reinforced)
+		USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+		return
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	is_reinforced = input == "Secure Reinforcements" ? FRAME_REINFORCED_SECURE : FALSE
+	if (input == "Remove Reinforcements")
+		material.place_sheet(loc, 10)
+		material = null
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [input == "Secure Reinforcements" ? "secures" : "removes"] \the [src]'s internal reinforcements with \a [tool]."),
+		SPAN_NOTICE("You [input == "Secure Reinforcements" ? "secure" : "remove"] \the [src]'s internal reinforcements with \the [tool].")
+	)
+
 /obj/structure/heavy_vehicle_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
 	if (isCoil(tool))
@@ -176,69 +278,6 @@
 			SPAN_NOTICE("\The [user] reinforces \the [src] with \a [tool]."),
 			SPAN_NOTICE("You reinforce \the [src] with \the [tool].")
 		)
-		return TRUE
-
-	// Screwdriver - Finish construction
-	if (isScrewdriver(tool))
-		// Check for basic components.
-		if (!(arms && legs && head && body))
-			USE_FEEDBACK_FAILURE("\The [src] is still missing parts and cannot be completed.")
-			return TRUE
-		// Check for wiring.
-		if (is_wired < FRAME_WIRED_ADJUSTED)
-			if (is_wired == FRAME_WIRED)
-				USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be adjusted before you can complete it.")
-			else
-				USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can complete it.")
-			return TRUE
-		// Check for basing metal internal plating.
-		if (is_reinforced < FRAME_REINFORCED_WELDED)
-			if (is_reinforced == FRAME_REINFORCED)
-				USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be secured before you can complete it.")
-			else if (is_reinforced == FRAME_REINFORCED_SECURE)
-				USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be welded before you can complete it.")
-			else
-				USE_FEEDBACK_FAILURE("\The [src] needs internal reinforcement before you can complete it.")
-			return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts finishing \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start finishing \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 5) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-			return TRUE
-		// Check for basic components.
-		if (!(arms && legs && head && body))
-			USE_FEEDBACK_FAILURE("\The [src] is still missing parts and cannot be completed.")
-			return TRUE
-		// Check for wiring.
-		if (is_wired < FRAME_WIRED_ADJUSTED)
-			if (is_wired == FRAME_WIRED)
-				USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be adjusted before you can complete it.")
-			else
-				USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can complete it.")
-			return TRUE
-		// Check for basing metal internal plating.
-		if (is_reinforced < FRAME_REINFORCED_WELDED)
-			if (is_reinforced == FRAME_REINFORCED)
-				USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be secured before you can complete it.")
-			else if (is_reinforced == FRAME_REINFORCED_SECURE)
-				USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcement needs to be welded before you can complete it.")
-			else
-				USE_FEEDBACK_FAILURE("\The [src] needs internal reinforcement before you can complete it.")
-			return TRUE
-		var/mob/living/exosuit/exosuit = new(get_turf(src), src)
-		transfer_fingerprints_to(exosuit)
-		arms = null
-		legs = null
-		head = null
-		body = null
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] finishes constructing \the [exosuit] with \a [tool]."),
-			SPAN_NOTICE("You finish constructing \the [exosuit] with \the [tool].")
-		)
-		qdel_self()
 		return TRUE
 
 	// Welding Tool - Weld reinforcements
@@ -315,47 +354,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] [input == "Adjust Wiring" ? "adjusts" : "removes"] the wiring in \the [src] with \a [tool]."),
 			SPAN_NOTICE("You [input == "Adjust Wiring" ? "adjust" : "remove"] the wiring in \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	// Wrench - Secure reinforcements
-	if (isWrench(tool))
-		if (!is_reinforced)
-			USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to secure or remove.")
-			return TRUE
-		if (is_reinforced == FRAME_REINFORCED_WELDED)
-			USE_FEEDBACK_FAILURE("\The [src]'s internal reinforcements are welded in place and can't be removed.")
-			return TRUE
-		var/current_state = is_reinforced
-		var/input
-		if (is_reinforced == FRAME_REINFORCED_SECURE)
-			input = "Remove Reinforcements"
-		else
-			input = input(user, "What would you like to do with the reinforcements?", "[src] - Reinforcements") as null|anything in list("Secure Reinforcements", "Remove Reinforcements")
-			if (!input || !user.use_sanity_check(src, tool))
-				return TRUE
-			if (current_state != is_reinforced)
-				USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-				return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts [input == "Secure Reinforcements" ? "securing" : "removing"] \the [src]'s internal reinforcements with \a [tool]."),
-			SPAN_NOTICE("You start [input == "Secure Reinforcements" ? "securing" : "removing"] \the [src]'s internal reinforcements with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (current_state != is_reinforced)
-			USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		is_reinforced = input == "Secure Reinforcements" ? FRAME_REINFORCED_SECURE : FALSE
-		if (input == "Remove Reinforcements")
-			material.place_sheet(loc, 10)
-			material = null
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [input == "Secure Reinforcements" ? "secures" : "removes"] \the [src]'s internal reinforcements with \a [tool]."),
-			SPAN_NOTICE("You [input == "Secure Reinforcements" ? "secure" : "remove"] \the [src]'s internal reinforcements with \the [tool].")
 		)
 		return TRUE
 

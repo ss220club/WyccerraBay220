@@ -16,6 +16,17 @@
 	var/icon_state_idle = "recharger0" //also when unpowered
 	var/portable = 1
 
+/obj/machinery/recharger/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!portable)
+		return
+	if(charging)
+		to_chat(user, SPAN_WARNING("Remove [charging] first!"))
+		return
+	anchored = !anchored
+	to_chat(user, "You [anchored ? "attached" : "detached"] the recharger.")
+	playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
+
 /obj/machinery/recharger/use_tool(obj/item/G, mob/living/user, list/click_params)
 	var/allowed = 0
 	for (var/allowed_type in allowed_devices)
@@ -43,15 +54,6 @@
 			charging = G
 			update_icon()
 			return TRUE
-
-	if (portable && isWrench(G))
-		if(charging)
-			to_chat(user, SPAN_WARNING("Remove [charging] first!"))
-			return TRUE
-		anchored = !anchored
-		to_chat(user, "You [anchored ? "attached" : "detached"] the recharger.")
-		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
-		return TRUE
 
 	return ..()
 

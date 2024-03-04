@@ -176,6 +176,29 @@ var/global/const/STASISCAGE_WIRE_LOCK      = 4
 		)
 		release()
 
+/obj/machinery/stasis_cage/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(broken)
+		if(health_dead())
+			USE_FEEDBACK_FAILURE("You need to repair the rest of \the [src] first!")
+			return
+		user.visible_message(
+			SPAN_NOTICE("\The [user] begins to clamp \the [src]'s lid back into position."),
+			SPAN_NOTICE("You begin to clamp \the [src]'s lid back into position.")
+		)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		if(!user.skill_check(SKILL_CONSTRUCTION, SKILL_BASIC))
+			to_chat(user, SPAN_WARNING("You fail to repair \the [src]."))
+			return
+		if(!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE))
+			return
+		user.visible_message(
+			SPAN_NOTICE("\The [user] successfully repairs \the [src]'s lid!"),
+			SPAN_NOTICE("You successfully repair \the [src]'s lid!")
+		)
+		broken = FALSE
+		update_icon()
+
 /obj/machinery/stasis_cage/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Coil - Repair cage
 	if (isCoil(tool))
@@ -204,30 +227,6 @@ var/global/const/STASISCAGE_WIRE_LOCK      = 4
 			revive_health()
 			broken = TRUE
 			safety = TRUE
-			update_icon()
-			return TRUE
-
-	// Wrench - Repair lid
-	if (isWrench(tool))
-		if (broken)
-			if (health_dead())
-				USE_FEEDBACK_FAILURE("You need to repair the rest of \the [src] first!")
-				return TRUE
-			user.visible_message(
-				SPAN_NOTICE("\The [user] begins to clamp \the [src]'s lid back into position."),
-				SPAN_NOTICE("You begin to clamp \the [src]'s lid back into position.")
-			)
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-			if (!user.skill_check(SKILL_CONSTRUCTION, SKILL_BASIC))
-				to_chat(user, SPAN_WARNING("You fail to repair \the [src]."))
-				return TRUE
-			if (!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE))
-				return TRUE
-			user.visible_message(
-				SPAN_NOTICE("\The [user] successfully repairs \the [src]'s lid!"),
-				SPAN_NOTICE("You successfully repair \the [src]'s lid!")
-			)
-			broken = FALSE
 			update_icon()
 			return TRUE
 

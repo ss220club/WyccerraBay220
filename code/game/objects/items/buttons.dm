@@ -58,28 +58,32 @@ GLOBAL_LIST_INIT(possible_switch_offsets, list(
 			break
 	return 1
 
-/obj/item/frame/light_switch/attackby(obj/item/tool as obj, mob/user as mob)	//construction
-	if(isWrench(tool))
-		new /obj/item/stack/material/steel( get_turf(src.loc), 1 )
-		qdel(src)
-	else if (isScrewdriver(tool) && isturf(user.loc))
-		var/obj/machinery/light_switch/S = new (user.loc)
+/obj/item/frame/light_switch/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	new /obj/item/stack/material/steel(get_turf(src.loc), 1)
+	qdel(src)
+
+/obj/item/frame/light_switch/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(isturf(user.loc))
+		var/obj/machinery/light_switch/S = new(user.loc)
 		if(position_with_direction(S, user))
 			to_chat(user, "You fasten \the [S] with your [tool].")
 			qdel(src)
 		else
 			qdel(S)
-	else ..()
 
-/obj/item/frame/light_switch/windowtint/attackby(obj/item/tool as obj, mob/user as mob)
-	if(isWrench(tool))
-		new /obj/item/stack/material/steel( get_turf(src.loc), 1 )
-		qdel(src)
-	else if (isScrewdriver(tool) && isturf(user.loc))
+/obj/item/frame/light_switch/windowtint/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	new /obj/item/stack/material/steel(get_turf(src.loc), 1)
+	qdel(src)
+
+/obj/item/frame/light_switch/windowtint/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(isturf(user.loc))
 		var/obj/machinery/button/windowtint/S = new(user.loc)
 		if(position_with_direction(S, user))
 			to_chat(user, "You fasten \the [S] with your [tool].")
 			qdel(src)
 		else
 			qdel(S)
-	else ..()

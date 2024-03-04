@@ -117,12 +117,14 @@ var/global/list/stool_cache = list() //haha stool
 		padding_material.place_sheet(get_turf(src))
 	qdel(src)
 
+/obj/item/stool/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+	dismantle()
+	qdel(src)
+
 /obj/item/stool/attackby(obj/item/W as obj, mob/user as mob)
-	if(isWrench(W))
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		dismantle()
-		qdel(src)
-	else if(istype(W,/obj/item/stack))
+	if(istype(W,/obj/item/stack))
 		if(padding_material)
 			to_chat(user, "\The [src] is already padded.")
 			return

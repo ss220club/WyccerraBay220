@@ -414,6 +414,17 @@
 
 	return
 
+/obj/machinery/portable_atmospherics/hydroponics/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(mechanical)
+		//If there's a connector here, the portable_atmospherics setup can handle it.
+		if(locate(/obj/machinery/atmospherics/portables_connector) in loc)
+			return ..()
+
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		anchored = !anchored
+		to_chat(user, "You [anchored ? "wrench" : "unwrench"] \the [src].")
+
 /obj/machinery/portable_atmospherics/hydroponics/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (O.is_open_container())
 		return FALSE
@@ -505,16 +516,6 @@
 		playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
 		qdel(O)
 		check_health()
-		return TRUE
-
-	if (mechanical && isWrench(O))
-		//If there's a connector here, the portable_atmospherics setup can handle it.
-		if(locate(/obj/machinery/atmospherics/portables_connector) in loc)
-			return ..()
-
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-		anchored = !anchored
-		to_chat(user, "You [anchored ? "wrench" : "unwrench"] \the [src].")
 		return TRUE
 
 	if (mechanical)

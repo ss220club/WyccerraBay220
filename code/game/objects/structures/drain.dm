@@ -11,6 +11,16 @@
 	can_drain = 1
 	var/welded
 
+/obj/structure/hygiene/drain/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/drain/drain_item = new(loc)
+	transfer_fingerprints_to(drain_item)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] unwrenches \the [src] from the floor with \a [tool]."),
+		SPAN_NOTICE("You unwrench \the [src] from the floor with \the [tool].")
+	)
+	qdel(src)
 
 /obj/structure/hygiene/drain/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Welding Tool - Weld the drain closed
@@ -24,18 +34,6 @@
 			SPAN_NOTICE("You [welded ? "un" : "weld"] \the [src] with \the [tool].")
 		)
 		update_icon()
-		return TRUE
-
-	// Wrench - Dismantle drain
-	if (isWrench(tool))
-		var/obj/item/drain/drain_item = new(loc)
-		transfer_fingerprints_to(drain_item)
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] unwrenches \the [src] from the floor with \a [tool]."),
-			SPAN_NOTICE("You unwrench \the [src] from the floor with \the [tool].")
-		)
-		qdel_self()
 		return TRUE
 
 	return ..()
@@ -62,17 +60,15 @@
 	icon_state = "drain"
 	var/constructed_type = /obj/structure/hygiene/drain
 
-/obj/item/drain/attackby(obj/item/thing, mob/user)
-	if(isWrench(thing))
-		if (!isturf(loc))
-			USE_FEEDBACK_FAILURE("\The [src] needs to be placed on the floor before you can secure it.")
-			return TRUE
-		new constructed_type(src.loc)
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		to_chat(user, SPAN_WARNING("[user] wrenches the [src] down."))
-		qdel(src)
+/obj/item/drain/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!isturf(loc))
+		USE_FEEDBACK_FAILURE("\The [src] needs to be placed on the floor before you can secure it.")
 		return
-	return ..()
+	new constructed_type(src.loc)
+	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+	to_chat(user, SPAN_WARNING("[user] wrenches the [src] down."))
+	qdel(src)
 
 /obj/structure/hygiene/drain/bath
 	name = "sealable drain"

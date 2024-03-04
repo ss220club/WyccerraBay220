@@ -79,6 +79,18 @@
 				qdel(src)
 				return
 
+/obj/structure/bed/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (HAS_FLAGS(bed_flags, BED_FLAG_CANNOT_BE_DISMANTLED))
+		USE_FEEDBACK_FAILURE("\The [src] cannot be dismantled.")
+		return TRUE
+	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	dismantle()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+	)
+	qdel_self()
 
 /obj/structure/bed/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Material Stack - Add padding
@@ -124,20 +136,6 @@
 		)
 		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 		remove_padding()
-		return TRUE
-
-	// Wrench - Dismantle
-	if (isWrench(tool))
-		if (HAS_FLAGS(bed_flags, BED_FLAG_CANNOT_BE_DISMANTLED))
-			USE_FEEDBACK_FAILURE("\The [src] cannot be dismantled.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		dismantle()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		qdel_self()
 		return TRUE
 
 	return ..()

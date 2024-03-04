@@ -154,6 +154,26 @@
 		release()
 	GLOB.empd_event.raise_event(src, severity)
 
+/obj/machinery/anomaly_container/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!health_dead)
+		return
+
+	user.visible_message(
+		SPAN_NOTICE("\The [user] begins to wrench apart the bolts on \the [src]..."),
+		SPAN_NOTICE("You begin to wrench apart the bolts on \the [src]...")
+	)
+
+	if(!do_after(user, (tool.toolspeed * 8) SECONDS, src, DO_PUBLIC_UNIQUE))
+		return
+
+	user.visible_message(
+		SPAN_NOTICE("\The [user] carefully loosens off \the [src]'s dented panel with \the [tool], freeing its contents.")
+	)
+
+	playsound(loc, 'sound/items/Ratchet.ogg', 80, 1)
+	release()
+	update_icon()
 
 /obj/machinery/anomaly_container/use_tool(obj/item/P, mob/living/user, list/click_params)
 	if (istype(P, /obj/item/paper))
@@ -207,27 +227,6 @@
 		M.use(10)
 		revive_health()
 		icon_state = "anomaly_container"
-		update_icon()
-		return TRUE
-
-	if (isWrench(P))
-		if (!health_dead)
-			return TRUE
-
-		user.visible_message(
-			SPAN_NOTICE("\The [user] begins to wrench apart the bolts on \the [src]..."),
-			SPAN_NOTICE("You begin to wrench apart the bolts on \the [src]...")
-		)
-
-		if(!do_after(user, (P.toolspeed * 8) SECONDS, src, DO_PUBLIC_UNIQUE))
-			return TRUE
-
-		user.visible_message(
-			SPAN_NOTICE("\The [user] carefully loosens off \the [src]'s dented panel with \the [P], freeing its contents.")
-		)
-
-		playsound(loc, 'sound/items/Ratchet.ogg', 80, 1)
-		release()
 		update_icon()
 		return TRUE
 	return ..()

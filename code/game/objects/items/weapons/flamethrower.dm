@@ -105,9 +105,9 @@
 		to_chat(user, SPAN_NOTICE("\The [igniter] is now [status ? "secured" : "unsecured"]!"))
 		update_icon()
 
-/obj/item/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
-	if(user.stat || user.restrained() || user.lying)	return
-	if(isWrench(W) && !status && !complete)//Taking this apart
+/obj/item/flamethrower/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!status && !complete)
 		if(weldtool)
 			weldtool.dropInto(loc)
 			weldtool = null
@@ -119,12 +119,14 @@
 			beaker = null
 		new /obj/item/stack/material/rods(get_turf(src))
 		qdel(src)
-		return
 
+/obj/item/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
 	if(isigniter(W))
 		var/obj/item/device/assembly/igniter/I = W
-		if(I.secured)	return
-		if(igniter)		return
+		if(I.secured)
+			return
+		if(igniter)
+			return
 		if(!user.unEquip(I, src))
 			return
 		igniter = I

@@ -89,11 +89,12 @@
 		return TRUE // Don't kill this processing loop unless we're not powered.
 	. = ..()
 
-/obj/machinery/reagent_temperature/use_tool(obj/item/thing, mob/living/user, list/click_params)
-	if(isWrench(thing) && use_power == POWER_USE_ACTIVE)
+/obj/machinery/reagent_temperature/wrench_act(mob/living/user, obj/item/tool)
+	if(use_power == POWER_USE_ACTIVE)
 		to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
-		return TRUE
+		return ITEM_INTERACT_SUCCESS
 
+/obj/machinery/reagent_temperature/use_tool(obj/item/thing, mob/living/user, list/click_params)
 	if(thing.reagents)
 		for(var/checktype in permitted_types)
 			if(istype(thing, checktype))
@@ -108,7 +109,7 @@
 		to_chat(user, SPAN_WARNING("\The [src] cannot accept \the [thing]."))
 		return TRUE
 
-	return ..()
+	. = ..()
 
 /obj/machinery/reagent_temperature/on_update_icon()
 	ClearOverlays()

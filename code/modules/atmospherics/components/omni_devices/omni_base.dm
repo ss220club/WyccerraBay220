@@ -76,28 +76,25 @@
 		return 0
 	return 1
 
-/obj/machinery/atmospherics/omni/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(!isWrench(W))
-		return ..()
-
+/obj/machinery/atmospherics/omni/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	var/int_pressure = 0
 	for(var/datum/omni_port/P in ports)
 		int_pressure += P.air.return_pressure()
 	var/datum/gas_mixture/env_air = loc.return_air()
-	if ((int_pressure - env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+	if((int_pressure - env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
 		to_chat(user, SPAN_WARNING("You cannot unwrench \the [src], it is too exerted due to internal pressure."))
-		return TRUE
+		return
 	to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src]..."))
 	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-	if (!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
-		return TRUE
+	if(!do_after(user, (tool.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		return
 	user.visible_message( \
 		SPAN_NOTICE("\The [user] unfastens \the [src]."), \
 		SPAN_NOTICE("You have unfastened \the [src]."), \
 		"You hear a ratchet.")
 	new /obj/item/pipe(loc, src)
 	qdel(src)
-	return TRUE
 
 /obj/machinery/atmospherics/omni/interface_interact(mob/user)
 	ui_interact(user)

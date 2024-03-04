@@ -93,17 +93,53 @@
 
 /obj/structure/table/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!carpeted)
-		USE_FEEDBACK_FAILURE("\The [src] has no carpeting to remove.")
-		return TRUE
-	new /obj/item/stack/tile/carpet(loc)
-	carpeted = FALSE
-	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("\The [user] removes the carpting from \the [src] with \a [tool]."),
-		SPAN_NOTICE("You remove the carpting from \the [src] with \the [tool].")
-	)
-	return TRUE
+	if(user.a_intent == I_HURT)
+		if(!carpeted)
+			USE_FEEDBACK_FAILURE("\The [src] has no carpeting to remove.")
+			return
+		new /obj/item/stack/tile/carpet(loc)
+		carpeted = FALSE
+		update_icon()
+		user.visible_message(
+			SPAN_NOTICE("\The [user] removes the carpting from \the [src] with \a [tool]."),
+			SPAN_NOTICE("You remove the carpting from \the [src] with \the [tool].")
+		)
+
+/obj/structure/table/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(user.a_intent == I_HURT)
+		if (!reinforced)
+			USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to remove.")
+			return
+		remove_reinforced(tool, user)
+		if (!reinforced)
+			update_desc()
+			update_icon()
+			update_material()
+
+/obj/structure/table/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(user.a_intent == I_HURT)
+		if (!material)
+			dismantle(tool, user)
+			return TRUE
+		if (reinforced)
+			USE_FEEDBACK_FAILURE("\The [src]'s reinforcements need to be removed before you can remove the plating.")
+			return TRUE
+		if (carpeted)
+			USE_FEEDBACK_FAILURE("\The [src]'s carpeting needs to be removed before you can remove the plating.")
+			return TRUE
+		remove_material(tool, user)
+		if (!material)
+			update_connections(TRUE)
+			update_icon()
+			for (var/obj/structure/table/table in oview(src, 1))
+				table.update_icon()
+			update_desc()
+			update_material()
+		return
+	if(can_plate && !material)
+		dismantle(tool, user)
 
 /obj/structure/table/use_weapon(obj/item/weapon, mob/user, list/click_params)
 	// Carpet - Add carpeting
@@ -170,45 +206,11 @@
 		)
 		return TRUE
 
-	// Wrench - Remove material
-	if (isWrench(weapon))
-		if (!material)
-			dismantle(weapon, user)
-			return TRUE
-		if (reinforced)
-			USE_FEEDBACK_FAILURE("\The [src]'s reinforcements need to be removed before you can remove the plating.")
-			return TRUE
-		if (carpeted)
-			USE_FEEDBACK_FAILURE("\The [src]'s carpeting needs to be removed before you can remove the plating.")
-			return TRUE
-		remove_material(weapon, user)
-		if (!material)
-			update_connections(TRUE)
-			update_icon()
-			for (var/obj/structure/table/table in oview(src, 1))
-				table.update_icon()
-			update_desc()
-			update_material()
-		return TRUE
-
-	// Screwdriver - Remove reinforcement
-	if (isScrewdriver(weapon))
-		if (!reinforced)
-			USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to remove.")
-			return TRUE
-		remove_reinforced(weapon, user)
-		if (!reinforced)
-			update_desc()
-			update_icon()
-			update_material()
-		return TRUE
-
 	return ..()
 
 
 /obj/structure/table/use_tool(obj/item/tool, mob/user, list/click_params)
 	SHOULD_CALL_PARENT(FALSE)
-
 	// Unfinished table - Construction stuff
 	if (can_plate && !material)
 		// Material - Plate table
@@ -220,23 +222,15 @@
 				update_desc()
 				update_material()
 			return TRUE
-
-		// Wrench - Dismantle
-		if (isWrench(tool))
-			dismantle(tool, user)
-			return TRUE
-
 		// Anything else - Can't put it on an unfinished table
 		USE_FEEDBACK_FAILURE("\The [src] needs to be plated before you can put \the [tool] on it.")
 		return TRUE
-
 	// Put things on table
 	if (!user.unEquip(tool, loc))
 		FEEDBACK_UNEQUIP_FAILURE(user, tool)
 		return TRUE
 	auto_align(tool, click_params)
 	return TRUE
-
 
 /obj/structure/table/MouseDrop_T(atom/dropped, mob/user)
 	// Place held objects on table
@@ -329,9 +323,6 @@
 	material = common_material_remove(user, material, (W.toolspeed * 2) SECONDS, "plating", "bolts", 'sound/items/Ratchet.ogg')
 
 /obj/structure/table/proc/dismantle(obj/item/W, mob/user)
-	if (!isWrench(W))
-		return
-
 	reset_mobs_offset()
 	if(manipulating) return
 	manipulating = 1

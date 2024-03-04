@@ -194,16 +194,15 @@
 		state = EMITTER_LOOSE
 	..()
 
+/obj/machinery/power/emitter/wrench_act(mob/living/user, obj/item/tool)
+	if(active)
+		to_chat(user, SPAN_WARNING("Turn \the [src] off first."))
+		return ITEM_INTERACT_SUCCESS
+	if(state == EMITTER_WELDED)
+		to_chat(user, SPAN_WARNING("\The [src] needs to be unwelded from the floor before you raise its bolts."))
+		return ITEM_INTERACT_SUCCESS
+
 /obj/machinery/power/emitter/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isWrench(W))
-		if (active)
-			to_chat(user, SPAN_WARNING("Turn \the [src] off first."))
-			return TRUE
-
-		if (state == EMITTER_WELDED)
-			to_chat(user, SPAN_WARNING("\The [src] needs to be unwelded from the floor before you raise its bolts."))
-			return TRUE
-
 	if (isWelder(W))
 		var/obj/item/weldingtool/WT = W
 		if (active)

@@ -94,6 +94,15 @@ var/global/list/rad_collectors = list()
 	if(P && !locked)
 		eject()
 
+/obj/machinery/power/rad_collector/wrench_act(mob/living/user, obj/item/tool)
+	if(P)
+		to_chat(user, SPAN_NOTICE("Remove the phoron tank first."))
+		return ITEM_INTERACT_SUCCESS
+	for(var/obj/machinery/power/rad_collector/R in get_turf(src))
+		if(R != src)
+			to_chat(user, SPAN_WARNING("You cannot install more than one collector on the same spot."))
+			return ITEM_INTERACT_SUCCESS
+
 /obj/machinery/power/rad_collector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/tank/phoron))
 		if(!anchored)
@@ -107,15 +116,6 @@ var/global/list/rad_collectors = list()
 		P = W
 		update_icon()
 		return TRUE
-
-	if (isWrench(W))
-		if(P)
-			to_chat(user, SPAN_NOTICE("Remove the phoron tank first."))
-			return TRUE
-		for(var/obj/machinery/power/rad_collector/R in get_turf(src))
-			if(R != src)
-				to_chat(user, SPAN_WARNING("You cannot install more than one collector on the same spot."))
-				return TRUE
 
 	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/modular_computer))
 		if (allowed(user))

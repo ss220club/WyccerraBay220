@@ -9,17 +9,6 @@
 /// True when A exists and can be used as a cable coil.
 #define isCoil(A) (A?.IsCoil())
 
-/// True when this atom can be used as a multitool.
-/atom/proc/IsMultitool()
-	return FALSE
-
-/// Defines the base multitool as useable as a multitool.
-/obj/item/device/multitool/IsMultitool()
-	return TRUE
-
-/// True when A exists and can be used as a multitool.
-#define isMultitool(A) (A?.IsMultitool())
-
 /// True when this atom can be used as a hatchet.
 /atom/proc/IsHatchet()
 	return FALSE

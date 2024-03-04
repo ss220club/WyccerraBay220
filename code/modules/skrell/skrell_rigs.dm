@@ -219,12 +219,7 @@
 	icon_state = "skrell_multitool"
 	usable = FALSE
 	selectable = TRUE
-
-/obj/item/rig_module/device/multitool/skrell/IsMultitool()
-	if(holder)
-		return TRUE
-	else
-		return FALSE
+	tool_behaviour = TOOL_MULTITOOL
 
 /obj/item/rig_module/device/cable_coil/skrell
 	name = "skrellian cable extruder"

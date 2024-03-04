@@ -192,7 +192,7 @@
 					to_chat(user, SPAN_NOTICE("You weld the cables into places."))
 					buildstate++
 		if(14)
-			if(isMultitool(tool))
+			if(tool.tool_behaviour == TOOL_MULTITOOL)
 				to_chat(user, SPAN_NOTICE("You reprogrammed the resulting internal device with [tool]."))
 				buildstate++
 		if(15)

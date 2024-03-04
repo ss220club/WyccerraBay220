@@ -1000,6 +1000,10 @@ About the new airlock wires panel:
 		close(1)
 		return
 
+/obj/machinery/door/airlock/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	attack_hand(user)
+
 /obj/machinery/door/airlock/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (p_open)
@@ -1018,6 +1022,10 @@ About the new airlock wires panel:
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
 		update_icon()
 		return TRUE
+
+/obj/machinery/door/airlock/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	attack_hand(user)
 
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)
 	// Brace is considered installed on the airlock, so interacting with it is protected from electrification.
@@ -1067,7 +1075,7 @@ About the new airlock wires panel:
 			to_chat(user, SPAN_NOTICE("You must remain still to complete this task."))
 			return TRUE
 
-	if (isWirecutter(C) || isMultitool(C) || istype(C, /obj/item/device/assembly/signaler))
+	if (istype(C, /obj/item/device/assembly/signaler))
 		return attack_hand(user)
 
 	if (istype(C, /obj/item/pai_cable))

@@ -46,6 +46,11 @@ var/global/bomb_set
 			addtimer(CALLBACK(src, PROC_REF(explode)), 0)
 		SSnano.update_uis(src)
 
+/obj/machinery/nuclearbomb/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
 /obj/machinery/nuclearbomb/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	ClearOverlays()
@@ -64,10 +69,12 @@ var/global/bomb_set
 			to_chat(user, "You screw the control panel of [src] back on.")
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 
-/obj/machinery/nuclearbomb/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(panel_open && isMultitool(O) || isWirecutter(O))
-		return attack_hand(user)
+/obj/machinery/nuclearbomb/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
 
+/obj/machinery/nuclearbomb/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(extended)
 		if(istype(O, /obj/item/disk/nuclear))
 			if(!user.unEquip(O, src))

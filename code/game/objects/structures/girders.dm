@@ -170,6 +170,32 @@
 	)
 	reset_girder()
 
+/obj/structure/girder/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	switch (state)
+		if (GIRDER_STATE_NORMAL)
+			USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to remove.")
+		if (GIRDER_STATE_REINFORCEMENT_UNSECURED)
+			playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+			user.visible_message(
+				SPAN_NOTICE("\The [user] starts removing \the [src]'s support struts with \a [tool]."),
+				SPAN_NOTICE("You start removing \the [src]'s support struts with \the [tool].")
+			)
+			if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+				return
+			if (state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
+				USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+				return
+			playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+			if (reinf_material)
+				reinf_material.place_dismantled_product(get_turf(src))
+				reinf_material = null
+			reset_girder()
+			user.visible_message(
+				SPAN_NOTICE("\The [user] removes \the [src]'s support struts with \a [tool]."),
+				SPAN_NOTICE("You remove \the [src]'s support struts with \the [tool].")
+			)
+
 /obj/structure/girder/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Diamond Drill, Plasmacutter, Psiblade (Paramount) - Slice girder
 	if (istype(tool, /obj/item/pickaxe/diamonddrill) || istype(tool, /obj/item/gun/energy/plasmacutter) || istype(tool, /obj/item/psychic_power/psiblade/master/grand/paramount))
@@ -200,34 +226,6 @@
 			return TRUE
 		construct_wall(tool, user)
 		return TRUE
-
-	// Wirecutters - Remove reinforcement
-	if (isWirecutter(tool))
-		switch (state)
-			if (GIRDER_STATE_NORMAL)
-				USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to remove.")
-				return TRUE
-			if (GIRDER_STATE_REINFORCEMENT_UNSECURED)
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-				user.visible_message(
-					SPAN_NOTICE("\The [user] starts removing \the [src]'s support struts with \a [tool]."),
-					SPAN_NOTICE("You start removing \the [src]'s support struts with \the [tool].")
-				)
-				if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-					return TRUE
-				if (state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
-					USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-					return TRUE
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-				if (reinf_material)
-					reinf_material.place_dismantled_product(get_turf(src))
-					reinf_material = null
-				reset_girder()
-				user.visible_message(
-					SPAN_NOTICE("\The [user] removes \the [src]'s support struts with \a [tool]."),
-					SPAN_NOTICE("You remove \the [src]'s support struts with \the [tool].")
-				)
-				return TRUE
 
 	return ..()
 

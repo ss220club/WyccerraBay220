@@ -70,14 +70,27 @@
 	else
 		to_chat(user, SPAN_WARNING("\The [src] cannot process \the [thing]."))
 
+/obj/machinery/fabricator/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(stat)
+		to_chat(user, SPAN_WARNING("\The [src] is not operating."))
+		return
+	if(panel_open)
+		attack_hand(user)
+
+/obj/machinery/fabricator/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(stat)
+		to_chat(user, SPAN_WARNING("\The [src] is not operating."))
+		return
+	if(panel_open)
+		attack_hand(user)
+
 /obj/machinery/fabricator/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if ((. = ..()))
 		return
 	if(stat)
 		to_chat(user, SPAN_WARNING("\The [src] is not operating."))
-		return TRUE
-	if(panel_open && (isMultitool(O) || isWirecutter(O)))
-		attack_hand(user)
 		return TRUE
 	// Take reagents, if any are applicable.
 	var/reagents_taken = take_reagents(O, user)

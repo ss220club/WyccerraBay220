@@ -166,6 +166,35 @@
 	)
 	qdel(src)
 
+/obj/structure/door_assembly/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (state < ASSEMBLY_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		return
+	if (state > ASSEMBLY_STATE_WIRED)
+		return
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts cutting \the [src]'s wires with \a [tool]."),
+		SPAN_NOTICE("You start cutting \the [src]'s wires with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (state < ASSEMBLY_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		return
+	if (state > ASSEMBLY_STATE_WIRED)
+		return
+	var/obj/item/stack/cable_coil/cable = new(loc, 1)
+	cable.add_fingerprint(user, tool = tool)
+	state = ASSEMBLY_STATE_FRAME
+	update_state()
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts \the [src]'s wires with \a [tool]."),
+		SPAN_NOTICE("You cut \the [src]'s wires with \the [tool].")
+	)
+
 /obj/structure/door_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Airlock Electronics - Install circuit
 	if (istype(tool, /obj/item/airlock_electronics))
@@ -386,38 +415,6 @@
 			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
 		)
 		qdel_self()
-		return TRUE
-
-	// Wirecutter - Remove wires
-	if (isWirecutter(tool))
-		if (state < ASSEMBLY_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (state > ASSEMBLY_STATE_WIRED)
-			// TODO: Feedback message
-			return TRUE
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts cutting \the [src]'s wires with \a [tool]."),
-			SPAN_NOTICE("You start cutting \the [src]'s wires with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (state < ASSEMBLY_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (state > ASSEMBLY_STATE_WIRED)
-			// TODO: Feedback message
-			return TRUE
-		var/obj/item/stack/cable_coil/cable = new(loc, 1)
-		cable.add_fingerprint(user, tool = tool)
-		state = ASSEMBLY_STATE_FRAME
-		update_state()
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src]'s wires with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wires with \the [tool].")
-		)
 		return TRUE
 
 	return ..()

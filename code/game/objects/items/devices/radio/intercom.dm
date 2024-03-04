@@ -231,6 +231,24 @@
 	)
 	qdel(src)
 
+/obj/item/device/radio/intercom/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (buildstage < 2)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		return
+	if (!wiresexposed)
+		USE_FEEDBACK_FAILURE("\The [src]'s wire panel needs to be opened before you can cut the wiring.")
+		return
+	new /obj/item/stack/cable_coil(get_turf(src), 5)
+	b_stat = FALSE
+	buildstage = 1
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts \a [src]'s wiring with \a [tool]."),
+		SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
+	)
+
 /obj/item/device/radio/intercom/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
 	if (isCoil(tool))
@@ -269,26 +287,6 @@
 		)
 		qdel(tool)
 		return TRUE
-
-	// Wirecutters - Cut wiring
-	if (isWirecutter(tool))
-		if (buildstage < 2)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (!wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wire panel needs to be opened before you can cut the wiring.")
-			return TRUE
-		new /obj/item/stack/cable_coil(get_turf(src), 5)
-		b_stat = FALSE
-		buildstage = 1
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \a [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
-		)
-		return TRUE
-
 	return ..()
 
 

@@ -135,6 +135,37 @@
 		SPAN_NOTICE("You start removing \the [src]'s circuits with \the [tool].")
 	)
 
+/obj/structure/windoor_assembly/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (state != WINDOOR_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		return
+	if (electronics)
+		USE_FEEDBACK_FAILURE("\The [src]'s electronics need to be removed before you can cut the wiring.")
+		return
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts cutting \the [src]'s wiring with \a [tool]."),
+		SPAN_NOTICE("You start cutting \the [src]'s wiring with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (state != WINDOOR_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		return
+	if (electronics)
+		USE_FEEDBACK_FAILURE("\The [src]'s electronics need to be removed before you can cut the wiring.")
+		return
+	var/obj/item/stack/cable_coil/cable = new (loc, 1)
+	cable.add_fingerprint(user, tool = tool)
+	state = WINDOOR_STATE_FRAME
+	update_icon()
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
+		SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
+	)
+
 /obj/structure/windoor_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Airlock electronics - Install electronics
 	if (istype(tool, /obj/item/airlock_electronics))
@@ -240,38 +271,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] reinforces \the [src] with some [tool.name]."),
 			SPAN_NOTICE("You reinforce \the [src] with some [tool.name].")
-		)
-		return TRUE
-
-	// Wirecutter - Remove wiring
-	if (isWirecutter(tool))
-		if (state != WINDOOR_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (electronics)
-			USE_FEEDBACK_FAILURE("\The [src]'s electronics need to be removed before you can cut the wiring.")
-			return TRUE
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts cutting \the [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You start cutting \the [src]'s wiring with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (state != WINDOOR_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (electronics)
-			USE_FEEDBACK_FAILURE("\The [src]'s electronics need to be removed before you can cut the wiring.")
-			return TRUE
-		var/obj/item/stack/cable_coil/cable = new (loc, 1)
-		cable.add_fingerprint(user, tool = tool)
-		state = WINDOOR_STATE_FRAME
-		update_icon()
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
 		)
 		return TRUE
 

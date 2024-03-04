@@ -34,6 +34,16 @@
 	/// String. The body bag's label, if set.
 	var/label = null
 
+/obj/structure/closet/body_bag/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!label)
+		USE_FEEDBACK_FAILURE("\The [src] has no label to remove.")
+		return
+	set_label(null)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \the [src]'s label with \a [tool]."),
+		SPAN_NOTICE("You remove \the [src]'s label with \the [tool].")
+	)
 
 /obj/structure/closet/body_bag/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Pen - Set label
@@ -46,18 +56,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] labels \the [src] with \a [tool]."),
 			SPAN_NOTICE("You set \the [src]'s label with \the [tool] to: [SPAN_INFO("'[label]'")]")
-		)
-		return TRUE
-
-	// Wirecutters - Remove label
-	if (isWirecutter(tool))
-		if (!label)
-			USE_FEEDBACK_FAILURE("\The [src] has no label to remove.")
-			return TRUE
-		set_label(null)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [src]'s label with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src]'s label with \the [tool].")
 		)
 		return TRUE
 

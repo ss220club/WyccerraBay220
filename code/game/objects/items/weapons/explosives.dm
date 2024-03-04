@@ -29,11 +29,19 @@
 	open_panel = !open_panel
 	to_chat(user, SPAN_NOTICE("You [open_panel ? "open" : "close"] the wire panel."))
 
+/obj/item/plastique/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	wires.Interact(user)
+
+/obj/item/plastique/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	wires.Interact(user)
+
 /obj/item/plastique/attackby(obj/item/I, mob/user)
-	if(isWirecutter(I) || isMultitool(I) || istype(I, /obj/item/device/assembly/signaler ))
+	if(istype(I, /obj/item/device/assembly/signaler))
 		wires.Interact(user)
-	else
-		..()
+		return
+	. = ..()
 
 /obj/item/plastique/attack_self(mob/user as mob)
 	var/newtime = input(usr, "Please set the timer.", "Timer", 10) as num

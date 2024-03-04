@@ -9,6 +9,28 @@
 	obj_flags = OBJ_FLAG_ANCHORABLE
 	var/wired = 0
 
+/obj/structure/firedoor_assembly/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!wired)
+		USE_FEEDBACK_FAILURE("\The [src] has no wires to cut.")
+		return
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts cutting \the [src]'s wires with \a [tool]."),
+		SPAN_NOTICE("You start cutting \the [src]'s wires with \the [tool].")
+	)
+	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if(!wired)
+		USE_FEEDBACK_FAILURE("\The [src] has no wires to cut.")
+		return
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	new /obj/item/stack/cable_coil(loc, 1)
+	wired = FALSE
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts \the [src]'s wires with \a [tool]."),
+		SPAN_NOTICE("You cut \the [src]'s wires with \the [tool].")
+	)
 
 /obj/structure/firedoor_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Air Alarm Electronics - Install circuit
@@ -87,30 +109,6 @@
 			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
 		)
 		qdel_self()
-		return TRUE
-
-	// Wirecutters - Cut wires
-	if (isWirecutter(tool))
-		if (!wired)
-			USE_FEEDBACK_FAILURE("\The [src] has no wires to cut.")
-			return TRUE
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts cutting \the [src]'s wires with \a [tool]."),
-			SPAN_NOTICE("You start cutting \the [src]'s wires with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!wired)
-			USE_FEEDBACK_FAILURE("\The [src] has no wires to cut.")
-			return TRUE
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		new /obj/item/stack/cable_coil(loc, 1)
-		wired = FALSE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src]'s wires with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wires with \the [tool].")
-		)
 		return TRUE
 
 	return ..()

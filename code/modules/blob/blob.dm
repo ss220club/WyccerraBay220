@@ -176,32 +176,26 @@
 	damage_health(damage, Proj.damage_type)
 	return 0
 
-
-/obj/blob/use_tool(obj/item/tool, mob/user, list/click_params)
-	if (isWirecutter(tool))
-		if (pruned)
-			USE_FEEDBACK_FAILURE("\The [src] has already been pruned.")
-			return TRUE
-		if (prob(user.skill_fail_chance(SKILL_SCIENCE, 90, SKILL_EXPERIENCED)))
-			USE_FEEDBACK_FAILURE("You fail to collect a sample from \the [src].")
-			return TRUE
-		var/obj/item/sample = new product(user.loc)
-		sample.add_fingerprint(user, tool = tool)
-		pruned = TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] collects \a [sample] from \the [src] with \a [tool]."),
-			SPAN_NOTICE("You collect \a [sample] from \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
+/obj/blob/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (pruned)
+		USE_FEEDBACK_FAILURE("\The [src] has already been pruned.")
+		return
+	if (prob(user.skill_fail_chance(SKILL_SCIENCE, 90, SKILL_EXPERIENCED)))
+		USE_FEEDBACK_FAILURE("You fail to collect a sample from \the [src].")
+		return
+	var/obj/item/sample = new product(user.loc)
+	sample.add_fingerprint(user, tool = tool)
+	pruned = TRUE
+	user.visible_message(
+		SPAN_NOTICE("\The [user] collects \a [sample] from \the [src] with \a [tool]."),
+		SPAN_NOTICE("You collect \a [sample] from \the [src] with \the [tool].")
+	)
 
 /obj/blob/post_use_item(obj/item/tool, mob/user, interaction_handled, use_call, click_params)
 	. = ..()
 	if (interaction_handled && use_call == "weapon" && isWelder(tool))
 		playsound(loc, 'sound/items/Welder.ogg', 100, TRUE)
-
 
 /obj/blob/core
 	name = "master nucleus"

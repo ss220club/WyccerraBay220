@@ -105,22 +105,22 @@
 			to_chat(user, SPAN_WARNING("You have to unscrew the case first."))
 			return
 
-/obj/machinery/light_construct/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWirecutter(W))
-		if (stage != LIGHT_STAGE_WIRED)
-			to_chat(user, SPAN_WARNING("There are no exposed wires to cut!"))
-			return TRUE
-		stage = LIGHT_STAGE_EMPTY
-		update_icon()
-		new /obj/item/stack/cable_coil(get_turf(loc), 1, "red")
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts the wires from \the [src]."),
-			SPAN_NOTICE("You cut \the [src]'s wires and remove them from the frame'."),
-			SPAN_ITALIC("You hear snipping and cables being cut.")
-		)
-		playsound(loc, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		return TRUE
+/obj/machinery/light_construct/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (stage != LIGHT_STAGE_WIRED)
+		to_chat(user, SPAN_WARNING("There are no exposed wires to cut!"))
+		return
+	stage = LIGHT_STAGE_EMPTY
+	update_icon()
+	new /obj/item/stack/cable_coil(get_turf(loc), 1, "red")
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts the wires from \the [src]."),
+		SPAN_NOTICE("You cut \the [src]'s wires and remove them from the frame'."),
+		SPAN_ITALIC("You hear snipping and cables being cut.")
+	)
+	playsound(loc, 'sound/items/Wirecutter.ogg', 50, TRUE)
 
+/obj/machinery/light_construct/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/stack/cable_coil))
 		if (stage != LIGHT_STAGE_EMPTY)
 			to_chat(user, SPAN_WARNING("There is no exposed, empty area to wire!"))

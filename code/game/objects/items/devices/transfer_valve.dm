@@ -20,6 +20,16 @@
 /obj/item/device/transfer_valve/IsAssemblyHolder()
 	return TRUE
 
+/obj/item/device/transfer_valve/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!armed)
+		USE_FEEDBACK_FAILURE("\The [src] isn't armed.")
+		return
+	if (!panel_open)
+		USE_FEEDBACK_FAILURE("\The [src]'s panel is closed.")
+		return
+	wires.Interact(user)
+
 /obj/item/device/transfer_valve/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!tank_one || !tank_two || !attached_device)
@@ -31,6 +41,16 @@
 		SPAN_NOTICE("\The [user] [panel_open ? "opens" : "closes"] \a [src]'s control panel with \a [tool]."),
 		SPAN_NOTICE("You [panel_open ? "open" : "close"] \the [src]'s control panel with \the [tool].")
 	)
+
+/obj/item/device/transfer_valve/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!armed)
+		USE_FEEDBACK_FAILURE("\The [src] isn't armed.")
+		return
+	if (!panel_open)
+		USE_FEEDBACK_FAILURE("\The [src]'s panel is closed.")
+		return
+	wires.Interact(user)
 
 /obj/item/device/transfer_valve/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Assembly - Attach device
@@ -59,17 +79,6 @@
 			SPAN_NOTICE("\The [user] attaches \a [tool] to \a [src]."),
 			SPAN_NOTICE("You attach \the [tool] to \the [src].")
 		)
-		return TRUE
-
-	// Multitool, Wirecutters - Open wire panel
-	if (isMultitool(tool) || isWirecutter(tool))
-		if (!armed)
-			USE_FEEDBACK_FAILURE("\The [src] isn't armed.")
-			return TRUE
-		if (!panel_open)
-			USE_FEEDBACK_FAILURE("\The [src]'s panel is closed.")
-			return TRUE
-		wires.Interact(user)
 		return TRUE
 
 	// Tank - Attach tank

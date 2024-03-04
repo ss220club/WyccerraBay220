@@ -108,6 +108,11 @@
 	I.layer = ABOVE_WINDOW_LAYER
 	AddOverlays(I)
 
+/obj/machinery/smartfridge/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
 /obj/machinery/smartfridge/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	panel_open = !panel_open
@@ -115,12 +120,12 @@
 	update_icon()
 	SSnano.update_uis(src)
 
-/obj/machinery/smartfridge/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(isMultitool(O) || isWirecutter(O))
-		if(panel_open)
-			attack_hand(user)
-		return TRUE
+/obj/machinery/smartfridge/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
 
+/obj/machinery/smartfridge/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(!is_powered())
 		to_chat(user, SPAN_NOTICE("\The [src] is unpowered and useless."))
 		return TRUE

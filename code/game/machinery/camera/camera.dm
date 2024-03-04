@@ -164,6 +164,11 @@
 		kill_health()
 		return TRUE
 
+/obj/machinery/camera/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		wires.Interact(user)
+
 /obj/machinery/camera/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	panel_open = !panel_open
@@ -173,14 +178,14 @@
 	)
 	playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 
+/obj/machinery/camera/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		wires.Interact(user)
+
 /obj/machinery/camera/use_tool(obj/item/W, mob/living/user, list/click_params)
 	update_coverage()
 	var/datum/wires/camera/camera_wires = wires
-
-	if ((isWirecutter(W) || isMultitool(W)) && panel_open)
-		wires.Interact(user)
-		return TRUE
-
 	if (isWelder(W) && (camera_wires.CanDeconstruct() || (MACHINE_IS_BROKEN(src))))
 		if(weld(W, user))
 			if(assembly)

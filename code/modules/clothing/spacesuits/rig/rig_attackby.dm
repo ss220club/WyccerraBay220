@@ -6,6 +6,13 @@
 	open = !open
 	to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the access panel."))
 
+/obj/item/rig/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!p_open)
+		to_chat(user, "You can't reach the wiring.")
+		return
+	wires.Interact(user)
+
 /obj/item/rig/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	p_open = !p_open
@@ -76,8 +83,16 @@
 			installed_modules -= removed
 			update_icon()
 
+/obj/item/rig/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!p_open)
+		to_chat(user, "You can't reach the wiring.")
+		return
+	wires.Interact(user)
+
 /obj/item/rig/attackby(obj/item/W as obj, mob/user as mob)
-	if(!istype(user,/mob/living)) return 0
+	if(!isliving(user))
+		return
 
 	if(electrified != 0)
 		if(shock(user)) //Handles removing charge from the cell, as well. No need to do that here.
@@ -106,15 +121,6 @@
 		locked = !locked
 		to_chat(user, "You [locked ? "lock" : "unlock"] \the [src] access panel.")
 		return
-
-	// Hacking.
-	else if(isWirecutter(W) || isMultitool(W))
-		if(p_open)
-			wires.Interact(user)
-		else
-			to_chat(user, "You can't reach the wiring.")
-		return
-
 	if(open)
 		// Air tank.
 		if(istype(W,/obj/item/tank)) //Todo, some kind of check for suits without integrated air supplies.

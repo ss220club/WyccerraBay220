@@ -480,6 +480,10 @@
 		SPAN_NOTICE("You wind \the [src]'s tape back in with \the [tool].")
 	)
 
+/obj/item/device/tape/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	cut(user)
+
 /obj/item/device/tape/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Magnetic Tape - Join tape
 	if (istype(tool, /obj/item/device/tape/loose))
@@ -498,14 +502,7 @@
 			SPAN_NOTICE("You label \the [src] with \the [tool].")
 		)
 		return TRUE
-
-	// Wirecutter - Cut tape
-	if (isWirecutter(tool))
-		cut(user)
-		return TRUE
-
 	. = ..()
-
 
 /obj/item/device/tape/proc/cut(mob/user)
 	if(!LAZYLEN(timestamp))

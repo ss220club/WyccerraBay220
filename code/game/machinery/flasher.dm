@@ -33,16 +33,13 @@
 //		src.sd_SetLuminosity(0)
 
 //Don't want to render prison breaks impossible
-/obj/machinery/flasher/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWirecutter(W))
-		disable = !disable
-		user.visible_message(
-			SPAN_WARNING("\The [user] has [disable ? "dis" : ""]connected \the [src]'s flashbulb!"),
-			SPAN_WARNING("You [disable? "dis" : ""]connect \the [src]'s flashbulb!")
-		)
-		return TRUE
-
-	return ..()
+/obj/machinery/flasher/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	disable = !disable
+	user.visible_message(
+		SPAN_WARNING("\The [user] has [disable ? "dis" : ""]connected \the [src]'s flashbulb!"),
+		SPAN_WARNING("You [disable? "dis" : ""]connect \the [src]'s flashbulb!")
+	)
 
 //Let the AI trigger them directly.
 /obj/machinery/flasher/attack_ai()

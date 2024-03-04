@@ -54,25 +54,22 @@
 	USE_FEEDBACK_FAILURE("You must use wirecutters to remove \the [src].")
 
 
-/obj/structure/sign/poster/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/sign/poster/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Wirecutters - Remove poster
-	if (isWirecutter(tool))
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		if (ruined)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] removes the remnants of \the [src] with \a [tool]."),
-				SPAN_NOTICE("You remove the remnants of \the [src] with \the [tool].")
-			)
-			qdel_self()
-		else
-			user.visible_message(
-				SPAN_NOTICE("\The [user] removes \the [src] with \a [tool]."),
-				SPAN_NOTICE("You remove \the [src] with \the [tool].")
-			)
-			roll_and_drop(user.loc)
-		return TRUE
-
-	return ..()
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	if (ruined)
+		user.visible_message(
+			SPAN_NOTICE("\The [user] removes the remnants of \the [src] with \a [tool]."),
+			SPAN_NOTICE("You remove the remnants of \the [src] with \the [tool].")
+		)
+		qdel_self()
+	else
+		user.visible_message(
+			SPAN_NOTICE("\The [user] removes \the [src] with \a [tool]."),
+			SPAN_NOTICE("You remove \the [src] with \the [tool].")
+		)
+		roll_and_drop(user.loc)
 
 
 /obj/structure/sign/poster/attack_hand(mob/user as mob)

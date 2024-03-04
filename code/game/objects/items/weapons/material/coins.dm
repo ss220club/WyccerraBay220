@@ -79,6 +79,18 @@
 		range = 5
 	)
 
+/obj/item/material/coin/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(isnull(string_color))
+		return
+	new /obj/item/stack/cable_coil (get_turf(user), 1, string_color)
+	user.visible_message(
+		SPAN_ITALIC("\The [user] removes a wire from \a [src]."),
+		SPAN_ITALIC("You remove the wire from \the [src]."),
+		range = 5
+	)
+	string_color = null
+	update_icon()
 
 /obj/item/material/coin/attackby(obj/item/item, mob/living/user)
 	if (isCoil(item) && isnull(string_color))
@@ -92,16 +104,6 @@
 			range = 5
 		)
 		string_color = coil.color
-		update_icon()
-		return TRUE
-	if (isWirecutter(item) && !isnull(string_color))
-		new /obj/item/stack/cable_coil (get_turf(user), 1, string_color)
-		user.visible_message(
-			SPAN_ITALIC("\The [user] removes a wire from \a [src]."),
-			SPAN_ITALIC("You remove the wire from \the [src]."),
-			range = 5
-		)
-		string_color = null
 		update_icon()
 		return TRUE
 	..()

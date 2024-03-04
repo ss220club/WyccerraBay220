@@ -65,13 +65,12 @@
 
 	return ..()
 
-/obj/vehicle/train/cargo/trolley/use_tool(obj/item/tool, mob/user, list/click_params)
-	if(open && isWirecutter(tool))
-		passenger_allowed = !passenger_allowed
-		user.visible_message(SPAN_NOTICE("[user] [passenger_allowed ? "cuts" : "mends"] a cable in [src]."), SPAN_NOTICE("You [passenger_allowed ? "cut" : "mend"] the load limiter cable."))
-		return TRUE
-
-	return ..()
+/obj/vehicle/train/cargo/trolley/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!open)
+		return
+	passenger_allowed = !passenger_allowed
+	user.visible_message(SPAN_NOTICE("[user] [passenger_allowed ? "cuts" : "mends"] a cable in [src]."), SPAN_NOTICE("You [passenger_allowed ? "cut" : "mend"] the load limiter cable."))
 
 /obj/vehicle/train/cargo/engine/use_tool(obj/item/tool, mob/user, list/click_params)
 	if(istype(tool, /obj/item/key/cargo_train))

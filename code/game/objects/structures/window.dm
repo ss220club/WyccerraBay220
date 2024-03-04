@@ -321,6 +321,22 @@
 	)
 	dismantle()
 
+/obj/structure/window/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!polarized)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		return
+	if (opacity)
+		toggle()
+	new /obj/item/stack/cable_coil(user.loc, 1)
+	polarized = FALSE
+	id = null
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
+		SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
+	)
+
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window
 	if (isCoil(tool))
@@ -409,23 +425,6 @@
 			SPAN_NOTICE("You slice \the [src] apart with \the [tool].")
 		)
 		dismantle()
-		return TRUE
-
-	// Wirecutters - Remove wiring
-	if (isWirecutter(tool))
-		if (!polarized)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (opacity)
-			toggle()
-		new /obj/item/stack/cable_coil(user.loc, 1)
-		polarized = FALSE
-		id = null
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
-		)
 		return TRUE
 
 	// Welding Tool - Finalize repairs

@@ -83,6 +83,14 @@
 			update_icon()
 			state = ASSEMBLY_NONE
 
+/obj/item/camera_assembly/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(state == ASSEMBLY_WIRED)
+		new/obj/item/stack/cable_coil(get_turf(src), 2)
+		playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		to_chat(user, "You cut the wires from the circuits.")
+		state = ASSEMBLY_WELDED
+
 /obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
 	switch(state)
 		if(ASSEMBLY_WRENCHED)
@@ -108,13 +116,6 @@
 					to_chat(user, "You unweld the assembly from its place.")
 					state = ASSEMBLY_WRENCHED
 					anchored = TRUE
-				return
-		if(ASSEMBLY_WIRED)
-			if(isWirecutter(W))
-				new/obj/item/stack/cable_coil(get_turf(src), 2)
-				playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-				to_chat(user, "You cut the wires from the circuits.")
-				state = ASSEMBLY_WELDED
 				return
 
 	// Upgrades!

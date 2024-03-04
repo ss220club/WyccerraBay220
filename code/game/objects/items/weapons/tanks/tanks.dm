@@ -128,6 +128,44 @@ var/global/list/tank_gauge_cache = list()
 		FLIP_FLAGS(tank_flags, TANK_FLAG_FORCED)
 		to_chat(user, SPAN_NOTICE("You finish forcing the valve [GET_FLAGS(tank_flags, TANK_FLAG_FORCED) ? "open" : "closed"]."))
 
+/obj/item/tank/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	add_fingerprint(user)
+
+	if(!GET_FLAGS(tank_flags, TANK_FLAG_WIRED))
+		to_chat(user, SPAN_NOTICE("There are no wires to cut!"))
+		return
+
+	if(!proxyassembly.assembly)
+		if(do_after(user, (tool.toolspeed * 1) SECOND, src, DO_PUBLIC_UNIQUE))
+			to_chat(user, SPAN_NOTICE("You quickly clip the wire from the tank."))
+			CLEAR_FLAGS(tank_flags, TANK_FLAG_WIRED)
+			update_icon(TRUE)
+		return
+
+	to_chat(user, SPAN_NOTICE("You carefully begin clipping the wires that attach to the tank."))
+	if(!do_after(user, 10 SECONDS, src))
+		to_chat(user, SPAN_DANGER("You slip and bump the igniter!"))
+		if(prob(85))
+			proxyassembly.receive_signal()
+		return
+
+	CLEAR_FLAGS(tank_flags, TANK_FLAG_WIRED)
+	to_chat(user, SPAN_NOTICE("You cut the wire and remove the device."))
+	var/obj/item/device/assembly_holder/assy = proxyassembly.assembly
+	if(assy.a_left && assy.a_right)
+		assy.dropInto(usr.loc)
+		assy.master = null
+		proxyassembly.assembly = null
+	else
+		if(!proxyassembly.assembly.a_left)
+			assy.a_right.dropInto(usr.loc)
+			assy.a_right.holder = null
+			assy.a_right = null
+			proxyassembly.assembly = null
+			qdel(assy)
+	update_icon(TRUE)
+
 /obj/item/tank/attackby(obj/item/W, mob/user)
 	..()
 	if (istype(loc, /obj/item/assembly))
@@ -153,43 +191,6 @@ var/global/list/tank_gauge_cache = list()
 				to_chat(user, SPAN_NOTICE("You attach [single ? "" : "some of "]\the [C] to \the [src]."))
 				update_icon(TRUE)
 		return
-
-	if(isWirecutter(W))
-		add_fingerprint(user)
-		if(GET_FLAGS(tank_flags, TANK_FLAG_WIRED) && proxyassembly.assembly)
-
-			to_chat(user, SPAN_NOTICE("You carefully begin clipping the wires that attach to the tank."))
-			if(do_after(user, 10 SECONDS, src))
-				CLEAR_FLAGS(tank_flags, TANK_FLAG_WIRED)
-				to_chat(user, SPAN_NOTICE("You cut the wire and remove the device."))
-
-				var/obj/item/device/assembly_holder/assy = proxyassembly.assembly
-				if(assy.a_left && assy.a_right)
-					assy.dropInto(usr.loc)
-					assy.master = null
-					proxyassembly.assembly = null
-				else
-					if(!proxyassembly.assembly.a_left)
-						assy.a_right.dropInto(usr.loc)
-						assy.a_right.holder = null
-						assy.a_right = null
-						proxyassembly.assembly = null
-						qdel(assy)
-				update_icon(TRUE)
-
-			else
-				to_chat(user, SPAN_DANGER("You slip and bump the igniter!"))
-				if(prob(85))
-					proxyassembly.receive_signal()
-
-		else if(GET_FLAGS(tank_flags, TANK_FLAG_WIRED))
-			if(do_after(user, (W.toolspeed * 1) SECOND, src, DO_PUBLIC_UNIQUE))
-				to_chat(user, SPAN_NOTICE("You quickly clip the wire from the tank."))
-				CLEAR_FLAGS(tank_flags, TANK_FLAG_WIRED)
-				update_icon(TRUE)
-
-		else
-			to_chat(user, SPAN_NOTICE("There are no wires to cut!"))
 
 	if(istype(W, /obj/item/device/assembly_holder))
 		if(GET_FLAGS(tank_flags, TANK_FLAG_WIRED))

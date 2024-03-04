@@ -155,6 +155,14 @@
 	..()
 	update_connections(TRUE)
 
+/obj/structure/grille/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	dismantle()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts \the [src] apart with \a [tool]."),
+		SPAN_NOTICE("You cut \the [src] apart with \the [tool].")
+	)
 
 /obj/structure/grille/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Plasma Cutter - Cut grille
@@ -163,16 +171,6 @@
 		if (!plasmacutter.slice(user))
 			return TRUE
 		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		dismantle()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src] apart with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src] apart with \the [tool].")
-		)
-		return TRUE
-
-	// Wirecutter - Cut grille
-	if (isWirecutter(tool))
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 		dismantle()
 		user.visible_message(
 			SPAN_NOTICE("\The [user] cuts \the [src] apart with \a [tool]."),

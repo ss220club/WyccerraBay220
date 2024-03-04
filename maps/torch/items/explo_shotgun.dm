@@ -38,6 +38,19 @@
 		return TRUE
 	return ..()
 
+/obj/item/gun/projectile/shotgun/pump/exploration/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!reinforced)
+		USE_FEEDBACK_FAILURE("\The [src] has no reinforcement to remove.")
+		return
+	reinforced.dropInto(loc)
+	explosion_chance = initial(explosion_chance)
+	bulk = initial(bulk)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \a [reinforced] from \a [src] with \a [tool]."),
+		SPAN_NOTICE("You remove \the [reinforced] from \the [src] with \the [tool].")
+	)
 
 /obj/item/gun/projectile/shotgun/pump/exploration/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Pipe - Reinforce gun
@@ -58,23 +71,6 @@
 			SPAN_NOTICE("You reinforce \the [src] with \the [tool].")
 		)
 		return TRUE
-
-
-	// Wirecutter - Remove reinforcement
-	if (isWirecutter(tool))
-		if (!reinforced)
-			USE_FEEDBACK_FAILURE("\The [src] has no reinforcement to remove.")
-			return TRUE
-		reinforced.dropInto(loc)
-		explosion_chance = initial(explosion_chance)
-		bulk = initial(bulk)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [reinforced] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [reinforced] from \the [src] with \the [tool].")
-		)
-		return TRUE
-
 
 	return ..()
 

@@ -136,6 +136,9 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/proc/get_powernet()			//TODO: remove this as it is obsolete
 	return powernet
 
+/obj/structure/cable/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	cut_wire(tool, user)
 
 /obj/structure/cable/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Join cable
@@ -158,11 +161,6 @@ By design, d1 is the smallest direction and d2 is the highest
 			to_chat(user, SPAN_WARNING("\The [src] is not powered."))
 		else
 			to_chat(user, SPAN_INFO("\The [src] has [get_wattage()] flowing through it."))
-		return TRUE
-
-	// Wirecutter - Cut wire
-	if (isWirecutter(tool))
-		cut_wire(tool, user)
 		return TRUE
 
 	// Sharp Objects - Cut cable

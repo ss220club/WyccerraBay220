@@ -568,6 +568,13 @@
 	update_icon()
 	return
 
+/mob/living/silicon/robot/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!wiresexposed)
+		USE_FEEDBACK_FAILURE("\The [src]'s wiring must be exposed before you can access them.")
+		return
+	wires.Interact(user)
+
 /mob/living/silicon/robot/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!opened)
@@ -599,6 +606,13 @@
 				SPAN_NOTICE("\The [user] [wiresexposed ? "exposes" : "unexposes"] \the [src]'s wiring with \a [tool]."),
 				SPAN_NOTICE("You [wiresexposed ? "expose" : "unexpose"] \the [src]'s wiring with \the [tool].")
 			)
+
+/mob/living/silicon/robot/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!wiresexposed)
+		USE_FEEDBACK_FAILURE("\The [src]'s wiring must be exposed before you can access them.")
+		return
+	wires.Interact(user)
 
 /mob/living/silicon/robot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Components - Attempt to install
@@ -715,14 +729,6 @@
 		storage = tool
 		handle_selfinsert(tool, user)
 		recalculate_synth_capacities()
-		return TRUE
-
-	// Multitool, Wirecutters - Wire panel
-	if (isMultitool(tool) || isWirecutter(tool))
-		if (!wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring must be exposed before you can access them.")
-			return TRUE
-		wires.Interact(user)
 		return TRUE
 
 	// Power Cell - Install cell

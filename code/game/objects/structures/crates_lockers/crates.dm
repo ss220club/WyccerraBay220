@@ -31,6 +31,18 @@
 			devices += A
 		to_chat(user,"There are some wires attached to the lid, connected to [english_list(devices)].")
 
+/obj/structure/closet/crate/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!rigged)
+		USE_FEEDBACK_FAILURE("\The [src] has no wiring to cut.")
+		return
+	rigged = FALSE
+	new /obj/item/stack/cable_coil(loc, 1)
+	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
+		SPAN_NOTICE("You cuts \the [src]'s wiring with \the [tool].")
+	)
 
 /obj/structure/closet/crate/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Below interactions only apply if the crate is closed
@@ -64,20 +76,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] adds some wiring to \the [src] with [cable.get_vague_name(FALSE)]."),
 			SPAN_NOTICE("You rig \the [src] with [cable.get_exact_name(1)].")
-		)
-		return TRUE
-
-	// Wirecutters - Remove wiring
-	if (isWirecutter(tool))
-		if (!rigged)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to cut.")
-			return TRUE
-		rigged = FALSE
-		new /obj/item/stack/cable_coil(loc, 1)
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cuts \the [src]'s wiring with \the [tool].")
 		)
 		return TRUE
 

@@ -998,7 +998,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	SEND_SIGNAL(src, COMSIG_OBJ_CHANGE_TOOL_BEHAVIOUR, tool_behaviour, toolspeed, override_sound)
 
 /// Called when a mob tries to use the item as a tool. Handles most checks.
-/obj/item/proc/use_as_tool(atom/target, mob/living/user, delay, amount=0, volume=0, skill_path, datum/callback/extra_checks)
+/obj/item/proc/use_as_tool(atom/target, mob/living/user, delay, amount=0, volume=0, skill_path, datum/callback/extra_checks, do_flags = DO_DEFAULT)
 	// No delay means there is no start message, and no reason to call tool_start_check before use_tool.
 	// Run the start check here so we wouldn't have to call it manually.
 	if(!delay && !tool_start_check(user, amount))
@@ -1015,7 +1015,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 		// Create a callback with checks that would be called every tick by do_after.
 		var/datum/callback/tool_check = CALLBACK(src, PROC_REF(tool_check_callback), user, amount, extra_checks)
 
-		if(!do_after(user, delay, target=target, extra_checks=tool_check))
+		if(!do_after(user, delay, target=target, do_flags = do_flags, extra_checks=tool_check))
 			return
 	else
 		// Invoke the extra checks once, just in case.

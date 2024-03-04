@@ -49,12 +49,12 @@
 		else
 			Inject()
 
-/obj/machinery/fusion_fuel_injector/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isMultitool(W))
-		var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
-		fusion.get_new_tag(user)
-		return TRUE
+/obj/machinery/fusion_fuel_injector/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
+	fusion.get_new_tag(user)
 
+/obj/machinery/fusion_fuel_injector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/fuel_assembly))
 		if(injecting)
 			to_chat(user, SPAN_WARNING("Shut \the [src] off before playing with the fuel rod!"))

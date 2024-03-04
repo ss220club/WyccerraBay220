@@ -207,10 +207,8 @@
 	new /obj/item/pipe(loc, src)
 	qdel(src)
 
-/obj/machinery/atmospherics/unary/outlet_injector/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(isMultitool(O))
-		var/datum/browser/popup = new (user, "Vent Configuration Utility", "[src] Configuration Panel", 600, 200)
-		popup.set_content(jointext(get_console_data(),"<br>"))
-		popup.open()
-		return TRUE
-	return ..()
+/obj/machinery/atmospherics/unary/outlet_injector/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/browser/popup = new (user, "Vent Configuration Utility", "[src] Configuration Panel", 600, 200)
+	popup.set_content(jointext(get_console_data(),"<br>"))
+	popup.open()

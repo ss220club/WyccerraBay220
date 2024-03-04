@@ -67,6 +67,27 @@
 		fireaxe = null
 	return ..()
 
+/obj/structure/fireaxecabinet/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(open)
+		USE_FEEDBACK_FAILURE("\The [src] must be closed before you can lock it.")
+		return
+	if(health_dead)
+		USE_FEEDBACK_FAILURE("\The [src] is shattered and the lock doesn't function.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] begins toggling \the [src]'s maglock with \a [tool]."),
+		SPAN_NOTICE("You begin [unlocked ? "locking" : "unlocking"] \the [src]'s maglock with \the [tool].")
+	)
+	if(!do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+		return
+	playsound(src, 'sound/machines/lockreset.ogg', 50, TRUE)
+	unlocked = !unlocked
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [unlocked ? "unlocks" : "locks"] \the [src]'s maglock with \a [tool]."),
+		SPAN_NOTICE("You [unlocked ? "unlock" : "lock"] \the [src]'s maglock with \the [tool].")
+	)
 
 /obj/structure/fireaxecabinet/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Fireaxe - Place inside
@@ -108,32 +129,6 @@
 		)
 		revive_health()
 		return TRUE
-
-	// Multitool - Toggle manual lock
-	if (isMultitool(tool))
-		if (open)
-			USE_FEEDBACK_FAILURE("\The [src] must be closed before you can lock it.")
-			return TRUE
-		if (health_dead)
-			USE_FEEDBACK_FAILURE("\The [src] is shattered and the lock doesn't function.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] begins toggling \the [src]'s maglock with \a [tool]."),
-			SPAN_NOTICE("You begin [unlocked ? "locking" : "unlocking"] \the [src]'s maglock with \the [tool].")
-		)
-		if (!do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/machines/lockreset.ogg', 50, TRUE)
-		unlocked = !unlocked
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [unlocked ? "unlocks" : "locks"] \the [src]'s maglock with \a [tool]."),
-			SPAN_NOTICE("You [unlocked ? "unlock" : "lock"] \the [src]'s maglock with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
 
 /obj/structure/fireaxecabinet/proc/toggle_open(mob/user)
 	if(health_dead)

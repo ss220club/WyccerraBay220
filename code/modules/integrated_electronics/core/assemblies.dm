@@ -437,6 +437,13 @@
 			else
 				visible_message(SPAN_NOTICE("\The [user] points \the [src] towards \the [target]."))
 
+/obj/item/device/electronic_assembly/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!opened)
+		USE_FEEDBACK_FAILURE("\The [src]'s hatch needs to be opened before you can access the internal components.")
+		return
+	interact(user)
+
 /obj/item/device/electronic_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	for(var/obj/item/integrated_circuit/manipulation/hatchlock/hatchlock in assembly_components)
@@ -499,8 +506,8 @@
 			return TRUE
 		return ..()
 
-	// Multitool, wirer, debugger - Interact
-	if (isMultitool(tool) || istype(tool, /obj/item/device/integrated_electronics/wirer) || istype(tool, /obj/item/device/integrated_electronics/debugger))
+	// Wirer, debugger - Interact
+	if (istype(tool, /obj/item/device/integrated_electronics/wirer) || istype(tool, /obj/item/device/integrated_electronics/debugger))
 		if (!opened)
 			USE_FEEDBACK_FAILURE("\The [src]'s hatch needs to be opened before you can access the internal components.")
 			return TRUE

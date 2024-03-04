@@ -50,6 +50,25 @@ GLOBAL_LIST_EMPTY(admin_departments)
 		linked_pdas = null
 	. = ..()
 
+/obj/machinery/photocopier/faxmachine/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	to_chat(user, SPAN_NOTICE("\The [src]'s department tag is set to [department]."))
+	if(!emagged)
+		to_chat(user, SPAN_WARNING("\The [src]'s department configuration is vendor locked."))
+		return
+	var/list/option_list = GLOB.alldepartments.Copy() + GLOB.admin_departments.Copy() + "(Custom)" + "(Cancel)"
+	var/new_department = input(user, "Which department do you want to tag this fax machine as? Choose '(Custom)' to enter a custom department or '(Cancel) to cancel.", "Fax Machine Department Tag") as null|anything in option_list
+	if(!new_department || new_department == department || new_department == "(Cancel)" || !CanUseTopic(user) || !Adjacent(user))
+		return
+	if(new_department == "(Custom)")
+		new_department = input(user, "Which department do you want to tag this fax machine as?", "Fax Machine Department Tag", department) as text|null
+		if (!new_department || new_department == department || !CanUseTopic(user) || !Adjacent(user))
+			return
+	if(new_department == "Unknown" || new_department == "(Custom)" || new_department == "(Cancel)")
+		to_chat(user, SPAN_WARNING("Invalid department tag selected."))
+		return
+	department = new_department
+	to_chat(user, SPAN_NOTICE("You reconfigure \the [src]'s department tag to [department]."))
 
 /obj/machinery/photocopier/faxmachine/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(istype(O, /obj/item/paper))
@@ -63,26 +82,6 @@ GLOBAL_LIST_EMPTY(admin_departments)
 			return TRUE
 		scan = O
 		to_chat(user, SPAN_NOTICE("You insert \the [O] into \the [src]."))
-		return TRUE
-
-	if (isMultitool(O))
-		to_chat(user, SPAN_NOTICE("\The [src]'s department tag is set to [department]."))
-		if (!emagged)
-			to_chat(user, SPAN_WARNING("\The [src]'s department configuration is vendor locked."))
-			return TRUE
-		var/list/option_list = GLOB.alldepartments.Copy() + GLOB.admin_departments.Copy() + "(Custom)" + "(Cancel)"
-		var/new_department = input(user, "Which department do you want to tag this fax machine as? Choose '(Custom)' to enter a custom department or '(Cancel) to cancel.", "Fax Machine Department Tag") as null|anything in option_list
-		if (!new_department || new_department == department || new_department == "(Cancel)" || !CanUseTopic(user) || !Adjacent(user))
-			return TRUE
-		if (new_department == "(Custom)")
-			new_department = input(user, "Which department do you want to tag this fax machine as?", "Fax Machine Department Tag", department) as text|null
-			if (!new_department || new_department == department || !CanUseTopic(user) || !Adjacent(user))
-				return TRUE
-		if (new_department == "Unknown" || new_department == "(Custom)" || new_department == "(Cancel)")
-			to_chat(user, SPAN_WARNING("Invalid department tag selected."))
-			return TRUE
-		department = new_department
-		to_chat(user, SPAN_NOTICE("You reconfigure \the [src]'s department tag to [department]."))
 		return TRUE
 
 	if (istype(O, /obj/item/modular_computer/pda))

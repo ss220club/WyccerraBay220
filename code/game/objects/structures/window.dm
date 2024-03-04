@@ -266,6 +266,31 @@
 		SPAN_NOTICE("You pry \the [src] [construction_state ? "into" : "out of"] its frame with \the [tool].")
 	)
 
+/obj/structure/window/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!polarized)
+		USE_FEEDBACK_FAILURE("\The [src] is not wired and cannot be toggled.")
+		return
+	// Toggle Tinting
+	if (anchored)
+		toggle()
+		playsound(src, 'sound/effects/pop.ogg', 50, TRUE)
+		user.visible_message(
+			SPAN_NOTICE("\The [user] toggles \the [src]'s tinting with \a [tool]."),
+			SPAN_NOTICE("You toggle \the [src]'s tinting with \the [tool].")
+		)
+		return
+	// Set ID
+	var/input = input(user, "What ID would you like to set this window to?", "[src] - Polarization ID", id) as null|text
+	input = sanitizeSafe(input, MAX_NAME_LEN)
+	if (!input || input == id || !user.use_sanity_check(src, tool))
+		return
+	id = input
+	user.visible_message(
+		SPAN_NOTICE("\The [user] configures \the [src] with \a [tool]."),
+		SPAN_NOTICE("You set \the [src]'s polarization ID to '[id]' with \the [tool].")
+	)
+
 /obj/structure/window/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Reinforced Window
@@ -377,34 +402,6 @@
 		)
 		if (repair_pending < get_damage_value())
 			user.show_message(SPAN_WARNING("It looks like it could use more sheets"), VISIBLE_MESSAGE)
-		return TRUE
-
-	// Multitool
-	// - Toggle tinting (Anchored)
-	// - Set ID (Unanchored)
-	if (isMultitool(tool))
-		if (!polarized)
-			USE_FEEDBACK_FAILURE("\The [src] is not wired and cannot be toggled.")
-			return TRUE
-		// Toggle Tinting
-		if (anchored)
-			toggle()
-			playsound(src, 'sound/effects/pop.ogg', 50, TRUE)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] toggles \the [src]'s tinting with \a [tool]."),
-				SPAN_NOTICE("You toggle \the [src]'s tinting with \the [tool].")
-			)
-			return TRUE
-		// Set ID
-		var/input = input(user, "What ID would you like to set this window to?", "[src] - Polarization ID", id) as null|text
-		input = sanitizeSafe(input, MAX_NAME_LEN)
-		if (!input || input == id || !user.use_sanity_check(src, tool))
-			return TRUE
-		id = input
-		user.visible_message(
-			SPAN_NOTICE("\The [user] configures \the [src] with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s polarization ID to '[id]' with \the [tool].")
-		)
 		return TRUE
 
 	// Plasmacutter - Dismantle window
@@ -733,28 +730,26 @@
 		/obj/item/stock_parts/power/apc
 	)
 
+/obj/machinery/button/windowtint/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/t = sanitizeSafe(input(user, "Enter the ID for the button.", name, id), MAX_NAME_LEN)
+	if(user.incapacitated() && !user.Adjacent(src))
+		return
+	if(user.get_active_hand() != tool)
+		to_chat(SPAN_WARNING("\The [tool] needs to be in your active hand."))
+		return
+	if(!in_range(src, user) && src.loc != user)
+		return
+	t = sanitizeSafe(t, MAX_NAME_LEN)
+	if(t)
+		src.id = t
+		to_chat(user, SPAN_NOTICE("The new ID of the button is [id]"))
+
 /obj/machinery/button/windowtint/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	var/obj/item/frame/light_switch/windowtint/frame = new /obj/item/frame/light_switch/windowtint(user.loc, 1)
 	transfer_fingerprints_to(frame)
 	qdel(src)
-
-/obj/machinery/button/windowtint/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isMultitool(W))
-		var/t = sanitizeSafe(input(user, "Enter the ID for the button.", name, id), MAX_NAME_LEN)
-		if(user.incapacitated() && !user.Adjacent(src))
-			return TRUE
-		if (user.get_active_hand() != W)
-			to_chat(SPAN_WARNING("\The [W] needs to be in your active hand."))
-			return TRUE
-		if (!in_range(src, user) && src.loc != user)
-			return TRUE
-		t = sanitizeSafe(t, MAX_NAME_LEN)
-		if (t)
-			src.id = t
-			to_chat(user, SPAN_NOTICE("The new ID of the button is [id]"))
-		return TRUE
-	. = ..()
 
 /obj/machinery/button/windowtint/activate()
 	if(operating)

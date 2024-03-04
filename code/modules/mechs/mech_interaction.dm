@@ -352,24 +352,41 @@
 		SPAN_WARNING("You force \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
 	)
 
+/mob/living/exosuit/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(hardpoints_locked)
+		USE_FEEDBACK_FAILURE("\The [src]'s hardpoint system is locked.")
+		return
+	var/list/parts = list()
+	for(var/hardpoint in hardpoints)
+		if (hardpoints[hardpoint])
+			parts += hardpoint
+	var/input = input(user, "Which component would you like to remove?", "\The [src] - Remove Hardpoint") as null|anything in parts
+	if(!input || !user.use_sanity_check(src, tool))
+		return
+	if(isnull(hardpoints[input]))
+		USE_FEEDBACK_FAILURE("\The [src] not longer has a component in the [input] slot.")
+		return
+	remove_system(input, user)
+
 /mob/living/exosuit/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!maintenance_protocols)
+	if(!maintenance_protocols)
 		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
 		return
-	if (!body?.cell)
+	if(!body?.cell)
 		USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
 		return
 	user.visible_message(
 		SPAN_NOTICE("\The [user] starts removing \the [src]'s power cell with \a [tool]."),
 		SPAN_NOTICE("You start removing \the [src]'s power cell with \the [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
 		return
-	if (!maintenance_protocols)
+	if(!maintenance_protocols)
 		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
 		return
-	if (!body?.cell)
+	if(!body?.cell)
 		USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
 		return
 	user.put_in_hands(body.cell)
@@ -383,16 +400,16 @@
 
 /mob/living/exosuit/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!maintenance_protocols)
+	if(!maintenance_protocols)
 		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
 		return
 	user.visible_message(
 		SPAN_NOTICE("\The [user] starts removing \the [src]'s securing bolts with \a [tool]."),
 		SPAN_NOTICE("You start removing \the [src]'s securing bolts with \the [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 6) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+	if(!user.do_skilled((tool.toolspeed * 6) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
 		return
-	if (!maintenance_protocols)
+	if(!maintenance_protocols)
 		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
 		return
 	user.visible_message(
@@ -460,24 +477,6 @@
 			USE_FEEDBACK_FAILURE("\The [input] slot on \the [src] is no longer free. It has \a [hardpoints[input]] attached.")
 			return TRUE
 		install_system(tool, input, user)
-		return TRUE
-
-	// Multitool - Remove component
-	if (isMultitool(tool))
-		if (hardpoints_locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s hardpoint system is locked.")
-			return TRUE
-		var/list/parts = list()
-		for (var/hardpoint in hardpoints)
-			if (hardpoints[hardpoint])
-				parts += hardpoint
-		var/input = input(user, "Which component would you like to remove?", "\The [src] - Remove Hardpoint") as null|anything in parts
-		if (!input || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (isnull(hardpoints[input]))
-			USE_FEEDBACK_FAILURE("\The [src] not longer has a component in the [input] slot.")
-			return TRUE
-		remove_system(input, user)
 		return TRUE
 
 	// Power Cell - Install cell

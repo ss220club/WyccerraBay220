@@ -330,21 +330,17 @@
 			return
 	..()
 
-/obj/machinery/power/smes/buildable/use_tool(obj/item/W, mob/living/user, list/click_params)
+/obj/machinery/power/smes/buildable/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// No more disassembling of overloaded SMESs. You broke it, now enjoy the consequences.
 	if (failing)
 		to_chat(user, SPAN_WARNING("\The [src]'s screen is flashing with alerts. It seems to be overloaded! Touching it now is probably not a good idea."))
-		return TRUE
+		return
 
-	// Multitool - change RCON tag
-	if(isMultitool(W))
-		var/newtag = input(user, "Enter new RCON tag. Use \"NO_TAG\" to disable RCON or leave empty to cancel.", "SMES RCON system") as text
-		if(newtag)
-			RCon_tag = newtag
-			to_chat(user, SPAN_NOTICE("You changed the RCON tag to: [newtag]"))
-		return TRUE
-
-	return ..()
+	var/newtag = input(user, "Enter new RCON tag. Use \"NO_TAG\" to disable RCON or leave empty to cancel.", "SMES RCON system") as text
+	if(newtag)
+		RCon_tag = newtag
+		to_chat(user, SPAN_NOTICE("You changed the RCON tag to: [newtag]"))
 
 // Proc: toggle_input()
 // Parameters: None

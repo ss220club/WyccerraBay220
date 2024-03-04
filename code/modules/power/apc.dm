@@ -469,6 +469,11 @@
 	user.visible_message(SPAN_NOTICE("\The [user] pries the cover open on \the [src]."), SPAN_NOTICE("You pry the cover open."))
 	update_icon()
 
+/obj/machinery/power/apc/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!opened && wiresexposed)
+		wires.Interact(user)
+
 /obj/machinery/power/apc/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(opened)
@@ -500,6 +505,11 @@
 	wiresexposed = !wiresexposed
 	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
 	update_icon()
+
+/obj/machinery/power/apc/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!opened && wiresexposed)
+		wires.Interact(user)
 
 /obj/machinery/power/apc/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
@@ -640,7 +650,7 @@
 
 	if (istype(user, /mob/living/silicon))
 		return attack_robot(user)
-	if (!opened && wiresexposed && (isMultitool(W) || isWirecutter(W) || istype(W, /obj/item/device/assembly/signaler)))
+	if (!opened && wiresexposed && istype(W, /obj/item/device/assembly/signaler))
 		return wires.Interact(user)
 
 	return ..()

@@ -15,6 +15,25 @@
 	max_w_class = ITEM_SIZE_SMALL
 	max_storage_space = DEFAULT_BOX_STORAGE
 
+/obj/item/storage/secure/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(open == 1 && !l_hacking)
+		user.show_message(SPAN_NOTICE("Now attempting to reset internal memory, please hold."), 1)
+		l_hacking = 1
+		if(do_after(usr, (tool.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT))
+			if (prob(40))
+				l_setshort = 1
+				l_set = 0
+				user.show_message(SPAN_NOTICE("Internal memory reset. Please give it a few seconds to reinitialize."), 1)
+				sleep(8 SECONDS)
+				l_setshort = 0
+				l_hacking = 0
+			else
+				user.show_message(SPAN_WARNING("Unable to reset internal memory."), 1)
+				l_hacking = 0
+		else
+			l_hacking = 0
+
 /obj/item/storage/secure/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
@@ -31,24 +50,6 @@
 		spark_system.start()
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(loc, "sparks", 50, 1)
-		return TRUE
-
-	else if (isMultitool(W) && (open == 1)&& (!l_hacking))
-		user.show_message(SPAN_NOTICE("Now attempting to reset internal memory, please hold."), 1)
-		l_hacking = 1
-		if (do_after(usr, (W.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if (prob(40))
-				l_setshort = 1
-				l_set = 0
-				user.show_message(SPAN_NOTICE("Internal memory reset. Please give it a few seconds to reinitialize."), 1)
-				sleep(80)
-				l_setshort = 0
-				l_hacking = 0
-			else
-				user.show_message(SPAN_WARNING("Unable to reset internal memory."), 1)
-				l_hacking = 0
-		else
-			l_hacking = 0
 		return TRUE
 
 	else

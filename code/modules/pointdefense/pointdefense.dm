@@ -82,19 +82,16 @@
 	data["turrets"] = turrets
 	return data
 
-/obj/machinery/pointdefense_control/use_tool(obj/item/thing, mob/living/user, list/click_params)
-	if(isMultitool(thing))
-		var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
-		pointdefense.get_new_tag(user)
-		//Check if there is more than 1 controller
-		var/datum/local_network/lan = pointdefense.get_local_network()
-		if(lan)
-			var/list/pointdefense_controllers = lan.get_devices(/obj/machinery/pointdefense_control)
-			if(pointdefense_controllers && length(pointdefense_controllers) > 1)
-				lan.remove_device(src)
-		return TRUE
-	else
-		return ..()
+/obj/machinery/pointdefense_control/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
+	pointdefense.get_new_tag(user)
+	//Check if there is more than 1 controller
+	var/datum/local_network/lan = pointdefense.get_local_network()
+	if(lan)
+		var/list/pointdefense_controllers = lan.get_devices(/obj/machinery/pointdefense_control)
+		if(pointdefense_controllers && length(pointdefense_controllers) > 1)
+			lan.remove_device(src)
 
 /obj/machinery/pointdefense
 	name = "point defense battery"
@@ -128,13 +125,10 @@
 		var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
 		pointdefense.set_tag(null, initial_id_tag)
 
-/obj/machinery/pointdefense/use_tool(obj/item/thing, mob/living/user, list/click_params)
-	if(isMultitool(thing))
-		var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
-		pointdefense.get_new_tag(user)
-		return TRUE
-
-	return ..()
+/obj/machinery/pointdefense/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
+	pointdefense.get_new_tag(user)
 
 //Guns cannot shoot through hull or generally dense turfs.
 /obj/machinery/pointdefense/proc/space_los(meteor)

@@ -136,6 +136,18 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/proc/get_powernet()			//TODO: remove this as it is obsolete
 	return powernet
 
+/obj/structure/cable/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("\The [user] scans \the [src] with \a [tool]."),
+		SPAN_NOTICE("You scan \the [src] with \the [tool].")
+	)
+	shock(user, 5, 0.2)
+	if (!powernet?.avail)
+		to_chat(user, SPAN_WARNING("\The [src] is not powered."))
+	else
+		to_chat(user, SPAN_INFO("\The [src] has [get_wattage()] flowing through it."))
+
 /obj/structure/cable/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	cut_wire(tool, user)
@@ -148,19 +160,6 @@ By design, d1 is the smallest direction and d2 is the highest
 			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to add cable to \the [src].")
 			return TRUE
 		cable.JoinCable(src, user)
-		return TRUE
-
-	// Multitool - Measure power
-	if (isMultitool(tool))
-		user.visible_message(
-			SPAN_NOTICE("\The [user] scans \the [src] with \a [tool]."),
-			SPAN_NOTICE("You scan \the [src] with \the [tool].")
-		)
-		shock(user, 5, 0.2)
-		if (!powernet?.avail)
-			to_chat(user, SPAN_WARNING("\The [src] is not powered."))
-		else
-			to_chat(user, SPAN_INFO("\The [src] has [get_wattage()] flowing through it."))
 		return TRUE
 
 	// Sharp Objects - Cut cable

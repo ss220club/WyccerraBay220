@@ -71,6 +71,14 @@
 	if(alwaysactive && wires_intact)
 		generate_field()
 
+/obj/machinery/atmospheric_field_generator/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!hatch_open)
+		return
+	to_chat(user, SPAN_NOTICE("You toggle \the [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
+	alwaysactive = !alwaysactive
+	update_icon()
+
 /obj/machinery/atmospheric_field_generator/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
@@ -80,12 +88,6 @@
 	update_icon()
 
 /obj/machinery/atmospheric_field_generator/use_tool(obj/item/tool, mob/user, list/click_params)
-	if(hatch_open && isMultitool(tool))
-		to_chat(user, SPAN_NOTICE("You toggle \the [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
-		alwaysactive = !alwaysactive
-		update_icon()
-		return TRUE
-
 	if(hatch_open && (isWelder(tool)))
 		var/obj/item/weldingtool/welder = tool
 		if (!welder.remove_fuel(5, user))

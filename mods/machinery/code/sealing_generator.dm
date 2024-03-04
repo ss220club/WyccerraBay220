@@ -98,6 +98,14 @@
 
 	update_icon()
 
+/obj/machinery/sealgen/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(locked)
+		return
+	field_color = input(usr, "Choose field colour.", "Field color", initial(field_color)) as color|null
+	to_chat(usr, SPAN_NOTICE("You change \the [src] field <font color='[field_color]'>color.</font>"))
+	colorize()
+
 /obj/machinery/sealgen/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	hatch_open = !hatch_open
@@ -121,11 +129,6 @@
 		wires.Interact(user)
 
 /obj/machinery/sealgen/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isMultitool(W) && !locked)
-		field_color = input(usr, "Choose field colour.", "Field color", initial(field_color)) as color|null
-		to_chat(usr, SPAN_NOTICE("You change \the [src] field <font color='[field_color]'>color.</font>"))
-		colorize()
-		return
 	if(isid(W) && allowed(usr))
 		locked = !locked
 		to_chat(user, "You [locked ? "lock" : "unlock"] \the [src].")

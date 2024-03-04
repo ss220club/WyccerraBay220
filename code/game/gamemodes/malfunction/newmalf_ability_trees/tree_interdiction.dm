@@ -83,18 +83,20 @@
 	if(!target)
 		var/list/robots = list()
 		var/list/robot_names = list()
-		for(var/mob/living/silicon/robot/R as anything in SSmobs.get_mobs_by_type(/mob/living/silicon/robot))
-			if(istype(R, /mob/living/silicon/robot/drone))	// No drones.
+		for(var/mob/living/silicon/robot/R as anything in SSmobs.get_mobs_of_type(/mob/living/silicon/robot))
+			if(isdrone(R))	// No drones.
 				continue
+
 			if(R.connected_ai != user)						// No robots linked to other AIs
 				continue
+
 			if(R.lockcharge)
 				robots += R
 				robot_names += R.name
+
 		if(!length(robots))
 			to_chat(user, "No locked cyborgs connected.")
 			return
-
 
 		var/targetname = input("Select unlock target: ") in robot_names
 		for(var/mob/living/silicon/robot/R in robots)

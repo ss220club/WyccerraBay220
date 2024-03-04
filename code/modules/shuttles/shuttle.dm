@@ -333,7 +333,7 @@
 
 /datum/shuttle/proc/knockdown_passengers()
 	var/list/area_refs_set = get_area_refs_set(shuttle_area)
-	for(var/mob/living/carbon/passenger_to_knockdown as anything in SSmobs.get_mobs_by_type(/mob/living/carbon))
+	for(var/mob/living/carbon/passenger_to_knockdown as anything in SSmobs.get_mobs_of_type(/mob/living/carbon))
 		/// TODO: cache mobs inside areas
 		if(!area_refs_set[ref(get_area(passenger_to_knockdown))])
 			continue

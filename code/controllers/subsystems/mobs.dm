@@ -59,21 +59,25 @@ SUBSYSTEM_DEF(mobs)
 /datum/controller/subsystem/mobs/proc/get_all_mobs()
 	return all_mobs.Copy()
 
-/datum/controller/subsystem/mobs/proc/get_mobs_by_type(mob/type)
+/datum/controller/subsystem/mobs/proc/get_mobs_of_type(mob/type)
 	if(istype(type))
 		var/mob/passed_mob = type
 		type = passed_mob.type
 
 	if(!ispath(type))
+		stack_trace("Non-mob type passed in `/datum/controller/subsystem/mobs/proc/get_mobs_of_type`")
 		return list()
 
 	if(type == /mob)
 		return get_all_mobs()
 
 	var/list/desired_mobs = list()
-
 	for(var/mob/mob_type as anything in typesof(type))
-		desired_mobs += mobs_by_type[mob_type]
+		var/list/mobs_of_type = mobs_by_type[mob_type]
+		if(!length(mobs_of_type))
+			continue
+
+		desired_mobs += mobs_of_type
 
 	return desired_mobs
 

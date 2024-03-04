@@ -123,14 +123,13 @@ SUBSYSTEM_DEF(machines)
 		LAZYREMOVE(A.machinery_list, machine)
 
 /datum/controller/subsystem/machines/proc/get_machinery_of_type(obj/machinery/machinery_type)
-	if(!machinery_type)
-		return list()
+	if(istype(machinery_type))
+		var/obj/machinery/passed_machinery = machinery_type
+		machinery_type = passed_machinery.type
 
 	if(!ispath(machinery_type))
-		machinery_type = machinery_type.type
-
-	if(!ispath(machinery_type, /obj/machinery))
-		CRASH("Non-machinery type passed in `/datum/controller/subsystem/machines/proc/get_machinery_of_type`")
+		stack_trace("Non-machinery type passed in `/datum/controller/subsystem/machines/proc/get_machinery_of_type`")
+		return list()
 
 	if(machinery_type == /obj/machinery)
 		return get_all_machinery()
@@ -138,8 +137,10 @@ SUBSYSTEM_DEF(machines)
 	var/list/machinery = list()
 	for(var/type in typesof(machinery_type))
 		var/list/machinery_of_type = machinery_by_type[type]
-		if(machinery_of_type)
-			machinery += machinery_of_type
+		if(!length(machinery_of_type))
+			continue
+
+		machinery += machinery_of_type
 
 	return machinery
 

@@ -195,6 +195,28 @@
 		repairing.dropInto(user.loc)
 		repairing = null
 
+/obj/machinery/door/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!repairing)
+		return
+	if(!density)
+		to_chat(user, SPAN_WARNING("\The [src] must be closed before you can repair it."))
+		return TRUE
+
+	var/obj/item/weldingtool/welder = tool
+	if(welder.can_use(2, user))
+		to_chat(user, SPAN_NOTICE("You start to fix dents and weld \the [repairing] into place."))
+		playsound(src, 'sound/items/Welder.ogg', 100, 1)
+		if(do_after(user, (0.5 * repairing.amount) SECONDS, src, DO_REPAIR_CONSTRUCT) && welder.remove_fuel(2, user))
+			if(!repairing)
+				return TRUE//the materials in the door have been removed before welding was finished.
+
+			to_chat(user, SPAN_NOTICE("You finish repairing the damage to \the [src]."))
+			restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
+			update_icon()
+			qdel(repairing)
+			repairing = null
+
 /obj/machinery/door/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(istype(I, /obj/item/stack/material) && I.get_material_name() == get_material_name())
 		if(MACHINE_IS_BROKEN(src))
@@ -227,26 +249,6 @@
 		if (transfer)
 			to_chat(user, SPAN_NOTICE("You fit [stack.get_exact_name(transfer)] to damaged and broken parts on \the [src]."))
 
-		return TRUE
-
-	if(repairing && isWelder(I))
-		if(!density)
-			to_chat(user, SPAN_WARNING("\The [src] must be closed before you can repair it."))
-			return TRUE
-
-		var/obj/item/weldingtool/welder = I
-		if(welder.can_use(2, user))
-			to_chat(user, SPAN_NOTICE("You start to fix dents and weld \the [repairing] into place."))
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			if(do_after(user, (0.5 * repairing.amount) SECONDS, src, DO_REPAIR_CONSTRUCT) && welder.remove_fuel(2, user))
-				if (!repairing)
-					return TRUE//the materials in the door have been removed before welding was finished.
-
-				to_chat(user, SPAN_NOTICE("You finish repairing the damage to \the [src]."))
-				restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
-				update_icon()
-				qdel(repairing)
-				repairing = null
 		return TRUE
 
 	if (!operating)

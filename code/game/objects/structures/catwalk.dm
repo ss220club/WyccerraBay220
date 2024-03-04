@@ -86,19 +86,18 @@
 		SPAN_NOTICE("You pry \the [src]'s maintenance hatch open with \the [tool].")
 	)
 
+/obj/structure/catwalk/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/welder = tool
+	if (!welder.remove_fuel(1, user))
+		return
+	deconstruct(user)
+
 /obj/structure/catwalk/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Plasma Cutter - Deconstruct
 	if (istype(tool, /obj/item/gun/energy/plasmacutter))
 		var/obj/item/gun/energy/plasmacutter/cutter = tool
 		if (!cutter.slice(user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
-
-	// Welding Tool - Deconstruct
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(1, user))
 			return TRUE
 		deconstruct(user)
 		return TRUE

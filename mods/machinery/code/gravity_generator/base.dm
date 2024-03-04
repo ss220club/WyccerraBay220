@@ -219,59 +219,56 @@
 		set_broken_state(GRAV_NEEDS_SCREWDRIVER)
 		update_icon()
 
+/obj/machinery/gravity_generator/main/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] begins to weld the damaged parts."),
+		SPAN_NOTICE("You begin to weld the damaged parts.")
+	)
+
+	playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
+	var/obj/item/weldingtool/WT = tool
+
+	if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || !WT.remove_fuel(1, user) || broken_state != GRAV_NEEDS_WELDING)
+		return TRUE
+
+	health += 250
+	user.visible_message(
+		SPAN_NOTICE("[user] fixed the damaged parts."),
+		SPAN_NOTICE("You fixed the damaged parts.")
+	)
+	playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
+	set_broken_state(GRAV_NEEDS_WRENCH)
+	update_icon()
+
 /obj/machinery/gravity_generator/main/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	switch(broken_state)
-		if(GRAV_NEEDS_PLASTEEL)
-			if(istype(tool, /obj/item/stack/material/plasteel) || broken_state != GRAV_NEEDS_PLASTEEL)
-				var/obj/item/stack/material/plasteel/PS = tool
-				if(PS.amount < 10)
-					to_chat(user, SPAN_WARNING("You need 10 sheets of plasteel."))
-					return TRUE
-
-				user.visible_message(
-					SPAN_NOTICE("[user] begins to add plasteel to the destroyed frame."),
-					SPAN_NOTICE("You begin to add plasteel to the destroyed frame.")
-				)
-				playsound(loc, 'sound/machines/click.ogg', 75, 1)
-
-				if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || PS.amount < 10)
-					return TRUE
-
-				PS.use(10)
-				health += 250
-				user.visible_message(
-					SPAN_NOTICE("[user] replaced the destroyed frame."),
-					SPAN_NOTICE("You replaced the destroyed frame.")
-				)
-				playsound(loc, 'sound/machines/click.ogg', 75, 1)
-				set_broken_state(GRAV_NEEDS_WELDING)
-				update_icon()
-
+	if(broken_state == GRAV_NEEDS_PLASTEEL)
+		if(istype(tool, /obj/item/stack/material/plasteel) || broken_state != GRAV_NEEDS_PLASTEEL)
+			var/obj/item/stack/material/plasteel/PS = tool
+			if(PS.amount < 10)
+				to_chat(user, SPAN_WARNING("You need 10 sheets of plasteel."))
 				return TRUE
 
-		if(GRAV_NEEDS_WELDING)
-			if(isWelder(tool))
-				user.visible_message(
-					SPAN_NOTICE("[user] begins to weld the damaged parts."),
-					SPAN_NOTICE("You begin to weld the damaged parts.")
-				)
+			user.visible_message(
+				SPAN_NOTICE("[user] begins to add plasteel to the destroyed frame."),
+				SPAN_NOTICE("You begin to add plasteel to the destroyed frame.")
+			)
+			playsound(loc, 'sound/machines/click.ogg', 75, 1)
 
-				playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
-				var/obj/item/weldingtool/WT = tool
-
-				if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || !WT.remove_fuel(1, user) || broken_state != GRAV_NEEDS_WELDING)
-					return TRUE
-
-				health += 250
-				user.visible_message(
-					SPAN_NOTICE("[user] fixed the damaged parts."),
-					SPAN_NOTICE("You fixed the damaged parts.")
-				)
-				playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
-				set_broken_state(GRAV_NEEDS_WRENCH)
-				update_icon()
-
+			if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || PS.amount < 10)
 				return TRUE
+
+			PS.use(10)
+			health += 250
+			user.visible_message(
+				SPAN_NOTICE("[user] replaced the destroyed frame."),
+				SPAN_NOTICE("You replaced the destroyed frame.")
+			)
+			playsound(loc, 'sound/machines/click.ogg', 75, 1)
+			set_broken_state(GRAV_NEEDS_WELDING)
+			update_icon()
+
+			return TRUE
 	return ..()
 
 /obj/machinery/gravity_generator/part/attack_ghost(mob/user)

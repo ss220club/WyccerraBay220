@@ -614,6 +614,38 @@
 		return
 	wires.Interact(user)
 
+/mob/living/silicon/robot/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (user == src)
+		USE_FEEDBACK_FAILURE("You lack the reach to be able to repair yourself.")
+		return
+	if (!getBruteLoss())
+		USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if (!welder.can_use(1, user, "to repair \the [src]'s physical damage."))
+		return
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts repairing some of the dents on \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start repairing some of the dents on \the [src] with \the [tool]."),
+	)
+	if (!do_after(user, (tool.toolspeed * 1) SECOND, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+		return
+	if (!getBruteLoss())
+		USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
+		return
+	if (!welder.can_use(1, user, "to repair \the [src]'s physical damage."))
+		return
+	welder.remove_fuel(1, user)
+	adjustBruteLoss(-30)
+	updatehealth()
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] repairs some of the dents on \the [src] with \a [tool]."),
+		SPAN_NOTICE("You repair some of the dents on \the [src] with \the [tool]."),
+	)
+
 /mob/living/silicon/robot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Components - Attempt to install
 	for (var/key in components)
@@ -783,39 +815,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
 			SPAN_NOTICE("You install \a [tool] into \the [src].")
-		)
-		return TRUE
-
-	// Welding Tool - Repair brute damage
-	if (isWelder(tool))
-		if (user == src)
-			USE_FEEDBACK_FAILURE("You lack the reach to be able to repair yourself.")
-			return TRUE
-		if (!getBruteLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to repair \the [src]'s physical damage."))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts repairing some of the dents on \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start repairing some of the dents on \the [src] with \the [tool]."),
-		)
-		if (!do_after(user, (tool.toolspeed * 1) SECOND, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!getBruteLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
-			return TRUE
-		if (!welder.can_use(1, user, "to repair \the [src]'s physical damage."))
-			return TRUE
-		welder.remove_fuel(1, user)
-		adjustBruteLoss(-30)
-		updatehealth()
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs some of the dents on \the [src] with \a [tool]."),
-			SPAN_NOTICE("You repair some of the dents on \the [src] with \the [tool]."),
 		)
 		return TRUE
 

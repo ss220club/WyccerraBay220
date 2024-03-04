@@ -32,6 +32,28 @@
 		SPAN_NOTICE("You cut \the [src]'s wires with \the [tool].")
 	)
 
+/obj/structure/firedoor_assembly/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(anchored)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be unanchored before you can dismantle it.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if(!welder.can_use(1, user, "to dismantle \the [src]."))
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
+	)
+	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	var/obj/item/stack/material/steel/stack = new (loc, 4)
+	transfer_fingerprints_to(stack)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+	)
+	qdel(src)
+
 /obj/structure/firedoor_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Air Alarm Electronics - Install circuit
 	if (istype(tool, /obj/item/airalarm_electronics))
@@ -86,29 +108,6 @@
 			SPAN_NOTICE("\The [user] wires \the [src] with [cable.get_vague_name(FALSE)]."),
 			SPAN_NOTICE("You wire \the [src] with [cable.get_exact_name(1)].")
 		)
-		return TRUE
-
-	// Welding Tool - Disassemble
-	if (isWelder(tool))
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be unanchored before you can dismantle it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to dismantle \the [src]."))
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		var/obj/item/stack/material/steel/stack = new (loc, 4)
-		transfer_fingerprints_to(stack)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		qdel_self()
 		return TRUE
 
 	return ..()

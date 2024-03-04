@@ -22,21 +22,18 @@
 	)
 	qdel(src)
 
-/obj/structure/hygiene/drain/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/hygiene/drain/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Weld the drain closed
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		welded = !welded
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [welded ? "un" : "welds"] \the [src] with \a [tool]."),
-			SPAN_NOTICE("You [welded ? "un" : "weld"] \the [src] with \the [tool].")
-		)
-		update_icon()
-		return TRUE
-
-	return ..()
+	var/obj/item/weldingtool/welder = tool
+	if(!welder.remove_fuel(1, user))
+		return
+	welded = !welded
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [welded ? "un" : "welds"] \the [src] with \a [tool]."),
+		SPAN_NOTICE("You [welded ? "un" : "weld"] \the [src] with \the [tool].")
+	)
+	update_icon()
 
 
 /obj/structure/hygiene/drain/on_update_icon()

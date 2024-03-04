@@ -101,6 +101,25 @@
 	)
 	Interact(user)
 
+/mob/living/bot/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(health >= maxHealth)
+		USE_FEEDBACK_FAILURE("\The [src] doesn't need any repairs.")
+		return
+	if(!open)
+		USE_FEEDBACK_FAILURE("\The [src]'s access panel must be open to repair it.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if(!welder.can_use(5, user, "to repair \the [src]."))
+		return
+	welder.remove_fuel(5, user)
+	health = min(maxHealth, health + 10)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] repairs some of \the [src]'s damage with \a [tool]."),
+		SPAN_NOTICE("You repair some of \the [src]'s damage with \the [tool].")
+	)
+
 /mob/living/bot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// ID Card - Toggle access panel lock
 	var/obj/item/card/id/id = tool.GetIdCard()
@@ -121,27 +140,7 @@
 		Interact(user)
 		return TRUE
 
-	// Welder - Repairs damage
-	if (isWelder(tool))
-		if (health >= maxHealth)
-			USE_FEEDBACK_FAILURE("\The [src] doesn't need any repairs.")
-			return TRUE
-		if (!open)
-			USE_FEEDBACK_FAILURE("\The [src]'s access panel must be open to repair it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(5, user, "to repair \the [src]."))
-			return TRUE
-		welder.remove_fuel(5, user)
-		health = min(maxHealth, health + 10)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs some of \the [src]'s damage with \a [tool]."),
-			SPAN_NOTICE("You repair some of \the [src]'s damage with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
+	. = ..()
 
 
 /mob/living/bot/attack_ai(mob/user)

@@ -183,11 +183,11 @@
 	if(panel_open)
 		wires.Interact(user)
 
-/obj/machinery/camera/use_tool(obj/item/W, mob/living/user, list/click_params)
-	update_coverage()
+/obj/machinery/camera/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	var/datum/wires/camera/camera_wires = wires
-	if (isWelder(W) && (camera_wires.CanDeconstruct() || (MACHINE_IS_BROKEN(src))))
-		if(weld(W, user))
+	if(camera_wires.CanDeconstruct() || (MACHINE_IS_BROKEN(src)))
+		if(weld(tool, user))
 			if(assembly)
 				assembly.dropInto(loc)
 				assembly.anchored = TRUE
@@ -205,7 +205,9 @@
 					new /obj/item/stack/cable_coil(loc, 2)
 				assembly = null //so qdel doesn't eat it.
 			qdel(src)
-			return TRUE
+
+/obj/machinery/camera/use_tool(obj/item/W, mob/living/user, list/click_params)
+	update_coverage()
 
 	if (can_use() && istype(W, /obj/item/paper) && isliving(user))
 		var/mob/living/U = user

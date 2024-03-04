@@ -166,6 +166,44 @@
 		SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
 	)
 
+/obj/structure/windoor_assembly/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (state != WINDOOR_STATE_FRAME)
+		USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can dismantle it.")
+		return
+	if (anchored)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be unanchored before you can dismantle it.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if (!welder.can_use(1, user, "to dismantle \the [src]."))
+		return
+	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (state != WINDOOR_STATE_FRAME)
+		USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can dismantle it.")
+		return
+	if (anchored)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be unanchored before you can dismantle it.")
+		return
+	if (!welder.remove_fuel(1, user))
+		return
+	var/obj/item/stack/material/glass/reinforced/glass = new(loc, 5)
+	transfer_fingerprints_to(glass)
+	if (secure)
+		var/obj/item/stack/material/rods/rods = new(loc, 4)
+		transfer_fingerprints_to(rods)
+	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+	)
+	qdel(src)
+
 /obj/structure/windoor_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Airlock electronics - Install electronics
 	if (istype(tool, /obj/item/airlock_electronics))
@@ -272,45 +310,6 @@
 			SPAN_NOTICE("\The [user] reinforces \the [src] with some [tool.name]."),
 			SPAN_NOTICE("You reinforce \the [src] with some [tool.name].")
 		)
-		return TRUE
-
-	// Welder - Dismantle
-	if (isWelder(tool))
-		if (state != WINDOOR_STATE_FRAME)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can dismantle it.")
-			return TRUE
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be unanchored before you can dismantle it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to dismantle \the [src]."))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (state != WINDOOR_STATE_FRAME)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can dismantle it.")
-			return TRUE
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be unanchored before you can dismantle it.")
-			return TRUE
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		var/obj/item/stack/material/glass/reinforced/glass = new(loc, 5)
-		transfer_fingerprints_to(glass)
-		if (secure)
-			var/obj/item/stack/material/rods/rods = new(loc, 4)
-			transfer_fingerprints_to(rods)
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		qdel_self()
 		return TRUE
 
 	return ..()

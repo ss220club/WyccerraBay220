@@ -418,6 +418,23 @@
 	)
 	dismantle()
 
+/mob/living/exosuit/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!getBruteLoss())
+		USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
+		return
+	var/list/damaged_parts = list()
+	for (var/obj/item/mech_component/component in list(arms, legs, body, head))
+		if (component?.brute_damage)
+			damaged_parts += component
+	var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "\The [src] - Fix Component") as null|anything in damaged_parts
+	if (!input_fix || !user.use_sanity_check(src, tool))
+		return
+	if (!input_fix.brute_damage)
+		USE_FEEDBACK_FAILURE("\The [src]'s [input_fix.name] no longer needs repair.")
+		return
+	input_fix.repair_brute_generic(tool, user)
+
 /mob/living/exosuit/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Repair burn damage
 	if (isCoil(tool))
@@ -496,24 +513,6 @@
 			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
 			SPAN_NOTICE("You install \the [tool] into \the [src].")
 		)
-		return TRUE
-
-	// Welding Tool - Repair physical damage
-	if (isWelder(tool))
-		if (!getBruteLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
-			return TRUE
-		var/list/damaged_parts = list()
-		for (var/obj/item/mech_component/component in list(arms, legs, body, head))
-			if (component?.brute_damage)
-				damaged_parts += component
-		var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "\The [src] - Fix Component") as null|anything in damaged_parts
-		if (!input_fix || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!input_fix.brute_damage)
-			USE_FEEDBACK_FAILURE("\The [src]'s [input_fix.name] no longer needs repair.")
-			return TRUE
-		input_fix.repair_brute_generic(tool, user)
 		return TRUE
 
 	return ..()

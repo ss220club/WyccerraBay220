@@ -182,6 +182,21 @@
 
 //Handles repairs (and also upgrades).
 
+/obj/item/clothing/suit/space/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(istype(loc,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = loc
+		if(H.wear_suit == src)
+			to_chat(user, SPAN_WARNING("You cannot repair \the [src] while it is being worn."))
+			return
+	if (brute_damage <= 0)
+		to_chat(user, "There is no structural damage on \the [src] to repair.")
+		return
+	var/obj/item/weldingtool/WT = tool
+	if(!WT.remove_fuel(5))
+		return
+	repair_breaches(DAMAGE_BRUTE, 3, user)
+
 /obj/item/clothing/suit/space/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/material))
 		var/repair_power = 0
@@ -208,25 +223,6 @@
 		var/use_amt = min(P.get_amount(), 3)
 		if(use_amt && P.use(use_amt))
 			repair_breaches(DAMAGE_BURN, use_amt * repair_power, user)
-		return
-
-	else if(isWelder(W))
-
-		if(istype(loc,/mob/living/carbon/human))
-			var/mob/living/carbon/human/H = loc
-			if(H.wear_suit == src)
-				to_chat(user, SPAN_WARNING("You cannot repair \the [src] while it is being worn."))
-				return
-
-		if (brute_damage <= 0)
-			to_chat(user, "There is no structural damage on \the [src] to repair.")
-			return
-
-		var/obj/item/weldingtool/WT = W
-		if(!WT.remove_fuel(5))
-			return
-
-		repair_breaches(DAMAGE_BRUTE, 3, user)
 		return
 
 	else if(istype(W, /obj/item/tape_roll))

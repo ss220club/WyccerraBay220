@@ -141,6 +141,28 @@
 	if(can_plate && !material)
 		dismantle(tool, user)
 
+/obj/structure/table/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!health_damaged())
+		USE_FEEDBACK_FAILURE("\The [src] isn't damaged.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if(!welder.can_use(1, user, "to repair \the [src]"))
+		return
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts repairing \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start repairing \the [src] with \the [tool].")
+	)
+	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1))
+		return
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	restore_health(get_max_health() / 5) // 20% repair per application
+	user.visible_message(
+		SPAN_NOTICE("\The [user] repairs some of \the [src]'s damage with \a [tool]."),
+		SPAN_NOTICE("You repair some of \the [src]'s damage with \the [tool].")
+	)
+
 /obj/structure/table/use_weapon(obj/item/weapon, mob/user, list/click_params)
 	// Carpet - Add carpeting
 	if (istype(weapon, /obj/item/stack/tile/carpet))
@@ -181,29 +203,6 @@
 		if (!material)
 			return FALSE // Handled by `use_tool()`
 		reinforce_table(weapon, user)
-		return TRUE
-
-	// Welding Tool - Repair damage
-	if (isWelder(weapon))
-		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] isn't damaged.")
-			return TRUE
-		var/obj/item/weldingtool/welder = weapon
-		if (!welder.can_use(1, user, "to repair \the [src]"))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts repairing \the [src] with \a [weapon]."),
-			SPAN_NOTICE("You start repairing \the [src] with \the [weapon].")
-		)
-		if (!user.do_skilled((weapon.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, weapon) || !welder.remove_fuel(1))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		restore_health(get_max_health() / 5) // 20% repair per application
-		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs some of \the [src]'s damage with \a [weapon]."),
-			SPAN_NOTICE("You repair some of \the [src]'s damage with \the [weapon].")
-		)
 		return TRUE
 
 	return ..()

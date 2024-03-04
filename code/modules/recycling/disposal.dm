@@ -102,34 +102,34 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 
+/obj/machinery/disposal/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(mode != -1)
+		return
+	if(length(contents) > LAZYLEN(component_parts))
+		to_chat(user, "Eject the items first!")
+		return
+	var/obj/item/weldingtool/W = tool
+	if(!W.can_use(1,user))
+		to_chat(user, "You need more welding fuel to complete this task.")
+		return
+	playsound(loc, 'sound/items/Welder2.ogg', 100, 1)
+	to_chat(user, "You start slicing the floorweld off the disposal unit.")
+	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		if(!src || !W.remove_fuel(1, user))
+			return
+		to_chat(user, "You sliced the floorweld off the disposal unit.")
+		var/obj/structure/disposalconstruct/machine/C = new (loc, src)
+		transfer_fingerprints_to(C)
+		C.update()
+		qdel(src)
+
 /obj/machinery/disposal/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(MACHINE_IS_BROKEN(src))
 		return ..()
 
 	if ((. = ..()))
 		return
-
-	if(mode <=0 ) // It's off
-		if (isWelder(I) && mode==-1)
-			if(length(contents) > LAZYLEN(component_parts))
-				to_chat(user, "Eject the items first!")
-				return TRUE
-			var/obj/item/weldingtool/W = I
-			if(W.can_use(1,user))
-				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-				to_chat(user, "You start slicing the floorweld off the disposal unit.")
-
-				if(do_after(user, (I.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-					if(!src || !W.remove_fuel(1, user)) return
-					to_chat(user, "You sliced the floorweld off the disposal unit.")
-					var/obj/structure/disposalconstruct/machine/C = new (loc, src)
-					src.transfer_fingerprints_to(C)
-					C.update()
-					qdel(src)
-				return TRUE
-			else
-				to_chat(user, "You need more welding fuel to complete this task.")
-				return TRUE
 
 	if (istype(I, /obj/item/storage/bag/trash))
 		var/obj/item/storage/bag/trash/T = I
@@ -608,37 +608,34 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		SPAN_NOTICE("You [mode ? "remove" : "attach"] the screws around \the [src]'s power connection with \the [tool].")
 	)
 
-/obj/structure/disposaloutlet/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/disposaloutlet/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Detach from floor
-	if (isWelder(tool))
-		if (!mode)
-			USE_FEEDBACK_FAILURE("\The [src]'s power connection needs to be disconnected before you can remove \the [src] from the floor.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to slice \the [src]'s floorweld."))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts slicing \the [src]'s floorweld with \a [tool]."),
-			SPAN_NOTICE("You start slicing \the [src]'s floorweld with \the [tool]."),
-			SPAN_ITALIC("You hear the sound of welding.")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] slices \the [src]'s floorweld with \a [tool]."),
-			SPAN_NOTICE("You start slices \the [src]'s floorweld with \the [tool].")
-		)
-		var/obj/structure/disposalconstruct/machine/outlet/outlet = new(loc, src)
-		transfer_fingerprints_to(outlet)
-		outlet.anchored = TRUE
-		outlet.set_density(TRUE)
-		outlet.update()
-		qdel_self()
-		return TRUE
-
-	return ..()
+	if(!mode)
+		USE_FEEDBACK_FAILURE("\The [src]'s power connection needs to be disconnected before you can remove \the [src] from the floor.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if(!welder.can_use(1, user, "to slice \the [src]'s floorweld."))
+		return
+	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts slicing \the [src]'s floorweld with \a [tool]."),
+		SPAN_NOTICE("You start slicing \the [src]'s floorweld with \the [tool]."),
+		SPAN_ITALIC("You hear the sound of welding.")
+	)
+	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
+		return
+	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] slices \the [src]'s floorweld with \a [tool]."),
+		SPAN_NOTICE("You start slices \the [src]'s floorweld with \the [tool].")
+	)
+	var/obj/structure/disposalconstruct/machine/outlet/outlet = new(loc, src)
+	transfer_fingerprints_to(outlet)
+	outlet.anchored = TRUE
+	outlet.set_density(TRUE)
+	outlet.update()
+	qdel(src)
 
 
 /obj/structure/disposaloutlet/forceMove()//updates this when shuttle moves. So you can YEET things out the airlock

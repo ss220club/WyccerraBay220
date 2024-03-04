@@ -28,6 +28,23 @@
 		var/T = get_archeological_find_by_findtype(inside_item_type)
 		new T(src)
 
+/obj/item/ore/strangerock/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/W = tool
+	if(W.can_use(2, user))
+		var/obj/item/inside = locate() in src
+		if(inside)
+			inside.dropInto(loc)
+			visible_message(SPAN_INFO("\The [src] burns away revealing \the [inside]."))
+		else
+			visible_message(SPAN_INFO("\The [src] burns away into nothing."))
+		qdel(src)
+		W.remove_fuel(2, user)
+		return
+	if (W.can_use(1, user, silent = TRUE))
+		visible_message(SPAN_INFO("A few sparks fly off \the [src], but nothing else happens."))
+		W.remove_fuel(1)
+
 /obj/item/ore/strangerock/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/pickaxe/xeno/brush))
 		var/obj/item/inside = locate() in src
@@ -38,22 +55,6 @@
 			visible_message(SPAN_INFO("\The [src] is brushed away into nothing."))
 		qdel(src)
 		return
-
-	if(isWelder(I))
-		var/obj/item/weldingtool/W = I
-		if(W.can_use(2, user))
-			var/obj/item/inside = locate() in src
-			if(inside)
-				inside.dropInto(loc)
-				visible_message(SPAN_INFO("\The [src] burns away revealing \the [inside]."))
-			else
-				visible_message(SPAN_INFO("\The [src] burns away into nothing."))
-			qdel(src)
-			W.remove_fuel(2, user)
-		else if (W.can_use(1, user, silent = TRUE))
-			visible_message(SPAN_INFO("A few sparks fly off \the [src], but nothing else happens."))
-			W.remove_fuel(1)
-			return
 
 	else if(istype(I, /obj/item/device/core_sampler))
 		var/obj/item/device/core_sampler/S = I

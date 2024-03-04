@@ -91,16 +91,22 @@
 		to_chat(user, "You cut the wires from the circuits.")
 		state = ASSEMBLY_WELDED
 
-/obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
+/obj/item/camera_assembly/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	switch(state)
 		if(ASSEMBLY_WRENCHED)
-			// State 1
-			if(isWelder(W))
-				if(weld(W, user))
-					to_chat(user, "You weld the assembly securely into place.")
-					anchored = TRUE
-					state = ASSEMBLY_WELDED
-				return
+			if(weld(tool, user))
+				to_chat(user, "You weld the assembly securely into place.")
+				anchored = TRUE
+				state = ASSEMBLY_WELDED
+		if(ASSEMBLY_WELDED)
+			if(weld(tool, user))
+				to_chat(user, "You unweld the assembly from its place.")
+				state = ASSEMBLY_WRENCHED
+				anchored = TRUE
+
+/obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
+	switch(state)
 		if(ASSEMBLY_WELDED)
 			// State 2
 			if(isCoil(W))
@@ -110,12 +116,6 @@
 					state = ASSEMBLY_WIRED
 				else
 					to_chat(user, SPAN_WARNING("You need 2 coils of wire to wire the assembly."))
-				return
-			else if(isWelder(W))
-				if(weld(W, user))
-					to_chat(user, "You unweld the assembly from its place.")
-					state = ASSEMBLY_WRENCHED
-					anchored = TRUE
 				return
 
 	// Upgrades!

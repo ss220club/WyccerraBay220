@@ -241,25 +241,20 @@
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/power/smes/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if((.= ..()))
-		return
-
+/obj/machinery/power/smes/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if (!panel_open)
 		to_chat(user, SPAN_WARNING("You need to open the access hatch on \the [src] first!"))
-		return TRUE
-
-	if(isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		if(!WT.can_use(5, user))
-			return TRUE
-		if(!damage)
-			to_chat(user, "\The [src] is already fully repaired.")
-			return TRUE
-		if(do_after(user, damage, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(5 ,user))
-			to_chat(user, "You repair all structural damage to \the [src]")
-			damage = 0
-		return TRUE
+		return
+	var/obj/item/weldingtool/WT = tool
+	if(!WT.can_use(5, user))
+		return
+	if(!damage)
+		to_chat(user, "\The [src] is already fully repaired.")
+		return
+	if(do_after(user, damage, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(5 ,user))
+		to_chat(user, "You repair all structural damage to \the [src]")
+		damage = 0
 
 /obj/machinery/power/smes/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	// this is the data which will be sent to the ui

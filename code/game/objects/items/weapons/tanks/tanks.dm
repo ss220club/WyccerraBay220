@@ -166,8 +166,32 @@ var/global/list/tank_gauge_cache = list()
 			qdel(assy)
 	update_icon(TRUE)
 
+/obj/item/tank/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/WT = tool
+	if (GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
+		to_chat(user, SPAN_WARNING("\The [src]'s emergency relief valve must be closed before you can weld it shut!"))
+		return
+	if(WT.can_use(1,user))
+		add_fingerprint(user)
+		if(!GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
+			to_chat(user, SPAN_NOTICE("You begin welding the \the [src] emergency pressure relief valve."))
+			if(do_after(user, (tool.toolspeed * 4) SECONDS, src, DO_PUBLIC_UNIQUE) && WT.remove_fuel(1, user))
+				to_chat(user, "[SPAN_NOTICE("You carefully weld \the [src] emergency pressure relief valve shut.")][SPAN_WARNING(" \The [src] may now rupture under pressure!")]")
+				SET_FLAGS(tank_flags, TANK_FLAG_WELDED)
+				CLEAR_FLAGS(tank_flags, TANK_FLAG_LEAKING)
+			else
+				GLOB.bombers += "[key_name(user)] attempted to weld a [src]. [air_contents.temperature-T0C]"
+				log_and_message_admins("attempted to weld a [src]. [air_contents.temperature-T0C]", user)
+				if(WT.welding)
+					to_chat(user, SPAN_DANGER("You accidentally rake \the [tool] across \the [src]!"))
+					maxintegrity -= rand(2,6)
+					integrity = min(integrity,maxintegrity)
+					air_contents.add_thermal_energy(rand(2000,50000))
+		else
+			to_chat(user, SPAN_NOTICE("The emergency pressure relief valve has already been welded."))
+
 /obj/item/tank/attackby(obj/item/W, mob/user)
-	..()
 	if (istype(loc, /obj/item/assembly))
 		icon = loc
 
@@ -206,29 +230,7 @@ var/global/list/tank_gauge_cache = list()
 		else
 			to_chat(user, SPAN_NOTICE("You need to wire the device up first."))
 
-	if(isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		if (GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
-			to_chat(user, SPAN_WARNING("\The [src]'s emergency relief valve must be closed before you can weld it shut!"))
-			return
-		if(WT.can_use(1,user))
-			add_fingerprint(user)
-			if(!GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-				to_chat(user, SPAN_NOTICE("You begin welding the \the [src] emergency pressure relief valve."))
-				if(do_after(user, (W.toolspeed * 4) SECONDS, src, DO_PUBLIC_UNIQUE) && WT.remove_fuel(1, user))
-					to_chat(user, "[SPAN_NOTICE("You carefully weld \the [src] emergency pressure relief valve shut.")][SPAN_WARNING(" \The [src] may now rupture under pressure!")]")
-					SET_FLAGS(tank_flags, TANK_FLAG_WELDED)
-					CLEAR_FLAGS(tank_flags, TANK_FLAG_LEAKING)
-				else
-					GLOB.bombers += "[key_name(user)] attempted to weld a [src]. [air_contents.temperature-T0C]"
-					log_and_message_admins("attempted to weld a [src]. [air_contents.temperature-T0C]", user)
-					if(WT.welding)
-						to_chat(user, SPAN_DANGER("You accidentally rake \the [W] across \the [src]!"))
-						maxintegrity -= rand(2,6)
-						integrity = min(integrity,maxintegrity)
-						air_contents.add_thermal_energy(rand(2000,50000))
-			else
-				to_chat(user, SPAN_NOTICE("The emergency pressure relief valve has already been welded."))
+	. = ..()
 
 /obj/item/tank/attack_self(mob/user)
 	tgui_interact(user)

@@ -142,6 +142,22 @@
 	src.visible_message("\The [src] has been disassembled by [user].")
 	qdel(src)
 
+/obj/item/modular_computer/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/WT = tool
+	var/damage = get_damage_value()
+	if(!WT.can_use(round(damage/75), user))
+		return
+
+	if(!get_damage_value())
+		to_chat(user, "\The [src] does not require repairs.")
+		return
+
+	to_chat(user, "You begin repairing damage to \the [src]...")
+	if(do_after(user, damage / (1 SECONDS), src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(round(damage / 75)))
+		revive_health()
+		to_chat(user, "You repair \the [src].")
+
 /obj/item/modular_computer/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/card/id)) // ID Card, try to insert it.
 		var/obj/item/card/id/I = W
@@ -185,23 +201,7 @@
 			try_install_component(user, C)
 		else
 			to_chat(user, "This component is too large for \the [src].")
-	if(isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		var/damage = get_damage_value()
-		if(!WT.can_use(round(damage/75), user))
-			return
-
-		if(!get_damage_value())
-			to_chat(user, "\The [src] does not require repairs.")
-			return
-
-		to_chat(user, "You begin repairing damage to \the [src]...")
-		if(do_after(user, damage / 10, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(round(damage / 75)))
-			revive_health()
-			to_chat(user, "You repair \the [src].")
-		return
-
-	..()
+	. = ..()
 
 /obj/item/modular_computer/examine(mob/user)
 	. = ..()

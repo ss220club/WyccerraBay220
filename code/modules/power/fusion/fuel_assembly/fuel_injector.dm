@@ -54,6 +54,15 @@
 	var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
 	fusion.get_new_tag(user)
 
+/obj/machinery/fusion_fuel_injector/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(injecting)
+		to_chat(user, SPAN_WARNING("Shut \the [src] off first!"))
+		return
+	anchored = !anchored
+	playsound(src.loc, 'sound/items/Welder.ogg', 75, 1)
+	user.visible_message("\The [user] [anchored ? null : "un"]secures \the [src] to the floor.")
+
 /obj/machinery/fusion_fuel_injector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/fuel_assembly))
 		if(injecting)
@@ -69,18 +78,6 @@
 			cur_assembly.dropInto(loc)
 			user.put_in_hands(cur_assembly)
 		cur_assembly = W
-		return TRUE
-
-	if(isWelder(W))
-		if(injecting)
-			to_chat(user, SPAN_WARNING("Shut \the [src] off first!"))
-			return TRUE
-		anchored = !anchored
-		playsound(src.loc, 'sound/items/Welder.ogg', 75, 1)
-		if(anchored)
-			user.visible_message("\The [user] secures \the [src] to the floor.")
-		else
-			user.visible_message("\The [user] unsecures \the [src] from the floor.")
 		return TRUE
 
 	return ..()

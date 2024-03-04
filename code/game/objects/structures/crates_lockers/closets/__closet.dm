@@ -306,16 +306,30 @@
 		slice_into_parts(weapon, user)
 		return TRUE
 
-	// Welding weapon - Dismantle closet
-	if (isWelder(weapon))
-		var/obj/item/weldingtool/welder = weapon
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		slice_into_parts(weapon, user)
-		return TRUE
-
 	return ..()
 
+/obj/structure/closet/welder_act(mob/living/user, obj/item/tool)
+	if(opened)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/welder = tool
+	if(user.a_intent == I_HURT)
+		if(!welder.remove_fuel(1, user))
+			return
+		slice_into_parts(tool, user)
+		return
+
+	if (!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
+		USE_FEEDBACK_FAILURE("\The [src] can't be welded shut.")
+		return
+	if (!welder.can_use(1, user))
+		return
+	welded = !welded
+	update_icon()
+	user.visible_message(
+		SPAN_WARNING("\The [user] [welded ? "welds" : "unwelds"] \the [src] with \a [tool]."),
+		SPAN_WARNING("You [welded ? "weld" : "unweld"] \the [src] with \the [tool].")
+	)
 
 /obj/structure/closet/use_tool(obj/item/tool, mob/user, list/click_params)
 	// General Action - Place item in closet, if open.
@@ -336,22 +350,6 @@
 		if (!HAS_FLAGS(setup, CLOSET_HAS_LOCK))
 			return ..()
 		togglelock(user, id)
-		return TRUE
-
-	// Welding Tool - Weld closet shut
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
-			USE_FEEDBACK_FAILURE("\The [src] can't be welded shut.")
-			return TRUE
-		if (!welder.can_use(1, user))
-			return TRUE
-		welded = !welded
-		update_icon()
-		user.visible_message(
-			SPAN_WARNING("\The [user] [welded ? "welds" : "unwelds"] \the [src] with \a [tool]."),
-			SPAN_WARNING("You [welded ? "weld" : "unweld"] \the [src] with \the [tool].")
-		)
 		return TRUE
 
 	return ..()

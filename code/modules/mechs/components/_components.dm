@@ -113,10 +113,11 @@
 	playsound(user.loc, 'sound/effects/pop.ogg', 50, 0)
 	update_components()
 
+/obj/item/mech_component/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	repair_brute_generic(tool, user)
+
 /obj/item/mech_component/attackby(obj/item/thing, mob/user)
-	if(isWelder(thing))
-		repair_brute_generic(thing, user)
-		return
 	if(isCoil(thing))
 		repair_burn_generic(thing, user)
 		return

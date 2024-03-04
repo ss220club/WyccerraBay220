@@ -269,31 +269,33 @@
 	playsound(loc, 'sound/items/Screwdriver.ogg', 25, TRUE)
 	update_icon()
 
+/obj/machinery/door/firedoor/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(repairing || operating)
+		return
+	var/obj/item/weldingtool/W = tool
+	if(W.can_use(2, user))
+		user.visible_message(
+			SPAN_WARNING("\The [user] starts [!blocked ? "welding \the [src] shut" : "cutting open \the [src]"]."),
+			SPAN_DANGER("You start [!blocked ? "welding \the [src] closed" : "cutting open \the [src]"]."),
+			SPAN_ITALIC("You hear welding.")
+		)
+		playsound(loc, 'sound/items/Welder.ogg', 50, TRUE)
+		if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+			if(!W.remove_fuel(2, user))
+				return
+			blocked = !blocked
+			user.visible_message(
+				SPAN_DANGER("\The [user] [blocked ? "welds \the [src] shut" : "cuts open \the [src]"]."),
+				SPAN_DANGER("You [blocked ? "weld shut" : "undo the welds on"] \the [src]."),
+				SPAN_ITALIC("You hear welding.")
+			)
+			playsound(loc, 'sound/items/Welder2.ogg', 50, TRUE)
+			update_icon()
+
 /obj/machinery/door/firedoor/use_tool(obj/item/C, mob/living/user, list/click_params)
 	if(operating)
 		return TRUE
-
-	if(isWelder(C) && !repairing)
-		var/obj/item/weldingtool/W = C
-		if(W.can_use(2, user))
-			user.visible_message(
-				SPAN_WARNING("\The [user] starts [!blocked ? "welding \the [src] shut" : "cutting open \the [src]"]."),
-				SPAN_DANGER("You start [!blocked ? "welding \the [src] closed" : "cutting open \the [src]"]."),
-				SPAN_ITALIC("You hear welding.")
-			)
-			playsound(loc, 'sound/items/Welder.ogg', 50, TRUE)
-			if(do_after(user, (C.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				if(!W.remove_fuel(2, user))
-					return TRUE
-				blocked = !blocked
-				user.visible_message(
-					SPAN_DANGER("\The [user] [blocked ? "welds \the [src] shut" : "cuts open \the [src]"]."),
-					SPAN_DANGER("You [blocked ? "weld shut" : "undo the welds on"] \the [src]."),
-					SPAN_ITALIC("You hear welding.")
-				)
-				playsound(loc, 'sound/items/Welder2.ogg', 50, TRUE)
-				update_icon()
-			return TRUE
 
 	if(blocked)
 		to_chat(user, SPAN_DANGER("\The [src] is welded shut!"))

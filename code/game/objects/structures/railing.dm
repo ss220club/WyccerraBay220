@@ -297,32 +297,28 @@
 	)
 	qdel(src)
 
-/obj/structure/railing/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/railing/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Repair
-	if (isWelder(tool))
-		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] doesn't require repairs.")
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts repairing \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start repairing \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] doesn't require repairs.")
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		restore_health(get_max_health() / 5)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs \the [src] with \a [tool]."),
-			SPAN_NOTICE("You repair \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
+	if(!health_damaged())
+		USE_FEEDBACK_FAILURE("\The [src] doesn't require repairs.")
+		return
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts repairing \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start repairing \the [src] with \the [tool].")
+	)
+	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if(!health_damaged())
+		USE_FEEDBACK_FAILURE("\The [src] doesn't require repairs.")
+		return
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	restore_health(get_max_health() / 5)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] repairs \the [src] with \a [tool]."),
+		SPAN_NOTICE("You repair \the [src] with \the [tool].")
+	)
 
 /obj/structure/railing/can_climb(mob/living/user, post_climb_check=FALSE, check_silicon=TRUE)
 	. = ..()

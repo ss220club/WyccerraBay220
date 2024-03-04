@@ -250,21 +250,19 @@
 		user.drop_item()
 		qdel(src)
 
-/obj/item/barrier/use_tool(obj/item/tool, mob/user, list/click_params)
-	if(health != 200 && isWelder(tool))
+/obj/item/barrier/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(health != initial(health))
 		var/obj/item/weldingtool/WT = tool
 		if(!WT.isOn())
 			to_chat(user, SPAN_NOTICE("The [tool] should be turned on firstly."))
-			return TRUE
-		if(WT.remove_fuel(0,user))
-			to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			if(do_after(user, max(5, health / 5), src) && WT?.isOn())
-				to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
-				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-				health = 200
-			return TRUE
-		else
+			return
+		if(!WT.remove_fuel(0,user))
 			to_chat(user, SPAN_NOTICE("You need more welding fuel to complete this task."))
-			return TRUE
-	return ..()
+			return
+		to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
+		playsound(src, 'sound/items/Welder.ogg', 100, 1)
+		if(do_after(user, max(5, health / 5), src) && WT?.isOn())
+			to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+			health = initial(health)

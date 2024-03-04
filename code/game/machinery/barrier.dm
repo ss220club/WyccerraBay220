@@ -21,12 +21,39 @@
 			message += SPAN_WARNING(" The locking clamps have other ideas.")
 		to_chat(user, message)
 
+/obj/machinery/barrier/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/W = tool
+	if(!W.can_use(1, user))
+		return
+	if(!emagged)
+		to_chat(user, SPAN_WARNING("\The [src]'s locking clamps are not damaged."))
+		return
+	user.visible_message(
+		"\The [user] starts to repair \the [src]'s locking clamps with \an [tool].",
+		"You start to repair \the [src]'s locking clamps with \the [tool].",
+		"You hear a hissing flame."
+	)
+	if(!do_after(user, (tool.toolspeed * 15) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		return
+	W.remove_fuel(1, user)
+	to_chat(user, SPAN_NOTICE("You finished repairing \the [src]'s locking clamps."))
+	emagged = FALSE
+	if(locked)
+		visible_message(
+			"\The [src]'s clamps engage, locking onto \the [get_turf(src)].",
+			"You hear metal sliding and creaking.",
+			range = 5
+		)
+		anchored = TRUE
+	update_icon()
+
 /obj/machinery/barrier/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if (isid(I))
+	if(isid(I))
 		var/success = allowed(user)
 		var/message = " to no effect"
-		if (success)
-			if (locked)
+		if(success)
+			if(locked)
 				message = ", unlocking it from \the [get_turf(src)]"
 			else
 				message = ", locking it onto \the [get_turf(src)]"
@@ -36,36 +63,10 @@
 			"You hear metal sliding and creaking.",
 			range = 5
 		)
-		if (success)
+		if(success)
 			locked = !locked
 			anchored = emagged ? FALSE : locked
 			update_icon()
-		return TRUE
-	if (isWelder(I))
-		var/obj/item/weldingtool/W = I
-		if (!W.can_use(1, user))
-			return TRUE
-		if (!emagged)
-			to_chat(user, SPAN_WARNING("\The [src]'s locking clamps are not damaged."))
-			return TRUE
-		user.visible_message(
-			"\The [user] starts to repair \the [src]'s locking clamps with \an [I].",
-			"You start to repair \the [src]'s locking clamps with \the [I].",
-			"You hear a hissing flame."
-		)
-		if (!do_after(user, (I.toolspeed * 15) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return TRUE
-		W.remove_fuel(1, user)
-		to_chat(user, SPAN_NOTICE("You finished repairing \the [src]'s locking clamps."))
-		emagged = FALSE
-		if (locked)
-			visible_message(
-				"\The [src]'s clamps engage, locking onto \the [get_turf(src)].",
-				"You hear metal sliding and creaking.",
-				range = 5
-			)
-			anchored = TRUE
-		update_icon()
 		return TRUE
 	return ..()
 

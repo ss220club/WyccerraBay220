@@ -203,33 +203,24 @@
 			return SPAN_WARNING("You cannot take this [src] apart, it too exerted due to internal pressure.")
 	return ..()
 
-/obj/machinery/atmospherics/unary/vent_scrubber/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWelder(W))
-		var/obj/item/weldingtool/WT = W
-
-
-		if(!WT.can_use(1,user))
-			return TRUE
-
-		to_chat(user, SPAN_NOTICE("Now welding \the [src]."))
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-
-		if(!do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return TRUE
-
-		if(!src || !WT.remove_fuel(1, user))
-			return TRUE
-
-		welded = !welded
-		update_icon()
-		playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [welded ? "welds \the [src] shut" : "unwelds \the [src]"]."), \
-			SPAN_NOTICE("You [welded ? "weld \the [src] shut" : "unweld \the [src]"]."), \
-			"You hear welding.")
-		return TRUE
-
-	return ..()
+/obj/machinery/atmospherics/unary/vent_scrubber/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/WT = tool
+	if(!WT.can_use(1,user))
+		return
+	to_chat(user, SPAN_NOTICE("Now welding \the [src]."))
+	playsound(src, 'sound/items/Welder.ogg', 50, 1)
+	if(!do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		return
+	if(!src || !WT.remove_fuel(1, user))
+		return
+	welded = !welded
+	update_icon()
+	playsound(src, 'sound/items/Welder2.ogg', 50, 1)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [welded ? "welds \the [src] shut" : "unwelds \the [src]"]."), \
+		SPAN_NOTICE("You [welded ? "weld \the [src] shut" : "unweld \the [src]"]."), \
+		"You hear welding.")
 
 /obj/machinery/atmospherics/unary/vent_scrubber/examine(mob/user, distance)
 	. = ..()

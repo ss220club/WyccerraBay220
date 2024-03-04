@@ -41,34 +41,31 @@
 	throwforce = round(0.25*material.get_edge_damage())
 	force = round(0.5*material.get_blunt_damage())
 
-/obj/item/stack/material/rods/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWelder(W))
-		var/obj/item/weldingtool/WT = W
+/obj/item/stack/material/rods/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/weldingtool/WT = tool
 
-		if(material.ignition_point)
-			to_chat(user, SPAN_WARNING("You can't weld this material into sheets."))
-			return TRUE
+	if(material.ignition_point)
+		to_chat(user, SPAN_WARNING("You can't weld this material into sheets."))
+		return
 
-		if(!can_use(2))
-			to_chat(user, SPAN_WARNING("You need at least two rods to do this."))
-			return TRUE
+	if(!can_use(2))
+		to_chat(user, SPAN_WARNING("You need at least two rods to do this."))
+		return
 
-		if(WT.remove_fuel(1,user))
-			var/obj/item/stack/material/new_item = material.place_sheet(usr.loc)
-			new_item.add_to_stacks(usr)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] welds \the [src] into \a [material.sheet_singular_name]."),
-				SPAN_NOTICE("You weld \the [src] into \a [material.sheet_singular_name].")
-				)
-			var/obj/item/stack/material/rods/R = src
-			src = null
-			var/replace = (user.get_inactive_hand()==R)
-			R.use(2)
-			if (!R && replace)
-				user.put_in_hands(new_item)
-			return TRUE
-
-	return ..()
+	if(WT.remove_fuel(1,user))
+		var/obj/item/stack/material/new_item = material.place_sheet(usr.loc)
+		new_item.add_to_stacks(usr)
+		user.visible_message(
+			SPAN_NOTICE("\The [user] welds \the [src] into \a [material.sheet_singular_name]."),
+			SPAN_NOTICE("You weld \the [src] into \a [material.sheet_singular_name].")
+			)
+		var/obj/item/stack/material/rods/R = src
+		src = null
+		var/replace = (user.get_inactive_hand()==R)
+		R.use(2)
+		if (!R && replace)
+			user.put_in_hands(new_item)
 
 /obj/item/stack/material/rods/attack_self(mob/user as mob)
 	src.add_fingerprint(user)

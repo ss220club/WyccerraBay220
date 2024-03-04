@@ -249,6 +249,45 @@
 		SPAN_NOTICE("You [input == "Adjust Wiring" ? "adjust" : "remove"] the wiring in \the [src] with \the [tool].")
 	)
 
+/obj/structure/heavy_vehicle_frame/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!is_reinforced)
+		USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to weld.")
+		return
+	if (is_reinforced == FRAME_REINFORCED)
+		USE_FEEDBACK_FAILURE("\The [src]'s reinforcements need to be secured before you can weld them.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if (!welder.can_use(1, user, "to weld \the [src]'s internal reinforcements"))
+		return
+	var/current_state = is_reinforced
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding \the [src]'s internal reinforcements with \a [tool]."),
+		SPAN_NOTICE("You start [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding \the [src]'s internal reinforcements with \the [tool]."),
+		SPAN_ITALIC("You hear welding.")
+	)
+	if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+		return
+	if (!is_reinforced)
+		USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to weld.")
+		return
+	if (is_reinforced == FRAME_REINFORCED)
+		USE_FEEDBACK_FAILURE("\The [src]'s reinforcements need to be secured before you can weld them.")
+		return
+	if (current_state != is_reinforced)
+		USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+		return
+	if (!welder.remove_fuel(1, user))
+		return
+	is_reinforced = is_reinforced == FRAME_REINFORCED_WELDED ? FRAME_REINFORCED_SECURE : FRAME_REINFORCED_WELDED
+	update_icon()
+	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welds \the [src]'s internal reinforcements with \a [tool]."),
+		SPAN_NOTICE("You [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]weld \the [src]'s internal reinforcements with \the [tool]."),
+	)
+
 /obj/structure/heavy_vehicle_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
 	if (isCoil(tool))
@@ -313,46 +352,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] reinforces \the [src] with \a [tool]."),
 			SPAN_NOTICE("You reinforce \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	// Welding Tool - Weld reinforcements
-	if (isWelder(tool))
-		if (!is_reinforced)
-			USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to weld.")
-			return TRUE
-		if (is_reinforced == FRAME_REINFORCED)
-			USE_FEEDBACK_FAILURE("\The [src]'s reinforcements need to be secured before you can weld them.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to weld \the [src]'s internal reinforcements"))
-			return TRUE
-		var/current_state = is_reinforced
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding \the [src]'s internal reinforcements with \a [tool]."),
-			SPAN_NOTICE("You start [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding \the [src]'s internal reinforcements with \the [tool]."),
-			SPAN_ITALIC("You hear welding.")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!is_reinforced)
-			USE_FEEDBACK_FAILURE("\The [src] has no reinforcements to weld.")
-			return TRUE
-		if (is_reinforced == FRAME_REINFORCED)
-			USE_FEEDBACK_FAILURE("\The [src]'s reinforcements need to be secured before you can weld them.")
-			return TRUE
-		if (current_state != is_reinforced)
-			USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
-			return TRUE
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		is_reinforced = is_reinforced == FRAME_REINFORCED_WELDED ? FRAME_REINFORCED_SECURE : FRAME_REINFORCED_WELDED
-		update_icon()
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welds \the [src]'s internal reinforcements with \a [tool]."),
-			SPAN_NOTICE("You [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]weld \the [src]'s internal reinforcements with \the [tool]."),
 		)
 		return TRUE
 

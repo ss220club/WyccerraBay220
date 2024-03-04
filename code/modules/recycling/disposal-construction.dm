@@ -154,36 +154,31 @@
 	..()
 
 
-/obj/structure/disposalconstruct/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/disposalconstruct/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	var/obj/structure/disposalpipe/connected_pipe = locate() in get_turf(src)
-
 	// Welding Tool - Weld into place
-	if (isWelder(tool))
-		if (!anchored)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be anchored to the floor before you can weld it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to weld \the [src] down."))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts welding \the [src] down with \a [tool]."),
-			SPAN_NOTICE("You start welding \the [src] down with \the [tool]."),
-			SPAN_ITALIC("You hear welding.")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] welds \the [src] down with \a [tool]."),
-			SPAN_NOTICE("You weld \the [src] down with \the [tool].")
-		)
-		build(connected_pipe)
-		qdel_self()
-		return TRUE
-
-	return ..()
-
+	if(!anchored)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be anchored to the floor before you can weld it.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if(!welder.can_use(1, user, "to weld \the [src] down."))
+		return
+	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts welding \the [src] down with \a [tool]."),
+		SPAN_NOTICE("You start welding \the [src] down with \the [tool]."),
+		SPAN_ITALIC("You hear welding.")
+	)
+	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
+		return
+	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] welds \the [src] down with \a [tool]."),
+		SPAN_NOTICE("You weld \the [src] down with \the [tool].")
+	)
+	build(connected_pipe)
+	qdel(src)
 
 /obj/structure/disposalconstruct/hides_under_flooring()
 	return anchored

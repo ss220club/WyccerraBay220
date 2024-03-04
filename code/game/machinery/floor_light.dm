@@ -52,21 +52,20 @@ var/global/list/floor_light_cache = list()
 	new /obj/item/stack/material/glass(src.loc, 1)
 	qdel(src)
 
-/obj/machinery/floor_light/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isWelder(W) && (health_damaged() || MACHINE_IS_BROKEN(src)))
-		var/obj/item/weldingtool/WT = W
+/obj/machinery/floor_light/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(health_damaged() || MACHINE_IS_BROKEN(src))
+		var/obj/item/weldingtool/WT = tool
 		if(!WT.can_use(1, user))
-			return TRUE
+			return
 		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-		if(!do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return TRUE
+		if(!do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+			return
 		if(!src || !WT.remove_fuel(1, user))
-			return TRUE
+			return
 		visible_message(SPAN_NOTICE("\The [user] has repaired \the [src]."))
 		set_broken(FALSE)
 		revive_health()
-		return TRUE
-	return ..()
 
 /obj/machinery/floor_light/on_death()
 	..()

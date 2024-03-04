@@ -362,6 +362,24 @@
 		SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
 	)
 
+/obj/structure/window/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!health_damaged())
+		USE_FEEDBACK_FAILURE("\The [src] does not need repairs.")
+		return
+	if(!repair_pending)
+		USE_FEEDBACK_FAILURE("\The [src] needs some [get_material_display_name()] applied before you can weld it.")
+		return
+	var/obj/item/weldingtool/welder = tool
+	if(!welder.remove_fuel(1, user))
+		return
+	restore_health(repair_pending)
+	repair_pending = 0
+	user.visible_message(
+		SPAN_NOTICE("\The [user] welds \the [src]'s [material] into place with \a [tool]."),
+		SPAN_NOTICE("You weld \the [src]'s [material] into place with \the [tool].")
+	)
+
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window
 	if (isCoil(tool))
@@ -422,25 +440,6 @@
 			SPAN_NOTICE("You slice \the [src] apart with \the [tool].")
 		)
 		dismantle()
-		return TRUE
-
-	// Welding Tool - Finalize repairs
-	if (isWelder(tool))
-		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] does not need repairs.")
-			return TRUE
-		if (!repair_pending)
-			USE_FEEDBACK_FAILURE("\The [src] needs some [get_material_display_name()] applied before you can weld it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		restore_health(repair_pending)
-		repair_pending = 0
-		user.visible_message(
-			SPAN_NOTICE("\The [user] welds \the [src]'s [material] into place with \a [tool]."),
-			SPAN_NOTICE("You weld \the [src]'s [material] into place with \the [tool].")
-		)
 		return TRUE
 
 	return ..()

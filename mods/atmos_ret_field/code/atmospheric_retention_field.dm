@@ -87,25 +87,24 @@
 	wires_intact = !wires_intact
 	update_icon()
 
-/obj/machinery/atmospheric_field_generator/use_tool(obj/item/tool, mob/user, list/click_params)
-	if(hatch_open && (isWelder(tool)))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(5, user))
-			to_chat(user, SPAN_WARNING("You need more fuel to complete this task."))
-			return TRUE // uses up 5 fuel.
+/obj/machinery/atmospheric_field_generator/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!hatch_open)
+		return
+	var/obj/item/weldingtool/welder = tool
+	if (!welder.remove_fuel(5, user))
+		to_chat(user, SPAN_WARNING("You need more fuel to complete this task."))
+		return
 
-		user.visible_message("[user] starts to disassemble \the [src].", "You start to disassemble \the [src].")
-		playsound(loc, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+	user.visible_message("[user] starts to disassemble \the [src].", "You start to disassemble \the [src].")
+	playsound(loc, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
 
-		if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if(!src || !user || !welder.remove_fuel(5, user))
-				return TRUE
+	if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
+		if(!src || !user || !welder.remove_fuel(5, user))
+			return
 
-			to_chat(user, SPAN_NOTICE("You fully disassemble \the [src]. There were no salvageable parts."))
-			qdel_self()
-			return TRUE
-
-	return ..()
+		to_chat(user, SPAN_NOTICE("You fully disassemble \the [src]. There were no salvageable parts."))
+		qdel(src)
 
 /obj/machinery/atmospheric_field_generator/perma/Initialize()
 	. = ..()

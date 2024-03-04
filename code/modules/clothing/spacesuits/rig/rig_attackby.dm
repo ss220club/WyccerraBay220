@@ -90,6 +90,11 @@
 		return
 	wires.Interact(user)
 
+/obj/item/rig/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(chest)
+		chest.attackby(tool, user)
+
 /obj/item/rig/attackby(obj/item/W as obj, mob/user as mob)
 	if(!isliving(user))
 		return
@@ -99,7 +104,7 @@
 			return
 
 	// Pass repair items on to the chestpiece.
-	if(chest && (istype(W,/obj/item/stack/material) || isWelder(W)))
+	if(chest && istype(W,/obj/item/stack/material))
 		return chest.attackby(W,user)
 
 	// Lock or unlock the access panel.

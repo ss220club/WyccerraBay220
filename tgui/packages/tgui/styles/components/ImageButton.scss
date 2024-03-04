@@ -33,29 +33,13 @@ $bg-map: colors.$bg-map !default;
   }
 }
 
-.ImageButton__children {
-  display: -ms-flexbox;
-  margin-top: 0.5em;
-
-  &:first-child {
-    margin-top: 0;
-  }
-
-  &:last-child {
-    margin-bottom: 0.5em;
-  }
-}
-
-.ImageButton__children--item {
-  display: -ms-flexbox;
-}
-
 .ImageButton__image {
   line-height: 0;
   align-self: center;
 }
 
-.ImageButton__vertical {
+.ImageButton__vertical,
+.ImageButton--vertical {
   display: inline-block;
 }
 
@@ -68,9 +52,14 @@ $bg-map: colors.$bg-map !default;
   &:first-child {
     margin-top: 0;
   }
+}
 
-  &:last-child {
-    margin-bottom: 0.5em;
+.ImageButton--horizontal {
+  display: -ms-flexbox;
+  margin-top: 0.5em;
+
+  &:first-child {
+    margin-top: 0;
   }
 }
 
@@ -112,12 +101,12 @@ $bg-map: colors.$bg-map !default;
 
 .ImageButton__content__horizontal--title {
   font-weight: bold;
-  margin: base.em(6px);
-  margin-bottom: 0;
+  padding: base.em(6px);
+  padding-bottom: 0;
 }
 
 .ImageButton__content__horizontal--content {
-  margin: base.em(6px);
+  padding: base.em(6px);
 }
 
 .ImageButton__content__horizontal--divider {

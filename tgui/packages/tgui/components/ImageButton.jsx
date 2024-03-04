@@ -38,13 +38,12 @@ export const ImageButton = (props) => {
   let buttonContent = (
     <div
       className={classes([
-        children && 'ImageButton__children',
-        vertical && 'ImageButton__vertical',
+        vertical ? 'ImageButton--vertical' : 'ImageButton--horizontal',
       ])}
     >
       <div
         className={classes([
-          vertical ? '' : 'ImageButton__horizontal',
+          vertical ? 'ImageButton__vertical' : 'ImageButton__horizontal',
           selected && 'ImageButton--selected',
           disabled && 'ImageButton--disabled',
           color && typeof color === 'string'
@@ -112,11 +111,7 @@ export const ImageButton = (props) => {
             </div>
           ))}
       </div>
-      {children && (
-        <div className={classes(['ImageButton__children--item'])}>
-          {children}
-        </div>
-      )}
+      {children}
     </div>
   );
 
@@ -168,43 +163,45 @@ export const ImageButtonItem = (props) => {
     }
   };
   let itemContent = (
-    <div
-      className={classes([
-        'ImageButton__item',
-        selected && 'ImageButton__item--selected',
-        disabled && 'ImageButton__item--disabled',
-        color && typeof color === 'string'
-          ? 'ImageButton__item--color--' + color
-          : 'ImageButton__item--color--default',
-        className,
-        computeBoxClassName(rest),
-      ])}
-      tabIndex={!disabled && '0'}
-      {...computeBoxProps(rest)}
-    >
-      <div>
-        {icon && iconPosition === 'top' && (
-          <Icon
-            mb={0.5}
-            name={icon}
-            color={iconColor}
-            rotation={iconRotation}
-            size={iconSize}
-          />
-        )}
+    <div>
+      <div
+        className={classes([
+          'ImageButton__item',
+          selected && 'ImageButton__item--selected',
+          disabled && 'ImageButton__item--disabled',
+          color && typeof color === 'string'
+            ? 'ImageButton__item--color--' + color
+            : 'ImageButton__item--color--default',
+          className,
+          computeBoxClassName(rest),
+        ])}
+        tabIndex={!disabled && '0'}
+        {...computeBoxProps(rest)}
+      >
         <div>
-          {disabled ? disabledContent : content}
-          {children}
+          {icon && iconPosition === 'top' && (
+            <Icon
+              mb={0.5}
+              name={icon}
+              color={iconColor}
+              rotation={iconRotation}
+              size={iconSize}
+            />
+          )}
+          <div>
+            {disabled ? disabledContent : content}
+            {children}
+          </div>
+          {icon && iconPosition !== 'top' && (
+            <Icon
+              mt={0.5}
+              name={icon}
+              color={iconColor}
+              rotation={iconRotation}
+              size={iconSize}
+            />
+          )}
         </div>
-        {icon && iconPosition !== 'top' && (
-          <Icon
-            mt={0.5}
-            name={icon}
-            color={iconColor}
-            rotation={iconRotation}
-            size={iconSize}
-          />
-        )}
       </div>
     </div>
   );

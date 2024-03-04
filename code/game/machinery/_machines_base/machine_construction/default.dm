@@ -25,7 +25,7 @@
 	if (!machine.can_use_tools)
 		to_chat(user, SPAN_WARNING("\The [src] cannot be modified!"))
 		return TRUE
-	if(isScrewdriver(I))
+	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		TRANSFER_STATE(down_state)
 		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = TRUE
@@ -68,7 +68,7 @@
 		TRANSFER_STATE(down_state)
 		machine.dismantle()
 		return
-	if(isScrewdriver(I))
+	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		TRANSFER_STATE(up_state)
 		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = FALSE

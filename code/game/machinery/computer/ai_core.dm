@@ -298,7 +298,7 @@ var/global/list/empty_playable_ai_cores = list()
 	// - State 2 - Fasten circuitboard, move to State 3
 	// - State 3 - Unfasten circuitboard, move to State 2
 	// - State 5 - Finish core
-	if (isScrewdriver(tool))
+	if (tool.tool_behaviour == TOOL_SCREWDRIVER)
 		if (state < STATE_CIRCUIT)
 			USE_FEEDBACK_FAILURE("\The [src] has no circuit to fasten.")
 			return TRUE

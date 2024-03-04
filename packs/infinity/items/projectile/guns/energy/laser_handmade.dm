@@ -208,7 +208,7 @@
 				to_chat(user, SPAN_NOTICE("You processed the lens with [tool], making it perfect."))
 				buildstate++
 		if(17)
-			if(isScrewdriver(tool))
+			if(tool.tool_behaviour == TOOL_SCREWDRIVER)
 				to_chat(user, SPAN_NOTICE("You secure everything with [tool]."))
 				new /obj/item/gun/energy/laser/craftable(get_turf(src))
 				qdel(src)

@@ -129,7 +129,7 @@
 		machine.circuit = null
 		to_chat(user, SPAN_NOTICE("You remove the circuit board."))
 		return
-	if(isScrewdriver(I))
+	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		playsound(machine.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		var/obj/machinery/new_machine = new machine.circuit.build_path(machine.loc, machine.dir, FALSE)
 		machine.circuit.construct(new_machine)

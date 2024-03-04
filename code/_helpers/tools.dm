@@ -9,18 +9,6 @@
 /// True when A exists and can be used as a cable coil.
 #define isCoil(A) (A?.IsCoil())
 
-/// True when this atom can be used as a screwdriver.
-/atom/proc/IsScrewdriver()
-	return FALSE
-
-/// Defines the base screwdriver as useable as a screwdriver.
-/obj/item/screwdriver/IsScrewdriver()
-	return TRUE
-
-/// True when A exists and can be used as a screwdriver.
-#define isScrewdriver(A) (A?.IsScrewdriver())
-
-
 /// True when this atom can be used as a multitool.
 /atom/proc/IsMultitool()
 	return FALSE

@@ -7,7 +7,7 @@
 	if(isCoil(C) || (flooring && istype(C, /obj/item/stack/material/rods)))
 		return ..(C, user)
 
-	if(!(isScrewdriver(C) && flooring && (flooring.flags & TURF_REMOVE_SCREWDRIVER)) && try_graffiti(user, C))
+	if(!(C.tool_behaviour == TOOL_SCREWDRIVER && flooring && (flooring.flags & TURF_REMOVE_SCREWDRIVER)) && try_graffiti(user, C))
 		return TRUE
 
 	if(flooring)
@@ -42,7 +42,7 @@
 			playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
 			return TRUE
 
-		else if(isScrewdriver(C) && (flooring.flags & TURF_REMOVE_SCREWDRIVER))
+		else if(C.tool_behaviour == TOOL_SCREWDRIVER && (flooring.flags & TURF_REMOVE_SCREWDRIVER))
 			if(broken || burnt)
 				return ..()
 			if (flooring.remove_timer)

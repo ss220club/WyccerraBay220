@@ -14,7 +14,7 @@
 /singleton/machine_construction/tcomms/panel_closed/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if((. = ..()))
 		return
-	if(isScrewdriver(I))
+	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
 		machine.panel_open = TRUE
 		to_chat(user, "You unfasten the bolts.")
@@ -46,7 +46,7 @@
 	return state_interactions(I, user, machine)
 
 /singleton/machine_construction/tcomms/panel_open/proc/state_interactions(obj/item/I, mob/user, obj/machinery/machine)
-	if(isScrewdriver(I))
+	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_closed)
 		machine.panel_open = FALSE
 		to_chat(user, "You fasten the bolts.")

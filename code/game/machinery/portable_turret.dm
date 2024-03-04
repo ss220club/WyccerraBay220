@@ -705,7 +705,7 @@ var/global/list/turret_icons
 				return TRUE
 
 		if(5)
-			if(isScrewdriver(I))
+			if(I.tool_behaviour == TOOL_SCREWDRIVER)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 6
 				to_chat(user, SPAN_NOTICE("You close the internal access hatch."))
@@ -721,7 +721,7 @@ var/global/list/turret_icons
 					to_chat(user, SPAN_WARNING("You need two sheets of metal to continue construction."))
 				return TRUE
 
-			else if (isScrewdriver(I))
+			else if(I.tool_behaviour == TOOL_SCREWDRIVER)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 5
 				to_chat(user, SPAN_NOTICE("You open the internal access hatch."))

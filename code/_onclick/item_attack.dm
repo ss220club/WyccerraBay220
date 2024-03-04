@@ -53,19 +53,26 @@ avoid code duplication. This includes items that may sometimes act as a standard
 
 	use_call = "use"
 	. = use_before(atom, user, click_params)
-	if (!. && user.a_intent == I_HURT)
+	if(!. && user.a_intent == I_HURT)
 		use_call = "weapon"
 		. = atom.use_weapon(src, user, click_params)
-	if (!.)
+	if(!.)
+		use_call = "tool"
+		var/item_interact_result = atom.item_interaction(user, src, click_params)
+		if(item_interact_result & ITEM_INTERACT_SUCCESS)
+			. = TRUE
+		if(item_interact_result & ITEM_INTERACT_BLOCKING)
+			. = FALSE
+	if(!.)
 		use_call = "tool"
 		. = atom.use_tool(src, user, click_params)
-	if (!.)
+	if(!.)
 		use_call = "attackby"
 		. = atom.attackby(src, user, click_params)
-	if (!.)
+	if(!.)
 		use_call = "use"
 		. = use_after(atom, user, click_params)
-	if (!.)
+	if(!.)
 		use_call = null
 	atom.post_use_item(src, user, ., use_call, click_params)
 
@@ -353,11 +360,6 @@ avoid code duplication. This includes items that may sometimes act as a standard
  */
 /atom/proc/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	SHOULD_CALL_PARENT(TRUE)
-	var/item_interact_result = src.item_interaction(user, tool, click_params)
-	if(item_interact_result & ITEM_INTERACT_SUCCESS)
-		return TRUE
-	if(item_interact_result & ITEM_INTERACT_BLOCKING)
-		return FALSE
 	return FALSE
 
 

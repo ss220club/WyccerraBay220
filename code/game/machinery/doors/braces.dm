@@ -15,6 +15,7 @@
 	base_parry_chance = 30
 	applies_material_colour = FALSE
 	tool_behaviour = TOOL_CROWBAR
+	usesound = DEFAULT_CROWBAR_SOUND
 
 /obj/item/material/twohanded/jack/aluminium
 	default_material = MATERIAL_ALUMINIUM

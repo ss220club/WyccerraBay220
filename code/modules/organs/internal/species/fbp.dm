@@ -35,7 +35,7 @@
 		return FALSE
 	return cell && cell.checked_use(amount)
 
-/obj/item/organ/internal/cell/proc/use(amount)
+/obj/item/organ/internal/cell/use(amount)
 	if(!is_usable())
 		return 0
 	return cell && cell.use(amount)

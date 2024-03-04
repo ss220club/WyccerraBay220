@@ -110,10 +110,10 @@
 /// The mob currently interacting with the atom during a `do_after` timer. Used to validate `DO_TARGET_UNIQUE_ACT` flag checks.
 /atom/var/do_unique_target_user
 
-/proc/do_after(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT)
-	return !do_after_detailed(user, delay, target, do_flags, incapacitation_flags)
+/proc/do_after(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT, datum/callback/extra_checks)
+	return !do_after_detailed(user, delay, target, do_flags, incapacitation_flags, extra_checks)
 
-/proc/do_after_detailed(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT)
+/proc/do_after_detailed(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT, datum/callback/extra_checks)
 	if (!delay)
 		return FALSE
 
@@ -203,6 +203,10 @@
 			break
 		if (target_zone && user.zone_sel.selecting != target_zone)
 			. = DO_USER_SAME_ZONE
+			break
+		if (extra_checks && !invoke(extra_checks))
+			. = FALSE
+			do_feedback = FALSE
 			break
 
 	if (. && do_feedback)

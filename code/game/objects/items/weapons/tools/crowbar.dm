@@ -18,6 +18,7 @@
 	center_of_mass = "x=16;y=20"
 	attack_verb = list("attacked", "bashed", "battered", "bludgeoned", "whacked")
 	tool_behaviour = TOOL_CROWBAR
+	usesound = DEFAULT_CROWBAR_SOUND
 
 /obj/item/crowbar/red
 	icon_state = "red_crowbar"

@@ -26,6 +26,7 @@
 	var/active_tool = BOLT_HEAD
 	var/previous_tool = 1
 	tool_behaviour = TOOL_WRENCH
+	usesound = DEFAULT_WRENCH_SOUND
 
 /obj/item/swapper/istool()
 	return TRUE

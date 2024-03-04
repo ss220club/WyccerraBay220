@@ -4,6 +4,7 @@
 	force = 1
 	var/emulating = "Crowbar"
 	tool_behaviour = TOOL_CROWBAR
+	usesound = DEFAULT_CROWBAR_SOUND
 
 /obj/item/psychic_power/tinker/attack_self()
 	if(!owner || loc != owner)

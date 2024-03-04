@@ -130,18 +130,23 @@
  *
  * Returns boolean. Whether or not the do after check passed.
  */
+
 /mob/proc/do_skilled(base_delay, skill_path, atom/target = null, factor = 0.3, do_flags = DO_PUBLIC_UNIQUE)
-	var/final_delay
-	if (islist(skill_path))
+	var/delay_multiplier = skill_delay_mult(skill_path, factor)
+	base_delay *= delay_multiplier
+	return do_after(src, base_delay, target, do_flags)
+
+/mob/proc/skill_delay_total(skill_path, factor = 0.3)
+	. = 1
+	if(isnull(skill_path))
+		return
+	if(islist(skill_path))
 		for (var/path as anything in skill_path)
 			var/check_delay = skill_delay_mult(path, factor)
-			if (check_delay < final_delay)
-				final_delay = check_delay
+			if (check_delay < .)
+				. = check_delay
 	else
-		final_delay = skill_delay_mult(skill_path, factor)
-	final_delay *= base_delay
-	return do_after(src, final_delay, target, do_flags)
-
+		. = skill_delay_mult(skill_path, factor)
 
 // A generic way of modifying success probabilities via skill values. Higher factor means skills have more effect. fail_chance is the chance at SKILL_UNSKILLED.
 /mob/proc/skill_fail_chance(skill_path, fail_chance, no_more_fail = SKILL_MAX, factor = 1)

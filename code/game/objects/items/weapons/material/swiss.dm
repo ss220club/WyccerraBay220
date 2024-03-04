@@ -56,11 +56,11 @@
 	tool_behaviour = null
 	switch(active_tool)
 		if(SWISSKNF_CROWBAR)
-			tool_behaviour = TOOL_CROWBAR
+			change_tool_behaviour(TOOL_CROWBAR)
 		if(SWISSKNF_CLIFTER, SWISSKNF_COPENER)
-			tool_behaviour = TOOL_SCREWDRIVER
+			change_tool_behaviour(TOOL_SCREWDRIVER)
 		if(SWISSKNF_WCUTTER)
-			tool_behaviour = TOOL_WIRECUTTER
+			change_tool_behaviour(TOOL_WIRECUTTER)
 
 	update_force()
 	update_icon()

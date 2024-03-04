@@ -261,9 +261,9 @@
 	change_tool_behaviour(device.tool_behaviour)
 	RegisterSignal(device, COMSIG_OBJ_CHANGE_TOOL_BEHAVIOUR, PROC_REF(update_tool_behaviour))
 
-/obj/item/rig_module/device/clustertool/skrell/proc/update_tool_behaviour(obj/item/tool, new_tool_behaviour, new_toolspeed)
+/obj/item/rig_module/device/clustertool/skrell/proc/update_tool_behaviour(obj/item/tool, new_tool_behaviour, new_toolspeed, override_sound)
 	SIGNAL_HANDLER
-	change_tool_behaviour(new_tool_behaviour, new_toolspeed)
+	change_tool_behaviour(new_tool_behaviour, new_toolspeed, override_sound)
 
 // Self-charging power cell.
 /obj/item/cell/skrell

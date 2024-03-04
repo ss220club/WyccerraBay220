@@ -13,23 +13,26 @@ $color-disabled: #4d1717 !default;
 $color-selected: colors.bg(colors.$green) !default;
 $bg-map: colors.$bg-map !default;
 
-@mixin button-color($color) {
+@mixin button-style($color, $clickable: false) {
   $luminance: luminance($color);
 
-  transition:
-    color 100ms,
-    background-color 100ms;
   background-color: rgba($color, 0.15);
   border: base.em(1px) solid rgba(lighten($color, 50%), 0.2);
 
-  &:focus {
+  @if $clickable {
     transition:
-      color 250ms,
-      background-color 250ms;
-  }
+      color 100ms,
+      background-color 100ms;
 
-  &:hover {
-    background-color: rgba(lighten($color, 25%), 0.25);
+    &:focus {
+      transition:
+        color 250ms,
+        background-color 250ms;
+    }
+
+    &:hover {
+      background-color: rgba(lighten($color, 25%), 0.25);
+    }
   }
 }
 
@@ -65,12 +68,20 @@ $bg-map: colors.$bg-map !default;
 
 @each $color-name, $color-value in $bg-map {
   .ImageButton--color--#{$color-name} {
-    @include button-color($color-value);
+    @include button-style($color-value);
+  }
+
+  .ImageButton--color--clickable--#{$color-name} {
+    @include button-style($color-value, true);
   }
 }
 
 .ImageButton--color--default {
-  @include button-color(rgba(lighten($color-default, 100%), 0.2));
+  @include button-style(rgba(lighten($color-default, 100%), 0.2));
+}
+
+.ImageButton--color--default--clickable {
+  @include button-style(rgba(lighten($color-default, 100%), 0.2), true);
 }
 
 .ImageButton--disabled {
@@ -79,7 +90,7 @@ $bg-map: colors.$bg-map !default;
 }
 
 .ImageButton--selected {
-  @include button-color($color-selected);
+  @include button-style($color-selected);
   border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
 }
 
@@ -120,7 +131,7 @@ $bg-map: colors.$bg-map !default;
   text-overflow: ellipsis;
 }
 
-@mixin content-color($color) {
+@mixin content-style($color) {
   $luminance: luminance($color);
   $text-color: if($luminance > 0.3, rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 1));
 
@@ -131,12 +142,12 @@ $bg-map: colors.$bg-map !default;
 
 @each $color-name, $color-value in $bg-map {
   .ImageButton__content--color--#{$color-name} {
-    @include content-color(rgba($color-value, 1));
+    @include content-style(rgba($color-value, 1));
   }
 }
 
 .ImageButton__content--color--default {
-  @include content-color(rgba(lighten($color-default, 80%), 1));
+  @include content-style(rgba(lighten($color-default, 80%), 1));
 }
 
 .ImageButton__content--disabled {
@@ -159,7 +170,7 @@ $bg-map: colors.$bg-map !default;
   height: 100%;
 }
 
-@mixin item-color($color) {
+@mixin item-style($color) {
   $luminance: luminance($color);
 
   transition:
@@ -182,12 +193,12 @@ $bg-map: colors.$bg-map !default;
 
 @each $color-name, $color-value in $bg-map {
   .ImageButton__item--color--#{$color-name} {
-    @include item-color(rgba($color-value, 1));
+    @include item-style(rgba($color-value, 1));
   }
 }
 
 .ImageButton__item--color--default {
-  @include item-color(rgba(lighten($color-default, 100%), 1));
+  @include item-style(rgba(lighten($color-default, 100%), 1));
 }
 
 .ImageButton__item--disabled {
@@ -197,7 +208,7 @@ $bg-map: colors.$bg-map !default;
 }
 
 .ImageButton__item--selected {
-  @include item-color($color-selected);
+  @include item-style($color-selected);
   border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
   border-left: 0;
 }

@@ -34,6 +34,7 @@ const COLORS_STATES = ['good', 'average', 'bad', 'black', 'white'];
 
 const Story = (props, context) => {
   const [disabled, setDisabled] = useLocalState(context, 'disabled', false);
+  const [onClick, setOnClick] = useLocalState(context, 'onClick', true);
   const [vertical1, setVertical1] = useLocalState(context, 'vertical1', true);
   const [vertical2, setVertical2] = useLocalState(context, 'vertical2', true);
   const [vertical3, setVertical3] = useLocalState(context, 'vertical3', false);
@@ -70,6 +71,10 @@ const Story = (props, context) => {
 
   const toggleDisabled = () => {
     setDisabled(!disabled);
+  };
+
+  const toggleOnClick = () => {
+    setOnClick(!onClick);
   };
 
   return (
@@ -115,15 +120,25 @@ const Story = (props, context) => {
                   onInput={(e, value) => setItemIcon(value)}
                 />
               </LabeledList.Item>
-              <LabeledList.Item label="Vertical">
+            </LabeledList>
+            <Stack mt={1}>
+              <Stack.Item grow>
+                <Button.Checkbox
+                  fluid
+                  content="onClick"
+                  checked={onClick}
+                  onClick={toggleOnClick}
+                />
+              </Stack.Item>
+              <Stack.Item grow>
                 <Button.Checkbox
                   fluid
                   content="Vertical"
                   checked={vertical3}
                   onClick={toggleVertical3}
                 />
-              </LabeledList.Item>
-            </LabeledList>
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
         </Stack>
         <ImageButton
@@ -143,6 +158,7 @@ const Story = (props, context) => {
             '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'
           }
           imageSize={`${imageSize}px`}
+          onClick={onClick ? () => 'false' : ''}
         >
           {!vertical3 && (
             <ImageButton.Item
@@ -181,6 +197,7 @@ const Story = (props, context) => {
               'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAOVBMVEXAwMDBr16vk0uORiz/o7HyfxiZbDXWzMzhbA3//wD////tHCQAAP/4ior/ADOAgIDAwMAAAAAzmQDdkuRxAAAAAXRSTlMAQObYZgAAAKxJREFUOI3dksESgyAMRG0FE4I22P//2IaAVdB0em3Xy477SJYZhuFfdDO1AXdD4xtwRd77o5t6wKt20wPlN2QVewUgQqAAiD0QYxQCJYc5zCAEtisUcBkgmUAZ6ErGWh9oeSwE6k+3yHNACIIPgMzQONsWYOZ90QXAiRK7g2K7gtNKayXKjdoOcv4pX+IcGoBMqIA26TswSU6HmueSpLlRcjK0AaOpL97rb+gFHckLe1QlljQAAAAASUVORK5CYII='
             }
             imageSize={vertical1 ? '48px' : '24px'}
+            onClick={onClick ? () => 'false' : ''}
           />
         ))}
       </Section>
@@ -205,6 +222,7 @@ const Story = (props, context) => {
               'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAJ1BMVEUAAABeGFCgXZN2PnKqqqq/vr/T09PycWFIHUFeKlNLHEtVWWOOj5g02k6OAAAAAXRSTlMAQObYZgAAAFdJREFUKJFjYBhEgFEQDATgAkImLkDgrIgQME0vSy8LRhYoBwISBdLLy1HNSCsvT0MWwLDWGAwQAp0rZ+3evXLWDGSBM2dQBWYCAUkCHB1g0IAreAYCAACm2zDykxPL4AAAAABJRU5ErkJggg=='
             }
             imageSize={vertical2 ? '48px' : '24px'}
+            onClick={onClick ? () => 'false' : ''}
           />
         ))}
       </Section>

@@ -42,8 +42,12 @@ export const ImageButton = (props) => {
         selected && 'ImageButton--selected',
         disabled && 'ImageButton--disabled',
         color && typeof color === 'string'
-          ? 'ImageButton--color--' + color
-          : 'ImageButton--color--default',
+          ? onClick
+            ? 'ImageButton--color--clickable--' + color
+            : 'ImageButton--color--' + color
+          : onClick
+            ? 'ImageButton--color--default--clickable'
+            : 'ImageButton--color--default',
         className,
         computeBoxClassName(rest),
       ])}

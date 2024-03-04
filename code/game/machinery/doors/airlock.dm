@@ -900,7 +900,7 @@ About the new airlock wires panel:
 	var/cut_verb
 	var/cut_sound
 
-	if(isWelder(item))
+	if(item.tool_behaviour == TOOL_WELDER)
 		var/obj/item/weldingtool/WT = item
 		if(!WT.remove_fuel(3,user))
 			return 0
@@ -1027,6 +1027,26 @@ About the new airlock wires panel:
 	. = ITEM_INTERACT_SUCCESS
 	attack_hand(user)
 
+/obj/machinery/door/airlock/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!repairing && MACHINE_IS_BROKEN(src) && locked) //bolted and broken
+		if(cut_bolts(tool, user))
+			return
+
+	if(!repairing && operating != DOOR_OPERATING_YES && density)
+		var/obj/item/weldingtool/W = tool
+		if(!W.can_use(1, user))
+			return
+		playsound(src, 'sound/items/Welder.ogg', 50, 1)
+		user.visible_message(SPAN_WARNING("\The [user] begins welding \the [src] [welded ? "open" : "closed"]!"),
+							SPAN_NOTICE("You begin welding \the [src] [welded ? "open" : "closed"]."))
+		if(!do_after(user, (rand(3,5)) SECONDS, src, DO_REPAIR_CONSTRUCT))
+			return
+		if(density && operating != DOOR_OPERATING_YES && !repairing && W.remove_fuel(1, user))
+			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
+			welded = !welded
+			update_icon()
+
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)
 	// Brace is considered installed on the airlock, so interacting with it is protected from electrification.
 	if(brace && C && (istype(C.GetIdCard(), /obj/item/card/id) || istype(C, /obj/item/material/twohanded/jack)))
@@ -1056,23 +1076,6 @@ About the new airlock wires panel:
 
 	if (!repairing && MACHINE_IS_BROKEN(src) && locked) //bolted and broken
 		if (cut_bolts(C,user))
-			return TRUE
-
-	if (!repairing && isWelder(C) && operating != DOOR_OPERATING_YES && density)
-		var/obj/item/weldingtool/W = C
-		if(!W.can_use(1, user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-		user.visible_message(SPAN_WARNING("\The [user] begins welding \the [src] [welded ? "open" : "closed"]!"),
-							SPAN_NOTICE("You begin welding \the [src] [welded ? "open" : "closed"]."))
-		if(do_after(user, (rand(3,5)) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if (density && operating != DOOR_OPERATING_YES && !repairing && W.remove_fuel(1, user))
-				playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-				welded = !welded
-				update_icon()
-				return TRUE
-		else
-			to_chat(user, SPAN_NOTICE("You must remain still to complete this task."))
 			return TRUE
 
 	if (istype(C, /obj/item/device/assembly/signaler))

@@ -184,7 +184,7 @@
 				else
 					to_chat(user, SPAN_NOTICE("You need at least 30 segments of [tool] to complete this task."))
 		if(13)
-			if(isWelder(tool))
+			if(tool.tool_behaviour == TOOL_WELDER)
 				var/obj/item/weldingtool/T = tool
 				if(T.remove_fuel(0,user))
 					if(!src || !T.isOn()) return TRUE

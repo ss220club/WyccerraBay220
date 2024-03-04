@@ -85,7 +85,7 @@ var/global/bomb_set
 	if(anchored)
 		switch(removal_stage)
 			if(0)
-				if(isWelder(O))
+				if(O.tool_behaviour == TOOL_WELDER)
 					var/obj/item/weldingtool/WT = O
 					if(!WT.can_use(5, user))
 						return TRUE
@@ -121,7 +121,7 @@ var/global/bomb_set
 					return TRUE
 
 			if(2)
-				if(isWelder(O))
+				if(O.tool_behaviour == TOOL_WELDER)
 					var/obj/item/weldingtool/WT = O
 					if(!WT.can_use(5, user))
 						return TRUE

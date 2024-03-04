@@ -120,7 +120,7 @@
 /singleton/surgery_step/hardsuit/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
 		return FALSE
-	if(isWelder(tool))
+	if(tool.tool_behaviour == TOOL_WELDER)
 		var/obj/item/weldingtool/welder = tool
 		if(!welder.remove_fuel(1,user))
 			return FALSE

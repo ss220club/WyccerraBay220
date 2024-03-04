@@ -213,7 +213,7 @@
 		if(BP_IS_BRITTLE(affected))
 			to_chat(user, SPAN_WARNING("\The [target]'s [affected.name] is too brittle to be repaired normally."))
 			return FALSE
-		if(isWelder(tool))
+		if(tool.tool_behaviour == TOOL_WELDER)
 			var/obj/item/weldingtool/welder = tool
 			if(!welder.remove_fuel(1,user))
 				return FALSE

@@ -659,7 +659,7 @@ var/global/list/turret_icons
 				build_step = 3
 				return TRUE
 
-			else if(isWelder(I))
+			else if(I.tool_behaviour == TOOL_WELDER)
 				var/obj/item/weldingtool/WT = I
 				if(!WT.can_use(5, user))
 					return TRUE
@@ -728,7 +728,7 @@ var/global/list/turret_icons
 				return TRUE
 
 		if(7)
-			if(isWelder(I))
+			if(I.tool_behaviour == TOOL_WELDER)
 				var/obj/item/weldingtool/WT = I
 				if(!WT.can_use(5, user))
 					return TRUE

@@ -163,7 +163,7 @@
 				T.visible_message(SPAN_DANGER("The ceiling above has been pried off!"))
 			return TRUE
 
-		else if(isWelder(C))
+		else if(C.tool_behaviour == TOOL_WELDER)
 			var/obj/item/weldingtool/welder = C
 			if(welder.can_use(2, user) && (is_plating()))
 				if(broken || burnt)

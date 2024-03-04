@@ -350,7 +350,7 @@ var/global/list/empty_playable_ai_cores = list()
 
 	// Welding Tool
 	// - State 1 - Deconstruct frame
-	if (isWelder(tool))
+	if (tool.tool_behaviour == TOOL_WELDER)
 		if (state == STATE_FRAME)
 			if (anchored)
 				USE_FEEDBACK_FAILURE("\The [src] needs to be unanchored from the floor before you can dismantle it with \the [tool].")

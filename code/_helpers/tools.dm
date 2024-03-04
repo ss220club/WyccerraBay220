@@ -9,19 +9,6 @@
 /// True when A exists and can be used as a wrench.
 #define isWrench(A) (A?.IsWrench())
 
-
-/// True when this atom can be used as a Welder.
-/atom/proc/IsWelder()
-	return FALSE
-
-/// Defines the base welder as useable as a welder.
-/obj/item/weldingtool/IsWelder()
-	return TRUE
-
-/// True when A exists and can be used as a welder.
-#define isWelder(A) (A?.IsWelder())
-
-
 /// True when this atom can be used as a cable coil.
 /atom/proc/IsCoil()
 	return FALSE

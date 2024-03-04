@@ -151,7 +151,7 @@
 		burn(heat_value)
 
 	if(locate(/obj/overlay/wallrot) in src)
-		if(isWelder(W))
+		if(W.tool_behaviour == TOOL_WELDER)
 			var/obj/item/weldingtool/WT = W
 			if(!WT.can_use(1, user))
 				return TRUE
@@ -170,7 +170,7 @@
 
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
 	if(thermite)
-		if(isWelder(W))
+		if(W.tool_behaviour == TOOL_WELDER)
 			var/obj/item/weldingtool/WT = W
 			if(!WT.can_use(1, user))
 				return TRUE

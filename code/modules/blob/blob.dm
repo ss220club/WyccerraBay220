@@ -192,11 +192,6 @@
 		SPAN_NOTICE("You collect \a [sample] from \the [src] with \the [tool].")
 	)
 
-/obj/blob/post_use_item(obj/item/tool, mob/user, interaction_handled, use_call, click_params)
-	. = ..()
-	if (interaction_handled && use_call == "weapon" && isWelder(tool))
-		playsound(loc, 'sound/items/Welder.ogg', 100, TRUE)
-
 /obj/blob/core
 	name = "master nucleus"
 	desc = "A massive, fragile nucleus guarded by a shield of thick tendrils."

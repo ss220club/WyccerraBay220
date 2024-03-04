@@ -18,7 +18,7 @@
 			TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
 			to_chat(user, SPAN_NOTICE("You wrench \the [machine] into place."))
 			machine.anchored = TRUE
-	if(isWelder(I))
+	if(I.tool_behaviour == TOOL_WELDER)
 		var/obj/item/weldingtool/WT = I
 		if(!WT.can_use(3, user))
 			return TRUE

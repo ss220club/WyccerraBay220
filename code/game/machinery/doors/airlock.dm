@@ -974,6 +974,35 @@ About the new airlock wires panel:
 			src.unlock(1) //force it
 		return 1
 
+/obj/machinery/door/airlock/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (repairing)
+		return
+	if (p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
+		playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
+		user.visible_message("\The [user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
+		if(do_after(user, 4 SECONDS, src, DO_REPAIR_CONSTRUCT))
+			to_chat(user, SPAN_NOTICE("You've removed the airlock electronics!"))
+			deconstruct(user)
+			return
+	if(arePowerSystemsOn())
+		to_chat(user, SPAN_NOTICE("The airlock's motors resist your efforts to force it."))
+		return
+	if(locked)
+		to_chat(user, SPAN_NOTICE("The airlock's bolts prevent it from being forced."))
+		return
+	if(brace)
+		to_chat(user, SPAN_NOTICE("The airlock's brace holds it firmly in place."))
+		return
+	if(density)
+		spawn(0)
+		open(1)
+		return
+	else
+		spawn(0)
+		close(1)
+		return
+
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)
 	// Brace is considered installed on the airlock, so interacting with it is protected from electrification.
 	if(brace && C && (istype(C.GetIdCard(), /obj/item/card/id) || istype(C, /obj/item/material/twohanded/jack)))
@@ -1046,31 +1075,6 @@ About the new airlock wires panel:
 	if (istype(C, /obj/item/pai_cable))
 		var/obj/item/pai_cable/cable = C
 		cable.resolve_attackby(src, user)
-
-	if (!repairing && isCrowbar(C))
-		if (p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
-			user.visible_message("\The [user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
-			if(do_after(user, 4 SECONDS, src, DO_REPAIR_CONSTRUCT))
-				to_chat(user, SPAN_NOTICE("You've removed the airlock electronics!"))
-				deconstruct(user)
-				return TRUE
-		else if(arePowerSystemsOn())
-			to_chat(user, SPAN_NOTICE("The airlock's motors resist your efforts to force it."))
-			return TRUE
-		else if(locked)
-			to_chat(user, SPAN_NOTICE("The airlock's bolts prevent it from being forced."))
-			return TRUE
-		else if(brace)
-			to_chat(user, SPAN_NOTICE("The airlock's brace holds it firmly in place."))
-			return TRUE
-		else
-			if(density)
-				spawn(0)	open(1)
-				return TRUE
-			else
-				spawn(0)	close(1)
-				return TRUE
 
 			//if door is unbroken, hit with fire axe using harm intent
 	if (istype(C, /obj/item/material/twohanded/fireaxe) && !MACHINE_IS_BROKEN(src) && user.a_intent == I_HURT)

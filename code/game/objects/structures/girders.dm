@@ -54,31 +54,29 @@
 
 	return ..()
 
+/obj/structure/girder/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!can_anchor(tool, user))
+		return TRUE
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts dislodging \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start dislodging \the [src] with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return TRUE
+	if (!can_anchor(tool, user))
+		return TRUE
+	icon_state = "displaced"
+	anchored = FALSE
+	set_max_health(50)
+	cover = 25
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dislodges \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dislodge \the [src] with \a [tool].")
+	)
 
 /obj/structure/girder/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Dislodge
-	if (isCrowbar(tool))
-		if (!can_anchor(tool, user))
-			return TRUE
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dislodging \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dislodging \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!can_anchor(tool, user))
-			return TRUE
-		icon_state = "displaced"
-		anchored = FALSE
-		set_max_health(50)
-		cover = 25
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dislodges \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dislodge \the [src] with \a [tool].")
-		)
-		return TRUE
-
 	// Diamond Drill, Plasmacutter, Psiblade (Paramount) - Slice girder
 	if (istype(tool, /obj/item/pickaxe/diamonddrill) || istype(tool, /obj/item/gun/energy/plasmacutter) || istype(tool, /obj/item/psychic_power/psiblade/master/grand/paramount))
 		var/obj/item/gun/energy/plasmacutter/cutter = tool

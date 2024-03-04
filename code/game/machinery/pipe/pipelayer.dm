@@ -40,19 +40,19 @@
 	)
 	return TRUE
 
+/obj/machinery/pipelayer/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	a_dis=!a_dis
+	user.visible_message(
+		SPAN_NOTICE("[user] has [!a_dis?"de":""]activated auto-dismantling."),
+		SPAN_NOTICE("You [!a_dis?"de":""]activate auto-dismantling.")
+	)
+
 /obj/machinery/pipelayer/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isWrench(W))
 		P_type_t = input("Choose pipe type", "Pipe type") as null|anything in Pipes
 		P_type = Pipes[P_type_t]
 		user.visible_message(SPAN_NOTICE("[user] has set \the [src] to manufacture [P_type_t]."), SPAN_NOTICE("You set \the [src] to manufacture [P_type_t]."))
-		return TRUE
-
-	if(isCrowbar(W))
-		a_dis=!a_dis
-		user.visible_message(
-			SPAN_NOTICE("[user] has [!a_dis?"de":""]activated auto-dismantling."),
-			SPAN_NOTICE("You [!a_dis?"de":""]activate auto-dismantling.")
-		)
 		return TRUE
 
 	if(istype(W, /obj/item/stack/material) && W.get_material_name() == MATERIAL_STEEL)

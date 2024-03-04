@@ -200,26 +200,24 @@
 	grab.affecting.adjustOxyLoss(5)
 	return TRUE
 
+/obj/structure/hygiene/toilet/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts to [cistern ? "lift" : "replace"] \the [src]'s cistern with \a [tool]."),
+		SPAN_NOTICE("You start to [cistern ? "lift" : "replace"] \the [src]'s cistern with \the [tool].")
+	)
+	if (!do_after(user, (tool.toolspeed * 3) SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return TRUE
+	playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [cistern ? "lifts" : "replaces"] \the [src]'s cistern with \a [tool]."),
+		SPAN_NOTICE("You [cistern ? "lift" : "replace"] \the [src]'s cistern with \the [tool].")
+	)
+	cistern = !cistern
+	update_icon()
 
 /obj/structure/hygiene/toilet/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Toggle lid
-	if (isCrowbar(tool))
-		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts to [cistern ? "lift" : "replace"] \the [src]'s cistern with \a [tool]."),
-			SPAN_NOTICE("You start to [cistern ? "lift" : "replace"] \the [src]'s cistern with \the [tool].")
-		)
-		if (!do_after(user, (tool.toolspeed * 3) SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [cistern ? "lifts" : "replaces"] \the [src]'s cistern with \a [tool]."),
-			SPAN_NOTICE("You [cistern ? "lift" : "replace"] \the [src]'s cistern with \the [tool].")
-		)
-		cistern = !cistern
-		update_icon()
-		return TRUE
-
 	// Anything else - Put item in cistern
 	if (cistern)
 		if (tool.w_class > ITEM_SIZE_NORMAL)

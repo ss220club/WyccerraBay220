@@ -31,23 +31,22 @@
 			return FALSE
 	return TRUE
 
+/obj/item/robot_parts/robot_suit/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!length(parts))
+		to_chat(user, SPAN_WARNING("\The [src] has no parts to remove."))
+		return
+	var/removing = pick(parts)
+	var/obj/item/robot_parts/part = parts[removing]
+	part.forceMove(get_turf(src))
+	user.put_in_hands(part)
+	parts -= removing
+	to_chat(user, SPAN_WARNING("You lever \the [part] off \the [src]."))
+	update_icon()
+
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
-
-	// Uninstall a robotic part.
-	if(isCrowbar(W))
-		if(!length(parts))
-			to_chat(user, SPAN_WARNING("\The [src] has no parts to remove."))
-			return
-		var/removing = pick(parts)
-		var/obj/item/robot_parts/part = parts[removing]
-		part.forceMove(get_turf(src))
-		user.put_in_hands(part)
-		parts -= removing
-		to_chat(user, SPAN_WARNING("You lever \the [part] off \the [src]."))
-		update_icon()
-
 	// Install a robotic part.
-	else if (istype(W, /obj/item/robot_parts))
+	if (istype(W, /obj/item/robot_parts))
 		var/obj/item/robot_parts/part = W
 		if(!required_parts[part.bp_tag] || !istype(W, required_parts[part.bp_tag]))
 			to_chat(user, SPAN_WARNING("\The [src] is not compatible with \the [W]."))

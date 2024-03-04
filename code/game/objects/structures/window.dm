@@ -245,6 +245,26 @@
 		USE_FEEDBACK_FAILURE("This area does not allow structural modifications.")
 		return FALSE
 
+/obj/structure/window/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!reinf_material)
+		USE_FEEDBACK_FAILURE("\The [src] doesn't have a reinforced frame to pry out.")
+		return
+	if (construction_state == CONSTRUCT_STATE_COMPLETE)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be unfastened from the frame before you can pry it out.")
+		return
+	if (!anchored)
+		USE_FEEDBACK_FAILURE("\The [src] isn't anchored and doesn't need to be pried.")
+		return
+	if (construction_state == CONSTRUCT_STATE_ANCHORED)
+		construction_state = CONSTRUCT_STATE_UNANCHORED
+	else
+		construction_state = CONSTRUCT_STATE_ANCHORED
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] pries \the [src] [construction_state ? "into" : "out of"] its frame with \a [tool]."),
+		SPAN_NOTICE("You pry \the [src] [construction_state ? "into" : "out of"] its frame with \the [tool].")
+	)
 
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window
@@ -261,28 +281,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] wires and polarizes \the [src] with \a [tool]."),
 			SPAN_NOTICE("You wire and polarize \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	// Crowbar - Remove reinforced window from frame
-	if (isCrowbar(tool))
-		if (!reinf_material)
-			USE_FEEDBACK_FAILURE("\The [src] doesn't have a reinforced frame to pry out.")
-			return TRUE
-		if (construction_state == CONSTRUCT_STATE_COMPLETE)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be unfastened from the frame before you can pry it out.")
-			return TRUE
-		if (!anchored)
-			USE_FEEDBACK_FAILURE("\The [src] isn't anchored and doesn't need to be pried.")
-			return TRUE
-		if (construction_state == CONSTRUCT_STATE_ANCHORED)
-			construction_state = CONSTRUCT_STATE_UNANCHORED
-		else
-			construction_state = CONSTRUCT_STATE_ANCHORED
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pries \the [src] [construction_state ? "into" : "out of"] its frame with \a [tool]."),
-			SPAN_NOTICE("You pry \the [src] [construction_state ? "into" : "out of"] its frame with \the [tool].")
 		)
 		return TRUE
 

@@ -147,9 +147,18 @@
 
 // If we are clicked with crowbar or wielded fire axe, try to manually open the door.
 // This only works on broken doors or doors without power. Also allows repair with Plasteel.
+/obj/machinery/door/blast/crowbar_act(mob/living/user, obj/item/tool)
+	if(((!is_powered()) || MACHINE_IS_BROKEN(src)) && !( operating ))
+		to_chat(user, SPAN_NOTICE("You begin prying at \the [src]..."))
+		if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+			force_toggle()
+	else
+		to_chat(user, SPAN_NOTICE("[src]'s motors resist your effort."))
+
 /obj/machinery/door/blast/use_tool(obj/item/C, mob/living/user, list/click_params)
-	if(isCrowbar(C) || (istype(C, /obj/item/material/twohanded/fireaxe) && C:wielded == 1))
-		if(((!is_powered()) || MACHINE_IS_BROKEN(src)) && !( operating ))
+	if(istype(C, /obj/item/material/twohanded/fireaxe))
+		var/obj/item/material/twohanded/fireaxe/fireaxe = C
+		if(((!is_powered()) || MACHINE_IS_BROKEN(src)) && !( operating ) && fireaxe.wielded)
 			to_chat(user, SPAN_NOTICE("You begin prying at \the [src]..."))
 			if(do_after(user, (C.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
 				force_toggle()

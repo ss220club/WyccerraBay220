@@ -78,6 +78,37 @@
 			USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can unanchor it.")
 		return FALSE
 
+/obj/structure/windoor_assembly/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!electronics)
+		USE_FEEDBACK_FAILURE("\The [src] needs a circuit board before you can complete it.")
+		return TRUE
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts prying \the [src] into its frame with \a [tool]."),
+		SPAN_NOTICE("You start prying \the [src] into its frame with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (!electronics)
+		USE_FEEDBACK_FAILURE("\The [src] needs a circuit board before you can complete it.")
+		return
+	var/obj/machinery/door/window/windoor
+	if (secure)
+		windoor = new /obj/machinery/door/window/brigdoor(loc, src)
+	else
+		windoor = new (loc, src)
+	if (facing == "l")
+		windoor.base_state = "left"
+	else
+		windoor.base_state = "right"
+	transfer_fingerprints_to(windoor)
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] finishes \the [windoor] with \a [tool]."),
+		SPAN_NOTICE("You finish \the [windoor] with \the [tool].")
+	)
+	qdel(src)
 
 /obj/structure/windoor_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Airlock electronics - Install electronics
@@ -280,39 +311,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
 			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		qdel_self()
-		return TRUE
-
-	// Crowbar - Complete assembly
-	if (isCrowbar(tool))
-		if (!electronics)
-			USE_FEEDBACK_FAILURE("\The [src] needs a circuit board before you can complete it.")
-			return TRUE
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts prying \the [src] into its frame with \a [tool]."),
-			SPAN_NOTICE("You start prying \the [src] into its frame with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!electronics)
-			USE_FEEDBACK_FAILURE("\The [src] needs a circuit board before you can complete it.")
-			return TRUE
-		var/obj/machinery/door/window/windoor
-		if (secure)
-			windoor = new /obj/machinery/door/window/brigdoor(loc, src)
-		else
-			windoor = new (loc, src)
-		if (facing == "l")
-			windoor.base_state = "left"
-		else
-			windoor.base_state = "right"
-		transfer_fingerprints_to(windoor)
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] finishes \the [windoor] with \a [tool]."),
-			SPAN_NOTICE("You finish \the [windoor] with \the [tool].")
 		)
 		qdel_self()
 		return TRUE

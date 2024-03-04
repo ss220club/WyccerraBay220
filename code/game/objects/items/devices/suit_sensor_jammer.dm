@@ -44,22 +44,20 @@
 /obj/item/device/suit_sensor_jammer/get_cell()
 	return bcell
 
+/obj/item/device/suit_sensor_jammer/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!bcell)
+		USE_FEEDBACK_FAILURE("\The [src] has no cell to remove.")
+		return TRUE
+	disable()
+	user.put_in_hands(bcell)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \a [bcell] from \a [src] with \a [tool]."),
+		SPAN_NOTICE("You remove \the [bcell] from \the [src] with \the [tool].")
+	)
+	bcell = null
 
 /obj/item/device/suit_sensor_jammer/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Remove cell
-	if (isCrowbar(tool))
-		if (!bcell)
-			USE_FEEDBACK_FAILURE("\The [src] has no cell to remove.")
-			return TRUE
-		disable()
-		user.put_in_hands(bcell)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [bcell] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [bcell] from \the [src] with \the [tool].")
-		)
-		bcell = null
-		return TRUE
-
 	// Power Cell - Install cell
 	if (istype(tool, /obj/item/cell))
 		if (bcell)

@@ -38,31 +38,29 @@
 
 	return ..()
 
+/obj/structure/plasticflaps/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (anchored)
+		USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can deconstruct it.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts deconstructing \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start deconstructing \the [src] with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 3) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (anchored)
+		USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can deconstruct it.")
+		return
+	var/obj/item/stack/material/plastic/stack = new(loc, 30)
+	transfer_fingerprints_to(stack)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] deconstructs \the [src] with \a [tool]."),
+		SPAN_NOTICE("You deconstruct \the [src] with \the [tool].")
+	)
+	qdel(src)
 
 /obj/structure/plasticflaps/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Deconstruct
-	if (isCrowbar(tool))
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can deconstruct it.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts deconstructing \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start deconstructing \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 3) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can deconstruct it.")
-			return TRUE
-		var/obj/item/stack/material/plastic/stack = new(loc, 30)
-		transfer_fingerprints_to(stack)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] deconstructs \the [src] with \a [tool]."),
-			SPAN_NOTICE("You deconstruct \the [src] with \the [tool].")
-		)
-		qdel_self()
-		return TRUE
-
 	// Screwdriver - Toggle airflow
 	if (isScrewdriver(tool))
 		if (anchored)

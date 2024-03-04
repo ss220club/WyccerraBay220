@@ -177,6 +177,35 @@
 
 	return canhear_range
 
+/obj/item/device/radio/intercom/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (buildstage > 1)
+		USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
+		return
+	if (buildstage < 1)
+		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+		return
+	playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts removing \a [src]'s circuit with \a [tool]."),
+		SPAN_NOTICE("You start removing \the [src]'s circuit with \the [tool].")
+	)
+	if (!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (buildstage > 1)
+		USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
+		return
+	if (buildstage < 1)
+		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+		return
+	var/obj/item/intercom_electronics/circuit = new(get_turf(src))
+	buildstage = 0
+	update_icon()
+	playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \a [circuit] from \a [src] with \a [tool]."),
+		SPAN_NOTICE("You remove \the [circuit] from \the [src] with \the [tool].")
+	)
 
 /obj/item/device/radio/intercom/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
@@ -197,37 +226,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] wires \a [src] with [cable.get_vague_name(TRUE)]."),
 			SPAN_NOTICE("You wire \the [src] with [cable.get_exact_name(5)].")
-		)
-		return TRUE
-
-	// Crowbar - Remove circuits
-	if (isCrowbar(tool))
-		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
-			return TRUE
-		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \a [src]'s circuit with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s circuit with \the [tool].")
-		)
-		if (!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
-			return TRUE
-		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		var/obj/item/intercom_electronics/circuit = new(get_turf(src))
-		buildstage = 0
-		update_icon()
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [circuit] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [circuit] from \the [src] with \the [tool].")
 		)
 		return TRUE
 

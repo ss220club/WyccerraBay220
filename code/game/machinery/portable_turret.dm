@@ -273,30 +273,28 @@ var/global/list/turret_icons
 			set_stat(MACHINE_STAT_NOPOWER, TRUE)
 			queue_icon_update()
 
+/obj/machinery/porta_turret/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	//If the turret is destroyed, you can remove it with a crowbar to
+	//try and salvage its components
+	to_chat(user, SPAN_NOTICE("You begin prying the metal coverings off."))
+	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		if(prob(70))
+			to_chat(user, SPAN_NOTICE("You remove the turret and salvage some components."))
+			if(installation)
+				var/obj/item/gun/energy/Gun = new installation(loc)
+				Gun.power_supply.charge = gun_charge
+				Gun.update_icon()
+			if(prob(50))
+				new /obj/item/stack/material/steel(loc, rand(1,4))
+			if(prob(50))
+				new /obj/item/device/assembly/prox_sensor(loc)
+		else
+			to_chat(user, SPAN_NOTICE("You remove the turret but did not manage to salvage anything."))
+		qdel(src)
 
 /obj/machinery/porta_turret/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(MACHINE_IS_BROKEN(src))
-		if(isCrowbar(I))
-			//If the turret is destroyed, you can remove it with a crowbar to
-			//try and salvage its components
-			to_chat(user, SPAN_NOTICE("You begin prying the metal coverings off."))
-			if(do_after(user, (I.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				if(prob(70))
-					to_chat(user, SPAN_NOTICE("You remove the turret and salvage some components."))
-					if(installation)
-						var/obj/item/gun/energy/Gun = new installation(loc)
-						Gun.power_supply.charge = gun_charge
-						Gun.update_icon()
-					if(prob(50))
-						new /obj/item/stack/material/steel(loc, rand(1,4))
-					if(prob(50))
-						new /obj/item/device/assembly/prox_sensor(loc)
-				else
-					to_chat(user, SPAN_NOTICE("You remove the turret but did not manage to salvage anything."))
-				qdel(src) // qdel
-			return TRUE
-
-	else if(isWrench(I))
+	if(isWrench(I))
 		if(enabled || raised)
 			to_chat(user, SPAN_WARNING("You cannot unsecure an active turret!"))
 			return TRUE

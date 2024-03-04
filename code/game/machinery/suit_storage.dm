@@ -100,6 +100,18 @@
 				dump_everything()
 				qdel(src)
 
+/obj/machinery/suit_storage_unit/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(inoperable() && !islocked && !isopen)
+		to_chat(user, SPAN_NOTICE("You begin prying the unit open."))
+		if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
+			isopen = TRUE
+			to_chat(user, SPAN_NOTICE("You pry the unit open."))
+			SStgui.update_uis(src)
+			update_icon()
+	else if(islocked)
+		to_chat(user, SPAN_WARNING("You can't pry the unit open, it's locked!"))
+
 /obj/machinery/suit_storage_unit/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if ((. = ..()))
 		return
@@ -111,18 +123,6 @@
 			to_chat(user, SPAN_NOTICE("You [panelopen ? "open" : "close"] the unit's maintenance panel."))
 			SStgui.update_uis(src)
 			update_icon()
-		 return TRUE
-
-	if(isCrowbar(I))
-		if(inoperable() && !islocked && !isopen)
-			to_chat(user, SPAN_NOTICE("You begin prying the unit open."))
-			if(do_after(user, (I.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				isopen = TRUE
-				to_chat(user, SPAN_NOTICE("You pry the unit open."))
-				SStgui.update_uis(src)
-				update_icon()
-		else if(islocked)
-			to_chat(user, SPAN_WARNING("You can't pry the unit open, it's locked!"))
 		return TRUE
 
 	TRY_INSERT_SUIT_PIECE(suit, clothing/suit/space)

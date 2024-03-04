@@ -20,21 +20,17 @@
 		return ..()
 	to_chat(user, SPAN_NOTICE("You need a crowbar to pry this open!"))
 
-/obj/structure/largecrate/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Open crate
-	if (isCrowbar(tool))
-		var/obj/item/stack/material/wood/A = new(loc)
-		transfer_fingerprints_to(A)
-		dump_contents()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pries \the [src] open with \a [tool]."),
-			SPAN_NOTICE("You pry \the [src] open with \the [tool]."),
-			SPAN_ITALIC("You hear splitting wood.")
-		)
-		qdel_self()
-		return TRUE
-
-	return ..()
+/obj/structure/largecrate/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/stack/material/wood/A = new(loc)
+	transfer_fingerprints_to(A)
+	dump_contents()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] pries \the [src] open with \a [tool]."),
+		SPAN_NOTICE("You pry \the [src] open with \the [tool]."),
+		SPAN_ITALIC("You hear splitting wood.")
+	)
+	qdel(src)
 
 /obj/structure/largecrate/on_death()
 	var/obj/item/stack/material/wood/A = new(loc)

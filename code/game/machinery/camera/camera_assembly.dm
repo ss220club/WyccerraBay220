@@ -1,3 +1,9 @@
+#define ASSEMBLY_NONE 0
+#define ASSEMBLY_WRENCHED 1
+#define ASSEMBLY_WELDED 2
+#define ASSEMBLY_WIRED 3 // you can now attach/dettach upgrades
+#define ASSEMBLY_SCREWED 4 // you cannot attach upgrades
+
 /obj/item/camera_assembly
 	name = "camera assembly"
 	desc = "A pre-fabricated security camera kit, ready to be assembled and mounted to a surface."
@@ -13,98 +19,85 @@
 	var/list/upgrades = list()
 	var/camera_name
 	var/camera_network
-	var/state = 0
+	var/state = ASSEMBLY_NONE
 	var/busy = 0
-	/*
-				0 = Nothing done to it
-				1 = Wrenched in place
-				2 = Welded in place
-				3 = Wires attached to it (you can now attach/dettach upgrades)
-				4 = Screwdriver panel closed and is fully built (you cannot attach upgrades)
-	*/
+
+/obj/item/camera_assembly/crowbar_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(state == ASSEMBLY_WIRED && length(upgrades))
+		var/obj/U = locate(/obj) in upgrades
+		if(U)
+			to_chat(user, "You unattach an upgrade from the assembly.")
+			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
+			U.dropInto(loc)
+			upgrades -= U
 
 /obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
 
 	switch(state)
-
-		if(0)
+		if(ASSEMBLY_NONE)
 			// State 0
 			if(isWrench(W) && isturf(src.loc))
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				to_chat(user, "You wrench the assembly into place.")
 				anchored = TRUE
-				state = 1
+				state = ASSEMBLY_WRENCHED
 				update_icon()
 				auto_turn()
 				return
-
-		if(1)
+		if(ASSEMBLY_WRENCHED)
 			// State 1
 			if(isWelder(W))
 				if(weld(W, user))
 					to_chat(user, "You weld the assembly securely into place.")
 					anchored = TRUE
-					state = 2
+					state = ASSEMBLY_WELDED
 				return
-
 			else if(isWrench(W))
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 				to_chat(user, "You unattach the assembly from its place.")
 				anchored = FALSE
 				update_icon()
-				state = 0
+				state = ASSEMBLY_NONE
 				return
-
-		if(2)
+		if(ASSEMBLY_WELDED)
 			// State 2
 			if(isCoil(W))
 				var/obj/item/stack/cable_coil/C = W
 				if(C.use(2))
 					to_chat(user, SPAN_NOTICE("You add wires to the assembly."))
-					state = 3
+					state = ASSEMBLY_WIRED
 				else
 					to_chat(user, SPAN_WARNING("You need 2 coils of wire to wire the assembly."))
 				return
-
 			else if(isWelder(W))
-
 				if(weld(W, user))
 					to_chat(user, "You unweld the assembly from its place.")
-					state = 1
+					state = ASSEMBLY_WRENCHED
 					anchored = TRUE
 				return
-
-
-		if(3)
+		if(ASSEMBLY_WIRED)
 			// State 3
 			if(isScrewdriver(W))
 				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-
 				var/input = sanitize(input(usr, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
 				if(!input)
 					to_chat(usr, "No input found please hang up and try your call again.")
 					return
-
 				var/list/tempnetwork = splittext(input, ",")
 				if(length(tempnetwork) < 1)
 					to_chat(usr, "No network found please hang up and try your call again.")
 					return
-
 				var/area/camera_area = get_area(src)
 				var/temptag = "[sanitize(camera_area.name)] ([rand(1, 999)])"
 				input = sanitizeSafe(input(usr, "How would you like to name the camera?", "Set Camera Name", camera_name ? camera_name : temptag), MAX_LNAME_LEN)
-
-				state = 4
+				state = ASSEMBLY_SCREWED
 				var/obj/machinery/camera/C = new(src.loc)
 				src.forceMove(C)
 				C.assembly = src
-
 				C.auto_turn()
-
 				C.replace_networks(uniquelist(tempnetwork))
-
 				C.c_tag = input
-
 				for(var/i = 5; i >= 0; i -= 1)
 					var/direct = input(user, "Direction?", "Assembling Camera", null) in list("LEAVE IT", "NORTH", "EAST", "SOUTH", "WEST" )
 					if(direct != "LEAVE IT")
@@ -121,7 +114,7 @@
 				new/obj/item/stack/cable_coil(get_turf(src), 2)
 				playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
 				to_chat(user, "You cut the wires from the circuits.")
-				state = 2
+				state = ASSEMBLY_WELDED
 				return
 
 	// Upgrades!
@@ -129,17 +122,6 @@
 		to_chat(user, "You attach \the [W] into the assembly inner circuits.")
 		upgrades += W
 		return
-
-	// Taking out upgrades
-	else if(isCrowbar(W) && length(upgrades))
-		var/obj/U = locate(/obj) in upgrades
-		if(U)
-			to_chat(user, "You unattach an upgrade from the assembly.")
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-			U.dropInto(loc)
-			upgrades -= U
-		return
-
 	..()
 
 /obj/item/camera_assembly/on_update_icon()
@@ -168,3 +150,9 @@
 
 	busy = 0
 	return 0
+
+#undef ASSEMBLY_NONE
+#undef ASSEMBLY_WRENCHED
+#undef ASSEMBLY_WELDED
+#undef ASSEMBLY_WIRED
+#undef ASSEMBLY_SCREWED

@@ -108,6 +108,31 @@
 			USE_FEEDBACK_FAILURE("\The [src] needs its components and wiring removed before you can unanchor it.")
 		return FALSE
 
+/obj/structure/door_assembly/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!electronics)
+		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+		return TRUE
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts removing \the [src]'s [electronics.name] with \a [tool]."),
+		SPAN_NOTICE("You start removing \the [src]'s [electronics.name] with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return TRUE
+	if (!electronics)
+		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+		return TRUE
+	electronics.dropInto(loc)
+	electronics.add_fingerprint(user)
+	state = ASSEMBLY_STATE_WIRED
+	update_state()
+	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \the [src]'s [electronics.name] with \a [tool]."),
+		SPAN_NOTICE("You remove \the [src]'s [electronics.name] with \the [tool].")
+	)
+	electronics = null
 
 /obj/structure/door_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Airlock Electronics - Install circuit
@@ -180,33 +205,6 @@
 			SPAN_NOTICE("\The [user] wires \the [src] with \a [tool]."),
 			SPAN_NOTICE("You wire \the [src] with \the [tool].")
 		)
-		return TRUE
-
-	// Crowbar - Remove circuit
-	if (isCrowbar(tool))
-		if (!electronics)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \the [src]'s [electronics.name] with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s [electronics.name] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!electronics)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		electronics.dropInto(loc)
-		electronics.add_fingerprint(user)
-		state = ASSEMBLY_STATE_WIRED
-		update_state()
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [src]'s [electronics.name] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src]'s [electronics.name] with \the [tool].")
-		)
-		electronics = null
 		return TRUE
 
 	// Material Stack - Add glass/plating

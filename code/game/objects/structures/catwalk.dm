@@ -74,21 +74,19 @@
 		new plated_tile.build_type(src.loc)
 	qdel(src)
 
+/obj/structure/catwalk/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!plated_tile)
+		USE_FEEDBACK_FAILURE("\The [src] is not plated and has no hatch to open.")
+		return TRUE
+	hatch_open = !hatch_open
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] pries \the [src]'s maintenance hatch open with \a [tool]."),
+		SPAN_NOTICE("You pry \the [src]'s maintenance hatch open with \the [tool].")
+	)
 
 /obj/structure/catwalk/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Toggle hatch
-	if (isCrowbar(tool))
-		if (!plated_tile)
-			USE_FEEDBACK_FAILURE("\The [src] is not plated and has no hatch to open.")
-			return TRUE
-		hatch_open = !hatch_open
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pries \the [src]'s maintenance hatch open with \a [tool]."),
-			SPAN_NOTICE("You pry \the [src]'s maintenance hatch open with \the [tool].")
-		)
-		return TRUE
-
 	// Plasma Cutter - Deconstruct
 	if (istype(tool, /obj/item/gun/energy/plasmacutter))
 		var/obj/item/gun/energy/plasmacutter/cutter = tool

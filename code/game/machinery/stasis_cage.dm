@@ -142,43 +142,41 @@ var/global/const/STASISCAGE_WIRE_LOCK      = 4
 	if (cell)
 		to_chat(user, "\The [src]'s power gauge shows [cell.percent()]% remaining.")
 
-
-/obj/machinery/stasis_cage/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Pry thing out of cage
-	if (isCrowbar(tool))
-		if (panel_open)
-			USE_FEEDBACK_FAILURE("\The [src]'s panel is open!")
-			return TRUE
-		if (contained)
-			if (is_powered())
-				USE_FEEDBACK_FAILURE("\The [src] is still powered shut.")
-				return TRUE
+/obj/machinery/stasis_cage/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		USE_FEEDBACK_FAILURE("\The [src]'s panel is open!")
+		return
+	if(contained)
+		if(is_powered())
+			USE_FEEDBACK_FAILURE("\The [src] is still powered shut.")
+			return
+		user.visible_message(
+			SPAN_DANGER("\The [user] begins to pry open \the [src] with the crowbar!"),
+			SPAN_DANGER("You being to pry open \the [src] with the crowbar.")
+		)
+		playsound(loc, 'sound/machines/airlock_creaking.ogg', 40)
+		if(!do_after(user, 7 SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+			return
+		if(!prob(20 * (user.get_skill_value(SKILL_CONSTRUCTION))))
+			USE_FEEDBACK_FAILURE("You fail to pry open \the [src]'s lid!")
+			return
+		if(!user.skill_check(SKILL_CONSTRUCTION, SKILL_TRAINED))
 			user.visible_message(
-				SPAN_DANGER("\The [user] begins to pry open \the [src] with the crowbar!"),
-				SPAN_DANGER("You being to pry open \the [src] with the crowbar.")
-			)
-			playsound(loc, 'sound/machines/airlock_creaking.ogg', 40)
-			if (!do_after(user, 7 SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-				return TRUE
-			if (!prob(20 * (user.get_skill_value(SKILL_CONSTRUCTION))))
-				USE_FEEDBACK_FAILURE("You fail to pry open \the [src]'s lid!")
-				return TRUE
-			if (!user.skill_check(SKILL_CONSTRUCTION, SKILL_TRAINED))
-				user.visible_message(
-					SPAN_DANGER("\The [user] jams open \the [src]'s lid, damaging it in the process!"),
-					SPAN_DANGER("You successfully manage to jam open \the [src]'s lid, damaging it in the process.")
-				)
-				release()
-				broken = TRUE
-				update_icon()
-				return TRUE
-			user.visible_message(
-				SPAN_DANGER("\The [user] jams open \the [src]'s lid!"),
-				SPAN_DANGER("You successfully manage to jam open \the [src]'s lid.")
+				SPAN_DANGER("\The [user] jams open \the [src]'s lid, damaging it in the process!"),
+				SPAN_DANGER("You successfully manage to jam open \the [src]'s lid, damaging it in the process.")
 			)
 			release()
-			return TRUE
+			broken = TRUE
+			update_icon()
+			return
+		user.visible_message(
+			SPAN_DANGER("\The [user] jams open \the [src]'s lid!"),
+			SPAN_DANGER("You successfully manage to jam open \the [src]'s lid.")
+		)
+		release()
 
+/obj/machinery/stasis_cage/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Coil - Repair cage
 	if (isCoil(tool))
 		if (health_dead())

@@ -187,6 +187,14 @@
 		update_icon()
 		return TRUE
 
+/obj/machinery/door/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(repairing)
+		to_chat(user, SPAN_NOTICE("You remove \the [repairing]."))
+		playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
+		repairing.dropInto(user.loc)
+		repairing = null
+
 /obj/machinery/door/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(istype(I, /obj/item/stack/material) && I.get_material_name() == get_material_name())
 		if(MACHINE_IS_BROKEN(src))
@@ -239,13 +247,6 @@
 				update_icon()
 				qdel(repairing)
 				repairing = null
-		return TRUE
-
-	if(repairing && isCrowbar(I))
-		to_chat(user, SPAN_NOTICE("You remove \the [repairing]."))
-		playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
-		repairing.dropInto(user.loc)
-		repairing = null
 		return TRUE
 
 	if (!operating)

@@ -332,7 +332,7 @@
 					to_chat(user, SPAN_NOTICE("You pry off the cover."))
 					return TRUE
 			if(2)
-				if(isWrench(W))
+				if(W.tool_behaviour == TOOL_WRENCH)
 					to_chat(user, SPAN_NOTICE("You start loosening the anchoring bolts which secure the support rods to their frame."))
 					playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 					if(!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT) || construction_stage != 2)

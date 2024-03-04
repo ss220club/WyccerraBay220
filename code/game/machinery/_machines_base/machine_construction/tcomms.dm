@@ -52,7 +52,7 @@
 		to_chat(user, "You fasten the bolts.")
 		playsound(machine.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		return
-	if(isWrench(I))
+	if(I.tool_behaviour == TOOL_WRENCH)
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/unwrenched)
 		to_chat(user, "You dislodge the external plating.")
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 75, 1)
@@ -63,7 +63,7 @@
 	. += "Use a wrench to remove the external plating."
 
 /singleton/machine_construction/tcomms/panel_open/unwrenched/state_interactions(obj/item/I, mob/user, obj/machinery/machine)
-	if(isWrench(I))
+	if(I.tool_behaviour == TOOL_WRENCH)
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
 		to_chat(user, "You secure the external plating.")
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 75, 1)
@@ -101,7 +101,7 @@
 	if(istype(I, /obj/item/storage/part_replacer))
 		return machine.part_replacement(I, user)
 
-	if(isWrench(I))
+	if(I.tool_behaviour == TOOL_WRENCH)
 		return machine.part_removal(user)
 
 	if(istype(I))

@@ -12,7 +12,7 @@
 			try_change_state(machine, /singleton/machine_construction/frame/wrenched)
 
 /singleton/machine_construction/frame/unwrenched/attackby(obj/item/I, mob/user, obj/machinery/machine)
-	if(isWrench(I))
+	if(I.tool_behaviour == TOOL_WRENCH)
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
@@ -48,7 +48,7 @@
 			try_change_state(machine, /singleton/machine_construction/frame/unwrenched)
 
 /singleton/machine_construction/frame/wrenched/attackby(obj/item/I, mob/user, obj/machinery/machine)
-	if(isWrench(I))
+	if(I.tool_behaviour == TOOL_WRENCH)
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			TRANSFER_STATE(/singleton/machine_construction/frame/unwrenched)

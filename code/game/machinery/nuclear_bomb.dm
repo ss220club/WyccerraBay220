@@ -141,7 +141,7 @@ var/global/bomb_set
 					return TRUE
 
 			if(3)
-				if(isWrench(O))
+				if(O.tool_behaviour == TOOL_WRENCH)
 					user.visible_message(
 						SPAN_NOTICE("\The [user] begins unwrenching the anchoring bolts on \the [src]."),
 						SPAN_NOTICE("You begin unwrenching the anchoring bolts on \the [src].")

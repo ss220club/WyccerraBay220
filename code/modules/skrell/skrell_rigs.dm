@@ -261,17 +261,14 @@
 	usable = TRUE
 	selectable = TRUE
 
-/obj/item/rig_module/device/clustertool/IsWrench()
-	return isWrench(device)
+/obj/item/rig_module/device/clustertool/skrell/Initialize()
+	. = ..()
+	change_tool_behaviour(device.tool_behaviour)
+	RegisterSignal(device, COMSIG_OBJ_CHANGE_TOOL_BEHAVIOUR, PROC_REF(update_tool_behaviour))
 
-/obj/item/rig_module/device/clustertool/IsWirecutter()
-	return isWirecutter(device)
-
-/obj/item/rig_module/device/clustertool/IsScrewdriver()
-	return isScrewdriver(device)
-
-/obj/item/rig_module/device/clustertool/IsCrowbar()
-	return isCrowbar(device)
+/obj/item/rig_module/device/clustertool/skrell/proc/update_tool_behaviour(obj/item/tool, new_tool_behaviour, new_toolspeed)
+	SIGNAL_HANDLER
+	change_tool_behaviour(new_tool_behaviour, new_toolspeed)
 
 // Self-charging power cell.
 /obj/item/cell/skrell
@@ -299,40 +296,26 @@
 	icon = 'icons/obj/tools/swapper.dmi'
 	icon_state = "clustertool"
 	w_class = ITEM_SIZE_SMALL
-
-	var/tool_mode
-	var/list/tool_modes = list("wrench", "wirecutters", "crowbar", "screwdriver")
+	var/list/tool_modes = list(TOOL_WRENCH, TOOL_WIRECUTTER, TOOL_CROWBAR, TOOL_SCREWDRIVER)
 
 /obj/item/clustertool/attack_self(mob/user)
-	var/new_index = _list_find(tool_modes, tool_mode) + 1
+	var/new_index = _list_find(tool_modes, tool_behaviour) + 1
 	if(new_index > length(tool_modes))
 		new_index = 1
-	tool_mode = tool_modes[new_index]
-	name = "[initial(name)] ([tool_mode])"
+	change_tool_behaviour(tool_modes[new_index])
+	name = "[initial(name)] ([tool_behaviour])"
 	playsound(user, 'sound/machines/bolts_down.ogg', 10)
-	to_chat(user, SPAN_NOTICE("You select the [tool_mode] attachment."))
+	to_chat(user, SPAN_NOTICE("You select the [tool_behaviour] attachment."))
 	update_icon()
 
 /obj/item/clustertool/on_update_icon()
-	icon_state = "[initial(icon_state)]-[tool_mode]"
+	icon_state = "[initial(icon_state)]-[tool_behaviour]"
 
 /obj/item/clustertool/Initialize()
 	. = ..()
-	tool_mode = tool_modes[1]
-	name = "[initial(name)] ([tool_mode])"
+	tool_behaviour = tool_modes[1]
+	name = "[initial(name)] ([tool_behaviour])"
 	update_icon()
-
-/obj/item/clustertool/IsWrench()
-	return tool_mode == "wrench"
-
-/obj/item/clustertool/IsWirecutter()
-	return tool_mode == "wirecutters"
-
-/obj/item/clustertool/IsScrewdriver()
-	return tool_mode == "screwdriver"
-
-/obj/item/clustertool/IsCrowbar()
-	return tool_mode == "crowbar"
 
 /obj/item/device/multitool/skrell
 	name = "skrellian multitool"

@@ -977,3 +977,8 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	if (href_list["examine"])
 		examinate(usr, src)
 		return TOPIC_HANDLED
+
+/obj/item/proc/change_tool_behaviour(new_tool_behaviour = tool_behaviour, new_toolspeed = toolspeed)
+	tool_behaviour = new_tool_behaviour
+	toolspeed = new_toolspeed
+	SEND_SIGNAL(src, COMSIG_OBJ_CHANGE_TOOL_BEHAVIOUR, tool_behaviour, toolspeed)

@@ -142,7 +142,7 @@
 	// Shock Check
 	var/shock_chance = 70
 	// 100% shock chance to remove or move
-	if (isWirecutter(tool) || isWrench(tool))
+	if (isWirecutter(tool) || tool.tool_behaviour == TOOL_WRENCH)
 		shock_chance = 100
 	// Plasmacutter shouldn't need to touch the grille
 	if (istype(tool, /obj/item/gun/energy/plasmacutter))

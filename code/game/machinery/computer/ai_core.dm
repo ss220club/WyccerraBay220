@@ -402,14 +402,14 @@ var/global/list/empty_playable_ai_cores = list()
 
 /obj/structure/AIcore/post_use_item(obj/item/tool, mob/user, interaction_handled, use_call, click_params)
 	// Wrench - Toggle anchorable state
-	if (interaction_handled && isWrench(tool))
-		if (state == STATE_FRAME)
+	if(interaction_handled && tool.tool_behaviour == TOOL_WRENCH)
+		if(state == STATE_FRAME)
 			SET_FLAGS(obj_flags, OBJ_FLAG_ANCHORABLE)
 		else
 			CLEAR_FLAGS(obj_flags, OBJ_FLAG_ANCHORABLE)
 		update_icon()
 
-	..()
+	. = ..()
 
 
 /obj/structure/AIcore/deactivated

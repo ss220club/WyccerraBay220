@@ -65,7 +65,7 @@
 				playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
 				return TRUE
 
-		else if(isWrench(C) && (flooring.flags & TURF_REMOVE_WRENCH))
+		else if(C.tool_behaviour == TOOL_WRENCH && (flooring.flags & TURF_REMOVE_WRENCH))
 			if (flooring.remove_timer)
 				user.visible_message(
 					SPAN_NOTICE("\The [user] begins unwrenching \the [flooring.descriptor] with \the [C]!"),

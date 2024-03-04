@@ -1,14 +1,3 @@
-/// True when this atom can be used as a wrench.
-/atom/proc/IsWrench()
-	return FALSE
-
-/// Defines the base wrench as useable as a wrench.
-/obj/item/wrench/IsWrench()
-	return TRUE
-
-/// True when A exists and can be used as a wrench.
-#define isWrench(A) (A?.IsWrench())
-
 /// True when this atom can be used as a cable coil.
 /atom/proc/IsCoil()
 	return FALSE

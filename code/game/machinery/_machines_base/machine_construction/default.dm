@@ -79,7 +79,7 @@
 	if(istype(I, /obj/item/storage/part_replacer))
 		return machine.part_replacement(user, I)
 
-	if(isWrench(I))
+	if(I.tool_behaviour == TOOL_WRENCH)
 		return machine.part_removal(user)
 
 	if(istype(I))

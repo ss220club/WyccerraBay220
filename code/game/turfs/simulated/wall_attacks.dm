@@ -267,7 +267,7 @@
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 					return TRUE
 
-				else if(isWirecutter(W))
+				else if(W.tool_behaviour == TOOL_WIRECUTTER)
 					playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 					construction_stage = 5
 					new /obj/item/stack/material/rods( src )

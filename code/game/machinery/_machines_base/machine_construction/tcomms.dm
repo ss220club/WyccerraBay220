@@ -68,7 +68,7 @@
 		to_chat(user, "You secure the external plating.")
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 75, 1)
 		return
-	if(isWirecutter(I))
+	if(I.tool_behaviour == TOOL_WIRECUTTER)
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/no_cable)
 		playsound(machine.loc, 'sound/items/Wirecutter.ogg', 50, 1)
 		to_chat(user, "You remove the cables.")

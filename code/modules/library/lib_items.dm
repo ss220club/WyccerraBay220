@@ -231,7 +231,7 @@
 					src.author = newauthor
 			else
 				return
-	else if(istype(W, /obj/item/material/knife) || isWirecutter(W))
+	else if(istype(W, /obj/item/material/knife) || W.tool_behaviour == TOOL_WIRECUTTER)
 		if(carved)	return
 		to_chat(user, SPAN_NOTICE("You begin to carve out [title]."))
 		if(do_after(user, 3 SECONDS, src, DO_PUBLIC_UNIQUE))

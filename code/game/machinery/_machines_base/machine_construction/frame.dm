@@ -99,7 +99,7 @@
 		else
 			to_chat(user, SPAN_WARNING("This frame does not accept circuit boards of this type!"))
 			return TRUE
-	if(isWirecutter(I))
+	if(I.tool_behaviour == TOOL_WIRECUTTER)
 		TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
 		playsound(machine.loc, 'sound/items/Wirecutter.ogg', 50, 1)
 		to_chat(user, SPAN_NOTICE("You remove the cables."))

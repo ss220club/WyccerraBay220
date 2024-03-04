@@ -238,7 +238,7 @@
 				stage++
 				return
 		if(2)
-			if(W.sharp || istype(W,/obj/item/hemostat) || isWirecutter(W))
+			if(W.sharp || istype(W,/obj/item/hemostat) || W.tool_behaviour == TOOL_WIRECUTTER)
 				var/list/organs = get_contents_recursive()
 				if(length(organs))
 					var/obj/item/removing = pick(organs)

@@ -9,19 +9,6 @@
 /// True when A exists and can be used as a cable coil.
 #define isCoil(A) (A?.IsCoil())
 
-
-/// True when this atom can be used as a wirecutter.
-/atom/proc/IsWirecutter()
-	return FALSE
-
-/// Defines the base wirecutter as useable as a wirecutter.
-/obj/item/wirecutters/IsWirecutter()
-	return TRUE
-
-/// True when A exists and can be used as a wirecutter.
-#define isWirecutter(A) (A?.IsWirecutter())
-
-
 /// True when this atom can be used as a screwdriver.
 /atom/proc/IsScrewdriver()
 	return FALSE

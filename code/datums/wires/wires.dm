@@ -147,7 +147,7 @@ var/global/list/wireColours = list("red", "blue", "green", "darkred", "orange", 
 
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
-				if(isWirecutter(I) || isWirecutter(offhand_item))
+				if(I.tool_behaviour == TOOL_WIRECUTTER || offhand_item.tool_behaviour == TOOL_WIRECUTTER)
 					var/colour = href_list["cut"]
 					var/message = ""
 					if (CutWireColour(colour))

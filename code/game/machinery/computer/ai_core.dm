@@ -377,7 +377,7 @@ var/global/list/empty_playable_ai_cores = list()
 
 	// Wirecutters
 	// - State 4 - Remove wiring, move to State 3
-	if (isWirecutter(tool))
+	if (tool.tool_behaviour == TOOL_WIRECUTTER)
 		if (state < STATE_WIRED)
 			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
 			return TRUE

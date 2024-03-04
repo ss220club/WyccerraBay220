@@ -74,21 +74,67 @@
 	ignite()
 
 /obj/machinery/atmospherics/pipe/cap/sparker/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if(signaler || disabled)
 		to_chat(user, SPAN_NOTICE("Remove signalers and check the wiring before unwrenching \the [src]."))
-		return ITEM_INTERACT_SUCCESS
-	. = ..()
+		return
+	. = ITEM_INTERACT_SUCCESS
+	var/turf/T = src.loc
+	if(level==ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
+		to_chat(user, SPAN_WARNING("You must remove the plating first."))
+		return
+	if(clamp)
+		to_chat(user, SPAN_WARNING("You must remove \the [clamp] first."))
+		return
+
+	var/datum/gas_mixture/int_air = return_air()
+	var/datum/gas_mixture/env_air = loc.return_air()
+
+	if((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+		to_chat(user, SPAN_WARNING("You cannot unwrench \the [src], it is too exerted due to internal pressure."))
+		return
+
+	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+	to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src]..."))
+
+	if(!do_after(user, (tool.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		return
+
+	if(clamp)
+		to_chat(user, SPAN_WARNING("You must remove \the [clamp] first."))
+		return
+
+	user.visible_message(
+		SPAN_NOTICE("\The [user] unfastens \the [src]."),
+		SPAN_NOTICE("You have unfastened \the [src]."),
+		"You hear a ratchet.")
+
+	new /obj/item/pipe(loc, src)
+	for(var/obj/machinery/meter/meter in T)
+		if(meter.target == src)
+			meter.dismantle()
+	qdel(src)
+
+/obj/machinery/atmospherics/pipe/cap/sparker/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(signaler)
+		signaler.mholder = null
+		signaler.dropInto(loc)
+		user.visible_message(
+			SPAN_WARNING("\The [user] disconnects \the [signaler] from \the [src]."),
+			SPAN_WARNING("You disconnect \the [signaler] from \the [src].")
+		)
+		signaler = null
+		update_icon()
+		return
+	disabled = !disabled
+	user.visible_message(
+		SPAN_WARNING("\The [user] has [disabled ? "disabled" : "reconnected wiring on"] \the [src]."),
+		SPAN_WARNING("You [disabled ? "disable" : "fix"] the connection on \the [src].")
+	)
+	update_icon()
 
 /obj/machinery/atmospherics/pipe/cap/sparker/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isScrewdriver(W) && !signaler)
-		disabled = !disabled
-		user.visible_message(
-			SPAN_WARNING("\The [user] has [disabled ? "disabled" : "reconnected wiring on"] \the [src]."),
-			SPAN_WARNING("You [disabled ? "disable" : "fix"] the connection on \the [src].")
-		)
-		update_icon()
-		return TRUE
-
 	if (istype(W, /obj/item/device/assembly/signaler) && isnull(signaler))
 		if (disabled)
 			to_chat(user, SPAN_WARNING("\The [src] is disabled!"))
@@ -105,17 +151,6 @@
 			SPAN_NOTICE("\The [user] connects \the [signaler] to \the [src]."),
 			SPAN_NOTICE("You connect \the [signaler] to \the [src].")
 		)
-		update_icon()
-		return TRUE
-
-	if (isScrewdriver(W) && signaler)
-		signaler.mholder = null
-		signaler.dropInto(loc)
-		user.visible_message(
-			SPAN_WARNING("\The [user] disconnects \the [signaler] from \the [src]."),
-			SPAN_WARNING("You disconnect \the [signaler] from \the [src].")
-		)
-		signaler = null
 		update_icon()
 		return TRUE
 

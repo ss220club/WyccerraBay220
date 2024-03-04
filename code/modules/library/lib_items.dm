@@ -26,6 +26,25 @@
 	update_icon()
 	. = ..()
 
+/obj/structure/bookcase/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] begins dismantling \the [src] with \a [tool]."),
+		SPAN_NOTICE("You begin dismantling \the [src] with \a [tool].")
+	)
+	if(!user.do_skilled(2.5 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return TRUE
+	var/obj/item/stack/material/wood/wood = new (loc, 5)
+	transfer_fingerprints_to(wood)
+	for(var/obj/item/book/book in contents)
+		book.dropInto(loc)
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
+		SPAN_NOTICE("You dismantle \the [src] with \a [tool].")
+	)
+	qdel(src)
 
 /obj/structure/bookcase/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Book - Add book to shelf
@@ -49,28 +68,7 @@
 		)
 		return TRUE
 
-	// Screwdriver - Dismantle bookshelf
-	if (isScrewdriver(tool))
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] begins dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You begin dismantling \the [src] with \a [tool].")
-		)
-		if (!user.do_skilled(2.5 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		var/obj/item/stack/material/wood/wood = new (loc, 5)
-		transfer_fingerprints_to(wood)
-		for (var/obj/item/book/book in contents)
-			book.dropInto(loc)
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \a [tool].")
-		)
-		qdel_self()
-		return TRUE
-
-	return ..()
+	. = ..()
 
 
 /obj/structure/bookcase/attack_hand(mob/user as mob)

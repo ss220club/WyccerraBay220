@@ -105,6 +105,23 @@
 		else
 			to_chat(user, SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_GREEN]", "green")]."))
 
+/obj/item/gun/magnetic/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!removable_components)
+		USE_FEEDBACK_FAILURE("\The [src]'s components can't be swapped out.")
+		return
+	if (!capacitor)
+		USE_FEEDBACK_FAILURE("\The [src] has no capacitor to remove.")
+		return
+	user.put_in_hands(capacitor)
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] detaches \a [capacitor] from \a [src] with \a [tool]."),
+		SPAN_NOTICE("You detach \the [capacitor] from \the [src] with \the [tool].")
+	)
+	capacitor = null
+	power_per_tick = 0
+	update_icon()
 
 /obj/item/gun/magnetic/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Capacitor - Install capacitor
@@ -146,25 +163,6 @@
 			SPAN_NOTICE("\The [user] slots \a [tool] into \a [src]."),
 			SPAN_NOTICE("You slot \the [tool] into \the [src].")
 		)
-		return TRUE
-
-	// Screwdriver - Remove capacitor
-	if (isScrewdriver(tool))
-		if (!removable_components)
-			USE_FEEDBACK_FAILURE("\The [src]'s components can't be swapped out.")
-			return TRUE
-		if (!capacitor)
-			USE_FEEDBACK_FAILURE("\The [src] has no capacitor to remove.")
-			return TRUE
-		user.put_in_hands(capacitor)
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] detaches \a [capacitor] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You detach \the [capacitor] from \the [src] with \the [tool].")
-		)
-		capacitor = null
-		power_per_tick = 0
-		update_icon()
 		return TRUE
 
 	// Attempt to load ammo

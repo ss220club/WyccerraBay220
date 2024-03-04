@@ -60,23 +60,20 @@
 	)
 	qdel(src)
 
-/obj/structure/plasticflaps/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/plasticflaps/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle airflow
-	if (isScrewdriver(tool))
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can adjust the airflow.")
-			return TRUE
-		if (airtight)
-			clear_airtight()
-		else
-			become_airtight()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \the [src] with \a [tool]."),
-			SPAN_NOTICE("You adjust \the [src] with \the [tool], [airtight ? "preventing" : "allowing"] air flow.")
-		)
-		return TRUE
-
-	return ..()
+	if (anchored)
+		USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can adjust the airflow.")
+		return
+	if (airtight)
+		clear_airtight()
+	else
+		become_airtight()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] adjusts \the [src] with \a [tool]."),
+		SPAN_NOTICE("You adjust \the [src] with \the [tool], [airtight ? "preventing" : "allowing"] air flow.")
+	)
 
 
 /obj/structure/plasticflaps/can_anchor(obj/item/tool, mob/user, silent)

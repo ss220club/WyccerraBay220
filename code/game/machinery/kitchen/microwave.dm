@@ -72,26 +72,25 @@
 			update_icon()
 			atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER
 
+/obj/machinery/microwave/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(broken != 2)
+		return
+	user.visible_message( \
+		SPAN_NOTICE("\The [user] starts to fix part of the microwave."), \
+		SPAN_NOTICE("You start to fix part of the microwave.") \
+	)
+	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		user.visible_message( \
+			SPAN_NOTICE("\The [user] fixes part of the microwave."), \
+			SPAN_NOTICE("You have fixed part of the microwave.") \
+		)
+		broken = 1 // Fix it a bit
+
 /obj/machinery/microwave/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (broken > 0)
-		// Start repairs by using a screwdriver
-		if(broken == 2 && isScrewdriver(O))
-			user.visible_message( \
-				SPAN_NOTICE("\The [user] starts to fix part of the microwave."), \
-				SPAN_NOTICE("You start to fix part of the microwave.") \
-			)
-			if (do_after(user, (O.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				user.visible_message( \
-					SPAN_NOTICE("\The [user] fixes part of the microwave."), \
-					SPAN_NOTICE("You have fixed part of the microwave.") \
-				)
-				broken = 1 // Fix it a bit
-			return TRUE
-
-		// Otherwise, we can't add anything to the micrwoave
-		else
-			to_chat(user, SPAN_WARNING("It's broken, and this isn't the right way to fix it!"))
-			return TRUE
+		to_chat(user, SPAN_WARNING("It's broken, and this isn't the right way to fix it!"))
+		return TRUE
 
 	if(dirtiness == 100) // The microwave is all dirty, so it can't be used!
 		var/has_rag = istype(O, /obj/item/reagent_containers/glass/rag)

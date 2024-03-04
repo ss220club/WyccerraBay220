@@ -41,8 +41,17 @@
 		to_chat(user, SPAN_NOTICE("You pull out all the tape!"))
 		ruin()
 
+/obj/item/music_tape/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!ruined)
+		return
+	to_chat(user, SPAN_NOTICE("You start winding \the [src] back in..."))
+	if(do_after(user, 12 SECONDS, target = src) && user.use_sanity_check(src, tool))
+		to_chat(user, SPAN_NOTICE("You wound \the [src] back in."))
+		fix()
+
 /obj/item/music_tape/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	if(ruined && (isScrewdriver(tool) || istype(tool, /obj/item/pen)))
+	if(ruined && istype(tool, /obj/item/pen))
 		to_chat(user, SPAN_NOTICE("You start winding \the [src] back in..."))
 		if(do_after(user, 12 SECONDS, target = src) && user.use_sanity_check(src, tool))
 			to_chat(user, SPAN_NOTICE("You wound \the [src] back in."))

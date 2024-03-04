@@ -90,6 +90,13 @@
 		update_icon()
 	return secured
 
+/obj/item/device/assembly/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	set_secure(!secured)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
+		SPAN_NOTICE("You adjust \the [src] with \the [tool]. It [secured ? "is now ready to use" : "can now be taken apart"].")
+	)
 
 /obj/item/device/assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Assembly - Attach assembly
@@ -128,18 +135,7 @@
 			range = 3
 		)
 		return TRUE
-
-	// Screwdriver - Toggle secured
-	if (isScrewdriver(tool))
-		set_secure(!secured)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
-			SPAN_NOTICE("You adjust \the [src] with \the [tool]. It [secured ? "is now ready to use" : "can now be taken apart"].")
-		)
-		return TRUE
-
 	return ..()
-
 
 /obj/item/device/assembly/Process()
 	return PROCESS_KILL

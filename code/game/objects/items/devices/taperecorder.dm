@@ -42,17 +42,15 @@
 		mytape = null
 	return ..()
 
+/obj/item/device/taperecorder/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	maintenance = !maintenance
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [maintenance ? "opens" : "closes"] \a [src]'s lid with \a [tool]."),
+		SPAN_NOTICE("You [maintenance ? "open" : "close"] \the [src]'s lid with \the [tool].")
+	)
 
 /obj/item/device/taperecorder/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Toggle maintenance cover
-	if (isScrewdriver(tool))
-		maintenance = !maintenance
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [maintenance ? "opens" : "closes"] \a [src]'s lid with \a [tool]."),
-			SPAN_NOTICE("You [maintenance ? "open" : "close"] \the [src]'s lid with \the [tool].")
-		)
-		return TRUE
-
 	// Tape - Insert tape
 	if (istype(tool, /obj/item/device/tape))
 		if (mytape)
@@ -456,6 +454,31 @@
 	timestamp += used_capacity
 	storedinfo += "*\[[time2text(used_capacity*10,"mm:ss")]\] [text]"
 
+/obj/item/device/tape/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!max_capacity)
+		USE_FEEDBACK_FAILURE("\The [src] has no tape to wind.")
+		return
+	if (!ruined)
+		USE_FEEDBACK_FAILURE("\The [src]'s tape doesn't need re-winding.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts winding \a [src]'s tape back in with \a [tool]."),
+		SPAN_NOTICE("You start winding \the [src]'s tape back in with \the [tool].")
+	)
+	if (!do_after(user, 12 SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (!max_capacity)
+		USE_FEEDBACK_FAILURE("\The [src] has no tape to wind.")
+		return
+	if (!ruined)
+		USE_FEEDBACK_FAILURE("\The [src]'s tape doesn't need re-winding.")
+		return
+	fix()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] winds \a [src]'s tape back in with \a [tool]."),
+		SPAN_NOTICE("You wind \the [src]'s tape back in with \the [tool].")
+	)
 
 /obj/item/device/tape/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Magnetic Tape - Join tape
@@ -476,39 +499,12 @@
 		)
 		return TRUE
 
-	// Screwdriver - Fix tape
-	if (isScrewdriver(tool))
-		if (!max_capacity)
-			USE_FEEDBACK_FAILURE("\The [src] has no tape to wind.")
-			return TRUE
-		if (!ruined)
-			USE_FEEDBACK_FAILURE("\The [src]'s tape doesn't need re-winding.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts winding \a [src]'s tape back in with \a [tool]."),
-			SPAN_NOTICE("You start winding \the [src]'s tape back in with \the [tool].")
-		)
-		if (!do_after(user, 12 SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!max_capacity)
-			USE_FEEDBACK_FAILURE("\The [src] has no tape to wind.")
-			return TRUE
-		if (!ruined)
-			USE_FEEDBACK_FAILURE("\The [src]'s tape doesn't need re-winding.")
-			return TRUE
-		fix()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] winds \a [src]'s tape back in with \a [tool]."),
-			SPAN_NOTICE("You wind \the [src]'s tape back in with \the [tool].")
-		)
-		return TRUE
-
 	// Wirecutter - Cut tape
 	if (isWirecutter(tool))
 		cut(user)
 		return TRUE
 
-	return ..()
+	. = ..()
 
 
 /obj/item/device/tape/proc/cut(mob/user)

@@ -444,6 +444,22 @@
 
 	return ..()
 
+/obj/machinery/light/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(lightbulb)
+		return
+	playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] opens \the [src]'s casing."),
+		SPAN_NOTICE("You open up \the [src]'s casing."),
+		SPAN_ITALIC("You hear screws being loosened.")
+	)
+	var/obj/machinery/light_construct/C = new construct_type(loc, dir, src)
+	C.stage = LIGHT_STAGE_WIRED
+	C.update_icon()
+	transfer_fingerprints_to(C)
+	qdel(src)
+
 /obj/machinery/light/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(W, /obj/item/light))
 		if(lightbulb)
@@ -463,20 +479,6 @@
 		return TRUE
 
 	if (!lightbulb)
-		if (isScrewdriver(W)) //If it's a screwdriver open it.
-			playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] opens \the [src]'s casing."),
-				SPAN_NOTICE("You open up \the [src]'s casing."),
-				SPAN_ITALIC("You hear screws being loosened.")
-			)
-			var/obj/machinery/light_construct/C = new construct_type(loc, dir, src)
-			C.stage = LIGHT_STAGE_WIRED
-			C.update_icon()
-			transfer_fingerprints_to(C)
-			qdel(src)
-			return TRUE
-
 		user.visible_message(
 			SPAN_WARNING("\The [user] shoves \a [W] into \the [src]!"),
 			SPAN_DANGER("You stick \the [W] into \the [src]!")

@@ -49,12 +49,12 @@
 	desc = "[initial(desc)] [design.desc]"
 	icon_state = design.icon_state
 
-/obj/structure/sign/poster/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Block interaction
-	if (isScrewdriver(tool))
-		USE_FEEDBACK_FAILURE("You must use wirecutters to remove \the [src].")
-		return TRUE
+/obj/structure/sign/poster/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+	USE_FEEDBACK_FAILURE("You must use wirecutters to remove \the [src].")
 
+
+/obj/structure/sign/poster/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Wirecutters - Remove poster
 	if (isWirecutter(tool))
 		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)

@@ -74,6 +74,42 @@
 				display = "[display]%"
 			to_chat(user, "\The [cell] charge is [display]")
 
+/obj/item/scrubpack/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (enabled)
+		to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
+		return
+	if (!cell && !tank)
+		to_chat(user, SPAN_WARNING("\The [src] doesn't have anything you can remove."))
+		return
+	var/list/options = list()
+	if (cell)
+		options += "cell"
+	if (tank)
+		options += "tank"
+	var/selection = input("Which would you like to remove?") as null|anything in options
+	if (!selection)
+		return
+	var/time_cost = 5 - round(user.get_skill_value(SKILL_ATMOS) * 0.5) //0,1,1,2,2
+	if (!do_after(user, time_cost SECONDS, src, do_flags = DO_PUBLIC_UNIQUE))
+		return
+	var/removed
+	if (selection == "cell")
+		user.put_in_hands(cell)
+		removed = cell
+		cell = null
+	else if (selection == "tank")
+		user.put_in_hands(tank)
+		removed = tank
+		tank = null
+	user.visible_message(
+		SPAN_ITALIC("\The [user] removes \the [removed] from \the [src]."),
+		SPAN_ITALIC("You remove the [selection] from \the [src]."),
+		SPAN_ITALIC("You can hear metal scratching on metal."),
+		range = 5
+	)
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+
 /obj/item/scrubpack/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/cell))
 		if (cell)
@@ -109,42 +145,6 @@
 			range = 5
 		)
 		tank = W
-		return TRUE
-
-	if (isScrewdriver(W))
-		if (enabled)
-			to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
-			return TRUE
-		if (!cell && !tank)
-			to_chat(user, SPAN_WARNING("\The [src] doesn't have anything you can remove."))
-			return TRUE
-		var/list/options = list()
-		if (cell)
-			options += "cell"
-		if (tank)
-			options += "tank"
-		var/selection = input("Which would you like to remove?") as null|anything in options
-		if (!selection)
-			return TRUE
-		var/time_cost = 5 - round(user.get_skill_value(SKILL_ATMOS) * 0.5) //0,1,1,2,2
-		if (!do_after(user, time_cost SECONDS, src, do_flags = DO_PUBLIC_UNIQUE))
-			return TRUE
-		var/removed
-		if (selection == "cell")
-			user.put_in_hands(cell)
-			removed = cell
-			cell = null
-		else if (selection == "tank")
-			user.put_in_hands(tank)
-			removed = tank
-			tank = null
-		user.visible_message(
-			SPAN_ITALIC("\The [user] removes \the [removed] from \the [src]."),
-			SPAN_ITALIC("You remove the [selection] from \the [src]."),
-			SPAN_ITALIC("You can hear metal scratching on metal."),
-			range = 5
-		)
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		return TRUE
 
 	. = ..()

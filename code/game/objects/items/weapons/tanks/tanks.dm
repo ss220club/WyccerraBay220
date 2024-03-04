@@ -108,32 +108,32 @@ var/global/list/tank_gauge_cache = list()
 					descriptive = "bitterly cold"
 		to_chat(user, SPAN_ITALIC("\The [src] feels [descriptive]."))
 
+/obj/item/tank/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	add_fingerprint(user)
+	user.visible_message(
+		SPAN_ITALIC("\The [user] starts to use \the [tool] on \the [src]."),
+		SPAN_ITALIC("You start to force \the [src]'s emergency relief valve with \the [tool]."),
+		SPAN_ITALIC("You can hear metal scratching on metal."),
+		range = 5
+	)
+	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
+		to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
+		return
+	var/reduction = round(user.get_skill_value(SKILL_ATMOS) * 0.5) //0,1,1,2,2
+	if(do_after(user, (5 - reduction) SECONDS, src, DO_PUBLIC_UNIQUE))
+		if (GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
+			to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
+			return
+		FLIP_FLAGS(tank_flags, TANK_FLAG_FORCED)
+		to_chat(user, SPAN_NOTICE("You finish forcing the valve [GET_FLAGS(tank_flags, TANK_FLAG_FORCED) ? "open" : "closed"]."))
+
 /obj/item/tank/attackby(obj/item/W, mob/user)
 	..()
 	if (istype(loc, /obj/item/assembly))
 		icon = loc
 
 	if (istype(W, /obj/item/device/scanner/gas))
-		return
-
-	if (isScrewdriver(W))
-		add_fingerprint(user)
-		user.visible_message(
-			SPAN_ITALIC("\The [user] starts to use \the [W] on \the [src]."),
-			SPAN_ITALIC("You start to force \the [src]'s emergency relief valve with \the [W]."),
-			SPAN_ITALIC("You can hear metal scratching on metal."),
-			range = 5
-		)
-		if (GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-			to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
-			return
-		var/reduction = round(user.get_skill_value(SKILL_ATMOS) * 0.5) //0,1,1,2,2
-		if (do_after(user, (5 - reduction) SECONDS, src, DO_PUBLIC_UNIQUE))
-			if (GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-				to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
-				return
-			FLIP_FLAGS(tank_flags, TANK_FLAG_FORCED)
-			to_chat(user, SPAN_NOTICE("You finish forcing the valve [GET_FLAGS(tank_flags, TANK_FLAG_FORCED) ? "open" : "closed"]."))
 		return
 
 	if (istype(W,/obj/item/latexballon))

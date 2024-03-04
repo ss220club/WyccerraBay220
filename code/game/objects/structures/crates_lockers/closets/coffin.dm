@@ -19,32 +19,28 @@
 		return FALSE
 
 
-/obj/structure/closet/coffin/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/closet/coffin/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle lock
-	if (isScrewdriver(tool))
-		if (opened)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can screw the lid shut.")
-			return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] begins screwing \the [src]'s lid [locked ? "open" : "shut"] with \a [tool]."),
-			SPAN_NOTICE("You begin screwing \the [src]'s lid [locked ? "open" : "shut"] with \the [tool].")
-		)
-		if (!user.do_skilled(screwdriver_time_needed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (opened)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can screw the lid shut.")
-			return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] screws \the [src]'s lid [locked ? "open" : "shut"] with \a [tool]."),
-			SPAN_NOTICE("You screw \the [src]'s lid [locked ? "open" : "shut"] with \the [tool].")
-		)
-		locked = !locked
-		return TRUE
-
-	return ..()
-
+	if (opened)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can screw the lid shut.")
+		return
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] begins screwing \the [src]'s lid [locked ? "open" : "shut"] with \a [tool]."),
+		SPAN_NOTICE("You begin screwing \the [src]'s lid [locked ? "open" : "shut"] with \the [tool].")
+	)
+	if (!user.do_skilled(screwdriver_time_needed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (opened)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be closed before you can screw the lid shut.")
+		return
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] screws \the [src]'s lid [locked ? "open" : "shut"] with \a [tool]."),
+		SPAN_NOTICE("You screw \the [src]'s lid [locked ? "open" : "shut"] with \the [tool].")
+	)
+	locked = !locked
 
 /obj/structure/closet/coffin/toggle(mob/user as mob)
 	if(!(opened ? close() : open()))

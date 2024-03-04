@@ -110,6 +110,31 @@
 	)
 	qdel(src)
 
+/obj/structure/windoor_assembly/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!electronics)
+		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+		return
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts removing \the [src]'s circuits with \a [tool]."),
+		SPAN_NOTICE("You start removing \the [src]'s circuits with \the [tool].")
+	)
+	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if (!electronics)
+		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+		return
+	electronics.dropInto(loc)
+	electronics.add_fingerprint(user, tool = tool)
+	electronics = null
+	update_icon()
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts removing \the [src]'s circuits with \a [tool]."),
+		SPAN_NOTICE("You start removing \the [src]'s circuits with \the [tool].")
+	)
+
 /obj/structure/windoor_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Airlock electronics - Install electronics
 	if (istype(tool, /obj/item/airlock_electronics))
@@ -215,32 +240,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] reinforces \the [src] with some [tool.name]."),
 			SPAN_NOTICE("You reinforce \the [src] with some [tool.name].")
-		)
-		return TRUE
-
-	// Screwdriver - Remove electronics
-	if (isScrewdriver(tool))
-		if (!electronics)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \the [src]'s circuits with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s circuits with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!electronics)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		electronics.dropInto(loc)
-		electronics.add_fingerprint(user, tool = tool)
-		electronics = null
-		update_icon()
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \the [src]'s circuits with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s circuits with \the [tool].")
 		)
 		return TRUE
 

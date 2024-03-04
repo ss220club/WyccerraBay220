@@ -71,18 +71,18 @@
 	cartridges -= label
 	SSnano.update_uis(src)
 
+/obj/machinery/chemical_dispenser/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/label = input(user, "Which cartridge would you like to remove?", "Chemical Dispenser") as null|anything in cartridges
+	if(!label) return TRUE
+	var/obj/item/reagent_containers/chem_disp_cartridge/C = remove_cartridge(label)
+	if(C)
+		to_chat(user, SPAN_NOTICE("You remove \the [C] from \the [src]."))
+		C.dropInto(loc)
+
 /obj/machinery/chemical_dispenser/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(W, /obj/item/reagent_containers/chem_disp_cartridge))
 		add_cartridge(W, user)
-		return TRUE
-
-	if (isScrewdriver(W))
-		var/label = input(user, "Which cartridge would you like to remove?", "Chemical Dispenser") as null|anything in cartridges
-		if(!label) return TRUE
-		var/obj/item/reagent_containers/chem_disp_cartridge/C = remove_cartridge(label)
-		if(C)
-			to_chat(user, SPAN_NOTICE("You remove \the [C] from \the [src]."))
-			C.dropInto(loc)
 		return TRUE
 
 	if (istype(W, /obj/item/reagent_containers/glass) || istype(W, /obj/item/reagent_containers/food) || istype(W, /obj/item/reagent_containers/ivbag))

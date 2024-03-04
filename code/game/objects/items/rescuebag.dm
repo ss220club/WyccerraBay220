@@ -29,22 +29,25 @@
 		airtank = null
 	qdel(src)
 
+/obj/item/bodybag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!airtank)
+		return
+	to_chat(user, "You remove \the [airtank] from \the [src].")
+	airtank.dropInto(loc)
+	airtank = null
+
 /obj/item/bodybag/rescue/attackby(obj/item/W, mob/user, click_params)
 	if(istype(W,/obj/item/tank))
 		if(airtank)
 			to_chat(user, "\The [src] already has an air tank installed.")
-			return 1
-		else if(user.unEquip(W))
+			return TRUE
+		if(user.unEquip(W))
 			W.forceMove(src)
 			airtank = W
 			to_chat(user, "You install \the [W] in \the [src].")
-			return 1
-	else if(airtank && isScrewdriver(W))
-		to_chat(user, "You remove \the [airtank] from \the [src].")
-		airtank.dropInto(loc)
-		airtank = null
-	else
-		..()
+			return TRUE
+	. = ..()
 
 /obj/item/bodybag/rescue/examine(mob/user)
 	. = ..()
@@ -86,22 +89,20 @@
 	if(airtank)
 		AddOverlays(image(icon, "tank"))
 
+/obj/structure/closet/body_bag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!airtank)
+		USE_FEEDBACK_FAILURE("\The [src] has no airtank to remove.")
+		return
+	airtank.dropInto(loc)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] removes \the [src]'s [airtank.name] with \a [tool]."),
+		SPAN_NOTICE("You remove \the [src]'s [airtank.name] with \the [tool].")
+	)
+	airtank = null
 
 /obj/structure/closet/body_bag/rescue/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Remove air tank
-	if (isScrewdriver(tool))
-		if (!airtank)
-			USE_FEEDBACK_FAILURE("\The [src] has no airtank to remove.")
-			return TRUE
-		airtank.dropInto(loc)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [src]'s [airtank.name] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src]'s [airtank.name] with \the [tool].")
-		)
-		airtank = null
-		return TRUE
-
 	// Tank - Install air tank
 	if (istype(tool, /obj/item/tank))
 		if (airtank)

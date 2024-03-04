@@ -55,6 +55,19 @@
 	)
 	update_icon()
 
+/obj/machinery/beehive/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(bee_count)
+		to_chat(user, SPAN_NOTICE("You can't dismantle \the [src] with these bees inside."))
+		return
+	to_chat(user, SPAN_NOTICE("You start dismantling \the [src]..."))
+	playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+	if(!do_after(user, (tool.toolspeed * 3) SECONDS, src, DO_PUBLIC_UNIQUE))
+		return
+	user.visible_message(SPAN_NOTICE("\The [user] dismantles \the [src]."), SPAN_NOTICE("You dismantle \the [src]."))
+	new /obj/item/beehive_assembly(loc)
+	qdel(src)
+
 /obj/machinery/beehive/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if (istype(I, /obj/item/bee_smoker))
 		if(closed)
@@ -132,21 +145,7 @@
 			to_chat(user, "The hive is smoked.")
 		return TRUE
 
-	if (isScrewdriver(I))
-		if(bee_count)
-			to_chat(user, SPAN_NOTICE("You can't dismantle \the [src] with these bees inside."))
-			return TRUE
-		to_chat(user, SPAN_NOTICE("You start dismantling \the [src]..."))
-		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		if (!do_after(user, (I.toolspeed * 3) SECONDS, src, DO_PUBLIC_UNIQUE))
-			return TRUE
-
-		user.visible_message(SPAN_NOTICE("\The [user] dismantles \the [src]."), SPAN_NOTICE("You dismantle \the [src]."))
-		new /obj/item/beehive_assembly(loc)
-		qdel(src)
-		return TRUE
-
-	return ..()
+	. = ..()
 
 /obj/machinery/beehive/physical_attack_hand(mob/user)
 	if(!closed)

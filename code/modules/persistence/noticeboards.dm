@@ -101,6 +101,30 @@
 	)
 	dismantle()
 
+/obj/structure/noticeboard/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/choice = input("Which direction do you wish to place the noticeboard?", "Noticeboard Offset") as null|anything in list("North", "South", "East", "West")
+	if (!choice || !user.use_sanity_check(src, tool))
+		return
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	switch(choice)
+		if("North")
+			pixel_x = 0
+			pixel_y = 32
+		if("South")
+			pixel_x = 0
+			pixel_y = -32
+		if("East")
+			pixel_x = 32
+			pixel_y = 0
+		if("West")
+			pixel_x = -32
+			pixel_y = 0
+	user.visible_message(
+		SPAN_NOTICE("\The [user] adjusts \the [src]'s positioning with \a [tool]."),
+		SPAN_NOTICE("You set \the [src]'s positioning to [choice] with \the [tool].")
+	)
+
 /obj/structure/noticeboard/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Paper, Photo - Attach
 	if (is_type_in_list(tool, list(/obj/item/paper, /obj/item/photo)))
@@ -121,32 +145,7 @@
 		)
 		return TRUE
 
-	// Screwdriver - Set board direction
-	if (isScrewdriver(tool))
-		var/choice = input("Which direction do you wish to place the noticeboard?", "Noticeboard Offset") as null|anything in list("North", "South", "East", "West")
-		if (!choice || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		switch(choice)
-			if("North")
-				pixel_x = 0
-				pixel_y = 32
-			if("South")
-				pixel_x = 0
-				pixel_y = -32
-			if("East")
-				pixel_x = 32
-				pixel_y = 0
-			if("West")
-				pixel_x = -32
-				pixel_y = 0
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \the [src]'s positioning with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s positioning to [choice] with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
+	. = ..()
 
 
 /obj/structure/noticeboard/attack_ai(mob/user)

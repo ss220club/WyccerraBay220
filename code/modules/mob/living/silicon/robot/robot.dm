@@ -568,6 +568,38 @@
 	update_icon()
 	return
 
+/mob/living/silicon/robot/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!opened)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance panel must be opened before you can access the wiring or radio.")
+		return TRUE
+	var/input = input(user, "What would you like to access?", "[name] - Screwdriver Access") as null|anything in list("Wiring", "Radio")
+	if (!input || !user.use_sanity_check(src, tool))
+		return TRUE
+	if (!opened)
+		USE_FEEDBACK_FAILURE("\The [src]'s maintenance panel must be opened before you can access the wiring or radio.")
+		return TRUE
+	switch (input)
+		// Passthrough to radio
+		if ("Radio")
+			if (!silicon_radio)
+				USE_FEEDBACK_FAILURE("\The [src] doesn't have a radio to access.")
+				return TRUE
+			var/result = tool.resolve_attackby(silicon_radio, user)
+			if (result)
+				update_icon()
+		// Toggle wire panel
+		if ("Wiring")
+			if (cell)
+				USE_FEEDBACK_FAILURE("\The [src]'s power cell must be removed before you can access the wiring.")
+				return TRUE
+			wiresexposed = !wiresexposed
+			update_icon()
+			user.visible_message(
+				SPAN_NOTICE("\The [user] [wiresexposed ? "exposes" : "unexposes"] \the [src]'s wiring with \a [tool]."),
+				SPAN_NOTICE("You [wiresexposed ? "expose" : "unexpose"] \the [src]'s wiring with \the [tool].")
+			)
+
 /mob/living/silicon/robot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Components - Attempt to install
 	for (var/key in components)
@@ -746,41 +778,6 @@
 			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
 			SPAN_NOTICE("You install \a [tool] into \the [src].")
 		)
-		return TRUE
-
-	// Screwdriver
-	// - Toggle wire panel
-	// - Passthrough to radio
-	if (isScrewdriver(tool))
-		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance panel must be opened before you can access the wiring or radio.")
-			return TRUE
-		var/input = input(user, "What would you like to access?", "[name] - Screwdriver Access") as null|anything in list("Wiring", "Radio")
-		if (!input || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance panel must be opened before you can access the wiring or radio.")
-			return TRUE
-		switch (input)
-			// Passthrough to radio
-			if ("Radio")
-				if (!silicon_radio)
-					USE_FEEDBACK_FAILURE("\The [src] doesn't have a radio to access.")
-					return TRUE
-				var/result = tool.resolve_attackby(silicon_radio, user, click_params)
-				if (result)
-					update_icon()
-			// Toggle wire panel
-			if ("Wiring")
-				if (cell)
-					USE_FEEDBACK_FAILURE("\The [src]'s power cell must be removed before you can access the wiring.")
-					return TRUE
-				wiresexposed = !wiresexposed
-				update_icon()
-				user.visible_message(
-					SPAN_NOTICE("\The [user] [wiresexposed ? "exposes" : "unexposes"] \the [src]'s wiring with \a [tool]."),
-					SPAN_NOTICE("You [wiresexposed ? "expose" : "unexpose"] \the [src]'s wiring with \the [tool].")
-				)
 		return TRUE
 
 	// Welding Tool - Repair brute damage

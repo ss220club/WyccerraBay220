@@ -71,6 +71,12 @@
 	DROP_NULL(helmet)
 	return ..()
 
+/obj/machinery/suit_cycler/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	panel_open = !panel_open
+	to_chat(user, "You [panel_open ?  "open" : "close"] the maintenance panel.")
+	updateUsrDialog()
+
 /obj/machinery/suit_cycler/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(electrified != 0)
 		if(shock(user, 100))
@@ -80,12 +86,6 @@
 	if(isMultitool(I) || isWirecutter(I))
 		if(panel_open)
 			attack_hand(user)
-		return TRUE
-	//Other interface stuff.
-	if (isScrewdriver(I))
-		panel_open = !panel_open
-		to_chat(user, "You [panel_open ?  "open" : "close"] the maintenance panel.")
-		updateUsrDialog()
 		return TRUE
 
 	if (istype(I,/obj/item/clothing/head/helmet/space) && !istype(I, /obj/item/clothing/head/helmet/space/rig))

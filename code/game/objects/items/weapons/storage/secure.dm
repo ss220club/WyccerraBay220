@@ -15,6 +15,12 @@
 	max_w_class = ITEM_SIZE_SMALL
 	max_storage_space = DEFAULT_BOX_STORAGE
 
+/obj/item/storage/secure/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		open = !open
+		user.show_message(SPAN_NOTICE("You [open ? "open" : "close"] the service panel."))
+
 /obj/item/storage/secure/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (!locked)
 		return ..()
@@ -25,12 +31,6 @@
 		spark_system.start()
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(loc, "sparks", 50, 1)
-		return TRUE
-
-	else if (isScrewdriver(W))
-		if (do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			open = ! open
-			user.show_message(SPAN_NOTICE("You [open ? "open" : "close"] the service panel."))
 		return TRUE
 
 	else if (isMultitool(W) && (open == 1)&& (!l_hacking))

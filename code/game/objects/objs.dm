@@ -207,7 +207,6 @@
 	return TRUE
 
 /obj/proc/wrench_floor_bolts(obj/item, mob/user, obj/item/tool, act_result, delay = 2 SECONDS)
-	SIGNAL_HANDLER
 	if(act_result)
 		return
 	if(!can_anchor(tool, user))

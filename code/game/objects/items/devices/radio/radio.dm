@@ -611,17 +611,15 @@
 		if (power_usage && cell)
 			to_chat(user, SPAN_NOTICE("\The [src] charge meter reads [round(cell.percent(), 0.1)]%."))
 
+/obj/item/device/radio/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	b_stat = !b_stat
+	user.visible_message(
+		SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
+		SPAN_NOTICE("You adjust \the [src] with \the [tool]. It can [b_stat ? "now" : "no longer"] be attached or modified.")
+	)
 
 /obj/item/device/radio/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Make attachable
-	if (isScrewdriver(tool))
-		b_stat = !b_stat
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
-			SPAN_NOTICE("You adjust \the [src] with \the [tool]. It can [b_stat ? "now" : "no longer"] be attached or modified.")
-		)
-		return TRUE
-
 	// Device Cell - Install power cell
 	if (istype(tool, /obj/item/cell/device))
 		if (!power_usage)
@@ -707,6 +705,22 @@
 		var/datum/robot_component/C = R.components["radio"]
 		R.cell_use_power(C.active_usage)
 
+/obj/item/device/radio/borg/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!keyslot)
+		USE_FEEDBACK_FAILURE("\The [src] doesn't have an encryption key to remove.")
+		return
+	for (var/channel_name in channels)
+		radio_controller.remove_object(src, radiochannels[channel_name])
+		secure_radio_connections[channel_name] = null
+	user.put_in_hands(keyslot)
+	recalculateChannels()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] pops \a [keyslot] out of \a [src] with \a [tool]."),
+		SPAN_NOTICE("You pop \the [keyslot] out of \the [src] with \the [tool]."),
+		range = 2
+	)
+	keyslot = null
 
 /obj/item/device/radio/borg/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Encryption Key - Insert key
@@ -725,27 +739,7 @@
 			range = 2
 		)
 		return TRUE
-
-	// Screwdriver - Remove encryption key
-	if (isScrewdriver(tool))
-		if (!keyslot)
-			USE_FEEDBACK_FAILURE("\The [src] doesn't have an encryption key to remove.")
-			return TRUE
-		for (var/channel_name in channels)
-			radio_controller.remove_object(src, radiochannels[channel_name])
-			secure_radio_connections[channel_name] = null
-		user.put_in_hands(keyslot)
-		recalculateChannels()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pops \a [keyslot] out of \a [src] with \a [tool]."),
-			SPAN_NOTICE("You pop \the [keyslot] out of \the [src] with \the [tool]."),
-			range = 2
-		)
-		keyslot = null
-		return TRUE
-
 	return ..()
-
 
 /obj/item/device/radio/borg/recalculateChannels()
 	src.channels = list()

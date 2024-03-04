@@ -146,6 +146,15 @@
 		M.update_inv_l_hand(0)
 		M.update_inv_r_hand(1)
 
+/obj/item/clothing/mask/smokable/ecig/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!cigcell)
+		to_chat(user, SPAN_NOTICE("There's no battery in \the [src]."))
+		return
+	cigcell.update_icon()
+	cigcell.dropInto(loc)
+	cigcell = null
+	to_chat(user, SPAN_NOTICE("You remove \the [cigcell] from \the [src]."))
 
 /obj/item/clothing/mask/smokable/ecig/attackby(obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/reagent_containers/ecig_cartridge))
@@ -156,15 +165,6 @@
 			update_icon()
 			to_chat(user, "[SPAN_NOTICE("You insert \the [I] into \the [src].")] ")
 
-	if (isScrewdriver(I))
-		if(cigcell) //if contains powercell
-			cigcell.update_icon()
-			cigcell.dropInto(loc)
-			cigcell = null
-			to_chat(user, SPAN_NOTICE("You remove \the [cigcell] from \the [src]."))
-		else //does not contains cell
-			to_chat(user, SPAN_NOTICE("There's no battery in \the [src]."))
-
 	if(istype(I, /obj/item/cell/device))
 		if(!cigcell && user.unEquip(I))
 			I.forceMove(src)
@@ -173,6 +173,8 @@
 			update_icon()
 		else
 			to_chat(user, SPAN_NOTICE("\The [src] already has a battery installed."))
+
+	. = ..()
 
 
 /obj/item/clothing/mask/smokable/ecig/attack_self(mob/user as mob)

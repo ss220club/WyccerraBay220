@@ -112,17 +112,17 @@
 	. = ITEM_INTERACT_SUCCESS
 	if (!electronics)
 		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-		return TRUE
+		return
 	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("\The [user] starts removing \the [src]'s [electronics.name] with \a [tool]."),
 		SPAN_NOTICE("You start removing \the [src]'s [electronics.name] with \the [tool].")
 	)
 	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return TRUE
+		return
 	if (!electronics)
 		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-		return TRUE
+		return
 	electronics.dropInto(loc)
 	electronics.add_fingerprint(user)
 	state = ASSEMBLY_STATE_WIRED
@@ -133,6 +133,38 @@
 		SPAN_NOTICE("You remove \the [src]'s [electronics.name] with \the [tool].")
 	)
 	electronics = null
+
+/obj/structure/door_assembly/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(state != ASSEMBLY_STATE_CIRCUIT)
+		USE_FEEDBACK_FAILURE("\The [src] needs a circuit before you can finish it.")
+		return
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] starts finishing \the [src] with \a [tool]."),
+		SPAN_NOTICE("You start finishing \the [src] with \the [tool].")
+	)
+	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		return
+	if(state != ASSEMBLY_STATE_CIRCUIT)
+		USE_FEEDBACK_FAILURE("\The [src] needs a circuit before you can finish it.")
+		return
+	var/path
+	if(istext(glass))
+		path = text2path("/obj/machinery/door/airlock/[glass]")
+	else if(glass == 1)
+		path = glass_type
+	else
+		path = airlock_type
+	var/obj/machinery/door/airlock/airlock = new path(loc, src)
+	transfer_fingerprints_to(airlock)
+	airlock.add_fingerprint(user, tool = tool)
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] finishes \the [airlock] with \a [tool]."),
+		SPAN_NOTICE("You finishes \the [airlock] with \the [tool].")
+	)
+	qdel(src)
 
 /obj/structure/door_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Airlock Electronics - Install circuit
@@ -287,39 +319,6 @@
 			SPAN_NOTICE("\The [user] names \the [src] to '[created_name]' with \a [tool]."),
 			SPAN_NOTICE("You name \the [src] to '[created_name]' with \the [tool].")
 		)
-		return TRUE
-
-	// Screwdriver - Finish airlock
-	if (isScrewdriver(tool))
-		if (state != ASSEMBLY_STATE_CIRCUIT)
-			USE_FEEDBACK_FAILURE("\The [src] needs a circuit before you can finish it.")
-			return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts finishing \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start finishing \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (state != ASSEMBLY_STATE_CIRCUIT)
-			USE_FEEDBACK_FAILURE("\The [src] needs a circuit before you can finish it.")
-			return TRUE
-		var/path
-		if(istext(glass))
-			path = text2path("/obj/machinery/door/airlock/[glass]")
-		else if (glass == 1)
-			path = glass_type
-		else
-			path = airlock_type
-		var/obj/machinery/door/airlock/airlock = new path(loc, src)
-		transfer_fingerprints_to(airlock)
-		airlock.add_fingerprint(user, tool = tool)
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] finishes \the [airlock] with \a [tool]."),
-			SPAN_NOTICE("You finishes \the [airlock] with \the [tool].")
-		)
-		qdel_self()
 		return TRUE
 
 	// Welder

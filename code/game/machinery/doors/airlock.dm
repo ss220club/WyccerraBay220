@@ -1000,6 +1000,25 @@ About the new airlock wires panel:
 		close(1)
 		return
 
+/obj/machinery/door/airlock/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (p_open)
+		if (MACHINE_IS_BROKEN(src))
+			to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
+			return TRUE
+		else
+			p_open = FALSE
+			user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on \the [src]."), SPAN_NOTICE("You close the maintenance panel on \the [src]."))
+			playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
+			update_icon()
+			return TRUE
+	else
+		p_open = TRUE
+		user.visible_message(SPAN_NOTICE("[user.name] opens the maintenance panel on \the [src]."), SPAN_NOTICE("You open the maintenance panel on \the [src]."))
+		playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
+		update_icon()
+		return TRUE
+
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)
 	// Brace is considered installed on the airlock, so interacting with it is protected from electrification.
 	if(brace && C && (istype(C.GetIdCard(), /obj/item/card/id) || istype(C, /obj/item/material/twohanded/jack)))
@@ -1046,24 +1065,6 @@ About the new airlock wires panel:
 				return TRUE
 		else
 			to_chat(user, SPAN_NOTICE("You must remain still to complete this task."))
-			return TRUE
-
-	if (isScrewdriver(C))
-		if (p_open)
-			if (MACHINE_IS_BROKEN(src))
-				to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
-				return TRUE
-			else
-				p_open = FALSE
-				user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on \the [src]."), SPAN_NOTICE("You close the maintenance panel on \the [src]."))
-				playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
-				update_icon()
-				return TRUE
-		else
-			p_open = TRUE
-			user.visible_message(SPAN_NOTICE("[user.name] opens the maintenance panel on \the [src]."), SPAN_NOTICE("You open the maintenance panel on \the [src]."))
-			playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
-			update_icon()
 			return TRUE
 
 	if (isWirecutter(C) || isMultitool(C) || istype(C, /obj/item/device/assembly/signaler))

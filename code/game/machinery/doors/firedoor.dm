@@ -194,6 +194,81 @@
 	if(needs_to_close)
 		addtimer(CALLBACK(src, PROC_REF(attempt_autoclose)), 10 SECONDS) //Just in case a fire alarm is turned off while the firedoor is going through an autoclose cycle
 
+/obj/machinery/door/firedoor/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(operating)
+		return
+	if(blocked && !repairing)
+		if(!hatch_open)
+			to_chat(user, SPAN_DANGER("You must open the maintenance hatch first!"))
+		else
+			user.visible_message(
+				SPAN_NOTICE("\The [user] starts removing \the [src]'s electronics."),
+				SPAN_NOTICE("You start levering out \the [src]'s electronics."),
+				SPAN_ITALIC("You hear metal bumping against metal.")
+			)
+			playsound(loc, 'sound/items/Crowbar.ogg', 100, TRUE)
+			if(do_after(user, (tool.toolspeed * 3) SECONDS, src, DO_REPAIR_CONSTRUCT))
+				if(blocked && density && hatch_open)
+					playsound(loc, 'sound/items/Deconstruct.ogg', 100, TRUE)
+					user.visible_message(
+						SPAN_NOTICE("\The [user] removes the electronics from \the [src]!"),
+						SPAN_NOTICE("You pry out \the [src]'s circuit board."),
+						SPAN_ITALIC("You hear metal coming loose and clattering.")
+					)
+					deconstruct(user)
+		return
+	if(blocked)
+		user.visible_message(
+			SPAN_WARNING("\The [user] pries at \the [src], but it's stuck in place!"),
+			SPAN_WARNING("You try to pry \the [src] [density ? "open" : "closed"], but it's been welded in place!"),
+			SPAN_WARNING("You hear the unhappy sound of metal straining and groaning.")
+		)
+		return
+	user.visible_message(
+		SPAN_WARNING("\The [user] wedges \the [tool] into \the [src] and starts forcing it [density ? "open" : "closed"]!"),
+		SPAN_DANGER("You start forcing \the [src] [density ? "open" : "shut"]."),
+		SPAN_WARNING("You hear metal groaning and grinding!")
+	)
+	playsound(loc, 'sound/machines/airlock_creaking.ogg', 100, TRUE)
+	if(do_after(user, (tool.toolspeed * 3) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		if(inoperable() || !density)
+			user.visible_message(
+				SPAN_DANGER("\The [user] pries \the [src] [density ? "open" : "shut"]!"),
+				SPAN_DANGER("You force [density ? "open" : "shut"] \the [src]!"),
+				SPAN_WARNING("You hear metal groan as a door is forced [density ? "open" : "closed"]!")
+			)
+		else
+			user.visible_message(
+				SPAN_DANGER("\The [user] forces \the [src] [density ? "open" : "shut"]!"),
+				SPAN_DANGER("You force [density ? "open" : "shut"] \the [src]!"),
+				SPAN_WARNING("You hear metal shrieking as a door is forced [density ? "open" : "closed"]!")
+			)
+		if(density)
+			spawn(0)
+				open(TRUE)
+				if(lockdown || get_alarm())
+					locked = TRUE
+		else
+			spawn(0)
+				locked = FALSE
+				close()
+
+/obj/machinery/door/firedoor/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(operating)
+		return
+	if(!density)
+		return
+	hatch_open = !hatch_open
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [hatch_open ? "opens" : "closes"] \the [src]'s maintenance hatch."),
+		SPAN_NOTICE("You [hatch_open ? "open" : "close"] \the [src]'s maintenance hatch."),
+		SPAN_ITALIC("You hear screws being adjusted.")
+	)
+	playsound(loc, 'sound/items/Screwdriver.ogg', 25, TRUE)
+	update_icon()
+
 /obj/machinery/door/firedoor/use_tool(obj/item/C, mob/living/user, list/click_params)
 	if(operating)
 		return TRUE
@@ -220,56 +295,16 @@
 				update_icon()
 			return TRUE
 
-	if(density && isScrewdriver(C))
-		hatch_open = !hatch_open
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [hatch_open ? "opens" : "closes"] \the [src]'s maintenance hatch."),
-			SPAN_NOTICE("You [hatch_open ? "open" : "close"] \the [src]'s maintenance hatch."),
-			SPAN_ITALIC("You hear screws being adjusted.")
-		)
-		playsound(loc, 'sound/items/Screwdriver.ogg', 25, TRUE)
-		update_icon()
-		return TRUE
-
-	if(blocked && isCrowbar(C) && !repairing)
-		if(!hatch_open)
-			to_chat(user, SPAN_DANGER("You must open the maintenance hatch first!"))
-		else
-			user.visible_message(
-				SPAN_NOTICE("\The [user] starts removing \the [src]'s electronics."),
-				SPAN_NOTICE("You start levering out \the [src]'s electronics."),
-				SPAN_ITALIC("You hear metal bumping against metal.")
-			)
-			playsound(loc, 'sound/items/Crowbar.ogg', 100, TRUE)
-			if(do_after(user, (C.toolspeed * 3) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				if(blocked && density && hatch_open)
-					playsound(loc, 'sound/items/Deconstruct.ogg', 100, TRUE)
-					user.visible_message(
-						SPAN_NOTICE("\The [user] removes the electronics from \the [src]!"),
-						SPAN_NOTICE("You pry out \the [src]'s circuit board."),
-						SPAN_ITALIC("You hear metal coming loose and clattering.")
-					)
-					deconstruct(user)
-		return TRUE
-
 	if(blocked)
 		to_chat(user, SPAN_DANGER("\The [src] is welded shut!"))
 		return TRUE
 
-	if(isCrowbar(C) || istype(C,/obj/item/material/twohanded/fireaxe))
+	if(istype(C,/obj/item/material/twohanded/fireaxe))
+		var/obj/item/material/twohanded/fireaxe/F = C
 		if(operating)
 			return TRUE
 
-		if(blocked && isCrowbar(C))
-			user.visible_message(
-				SPAN_WARNING("\The [user] pries at \the [src], but it's stuck in place!"),
-				SPAN_WARNING("You try to pry \the [src] [density ? "open" : "closed"], but it's been welded in place!"),
-				SPAN_WARNING("You hear the unhappy sound of metal straining and groaning.")
-			)
-			return TRUE
-
 		if(istype(C,/obj/item/material/twohanded/fireaxe))
-			var/obj/item/material/twohanded/fireaxe/F = C
 			if(!F.wielded)
 				to_chat(user, SPAN_WARNING("You need to wield \the [C]!"))
 				return TRUE
@@ -281,19 +316,6 @@
 		)
 		playsound(loc, 'sound/machines/airlock_creaking.ogg', 100, TRUE)
 		if(do_after(user, (C.toolspeed * 3) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if(isCrowbar(C))
-				if(inoperable() || !density)
-					user.visible_message(
-						SPAN_DANGER("\The [user] pries \the [src] [density ? "open" : "shut"]!"),
-						SPAN_DANGER("You force [density ? "open" : "shut"] \the [src]!"),
-						SPAN_WARNING("You hear metal groan as a door is forced [density ? "open" : "closed"]!")
-					)
-				else
-					user.visible_message(
-						SPAN_DANGER("\The [user] forces \the [src] [density ? "open" : "shut"]!"),
-						SPAN_DANGER("You force [density ? "open" : "shut"] \the [src]!"),
-						SPAN_WARNING("You hear metal shrieking as a door is forced [density ? "open" : "closed"]!")
-					)
 			if(density)
 				spawn(0)
 					open(TRUE)

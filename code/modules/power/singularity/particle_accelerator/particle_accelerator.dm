@@ -123,6 +123,20 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	update_icon()
 	..()
 
+/obj/structure/particle_accelerator/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (construction_state < CONSTRUCT_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can close the panel.")
+		return
+	if (construction_state == CONSTRUCT_STATE_WIRED)
+		construction_state = CONSTRUCT_STATE_COMPLETE
+	else
+		construction_state = CONSTRUCT_STATE_WIRED
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [construction_state == CONSTRUCT_STATE_COMPLETE ? "closes" : "opens"] \the [src]'s maintenance panel with \a [tool]."),
+		SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_COMPLETE ? "close" : "open"] \the [src]'s maintenance panel with \the [tool].")
+	)
 
 /obj/structure/particle_accelerator/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Add wiring
@@ -143,22 +157,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		user.visible_message(
 			SPAN_NOTICE("\The [user] wires \the [src] with \a [tool]."),
 			SPAN_NOTICE("You wire \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	// Screwdriver - Toggle panel
-	if (isScrewdriver(tool))
-		if (construction_state < CONSTRUCT_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can close the panel.")
-			return TRUE
-		if (construction_state == CONSTRUCT_STATE_WIRED)
-			construction_state = CONSTRUCT_STATE_COMPLETE
-		else
-			construction_state = CONSTRUCT_STATE_WIRED
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [construction_state == CONSTRUCT_STATE_COMPLETE ? "closes" : "opens"] \the [src]'s maintenance panel with \a [tool]."),
-			SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_COMPLETE ? "close" : "open"] \the [src]'s maintenance panel with \the [tool].")
 		)
 		return TRUE
 

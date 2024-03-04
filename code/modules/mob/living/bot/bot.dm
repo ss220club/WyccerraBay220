@@ -88,6 +88,18 @@
 	.[CODEX_INTERACTION_SCREWDRIVER] = "<p>Opens and closes the access panel. The panel must be unlocked.</p>"
 	.[CODEX_INTERACTION_WELDER] = "<p>Repairs 10 points of damage. The access panel must be open. Uses 5 units of fuel.</p>"
 
+/mob/living/bot/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (locked)
+		USE_FEEDBACK_FAILURE("\The [src]'s access panel must be unlocked before you can open it.")
+		return
+	open = !open
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \the [src]'s access panel with \a [tool]."),
+		SPAN_NOTICE("You [open ? "open" : "close"] \the [src]'s access panel with \the [tool].")
+	)
+	Interact(user)
 
 /mob/living/bot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// ID Card - Toggle access panel lock
@@ -105,20 +117,6 @@
 		user.visible_message(
 			SPAN_NOTICE("\The [user] [locked ? "locks" : "unlocks"] \the [src]'s access panel lock with \a [tool]."),
 			SPAN_NOTICE("You [locked ? "lock" : "unlock"] \the [src]'s access panel lock with \the [tool].")
-		)
-		Interact(user)
-		return TRUE
-
-	// Screwdriver - Toggle access panel open/closed
-	if (isScrewdriver(tool))
-		if (locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s access panel must be unlocked before you can open it.")
-			return TRUE
-		open = !open
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \the [src]'s access panel with \a [tool]."),
-			SPAN_NOTICE("You [open ? "open" : "close"] \the [src]'s access panel with \the [tool].")
 		)
 		Interact(user)
 		return TRUE

@@ -196,6 +196,18 @@
 
 	return ..()
 
+/obj/item/gun/launcher/crossbow/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!cell)
+		USE_FEEDBACK_FAILURE("\The [src] has no cell to remove.")
+		return TRUE
+	user.put_in_hands(cell)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] jimmies \a [cell] out of \a [src] with \a [tool]."),
+		SPAN_NOTICE("You jimmy \the [cell] out of \the [src] with \the [tool].")
+	)
+	cell = null
+	update_icon()
 
 /obj/item/gun/launcher/crossbow/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Arrow - Load ammo
@@ -250,22 +262,7 @@
 		superheat_rod(user)
 		return TRUE
 
-	// Screwdriver - Remove cell
-	if (isScrewdriver(tool))
-		if (!cell)
-			USE_FEEDBACK_FAILURE("\The [src] has no cell to remove.")
-			return TRUE
-		user.put_in_hands(cell)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] jimmies \a [cell] out of \a [src] with \a [tool]."),
-			SPAN_NOTICE("You jimmy \the [cell] out of \the [src] with \the [tool].")
-		)
-		cell = null
-		update_icon()
-		return TRUE
-
-	return ..()
-
+	. = ..()
 
 /obj/item/gun/launcher/crossbow/proc/superheat_rod(mob/user)
 	if(!user || !cell || !bolt) return

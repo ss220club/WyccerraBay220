@@ -86,6 +86,22 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 
 	return ..()
 
+/obj/machinery/disposal/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(mode <= 0)
+		if(length(contents) > LAZYLEN(component_parts))
+			to_chat(user, "Eject the items first!")
+			return
+		if(mode == 0) // It's off but still not unscrewed
+			mode = -1 // Set it to doubleoff l0l
+			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+			to_chat(user, "You remove the screws around the power connection.")
+			return
+		if(mode == -1)
+			mode = 0
+			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+			to_chat(user, "You attach the screws around the power connection.")
+
 /obj/machinery/disposal/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(MACHINE_IS_BROKEN(src))
 		return ..()
@@ -93,21 +109,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if ((. = ..()))
 		return
 
-	if(mode<=0) // It's off
-		if (isScrewdriver(I))
-			if(length(contents) > LAZYLEN(component_parts))
-				to_chat(user, "Eject the items first!")
-				return TRUE
-			if(mode==0) // It's off but still not unscrewed
-				mode=-1 // Set it to doubleoff l0l
-				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "You remove the screws around the power connection.")
-				return TRUE
-			else if(mode==-1)
-				mode=0
-				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "You attach the screws around the power connection.")
-				return TRUE
+	if(mode <=0 ) // It's off
 		if (isWelder(I) && mode==-1)
 			if(length(contents) > LAZYLEN(component_parts))
 				to_chat(user, "Eject the items first!")
@@ -597,18 +599,16 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	sleep(20)	//wait until correct animation frame
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 
+/obj/structure/disposaloutlet/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	mode = !mode
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [mode ? "removes" : "attaches"] the screws around \the [src]'s power connection with \a [tool]."),
+		SPAN_NOTICE("You [mode ? "remove" : "attach"] the screws around \the [src]'s power connection with \the [tool].")
+	)
 
 /obj/structure/disposaloutlet/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Toggle mode/power
-	if (isScrewdriver(tool))
-		mode = !mode
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [mode ? "removes" : "attaches"] the screws around \the [src]'s power connection with \a [tool]."),
-			SPAN_NOTICE("You [mode ? "remove" : "attach"] the screws around \the [src]'s power connection with \the [tool].")
-		)
-		return TRUE
-
 	// Welding Tool - Detach from floor
 	if (isWelder(tool))
 		if (!mode)

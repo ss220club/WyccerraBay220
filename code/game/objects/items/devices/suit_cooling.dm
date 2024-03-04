@@ -109,19 +109,17 @@
 		turn_on()
 	to_chat(user, SPAN_NOTICE("You switch \the [src] [on ? "on" : "off"]."))
 
+/obj/item/device/suit_cooling_unit/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	cover_open = !cover_open
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [cover_open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
+		SPAN_NOTICE("You [cover_open ? "open" : "close"] \the [src]'s panel with \the [tool].")
+	)
 
 /obj/item/device/suit_cooling_unit/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Toggle cover
-	if (isScrewdriver(tool))
-		cover_open = !cover_open
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [cover_open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
-			SPAN_NOTICE("You [cover_open ? "open" : "close"] \the [src]'s panel with \the [tool].")
-		)
-		return TRUE
-
 	// Power Cell - Install cell
 	if (istype(tool, /obj/item/cell))
 		if (!cover_open)

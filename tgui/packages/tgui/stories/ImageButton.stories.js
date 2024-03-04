@@ -55,6 +55,18 @@ const Story = (props, context) => {
     'face-smile'
   );
 
+  const [itemIconPos, setItemIconPos] = useLocalState(
+    context,
+    'itemIconPos',
+    'default'
+  );
+
+  const [itemIconSize, setItemIconSize] = useLocalState(
+    context,
+    'itemIconSize',
+    2
+  );
+
   const [imageSize, setImageSize] = useLocalState(context, 'imageSize', 64);
 
   const toggleVertical1 = () => {
@@ -105,23 +117,7 @@ const Story = (props, context) => {
                 />
               </LabeledList.Item>
             </LabeledList>
-          </Stack.Item>
-          <Stack.Item basis="50%">
-            <LabeledList>
-              <LabeledList.Item label="Item Content">
-                <Input
-                  value={itemContent}
-                  onInput={(e, value) => setItemContent(value)}
-                />
-              </LabeledList.Item>
-              <LabeledList.Item label="Item Icon">
-                <Input
-                  value={itemIcon}
-                  onInput={(e, value) => setItemIcon(value)}
-                />
-              </LabeledList.Item>
-            </LabeledList>
-            <Stack mt={1}>
+            <Stack mt={1} mr={2}>
               <Stack.Item grow>
                 <Button.Checkbox
                   fluid
@@ -139,6 +135,40 @@ const Story = (props, context) => {
                 />
               </Stack.Item>
             </Stack>
+          </Stack.Item>
+          <Stack.Item basis="50%">
+            <LabeledList>
+              <LabeledList.Item label="Item Content">
+                <Input
+                  value={itemContent}
+                  onInput={(e, value) => setItemContent(value)}
+                />
+              </LabeledList.Item>
+              <LabeledList.Item label="Item Icon">
+                <Input
+                  value={itemIcon}
+                  onInput={(e, value) => setItemIcon(value)}
+                />
+              </LabeledList.Item>
+              <LabeledList.Item label="Item IconPos">
+                <Input
+                  value={itemIconPos}
+                  onInput={(e, value) => setItemIconPos(value)}
+                />
+              </LabeledList.Item>
+              <LabeledList.Item label="Item IconSize">
+                <Slider
+                  animated
+                  width={10}
+                  value={itemIconSize}
+                  minValue={0}
+                  maxValue={20}
+                  step={1}
+                  stepPixelSize={10}
+                  onChange={(e, value) => setItemIconSize(value)}
+                />
+              </LabeledList.Item>
+            </LabeledList>
           </Stack.Item>
         </Stack>
         <ImageButton
@@ -170,7 +200,8 @@ const Story = (props, context) => {
               tooltipPosition="bottom-end"
               icon={itemIcon}
               iconColor={'gold'}
-              iconSize={2}
+              iconSize={itemIconSize}
+              iconPosition={itemIconPos}
               onClick={toggleDisabled}
             />
           )}

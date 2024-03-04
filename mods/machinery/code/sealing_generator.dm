@@ -98,6 +98,13 @@
 
 	update_icon()
 
+/obj/machinery/sealgen/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	hatch_open = !hatch_open
+	to_chat(user, "You [hatch_open ? "open" : "close"] \the [src] panel.")
+	playsound(src.loc, "[GLOB.machinery_exposed_sound[2]]", 20)
+	update_icon()
+
 /obj/machinery/sealgen/use_tool(obj/item/W, mob/living/user, list/click_params)
 
 	if(isMultitool(W) && !locked)
@@ -108,13 +115,6 @@
 
 	if(isWirecutter(W) && hatch_open)
 		wires.Interact(user)
-		return
-
-	if(isScrewdriver(W))
-		hatch_open = !hatch_open
-		to_chat(user, "You [hatch_open ? "open" : "close"] \the [src] panel.")
-		playsound(src.loc, "[GLOB.machinery_exposed_sound[2]]", 20)
-		update_icon()
 		return
 
 	if(isid(W) && allowed(usr))

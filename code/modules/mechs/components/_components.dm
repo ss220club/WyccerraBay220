@@ -93,26 +93,27 @@
 		qdel(RC)
 		update_components()
 
-/obj/item/mech_component/attackby(obj/item/thing, mob/user)
-	if(isScrewdriver(thing))
-		if(length(contents))
-			//Filter non movables
-			var/list/valid_contents = list()
-			for(var/atom/movable/A in contents)
-				if(!A.anchored)
-					valid_contents += A
-			if(!length(valid_contents))
-				return
-			var/obj/item/removed = pick(valid_contents)
-			if(!(removed in contents))
-				return
-			user.visible_message(SPAN_NOTICE("\The [user] removes \the [removed] from \the [src]."))
-			removed.forceMove(user.loc)
-			playsound(user.loc, 'sound/effects/pop.ogg', 50, 0)
-			update_components()
-		else
-			to_chat(user, SPAN_WARNING("There is nothing to remove."))
+/obj/item/mech_component/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!length(contents))
+		to_chat(user, SPAN_WARNING("There is nothing to remove."))
 		return
+	//Filter non movables
+	var/list/valid_contents = list()
+	for(var/atom/movable/A in contents)
+		if(!A.anchored)
+			valid_contents += A
+	if(!length(valid_contents))
+		return
+	var/obj/item/removed = pick(valid_contents)
+	if(!(removed in contents))
+		return
+	user.visible_message(SPAN_NOTICE("\The [user] removes \the [removed] from \the [src]."))
+	removed.forceMove(user.loc)
+	playsound(user.loc, 'sound/effects/pop.ogg', 50, 0)
+	update_components()
+
+/obj/item/mech_component/attackby(obj/item/thing, mob/user)
 	if(isWelder(thing))
 		repair_brute_generic(thing, user)
 		return

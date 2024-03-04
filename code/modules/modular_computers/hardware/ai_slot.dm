@@ -19,6 +19,12 @@
 		power_usage = power_usage_occupied
 	..()
 
+/obj/item/stock_parts/computer/ai_slot/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(stored_card)
+		to_chat(user, "You manually remove \the [stored_card] from \the [src].")
+		do_eject_ai(user)
+
 /obj/item/stock_parts/computer/ai_slot/attackby(obj/item/W, mob/user)
 	if(..())
 		return TRUE
@@ -29,10 +35,6 @@
 		if(!user.unEquip(W, src))
 			return
 		do_insert_ai(user, W)
-		return TRUE
-	if(isScrewdriver(W) && stored_card)
-		to_chat(user, "You manually remove \the [stored_card] from \the [src].")
-		do_eject_ai(user)
 		return TRUE
 
 /obj/item/stock_parts/computer/ai_slot/Destroy()

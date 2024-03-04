@@ -45,21 +45,22 @@
 	var/obj/item/cell/cell = get_cell()
 	return cell ? cell.charge : 0
 
+/obj/item/weldingtool/electric/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!cell)
+		to_chat(user, SPAN_WARNING("\The [src] has no cell installed."))
+		return
+	cell.dropInto(get_turf(src))
+	user.put_in_hands(cell)
+	to_chat(user, SPAN_NOTICE("You pop \the [cell] out of \the [src]."))
+	welding = FALSE
+	cell = null
+	update_icon()
+
 /obj/item/weldingtool/electric/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/stack/material/rods) || istype(W, /obj/item/welder_tank))
 		return
-	if(isScrewdriver(W))
-		if(cell)
-			cell.dropInto(get_turf(src))
-			user.put_in_hands(cell)
-			to_chat(user, SPAN_NOTICE("You pop \the [cell] out of \the [src]."))
-			welding = FALSE
-			cell = null
-			update_icon()
-		else
-			to_chat(user, SPAN_WARNING("\The [src] has no cell installed."))
-		return
-	else if(istype(W, /obj/item/cell))
+	if(istype(W, /obj/item/cell))
 		if(cell)
 			to_chat(user, SPAN_WARNING("\The [src] already has a cell installed."))
 		else if(user.unEquip(W))

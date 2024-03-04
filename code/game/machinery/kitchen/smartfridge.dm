@@ -108,14 +108,14 @@
 	I.layer = ABOVE_WINDOW_LAYER
 	AddOverlays(I)
 
-/obj/machinery/smartfridge/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(isScrewdriver(O))
-		panel_open = !panel_open
-		user.visible_message("[user] [panel_open ? "opens" : "closes"] the maintenance panel of \the [src].", "You [panel_open ? "open" : "close"] the maintenance panel of \the [src].")
-		update_icon()
-		SSnano.update_uis(src)
-		return TRUE
+/obj/machinery/smartfridge/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	panel_open = !panel_open
+	user.visible_message("[user] [panel_open ? "opens" : "closes"] the maintenance panel of \the [src].", "You [panel_open ? "open" : "close"] the maintenance panel of \the [src].")
+	update_icon()
+	SSnano.update_uis(src)
 
+/obj/machinery/smartfridge/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(isMultitool(O) || isWirecutter(O))
 		if(panel_open)
 			attack_hand(user)

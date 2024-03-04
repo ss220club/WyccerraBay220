@@ -48,6 +48,21 @@
 		SPAN_NOTICE("You [!a_dis?"de":""]activate auto-dismantling.")
 	)
 
+/obj/machinery/pipelayer/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!metal)
+		to_chat(user, "\The [src] is empty.")
+		return
+	var/m = round(input(usr,"Please specify the amount of metal to remove","Remove metal",min(round(metal),50)) as num, 1)
+	m = min(m, 50)
+	m = min(m, round(metal))
+	m = round(m)
+	if(m)
+		use_metal(m)
+		var/obj/item/stack/material/steel/MM = new (get_turf(src))
+		MM.amount = m
+		user.visible_message(SPAN_NOTICE("[user] removes [m] sheet\s of metal from the \the [src]."), SPAN_NOTICE("You remove [m] sheet\s of metal from \the [src]"))
+
 /obj/machinery/pipelayer/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isWrench(W))
 		P_type_t = input("Choose pipe type", "Pipe type") as null|anything in Pipes
@@ -63,21 +78,6 @@
 			to_chat(user, SPAN_NOTICE("\The [src] is full."))
 		else
 			user.visible_message(SPAN_NOTICE("[user] has loaded metal into \the [src]."), SPAN_NOTICE("You load metal into \the [src]"))
-		return TRUE
-
-	if(isScrewdriver(W))
-		if(metal)
-			var/m = round(input(usr,"Please specify the amount of metal to remove","Remove metal",min(round(metal),50)) as num, 1)
-			m = min(m, 50)
-			m = min(m, round(metal))
-			m = round(m)
-			if(m)
-				use_metal(m)
-				var/obj/item/stack/material/steel/MM = new (get_turf(src))
-				MM.amount = m
-				user.visible_message(SPAN_NOTICE("[user] removes [m] sheet\s of metal from the \the [src]."), SPAN_NOTICE("You remove [m] sheet\s of metal from \the [src]"))
-		else
-			to_chat(user, "\The [src] is empty.")
 		return TRUE
 
 	return ..()

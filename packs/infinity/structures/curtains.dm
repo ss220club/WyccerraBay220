@@ -10,26 +10,19 @@
 	name = "bed curtain"
 	color = "#854636"
 
-/obj/structure/curtain/use_tool(obj/item/tool, mob/user)
-
+/obj/structure/curtain/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if(in_progress)
-		return TRUE
-
-	if(isScrewdriver(tool))
-		in_progress = TRUE
-		user.visible_message(SPAN_NOTICE("[user] is uninstalling \the [src]."), SPAN_NOTICE("You are uninstalling \the [src]."))
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
-
-		if(!do_after(user, 40,src))
-			in_progress = FALSE
-			return TRUE
-
-		var/obj/item/curtain/C = new /obj/item/curtain(loc)
-		C.color = color
-		qdel(src)
-		return TRUE
-
-	return ..()
+		return
+	in_progress = TRUE
+	user.visible_message(SPAN_NOTICE("[user] is uninstalling \the [src]."), SPAN_NOTICE("You are uninstalling \the [src]."))
+	playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+	if(!do_after(user, 4 SECONDS, src))
+		in_progress = FALSE
+		return
+	var/obj/item/curtain/C = new /obj/item/curtain(loc)
+	C.color = color
+	qdel(src)
 
 /obj/item/curtain
 	name = "rolled curtain"
@@ -40,27 +33,18 @@
 	force = 3 //just plastic
 	w_class = ITEM_SIZE_HUGE //curtains, yeap
 
-/obj/item/curtain/use_tool(obj/item/tool, mob/user)
-
+/obj/item/curtain/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if(in_progress)
-		return TRUE
-
+		return
 	if(loc == user.loc)
 		to_chat(user, "You cannot install [src] from your hands.")
-		return TRUE
-
-	if(isScrewdriver(tool))
-		in_progress = TRUE
-		user.visible_message(SPAN_NOTICE("[user] is installing \the [src]."), SPAN_NOTICE("You are installing \the [src]."))
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
-
-		if(!do_after(user, 40,src))
-			in_progress = FALSE
-			return TRUE
-
-		var/obj/structure/curtain/C = new /obj/structure/curtain(loc)
-		C.color = color
-		qdel(src)
-		return TRUE
-
-	return ..()
+		return
+	in_progress = TRUE
+	user.visible_message(SPAN_NOTICE("[user] is installing \the [src]."), SPAN_NOTICE("You are installing \the [src]."))
+	playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+	if(!do_after(user, 4 SECONDS, src))
+		in_progress = FALSE
+		return
+	var/obj/structure/curtain/C = new /obj/structure/curtain(loc)
+	C.color = color

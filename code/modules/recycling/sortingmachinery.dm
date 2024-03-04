@@ -593,18 +593,20 @@
 	update_icon()
 	return
 
+/obj/machinery/disposal/deliveryChute/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(c_mode==0)
+		c_mode=1
+		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		to_chat(user, "You remove the screws around the power connection.")
+		return
+	if(c_mode==1)
+		c_mode=0
+		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		to_chat(user, "You attach the screws around the power connection.")
+		return
+
 /obj/machinery/disposal/deliveryChute/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isScrewdriver(I))
-		if(c_mode==0)
-			c_mode=1
-			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-			to_chat(user, "You remove the screws around the power connection.")
-			return TRUE
-		else if(c_mode==1)
-			c_mode=0
-			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-			to_chat(user, "You attach the screws around the power connection.")
-			return TRUE
 	if (isWelder(I) && c_mode==1)
 		var/obj/item/weldingtool/W = I
 		if(W.can_use(1,user))

@@ -736,6 +736,12 @@
 		/obj/item/stock_parts/power/apc
 	)
 
+/obj/machinery/button/windowtint/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/obj/item/frame/light_switch/windowtint/frame = new /obj/item/frame/light_switch/windowtint(user.loc, 1)
+	transfer_fingerprints_to(frame)
+	qdel(src)
+
 /obj/machinery/button/windowtint/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isMultitool(W))
 		var/t = sanitizeSafe(input(user, "Enter the ID for the button.", name, id), MAX_NAME_LEN)
@@ -751,14 +757,7 @@
 			src.id = t
 			to_chat(user, SPAN_NOTICE("The new ID of the button is [id]"))
 		return TRUE
-
-	if(isScrewdriver(W))
-		var/obj/item/frame/light_switch/windowtint/frame = new /obj/item/frame/light_switch/windowtint(user.loc, 1)
-		transfer_fingerprints_to(frame)
-		qdel(src)
-		return TRUE
-
-	return ..()
+	. = ..()
 
 /obj/machinery/button/windowtint/activate()
 	if(operating)

@@ -6,6 +6,11 @@
 	open = !open
 	to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the access panel."))
 
+/obj/item/rig/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	p_open = !p_open
+	to_chat(user, "You [p_open ? "open" : "close"] the wire cover.")
+
 /obj/item/rig/attackby(obj/item/W as obj, mob/user as mob)
 
 	if(!istype(user,/mob/living)) return 0
@@ -37,10 +42,6 @@
 		locked = !locked
 		to_chat(user, "You [locked ? "lock" : "unlock"] \the [src] access panel.")
 		return
-
-	else if(isScrewdriver(W))
-		p_open = !p_open
-		to_chat(user, "You [p_open ? "open" : "close"] the wire cover.")
 
 	// Hacking.
 	else if(isWirecutter(W) || isMultitool(W))

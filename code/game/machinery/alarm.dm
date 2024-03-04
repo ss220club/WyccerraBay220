@@ -995,14 +995,15 @@ FIRE ALARM
 		alarm(rand(30/severity, 60/severity))
 	..()
 
+/obj/machinery/firealarm/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage == 2)
+		wiresexposed = !wiresexposed
+		update_icon()
+
 /obj/machinery/firealarm/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if ((. = ..()))
 		return
-
-	if(isScrewdriver(W) && buildstage == 2)
-		wiresexposed = !wiresexposed
-		update_icon()
-		return TRUE
 
 	if(wiresexposed)
 		switch(buildstage)

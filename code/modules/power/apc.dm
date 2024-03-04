@@ -45,6 +45,10 @@
 #define COVER_OPEN 1
 #define COVER_REMOVED 2
 
+#define ELECTRONICS_NONE 0
+#define ELECTRONICS_PLUGGED 1
+#define ELECTRONICS_SECURED 2
+
 // Various APC types
 /obj/machinery/power/apc/inactive
 	lighting = 0
@@ -121,7 +125,7 @@
 	powernet = 0		 // set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/debug= 0         // Legacy debug toggle, left in for admin use.
 	var/autoflag= 0		 // 0 = off, 1= eqp and lights off, 2 = eqp off, 3 = all on.
-	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
+	var/has_electronics = ELECTRONICS_NONE
 	var/beenhit = 0 // used for counting how many times it has been hit, used for Aliens at the moment
 	var/longtermpower = 10  // Counter to smooth out power state changes; do not modify.
 	wires = /datum/wires/apc
@@ -222,7 +226,7 @@
 	playsound(src, 'sound/machines/apc_nopower.ogg', 75, 0)
 
 /obj/machinery/power/apc/proc/init_round_start()
-	has_electronics = 2 //installed and secured
+	has_electronics = ELECTRONICS_SECURED
 
 	var/obj/item/stock_parts/power/battery/bat = get_component_of_type(/obj/item/stock_parts/power/battery)
 	bat.add_cell(src, new cell_type(bat))
@@ -421,14 +425,14 @@
 /obj/machinery/power/apc/components_are_accessible(path)
 	. = opened
 	if(ispath(path, /obj/item/stock_parts/power/terminal))
-		. = min(., (has_electronics != 2))
+		. = min(., (has_electronics != ELECTRONICS_SECURED))
 
 //attack with an item - open/close cover, insert cell, or (un)lock interface
 
 /obj/machinery/power/apc/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(opened) // Closes or removes board.
-		if (has_electronics == 1)
+		if (has_electronics == ELECTRONICS_PLUGGED)
 			if (terminal())
 				to_chat(user, SPAN_WARNING("Disconnect the wires first."))
 				return
@@ -436,7 +440,7 @@
 			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
 
 			if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && (has_electronics == 1) && !terminal()) // redo all checks.
-				has_electronics = 0
+				has_electronics = ELECTRONICS_NONE
 				if (MACHINE_IS_BROKEN(src))
 					user.visible_message(\
 						SPAN_WARNING("\The [user] has broken the power control board inside \the [src]!"),\
@@ -465,42 +469,43 @@
 	user.visible_message(SPAN_NOTICE("\The [user] pries the cover open on \the [src]."), SPAN_NOTICE("You pry the cover open."))
 	update_icon()
 
+/obj/machinery/power/apc/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(opened)
+		if (get_cell())
+			to_chat(user, SPAN_WARNING("Either close the cover or remove the cell first."))
+			return
+
+		switch(has_electronics)
+			if(ELECTRONICS_PLUGGED)
+				if(!terminal())
+					to_chat(user, SPAN_WARNING("You must attach a wire connection first!"))
+					return
+				has_electronics = ELECTRONICS_SECURED
+				set_stat(MACHINE_STAT_MAINT, FALSE)
+				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				to_chat(user, "You screw the circuit electronics into place.")
+				update_icon()
+			if(ELECTRONICS_SECURED)
+				has_electronics = ELECTRONICS_PLUGGED
+				set_stat(MACHINE_STAT_MAINT, TRUE)
+				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				to_chat(user, "You unfasten the electronics.")
+				update_icon()
+			if(ELECTRONICS_NONE)
+				to_chat(user, SPAN_WARNING("There is no power control board to secure!"))
+		return
+
+	// Otherwise, if not opened, expose the wires.
+	wiresexposed = !wiresexposed
+	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+	update_icon()
+
 /obj/machinery/power/apc/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return attack_robot(user)
 	if(istype(W, /obj/item/inducer))
 		return FALSE // inducer.dm use_after handles this
-
-	// Exposes wires for hacking and attaches/detaches the circuit.
-	if(isScrewdriver(W))
-		if(opened)
-			if (get_cell())
-				to_chat(user, SPAN_WARNING("Either close the cover or remove the cell first."))
-				return TRUE
-			switch(has_electronics)
-				if(1)
-					if(!terminal())
-						to_chat(user, SPAN_WARNING("You must attach a wire connection first!"))
-						return TRUE
-					has_electronics = 2
-					set_stat(MACHINE_STAT_MAINT, FALSE)
-					playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-					to_chat(user, "You screw the circuit electronics into place.")
-					update_icon()
-				if(2)
-					has_electronics = 1
-					set_stat(MACHINE_STAT_MAINT, TRUE)
-					playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-					to_chat(user, "You unfasten the electronics.")
-					update_icon()
-				if(0)
-					to_chat(user, SPAN_WARNING("There is no power control board to secure!"))
-			return TRUE
-		// Otherwise, if not opened, expose the wires.
-		wiresexposed = !wiresexposed
-		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
-		update_icon()
-		return TRUE
 
 	// trying to unlock the interface with an ID card
 	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/modular_computer))
@@ -531,14 +536,14 @@
 		if(!opened)
 			to_chat(user, SPAN_WARNING("You must first open the cover."))
 			return TRUE
-		if(has_electronics != 0)
+		if(has_electronics)
 			to_chat(user, SPAN_WARNING("There is already a power control board inside."))
 			return TRUE
 		user.visible_message(SPAN_WARNING("\The [user] inserts the power control board into \the [src]."), \
 							"You start to insert the power control board into the frame...")
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, 1 SECOND, src, DO_REPAIR_CONSTRUCT) && has_electronics == 0 && opened && !MACHINE_IS_BROKEN(src))
-			has_electronics = 1
+		if(do_after(user, 1 SECOND, src, DO_REPAIR_CONSTRUCT) && !has_electronics && opened && !MACHINE_IS_BROKEN(src))
+			has_electronics = ELECTRONICS_PLUGGED
 			reboot() //completely new electronics
 			to_chat(user, SPAN_NOTICE("You place the power control board inside the frame."))
 			qdel(W)
@@ -549,7 +554,7 @@
 		if(!opened)
 			to_chat(user, SPAN_WARNING("You must first open the cover."))
 			return TRUE
-		if(has_electronics != 0)
+		if(has_electronics)
 			to_chat(user, SPAN_WARNING("You must first remove the power control board inside."))
 			return TRUE
 		if(terminal())
@@ -562,7 +567,7 @@
 							"You start welding the APC frame...", \
 							"You hear welding.")
 		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-		if(do_after(user, (W.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && has_electronics == 0 && !terminal())
+		if(do_after(user, (W.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && !has_electronics && !terminal())
 			if(!WT.remove_fuel(3, user))
 				return TRUE
 			if (emagged || MACHINE_IS_BROKEN(src) || opened==2)

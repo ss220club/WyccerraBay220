@@ -112,19 +112,18 @@
 	else if(islocked)
 		to_chat(user, SPAN_WARNING("You can't pry the unit open, it's locked!"))
 
+/obj/machinery/suit_storage_unit/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		panelopen = !panelopen
+		playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
+		to_chat(user, SPAN_NOTICE("You [panelopen ? "open" : "close"] the unit's maintenance panel."))
+		SStgui.update_uis(src)
+		update_icon()
+
 /obj/machinery/suit_storage_unit/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if ((. = ..()))
 		return
-
-	if(isScrewdriver(I))
-		if(do_after(user, (I.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			panelopen = !panelopen
-			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
-			to_chat(user, SPAN_NOTICE("You [panelopen ? "open" : "close"] the unit's maintenance panel."))
-			SStgui.update_uis(src)
-			update_icon()
-		return TRUE
-
 	TRY_INSERT_SUIT_PIECE(suit, clothing/suit/space)
 	TRY_INSERT_SUIT_PIECE(helmet, clothing/head/helmet/space)
 	TRY_INSERT_SUIT_PIECE(boots, clothing/shoes/magboots)

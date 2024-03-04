@@ -32,8 +32,39 @@
 			U.dropInto(loc)
 			upgrades -= U
 
-/obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
+/obj/item/camera_assembly/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(state == ASSEMBLY_WIRED)
+		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		var/input = sanitize(input(usr, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
+		if(!input)
+			to_chat(usr, "No input found please hang up and try your call again.")
+			return
+		var/list/tempnetwork = splittext(input, ",")
+		if(length(tempnetwork) < 1)
+			to_chat(usr, "No network found please hang up and try your call again.")
+			return
+		var/area/camera_area = get_area(src)
+		var/temptag = "[sanitize(camera_area.name)] ([rand(1, 999)])"
+		input = sanitizeSafe(input(usr, "How would you like to name the camera?", "Set Camera Name", camera_name ? camera_name : temptag), MAX_LNAME_LEN)
+		state = ASSEMBLY_SCREWED
+		var/obj/machinery/camera/C = new(src.loc)
+		src.forceMove(C)
+		C.assembly = src
+		C.auto_turn()
+		C.replace_networks(uniquelist(tempnetwork))
+		C.c_tag = input
+		for(var/i = 5; i >= 0; i -= 1)
+			var/direct = input(user, "Direction?", "Assembling Camera", null) in list("LEAVE IT", "NORTH", "EAST", "SOUTH", "WEST" )
+			if(direct != "LEAVE IT")
+				C.dir = text2dir(direct)
+			if(i != 0)
+				var/confirm = alert(user, "Is this what you want? Chances Remaining: [i]", "Confirmation", "Yes", "No")
+				if(confirm == "Yes")
+					C.update_icon()
+					break
 
+/obj/item/camera_assembly/attackby(obj/item/W as obj, mob/living/user as mob)
 	switch(state)
 		if(ASSEMBLY_NONE)
 			// State 0
@@ -77,40 +108,7 @@
 					anchored = TRUE
 				return
 		if(ASSEMBLY_WIRED)
-			// State 3
-			if(isScrewdriver(W))
-				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-				var/input = sanitize(input(usr, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
-				if(!input)
-					to_chat(usr, "No input found please hang up and try your call again.")
-					return
-				var/list/tempnetwork = splittext(input, ",")
-				if(length(tempnetwork) < 1)
-					to_chat(usr, "No network found please hang up and try your call again.")
-					return
-				var/area/camera_area = get_area(src)
-				var/temptag = "[sanitize(camera_area.name)] ([rand(1, 999)])"
-				input = sanitizeSafe(input(usr, "How would you like to name the camera?", "Set Camera Name", camera_name ? camera_name : temptag), MAX_LNAME_LEN)
-				state = ASSEMBLY_SCREWED
-				var/obj/machinery/camera/C = new(src.loc)
-				src.forceMove(C)
-				C.assembly = src
-				C.auto_turn()
-				C.replace_networks(uniquelist(tempnetwork))
-				C.c_tag = input
-				for(var/i = 5; i >= 0; i -= 1)
-					var/direct = input(user, "Direction?", "Assembling Camera", null) in list("LEAVE IT", "NORTH", "EAST", "SOUTH", "WEST" )
-					if(direct != "LEAVE IT")
-						C.dir = text2dir(direct)
-					if(i != 0)
-						var/confirm = alert(user, "Is this what you want? Chances Remaining: [i]", "Confirmation", "Yes", "No")
-						if(confirm == "Yes")
-							C.update_icon()
-							break
-				return
-
-			else if(isWirecutter(W))
-
+			if(isWirecutter(W))
 				new/obj/item/stack/cable_coil(get_turf(src), 2)
 				playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
 				to_chat(user, "You cut the wires from the circuits.")

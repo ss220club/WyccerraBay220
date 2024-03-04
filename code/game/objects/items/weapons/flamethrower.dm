@@ -98,6 +98,13 @@
 	else
 		return ..()
 
+/obj/item/flamethrower/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(igniter && !lit && !complete)
+		status = !status
+		to_chat(user, SPAN_NOTICE("\The [igniter] is now [status ? "secured" : "unsecured"]!"))
+		update_icon()
+
 /obj/item/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.stat || user.restrained() || user.lying)	return
 	if(isWrench(W) && !status && !complete)//Taking this apart
@@ -112,12 +119,6 @@
 			beaker = null
 		new /obj/item/stack/material/rods(get_turf(src))
 		qdel(src)
-		return
-
-	if(isScrewdriver(W) && igniter && !lit && !complete)
-		status = !status
-		to_chat(user, SPAN_NOTICE("\The [igniter] is now [status ? "secured" : "unsecured"]!"))
-		update_icon()
 		return
 
 	if(isigniter(W))

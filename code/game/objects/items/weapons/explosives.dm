@@ -24,11 +24,13 @@
 	wires = null
 	return ..()
 
+/obj/item/plastique/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	open_panel = !open_panel
+	to_chat(user, SPAN_NOTICE("You [open_panel ? "open" : "close"] the wire panel."))
+
 /obj/item/plastique/attackby(obj/item/I, mob/user)
-	if(isScrewdriver(I))
-		open_panel = !open_panel
-		to_chat(user, SPAN_NOTICE("You [open_panel ? "open" : "close"] the wire panel."))
-	else if(isWirecutter(I) || isMultitool(I) || istype(I, /obj/item/device/assembly/signaler ))
+	if(isWirecutter(I) || isMultitool(I) || istype(I, /obj/item/device/assembly/signaler ))
 		wires.Interact(user)
 	else
 		..()

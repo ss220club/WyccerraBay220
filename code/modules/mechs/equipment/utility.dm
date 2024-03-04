@@ -886,25 +886,23 @@
 	passive_power_use = 0
 	. = ..()
 
-/obj/item/mech_equipment/camera/attackby(obj/item/W, mob/user)
-	. = ..()
+/obj/item/mech_equipment/camera/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/list/all_networks = list()
+	for(var/network in GLOB.using_map.station_networks)
+		if(has_access(get_camera_access(network), GetIdCard(user)))
+			all_networks += network
 
-	if(isScrewdriver(W))
-		var/list/all_networks = list()
-		for(var/network in GLOB.using_map.station_networks)
-			if(has_access(get_camera_access(network), GetIdCard(user)))
-				all_networks += network
+	all_networks += additional_networks
 
-		all_networks += additional_networks
-
-		var/network = input("Which network would you like to configure it for?") as null|anything in (all_networks)
-		if(!network)
-			to_chat(user, SPAN_WARNING("You cannot connect to any camera network!."))
-		var/delay = 2 SECONDS * user.skill_delay_mult(SKILL_DEVICES)
-		if(do_after(user, delay, src, DO_DEFAULT | DO_BOTH_UNIQUE_ACT) && network)
-			camera.network = list(network)
-			camera.update_coverage(TRUE)
-			to_chat(user, SPAN_NOTICE("You configure the camera for \the [network] network."))
+	var/network = input("Which network would you like to configure it for?") as null|anything in (all_networks)
+	if(!network)
+		to_chat(user, SPAN_WARNING("You cannot connect to any camera network!."))
+	var/delay = 2 SECONDS * user.skill_delay_mult(SKILL_DEVICES)
+	if(do_after(user, delay, src, DO_DEFAULT | DO_BOTH_UNIQUE_ACT) && network)
+		camera.network = list(network)
+		camera.update_coverage(TRUE)
+		to_chat(user, SPAN_NOTICE("You configure the camera for \the [network] network."))
 
 /obj/item/mech_equipment/camera/attack_self(mob/user)
 	. = ..()

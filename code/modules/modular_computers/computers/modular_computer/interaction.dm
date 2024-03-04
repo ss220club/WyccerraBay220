@@ -113,6 +113,25 @@
 	else if(!enabled && screen_on)
 		turn_on(user)
 
+/obj/item/modular_computer/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/list/all_components = get_all_components()
+	if(!length(all_components))
+		to_chat(user, "This device doesn't have any components installed.")
+		return
+	var/list/component_names = list()
+	for(var/obj/item/stock_parts/computer/H in all_components)
+		component_names.Add(H.name)
+	var/choice = input(usr, "Which component do you want to uninstall?", "Computer maintenance", null) as null|anything in component_names
+	if(!choice)
+		return
+	if(!Adjacent(usr))
+		return
+	var/obj/item/stock_parts/computer/H = find_hardware_by_name(choice)
+	if(!H)
+		return
+	uninstall_component(user, H)
+
 /obj/item/modular_computer/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/card/id)) // ID Card, try to insert it.
 		var/obj/item/card/id/I = W
@@ -179,32 +198,6 @@
 		if(do_after(user, damage / 10, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(round(damage / 75)))
 			revive_health()
 			to_chat(user, "You repair \the [src].")
-		return
-
-	if(isScrewdriver(W))
-		var/list/all_components = get_all_components()
-		if(!length(all_components))
-			to_chat(user, "This device doesn't have any components installed.")
-			return
-		var/list/component_names = list()
-		for(var/obj/item/stock_parts/computer/H in all_components)
-			component_names.Add(H.name)
-
-		var/choice = input(usr, "Which component do you want to uninstall?", "Computer maintenance", null) as null|anything in component_names
-
-		if(!choice)
-			return
-
-		if(!Adjacent(usr))
-			return
-
-		var/obj/item/stock_parts/computer/H = find_hardware_by_name(choice)
-
-		if(!H)
-			return
-
-		uninstall_component(user, H)
-
 		return
 
 	..()

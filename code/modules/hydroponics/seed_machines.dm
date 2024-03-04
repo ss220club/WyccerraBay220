@@ -70,6 +70,11 @@
 	if(open)
 		dismantle()
 
+/obj/machinery/botany/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	open = !open
+	to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the maintenance panel."))
+
 /obj/machinery/botany/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W,/obj/item/seeds))
 		if(seed)
@@ -81,11 +86,6 @@
 		else if(user.unEquip(W, src))
 			seed = W
 			to_chat(user, "You load [W] into [src].")
-		return TRUE
-
-	if(isScrewdriver(W))
-		open = !open
-		to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the maintenance panel."))
 		return TRUE
 
 	if(istype(W,/obj/item/disk/botany))

@@ -46,29 +46,25 @@ var/global/bomb_set
 			addtimer(CALLBACK(src, PROC_REF(explode)), 0)
 		SSnano.update_uis(src)
 
-/obj/machinery/nuclearbomb/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(isScrewdriver(O))
-		ClearOverlays()
-		if(auth)
-			if(panel_open == 0)
-				panel_open = 1
+/obj/machinery/nuclearbomb/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	ClearOverlays()
+	switch(panel_open)
+		if(FALSE)
+			if(auth)
+				panel_open = TRUE
 				AddOverlays("panel_open")
 				to_chat(user, "You unscrew the control panel of [src].")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			else
-				panel_open = 0
-				to_chat(user, "You screw the control panel of [src] back on.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-		else
-			if(panel_open == 0)
 				to_chat(user, "\The [src] emits a buzzing noise, the panel staying locked in.")
-			if(panel_open == 1)
-				panel_open = 0
-				to_chat(user, "You screw the control panel of \the [src] back on.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			flick("lock", src)
-		return TRUE
+				flick("lock", src)
+		if(TRUE)
+			panel_open = FALSE
+			to_chat(user, "You screw the control panel of [src] back on.")
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 
+/obj/machinery/nuclearbomb/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(panel_open && isMultitool(O) || isWirecutter(O))
 		return attack_hand(user)
 

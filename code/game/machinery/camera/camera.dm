@@ -164,18 +164,18 @@
 		kill_health()
 		return TRUE
 
+/obj/machinery/camera/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	panel_open = !panel_open
+	user.visible_message(
+		SPAN_WARNING("\The [user] screws \the [src]'s panel [panel_open ? "open" : "closed"]!"),
+		SPAN_NOTICE("You screw \the [src]'s panel [panel_open ? "open" : "closed"].")
+	)
+	playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+
 /obj/machinery/camera/use_tool(obj/item/W, mob/living/user, list/click_params)
 	update_coverage()
 	var/datum/wires/camera/camera_wires = wires
-
-	if(isScrewdriver(W))
-		panel_open = !panel_open
-		user.visible_message(
-			SPAN_WARNING("\The [user] screws \the [src]'s panel [panel_open ? "open" : "closed"]!"),
-			SPAN_NOTICE("You screw \the [src]'s panel [panel_open ? "open" : "closed"].")
-		)
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		return TRUE
 
 	if ((isWirecutter(W) || isMultitool(W)) && panel_open)
 		wires.Interact(user)

@@ -145,19 +145,19 @@
 		return
 	return 1
 
-/obj/machinery/oxygen_pump/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isScrewdriver(W))
-		toggle_stat(MACHINE_STAT_MAINT)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [GET_FLAGS(stat, MACHINE_STAT_MAINT) ? "opens" : "closes"] \the [src]."),
-			SPAN_NOTICE("You [GET_FLAGS(stat, MACHINE_STAT_MAINT) ? "open" : "close"] \the [src].")
-		)
-		if(GET_FLAGS(stat, MACHINE_STAT_MAINT))
-			icon_state = icon_state_open
-		if(!stat)
-			icon_state = icon_state_closed
-		return TRUE
+/obj/machinery/oxygen_pump/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	toggle_stat(MACHINE_STAT_MAINT)
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [GET_FLAGS(stat, MACHINE_STAT_MAINT) ? "opens" : "closes"] \the [src]."),
+		SPAN_NOTICE("You [GET_FLAGS(stat, MACHINE_STAT_MAINT) ? "open" : "close"] \the [src].")
+	)
+	if(GET_FLAGS(stat, MACHINE_STAT_MAINT))
+		icon_state = icon_state_open
+	if(!stat)
+		icon_state = icon_state_closed
 
+/obj/machinery/oxygen_pump/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/tank) && (GET_FLAGS(stat, MACHINE_STAT_MAINT)))
 		if(tank)
 			to_chat(user, SPAN_WARNING("\The [src] already has a tank installed!"))

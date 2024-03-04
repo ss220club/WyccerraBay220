@@ -195,18 +195,18 @@
 		update_icon()
 		return 1
 
-/obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isScrewdriver(W))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 100, 1)
-		if(is_open)
-			to_chat(user, SPAN_NOTICE("You close the panel."))
-			is_open = 0
-		else
-			to_chat(user, SPAN_NOTICE("You open the panel and expose the wiring."))
-			is_open = 1
-		return TRUE
+/obj/machinery/shieldgen/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src.loc, 'sound/items/Screwdriver.ogg', 100, 1)
+	if(is_open)
+		to_chat(user, SPAN_NOTICE("You close the panel."))
+		is_open = FALSE
+	else
+		to_chat(user, SPAN_NOTICE("You open the panel and expose the wiring."))
+		is_open = TRUE
 
-	else if(isCoil(W) && malfunction && is_open)
+/obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
+	if(isCoil(W) && malfunction && is_open)
 		var/obj/item/stack/cable_coil/coil = W
 		to_chat(user, SPAN_NOTICE("You begin to replace the wires."))
 		//if(do_after(user, min(60, round( ((maxhealth/health)*10)+(malfunction*10) ))) //Take longer to repair heavier damage

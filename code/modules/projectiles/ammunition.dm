@@ -62,25 +62,21 @@
 	if(A)
 		LAZYDISTINCTADD(A.gunshot_residue, caliber)
 
-
-/obj/item/ammo_casing/attackby(obj/item/W as obj, mob/user as mob)
-	if(isScrewdriver(W))
-		if(!BB)
-			to_chat(user, SPAN_NOTICE("There is no bullet in the casing to inscribe anything into."))
-			return
-
-		var/tmp_label = ""
-		var/label_text = sanitizeSafe(input(user, "Inscribe some text into \the [initial(BB.name)]","Inscription",tmp_label), MAX_NAME_LEN)
-		if(length(label_text) > 20)
-			to_chat(user, SPAN_WARNING("The inscription can be at most 20 characters long."))
-		else if(!label_text)
-			to_chat(user, SPAN_NOTICE("You scratch the inscription off of [initial(BB)]."))
-			BB.SetName(initial(BB.name))
-		else
-			to_chat(user, SPAN_NOTICE("You inscribe \"[label_text]\" into \the [initial(BB.name)]."))
-			BB.SetName("[initial(BB.name)] (\"[label_text]\")")
-	else ..()
-
+/obj/item/ammo_casing/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!BB)
+		to_chat(user, SPAN_NOTICE("There is no bullet in the casing to inscribe anything into."))
+		return
+	var/tmp_label = ""
+	var/label_text = sanitizeSafe(input(user, "Inscribe some text into \the [initial(BB.name)]","Inscription",tmp_label), MAX_NAME_LEN)
+	if(length(label_text) > 20)
+		to_chat(user, SPAN_WARNING("The inscription can be at most 20 characters long."))
+	else if(!label_text)
+		to_chat(user, SPAN_NOTICE("You scratch the inscription off of [initial(BB)]."))
+		BB.SetName(initial(BB.name))
+	else
+		to_chat(user, SPAN_NOTICE("You inscribe \"[label_text]\" into \the [initial(BB.name)]."))
+		BB.SetName("[initial(BB.name)] (\"[label_text]\")")
 
 /obj/item/ammo_casing/on_update_icon()
 	if(spent_icon && !BB)

@@ -83,11 +83,20 @@
 		src.add_fingerprint(usr)
 		M.put_in_any_hand_if_possible(src)
 
+/obj/item/defibrillator/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(bcell)
+		bcell.update_icon()
+		bcell.dropInto(loc)
+		bcell = null
+		to_chat(user, SPAN_NOTICE("You remove the cell from \the [src]."))
+		update_icon()
 
 /obj/item/defibrillator/attackby(obj/item/W, mob/user, params)
 	if(W == paddles)
 		reattach_paddles(user)
-	else if(istype(W, /obj/item/cell))
+		return
+	if(istype(W, /obj/item/cell))
 		if(bcell)
 			to_chat(user, SPAN_NOTICE("\the [src] already has a cell."))
 		else
@@ -97,16 +106,8 @@
 			bcell = W
 			to_chat(user, SPAN_NOTICE("You install a cell in \the [src]."))
 			update_icon()
-
-	else if(isScrewdriver(W))
-		if(bcell)
-			bcell.update_icon()
-			bcell.dropInto(loc)
-			bcell = null
-			to_chat(user, SPAN_NOTICE("You remove the cell from \the [src]."))
-			update_icon()
-	else
-		return ..()
+		return
+	. = ..()
 
 /obj/item/defibrillator/emag_act(uses, mob/user)
 	if(paddles)

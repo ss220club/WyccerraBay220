@@ -214,6 +214,42 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 			update_icon()
 			return ITEM_INTERACT_SUCCESS
 
+/obj/item/music_player/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	switch(panel)
+		if(PANEL_UNSCREWED)
+			user.visible_message(SPAN_NOTICE("\The [user] screw \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You screw \the [src]'s front panel."))
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			panel = PANEL_CLOSED
+		if(PANEL_CLOSED)
+			user.visible_message(SPAN_NOTICE("\The [user] unscrew \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You unscrew \the [src]'s front panel."))
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			panel = PANEL_UNSCREWED
+		if(PANEL_OPENED)
+			var/choices = list()
+			if(cell)
+				choices += "Remove cell"
+			if(!broken)
+				choices += "Adjust player"
+			var/response = input(user, "What do you want to do?", "[src]") as null|anything in choices
+			if(!Adjacent(user) || !response)	//moved away or cancelled
+				return
+			switch(response)
+				if("Remove cell")
+					if(cell)
+						if(!MayAdjust(user))
+							return
+						playsound(src, 'sound/items/Screwdriver.ogg', 45, 1)
+						to_chat(user, SPAN_NOTICE("You pulled out [cell] out of [src] with [tool]."))
+						user.put_in_hands(cell)
+						cell = null
+						update_icon()
+					else
+						USE_FEEDBACK_FAILURE("\The [src] doesn't have a cell installed.")
+				if("Adjust player")
+					if(!broken)
+						AdjustFrequency(tool, user)
+
 /obj/item/music_player/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	if(istype(tool, /obj/item/music_tape))
 		var/obj/item/music_tape/C = tool
@@ -252,49 +288,6 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 			to_chat(user, SPAN_NOTICE("You insert \a [cell] into \the [src]."))
 			update_icon()
 		return TRUE
-
-	if(isScrewdriver(tool))
-		switch(panel)
-			if(PANEL_UNSCREWED)
-				user.visible_message(SPAN_NOTICE("\The [user] screw \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You screw \the [src]'s front panel."))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-				panel = PANEL_CLOSED
-				return TRUE
-
-			if(PANEL_CLOSED)
-				user.visible_message(SPAN_NOTICE("\The [user] unscrew \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You unscrew \the [src]'s front panel."))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-				panel = PANEL_UNSCREWED
-				return TRUE
-
-			if(PANEL_OPENED)
-				var/choices = list()
-				if(cell)
-					choices += "Remove cell"
-				if(!broken)
-					choices += "Adjust player"
-
-				var/response = input(user, "What do you want to do?", "[src]") as null|anything in choices
-
-				if(!Adjacent(user) || !response)	//moved away or cancelled
-					return TRUE
-
-				switch(response)
-					if("Remove cell")
-						if(cell)
-							if(!MayAdjust(user))
-								return FALSE
-							playsound(src, 'sound/items/Screwdriver.ogg', 45, 1)
-							to_chat(user, SPAN_NOTICE("You pulled out [cell] out of [src] with [tool]."))
-							user.put_in_hands(cell)
-							cell = null
-							update_icon()
-						else
-							USE_FEEDBACK_FAILURE("\The [src] doesn't have a cell installed.")
-					if("Adjust player")
-						if(!broken)
-							AdjustFrequency(tool, user)
-				return TRUE
 
 	if(istype(tool, /obj/item/stack/nanopaste))
 		var/obj/item/stack/S = tool

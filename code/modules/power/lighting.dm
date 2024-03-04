@@ -63,6 +63,22 @@
 		if(LIGHT_STAGE_WIRED) to_chat(user, "It's wired.")
 		if(LIGHT_STAGE_COMPLETE) to_chat(user, "The casing is closed.")
 
+/obj/machinery/light_construct/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (stage == LIGHT_STAGE_WIRED)
+		stage = LIGHT_STAGE_COMPLETE
+		update_icon()
+		user.visible_message(
+			SPAN_NOTICE("\The [user] closes \the [src]'s casing."),
+			SPAN_NOTICE("You close \the [src]'s casing."),
+			SPAN_ITALIC("You hear screws being tightened.")
+		)
+		playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
+		var/obj/machinery/light/newlight = new fixture_type(loc, src)
+		newlight.set_dir(dir)
+		transfer_fingerprints_to(newlight)
+		qdel(src)
+
 /obj/machinery/light_construct/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isWrench(W))
 		switch(stage)
@@ -118,24 +134,6 @@
 			)
 			playsound(loc, 'sound/items/Deconstruct.ogg', 50, TRUE)
 		return TRUE
-
-	if(isScrewdriver(W))
-		if (stage == LIGHT_STAGE_WIRED)
-			stage = LIGHT_STAGE_COMPLETE
-			update_icon()
-			user.visible_message(
-				SPAN_NOTICE("\The [user] closes \the [src]'s casing."),
-				SPAN_NOTICE("You close \the [src]'s casing."),
-				SPAN_ITALIC("You hear screws being tightened.")
-			)
-			playsound(loc, 'sound/items/Screwdriver.ogg', 50, TRUE)
-
-			var/obj/machinery/light/newlight = new fixture_type(loc, src)
-			newlight.set_dir(dir)
-
-			transfer_fingerprints_to(newlight)
-			qdel(src)
-			return TRUE
 
 	return ..()
 

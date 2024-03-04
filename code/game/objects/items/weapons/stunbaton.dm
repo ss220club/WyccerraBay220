@@ -78,6 +78,16 @@
 	if(!bcell)
 		to_chat(user, SPAN_WARNING("The baton does not have a power source installed."))
 
+/obj/item/melee/baton/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(bcell)
+		bcell.update_icon()
+		bcell.dropInto(loc)
+		bcell = null
+		to_chat(user, SPAN_NOTICE("You remove the cell from the [src]."))
+		status = 0
+		update_icon()
+
 /obj/item/melee/baton/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/cell/device))
 		if(!bcell && user.unEquip(W))
@@ -87,16 +97,8 @@
 			update_icon()
 		else
 			to_chat(user, SPAN_NOTICE("[src] already has a cell."))
-	else if(isScrewdriver(W))
-		if(bcell)
-			bcell.update_icon()
-			bcell.dropInto(loc)
-			bcell = null
-			to_chat(user, SPAN_NOTICE("You remove the cell from the [src]."))
-			status = 0
-			update_icon()
-	else
-		..()
+		return
+	. = ..()
 
 /obj/item/melee/baton/attack_self(mob/user)
 	set_status(!status, user)

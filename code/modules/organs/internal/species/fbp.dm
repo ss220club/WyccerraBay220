@@ -74,15 +74,16 @@
 			to_chat(user, SPAN_NOTICE("You remove \the [cell] from \the [src]."))
 			cell = null
 
-/obj/item/organ/internal/cell/attackby(obj/item/W, mob/user)
-	if(isScrewdriver(W))
-		if(open)
-			open = 0
-			to_chat(user, SPAN_NOTICE("You screw the battery panel in place."))
-		else
-			open = 1
-			to_chat(user, SPAN_NOTICE("You unscrew the battery panel."))
+/obj/item/organ/internal/cell/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(open)
+		open = FALSE
+		to_chat(user, SPAN_NOTICE("You screw the battery panel in place."))
+	else
+		open = TRUE
+		to_chat(user, SPAN_NOTICE("You unscrew the battery panel."))
 
+/obj/item/organ/internal/cell/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/cell))
 		if(open)
 			if(cell)
@@ -90,6 +91,7 @@
 			else if(user.unEquip(W, src))
 				cell = W
 				to_chat(user, SPAN_NOTICE("You insert \the [cell]."))
+	. = ..()
 
 /obj/item/organ/internal/cell/replaced()
 	..()

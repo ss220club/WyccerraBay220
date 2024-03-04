@@ -322,7 +322,7 @@
 					to_chat(user, SPAN_NOTICE("You press firmly on the cover, dislodging it."))
 					return TRUE
 			if(3)
-				if(isCrowbar(W))
+				if(W.tool_behaviour == TOOL_CROWBAR)
 					to_chat(user, SPAN_NOTICE("You struggle to pry off the cover."))
 					playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 					if(!do_after(user, (W.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT) || construction_stage != 3)
@@ -370,7 +370,7 @@
 					to_chat(user, SPAN_NOTICE("The support rods drop out as you cut them loose from the frame."))
 					return TRUE
 			if(0)
-				if(isCrowbar(W))
+				if(W.tool_behaviour == TOOL_CROWBAR)
 					to_chat(user, SPAN_NOTICE("You struggle to pry off the outer sheath."))
 					playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 					if(!do_after(user, (W.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT) || !W || !T )

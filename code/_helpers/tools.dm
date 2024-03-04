@@ -45,19 +45,6 @@
 /// True when A exists and can be used as a multitool.
 #define isMultitool(A) (A?.IsMultitool())
 
-
-/// True when this atom can be used as a crowbar.
-/atom/proc/IsCrowbar()
-	return FALSE
-
-/// Defines the base crowbar as useable as a crowbar.
-/obj/item/crowbar/IsCrowbar()
-	return TRUE
-
-/// True when A exists and can be used as a crowbar.
-#define isCrowbar(A) (A?.IsCrowbar())
-
-
 /// True when this atom can be used as a hatchet.
 /atom/proc/IsHatchet()
 	return FALSE

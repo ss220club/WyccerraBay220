@@ -122,7 +122,7 @@
 			try_change_state(machine, /singleton/machine_construction/frame/unwrenched)
 
 /singleton/machine_construction/frame/awaiting_parts/attackby(obj/item/I, mob/user, obj/machinery/constructable_frame/machine)
-	if(isCrowbar(I))
+	if(I.tool_behaviour == TOOL_CROWBAR)
 		TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_circuit)
 		playsound(machine.loc, 'sound/items/Crowbar.ogg', 50, 1)
 		machine.circuit.dropInto(machine.loc)

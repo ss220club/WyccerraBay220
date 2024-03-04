@@ -627,7 +627,7 @@ var/global/list/turret_icons
 				build_step = 1
 				return TRUE
 
-			else if(isCrowbar(I) && !anchored)
+			else if(I.tool_behaviour == TOOL_CROWBAR && !anchored)
 				playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, SPAN_NOTICE("You dismantle the turret construction."))
 				new /obj/item/stack/material/steel( loc, 5)
@@ -752,7 +752,7 @@ var/global/list/turret_icons
 					qdel(src) // qdel
 				return TRUE
 
-			else if(isCrowbar(I))
+			else if(I.tool_behaviour == TOOL_CROWBAR)
 				playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, SPAN_NOTICE("You pry off the turret's exterior armor."))
 				new /obj/item/stack/material/steel(loc, 2)

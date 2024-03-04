@@ -65,11 +65,3 @@
 	else
 		force = initial(force)
 	. = ..()
-
-/obj/item/crowbar/emergency_forcing_tool/IsCrowbar()
-	if(ismob(loc))
-		var/mob/M = loc
-		if(M.a_intent && M.a_intent == I_HURT)
-			return FALSE
-
-	return TRUE

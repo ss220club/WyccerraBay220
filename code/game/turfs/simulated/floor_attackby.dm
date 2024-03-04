@@ -11,7 +11,7 @@
 		return TRUE
 
 	if(flooring)
-		if(isCrowbar(C))
+		if(C.tool_behaviour == TOOL_CROWBAR)
 			if(broken || burnt)
 				to_chat(user, SPAN_NOTICE("You remove the broken [flooring.descriptor]."))
 				make_plating()
@@ -143,7 +143,7 @@
 				return TRUE
 
 		// Repairs and Deconstruction.
-		else if (isCrowbar(C) && (broken || burnt))
+		else if (C.tool_behaviour == TOOL_CROWBAR && (broken || burnt))
 			playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
 			visible_message(SPAN_NOTICE("\The [user] has begun prying off the damaged plating."))
 			var/turf/T = GetBelow(src)

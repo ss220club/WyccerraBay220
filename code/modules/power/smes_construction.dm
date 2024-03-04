@@ -298,7 +298,8 @@
 		if(!MACHINE_IS_BROKEN(src))
 			return SPAN_WARNING("You have to disassemble the terminal[num_terminals > 1 ? "s" : ""] first!")
 		if(user)
-			if(!do_after(user, 5 SECONDS * number_of_components(/obj/item/stock_parts/smes_coil), src, DO_REPAIR_CONSTRUCT) && isCrowbar(user.get_active_hand()))
+			var/obj/item/tool = user.get_active_hand()
+			if(!do_after(user, 5 SECONDS * number_of_components(/obj/item/stock_parts/smes_coil), src, DO_REPAIR_CONSTRUCT) && tool.tool_behaviour == TOOL_CROWBAR)
 				return MCS_BLOCK
 			if(check_total_system_failure(user))
 				return MCS_BLOCK

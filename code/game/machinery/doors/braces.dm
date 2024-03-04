@@ -14,23 +14,16 @@
 	attack_cooldown_modifier = 1
 	base_parry_chance = 30
 	applies_material_colour = FALSE
-
-
-/obj/item/material/twohanded/jack/IsCrowbar()
-	return TRUE
-
+	tool_behaviour = TOOL_CROWBAR
 
 /obj/item/material/twohanded/jack/aluminium
 	default_material = MATERIAL_ALUMINIUM
 
-
 /obj/item/material/twohanded/jack/titanium
 	default_material = MATERIAL_TITANIUM
 
-
 /obj/item/material/twohanded/jack/silver
 	default_material = MATERIAL_SILVER
-
 
 /obj/item/airlock_brace
 	name = "airlock brace"

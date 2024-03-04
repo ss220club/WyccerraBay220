@@ -64,7 +64,7 @@
 /singleton/machine_construction/default/panel_open/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if((. = ..()))
 		return
-	if(isCrowbar(I))
+	if(I.tool_behaviour == TOOL_CROWBAR)
 		TRANSFER_STATE(down_state)
 		machine.dismantle()
 		return

@@ -105,7 +105,7 @@ var/global/bomb_set
 					return TRUE
 
 			if(1)
-				if(isCrowbar(O))
+				if(O.tool_behaviour == TOOL_CROWBAR)
 					user.visible_message(
 						SPAN_NOTICE("\The [user] starts forcing open the bolt covers on \the [src]."),
 						SPAN_NOTICE("You start forcing open the anchoring bolt covers on \the [src] with \the [O].")
@@ -153,7 +153,7 @@ var/global/bomb_set
 					return TRUE
 
 			if(4)
-				if(isCrowbar(O))
+				if(O.tool_behaviour == TOOL_CROWBAR)
 					user.visible_message(
 						SPAN_NOTICE("\The [user] begins lifting \the [src] off of its anchors."),
 						SPAN_NOTICE("You begin lifting \the [src] off its anchors.")

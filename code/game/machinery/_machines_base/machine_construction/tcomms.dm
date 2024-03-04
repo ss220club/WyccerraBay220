@@ -93,7 +93,7 @@
 		else
 			to_chat(user, SPAN_WARNING("You need five coils of wire for this."))
 			return TRUE
-	if(isCrowbar(I))
+	if(I.tool_behaviour == TOOL_CROWBAR)
 		TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
 		machine.dismantle()
 		return

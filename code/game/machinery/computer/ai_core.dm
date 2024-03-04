@@ -149,7 +149,7 @@ var/global/list/empty_playable_ai_cores = list()
 	// - State 2 - Remove circuitboard, move to State 1
 	// - State 4 - Remove brain, move to State 3
 	// - State 5 - Remove panel, move to State 4 or 3
-	if (isCrowbar(tool))
+	if (tool.tool_behaviour == TOOL_CROWBAR)
 		if (state < STATE_CIRCUIT)
 			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
 			return TRUE

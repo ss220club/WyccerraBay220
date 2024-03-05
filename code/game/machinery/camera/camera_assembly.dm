@@ -20,7 +20,6 @@
 	var/camera_name
 	var/camera_network
 	var/state = ASSEMBLY_NONE
-	var/busy = 0
 
 /obj/item/camera_assembly/crowbar_act(mob/living/user, obj/item/tool)
 	. = TRUE
@@ -143,21 +142,12 @@
 		..()
 
 /obj/item/camera_assembly/proc/weld(obj/item/weldingtool/WT, mob/user)
-
-	if(busy)
-		return 0
-
-	if(WT.can_use(1, user))
-		to_chat(user, SPAN_NOTICE("You start to weld [src].."))
-		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-		busy = 1
-		if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(1, user))
-			playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-			busy = 0
-			return 1
-
-	busy = 0
-	return 0
+	if(!tool_start_check(user, 1))
+		return FALSE
+	to_chat(user, SPAN_NOTICE("You start to weld [src].."))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return FALSE
+	return TRUE
 
 #undef ASSEMBLY_NONE
 #undef ASSEMBLY_WRENCHED

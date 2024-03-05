@@ -378,8 +378,7 @@
 	if(!repair_pending)
 		USE_FEEDBACK_FAILURE("[src] needs some [get_material_display_name()] applied before you can weld it.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if(!welder.remove_fuel(1, user))
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	restore_health(repair_pending)
 	repair_pending = 0

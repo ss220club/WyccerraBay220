@@ -529,29 +529,28 @@
 	if(terminal())
 		to_chat(user, SPAN_WARNING("The wire connection is in the way."))
 		return
-	var/obj/item/weldingtool/WT = tool
-	if(!WT.can_use(3, user))
+
+	if(!tool.tool_use_check(user, 3))
 		return
 	user.visible_message(SPAN_WARNING("[user] begins to weld [src]."), \
 						"You start welding the APC frame...", \
 						"You hear welding.")
-	playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-	if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && !has_electronics && !terminal())
-		if(!WT.remove_fuel(3, user))
-			return
-		if (emagged || MACHINE_IS_BROKEN(src) || opened==2)
-			new /obj/item/stack/material/steel(loc)
-			user.visible_message(\
-				SPAN_WARNING("[src] has been cut apart by [user] with [WT]."),\
-				SPAN_NOTICE("You disassembled the broken APC frame."),\
-				"You hear welding.")
-		else
-			new /obj/item/frame/apc(loc)
-			user.visible_message(\
-				SPAN_WARNING("[src] has been cut from the wall by [user] with [WT]."),\
-				SPAN_NOTICE("You cut the APC frame from the wall."),\
-				"You hear welding.")
-		qdel(src)
+	if(!tool.use_as_tool(src, user, 5 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !opened || has_electronics || terminal())
+		return
+
+	if(emagged || MACHINE_IS_BROKEN(src) || opened == 2)
+		new /obj/item/stack/material/steel(loc)
+		user.visible_message(\
+			SPAN_WARNING("[src] has been cut apart by [user] with [WT]."),\
+			SPAN_NOTICE("You disassembled the broken APC frame."),\
+			"You hear welding.")
+	else
+		new /obj/item/frame/apc(loc)
+		user.visible_message(\
+			SPAN_WARNING("[src] has been cut from the wall by [user] with [WT]."),\
+			SPAN_NOTICE("You cut the APC frame from the wall."),\
+			"You hear welding.")
+	qdel(src)
 
 /obj/machinery/power/apc/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)

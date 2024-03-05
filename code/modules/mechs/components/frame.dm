@@ -227,32 +227,18 @@
 	if (is_reinforced == FRAME_REINFORCED)
 		USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be secured before you can weld them.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if (!welder.can_use(1, user, "to weld [src]'s internal reinforcements"))
+	if(!tool.tool_use_check(user, 1))
 		return
 	var/current_state = is_reinforced
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding [src]'s internal reinforcements with [tool]."),
 		SPAN_NOTICE("You start [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding [src]'s internal reinforcements with [tool]."),
 		SPAN_ITALIC("You hear welding.")
 	)
-	if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-		return
-	if (!is_reinforced)
-		USE_FEEDBACK_FAILURE("[src] has no reinforcements to weld.")
-		return
-	if (is_reinforced == FRAME_REINFORCED)
-		USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be secured before you can weld them.")
-		return
-	if (current_state != is_reinforced)
-		USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-		return
-	if (!welder.remove_fuel(1, user))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !is_reinforced || is_reinforced == FRAME_REINFORCED || current_state != is_reinforced)
 		return
 	is_reinforced = is_reinforced == FRAME_REINFORCED_WELDED ? FRAME_REINFORCED_SECURE : FRAME_REINFORCED_WELDED
 	update_icon()
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welds [src]'s internal reinforcements with [tool]."),
 		SPAN_NOTICE("You [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]weld [src]'s internal reinforcements with [tool]."),

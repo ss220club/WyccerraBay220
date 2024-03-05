@@ -624,25 +624,16 @@
 	if (!getBruteLoss())
 		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if (!welder.can_use(1, user, "to repair [src]'s physical damage."))
+	if(!tool.tool_use_check(user, 1))
 		return
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts repairing some of the dents on [src] with [tool]."),
 		SPAN_NOTICE("You start repairing some of the dents on [src] with [tool]."),
 	)
-	if (!do_after(user, (tool.toolspeed * 1) SECOND, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 1 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE) || !getBruteLoss())
 		return
-	if (!getBruteLoss())
-		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
-		return
-	if (!welder.can_use(1, user, "to repair [src]'s physical damage."))
-		return
-	welder.remove_fuel(1, user)
 	adjustBruteLoss(-30)
 	updatehealth()
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] repairs some of the dents on [src] with [tool]."),
 		SPAN_NOTICE("You repair some of the dents on [src] with [tool]."),

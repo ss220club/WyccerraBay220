@@ -101,19 +101,16 @@
 
 /obj/vehicle/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	var/obj/item/weldingtool/T = tool
-	if(!T.welding)
-		to_chat(user, SPAN_NOTICE("Unable to repair while [src] is off."))
-		return
 	if(health >= maxhealth)
 		to_chat(user, SPAN_NOTICE("[src] does not need a repair."))
 		return
 	if(!open)
 		to_chat(user, SPAN_NOTICE("Unable to repair with the maintenance panel closed."))
 		return
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	adjust_health(10)
-	user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-	user.visible_message(SPAN_WARNING("\The [user] repairs \the [src]!"), SPAN_NOTICE("You repair \the [src]!"))
+	user.visible_message(SPAN_WARNING("[user] repairs [src]!"), SPAN_NOTICE("You repair [src]!"))
 
 /obj/vehicle/use_tool(obj/item/tool, mob/user, list/click_params)
 	if(istype(tool, /obj/item/hand_labeler))
@@ -217,7 +214,7 @@
 		return 1
 
 /obj/vehicle/proc/explode()
-	src.visible_message(SPAN_DANGER("\The [src] blows apart!"))
+	src.visible_message(SPAN_DANGER("[src] blows apart!"))
 	var/turf/Tsec = get_turf(src)
 
 	new /obj/item/stack/material/rods(Tsec)
@@ -383,9 +380,9 @@
 /obj/vehicle/attack_generic(mob/user, damage, attack_message)
 	if(!damage)
 		return
-	visible_message(SPAN_DANGER("\The [user] [attack_message] the \the [src]!"))
+	visible_message(SPAN_DANGER("[user] [attack_message] the [src]!"))
 	if(istype(user))
-		admin_attacker_log(user, "attacked \the [src]")
+		admin_attacker_log(user, "attacked [src]")
 		user.do_attack_animation(src)
 	adjust_health(-damage)
 	if(prob(10))

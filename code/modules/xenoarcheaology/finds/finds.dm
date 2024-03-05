@@ -30,29 +30,24 @@
 
 /obj/item/ore/strangerock/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	var/obj/item/weldingtool/W = tool
-	if(W.can_use(2, user))
-		var/obj/item/inside = locate() in src
-		if(inside)
-			inside.dropInto(loc)
-			visible_message(SPAN_INFO("\The [src] burns away revealing \the [inside]."))
-		else
-			visible_message(SPAN_INFO("\The [src] burns away into nothing."))
-		qdel(src)
-		W.remove_fuel(2, user)
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	if (W.can_use(1, user, silent = TRUE))
-		visible_message(SPAN_INFO("A few sparks fly off \the [src], but nothing else happens."))
-		W.remove_fuel(1)
+	var/obj/item/inside = locate() in src
+	if(inside)
+		inside.dropInto(loc)
+		visible_message(SPAN_INFO(" [src] burns away revealing [inside]."))
+	else
+		visible_message(SPAN_INFO(" [src] burns away into nothing."))
+	qdel(src)
 
 /obj/item/ore/strangerock/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/pickaxe/xeno/brush))
 		var/obj/item/inside = locate() in src
 		if(inside)
 			inside.dropInto(loc)
-			visible_message(SPAN_INFO("\The [src] is brushed away, revealing \the [inside]."))
+			visible_message(SPAN_INFO(" [src] is brushed away, revealing [inside]."))
 		else
-			visible_message(SPAN_INFO("\The [src] is brushed away into nothing."))
+			visible_message(SPAN_INFO(" [src] is brushed away into nothing."))
 		qdel(src)
 		return
 

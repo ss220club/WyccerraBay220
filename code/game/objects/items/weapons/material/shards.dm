@@ -49,11 +49,12 @@
 
 /obj/item/material/shard/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(material.shard_can_repair)
-		var/obj/item/weldingtool/WT = tool
-		if(WT.remove_fuel(1, user))
-			material.place_sheet(get_turf(src))
-			qdel(src)
+	if(!material.shard_can_repair)
+		return
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	material.place_sheet(get_turf(src))
+	qdel(src)
 
 /obj/item/material/shard/Crossed(AM as mob|obj)
 	..()

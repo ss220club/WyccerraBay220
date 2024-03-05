@@ -32,14 +32,14 @@
 	if(anchored)
 		USE_FEEDBACK_FAILURE("[src] needs to be unanchored before you can dismantle it.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if(!welder.can_use(1, user, "to dismantle [src]."))
+
+	if(!tool.tool_use_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
 		SPAN_NOTICE("You start dismantling [src] with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/item/stack/material/steel/stack = new (loc, 4)
 	transfer_fingerprints_to(stack)

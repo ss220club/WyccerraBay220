@@ -111,20 +111,16 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if(length(contents) > LAZYLEN(component_parts))
 		to_chat(user, "Eject the items first!")
 		return
-	var/obj/item/weldingtool/W = tool
-	if(!W.can_use(1,user))
-		to_chat(user, "You need more welding fuel to complete this task.")
+	if(!tool.tool_use_check(user, 1))
 		return
-	playsound(loc, 'sound/items/Welder2.ogg', 100, 1)
 	to_chat(user, "You start slicing the floorweld off the disposal unit.")
-	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-		if(!src || !W.remove_fuel(1, user))
-			return
-		to_chat(user, "You sliced the floorweld off the disposal unit.")
-		var/obj/structure/disposalconstruct/machine/C = new (loc, src)
-		transfer_fingerprints_to(C)
-		C.update()
-		qdel(src)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You sliced the floorweld off the disposal unit.")
+	var/obj/structure/disposalconstruct/machine/C = new (loc, src)
+	transfer_fingerprints_to(C)
+	C.update()
+	qdel(src)
 
 /obj/machinery/disposal/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(MACHINE_IS_BROKEN(src))
@@ -619,18 +615,15 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if(!mode)
 		USE_FEEDBACK_FAILURE("[src]'s power connection needs to be disconnected before you can remove [src] from the floor.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if(!welder.can_use(1, user, "to slice [src]'s floorweld."))
+	if(!tool.tool_use_check(user, 1))
 		return
-	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts slicing [src]'s floorweld with  [tool]."),
 		SPAN_NOTICE("You start slicing [src]'s floorweld with [tool]."),
 		SPAN_ITALIC("You hear the sound of welding.")
 	)
-	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] slices [src]'s floorweld with  [tool]."),
 		SPAN_NOTICE("You start slices [src]'s floorweld with [tool].")

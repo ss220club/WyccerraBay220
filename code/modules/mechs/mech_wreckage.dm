@@ -70,8 +70,7 @@
 	if (prepared)
 		USE_FEEDBACK_FAILURE("[src] has already been weakened.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if (!welder.remove_fuel(1, user))
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	prepared = TRUE
 	user.visible_message(

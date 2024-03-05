@@ -95,20 +95,13 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
 		return
-	var/obj/item/weldingtool/welder = tool
-	if (!welder.remove_fuel(5, user))
-		to_chat(user, SPAN_WARNING("You need more fuel to complete this task."))
+	if(!tool.tool_use_check(user, 5))
 		return
-
 	user.visible_message("[user] starts to disassemble [src].", "You start to disassemble [src].")
-	playsound(loc, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-
-	if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
-		if(!src || !user || !welder.remove_fuel(5, user))
-			return
-
-		to_chat(user, SPAN_NOTICE("You fully disassemble [src]. There were no salvageable parts."))
-		qdel(src)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You fully disassemble [src]. There were no salvageable parts."))
+	qdel(src)
 
 /obj/machinery/atmospheric_field_generator/perma/Initialize()
 	. = ..()

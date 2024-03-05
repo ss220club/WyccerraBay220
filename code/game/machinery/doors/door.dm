@@ -204,19 +204,16 @@
 		to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
 		return TRUE
 
-	var/obj/item/weldingtool/welder = tool
-	if(welder.can_use(2, user))
-		to_chat(user, SPAN_NOTICE("You start to fix dents and weld [repairing] into place."))
-		playsound(src, 'sound/items/Welder.ogg', 100, 1)
-		if(do_after(user, (0.5 * repairing.amount) SECONDS, src, DO_REPAIR_CONSTRUCT) && welder.remove_fuel(2, user))
-			if(!repairing)
-				return TRUE//the materials in the door have been removed before welding was finished.
-
-			to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
-			restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
-			update_icon()
-			qdel(repairing)
-			repairing = null
+	if(!tool.tool_use_check(user, 2))
+		return
+	to_chat(user, SPAN_NOTICE("You start to fix dents and weld [repairing] into place."))
+	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing)
+		return
+	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
+	update_icon()
+	qdel(repairing)
+	repairing = null
 
 /obj/machinery/door/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(istype(I, /obj/item/stack/material) && I.get_material_name() == get_material_name())

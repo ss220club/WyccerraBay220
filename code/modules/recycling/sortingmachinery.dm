@@ -612,19 +612,15 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(c_mode != 1)
 		return
-	var/obj/item/weldingtool/W = tool
-	if(!W.can_use(1,user))
-		to_chat(user, "You need more welding fuel to complete this task.")
+	if(!tool.tool_use_check(user, 1))
 		return
 	to_chat(user, "You start slicing the floorweld off the delivery chute.")
-	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-		playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-		if(!src || !W.remove_fuel(1, user))
-			return
-		to_chat(user, "You sliced the floorweld off the delivery chute.")
-		var/obj/structure/disposalconstruct/C = new (loc, src)
-		C.update()
-		qdel(src)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You sliced the floorweld off the delivery chute.")
+	var/obj/structure/disposalconstruct/C = new (loc, src)
+	C.update()
+	qdel(src)
 
 /obj/machinery/disposal/deliveryChute/Destroy()
 	if(trunk)

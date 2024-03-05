@@ -26,8 +26,7 @@
 /obj/structure/hygiene/drain/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Weld the drain closed
-	var/obj/item/weldingtool/welder = tool
-	if(!welder.remove_fuel(1, user))
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded
 	user.visible_message(

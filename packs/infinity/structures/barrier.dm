@@ -135,22 +135,16 @@
 
 /obj/structure/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	var/obj/item/weldingtool/WT = tool
 	if(health == maxhealth)
 		to_chat(user, SPAN_NOTICE("[src] is fully repaired."))
 		return
-	if(!WT.isOn())
-		to_chat(user, SPAN_NOTICE("[tool] should be turned on firstly."))
-		return
-	if(!WT.remove_fuel(0,user))
-		to_chat(user, SPAN_NOTICE("You need more welding fuel to complete this task."))
+	if(!tool.tool_use_check(user, 1))
 		return
 	visible_message(SPAN_WARNING("[user] is repairing [src]..."))
-	playsound(src, 'sound/items/Welder.ogg', 100, 1)
-	if(do_after(user, max(5, health / 5), src) && WT?.isOn())
-		to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
-		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-		health = maxhealth
+	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	health = maxhealth
 
 /obj/structure/barrier/bullet_act(obj/item/projectile/P)
 	..()
@@ -253,17 +247,13 @@
 
 /obj/item/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(health != initial(health))
-		var/obj/item/weldingtool/WT = tool
-		if(!WT.isOn())
-			to_chat(user, SPAN_NOTICE("The [tool] should be turned on firstly."))
-			return
-		if(!WT.remove_fuel(0,user))
-			to_chat(user, SPAN_NOTICE("You need more welding fuel to complete this task."))
-			return
-		to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
-		playsound(src, 'sound/items/Welder.ogg', 100, 1)
-		if(do_after(user, max(5, health / 5), src) && WT?.isOn())
-			to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			health = initial(health)
+	if(health == initial(health))
+		to_chat(user, SPAN_NOTICE("[src] is fully repaired."))
+		return
+	if(!tool.tool_use_check(user, 1))
+		return
+	visible_message(SPAN_WARNING("[user] is repairing [src]..."))
+	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	health = initial(health)

@@ -275,25 +275,22 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(repairing || operating)
 		return
-	var/obj/item/weldingtool/W = tool
-	if(W.can_use(2, user))
-		user.visible_message(
-			SPAN_WARNING("[user] starts [!blocked ? "welding [src] shut" : "cutting open [src]"]."),
-			SPAN_DANGER("You start [!blocked ? "welding [src] closed" : "cutting open [src]"]."),
-			SPAN_ITALIC("You hear welding.")
-		)
-		playsound(loc, 'sound/items/Welder.ogg', 50, TRUE)
-		if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if(!W.remove_fuel(2, user))
-				return
-			blocked = !blocked
-			user.visible_message(
-				SPAN_DANGER("[user] [blocked ? "welds [src] shut" : "cuts open [src]"]."),
-				SPAN_DANGER("You [blocked ? "weld shut" : "undo the welds on"] [src]."),
-				SPAN_ITALIC("You hear welding.")
-			)
-			playsound(loc, 'sound/items/Welder2.ogg', 50, TRUE)
-			update_icon()
+	if(!tool.tool_use_check(user, 2))
+		return
+	user.visible_message(
+		SPAN_WARNING("[user] starts [!blocked ? "welding [src] shut" : "cutting open [src]"]."),
+		SPAN_DANGER("You start [!blocked ? "welding [src] closed" : "cutting open [src]"]."),
+		SPAN_ITALIC("You hear welding.")
+	)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	blocked = !blocked
+	user.visible_message(
+		SPAN_DANGER("[user] [blocked ? "welds [src] shut" : "cuts open [src]"]."),
+		SPAN_DANGER("You [blocked ? "weld shut" : "undo the welds on"] [src]."),
+		SPAN_ITALIC("You hear welding.")
+	)
+	update_icon()
 
 /obj/machinery/door/firedoor/use_tool(obj/item/C, mob/living/user, list/click_params)
 	if(operating)

@@ -40,21 +40,18 @@
 
 /obj/decal/writing/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	var/obj/item/weldingtool/welder = tool
-	if(!welder.can_use(1, user, "to remove \the [src]."))
-		return
-	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-	user.visible_message(
-		SPAN_NOTICE("\The [user] starts burning away \the [src] with \a [tool]."),
-		SPAN_NOTICE("You start burning away \the [src] with \the [tool].")
-	)
-	if(!user.do_skilled(1 SECOND, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.can_use(1, user, "to remove \the [src]"))
+	if(!tool.tool_use_check(user, 1))
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] clears away \the [src] with \a [tool]."),
-		SPAN_NOTICE("You clear away \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] starts burning away [src] with [tool]."),
+		SPAN_NOTICE("You start burning away [src] with [tool].")
 	)
-	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
+	if(!tool.use_as_tool(src, user, 1 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] clears away [src] with [tool]."),
+		SPAN_NOTICE("You clear away [src] with [tool].")
+	)
 	qdel(src)
 
 /obj/decal/writing/use_tool(obj/item/tool, mob/user, list/click_params)

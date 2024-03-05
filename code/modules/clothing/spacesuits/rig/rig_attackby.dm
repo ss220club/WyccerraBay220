@@ -109,7 +109,7 @@
 /obj/item/rig/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(chest)
-		chest.attackby(tool, user)
+		return chest.welder_act(tool, user)
 
 /obj/item/rig/attackby(obj/item/W as obj, mob/user as mob)
 	if(!isliving(user))

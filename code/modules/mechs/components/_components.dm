@@ -133,25 +133,22 @@
 /obj/item/mech_component/proc/update_components()
 	return
 
-/obj/item/mech_component/proc/repair_brute_generic(obj/item/weldingtool/WT, mob/user)
-	if(!istype(WT))
-		return
+/obj/item/mech_component/proc/repair_brute_generic(obj/item/tool, mob/user)
 	if(!brute_damage)
 		to_chat(user, SPAN_NOTICE("You inspect [src] but find nothing to weld."))
 		return
-	if(!WT.isOn())
-		to_chat(user, SPAN_WARNING("Turn [WT] on, first."))
+	var/amount = (SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION)
+	if(!tool.tool_use_check(user, amount))
 		return
-	if(WT.can_use((SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION), user))
-		user.visible_message(
-			SPAN_NOTICE("[user] begins welding the damage on [src]..."),
-			SPAN_NOTICE("You begin welding the damage on [src]...")
-		)
-		var/repair_value = 10 * max(user.get_skill_value(SKILL_CONSTRUCTION), user.get_skill_value(SKILL_DEVICES))
-		if(user.do_skilled(1 SECOND, SKILL_DEVICES , src, 0.6) && brute_damage && WT.remove_fuel((SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION), user))
-			repair_brute_damage(repair_value)
-			to_chat(user, SPAN_NOTICE("You mend the damage to [src]."))
-			playsound(user.loc, 'sound/items/Welder.ogg', 25, 1)
+	user.visible_message(
+		SPAN_NOTICE("[user] begins welding the damage on [src]..."),
+		SPAN_NOTICE("You begin welding the damage on [src]...")
+	)
+	if(!tool.use_as_tool(src, user, 1 SECONDS, amount, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !brute_damage)
+		return
+	var/repair_value = 10 * max(user.get_skill_value(SKILL_CONSTRUCTION), user.get_skill_value(SKILL_DEVICES))
+	repair_brute_damage(repair_value)
+	to_chat(user, SPAN_NOTICE("You mend the damage to [src]."))
 
 /obj/item/mech_component/proc/repair_burn_generic(obj/item/stack/cable_coil/CC, mob/user)
 	if(!istype(CC))

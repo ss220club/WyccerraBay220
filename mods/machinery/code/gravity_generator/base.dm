@@ -215,23 +215,19 @@
 
 /obj/machinery/gravity_generator/main/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_use_check(user, 1))
+		return
 	user.visible_message(
 		SPAN_NOTICE("[user] begins to weld the damaged parts."),
 		SPAN_NOTICE("You begin to weld the damaged parts.")
 	)
-
-	playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
-	var/obj/item/weldingtool/WT = tool
-
-	if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || !WT.remove_fuel(1, user) || broken_state != GRAV_NEEDS_WELDING)
-		return TRUE
-
+	if(!tool.use_as_tool(src, user, 15 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_WELDING)
+		return
 	health += 250
 	user.visible_message(
 		SPAN_NOTICE("[user] fixed the damaged parts."),
 		SPAN_NOTICE("You fixed the damaged parts.")
 	)
-	playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
 	set_broken_state(GRAV_NEEDS_WRENCH)
 	update_icon()
 

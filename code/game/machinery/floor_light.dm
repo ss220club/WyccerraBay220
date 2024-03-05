@@ -55,13 +55,7 @@ var/global/list/floor_light_cache = list()
 /obj/machinery/floor_light/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health_damaged() || MACHINE_IS_BROKEN(src))
-		var/obj/item/weldingtool/WT = tool
-		if(!WT.can_use(1, user))
-			return
-		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-		if(!do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return
-		if(!src || !WT.remove_fuel(1, user))
+		if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		visible_message(SPAN_NOTICE("[user] has repaired [src]."))
 		set_broken(FALSE)

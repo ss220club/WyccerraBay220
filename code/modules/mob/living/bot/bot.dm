@@ -111,10 +111,8 @@
 	if(!open)
 		USE_FEEDBACK_FAILURE("[src]'s access panel must be open to repair it.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if(!welder.can_use(5, user, "to repair [src]."))
+	if(!tool.use_as_tool(src, user, amount = 5, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	welder.remove_fuel(5, user)
 	health = min(maxHealth, health + 10)
 	update_icon()
 	user.visible_message(

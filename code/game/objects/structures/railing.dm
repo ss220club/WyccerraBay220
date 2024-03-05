@@ -294,17 +294,15 @@
 	if(!health_damaged())
 		USE_FEEDBACK_FAILURE("[src] doesn't require repairs.")
 		return
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
+
+	if(!tool.tool_use_check(user, 1))
+		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts repairing [src] with [tool]."),
 		SPAN_NOTICE("You start repairing [src] with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !health_damaged())
 		return
-	if(!health_damaged())
-		USE_FEEDBACK_FAILURE("[src] doesn't require repairs.")
-		return
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 	restore_health(get_max_health() / 5)
 	user.visible_message(
 		SPAN_NOTICE("[user] repairs [src] with [tool]."),

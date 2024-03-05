@@ -57,23 +57,24 @@
 /obj/machinery/fusion_fuel_injector/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(injecting)
-		to_chat(user, SPAN_WARNING("Shut \the [src] off first!"))
+		to_chat(user, SPAN_WARNING("Shut [src] off first!"))
+		return
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	anchored = !anchored
-	playsound(src.loc, 'sound/items/Welder.ogg', 75, 1)
-	user.visible_message("\The [user] [anchored ? null : "un"]secures \the [src] to the floor.")
+	user.visible_message("[user] [anchored ? null : "un"]secures [src] to the floor.")
 
 /obj/machinery/fusion_fuel_injector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/fuel_assembly))
 		if(injecting)
-			to_chat(user, SPAN_WARNING("Shut \the [src] off before playing with the fuel rod!"))
+			to_chat(user, SPAN_WARNING("Shut [src] off before playing with the fuel rod!"))
 			return TRUE
 		if(!user.unEquip(W, src))
 			return TRUE
 		if(cur_assembly)
-			visible_message(SPAN_NOTICE("\The [user] swaps \the [src]'s [cur_assembly] for \a [W]."))
+			visible_message(SPAN_NOTICE("[user] swaps [src]'s [cur_assembly] for \a [W]."))
 		else
-			visible_message(SPAN_NOTICE("\The [user] inserts \a [W] into \the [src]."))
+			visible_message(SPAN_NOTICE("[user] inserts \a [W] into [src]."))
 		if(cur_assembly)
 			cur_assembly.dropInto(loc)
 			user.put_in_hands(cur_assembly)
@@ -84,17 +85,17 @@
 
 /obj/machinery/fusion_fuel_injector/physical_attack_hand(mob/user)
 	if(injecting)
-		to_chat(user, SPAN_WARNING("Shut \the [src] off before playing with the fuel rod!"))
+		to_chat(user, SPAN_WARNING("Shut [src] off before playing with the fuel rod!"))
 		return TRUE
 
 	if(cur_assembly)
 		cur_assembly.dropInto(loc)
 		user.put_in_hands(cur_assembly)
-		visible_message(SPAN_NOTICE("\The [user] removes \the [cur_assembly] from \the [src]."))
+		visible_message(SPAN_NOTICE("[user] removes [cur_assembly] from [src]."))
 		cur_assembly = null
 		return TRUE
 	else
-		to_chat(user, SPAN_WARNING("There is no fuel rod in \the [src]."))
+		to_chat(user, SPAN_WARNING("There is no fuel rod in [src]."))
 		return TRUE
 
 /obj/machinery/fusion_fuel_injector/proc/BeginInjecting()

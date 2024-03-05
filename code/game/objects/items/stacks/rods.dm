@@ -48,24 +48,24 @@
 	if(material.ignition_point)
 		to_chat(user, SPAN_WARNING("You can't weld this material into sheets."))
 		return
-
 	if(!can_use(2))
 		to_chat(user, SPAN_WARNING("You need at least two rods to do this."))
 		return
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 
-	if(WT.remove_fuel(1,user))
-		var/obj/item/stack/material/new_item = material.place_sheet(usr.loc)
-		new_item.add_to_stacks(usr)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] welds \the [src] into \a [material.sheet_singular_name]."),
-			SPAN_NOTICE("You weld \the [src] into \a [material.sheet_singular_name].")
-			)
-		var/obj/item/stack/material/rods/R = src
-		src = null
-		var/replace = (user.get_inactive_hand()==R)
-		R.use(2)
-		if (!R && replace)
-			user.put_in_hands(new_item)
+	var/obj/item/stack/material/new_item = material.place_sheet(usr.loc)
+	new_item.add_to_stacks(usr)
+	user.visible_message(
+		SPAN_NOTICE("[user] welds [src] into [material.sheet_singular_name]."),
+		SPAN_NOTICE("You weld [src] into [material.sheet_singular_name].")
+		)
+	var/obj/item/stack/material/rods/R = src
+	src = null
+	var/replace = (user.get_inactive_hand()==R)
+	R.use(2)
+	if (!R && replace)
+		user.put_in_hands(new_item)
 
 /obj/item/stack/material/rods/attack_self(mob/user as mob)
 	src.add_fingerprint(user)

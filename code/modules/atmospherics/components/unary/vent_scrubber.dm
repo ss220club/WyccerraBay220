@@ -205,21 +205,17 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	var/obj/item/weldingtool/WT = tool
-	if(!WT.can_use(1,user))
+	if(!tool.tool_use_check(user, 1))
 		return
-	to_chat(user, SPAN_NOTICE("Now welding \the [src]."))
-	playsound(src, 'sound/items/Welder.ogg', 50, 1)
-	if(!do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-		return
-	if(!src || !WT.remove_fuel(1, user))
+	to_chat(user, SPAN_NOTICE("Now welding [src]."))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded
 	update_icon()
 	playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] [welded ? "welds \the [src] shut" : "unwelds \the [src]"]."), \
-		SPAN_NOTICE("You [welded ? "weld \the [src] shut" : "unweld \the [src]"]."), \
+		SPAN_NOTICE("[user] [welded ? "welds [src] shut" : "unwelds [src]"]."), \
+		SPAN_NOTICE("You [welded ? "weld [src] shut" : "unweld [src]"]."), \
 		"You hear welding.")
 
 /obj/machinery/atmospherics/unary/vent_scrubber/examine(mob/user, distance)

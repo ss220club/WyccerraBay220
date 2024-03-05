@@ -201,26 +201,25 @@
 	if(tracker in trackers)
 		trackers -= tracker
 		GLOB.destroyed_event.unregister(tracker, src, PROC_REF(remove_tracker))
-		to_chat(user, SPAN_NOTICE("You unlink the tracker in \the [mtool]'s buffer from \the [src]"))
+		to_chat(user, SPAN_NOTICE("You unlink the tracker in [mtool]'s buffer from [src]"))
 		return
 	trackers += tracker
 	GLOB.destroyed_event.register(tracker, src, PROC_REF(remove_tracker))
-	to_chat(user, SPAN_NOTICE("You link the tracker in \the [mtool]'s buffer to \the [src]"))
+	to_chat(user, SPAN_NOTICE("You link the tracker in [mtool]'s buffer to [src]"))
 
 /obj/machinery/shipsensors/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	var/damage = get_damage_value()
-	var/obj/item/weldingtool/WT = tool
-	if (!damage)
-		to_chat(user, SPAN_WARNING("\The [src] doesn't need any repairs."))
+	if(!damage)
+		to_chat(user, SPAN_WARNING("[src] doesn't need any repairs."))
 		return
-	if (!WT.can_use(1, user))
+	if(!tool.tool_use_check(user, 1))
 		return
 	to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
-	playsound(src, 'sound/items/Welder.ogg', 100, 1)
-	if (do_after(user, max(5, damage / 5), src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(1, user))
-		to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
-		revive_health()
+	if(!tool.use_as_tool(src, user, (max(0.5, damage / 50)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	revive_health()
 
 /obj/machinery/shipsensors/proc/remove_tracker(obj/item/ship_tracker/tracker)
 	trackers -= tracker

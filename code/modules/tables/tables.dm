@@ -157,20 +157,17 @@
 	if(!health_damaged())
 		USE_FEEDBACK_FAILURE("[src] isn't damaged.")
 		return
-	var/obj/item/weldingtool/welder = tool
-	if(!welder.can_use(1, user, "to repair [src]"))
+	if(!tool.tool_use_check(user, 1))
 		return
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("[user] starts repairing [src] with  [tool]."),
+		SPAN_NOTICE("[user] starts repairing [src] with [tool]."),
 		SPAN_NOTICE("You start repairing [src] with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 	restore_health(get_max_health() / 5) // 20% repair per application
 	user.visible_message(
-		SPAN_NOTICE("[user] repairs some of [src]'s damage with  [tool]."),
+		SPAN_NOTICE("[user] repairs some of [src]'s damage with [tool]."),
 		SPAN_NOTICE("You repair some of [src]'s damage with [tool].")
 	)
 
@@ -190,7 +187,7 @@
 		carpeted = TRUE
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("[user] pads [src] with  [weapon]."),
+			SPAN_NOTICE("[user] pads [src] with [weapon]."),
 			SPAN_NOTICE("You pad [src] with [weapon].")
 		)
 		return TRUE
@@ -203,7 +200,7 @@
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, TRUE)
 		playsound(loc, "sparks", 50, TRUE)
 		user.visible_message(
-			SPAN_WARNING("[user] slices [src] apart with  [weapon]."),
+			SPAN_WARNING("[user] slices [src] apart with [weapon]."),
 			SPAN_WARNING("You slice [src] apart with [weapon].")
 		)
 		break_to_parts()
@@ -314,14 +311,14 @@
 	if(manipulating) return M
 	manipulating = 1
 	user.visible_message(SPAN_NOTICE("[user] begins removing the [type_holding] holding [src]'s [M.display_name] [what] in place."),
-	                              SPAN_NOTICE("You begin removing the [type_holding] holding [src]'s [M.display_name] [what] in place."))
+	               SPAN_NOTICE("You begin removing the [type_holding] holding [src]'s [M.display_name] [what] in place."))
 	if(sound)
 		playsound(src.loc, sound, 50, 1)
 	if(!do_after(user, delay, src, DO_REPAIR_CONSTRUCT))
 		manipulating = 0
 		return M
 	user.visible_message(SPAN_NOTICE("[user] removes the [M.display_name] [what] from [src]."),
-	                              SPAN_NOTICE("You remove the [M.display_name] [what] from [src]."))
+	               SPAN_NOTICE("You remove the [M.display_name] [what] from [src]."))
 	M.place_sheet(src.loc)
 	manipulating = 0
 	return null
@@ -352,8 +349,8 @@
 // Used for !fun! things such as embedding shards in the faces of tableslammed people.
 
 // The repeated
-//     S = [x].place_shard(loc)
-//     if(S) shards += S
+//   S = [x].place_shard(loc)
+//   if(S) shards += S
 // is to avoid filling the list with nulls, as place_shard won't place shards of certain materials (holo-wood, holo-steel)
 
 /obj/structure/table/proc/break_to_parts(full_return = 0)

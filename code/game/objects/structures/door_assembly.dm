@@ -183,20 +183,13 @@
 	// Remove glass/plating
 	if(glass)
 		var/glass_noun = istext(glass) ? "[glass] plating" : "glass panel"
-		var/obj/item/weldingtool/welder = tool
-		if(!welder.can_use(1, user, "to remove [src]'s [glass_noun]."))
+		if(!tool.tool_use_check(user, 1))
 			return
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 		user.visible_message(
 			SPAN_NOTICE("[user] starts welding [src]'s [glass_noun] off with [tool]."),
 			SPAN_NOTICE("You start welding [src]'s [glass_noun] off with [tool].")
 		)
-		if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return
-		if(!glass)
-			USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-			return
-		if(!welder.remove_fuel(1, user))
+		if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !glass)
 			return
 		var/obj/item/stack/material/stack
 		if(istext(glass))
@@ -207,35 +200,28 @@
 		stack.add_fingerprint(user, tool = tool)
 		glass = null
 		update_state()
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 		user.visible_message(
 			SPAN_NOTICE("[user] welds [src]'s [glass_noun] off with [tool]."),
 			SPAN_NOTICE("You weld [src]'s [glass_noun] off with [tool].")
 		)
 		return
+
 	// Dismantle assembly
 	if(anchored)
 		USE_FEEDBACK_FAILURE("[src] must be unanchored before you can dismantle it.")
 		return
 	var/obj/item/weldingtool/welder = tool
-	if(!welder.can_use(1, user, "to dismantle [src]."))
+	if(!tool.tool_use_check(user, 1))
 		return
-	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
 		SPAN_NOTICE("You start dismantling [src] with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return
-	if(anchored)
-		USE_FEEDBACK_FAILURE("[src] must be unanchored before you can dismantle it.")
-		return
-	if(!welder.remove_fuel(1, user))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || anchored)
 		return
 	var/obj/item/stack/material/steel/stack = new(loc, 4)
 	transfer_fingerprints_to(stack)
 	stack.add_fingerprint(user, tool = tool)
-	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
 		SPAN_NOTICE("You dismantle [src] with [tool].")

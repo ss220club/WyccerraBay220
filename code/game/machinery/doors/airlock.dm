@@ -1034,16 +1034,13 @@ About the new airlock wires panel:
 			return
 
 	if(!repairing && operating != DOOR_OPERATING_YES && density)
-		var/obj/item/weldingtool/W = tool
-		if(!W.can_use(1, user))
+		if(!tool.tool_use_check(user, 1))
 			return
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
 		user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),
 							SPAN_NOTICE("You begin welding [src] [welded ? "open" : "closed"]."))
-		if(!do_after(user, (rand(3,5)) SECONDS, src, DO_REPAIR_CONSTRUCT))
+		if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		if(density && operating != DOOR_OPERATING_YES && !repairing && W.remove_fuel(1, user))
-			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 			welded = !welded
 			update_icon()
 

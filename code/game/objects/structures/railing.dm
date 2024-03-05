@@ -263,8 +263,9 @@
 	// Wrench
 	// - Dismantle (Unanchored)
 	// - Toggle Density (Anchored)
-	if (anchored)
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	if(anchored)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		set_density(!density)
 		update_icon()
 		user.visible_message(
@@ -273,17 +274,12 @@
 		)
 		return
 	// Dismantle
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
 		SPAN_NOTICE("You start dismantling [src] with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || anchored)
 		return
-	if (anchored)
-		USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-		return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	var/obj/new_sheet = material.place_sheet(loc, 2)
 	transfer_fingerprints_to(new_sheet)
 	user.visible_message(

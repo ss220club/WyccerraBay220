@@ -36,7 +36,7 @@
 
 /obj/machinery/cell_charger/wrench_act(mob/living/user, obj/item/tool)
 	if(MACHINE_IS_BROKEN(src))
-		return
+		return ITEM_INTERACT_BLOCKING
 	if(charging)
 		to_chat(user, SPAN_WARNING("Remove the cell first!"))
 		return ITEM_INTERACT_SUCCESS

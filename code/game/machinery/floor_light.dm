@@ -45,7 +45,8 @@ var/global/list/floor_light_cache = list()
 
 /obj/machinery/floor_light/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+	if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	to_chat(user, SPAN_NOTICE("You dismantle the floor light."))
 	new /obj/item/stack/material/steel(src.loc, 1)
 	new /obj/item/stack/material/glass(src.loc, 1)

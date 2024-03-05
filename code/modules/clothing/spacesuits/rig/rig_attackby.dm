@@ -27,11 +27,15 @@
 	if(!open)
 		return
 	var/list/current_mounts = list()
-	if(cell) current_mounts   += "cell"
-	if(air_supply) current_mounts += "tank"
+	if(cell)
+		current_mounts += "cell"
+	if(air_supply)
+		current_mounts += "tank"
 	if(istype(chest, /obj/item/clothing/suit/space/rig))
-		if(length(chest?.storage?.contents)) current_mounts += "storage"
-	if(installed_modules && length(installed_modules)) current_mounts += "system module"
+		if(length(chest?.storage?.contents))
+			current_mounts += "storage"
+	if(installed_modules && length(installed_modules))
+		current_mounts += "system module"
 	var/to_remove = input("Which would you like to modify?") as null|anything in current_mounts
 	if(!to_remove)
 		return
@@ -42,17 +46,21 @@
 			return
 	switch(to_remove)
 		if("cell")
-			if(cell)
-				to_chat(user, "You detach [cell] from [src]'s battery mount.")
-				for(var/obj/item/rig_module/module in installed_modules)
-					module.deactivate()
-				user.put_in_hands(cell)
-				cell = null
-			else
+			if(!cell)
 				to_chat(user, "There is nothing loaded in that mount.")
+				return
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			to_chat(user, "You detach [cell] from [src]'s battery mount.")
+			for(var/obj/item/rig_module/module in installed_modules)
+				module.deactivate()
+			user.put_in_hands(cell)
+			cell = null
 		if("tank")
 			if(!air_supply)
 				to_chat(user, "There is no tank to remove.")
+				return
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			user.put_in_hands(air_supply)
 			to_chat(user, "You detach and remove [air_supply].")
@@ -60,6 +68,8 @@
 		if("storage")
 			if (!length(chest?.storage?.contents))
 				to_chat(user, "There is nothing in the storage to remove.")
+				return
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			chest.storage.DoQuickEmpty()
 			user.visible_message(
@@ -79,6 +89,8 @@
 				return
 			var/removal_choice = input("Which module would you like to remove?") as null|anything in possible_removals
 			if(!removal_choice)
+				return
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			var/obj/item/rig_module/removed = possible_removals[removal_choice]
 			to_chat(user, "You detach [removed] from [src].")

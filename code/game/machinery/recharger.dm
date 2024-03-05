@@ -23,9 +23,10 @@
 	if(charging)
 		to_chat(user, SPAN_WARNING("Remove [charging] first!"))
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	anchored = !anchored
 	to_chat(user, "You [anchored ? "attached" : "detached"] the recharger.")
-	playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
 
 /obj/machinery/recharger/use_tool(obj/item/G, mob/living/user, list/click_params)
 	var/allowed = 0

@@ -57,20 +57,22 @@
 
 /obj/machinery/microwave/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(broken == 1)
-		user.visible_message( \
-			SPAN_NOTICE("[user] starts to fix part of the microwave."), \
-			SPAN_NOTICE("You start to fix part of the microwave.") \
-		)
-		if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			user.visible_message( \
-				SPAN_NOTICE("[user] fixes the microwave."), \
-				SPAN_NOTICE("You have fixed the microwave.") \
-			)
-			broken = 0 // Fix it!
-			dirtiness = 0 // just to be sure
-			update_icon()
-			atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER
+	if(broken != 1)
+		return
+	user.visible_message( \
+		SPAN_NOTICE("[user] starts to fix part of the microwave."), \
+		SPAN_NOTICE("You start to fix part of the microwave.") \
+	)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message( \
+		SPAN_NOTICE("[user] fixes the microwave."), \
+		SPAN_NOTICE("You have fixed the microwave.") \
+	)
+	broken = 0 // Fix it!
+	dirtiness = 0 // just to be sure
+	update_icon()
+	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER
 
 /obj/machinery/microwave/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ..()

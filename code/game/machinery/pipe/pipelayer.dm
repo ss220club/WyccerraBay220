@@ -70,6 +70,8 @@
 /obj/machinery/pipelayer/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	P_type_t = input("Choose pipe type", "Pipe type") as null|anything in Pipes
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	P_type = Pipes[P_type_t]
 	user.visible_message(SPAN_NOTICE("[user] has set [src] to manufacture [P_type_t]."), SPAN_NOTICE("You set [src] to manufacture [P_type_t]."))
 

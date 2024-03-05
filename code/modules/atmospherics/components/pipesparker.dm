@@ -78,9 +78,8 @@
 	if(signaler || disabled)
 		to_chat(user, SPAN_NOTICE("Remove signalers and check the wiring before unwrenching [src]."))
 		return
-	. = ITEM_INTERACT_SUCCESS
 	var/turf/T = src.loc
-	if(level==ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
+	if(level == ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
 		to_chat(user, SPAN_WARNING("You must remove the plating first."))
 		return
 	if(clamp)
@@ -94,16 +93,9 @@
 		to_chat(user, SPAN_WARNING("You cannot unwrench [src], it is too exerted due to internal pressure."))
 		return
 
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, SPAN_NOTICE("You begin to unfasten [src]..."))
-
-	if(!do_after(user, (tool.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_REPAIR_CONSTRUCT) || clamp)
 		return
-
-	if(clamp)
-		to_chat(user, SPAN_WARNING("You must remove [clamp] first."))
-		return
-
 	user.visible_message(
 		SPAN_NOTICE("[user] unfastens [src]."),
 		SPAN_NOTICE("You have unfastened [src]."),

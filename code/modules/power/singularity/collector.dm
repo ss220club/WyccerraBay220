@@ -99,11 +99,11 @@ var/global/list/rad_collectors = list()
 /obj/machinery/power/rad_collector/wrench_act(mob/living/user, obj/item/tool)
 	if(P)
 		to_chat(user, SPAN_NOTICE("Remove the phoron tank first."))
-		return ITEM_INTERACT_SUCCESS
+		return ITEM_INTERACT_BLOCKING
 	for(var/obj/machinery/power/rad_collector/R in get_turf(src))
 		if(R != src)
 			to_chat(user, SPAN_WARNING("You cannot install more than one collector on the same spot."))
-			return ITEM_INTERACT_SUCCESS
+			return ITEM_INTERACT_BLOCKING
 
 /obj/machinery/power/rad_collector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/tank/phoron))

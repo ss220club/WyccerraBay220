@@ -467,18 +467,11 @@
 	if(!isturf(loc))
 		USE_FEEDBACK_FAILURE("[src] needs to be on the floor to be anchored.")
 		return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts wrenching [src] [anchored ? "from" : "to"] the floor with [tool]."),
 		SPAN_NOTICE("You start wrenching [src] [anchored ? "from" : "to"] the floor with [tool].")
 	)
-	if(!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return
-	if(!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
-		USE_FEEDBACK_FAILURE("[src] can't be anchored.")
-		return
-	if(!isturf(loc))
-		USE_FEEDBACK_FAILURE("[src] needs to be on the floor to be anchored.")
+	if(!tool.use_as_tool(src, user, 1 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE) || !isturf(loc))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] wrenches [src] [anchored ? "from" : "to"] the floor with [tool]."),

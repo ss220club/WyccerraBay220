@@ -9,6 +9,8 @@
 
 /obj/item/frame/apc/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	new /obj/item/stack/material/steel(get_turf(src.loc), 2)
 	qdel(src)
 

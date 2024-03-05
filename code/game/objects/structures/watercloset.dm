@@ -330,17 +330,15 @@
 /obj/structure/hygiene/shower/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	var/input = input(user, "What setting would you like to set the temperature valve to?", "[name] Water Temperature Valve") as null|anything in temperature_settings
-	if (!input || !user.use_sanity_check(src, tool))
-		return TRUE
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	if(!input)
+		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts adjusting [src]'s temperature with [tool]."),
 		SPAN_NOTICE("You start adjusting [src]'s temperature with [tool].")
 	)
-	if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return TRUE
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	watertemp = input
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] adjusts [src]'s temperature with [tool]."),
 		SPAN_NOTICE("You set [src]'s temperature to [watertemp] with [tool].")
@@ -676,8 +674,9 @@
 
 /obj/structure/hygiene/faucet/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Wrench - Disconnect faucet
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	var/obj/item/faucet/faucet = new(loc)
 	transfer_fingerprints_to(faucet)
 	user.visible_message(
@@ -715,17 +714,18 @@
 /obj/item/faucet/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	var/turf/simulated/floor/F = loc
-	if (istype(F) && istype(F.flooring, /singleton/flooring/pool))
-		var/obj/O = new constructed_type (loc)
-		O.dir = dir
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-		user.visible_message(
-			SPAN_WARNING("[user] wrenches [src] down."),
-			SPAN_WARNING("You wrench [src] down.")
-		)
-		qdel(src)
-	else
+	if(!istype(F) || !istype(F.flooring, /singleton/flooring/pool))
 		to_chat(user, SPAN_WARNING("[src] can only be secured to pool tiles!"))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/O = new constructed_type(loc)
+	O.dir = dir
+	user.visible_message(
+		SPAN_WARNING("[user] wrenches [src] down."),
+		SPAN_WARNING("You wrench [src] down.")
+	)
+	qdel(src)
 
 /obj/structure/hygiene/faucet/proc/water_flow()
 	if(!isturf(src.loc))

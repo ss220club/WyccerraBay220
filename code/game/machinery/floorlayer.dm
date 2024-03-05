@@ -61,6 +61,8 @@
 /obj/machinery/floorlayer/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	var/m = input("Choose work mode", "Mode") as null|anything in mode
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	mode[m] = !mode[m]
 	var/O = mode[m]
 	user.visible_message(

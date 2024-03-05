@@ -99,7 +99,7 @@
 		network_node2.update = 1
 
 	if (usr)
-		visible_message(SPAN_WARNING("\The [usr] opens \the [src]."), range = 5)
+		visible_message(SPAN_WARNING("[usr] opens [src]."), range = 5)
 
 	return 1
 
@@ -118,7 +118,7 @@
 	build_network()
 
 	if (usr)
-		visible_message(SPAN_WARNING("\The [usr] closes \the [src]."), range = 5)
+		visible_message(SPAN_WARNING("[usr] closes [src]."), range = 5)
 
 	return 1
 
@@ -220,15 +220,14 @@
 	var/datum/gas_mixture/int_air = return_air()
 	var/datum/gas_mixture/env_air = loc.return_air()
 	if((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		to_chat(user, SPAN_WARNING("You cannot unwrench \the [src], it is too exerted due to internal pressure."))
+		to_chat(user, SPAN_WARNING("You cannot unwrench [src], it is too exerted due to internal pressure."))
 		return
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-	to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src]..."))
-	if(!do_after(user, (tool.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
+	to_chat(user, SPAN_NOTICE("You begin to unfasten [src]..."))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.visible_message( \
-		SPAN_NOTICE("\The [user] unfastens \the [src]."), \
-		SPAN_NOTICE("You have unfastened \the [src]."), \
+		SPAN_NOTICE("[user] unfastens [src]."), \
+		SPAN_NOTICE("You have unfastened [src]."), \
 		"You hear a ratchet.")
 	new /obj/item/pipe(loc, src)
 	qdel(src)

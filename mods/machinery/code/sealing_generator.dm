@@ -119,6 +119,8 @@
 	if(!anchored && (!isturf(src.loc) || is_space_turf(src.loc)))
 		to_chat(user, SPAN_WARNING("[src] can't be anchored here."))
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	anchored = !anchored
 	to_chat(user, "You [anchored ? "wrench [src] to" : "unwrench [src] from"] [get_turf(src)]")
 	if(!anchored)

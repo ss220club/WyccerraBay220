@@ -124,15 +124,19 @@
 /obj/structure/table/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(user.a_intent == I_HURT)
-		if (!material)
+		if(!material)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			dismantle(tool, user)
-			return TRUE
-		if (reinforced)
+			return
+		if(reinforced)
 			USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be removed before you can remove the plating.")
-			return TRUE
-		if (carpeted)
+			return
+		if(carpeted)
 			USE_FEEDBACK_FAILURE("[src]'s carpeting needs to be removed before you can remove the plating.")
-			return TRUE
+			return
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		remove_material(tool, user)
 		if (!material)
 			update_connections(TRUE)
@@ -142,7 +146,10 @@
 			update_desc()
 			update_material()
 		return
+
 	if(can_plate && !material)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		dismantle(tool, user)
 
 /obj/structure/table/welder_act(mob/living/user, obj/item/tool)

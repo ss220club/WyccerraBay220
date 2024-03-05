@@ -267,12 +267,13 @@
 
 /obj/machinery/door/airlock/external/escapepod/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(p_open && !arePowerSystemsOn())
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		user.visible_message(SPAN_WARNING("[user.name] starts frantically pumping the bolt override mechanism!"), SPAN_WARNING("You start frantically pumping the bolt override mechanism!"))
-		if(do_after(user, 16 SECONDS, src, DO_REPAIR_CONSTRUCT))
-			visible_message("[src] bolts [locked ? "disengage" : "engage"]!")
-			locked = !locked
+	if(!p_open || arePowerSystemsOn())
+		return
+	user.visible_message(SPAN_WARNING("[user.name] starts frantically pumping the bolt override mechanism!"), SPAN_WARNING("You start frantically pumping the bolt override mechanism!"))
+	if(!tool.use_as_tool(src, user, 16 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	visible_message("[src] bolts [locked ? "disengage" : "engage"]!")
+	locked = !locked
 
 /obj/machinery/door/airlock/external/bolted
 	locked = 1

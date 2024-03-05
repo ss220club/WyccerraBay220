@@ -168,10 +168,10 @@
 
 /obj/machinery/power/port_gen/pacman/examine(mob/user)
 	. = ..(user)
-	to_chat(user, "\The [src] appears to be producing [power_gen*power_output] W.")
+	to_chat(user, "[src] appears to be producing [power_gen*power_output] W.")
 	to_chat(user, "There [sheets == 1 ? "is" : "are"] [sheets] sheet\s left in the hopper.")
-	if(IsBroken()) to_chat(user, SPAN_WARNING("\The [src] seems to have broken down."))
-	if(overheating) to_chat(user, SPAN_DANGER("\The [src] is overheating!"))
+	if(IsBroken()) to_chat(user, SPAN_WARNING("[src] seems to have broken down."))
+	if(overheating) to_chat(user, SPAN_DANGER("[src] is overheating!"))
 
 /obj/machinery/power/port_gen/pacman/proc/process_exhaust()
 	var/datum/gas_mixture/environment = loc?.return_air()
@@ -290,13 +290,13 @@
 
 /obj/machinery/power/port_gen/pacman/cannot_transition_to(state_path, mob/user)
 	if(active)
-		return SPAN_WARNING("You cannot do this while \the [src] is running!")
+		return SPAN_WARNING("You cannot do this while [src] is running!")
 	return ..()
 
 /obj/machinery/power/port_gen/pacman/wrench_act(mob/living/user, obj/item/tool)
 	if(active)
-		to_chat(SPAN_WARNING("Turn off \the [src] before wrenching its bolts."))
-		return ITEM_INTERACT_SUCCESS
+		to_chat(SPAN_WARNING("Turn off [src] before wrenching its bolts."))
+		return ITEM_INTERACT_BLOCKING
 
 /obj/machinery/power/port_gen/pacman/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(istype(O, sheet_path))
@@ -509,18 +509,18 @@
 		return ..()
 	var/datum/reagents/item_reagents = item.reagents
 	if (!HAS_FLAGS(item.atom_flags, ATOM_FLAG_OPEN_CONTAINER))
-		to_chat(user, SPAN_WARNING("\The [item] is closed."))
+		to_chat(user, SPAN_WARNING("[item] is closed."))
 	else if (!item_reagents.has_reagent(coolant_reagent))
-		to_chat(user, SPAN_WARNING("\The [src] needs [initial(coolant_reagent.name)] to run."))
+		to_chat(user, SPAN_WARNING("[src] needs [initial(coolant_reagent.name)] to run."))
 	else if (length(item_reagents.reagent_list) > 1)
-		to_chat(user, SPAN_WARNING("The contents of \the [item] is impure."))
+		to_chat(user, SPAN_WARNING("The contents of [item] is impure."))
 	else
 		var/obj/item/reagent_containers/container = item
 		var/transferred = item_reagents.trans_to_holder(reagents, container.amount_per_transfer_from_this)
 		if (transferred)
 			user.visible_message(
-				SPAN_ITALIC("\The [user] pours something from \the [item] into \the [src]."),
-				SPAN_ITALIC("You pour [transferred]u from \the [item] into \the [src]."),
+				SPAN_ITALIC("[user] pours something from [item] into [src]."),
+				SPAN_ITALIC("You pour [transferred]u from [item] into [src]."),
 				SPAN_ITALIC("You hear a liquid gurgling.")
 			)
 		else

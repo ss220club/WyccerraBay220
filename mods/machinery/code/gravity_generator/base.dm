@@ -178,42 +178,40 @@
 // Fixing the gravity generator.
 /obj/machinery/gravity_generator/main/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(broken_state == GRAV_NEEDS_SCREWDRIVER)
-		user.visible_message(
-			SPAN_NOTICE("[user] begins to attach the details in the desired order."),
-			SPAN_NOTICE("You begin to attach the details in the desired order.")
-		)
-		if(!tool.use_as_tool(middle, user, 15 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_SCREWDRIVER)
-			return
-		health += max(initial(health), health + 250)
-		user.visible_message(
-			SPAN_NOTICE("[user] attached the details."),
-			SPAN_NOTICE("You have attached the details.")
-		)
-		stat &= ~MACHINE_BROKEN_GENERIC
-		set_broken_state(0)
-		update_icon()
+	if(broken_state != GRAV_NEEDS_SCREWDRIVER)
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] begins to attach the details in the desired order."),
+		SPAN_NOTICE("You begin to attach the details in the desired order.")
+	)
+	if(!tool.use_as_tool(middle, user, 15 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_SCREWDRIVER)
+		return
+	health += max(initial(health), health + 250)
+	user.visible_message(
+		SPAN_NOTICE("[user] attached the details."),
+		SPAN_NOTICE("You have attached the details.")
+	)
+	stat &= ~MACHINE_BROKEN_GENERIC
+	set_broken_state(0)
+	update_icon()
 
 /obj/machinery/gravity_generator/main/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(broken_state == GRAV_NEEDS_WRENCH)
-		user.visible_message(
-			SPAN_NOTICE("[user] screws the parts back."),
-			SPAN_NOTICE("You begin to screw the parts back.")
-		)
-		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
-
-		if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || broken_state != GRAV_NEEDS_WRENCH)
-			return TRUE
-
-		health += 250
-		user.visible_message(
-			SPAN_NOTICE("[user] screwed the parts back."),
-			SPAN_NOTICE("You screwed the parts back.")
-		)
-		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
-		set_broken_state(GRAV_NEEDS_SCREWDRIVER)
-		update_icon()
+	if(broken_state != GRAV_NEEDS_WRENCH)
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] screws the parts back."),
+		SPAN_NOTICE("You begin to screw the parts back.")
+	)
+	if(!tool.use_as_tool(middle, user, 15 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_WRENCH)
+		return
+	health += 250
+	user.visible_message(
+		SPAN_NOTICE("[user] screwed the parts back."),
+		SPAN_NOTICE("You screwed the parts back.")
+	)
+	set_broken_state(GRAV_NEEDS_SCREWDRIVER)
+	update_icon()
 
 /obj/machinery/gravity_generator/main/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

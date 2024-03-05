@@ -51,7 +51,8 @@
 
 /obj/machinery/atmospherics/binary/oxyregenerator/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+	if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	anchored = !anchored
 	user.visible_message("[user.name] [anchored ? "secures" : "unsecures"] the bolts holding [src.name] to the floor.", \
 				"You [anchored ? "secure" : "unsecure"] the bolts holding [src] to the floor.", \

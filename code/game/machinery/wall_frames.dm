@@ -11,6 +11,8 @@
 
 /obj/item/frame/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	new refund_type( get_turf(src.loc), refund_amt)
 	qdel(src)
 
@@ -33,10 +35,10 @@
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc
 	if (!istype(loc, /turf/simulated/floor))
-		to_chat(usr, SPAN_DANGER("\The [src] cannot be placed on this spot."))
+		to_chat(usr, SPAN_DANGER("[src] cannot be placed on this spot."))
 		return
 	if ((A.requires_power == 0 || A.name == "Space") && !isLightFrame())
-		to_chat(usr, SPAN_DANGER("\The [src] cannot be placed in this area."))
+		to_chat(usr, SPAN_DANGER("[src] cannot be placed in this area."))
 		return
 
 	if(gotwallitem(loc, ndir))

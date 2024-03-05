@@ -84,10 +84,9 @@
 /obj/machinery/light_construct/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	switch(stage)
-		if (LIGHT_STAGE_EMPTY)
-			playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
+		if(LIGHT_STAGE_EMPTY)
 			to_chat(user, SPAN_NOTICE("You begin deconstructing [src]."))
-			if (!user.do_skilled((tool.toolspeed * 3) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT))
+			if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			new /obj/item/stack/material/steel( get_turf(loc), sheets_refunded )
 			user.visible_message(
@@ -95,17 +94,11 @@
 				SPAN_NOTICE("You deconstruct [src]!"),
 				SPAN_ITALIC("You hear ratcheting and metal scraping.")
 			)
-			playsound(loc, 'sound/items/Deconstruct.ogg', 75, TRUE)
 			qdel(src)
-			return
-
-		if (LIGHT_STAGE_WIRED)
+		if(LIGHT_STAGE_WIRED)
 			to_chat(user, SPAN_WARNING("You have to remove the wires first."))
-			return
-
-		if (LIGHT_STAGE_COMPLETE)
+		if(LIGHT_STAGE_COMPLETE)
 			to_chat(user, SPAN_WARNING("You have to unscrew the case first."))
-			return
 
 /obj/machinery/light_construct/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

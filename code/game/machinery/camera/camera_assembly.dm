@@ -68,19 +68,21 @@
 					break
 
 /obj/item/camera_assembly/wrench_act(mob/living/user, obj/item/tool)
-	. = ..()
+	. = ITEM_INTERACT_SUCCESS
 	switch(state)
 		if(ASSEMBLY_NONE)
 			if(!isturf(loc))
 				return
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			to_chat(user, "You wrench the assembly into place.")
 			anchored = TRUE
 			state = ASSEMBLY_WRENCHED
 			update_icon()
 			auto_turn()
 		if(ASSEMBLY_WRENCHED)
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			to_chat(user, "You unattach the assembly from its place.")
 			anchored = FALSE
 			update_icon()

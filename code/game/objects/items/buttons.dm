@@ -60,6 +60,8 @@ GLOBAL_LIST_INIT(possible_switch_offsets, list(
 
 /obj/item/frame/light_switch/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	new /obj/item/stack/material/steel(get_turf(src.loc), 1)
 	qdel(src)
 
@@ -78,6 +80,8 @@ GLOBAL_LIST_INIT(possible_switch_offsets, list(
 
 /obj/item/frame/light_switch/windowtint/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	new /obj/item/stack/material/steel(get_turf(src.loc), 1)
 	qdel(src)
 

@@ -339,13 +339,14 @@
 
 /obj/structure/window/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (anchored || construction_state)
+	if(anchored || construction_state)
 		USE_FEEDBACK_FAILURE("[src] must be detached from the floor[reinf_material ? " and its frame" : null] before you can dismantle it.")
 		return
-	if (polarized)
+	if(polarized)
 		USE_FEEDBACK_FAILURE("[src]'s wiring must be removed before you can dismantle it.")
 		return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	user.visible_message(
 		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
 		SPAN_NOTICE("You dismantle [src] with [tool].")

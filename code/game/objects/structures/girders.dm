@@ -125,34 +125,24 @@
 		USE_FEEDBACK_FAILURE("[src]'s reinforcements must be removed before it can be dismantled.")
 		return
 	if(anchored)
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 		user.visible_message(
 			SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
 			SPAN_NOTICE("You start dismantling [src] with [tool].")
 		)
-		if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != GIRDER_STATE_NORMAL || !anchored)
 			return
-		if(state != GIRDER_STATE_NORMAL || !anchored)
-			USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-			return
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 		user.visible_message(
 			SPAN_NOTICE("[user] dismantles [src] with [tool]."),
 			SPAN_NOTICE("You dismantle [src] with [tool].")
 		)
 		dismantle()
 		return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts securing [src] with [tool]."),
 		SPAN_NOTICE("You start securing [src] with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != GIRDER_STATE_NORMAL || anchored)
 		return
-	if(state != GIRDER_STATE_NORMAL || anchored)
-		USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-		return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] secures [src] with [tool]."),
 		SPAN_NOTICE("You secure [src] with [tool].")

@@ -155,10 +155,10 @@
 
 /obj/structure/heavy_vehicle_frame/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!is_reinforced)
+	if(!is_reinforced)
 		USE_FEEDBACK_FAILURE("[src] has no reinforcements to secure or remove.")
 		return
-	if (is_reinforced == FRAME_REINFORCED_WELDED)
+	if(is_reinforced == FRAME_REINFORCED_WELDED)
 		USE_FEEDBACK_FAILURE("[src]'s internal reinforcements are welded in place and can't be removed.")
 		return
 	var/current_state = is_reinforced
@@ -172,19 +172,14 @@
 		if (current_state != is_reinforced)
 			USE_FEEDBACK_FAILURE("[src]'s state has changed.")
 			return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts [input == "Secure Reinforcements" ? "securing" : "removing"] [src]'s internal reinforcements with [tool]."),
 		SPAN_NOTICE("You start [input == "Secure Reinforcements" ? "securing" : "removing"] [src]'s internal reinforcements with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || current_state != is_reinforced)
 		return
-	if (current_state != is_reinforced)
-		USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-		return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	is_reinforced = input == "Secure Reinforcements" ? FRAME_REINFORCED_SECURE : FALSE
-	if (input == "Remove Reinforcements")
+	if(input == "Remove Reinforcements")
 		material.place_sheet(loc, 10)
 		material = null
 	update_icon()

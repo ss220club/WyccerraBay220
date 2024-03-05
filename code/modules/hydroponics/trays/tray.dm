@@ -416,14 +416,17 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(mechanical)
-		//If there's a connector here, the portable_atmospherics setup can handle it.
-		if(locate(/obj/machinery/atmospherics/portables_connector) in loc)
-			return ..()
+	if(!mechanical)
+		return
+	//If there's a connector here, the portable_atmospherics setup can handle it.
+	if(locate(/obj/machinery/atmospherics/portables_connector) in loc) // TODO: what's this
+		var/obj/machinery/atmospherics/portables_connector/connector = locate(/obj/machinery/atmospherics/portables_connector)
+		return connector.wrench_act(user, tool)
 
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-		anchored = !anchored
-		to_chat(user, "You [anchored ? "wrench" : "unwrench"] \the [src].")
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = !anchored
+	to_chat(user, "You [anchored ? "wrench" : "unwrench"] [src].")
 
 /obj/machinery/portable_atmospherics/hydroponics/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (O.is_open_container())
@@ -431,7 +434,7 @@
 
 	if(O.edge && O.w_class < ITEM_SIZE_NORMAL && user.a_intent != I_HURT)
 		if(!seed)
-			to_chat(user, SPAN_WARNING("There is nothing to take a sample from in \the [src]."))
+			to_chat(user, SPAN_WARNING("There is nothing to take a sample from in [src]."))
 			return TRUE
 
 		if(sampled)
@@ -527,7 +530,7 @@
 	if (weapon.force && seed)
 		user.setClickCooldown(user.get_attack_speed(weapon))
 		user.do_attack_animation(src)
-		user.visible_message(SPAN_DANGER("\The [seed.display_name] has been attacked by [user] with \the [weapon]!"))
+		user.visible_message(SPAN_DANGER("[seed.display_name] has been attacked by [user] with [weapon]!"))
 		playsound(get_turf(src), weapon.hitsound, 100, 1)
 		if(!dead)
 			health -= weapon.force
@@ -538,7 +541,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/plant_seed(mob/user, obj/item/seeds/S)
 
 	if(seed)
-		to_chat(user, SPAN_WARNING("\The [src] already has seeds in it!"))
+		to_chat(user, SPAN_WARNING("[src] already has seeds in it!"))
 		return
 
 	if(!S.seed)
@@ -578,16 +581,16 @@
 /obj/machinery/portable_atmospherics/hydroponics/examine(mob/user)
 	. = ..(user)
 	if(!seed)
-		to_chat(user, "\The [src] is empty.")
+		to_chat(user, "[src] is empty.")
 		return
 
 	to_chat(user, SPAN_NOTICE("\An [seed.display_name] is growing here."))
 
 	if(user.skill_check(SKILL_BOTANY, SKILL_BASIC))
 		if(weedlevel >= 5)
-			to_chat(user, "\The [src] is [SPAN_DANGER("infested with weeds")]!")
+			to_chat(user, "[src] is [SPAN_DANGER("infested with weeds")]!")
 		if(pestlevel >= 5)
-			to_chat(user, "\The [src] is [SPAN_DANGER("infested with tiny worms")]!")
+			to_chat(user, "[src] is [SPAN_DANGER("infested with tiny worms")]!")
 
 		if(dead)
 			to_chat(user, SPAN_DANGER("The [seed.display_name] is dead."))

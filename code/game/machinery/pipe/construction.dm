@@ -142,6 +142,9 @@ Buildable meters
 			to_chat(user, SPAN_WARNING("There is already a pipe of the same type at this location."))
 			return
 
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+
 	// no conflicts found
 
 	var/pipefailtext = SPAN_WARNING("There's nothing to connect this pipe section to!") //(with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)"
@@ -175,7 +178,6 @@ Buildable meters
 		P.atmos_init()
 		P.build_network()
 
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 	user.visible_message( \
 		"[user] fastens the [src].", \
 		SPAN_NOTICE("You have fastened the [src]."), \
@@ -211,12 +213,13 @@ Buildable meters
 
 /obj/item/machine_chassis/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	var/obj/machinery/machine = new build_type(get_turf(src), dir, FALSE)
 	machine.apply_component_presets()
 	machine.RefreshParts()
 	if(machine.construct_state)
 		machine.construct_state.post_construct(machine)
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, SPAN_NOTICE("You have fastened the [src]."))
 	qdel(src)
 

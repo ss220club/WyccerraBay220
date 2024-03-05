@@ -217,8 +217,9 @@
 
 /obj/item/device/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	new /obj/item/frame/intercom(get_turf(src))
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] removes [src] from the wall with [tool]."),
 		SPAN_NOTICE("You remove [src] from the wall with [tool].")

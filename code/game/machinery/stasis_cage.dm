@@ -179,26 +179,26 @@ var/global/const/STASISCAGE_WIRE_LOCK      = 4
 
 /obj/machinery/stasis_cage/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(broken)
-		if(health_dead())
-			USE_FEEDBACK_FAILURE("You need to repair the rest of [src] first!")
-			return
-		user.visible_message(
-			SPAN_NOTICE("[user] begins to clamp [src]'s lid back into position."),
-			SPAN_NOTICE("You begin to clamp [src]'s lid back into position.")
-		)
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-		if(!user.skill_check(SKILL_CONSTRUCTION, SKILL_BASIC))
-			to_chat(user, SPAN_WARNING("You fail to repair [src]."))
-			return
-		if(!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE))
-			return
-		user.visible_message(
-			SPAN_NOTICE("[user] successfully repairs [src]'s lid!"),
-			SPAN_NOTICE("You successfully repair [src]'s lid!")
-		)
-		broken = FALSE
-		update_icon()
+	if(!broken)
+		return
+	if(health_dead())
+		USE_FEEDBACK_FAILURE("You need to repair the rest of [src] first!")
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] begins to clamp [src]'s lid back into position."),
+		SPAN_NOTICE("You begin to clamp [src]'s lid back into position.")
+	)
+	if(!user.skill_check(SKILL_CONSTRUCTION, SKILL_BASIC))
+		to_chat(user, SPAN_WARNING("You fail to repair [src]."))
+		return
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_PUBLIC_UNIQUE))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] successfully repairs [src]'s lid!"),
+		SPAN_NOTICE("You successfully repair [src]'s lid!")
+	)
+	broken = FALSE
+	update_icon()
 
 /obj/machinery/stasis_cage/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Coil - Repair cage

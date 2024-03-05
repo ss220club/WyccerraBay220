@@ -206,5 +206,5 @@
 	obj_flags = EMPTY_BITFIELD
 
 /obj/machinery/portable_atmospherics/powered/scrubber/huge/stationary/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
+	. = ITEM_INTERACT_BLOCKING
 	to_chat(user, SPAN_WARNING("The bolts are too tight for you to unscrew!"))

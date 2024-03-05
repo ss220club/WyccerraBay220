@@ -621,15 +621,15 @@ var/global/list/ai_verbs_default = list(
 /mob/living/silicon/ai/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts [anchored ? "unbolting" : "bolting"] \the [src] from the floor with \a [tool]."),
-		SPAN_NOTICE("You start [anchored ? "unbolting" : "bolting"] \the [src] from the floor with \the [tool].")
+		SPAN_NOTICE("[user] starts [anchored ? "unbolting" : "bolting"] [src] from the floor with [tool]."),
+		SPAN_NOTICE("You start [anchored ? "unbolting" : "bolting"] [src] from the floor with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	anchored = !anchored
 	user.visible_message(
-		SPAN_NOTICE("\The [user] [anchored ? "bolts" : "unbolts"] \the [src] from the floor with \a [tool]."),
-		SPAN_NOTICE("You [anchored ? "bolts" : "unbolts"] \the [src] from the floor with \the [tool].")
+		SPAN_NOTICE("[user] [anchored ? "bolts" : "unbolts"] [src] from the floor with [tool]."),
+		SPAN_NOTICE("You [anchored ? "bolts" : "unbolts"] [src] from the floor with [tool].")
 	)
 
 /mob/living/silicon/ai/use_tool(obj/item/tool, mob/user, list/click_params)

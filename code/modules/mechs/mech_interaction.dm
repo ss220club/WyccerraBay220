@@ -398,10 +398,7 @@
 		SPAN_NOTICE("[user] starts removing [src]'s securing bolts with [tool]."),
 		SPAN_NOTICE("You start removing [src]'s securing bolts with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 6) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-		return
-	if(!maintenance_protocols)
-		USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to access the securing bolts.")
+	if(!tool.use_as_tool(src, user, 6 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !maintenance_protocols)
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] removes [src]'s securing bolts with [tool], dismantling it."),

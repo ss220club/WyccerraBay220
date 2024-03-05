@@ -297,7 +297,7 @@ var/global/list/turret_icons
 /obj/machinery/porta_turret/wrench_act(mob/living/user, obj/item/tool)
 	if(enabled || raised)
 		to_chat(user, SPAN_WARNING("You cannot unsecure an active turret!"))
-		return ITEM_INTERACT_SUCCESS
+		return ITEM_INTERACT_BLOCKING
 
 /obj/machinery/porta_turret/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if (isid(I) ||istype(I, /obj/item/modular_computer))

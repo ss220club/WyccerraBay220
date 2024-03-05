@@ -109,18 +109,21 @@
 
 /obj/item/flamethrower/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!status && !complete)
-		if(weldtool)
-			weldtool.dropInto(loc)
-			weldtool = null
-		if(igniter)
-			igniter.dropInto(loc)
-			igniter = null
-		if(beaker)
-			beaker.dropInto(loc)
-			beaker = null
-		new /obj/item/stack/material/rods(get_turf(src))
-		qdel(src)
+	if(status || complete)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(weldtool)
+		weldtool.dropInto(loc)
+		weldtool = null
+	if(igniter)
+		igniter.dropInto(loc)
+		igniter = null
+	if(beaker)
+		beaker.dropInto(loc)
+		beaker = null
+	new /obj/item/stack/material/rods(get_turf(src))
+	qdel(src)
 
 /obj/item/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
 	if(isigniter(W))

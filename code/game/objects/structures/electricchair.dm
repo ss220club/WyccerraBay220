@@ -16,16 +16,17 @@
 
 /obj/structure/bed/chair/e_chair/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Wrench - Dismantle electric chair
 	var/obj/structure/bed/chair/chair = new /obj/structure/bed/chair(loc)
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	chair.set_dir(dir)
 	part.dropInto(loc)
 	part.master = null
 	transfer_fingerprints_to(chair)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] removes \the [part] from \the [chair] with \a [tool]."),
-		SPAN_NOTICE("You remove \the [part] from \the [chair] with \the [tool].")
+		SPAN_NOTICE("[user] removes [part] from [chair] with [tool]."),
+		SPAN_NOTICE("You remove [part] from [chair] with [tool].")
 	)
 	part = null
 	qdel(src)

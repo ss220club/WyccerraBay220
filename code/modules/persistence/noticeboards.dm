@@ -112,14 +112,12 @@
 
 /obj/structure/noticeboard/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
 		SPAN_NOTICE("You start dismantling [src] with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 5) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
 		SPAN_NOTICE("You dismantle [src] with [tool].")

@@ -228,16 +228,18 @@ var/global/solar_gen_rate = 1500
 /obj/item/solar_assembly/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!anchored && isturf(loc))
+		if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		anchored = TRUE
 		pixel_x = 0
 		pixel_y = 0
 		pixel_z = 0
 		user.visible_message(SPAN_NOTICE("[user] wrenches the solar assembly into place."))
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+		return
+	if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	anchored = FALSE
 	user.visible_message(SPAN_NOTICE("[user] unwrenches the solar assembly from it's place."))
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 
 /obj/item/solar_assembly/attackby(obj/item/W, mob/user)
 	if(anchored || isturf(loc))

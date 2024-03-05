@@ -84,10 +84,6 @@
 /atom/proc/crowbar_act(mob/living/user, obj/item/tool)
 	return
 
-/// Sanity checks
-/atom/proc/can_crowbar_act(mob/living/user)
-	return
-
 /// Called on an object when a tool with multitool capabilities is used to left click an object
 /atom/proc/multitool_act(mob/living/user, obj/item/tool)
 	return

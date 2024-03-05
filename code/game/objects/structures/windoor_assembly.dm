@@ -104,7 +104,7 @@
 	)
 	qdel(src)
 
-/obj/structure/windoor_assembly/can_crowbar_act(mob/living/user)
+/obj/structure/windoor_assembly/proc/can_crowbar_act(mob/living/user)
 	. = TRUE
 	if(!electronics)
 		USE_FEEDBACK_FAILURE("[src] needs a circuit board before you can complete it.")

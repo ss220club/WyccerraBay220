@@ -128,7 +128,7 @@
 		SPAN_NOTICE("You remove [src]'s [electronics.name] with [tool].")
 	)
 
-/obj/structure/door_assembly/can_crowbar_act(mob/living/user)
+/obj/structure/door_assembly/proc/can_crowbar_act(mob/living/user)
 	. = TRUE
 	if(!electronics)
 		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")

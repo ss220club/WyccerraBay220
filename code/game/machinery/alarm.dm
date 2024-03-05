@@ -825,9 +825,9 @@
 	buildstage = 0
 	update_icon()
 
-/obj/machinery/alarm/can_crowbar_act(mob/living/user)
+/obj/machinery/alarm/proc/can_crowbar_act(mob/living/user)
 	. = TRUE
-	if(buildstate != 1)
+	if(buildstage != 1)
 		return FALSE
 
 /obj/machinery/alarm/screwdriver_act(mob/living/user, obj/item/tool)

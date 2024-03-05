@@ -44,7 +44,7 @@
 		return
 	var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in contents
 	if(E)
-		if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_act), user)))
+		if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		to_chat(user, SPAN_NOTICE("You remove the [E] from [src]."))
 		E.dropInto(loc)

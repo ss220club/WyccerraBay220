@@ -56,7 +56,7 @@
 	)
 	qdel(src)
 
-/obj/structure/plasticflaps/can_crowbar_act(mob/living/user)
+/obj/structure/plasticflaps/proc/can_crowbar_act(mob/living/user)
 	. = TRUE
 	if(anchored)
 		USE_FEEDBACK_FAILURE("[src] has to be unanchored before you can deconstruct it.")

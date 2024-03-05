@@ -105,49 +105,49 @@
 		return
 	if (state != ASSEMBLY_STATE_FRAME)
 		if (!silent)
-			USE_FEEDBACK_FAILURE("\The [src] needs its components and wiring removed before you can unanchor it.")
+			USE_FEEDBACK_FAILURE("[src] needs its components and wiring removed before you can unanchor it.")
 		return FALSE
 
 /obj/structure/door_assembly/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!electronics)
-		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+	if(!can_crowbar_act(user))
 		return
-	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts removing \the [src]'s [electronics.name] with \a [tool]."),
-		SPAN_NOTICE("You start removing \the [src]'s [electronics.name] with \the [tool].")
+		SPAN_NOTICE("[user] starts removing [src]'s [electronics.name] with [tool]."),
+		SPAN_NOTICE("You start removing [src]'s [electronics.name] with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return
-	if (!electronics)
-		USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_act), user)))
 		return
 	electronics.dropInto(loc)
 	electronics.add_fingerprint(user)
 	state = ASSEMBLY_STATE_WIRED
 	update_state()
-	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-	user.visible_message(
-		SPAN_NOTICE("\The [user] removes \the [src]'s [electronics.name] with \a [tool]."),
-		SPAN_NOTICE("You remove \the [src]'s [electronics.name] with \the [tool].")
-	)
 	electronics = null
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [src]'s [electronics.name] with [tool]."),
+		SPAN_NOTICE("You remove [src]'s [electronics.name] with [tool].")
+	)
+
+/obj/structure/door_assembly/can_crowbar_act(mob/living/user)
+	. = TRUE
+	if(!electronics)
+		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
+		return FALSE
 
 /obj/structure/door_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(state != ASSEMBLY_STATE_CIRCUIT)
-		USE_FEEDBACK_FAILURE("\The [src] needs a circuit before you can finish it.")
+		USE_FEEDBACK_FAILURE("[src] needs a circuit before you can finish it.")
 		return
 	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts finishing \the [src] with \a [tool]."),
-		SPAN_NOTICE("You start finishing \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] starts finishing [src] with [tool]."),
+		SPAN_NOTICE("You start finishing [src] with [tool].")
 	)
 	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 		return
 	if(state != ASSEMBLY_STATE_CIRCUIT)
-		USE_FEEDBACK_FAILURE("\The [src] needs a circuit before you can finish it.")
+		USE_FEEDBACK_FAILURE("[src] needs a circuit before you can finish it.")
 		return
 	var/path
 	if(istext(glass))
@@ -161,27 +161,27 @@
 	airlock.add_fingerprint(user, tool = tool)
 	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] finishes \the [airlock] with \a [tool]."),
-		SPAN_NOTICE("You finishes \the [airlock] with \the [tool].")
+		SPAN_NOTICE("[user] finishes [airlock] with [tool]."),
+		SPAN_NOTICE("You finishes [airlock] with [tool].")
 	)
 	qdel(src)
 
 /obj/structure/door_assembly/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (state < ASSEMBLY_STATE_WIRED)
-		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
 		return
 	if (state > ASSEMBLY_STATE_WIRED)
 		return
 	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts cutting \the [src]'s wires with \a [tool]."),
-		SPAN_NOTICE("You start cutting \the [src]'s wires with \the [tool].")
+		SPAN_NOTICE("[user] starts cutting [src]'s wires with [tool]."),
+		SPAN_NOTICE("You start cutting [src]'s wires with [tool].")
 	)
 	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 		return
 	if (state < ASSEMBLY_STATE_WIRED)
-		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
 		return
 	if (state > ASSEMBLY_STATE_WIRED)
 		return
@@ -191,8 +191,8 @@
 	update_state()
 	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] cuts \the [src]'s wires with \a [tool]."),
-		SPAN_NOTICE("You cut \the [src]'s wires with \the [tool].")
+		SPAN_NOTICE("[user] cuts [src]'s wires with [tool]."),
+		SPAN_NOTICE("You cut [src]'s wires with [tool].")
 	)
 
 /obj/structure/door_assembly/welder_act(mob/living/user, obj/item/tool)
@@ -201,17 +201,17 @@
 	if(glass)
 		var/glass_noun = istext(glass) ? "[glass] plating" : "glass panel"
 		var/obj/item/weldingtool/welder = tool
-		if(!welder.can_use(1, user, "to remove \the [src]'s [glass_noun]."))
+		if(!welder.can_use(1, user, "to remove [src]'s [glass_noun]."))
 			return
 		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts welding \the [src]'s [glass_noun] off with \a [tool]."),
-			SPAN_NOTICE("You start welding \the [src]'s [glass_noun] off with \the [tool].")
+			SPAN_NOTICE("[user] starts welding [src]'s [glass_noun] off with [tool]."),
+			SPAN_NOTICE("You start welding [src]'s [glass_noun] off with [tool].")
 		)
 		if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 			return
 		if(!glass)
-			USE_FEEDBACK_FAILURE("\The [src]'s state has changed.")
+			USE_FEEDBACK_FAILURE("[src]'s state has changed.")
 			return
 		if(!welder.remove_fuel(1, user))
 			return
@@ -226,26 +226,26 @@
 		update_state()
 		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] welds \the [src]'s [glass_noun] off with \a [tool]."),
-			SPAN_NOTICE("You weld \the [src]'s [glass_noun] off with \the [tool].")
+			SPAN_NOTICE("[user] welds [src]'s [glass_noun] off with [tool]."),
+			SPAN_NOTICE("You weld [src]'s [glass_noun] off with [tool].")
 		)
 		return
 	// Dismantle assembly
 	if(anchored)
-		USE_FEEDBACK_FAILURE("\The [src] must be unanchored before you can dismantle it.")
+		USE_FEEDBACK_FAILURE("[src] must be unanchored before you can dismantle it.")
 		return
 	var/obj/item/weldingtool/welder = tool
-	if(!welder.can_use(1, user, "to dismantle \the [src]."))
+	if(!welder.can_use(1, user, "to dismantle [src]."))
 		return
 	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-		SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
+		SPAN_NOTICE("You start dismantling [src] with [tool].")
 	)
 	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 		return
 	if(anchored)
-		USE_FEEDBACK_FAILURE("\The [src] must be unanchored before you can dismantle it.")
+		USE_FEEDBACK_FAILURE("[src] must be unanchored before you can dismantle it.")
 		return
 	if(!welder.remove_fuel(1, user))
 		return
@@ -254,8 +254,8 @@
 	stack.add_fingerprint(user, tool = tool)
 	playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-		SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
+		SPAN_NOTICE("You dismantle [src] with [tool].")
 	)
 	qdel(src)
 
@@ -263,26 +263,26 @@
 	// Airlock Electronics - Install circuit
 	if (istype(tool, /obj/item/airlock_electronics))
 		if (state < ASSEMBLY_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can install \the [src].")
+			USE_FEEDBACK_FAILURE("[src] needs to be wired before you can install [src].")
 			return TRUE
 		if (electronics)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [electronics] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [electronics] installed.")
 			return TRUE
 		if (!user.canUnEquip(tool))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts installing \a [tool] into \the [src]."),
-			SPAN_NOTICE("You start installing \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] starts installing [tool] into [src]."),
+			SPAN_NOTICE("You start installing [tool] into [src].")
 		)
 		if (!user.do_skilled(4 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 			return TRUE
 		if (state < ASSEMBLY_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can install \the [src].")
+			USE_FEEDBACK_FAILURE("[src] needs to be wired before you can install [src].")
 			return TRUE
 		if (electronics)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [electronics] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [electronics] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -292,73 +292,73 @@
 		update_state()
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
-			SPAN_NOTICE("You install \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
 		return TRUE
 
 	// Cable Coil - Add wiring
 	if (isCoil(tool))
 		if (state != ASSEMBLY_STATE_FRAME)
-			USE_FEEDBACK_FAILURE("\The [src] is already wired.")
+			USE_FEEDBACK_FAILURE("[src] is already wired.")
 			return TRUE
 		if (!anchored)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be anchored before you can wire it.")
+			USE_FEEDBACK_FAILURE("[src] needs to be anchored before you can wire it.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.can_use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire [src].")
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts wiring \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start wiring \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] starts wiring [src] with [tool]."),
+			SPAN_NOTICE("You start wiring [src] with [tool].")
 		)
 		if (!user.do_skilled(4 SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 			return TRUE
 		if (state != ASSEMBLY_STATE_FRAME)
-			USE_FEEDBACK_FAILURE("\The [src] is already wired.")
+			USE_FEEDBACK_FAILURE("[src] is already wired.")
 			return TRUE
 		if (!anchored)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be anchored before you can wire it.")
+			USE_FEEDBACK_FAILURE("[src] needs to be anchored before you can wire it.")
 			return TRUE
 		if (!cable.use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire [src].")
 			return TRUE
 		state = ASSEMBLY_STATE_WIRED
 		update_state()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] wires \the [src] with \a [tool]."),
-			SPAN_NOTICE("You wire \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] wires [src] with [tool]."),
+			SPAN_NOTICE("You wire [src] with [tool].")
 		)
 		return TRUE
 
 	// Material Stack - Add glass/plating
 	if (istype(tool, /obj/item/stack/material))
 		if (glass)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [istext(glass) ? "[glass] plating" : "glass panel"] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [istext(glass) ? "[glass] plating" : "glass panel"] installed.")
 			return TRUE
 		var/obj/item/stack/material/stack = tool
 		var/material_name = stack.get_material_name()
 		// Glass Panel
 		if (material_name == MATERIAL_GLASS)
 			if (!stack.reinf_material)
-				USE_FEEDBACK_FAILURE("\The [src] needs reinforced glass to make a glass panel.")
+				USE_FEEDBACK_FAILURE("[src] needs reinforced glass to make a glass panel.")
 				return TRUE
 			if (!stack.can_use(1))
 				USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to make a glass panel.")
 				return TRUE
 			playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
 			user.visible_message(
-				SPAN_NOTICE("\The [user] starts installing a glass panel into \the [src]."),
-				SPAN_NOTICE("You start installing a glass panel into \the [src].")
+				SPAN_NOTICE("[user] starts installing a glass panel into [src]."),
+				SPAN_NOTICE("You start installing a glass panel into [src].")
 			)
 			if (!user.do_skilled(4 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 				return TRUE
 			if (glass)
-				USE_FEEDBACK_FAILURE("\The [src] already has \a [istext(glass) ? "[glass] plating" : "glass panel"] installed.")
+				USE_FEEDBACK_FAILURE("[src] already has [istext(glass) ? "[glass] plating" : "glass panel"] installed.")
 				return TRUE
 			if (!stack.reinf_material)
-				USE_FEEDBACK_FAILURE("\The [src] needs reinforced glass to make a glass panel.")
+				USE_FEEDBACK_FAILURE("[src] needs reinforced glass to make a glass panel.")
 				return TRUE
 			if (!stack.use(1))
 				USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to make a glass panel.")
@@ -367,37 +367,37 @@
 			update_state()
 			playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
 			user.visible_message(
-				SPAN_NOTICE("\The [user] starts installing a glass panel into \the [src]."),
-				SPAN_NOTICE("You start installing a glass panel into \the [src].")
+				SPAN_NOTICE("[user] starts installing a glass panel into [src]."),
+				SPAN_NOTICE("You start installing a glass panel into [src].")
 			)
 			return TRUE
 		// Plating
 		if (material_name in reinforcement_materials)
 			if (!stack.can_use(2))
-				USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 2, "to reinforce \the [src].")
+				USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 2, "to reinforce [src].")
 				return TRUE
 			playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
 			user.visible_message(
-				SPAN_NOTICE("\The [user] starts installing \a [material_name] plating into \the [src]."),
-				SPAN_NOTICE("You start installing \a [material_name] plating into \the [src].")
+				SPAN_NOTICE("[user] starts installing [material_name] plating into [src]."),
+				SPAN_NOTICE("You start installing [material_name] plating into [src].")
 			)
 			if (!user.do_skilled(4 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 				return TRUE
 			if (glass)
-				USE_FEEDBACK_FAILURE("\The [src] already has \a [istext(glass) ? "[glass] plating" : "glass panel"] installed.")
+				USE_FEEDBACK_FAILURE("[src] already has [istext(glass) ? "[glass] plating" : "glass panel"] installed.")
 				return TRUE
 			if (!stack.use(2))
-				USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 2, "to reinforce \the [src].")
+				USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 2, "to reinforce [src].")
 				return TRUE
 			glass = material_name
 			update_state()
 			playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
 			user.visible_message(
-				SPAN_NOTICE("\The [user] installs \a [material_name] plating into \the [src]."),
-				SPAN_NOTICE("You install \a [material_name] plating into \the [src].")
+				SPAN_NOTICE("[user] installs [material_name] plating into [src]."),
+				SPAN_NOTICE("You install [material_name] plating into [src].")
 			)
 			return TRUE
-		USE_FEEDBACK_FAILURE("\The [src] can't be reinforced with [material_name].")
+		USE_FEEDBACK_FAILURE("[src] can't be reinforced with [material_name].")
 		return TRUE
 
 	// Pen - Name door
@@ -409,8 +409,8 @@
 		created_name = input
 		update_state()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] names \the [src] to '[created_name]' with \a [tool]."),
-			SPAN_NOTICE("You name \the [src] to '[created_name]' with \the [tool].")
+			SPAN_NOTICE("[user] names [src] to '[created_name]' with [tool]."),
+			SPAN_NOTICE("You name [src] to '[created_name]' with [tool].")
 		)
 		return TRUE
 

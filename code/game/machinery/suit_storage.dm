@@ -104,12 +104,14 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(inoperable() && !islocked && !isopen)
 		to_chat(user, SPAN_NOTICE("You begin prying the unit open."))
-		if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			isopen = TRUE
-			to_chat(user, SPAN_NOTICE("You pry the unit open."))
-			SStgui.update_uis(src)
-			update_icon()
-	else if(islocked)
+		if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		isopen = TRUE
+		to_chat(user, SPAN_NOTICE("You pry the unit open."))
+		SStgui.update_uis(src)
+		update_icon()
+		return
+	if(islocked)
 		to_chat(user, SPAN_WARNING("You can't pry the unit open, it's locked!"))
 
 /obj/machinery/suit_storage_unit/screwdriver_act(mob/living/user, obj/item/tool)

@@ -594,24 +594,23 @@
 /obj/structure/broken_cryo/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!closed)
-		USE_FEEDBACK_FAILURE("\The [src] is already open.")
+		USE_FEEDBACK_FAILURE("[src] is already open.")
 		return
 	busy = TRUE
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts prying \the [src]'s cover off with \a [tool]."),
-		SPAN_NOTICE("You start prying \the [src]'s cover off with \the [tool].")
+		SPAN_NOTICE("[user] starts prying [src]'s cover off with [tool]."),
+		SPAN_NOTICE("You start prying [src]'s cover off with [tool].")
 	)
-	if (!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	closed = FALSE
 	update_icon()
 	var/obj/dead = new remains_type(loc)
 	dead.dir = dir
 	user.visible_message(
-		SPAN_NOTICE("\The [user] opens \the [src]'s cover with \a [tool], exposing \a [dead]."),
-		SPAN_NOTICE("You open \the [src]'s cover with \the [tool], exposing \a [dead].")
+		SPAN_NOTICE("[user] opens [src]'s cover with [tool], exposing [dead]."),
+		SPAN_NOTICE("You open [src]'s cover with [tool], exposing [dead].")
 	)
-	return
 
 /obj/structure/broken_cryo/on_update_icon()
 	icon_state = initial(icon_state)

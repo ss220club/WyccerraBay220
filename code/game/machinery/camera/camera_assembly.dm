@@ -27,8 +27,9 @@
 	if(state == ASSEMBLY_WIRED && length(upgrades))
 		var/obj/U = locate(/obj) in upgrades
 		if(U)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			to_chat(user, "You unattach an upgrade from the assembly.")
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
 			U.dropInto(loc)
 			upgrades -= U
 

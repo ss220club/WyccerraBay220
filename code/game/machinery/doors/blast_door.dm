@@ -150,8 +150,9 @@
 /obj/machinery/door/blast/crowbar_act(mob/living/user, obj/item/tool)
 	if(((!is_powered()) || MACHINE_IS_BROKEN(src)) && !( operating ))
 		to_chat(user, SPAN_NOTICE("You begin prying at \the [src]..."))
-		if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			force_toggle()
+		if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		force_toggle()
 	else
 		to_chat(user, SPAN_NOTICE("[src]'s motors resist your effort."))
 

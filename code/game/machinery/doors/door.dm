@@ -168,7 +168,7 @@
 /obj/machinery/door/attack_hand(mob/user)
 	if (MUTATION_FERAL in user.mutations)
 		if ((!is_powered() || MACHINE_IS_BROKEN(src)) && density)
-			visible_message(SPAN_DANGER("\The [user] manages to pry \the [src] open!"))
+			visible_message(SPAN_DANGER("[user] manages to pry [src] open!"))
 			return open(TRUE)
 
 	if ((. = ..()))
@@ -190,8 +190,9 @@
 /obj/machinery/door/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(repairing)
-		to_chat(user, SPAN_NOTICE("You remove \the [repairing]."))
-		playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		to_chat(user, SPAN_NOTICE("You remove [repairing]."))
 		repairing.dropInto(user.loc)
 		repairing = null
 
@@ -200,18 +201,18 @@
 	if(!repairing)
 		return
 	if(!density)
-		to_chat(user, SPAN_WARNING("\The [src] must be closed before you can repair it."))
+		to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
 		return TRUE
 
 	var/obj/item/weldingtool/welder = tool
 	if(welder.can_use(2, user))
-		to_chat(user, SPAN_NOTICE("You start to fix dents and weld \the [repairing] into place."))
+		to_chat(user, SPAN_NOTICE("You start to fix dents and weld [repairing] into place."))
 		playsound(src, 'sound/items/Welder.ogg', 100, 1)
 		if(do_after(user, (0.5 * repairing.amount) SECONDS, src, DO_REPAIR_CONSTRUCT) && welder.remove_fuel(2, user))
 			if(!repairing)
 				return TRUE//the materials in the door have been removed before welding was finished.
 
-			to_chat(user, SPAN_NOTICE("You finish repairing the damage to \the [src]."))
+			to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
 			restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
 			update_icon()
 			qdel(repairing)
@@ -220,13 +221,13 @@
 /obj/machinery/door/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(istype(I, /obj/item/stack/material) && I.get_material_name() == get_material_name())
 		if(MACHINE_IS_BROKEN(src))
-			to_chat(user, SPAN_NOTICE("It looks like \the [src] is pretty busted. It's going to need more than just patching up now."))
+			to_chat(user, SPAN_NOTICE("It looks like [src] is pretty busted. It's going to need more than just patching up now."))
 			return TRUE
 		if (!get_damage_value())
 			to_chat(user, SPAN_NOTICE("Nothing to fix!"))
 			return TRUE
 		if(!density)
-			to_chat(user, SPAN_WARNING("\The [src] must be closed before you can repair it."))
+			to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
 			return TRUE
 
 		//figure out how much metal we need
@@ -238,7 +239,7 @@
 		if (repairing)
 			transfer = stack.transfer_to(repairing, amount_needed - repairing.amount)
 			if (!transfer)
-				to_chat(user, SPAN_WARNING("You must weld or remove \the [repairing] from \the [src] before you can add anything else."))
+				to_chat(user, SPAN_WARNING("You must weld or remove [repairing] from [src] before you can add anything else."))
 				return TRUE
 		else
 			repairing = stack.split(amount_needed)
@@ -247,7 +248,7 @@
 				transfer = repairing.amount
 
 		if (transfer)
-			to_chat(user, SPAN_NOTICE("You fit [stack.get_exact_name(transfer)] to damaged and broken parts on \the [src]."))
+			to_chat(user, SPAN_NOTICE("You fit [stack.get_exact_name(transfer)] to damaged and broken parts on [src]."))
 
 		return TRUE
 
@@ -287,13 +288,13 @@
 /obj/machinery/door/examine(mob/user)
 	. = ..()
 	if (emagged && ishuman(user) && user.skill_check(SKILL_COMPUTER, SKILL_TRAINED))
-		to_chat(user, SPAN_WARNING("\The [src]'s control panel looks fried."))
+		to_chat(user, SPAN_WARNING("[src]'s control panel looks fried."))
 
 
 /obj/machinery/door/set_broken(new_state)
 	. = ..()
 	if(. && new_state)
-		visible_message(SPAN_WARNING("\The [src.name] breaks!"))
+		visible_message(SPAN_WARNING("[src.name] breaks!"))
 
 
 /obj/machinery/door/on_update_icon()

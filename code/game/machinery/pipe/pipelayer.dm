@@ -31,17 +31,19 @@
 
 /obj/machinery/pipelayer/interface_interact(mob/user)
 	if(!metal&&!on)
-		to_chat(user, SPAN_WARNING("\The [src] doesn't work without metal."))
+		to_chat(user, SPAN_WARNING("[src] doesn't work without metal."))
 		return TRUE
 	on=!on
 	user.visible_message(
-		SPAN_NOTICE("[user] has [!on?"de":""]activated \the [src]."),
-		SPAN_NOTICE("You [!on?"de":""]activate \the [src].")
+		SPAN_NOTICE("[user] has [!on?"de":""]activated [src]."),
+		SPAN_NOTICE("You [!on?"de":""]activate [src].")
 	)
 	return TRUE
 
 /obj/machinery/pipelayer/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	a_dis=!a_dis
 	user.visible_message(
 		SPAN_NOTICE("[user] has [!a_dis?"de":""]activated auto-dismantling."),
@@ -51,7 +53,7 @@
 /obj/machinery/pipelayer/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!metal)
-		to_chat(user, "\The [src] is empty.")
+		to_chat(user, "[src] is empty.")
 		return
 	var/m = round(input(usr,"Please specify the amount of metal to remove","Remove metal",min(round(metal),50)) as num, 1)
 	m = min(m, 50)
@@ -61,13 +63,13 @@
 		use_metal(m)
 		var/obj/item/stack/material/steel/MM = new (get_turf(src))
 		MM.amount = m
-		user.visible_message(SPAN_NOTICE("[user] removes [m] sheet\s of metal from the \the [src]."), SPAN_NOTICE("You remove [m] sheet\s of metal from \the [src]"))
+		user.visible_message(SPAN_NOTICE("[user] removes [m] sheet\s of metal from the [src]."), SPAN_NOTICE("You remove [m] sheet\s of metal from [src]"))
 
 /obj/machinery/pipelayer/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	P_type_t = input("Choose pipe type", "Pipe type") as null|anything in Pipes
 	P_type = Pipes[P_type_t]
-	user.visible_message(SPAN_NOTICE("[user] has set \the [src] to manufacture [P_type_t]."), SPAN_NOTICE("You set \the [src] to manufacture [P_type_t]."))
+	user.visible_message(SPAN_NOTICE("[user] has set [src] to manufacture [P_type_t]."), SPAN_NOTICE("You set [src] to manufacture [P_type_t]."))
 
 /obj/machinery/pipelayer/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/stack/material) && W.get_material_name() == MATERIAL_STEEL)
@@ -75,16 +77,16 @@
 		if(isnull(result))
 			to_chat(user, SPAN_WARNING("Unable to load [W] - no metal found."))
 		else if(!result)
-			to_chat(user, SPAN_NOTICE("\The [src] is full."))
+			to_chat(user, SPAN_NOTICE("[src] is full."))
 		else
-			user.visible_message(SPAN_NOTICE("[user] has loaded metal into \the [src]."), SPAN_NOTICE("You load metal into \the [src]"))
+			user.visible_message(SPAN_NOTICE("[user] has loaded metal into [src]."), SPAN_NOTICE("You load metal into [src]"))
 		return TRUE
 
 	return ..()
 
 /obj/machinery/pipelayer/examine(mob/user)
 	. = ..()
-	to_chat(user, "\The [src] has [metal] sheet\s, is set to produce [P_type_t], and auto-dismantling is [!a_dis?"de":""]activated.")
+	to_chat(user, "[src] has [metal] sheet\s, is set to produce [P_type_t], and auto-dismantling is [!a_dis?"de":""]activated.")
 
 /obj/machinery/pipelayer/proc/reset()
 	on=0
@@ -105,7 +107,7 @@
 
 /obj/machinery/pipelayer/proc/use_metal(amount)
 	if(!metal || metal<amount)
-		visible_message("\The [src] deactivates as its metal source depletes.")
+		visible_message("[src] deactivates as its metal source depletes.")
 		return
 	metal-=amount
 	return 1

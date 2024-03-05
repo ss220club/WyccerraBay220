@@ -814,16 +814,21 @@
 
 /obj/machinery/alarm/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(buildstage == 1)
-		to_chat(user, "You start prying out the circuit.")
-		playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-		if(!do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return
-		to_chat(user, "You pry out the circuit!")
-		var/obj/item/airalarm_electronics/circuit = new /obj/item/airalarm_electronics()
-		circuit.dropInto(user.loc)
-		buildstage = 0
-		update_icon()
+	if(!can_crowbar_act(user))
+		return
+	to_chat(user, "You start prying out the circuit.")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_act), user)))
+		return
+	to_chat(user, "You pry out the circuit!")
+	var/obj/item/airalarm_electronics/circuit = new /obj/item/airalarm_electronics()
+	circuit.dropInto(user.loc)
+	buildstage = 0
+	update_icon()
+
+/obj/machinery/alarm/can_crowbar_act(mob/living/user)
+	. = TRUE
+	if(buildstate != 1)
+		return FALSE
 
 /obj/machinery/alarm/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

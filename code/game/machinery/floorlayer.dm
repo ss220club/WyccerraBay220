@@ -32,21 +32,23 @@
 /obj/machinery/floorlayer/physical_attack_hand(mob/user)
 	on=!on
 	user.visible_message(
-		SPAN_NOTICE("\The [user] has [!on?"de":""]activated \the [src]."),
-		SPAN_NOTICE("You [!on?"de":""]activate \the [src].")
+		SPAN_NOTICE("[user] has [!on?"de":""]activated [src]."),
+		SPAN_NOTICE("You [!on?"de":""]activate [src].")
 	)
 	return TRUE
 
 /obj/machinery/floorlayer/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!length(contents))
-		to_chat(user, SPAN_NOTICE("\The [src] is empty."))
-	else
-		var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in contents
-		if(E)
-			to_chat(user, SPAN_NOTICE("You remove the [E] from /the [src]."))
-			E.dropInto(loc)
-			T = null
+		to_chat(user, SPAN_NOTICE("[src] is empty."))
+		return
+	var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in contents
+	if(E)
+		if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_act), user)))
+			return
+		to_chat(user, SPAN_NOTICE("You remove the [E] from [src]."))
+		E.dropInto(loc)
+		T = null
 
 /obj/machinery/floorlayer/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -58,15 +60,15 @@
 	mode[m] = !mode[m]
 	var/O = mode[m]
 	user.visible_message(
-		SPAN_NOTICE("\The [user] has set \the [src] [m] mode [!O?"off":"on"]."),
-		SPAN_NOTICE("You set \the [src] [m] mode [!O?"off":"on"].")
+		SPAN_NOTICE("[user] has set [src] [m] mode [!O?"off":"on"]."),
+		SPAN_NOTICE("You set [src] [m] mode [!O?"off":"on"].")
 	)
 
 /obj/machinery/floorlayer/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/stack/tile))
 		if(!user.unEquip(W, T))
 			return TRUE
-		to_chat(user, SPAN_NOTICE("\The [W] successfully loaded."))
+		to_chat(user, SPAN_NOTICE("[W] successfully loaded."))
 		TakeTile(T)
 		return TRUE
 	return ..()
@@ -76,7 +78,7 @@
 	var/dismantle = mode["dismantle"]
 	var/laying = mode["laying"]
 	var/collect = mode["collect"]
-	var/message = SPAN_NOTICE("\The [src] [!T?"don't ":""]has [!T?"":"[T.get_amount()] [T] "]tile\s, dismantle is [dismantle?"on":"off"], laying is [laying?"on":"off"], collect is [collect?"on":"off"].")
+	var/message = SPAN_NOTICE("[src] [!T?"don't ":""]has [!T?"":"[T.get_amount()] [T] "]tile\s, dismantle is [dismantle?"on":"off"], laying is [laying?"on":"off"], collect is [collect?"on":"off"].")
 	to_chat(user, message)
 
 /obj/machinery/floorlayer/proc/reset()

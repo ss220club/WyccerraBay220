@@ -143,7 +143,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 	. = ..(user)
 	if(.)
 		if(tape)
-			to_chat(user, SPAN_NOTICE("You can see \a [tape] inside it."))
+			to_chat(user, SPAN_NOTICE("You can see [tape] inside it."))
 
 		switch(panel)
 			if(PANEL_OPENED)
@@ -169,7 +169,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 /obj/item/music_player/Process()
 	if(!get_cell() || !cell.checked_use(power_usage * CELLRATE))
 		StopPlaying()
-		visible_message(SPAN_WARNING("\The [src]'s power meter flashes a battery warning and refuses to operate."))
+		visible_message(SPAN_WARNING("[src]'s power meter flashes a battery warning and refuses to operate."))
 		return PROCESS_KILL
 
 /obj/item/music_player/proc/set_mode(value)
@@ -202,14 +202,16 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 /obj/item/music_player/crowbar_act(mob/living/user, obj/item/tool)
 	switch(panel)
 		if(PANEL_OPENED)
-			user.visible_message(SPAN_NOTICE("\The [user] re-attaches \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You re-attach \the [src]'s front panel."))
-			playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			user.visible_message(SPAN_NOTICE("[user] re-attaches [src]'s front panel with [tool]."), SPAN_NOTICE("You re-attach [src]'s front panel."))
 			panel = PANEL_UNSCREWED
 			update_icon()
 			return ITEM_INTERACT_SUCCESS
 		if(PANEL_UNSCREWED)
-			user.visible_message(SPAN_NOTICE("\The [user] unhinges \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You unhinge \the [src]'s front panel."))
-			playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			user.visible_message(SPAN_NOTICE("[user] unhinges [src]'s front panel with [tool]."), SPAN_NOTICE("You unhinge [src]'s front panel."))
 			panel = PANEL_OPENED
 			update_icon()
 			return ITEM_INTERACT_SUCCESS
@@ -218,11 +220,11 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 	. = ITEM_INTERACT_SUCCESS
 	switch(panel)
 		if(PANEL_UNSCREWED)
-			user.visible_message(SPAN_NOTICE("\The [user] screw \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You screw \the [src]'s front panel."))
+			user.visible_message(SPAN_NOTICE("[user] screw [src]'s front panel with [tool]."), SPAN_NOTICE("You screw [src]'s front panel."))
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			panel = PANEL_CLOSED
 		if(PANEL_CLOSED)
-			user.visible_message(SPAN_NOTICE("\The [user] unscrew \the [src]'s front panel with \the [tool]."), SPAN_NOTICE("You unscrew \the [src]'s front panel."))
+			user.visible_message(SPAN_NOTICE("[user] unscrew [src]'s front panel with [tool]."), SPAN_NOTICE("You unscrew [src]'s front panel."))
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			panel = PANEL_UNSCREWED
 		if(PANEL_OPENED)
@@ -245,7 +247,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 						cell = null
 						update_icon()
 					else
-						USE_FEEDBACK_FAILURE("\The [src] doesn't have a cell installed.")
+						USE_FEEDBACK_FAILURE("[src] doesn't have a cell installed.")
 				if("Adjust player")
 					if(!broken)
 						AdjustFrequency(tool, user)
@@ -254,11 +256,11 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 	if(istype(tool, /obj/item/music_tape))
 		var/obj/item/music_tape/C = tool
 		if(tape)
-			to_chat(user, SPAN_NOTICE("There is already \a [tape] inside."))
+			to_chat(user, SPAN_NOTICE("There is already [tape] inside."))
 			return TRUE
 
 		if(C.ruined)
-			USE_FEEDBACK_FAILURE("\The [C] is ruined, you can't use it.")
+			USE_FEEDBACK_FAILURE("[C] is ruined, you can't use it.")
 			return TRUE
 
 		if(!user.unEquip(C))
@@ -267,8 +269,8 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 		C.forceMove(src)
 		tape = C
 		user.visible_message(
-			SPAN_NOTICE("[user] insert \a [tape] into \the [src]."),
-			SPAN_NOTICE("You insert \a [tape] into \the [src]."))
+			SPAN_NOTICE("[user] insert [tape] into [src]."),
+			SPAN_NOTICE("You insert [tape] into [src]."))
 		playsound(src, 'sound/weapons/TargetOn.ogg', 35, 1)
 		update_icon()
 		return TRUE
@@ -277,7 +279,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 		var/obj/item/cell/device/C = tool
 		if(panel == PANEL_OPENED)
 			if(cell)
-				to_chat(user, SPAN_NOTICE("[src] already has \a [cell] installed."))
+				to_chat(user, SPAN_NOTICE("[src] already has [cell] installed."))
 				return TRUE
 
 			if(!user.unEquip(C))
@@ -285,7 +287,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 
 			C.forceMove(src)
 			cell = C
-			to_chat(user, SPAN_NOTICE("You insert \a [cell] into \the [src]."))
+			to_chat(user, SPAN_NOTICE("You insert [cell] into [src]."))
 			update_icon()
 		return TRUE
 
@@ -293,10 +295,10 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 		var/obj/item/stack/S = tool
 		if(broken && panel == PANEL_OPENED)
 			if(S.use(1))
-				user.visible_message(SPAN_NOTICE("\The [user] pours some of \the [S] onto \the [src]."), SPAN_NOTICE("You pour some of \the [S] over \the [src]'s internals and watch as it retraces and resolders paths."))
+				user.visible_message(SPAN_NOTICE("[user] pours some of [S] onto [src]."), SPAN_NOTICE("You pour some of [S] over [src]'s internals and watch as it retraces and resolders paths."))
 				broken = FALSE
 			else
-				to_chat(user, SPAN_NOTICE("\The [S] is empty."))
+				to_chat(user, SPAN_NOTICE("[S] is empty."))
 			return TRUE
 
 	if(isCoil(tool))
@@ -304,16 +306,16 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 		if(broken && panel == PANEL_OPENED)
 			if(user.skill_check(SKILL_ELECTRICAL, SKILL_BASIC))
 				if(S.use(5))
-					user.visible_message(SPAN_NOTICE("\The [user] starts replace burned out wires in \the [src]."), SPAN_NOTICE("You are replacing burned out wires in \the [src]'."))
+					user.visible_message(SPAN_NOTICE("[user] starts replace burned out wires in [src]."), SPAN_NOTICE("You are replacing burned out wires in [src]'."))
 					if(!do_after(user, 60, src))
 						return TRUE
-					user.visible_message(SPAN_NOTICE("\The [user] replaces burned out wires in \the [src]."), SPAN_NOTICE("You replace burned out wires in \the [src]."))
+					user.visible_message(SPAN_NOTICE("[user] replaces burned out wires in [src]."), SPAN_NOTICE("You replace burned out wires in [src]."))
 					broken = FALSE
 				else
-					to_chat(user, SPAN_NOTICE("You need more [S] to fix \the [src]."))
+					to_chat(user, SPAN_NOTICE("You need more [S] to fix [src]."))
 
 			else
-				to_chat(user, SPAN_NOTICE("You don't know how to fix \the [src]."))
+				to_chat(user, SPAN_NOTICE("You don't know how to fix [src]."))
 			return TRUE
 
 	return ..()
@@ -354,21 +356,21 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 		frequency -= 0.1
 	frequency = clamp(frequency, MIN_FREQUENCY, MAX_FREQUENCY)
 
-	user.visible_message(SPAN_NOTICE("\The [user] adjusts \the [src]'s player head."), SPAN_NOTICE("You adjust \the [src]'s player head."))
+	user.visible_message(SPAN_NOTICE("[user] adjusts [src]'s player head."), SPAN_NOTICE("You adjust [src]'s player head."))
 	playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 
 	if(frequency > 1.0)
-		to_chat(user, SPAN_NOTICE("\The [src] should be playing faster than usual."))
+		to_chat(user, SPAN_NOTICE("[src] should be playing faster than usual."))
 	else if(frequency < 1.0)
-		to_chat(user, SPAN_NOTICE("\The [src] should be playing slower than usual."))
+		to_chat(user, SPAN_NOTICE("[src] should be playing slower than usual."))
 	else
-		to_chat(user, SPAN_NOTICE("\The [src] should be playing as fast as usual."))
+		to_chat(user, SPAN_NOTICE("[src] should be playing as fast as usual."))
 
 	return TRUE
 
 /obj/item/music_player/proc/MayAdjust(mob/user)
 	if(mode)
-		USE_FEEDBACK_FAILURE("You can only adjust \the [src] when it's not playing.")
+		USE_FEEDBACK_FAILURE("You can only adjust [src] when it's not playing.")
 		return FALSE
 	return TRUE
 
@@ -395,7 +397,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 
 /obj/item/music_player/proc/eject(mob/user)
 	if(!tape)
-		to_chat(user, SPAN_NOTICE("There's no tape in \the [src]."))
+		to_chat(user, SPAN_NOTICE("There's no tape in [src]."))
 		return
 
 	if(mode)
@@ -404,8 +406,8 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 	playsound(src, GLOB.machinery_exposed_sound[1], 20, 1)
 	if(user)
 		visible_message(
-			SPAN_NOTICE("[user] eject \a [tape] from \the [src]."),
-			SPAN_NOTICE("You eject \a [tape] from \the [src]."))
+			SPAN_NOTICE("[user] eject [tape] from [src]."),
+			SPAN_NOTICE("You eject [tape] from [src]."))
 	if(user)
 		user.put_in_hands(tape)
 	else
@@ -432,7 +434,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 
 /obj/item/music_player/proc/explode()
 	walk_to(src, 0)
-	src.visible_message(SPAN_DANGER("\The [src] blows apart!"), 1)
+	src.visible_message(SPAN_DANGER("[src] blows apart!"), 1)
 
 	explosion(src.loc, 1, 1, 1, rand(3, 4), 1)
 
@@ -444,7 +446,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 	qdel(src)
 
 /obj/item/music_player/proc/break_act()
-	audible_message(SPAN_WARNING("\The [src]'s speakers pop with a sharp crack!"))
+	audible_message(SPAN_WARNING("[src]'s speakers pop with a sharp crack!"))
 	playsound(src, 'sound/effects/snap.ogg', 100, 1)
 	StopPlaying()
 	broken = TRUE

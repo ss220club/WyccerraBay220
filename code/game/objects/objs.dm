@@ -189,6 +189,12 @@
 	if (damtype == DAMAGE_BURN)
 		. |= DAMAGE_FLAG_LASER
 
+/obj/use_tool(obj/item/tool, mob/living/user, list/click_params)
+	if (isWrench(tool) && HAS_FLAGS(obj_flags, OBJ_FLAG_ANCHORABLE))
+		wrench_floor_bolts(user, tool)
+		return TRUE
+	return ..()
+
 /**
  * Whether or not the object can be anchored in its current state/position. Assumes the anchorable flag has already been checked.
  *

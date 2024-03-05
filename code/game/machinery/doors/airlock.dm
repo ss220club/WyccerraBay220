@@ -902,9 +902,8 @@ About the new airlock wires panel:
 	var/cut_sound
 
 	if(item.tool_behaviour == TOOL_WELDER)
-		var/obj/item/weldingtool/WT = item
-		if(!WT.remove_fuel(3,user))
-			return 0
+		if(!item.use_as_tool(src, user, amount = 3, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		cut_verb = "cutting"
 		cut_sound = 'sound/items/Welder.ogg'
 	else if(istype(item,/obj/item/gun/energy/plasmacutter)) //They could probably just shoot them out, but who cares!
@@ -1032,17 +1031,16 @@ About the new airlock wires panel:
 	if(!repairing && MACHINE_IS_BROKEN(src) && locked) //bolted and broken
 		if(cut_bolts(tool, user))
 			return
-
-	if(!repairing && operating != DOOR_OPERATING_YES && density)
-		if(!tool.tool_use_check(user, 1))
-			return
-		user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),
-							SPAN_NOTICE("You begin welding [src] [welded ? "open" : "closed"]."))
-		if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		if(density && operating != DOOR_OPERATING_YES && !repairing && W.remove_fuel(1, user))
-			welded = !welded
-			update_icon()
+	if(repairing || operating == DOOR_OPERATING_YES || !density)
+		return
+	if(!tool.tool_use_check(user, 1))
+		return
+	user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),
+						SPAN_NOTICE("You begin welding [src] [welded ? "open" : "closed"]."))
+	if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || repairing || operating == DOOR_OPERATING_YES || !density)
+		return
+	welded = !welded
+	update_icon()
 
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)
 	// Brace is considered installed on the airlock, so interacting with it is protected from electrification.

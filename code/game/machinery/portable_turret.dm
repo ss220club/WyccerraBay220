@@ -661,16 +661,13 @@ var/global/list/turret_icons
 				return TRUE
 
 			else if(I.tool_behaviour == TOOL_WELDER)
-				var/obj/item/weldingtool/WT = I
-				if(!WT.can_use(5, user))
+				if(!I.tool_use_check(user, 5))
 					return TRUE
-
-				playsound(loc, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-				if(do_after(user, (I.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-					if(!src || !WT.remove_fuel(5, user)) return
-					build_step = 1
-					to_chat(user, "You remove the turret's interior metal armor.")
-					new /obj/item/stack/material/steel( loc, 2)
+				if(!I.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
+				build_step = 1
+				to_chat(user, "You remove the turret's interior metal armor.")
+				new /obj/item/stack/material/steel( loc, 2)
 				return TRUE
 
 		if(3)
@@ -730,27 +727,23 @@ var/global/list/turret_icons
 
 		if(7)
 			if(I.tool_behaviour == TOOL_WELDER)
-				var/obj/item/weldingtool/WT = I
-				if(!WT.can_use(5, user))
+				if(!I.tool_use_check(user, 5))
 					return TRUE
+				if(!I.use_as_tool(src, user, 3 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
+				build_step = 8
+				to_chat(user, SPAN_NOTICE("You weld the turret's armor down."))
 
-				playsound(loc, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-				if(do_after(user, (I.toolspeed * 3) SECONDS, src, DO_REPAIR_CONSTRUCT))
-					if(!src || !WT.remove_fuel(5, user))
-						return TRUE
-					build_step = 8
-					to_chat(user, SPAN_NOTICE("You weld the turret's armor down."))
+				//The final step: create a full turret
+				var/obj/machinery/porta_turret/Turret = new target_type(loc)
+				transfer_fingerprints_to(Turret)
+				Turret.SetName(finish_name)
+				Turret.installation = installation
+				Turret.gun_charge = gun_charge
+				Turret.enabled = 0
+				Turret.setup()
 
-					//The final step: create a full turret
-					var/obj/machinery/porta_turret/Turret = new target_type(loc)
-					transfer_fingerprints_to(Turret)
-					Turret.SetName(finish_name)
-					Turret.installation = installation
-					Turret.gun_charge = gun_charge
-					Turret.enabled = 0
-					Turret.setup()
-
-					qdel(src) // qdel
+				qdel(src) // qdel
 				return TRUE
 
 			else if(I.tool_behaviour == TOOL_CROWBAR)

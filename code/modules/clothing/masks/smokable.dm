@@ -117,10 +117,10 @@
 		return
 	if(!lit)
 		if(is_wet())
-			to_chat(usr, SPAN_WARNING("You are too wet to light \the [src]."))
+			to_chat(usr, SPAN_WARNING("You are too wet to light [src]."))
 			return
 		if(submerged())
-			to_chat(usr, SPAN_WARNING("You cannot light \the [src] underwater."))
+			to_chat(usr, SPAN_WARNING("You cannot light [src] underwater."))
 			return
 		lit = 1
 		damtype = DAMAGE_BURN
@@ -177,7 +177,7 @@
 	. = FALSE
 	if (istype(M) && M.on_fire)
 		user.do_attack_animation(M)
-		light(SPAN_NOTICE("\The [user] coldly lights the \the [src] with the burning body of \the [M]."))
+		light(SPAN_NOTICE("[user] coldly lights the [src] with the burning body of [M]."))
 		return TRUE
 
 
@@ -347,7 +347,7 @@
 	if (lit && H == user && istype(H))
 		var/obj/item/blocked = H.check_mouth_coverage()
 		if (blocked)
-			to_chat(H, SPAN_WARNING("\The [blocked] is in the way!"))
+			to_chat(H, SPAN_WARNING("[blocked] is in the way!"))
 			return TRUE
 		user.visible_message(\
 			"[user] takes a [pick("drag","puff","pull")] on \his [name].", \
@@ -373,7 +373,7 @@
 
 	var/transfered = glass.reagents.trans_to_obj(src, chem_volume)
 	if(transfered)
-		to_chat(user, SPAN_NOTICE("You dip \the [src] into \the [glass]."))
+		to_chat(user, SPAN_NOTICE("You dip [src] into [glass]."))
 	else
 		if(!glass.reagents.total_volume)
 			to_chat(user, SPAN_NOTICE("[glass] is empty."))
@@ -507,7 +507,7 @@
 /obj/item/clothing/mask/smokable/pipe/light(flavor_text = "[usr] lights the [name].")
 	if(!lit && smoketime)
 		if(submerged())
-			to_chat(usr, SPAN_WARNING("You cannot light \the [src] underwater."))
+			to_chat(usr, SPAN_WARNING("You cannot light [src] underwater."))
 			return
 		lit = 1
 		damtype = DAMAGE_BURN

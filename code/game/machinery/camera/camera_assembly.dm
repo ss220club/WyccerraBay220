@@ -141,7 +141,7 @@
 	if(!anchored)
 		..()
 
-/obj/item/camera_assembly/proc/weld(obj/item/weldingtool/WT, mob/user)
+/obj/item/camera_assembly/proc/weld(obj/item/tool, mob/user)
 	if(!tool_start_check(user, 1))
 		return FALSE
 	to_chat(user, SPAN_NOTICE("You start to weld [src].."))

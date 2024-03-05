@@ -210,7 +210,6 @@
 	if(anchored)
 		USE_FEEDBACK_FAILURE("[src] must be unanchored before you can dismantle it.")
 		return
-	var/obj/item/weldingtool/welder = tool
 	if(!tool.tool_use_check(user, 1))
 		return
 	user.visible_message(

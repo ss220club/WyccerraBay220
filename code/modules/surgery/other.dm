@@ -121,8 +121,7 @@
 	if(!istype(target))
 		return FALSE
 	if(tool.tool_behaviour == TOOL_WELDER)
-		var/obj/item/weldingtool/welder = tool
-		if(!welder.remove_fuel(1,user))
+		if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return FALSE
 	return (target_zone == BP_CHEST) && istype(target.back, /obj/item/rig) && !(target.back.canremove)
 

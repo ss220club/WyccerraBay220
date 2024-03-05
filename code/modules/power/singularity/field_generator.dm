@@ -118,7 +118,6 @@ field_generator power level display
 	if(active)
 		to_chat(user, "The [src] needs to be off.")
 		return
-	var/obj/item/weldingtool/WT = tool
 	switch(state)
 		if(0)
 			to_chat(user, SPAN_WARNING("The [src.name] needs to be wrenched to the floor."))

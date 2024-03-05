@@ -16,19 +16,16 @@
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
-			to_chat(user, SPAN_NOTICE("You wrench \the [machine] into place."))
+			to_chat(user, SPAN_NOTICE("You wrench [machine] into place."))
 			machine.anchored = TRUE
 	if(I.tool_behaviour == TOOL_WELDER)
-		var/obj/item/weldingtool/WT = I
-		if(!WT.can_use(3, user))
+		if(!I.tool_use_check(user, 3))
 			return TRUE
-		playsound(machine.loc, 'sound/items/Welder.ogg', 50, 1)
-		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
-			if (!WT.remove_fuel(3, user))
-				return TRUE
-			TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
-			to_chat(user, SPAN_NOTICE("You deconstruct \the [machine]."))
-			machine.dismantle()
+		if(!I.use_as_tool(src, user, 2 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return TRUE
+		TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
+		to_chat(user, SPAN_NOTICE("You deconstruct [machine]."))
+		machine.dismantle()
 
 
 /singleton/machine_construction/frame/unwrenched/mechanics_info()
@@ -52,13 +49,13 @@
 		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			TRANSFER_STATE(/singleton/machine_construction/frame/unwrenched)
-			to_chat(user, SPAN_NOTICE("You unfasten \the [machine]."))
+			to_chat(user, SPAN_NOTICE("You unfasten [machine]."))
 			machine.anchored = FALSE
 			return
 	if(isCoil(I))
 		var/obj/item/stack/cable_coil/C = I
 		if(C.get_amount() < 5)
-			to_chat(user, SPAN_WARNING("You need five lengths of cable to add them to \the [machine]."))
+			to_chat(user, SPAN_WARNING("You need five lengths of cable to add them to [machine]."))
 			return TRUE
 		playsound(machine.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		to_chat(user, SPAN_NOTICE("You start to add cables to the frame."))
@@ -93,7 +90,7 @@
 			TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_parts)
 			user.unEquip(I, machine)
 			playsound(machine.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			to_chat(user, SPAN_NOTICE("You add the circuit board to \the [machine]."))
+			to_chat(user, SPAN_NOTICE("You add the circuit board to [machine]."))
 			machine.circuit = I
 			return
 		else

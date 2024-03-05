@@ -43,8 +43,6 @@
 
 /obj/item/stack/material/rods/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	var/obj/item/weldingtool/WT = tool
-
 	if(material.ignition_point)
 		to_chat(user, SPAN_WARNING("You can't weld this material into sheets."))
 		return

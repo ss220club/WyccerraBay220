@@ -185,12 +185,10 @@
 					to_chat(user, SPAN_NOTICE("You need at least 30 segments of [tool] to complete this task."))
 		if(13)
 			if(tool.tool_behaviour == TOOL_WELDER)
-				var/obj/item/weldingtool/T = tool
-				if(T.remove_fuel(0,user))
-					if(!src || !T.isOn()) return TRUE
-					playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-					to_chat(user, SPAN_NOTICE("You weld the cables into places."))
-					buildstate++
+				if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
+				to_chat(user, SPAN_NOTICE("You weld the cables into places."))
+				buildstate++
 		if(14)
 			if(tool.tool_behaviour == TOOL_MULTITOOL)
 				to_chat(user, SPAN_NOTICE("You reprogrammed the resulting internal device with [tool]."))

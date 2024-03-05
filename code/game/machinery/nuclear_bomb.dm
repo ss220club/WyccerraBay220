@@ -89,22 +89,19 @@ var/global/bomb_set
 		switch(removal_stage)
 			if(0)
 				if(O.tool_behaviour == TOOL_WELDER)
-					var/obj/item/weldingtool/WT = O
-					if(!WT.can_use(5, user))
+					if(!O.tool_use_check(user, 5))
 						return TRUE
-
 					user.visible_message(
 						SPAN_NOTICE("[user] starts cutting loose the anchoring bolt covers on [src]."),
 						SPAN_NOTICE("You start cutting loose the anchoring bolt covers on [src] with [O].")
 					)
-
-					if(do_after(user, (O.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if(!src || !user || !WT.remove_fuel(5, user)) return TRUE
-						user.visible_message(
-							SPAN_NOTICE("[user] cuts through the bolt covers on [src]."),
-							SPAN_NOTICE("You cut through the bolt covers on [src].")
-						)
-						removal_stage = 1
+					if(!O.use_as_tool(src, user, 4 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+						return TRUE
+					user.visible_message(
+						SPAN_NOTICE("[user] cuts through the bolt covers on [src]."),
+						SPAN_NOTICE("You cut through the bolt covers on [src].")
+					)
+					removal_stage = 1
 					return TRUE
 
 			if(1)
@@ -125,22 +122,19 @@ var/global/bomb_set
 
 			if(2)
 				if(O.tool_behaviour == TOOL_WELDER)
-					var/obj/item/weldingtool/WT = O
-					if(!WT.can_use(5, user))
+					if(!O.tool_use_check(user, 5))
 						return TRUE
-
 					user.visible_message(
 						SPAN_NOTICE("[user] starts cutting apart the anchoring system sealant on [src]."),
 						SPAN_NOTICE("You start cutting apart the anchoring system's sealant on [src] with [O].")
 					)
-
-					if(do_after(user, (O.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if(!src || !user || !WT.remove_fuel(5, user)) return TRUE
-						user.visible_message(
-							SPAN_NOTICE("[user] cuts apart the anchoring system sealant on [src]."),
-							SPAN_NOTICE("You cut apart the anchoring system's sealant.")
-						)
-						removal_stage = 3
+					if(!O.use_as_tool(src, user, 4 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+						return TRUE
+					user.visible_message(
+						SPAN_NOTICE("[user] cuts apart the anchoring system sealant on [src]."),
+						SPAN_NOTICE("You cut apart the anchoring system's sealant.")
+					)
+					removal_stage = 3
 					return TRUE
 
 			if(3)

@@ -386,8 +386,8 @@
 
 	return null
 
-/obj/machinery/camera/proc/weld(obj/item/weldingtool/WT, mob/user)
-	if(!tool_start_check(user, 1))
+/obj/machinery/camera/proc/weld(obj/item/tool, mob/user)
+	if(!tool.tool_start_check(user, 1))
 		return FALSE
 	to_chat(user, SPAN_NOTICE("You start to weld [src].."))
 	if(!tool.use_as_tool(src, user, 10 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))

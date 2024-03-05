@@ -541,13 +541,13 @@
 	if(emagged || MACHINE_IS_BROKEN(src) || opened == 2)
 		new /obj/item/stack/material/steel(loc)
 		user.visible_message(\
-			SPAN_WARNING("[src] has been cut apart by [user] with [WT]."),\
+			SPAN_WARNING("[src] has been cut apart by [user] with [tool]."),\
 			SPAN_NOTICE("You disassembled the broken APC frame."),\
 			"You hear welding.")
 	else
 		new /obj/item/frame/apc(loc)
 		user.visible_message(\
-			SPAN_WARNING("[src] has been cut from the wall by [user] with [WT]."),\
+			SPAN_WARNING("[src] has been cut from the wall by [user] with [tool]."),\
 			SPAN_NOTICE("You cut the APC frame from the wall."),\
 			"You hear welding.")
 	qdel(src)

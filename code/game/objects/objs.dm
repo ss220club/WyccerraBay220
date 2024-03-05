@@ -190,7 +190,7 @@
 		. |= DAMAGE_FLAG_LASER
 
 /obj/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	if (isWrench(tool) && HAS_FLAGS(obj_flags, OBJ_FLAG_ANCHORABLE))
+	if(tool.tool_behaviour == TOOL_WRENCH && HAS_FLAGS(obj_flags, OBJ_FLAG_ANCHORABLE))
 		wrench_floor_bolts(user, tool)
 		return TRUE
 	return ..()

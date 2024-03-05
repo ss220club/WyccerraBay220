@@ -147,34 +147,35 @@ var/global/const/STASISCAGE_WIRE_LOCK      = 4
 	if(panel_open)
 		USE_FEEDBACK_FAILURE("[src]'s panel is open!")
 		return
-	if(contained)
-		if(is_powered())
-			USE_FEEDBACK_FAILURE("[src] is still powered shut.")
-			return
+	if(!contained)
+		return
+	if(is_powered())
+		USE_FEEDBACK_FAILURE("[src] is still powered shut.")
+		return
+	user.visible_message(
+		SPAN_DANGER("[user] begins to pry open [src] with the crowbar!"),
+		SPAN_DANGER("You being to pry open [src] with the crowbar.")
+	)
+	playsound(loc, 'sound/machines/airlock_creaking.ogg', 40)
+	if(!tool.use_as_tool(src, user, 7 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_PUBLIC_UNIQUE) || panel_open || !contained || is_powered())
+		return
+	if(!prob(20 * (user.get_skill_value(SKILL_CONSTRUCTION))))
+		USE_FEEDBACK_FAILURE("You fail to pry open [src]'s lid!")
+		return
+	if(!user.skill_check(SKILL_CONSTRUCTION, SKILL_TRAINED))
 		user.visible_message(
-			SPAN_DANGER("[user] begins to pry open [src] with the crowbar!"),
-			SPAN_DANGER("You being to pry open [src] with the crowbar.")
-		)
-		playsound(loc, 'sound/machines/airlock_creaking.ogg', 40)
-		if(!tool.use_as_tool(src, user, 7 SECONDS, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		if(!prob(20 * (user.get_skill_value(SKILL_CONSTRUCTION))))
-			USE_FEEDBACK_FAILURE("You fail to pry open [src]'s lid!")
-			return
-		if(!user.skill_check(SKILL_CONSTRUCTION, SKILL_TRAINED))
-			user.visible_message(
-				SPAN_DANGER("[user] jams open [src]'s lid, damaging it in the process!"),
-				SPAN_DANGER("You successfully manage to jam open [src]'s lid, damaging it in the process.")
-			)
-			release()
-			broken = TRUE
-			update_icon()
-			return
-		user.visible_message(
-			SPAN_DANGER("[user] jams open [src]'s lid!"),
-			SPAN_DANGER("You successfully manage to jam open [src]'s lid.")
+			SPAN_DANGER("[user] jams open [src]'s lid, damaging it in the process!"),
+			SPAN_DANGER("You successfully manage to jam open [src]'s lid, damaging it in the process.")
 		)
 		release()
+		broken = TRUE
+		update_icon()
+		return
+	user.visible_message(
+		SPAN_DANGER("[user] jams open [src]'s lid!"),
+		SPAN_DANGER("You successfully manage to jam open [src]'s lid.")
+	)
+	release()
 
 /obj/machinery/stasis_cage/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

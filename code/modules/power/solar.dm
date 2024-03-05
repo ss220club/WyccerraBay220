@@ -64,14 +64,15 @@ var/global/solar_gen_rate = 1500
 	. = ITEM_INTERACT_SUCCESS
 	playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
 	user.visible_message(SPAN_NOTICE("[user] begins to take the glass off the solar panel."))
-	if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
-		var/obj/item/solar_assembly/S = locate() in src
-		if(S)
-			S.dropInto(loc)
-			S.give_glass()
-		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-		user.visible_message(SPAN_NOTICE("[user] takes the glass off the solar panel."))
-		qdel(src)
+	if(!tool.use_as_tool(src, user, 5 SECONDS, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/solar_assembly/S = locate() in src
+	if(S)
+		S.dropInto(loc)
+		S.give_glass()
+	playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+	user.visible_message(SPAN_NOTICE("[user] takes the glass off the solar panel."))
+	qdel(src)
 
 /obj/machinery/power/solar/on_update_icon()
 	..()
@@ -218,6 +219,8 @@ var/global/solar_gen_rate = 1500
 /obj/item/solar_assembly/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(tracker)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		new /obj/item/tracker_electronics(src.loc)
 		tracker = FALSE
 		user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))

@@ -3,6 +3,8 @@
 	if(!open && locked)
 		to_chat(user, SPAN_NOTICE("The access panel is locked shut."))
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	open = !open
 	to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the access panel."))
 
@@ -39,7 +41,7 @@
 	switch(to_remove)
 		if("cell")
 			if(cell)
-				to_chat(user, "You detach \the [cell] from \the [src]'s battery mount.")
+				to_chat(user, "You detach [cell] from [src]'s battery mount.")
 				for(var/obj/item/rig_module/module in installed_modules)
 					module.deactivate()
 				user.put_in_hands(cell)
@@ -51,7 +53,7 @@
 				to_chat(user, "There is no tank to remove.")
 				return
 			user.put_in_hands(air_supply)
-			to_chat(user, "You detach and remove \the [air_supply].")
+			to_chat(user, "You detach and remove [air_supply].")
 			air_supply = null
 		if("storage")
 			if (!length(chest?.storage?.contents))
@@ -59,8 +61,8 @@
 				return
 			chest.storage.DoQuickEmpty()
 			user.visible_message(
-				SPAN_ITALIC("\The [user] ejects the contents of \a [src]'s storage."),
-				SPAN_ITALIC("You eject the contents of \the [src]'s storage."),
+				SPAN_ITALIC("[user] ejects the contents of [src]'s storage."),
+				SPAN_ITALIC("You eject the contents of [src]'s storage."),
 				SPAN_ITALIC("You hear things clatter to the floor."),
 				range = 5
 			)
@@ -77,7 +79,7 @@
 			if(!removal_choice)
 				return
 			var/obj/item/rig_module/removed = possible_removals[removal_choice]
-			to_chat(user, "You detach \the [removed] from \the [src].")
+			to_chat(user, "You detach [removed] from [src].")
 			removed.dropInto(loc)
 			removed.removed()
 			installed_modules -= removed
@@ -116,7 +118,7 @@
 
 		if(!length(req_access))
 			locked = 0
-			to_chat(user, SPAN_DANGER("\The [src] doesn't seem to have a locking mechanism."))
+			to_chat(user, SPAN_DANGER("[src] doesn't seem to have a locking mechanism."))
 			return
 
 		if(security_check_enabled && !src.allowed(user))
@@ -124,17 +126,17 @@
 			return
 
 		locked = !locked
-		to_chat(user, "You [locked ? "lock" : "unlock"] \the [src] access panel.")
+		to_chat(user, "You [locked ? "lock" : "unlock"] [src] access panel.")
 		return
 	if(open)
 		// Air tank.
 		if(istype(W,/obj/item/tank)) //Todo, some kind of check for suits without integrated air supplies.
 
 			if(air_supply)
-				to_chat(user, "\The [src] already has a tank installed.")
+				to_chat(user, "[src] already has a tank installed.")
 				return
 			if (istype(W, /obj/item/tank/scrubber))
-				to_chat(user, SPAN_WARNING("\The [W] is far too large to attach to \the [src]."))
+				to_chat(user, SPAN_WARNING("[W] is far too large to attach to [src]."))
 				return
 
 			if(!user.unEquip(W)) return
@@ -149,13 +151,13 @@
 			if (!mod.can_install(src, user))
 				return TRUE
 
-			to_chat(user, "You begin installing \the [mod] into \the [src].")
+			to_chat(user, "You begin installing [mod] into [src].")
 			if(!do_after(user, 4 SECONDS, src, DO_PUBLIC_UNIQUE))
 				return
 			if(!user || !W || !mod.can_install(src, user))
 				return
 			if(!user.unEquip(mod)) return
-			to_chat(user, "You install \the [mod] into \the [src].")
+			to_chat(user, "You install [mod] into [src].")
 			LAZYADD(installed_modules, mod)
 			installed_modules |= mod
 			mod.forceMove(src)
@@ -166,7 +168,7 @@
 		else if(!cell && istype(W,/obj/item/cell))
 
 			if(!user.unEquip(W)) return
-			to_chat(user, "You jack \the [W] into \the [src]'s battery mount.")
+			to_chat(user, "You jack [W] into [src]'s battery mount.")
 			W.forceMove(src)
 			src.cell = W
 			return
@@ -175,13 +177,13 @@
 			var/obj/item/stack/S = W
 			if(malfunctioning || malfunction_delay)
 				if(S.use(1))
-					to_chat(user, "You pour some of \the [S] over \the [src]'s control circuitry and watch as the nanites do their work with impressive speed and precision.")
+					to_chat(user, "You pour some of [S] over [src]'s control circuitry and watch as the nanites do their work with impressive speed and precision.")
 					malfunctioning = 0
 					malfunction_delay = 0
 				else
-					to_chat(user, "\The [S] is empty!")
+					to_chat(user, "[S] is empty!")
 			else
-				to_chat(user, "You don't see any use for \the [S].")
+				to_chat(user, "You don't see any use for [S].")
 
 		return
 

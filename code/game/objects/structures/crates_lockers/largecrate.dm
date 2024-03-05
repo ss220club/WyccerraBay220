@@ -22,12 +22,14 @@
 
 /obj/structure/largecrate/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	var/obj/item/stack/material/wood/A = new(loc)
 	transfer_fingerprints_to(A)
 	dump_contents()
 	user.visible_message(
-		SPAN_NOTICE("\The [user] pries \the [src] open with \a [tool]."),
-		SPAN_NOTICE("You pry \the [src] open with \the [tool]."),
+		SPAN_NOTICE("[user] pries [src] open with [tool]."),
+		SPAN_NOTICE("You pry [src] open with [tool]."),
 		SPAN_ITALIC("You hear splitting wood.")
 	)
 	qdel(src)

@@ -24,15 +24,17 @@
 /obj/item/modular_computer/telescreen/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(anchored)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		shutdown_computer()
 		anchored = FALSE
 		screen_on = FALSE
 		pixel_x = 0
 		pixel_y = 0
-		to_chat(user, "You unsecure \the [src].")
+		to_chat(user, "You unsecure [src].")
 		return
 
-	var/choice = input(user, "Where do you want to place \the [src]?", "Offset selection") in list("North", "South", "West", "East", "This tile", "Cancel")
+	var/choice = input(user, "Where do you want to place [src]?", "Offset selection") in list("North", "South", "West", "East", "This tile", "Cancel")
 	var/valid = FALSE
 	switch(choice)
 		if("North")
@@ -52,4 +54,4 @@
 	if(valid)
 		anchored = TRUE
 		screen_on = TRUE
-		to_chat(user, "You secure \the [src].")
+		to_chat(user, "You secure [src].")

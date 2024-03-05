@@ -82,7 +82,7 @@
 /obj/vehicle/crowbar_act(mob/living/user, obj/item/tool)
 	if(cell && open)
 		. = ITEM_INTERACT_SUCCESS
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!tool.use_as_tool(src, user, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		remove_cell(user)
 

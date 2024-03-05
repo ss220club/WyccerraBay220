@@ -601,7 +601,7 @@
 		SPAN_NOTICE("[user] starts prying [src]'s cover off with [tool]."),
 		SPAN_NOTICE("You start prying [src]'s cover off with [tool].")
 	)
-	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT) || !closed)
 		return
 	closed = FALSE
 	update_icon()

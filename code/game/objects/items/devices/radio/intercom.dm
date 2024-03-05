@@ -180,13 +180,17 @@
 //TODO: cable act
 /obj/item/device/radio/intercom/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!can_crowbar_circuit())
+	if(buildstage > 1)
+		USE_FEEDBACK_FAILURE("[src]'s wiring needs to be removed before you can remove the circuit.")
+		return
+	if(buildstage < 1)
+		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts removing [src]'s circuit with [tool]."),
 		SPAN_NOTICE("You start removing [src]'s circuit with [tool].")
 	)
-	if(!tool.use_as_tool(src, user, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_circuit), user)))
+	if(!tool.use_as_tool(src, user, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || buildstage != 1)
 		return
 	var/obj/item/intercom_electronics/circuit = new(get_turf(src))
 	buildstage = 0
@@ -195,15 +199,6 @@
 		SPAN_NOTICE("[user] removes [circuit] from [src] with [tool]."),
 		SPAN_NOTICE("You remove [circuit] from [src] with [tool].")
 	)
-
-/obj/item/device/radio/intercom/proc/can_crowbar_circuit(mob/living/user)
-	. = TRUE
-	if(buildstage > 1)
-		USE_FEEDBACK_FAILURE("[src]'s wiring needs to be removed before you can remove the circuit.")
-		return FALSE
-	if(buildstage < 1)
-		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
-		return FALSE
 
 /obj/item/device/radio/intercom/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

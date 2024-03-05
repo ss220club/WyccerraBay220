@@ -65,7 +65,9 @@
 	if(isactive)
 		USE_FEEDBACK_FAILURE("You can't open the ARF-G whilst it's running!")
 		return
-	to_chat(user, SPAN_NOTICE("You [hatch_open? "close" : "open"] \the [src]'s access hatch."))
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You [hatch_open? "close" : "open"] [src]'s access hatch."))
 	hatch_open = !hatch_open
 	update_icon()
 	if(alwaysactive && wires_intact)
@@ -75,7 +77,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
 		return
-	to_chat(user, SPAN_NOTICE("You toggle \the [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
+	to_chat(user, SPAN_NOTICE("You toggle [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
 	alwaysactive = !alwaysactive
 	update_icon()
 
@@ -83,7 +85,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
 		return
-	to_chat(user, SPAN_WARNING("You [wires_intact? "cut" : "mend"] \the [src]'s wires!"))
+	to_chat(user, SPAN_WARNING("You [wires_intact? "cut" : "mend"] [src]'s wires!"))
 	wires_intact = !wires_intact
 	update_icon()
 
@@ -96,14 +98,14 @@
 		to_chat(user, SPAN_WARNING("You need more fuel to complete this task."))
 		return
 
-	user.visible_message("[user] starts to disassemble \the [src].", "You start to disassemble \the [src].")
+	user.visible_message("[user] starts to disassemble [src].", "You start to disassemble [src].")
 	playsound(loc, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
 
 	if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
 		if(!src || !user || !welder.remove_fuel(5, user))
 			return
 
-		to_chat(user, SPAN_NOTICE("You fully disassemble \the [src]. There were no salvageable parts."))
+		to_chat(user, SPAN_NOTICE("You fully disassemble [src]. There were no salvageable parts."))
 		qdel(src)
 
 /obj/machinery/atmospheric_field_generator/perma/Initialize()

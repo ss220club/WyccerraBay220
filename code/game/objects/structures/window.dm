@@ -258,7 +258,7 @@
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	if (construction_state == CONSTRUCT_STATE_ANCHORED)
+	if(construction_state == CONSTRUCT_STATE_ANCHORED)
 		construction_state = CONSTRUCT_STATE_UNANCHORED
 	else
 		construction_state = CONSTRUCT_STATE_ANCHORED

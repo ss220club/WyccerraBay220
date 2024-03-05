@@ -432,30 +432,31 @@
 /obj/machinery/power/apc/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(opened) // Closes or removes board.
-		if (has_electronics == ELECTRONICS_PLUGGED)
-			if (terminal())
+		if(has_electronics == ELECTRONICS_PLUGGED)
+			if(terminal())
 				to_chat(user, SPAN_WARNING("Disconnect the wires first."))
 				return
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
 			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
-
-			if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && (has_electronics == 1) && !terminal()) // redo all checks.
-				has_electronics = ELECTRONICS_NONE
-				if (MACHINE_IS_BROKEN(src))
-					user.visible_message(\
-						SPAN_WARNING("\The [user] has broken the power control board inside \the [src]!"),\
-						SPAN_NOTICE("You break the charred power control board and remove the remains."),\
-						"You hear a crack!")
-				else
-					user.visible_message(\
-						SPAN_WARNING("\The [user] has removed the power control board from \the [src]!"),\
-						SPAN_NOTICE("You remove the power control board."))
-					new /obj/item/module/power_control(loc)
+			if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || opened || (has_electronics == 1) || !terminal())
+				return
+			has_electronics = ELECTRONICS_NONE
+			if(MACHINE_IS_BROKEN(src))
+				user.visible_message(\
+					SPAN_WARNING("[user] has broken the power control board inside [src]!"),\
+					SPAN_NOTICE("You break the charred power control board and remove the remains."),\
+					"You hear a crack!")
+			else
+				user.visible_message(\
+					SPAN_WARNING("[user] has removed the power control board from [src]!"),\
+					SPAN_NOTICE("You remove the power control board."))
+				new /obj/item/module/power_control(loc)
 			return
 
-		else if (opened != COVER_REMOVED) //cover isn't removed
+		if(opened != COVER_REMOVED) //cover isn't removed
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			opened = COVER_CLOSED
-			user.visible_message(SPAN_NOTICE("\The [user] pries the cover shut on \the [src]."), SPAN_NOTICE("You pry the cover shut."))
+			user.visible_message(SPAN_NOTICE("[user] pries the cover shut on [src]."), SPAN_NOTICE("You pry the cover shut."))
 			update_icon()
 			return
 
@@ -465,8 +466,10 @@
 	if(coverlocked && !(GET_FLAGS(stat, MACHINE_STAT_MAINT)))
 		to_chat(user, SPAN_WARNING("The cover is locked and cannot be opened."))
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	opened = COVER_CLOSED
-	user.visible_message(SPAN_NOTICE("\The [user] pries the cover open on \the [src]."), SPAN_NOTICE("You pry the cover open."))
+	user.visible_message(SPAN_NOTICE("[user] pries the cover open on [src]."), SPAN_NOTICE("You pry the cover open."))
 	update_icon()
 
 /obj/machinery/power/apc/multitool_act(mob/living/user, obj/item/tool)
@@ -525,7 +528,7 @@
 	var/obj/item/weldingtool/WT = tool
 	if(!WT.can_use(3, user))
 		return
-	user.visible_message(SPAN_WARNING("\The [user] begins to weld \the [src]."), \
+	user.visible_message(SPAN_WARNING("[user] begins to weld [src]."), \
 						"You start welding the APC frame...", \
 						"You hear welding.")
 	playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
@@ -535,13 +538,13 @@
 		if (emagged || MACHINE_IS_BROKEN(src) || opened==2)
 			new /obj/item/stack/material/steel(loc)
 			user.visible_message(\
-				SPAN_WARNING("\The [src] has been cut apart by \the [user] with \the [WT]."),\
+				SPAN_WARNING("[src] has been cut apart by [user] with [WT]."),\
 				SPAN_NOTICE("You disassembled the broken APC frame."),\
 				"You hear welding.")
 		else
 			new /obj/item/frame/apc(loc)
 			user.visible_message(\
-				SPAN_WARNING("\The [src] has been cut from the wall by \the [user] with \the [WT]."),\
+				SPAN_WARNING("[src] has been cut from the wall by [user] with [WT]."),\
 				SPAN_NOTICE("You cut the APC frame from the wall."),\
 				"You hear welding.")
 		qdel(src)
@@ -584,7 +587,7 @@
 		if(has_electronics)
 			to_chat(user, SPAN_WARNING("There is already a power control board inside."))
 			return TRUE
-		user.visible_message(SPAN_WARNING("\The [user] inserts the power control board into \the [src]."), \
+		user.visible_message(SPAN_WARNING("[user] inserts the power control board into [src]."), \
 							"You start to insert the power control board into the frame...")
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, 1 SECOND, src, DO_REPAIR_CONSTRUCT) && !has_electronics && opened && !MACHINE_IS_BROKEN(src))
@@ -667,12 +670,12 @@
 		switch(roulette)
 			if(1 to 10)
 				locked = FALSE
-				to_chat(user, SPAN_NOTICE("You manage to disable the lock on \the [src]!"))
+				to_chat(user, SPAN_NOTICE("You manage to disable the lock on [src]!"))
 			if(50 to 70)
 				to_chat(user, SPAN_NOTICE("You manage to bash the lid open!"))
 				opened = COVER_CLOSED
 			if(90 to 100)
-				to_chat(user, SPAN_WARNING("There's a nasty sound and \the [src] goes cold..."))
+				to_chat(user, SPAN_WARNING("There's a nasty sound and [src] goes cold..."))
 				set_broken(TRUE)
 		queue_icon_update()
 		playsound(get_turf(src), 'sound/weapons/smash.ogg', 75, 1)
@@ -711,7 +714,7 @@
 		var/mob/living/carbon/human/H = user
 
 		if(H.species.can_shred(H))
-			user.visible_message(SPAN_WARNING("\The [user] slashes at \the [src]!"), SPAN_NOTICE("You slash at \the [src]!"))
+			user.visible_message(SPAN_WARNING("[user] slashes at [src]!"), SPAN_NOTICE("You slash at [src]!"))
 			playsound(src.loc, 'sound/weapons/slash.ogg', 100, 1)
 
 			var/allcut = wires.IsAllCut()
@@ -719,12 +722,12 @@
 			if(beenhit >= pick(3, 4) && !wiresexposed)
 				wiresexposed = TRUE
 				src.update_icon()
-				src.visible_message(SPAN_WARNING("\The The [src]'s cover flies open, exposing the wires!"))
+				src.visible_message(SPAN_WARNING("The [src]'s cover flies open, exposing the wires!"))
 
 			else if(wiresexposed && allcut == 0)
 				wires.CutAll()
 				src.update_icon()
-				src.visible_message(SPAN_WARNING("\The [src]'s wires are shredded!"))
+				src.visible_message(SPAN_WARNING("[src]'s wires are shredded!"))
 			else
 				beenhit += 1
 			return TRUE
@@ -1161,7 +1164,7 @@
 	..()
 	malf_upgraded = 1
 	emp_hardened = 1
-	to_chat(user, "\The [src] has been upgraded. It is now protected against EM pulses.")
+	to_chat(user, "[src] has been upgraded. It is now protected against EM pulses.")
 	return 1
 
 

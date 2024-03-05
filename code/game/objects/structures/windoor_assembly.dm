@@ -80,13 +80,14 @@
 
 /obj/structure/windoor_assembly/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!can_crowbar_act(user))
+	if(!electronics)
+		USE_FEEDBACK_FAILURE("[src] needs a circuit board before you can complete it.")
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts prying [src] into its frame with [tool]."),
 		SPAN_NOTICE("You start prying [src] into its frame with [tool].")
 	)
-	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_act), user)))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !electronics)
 		return
 	var/obj/machinery/door/window/windoor
 	if(secure)
@@ -103,12 +104,6 @@
 		SPAN_NOTICE("You finish [windoor] with [tool].")
 	)
 	qdel(src)
-
-/obj/structure/windoor_assembly/proc/can_crowbar_act(mob/living/user)
-	. = TRUE
-	if(!electronics)
-		USE_FEEDBACK_FAILURE("[src] needs a circuit board before you can complete it.")
-		return FALSE
 
 /obj/structure/windoor_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

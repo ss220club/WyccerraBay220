@@ -70,8 +70,10 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(open)
 		if(cell)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			user.put_in_hands(cell)
-			to_chat(user, SPAN_NOTICE("You remove \the [cell] from \the [src]."))
+			to_chat(user, SPAN_NOTICE("You remove [cell] from [src]."))
 			cell = null
 
 /obj/item/organ/internal/cell/screwdriver_act(mob/living/user, obj/item/tool)
@@ -90,7 +92,7 @@
 				to_chat(user, SPAN_WARNING("There is a power cell already installed."))
 			else if(user.unEquip(W, src))
 				cell = W
-				to_chat(user, SPAN_NOTICE("You insert \the [cell]."))
+				to_chat(user, SPAN_NOTICE("You insert [cell]."))
 	. = ..()
 
 /obj/item/organ/internal/cell/replaced()
@@ -98,7 +100,7 @@
 	// This is very ghetto way of rebooting an IPC. TODO better way.
 	if(owner && owner.stat == DEAD)
 		owner.set_stat(CONSCIOUS)
-		owner.visible_message(SPAN_DANGER("\The [owner] twitches visibly!"))
+		owner.visible_message(SPAN_DANGER("[owner] twitches visibly!"))
 
 /obj/item/organ/internal/cell/listen()
 	if(get_charge())
@@ -163,7 +165,7 @@
 	if(owner && owner.stat == DEAD)
 		owner.set_stat(CONSCIOUS)
 		owner.switch_from_dead_to_living_mob_list()
-		owner.visible_message(SPAN_DANGER("\The [owner] twitches visibly!"))
+		owner.visible_message(SPAN_DANGER("[owner] twitches visibly!"))
 
 /obj/item/organ/internal/mmi_holder/cut_away(mob/living/user)
 	var/obj/item/organ/external/parent = owner.get_organ(parent_organ)

@@ -40,13 +40,14 @@
 
 /obj/structure/plasticflaps/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!can_crowbar_act(user))
+	if(anchored)
+		USE_FEEDBACK_FAILURE("[src] has to be unanchored before you can deconstruct it.")
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts deconstructing [src] with [tool]."),
 		SPAN_NOTICE("You start deconstructing [src] with [tool].")
 	)
-	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_act), user)))
+	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || anchored)
 		return
 	var/obj/item/stack/material/plastic/stack = new(loc, 30)
 	transfer_fingerprints_to(stack)
@@ -55,12 +56,6 @@
 		SPAN_NOTICE("You deconstruct [src] with [tool].")
 	)
 	qdel(src)
-
-/obj/structure/plasticflaps/proc/can_crowbar_act(mob/living/user)
-	. = TRUE
-	if(anchored)
-		USE_FEEDBACK_FAILURE("[src] has to be unanchored before you can deconstruct it.")
-		return FALSE
 
 /obj/structure/plasticflaps/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

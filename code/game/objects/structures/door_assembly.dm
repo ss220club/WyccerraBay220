@@ -110,13 +110,14 @@
 
 /obj/structure/door_assembly/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!can_crowbar_act(user))
+	if(!electronics)
+		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts removing [src]'s [electronics.name] with [tool]."),
 		SPAN_NOTICE("You start removing [src]'s [electronics.name] with [tool].")
 	)
-	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT, extra_checks = CALLBACK(src, PROC_REF(can_crowbar_act), user)))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !electronics)
 		return
 	electronics.dropInto(loc)
 	electronics.add_fingerprint(user)
@@ -127,12 +128,6 @@
 		SPAN_NOTICE("[user] removes [src]'s [electronics.name] with [tool]."),
 		SPAN_NOTICE("You remove [src]'s [electronics.name] with [tool].")
 	)
-
-/obj/structure/door_assembly/proc/can_crowbar_act(mob/living/user)
-	. = TRUE
-	if(!electronics)
-		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
-		return FALSE
 
 /obj/structure/door_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

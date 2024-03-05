@@ -133,7 +133,7 @@
 		if(0)
 			charge_count = 0
 			enabled = FALSE
-			visible_message(SPAN_WARNING("\The [src] breaks apart!"))
+			visible_message(SPAN_WARNING("[src] breaks apart!"))
 			set_broken_state(GRAV_NEEDS_PLASTEEL)
 			stat |= MACHINE_BROKEN_GENERIC
 			set_state(FALSE)
@@ -169,10 +169,8 @@
 
 /obj/machinery/gravity_generator/main/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!do_after(user, 5 SECONDS, middle) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(middle, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-
-	playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
 	panel_open = !panel_open
 	update_icon()
 	to_chat(user, SPAN_NOTICE("You [panel_open ? "open" : "close"] the maintenance hatch."))
@@ -282,7 +280,7 @@
 
 /obj/machinery/gravity_generator/main/attack_hand(mob/user)
 	if(stat & MACHINE_BROKEN_GENERIC)
-		to_chat(user, SPAN_WARNING("\The [src] is broken!"))
+		to_chat(user, SPAN_WARNING("[src] is broken!"))
 		return
 	if(wires && panel_open)
 		wires.Interact(user)
@@ -326,12 +324,12 @@
 		if(!emergency_shutoff_button)
 			return
 		if(!charge_count)
-			to_chat(user, SPAN_WARNING("\The [middle] discharged!"))
+			to_chat(user, SPAN_WARNING("[middle] discharged!"))
 			return
 
 		user.visible_message(
-			SPAN_WARNING("[user] starts to press a lot of buttons on \the [src]!"),
-			SPAN_NOTICE("You start to press many buttons on \the [src], as if you know what you are doing.")
+			SPAN_WARNING("[user] starts to press a lot of buttons on [src]!"),
+			SPAN_NOTICE("You start to press many buttons on [src], as if you know what you are doing.")
 		)
 		if(do_after(user, 15 SECONDS, src))
 			emergency_shutoff()
@@ -348,7 +346,7 @@
 	breaker = FALSE
 	charging_state = POWER_IDLE
 	update_use_power(POWER_USE_IDLE)
-	visible_message(SPAN_DANGER("\The [src] makes a large whirring noise!"))
+	visible_message(SPAN_DANGER("[src] makes a large whirring noise!"))
 
 	for(var/i = 0, i <= 3, i++)
 		switch(i)

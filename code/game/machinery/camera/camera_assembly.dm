@@ -23,15 +23,16 @@
 	var/busy = 0
 
 /obj/item/camera_assembly/crowbar_act(mob/living/user, obj/item/tool)
-	. = ..()
-	if(state == ASSEMBLY_WIRED && length(upgrades))
-		var/obj/U = locate(/obj) in upgrades
-		if(U)
-			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-				return
-			to_chat(user, "You unattach an upgrade from the assembly.")
-			U.dropInto(loc)
-			upgrades -= U
+	. = TRUE
+	if(state != ASSEMBLY_WIRED || !length(upgrades))
+		return
+	var/obj/U = locate(/obj) in upgrades
+	if(U)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		to_chat(user, SPAN_NOTICE("You unattach an upgrade from the assembly."))
+		U.dropInto(loc)
+		upgrades -= U
 
 /obj/item/camera_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

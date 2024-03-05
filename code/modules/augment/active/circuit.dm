@@ -11,11 +11,12 @@
 	if(!item)
 		to_chat(user, SPAN_WARNING("The augment is empty!"))
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	item.canremove = TRUE
 	item.dropInto(loc)
-	to_chat(user, SPAN_NOTICE("You take out \the [item]."))
+	to_chat(user, SPAN_NOTICE("You take out [item]."))
 	item = null
-	playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
 
 /obj/item/organ/internal/augment/active/item/circuit/attackby(obj/item/I, mob/user)
 	if (istype(I, /obj/item/device/electronic_assembly/augment))

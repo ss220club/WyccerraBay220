@@ -102,17 +102,18 @@
 
 /obj/machinery/suit_storage_unit/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(inoperable() && !islocked && !isopen)
-		to_chat(user, SPAN_NOTICE("You begin prying the unit open."))
-		if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		isopen = TRUE
-		to_chat(user, SPAN_NOTICE("You pry the unit open."))
-		SStgui.update_uis(src)
-		update_icon()
-		return
 	if(islocked)
 		to_chat(user, SPAN_WARNING("You can't pry the unit open, it's locked!"))
+		return
+	if(!inoperable() || isopen)
+		return
+	to_chat(user, SPAN_NOTICE("You begin prying the unit open."))
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT) || !inoperable() || isopen || islocked)
+		return
+	isopen = TRUE
+	to_chat(user, SPAN_NOTICE("You pry the unit open."))
+	SStgui.update_uis(src)
+	update_icon()
 
 /obj/machinery/suit_storage_unit/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

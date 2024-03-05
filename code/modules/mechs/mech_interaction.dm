@@ -90,7 +90,7 @@
 		return
 
 	if(!arms)
-		to_chat(user, SPAN_WARNING("\The [src] has no manipulators!"))
+		to_chat(user, SPAN_WARNING("[src] has no manipulators!"))
 		setClickCooldown(3)
 		return
 
@@ -100,7 +100,7 @@
 		return
 
 	if(!get_cell()?.checked_use(arms.power_use * CELLRATE))
-		to_chat(user, power == MECH_POWER_ON ? SPAN_WARNING("Error: Power levels insufficient.") :  SPAN_WARNING("\The [src] is powered off."))
+		to_chat(user, power == MECH_POWER_ON ? SPAN_WARNING("Error: Power levels insufficient.") :  SPAN_WARNING("[src] is powered off."))
 		return
 
 	// User is not necessarily the exosuit, or the same person, so update intent.
@@ -173,7 +173,7 @@
 					ruser = user
 				temp_system.afterattack(A,ruser,adj,params)
 			if(system_moved) //We are using a proxy system that may not have logging like mech equipment does
-				admin_attack_log(user, A, "Attacked using \a [temp_system] (MECH)", "Was attacked with \a [temp_system] (MECH)", "used \a [temp_system] (MECH) to attack")
+				admin_attack_log(user, A, "Attacked using [temp_system] (MECH)", "Was attacked with [temp_system] (MECH)", "used [temp_system] (MECH) to attack")
 			//Mech equipment subtypes can add further click delays
 			var/extra_delay = 0
 			if(!isnull(selected_system))
@@ -190,7 +190,7 @@
 	else if(adj && user.a_intent == I_HURT) //Prevents accidental slams.
 		setClickCooldown(arms ? arms.action_delay : 7) // You've already commited to applying fist, don't turn and back out now!
 		playsound(src.loc, legs.mech_step_sound, 60, 1)
-		src.visible_message(SPAN_DANGER("\The [src] steps back, preparing for a slam!"), blind_message = SPAN_DANGER("You hear the loud hissing of hydraulics!"))
+		src.visible_message(SPAN_DANGER("[src] steps back, preparing for a slam!"), blind_message = SPAN_DANGER("You hear the loud hissing of hydraulics!"))
 		if (do_after(src, 1.2 SECONDS, get_turf(src), DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && user)
 			A.attack_generic(src, arms.melee_damage, "slammed against", DAMAGE_BRUTE) //"Punch" would be bad since vehicles without arms could be a thing
 			var/turf/T = get_step(get_turf(src), src.dir)
@@ -229,7 +229,7 @@
 		return FALSE
 	if (user.buckled)
 		if (!silent)
-			to_chat(user, SPAN_WARNING("You are currently buckled to \the [user.buckled]."))
+			to_chat(user, SPAN_WARNING("You are currently buckled to [user.buckled]."))
 		return FALSE
 	if(!(user.mob_size >= body.min_pilot_size && user.mob_size <= body.max_pilot_size))
 		if(!silent)
@@ -247,14 +247,14 @@
 		return FALSE
 	if(LAZYLEN(pilots) >= LAZYLEN(body.pilot_positions))
 		if(!silent)
-			to_chat(user, SPAN_WARNING("\The [src] is occupied to capacity."))
+			to_chat(user, SPAN_WARNING("[src] is occupied to capacity."))
 		return FALSE
 	return TRUE
 
 /mob/living/exosuit/proc/enter(mob/user, silent = FALSE, check_incap = TRUE, instant = FALSE)
 	if(!check_enter(user, silent, check_incap))
 		return FALSE
-	to_chat(user, SPAN_NOTICE("You start climbing into \the [src]..."))
+	to_chat(user, SPAN_NOTICE("You start climbing into [src]..."))
 	if(!body)
 		return FALSE
 	if(!instant && !do_after(user, body.climb_time, src, DO_PUBLIC_UNIQUE))
@@ -262,7 +262,7 @@
 	if(!check_enter(user, silent, check_incap))
 		return FALSE
 	if(!silent)
-		to_chat(user, SPAN_NOTICE("You climb into \the [src]."))
+		to_chat(user, SPAN_NOTICE("You climb into [src]."))
 		playsound(src, 'sound/machines/airlock_heavy.ogg', 60, 1)
 	add_pilot(user)
 	return TRUE
@@ -314,10 +314,10 @@
 			return
 		hud_open.toggled()
 		if(!silent)
-			to_chat(user, SPAN_NOTICE("You open the hatch and climb out of \the [src]."))
+			to_chat(user, SPAN_NOTICE("You open the hatch and climb out of [src]."))
 	else
 		if(!silent)
-			to_chat(user, SPAN_NOTICE("You climb out of \the [src]."))
+			to_chat(user, SPAN_NOTICE("You climb out of [src]."))
 
 	remove_pilot(user)
 	return 1
@@ -326,19 +326,16 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Crowbar - Force open locked cockpit
 	if(!body)
-		USE_FEEDBACK_FAILURE("\The [src] has no cockpit to force.")
+		USE_FEEDBACK_FAILURE("[src] has no cockpit to force.")
 		return
 	if(!hatch_locked)
-		USE_FEEDBACK_FAILURE("\The [src]'s cockpit isn't locked. You don't need to force it.")
+		USE_FEEDBACK_FAILURE("[src]'s cockpit isn't locked. You don't need to force it.")
 		return
 	user.visible_message(
-		SPAN_WARNING("\The [user] starts forcing \the [src]'s emergency [body.hatch_descriptor] release using \a [tool]."),
-		SPAN_WARNING("You start forcing \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
+		SPAN_WARNING("[user] starts forcing [src]'s emergency [body.hatch_descriptor] release using [tool]."),
+		SPAN_WARNING("You start forcing [src]'s emergency [body.hatch_descriptor] release using [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 5) SECONDS, list(SKILL_DEVICES, SKILL_EVA), src) || !user.use_sanity_check(src, tool))
-		return
-	if(!body)
-		USE_FEEDBACK_FAILURE("\The [src] has no cockpit to force.")
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = list(SKILL_DEVICES, SKILL_EVA), do_flags = DO_REPAIR_CONSTRUCT) || !body)
 		return
 	playsound(src, 'sound/machines/bolts_up.ogg', 25, TRUE)
 	hatch_locked = FALSE
@@ -348,90 +345,90 @@
 	hud_open.update_icon()
 	update_icon()
 	user.visible_message(
-		SPAN_WARNING("\The [user] forces \the [src]'s emergency [body.hatch_descriptor] release using \a [tool]."),
-		SPAN_WARNING("You force \the [src]'s emergency [body.hatch_descriptor] release using \the [tool].")
+		SPAN_WARNING("[user] forces [src]'s emergency [body.hatch_descriptor] release using [tool]."),
+		SPAN_WARNING("You force [src]'s emergency [body.hatch_descriptor] release using [tool].")
 	)
 
 /mob/living/exosuit/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(hardpoints_locked)
-		USE_FEEDBACK_FAILURE("\The [src]'s hardpoint system is locked.")
+		USE_FEEDBACK_FAILURE("[src]'s hardpoint system is locked.")
 		return
 	var/list/parts = list()
 	for(var/hardpoint in hardpoints)
 		if (hardpoints[hardpoint])
 			parts += hardpoint
-	var/input = input(user, "Which component would you like to remove?", "\The [src] - Remove Hardpoint") as null|anything in parts
+	var/input = input(user, "Which component would you like to remove?", "[src] - Remove Hardpoint") as null|anything in parts
 	if(!input || !user.use_sanity_check(src, tool))
 		return
 	if(isnull(hardpoints[input]))
-		USE_FEEDBACK_FAILURE("\The [src] not longer has a component in the [input] slot.")
+		USE_FEEDBACK_FAILURE("[src] not longer has a component in the [input] slot.")
 		return
 	remove_system(input, user)
 
 /mob/living/exosuit/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!maintenance_protocols)
-		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
+		USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to access the power cell.")
 		return
 	if(!body?.cell)
-		USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no power cell to remove.")
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts removing \the [src]'s power cell with \a [tool]."),
-		SPAN_NOTICE("You start removing \the [src]'s power cell with \the [tool].")
+		SPAN_NOTICE("[user] starts removing [src]'s power cell with [tool]."),
+		SPAN_NOTICE("You start removing [src]'s power cell with [tool].")
 	)
 	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
 		return
 	if(!maintenance_protocols)
-		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the power cell.")
+		USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to access the power cell.")
 		return
 	if(!body?.cell)
-		USE_FEEDBACK_FAILURE("\The [src] has no power cell to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no power cell to remove.")
 		return
 	user.put_in_hands(body.cell)
 	power = MECH_POWER_OFF
 	hud_power_control.update_icon()
 	body.cell = null
 	user.visible_message(
-		SPAN_NOTICE("\The [user] removes \the [src]'s power cell with \a [tool]."),
-		SPAN_NOTICE("You remove \the [src]'s power cell with \the [tool].")
+		SPAN_NOTICE("[user] removes [src]'s power cell with [tool]."),
+		SPAN_NOTICE("You remove [src]'s power cell with [tool].")
 	)
 
 /mob/living/exosuit/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!maintenance_protocols)
-		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
+		USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to access the securing bolts.")
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts removing \the [src]'s securing bolts with \a [tool]."),
-		SPAN_NOTICE("You start removing \the [src]'s securing bolts with \the [tool].")
+		SPAN_NOTICE("[user] starts removing [src]'s securing bolts with [tool]."),
+		SPAN_NOTICE("You start removing [src]'s securing bolts with [tool].")
 	)
 	if(!user.do_skilled((tool.toolspeed * 6) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
 		return
 	if(!maintenance_protocols)
-		USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to access the securing bolts.")
+		USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to access the securing bolts.")
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] removes \the [src]'s securing bolts with \a [tool], dismantling it."),
-		SPAN_NOTICE("You remove \the [src]'s securing bolts with \the [tool], dismantling it.")
+		SPAN_NOTICE("[user] removes [src]'s securing bolts with [tool], dismantling it."),
+		SPAN_NOTICE("You remove [src]'s securing bolts with [tool], dismantling it.")
 	)
 	dismantle()
 
 /mob/living/exosuit/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!getBruteLoss())
-		USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
+		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
 		return
 	var/list/damaged_parts = list()
 	for (var/obj/item/mech_component/component in list(arms, legs, body, head))
 		if (component?.brute_damage)
 			damaged_parts += component
-	var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "\The [src] - Fix Component") as null|anything in damaged_parts
+	var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "[src] - Fix Component") as null|anything in damaged_parts
 	if (!input_fix || !user.use_sanity_check(src, tool))
 		return
 	if (!input_fix.brute_damage)
-		USE_FEEDBACK_FAILURE("\The [src]'s [input_fix.name] no longer needs repair.")
+		USE_FEEDBACK_FAILURE("[src]'s [input_fix.name] no longer needs repair.")
 		return
 	input_fix.repair_brute_generic(tool, user)
 
@@ -439,17 +436,17 @@
 	// Cable Coil - Repair burn damage
 	if (isCoil(tool))
 		if (!getFireLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no electrical damage to repair.")
+			USE_FEEDBACK_FAILURE("[src] has no electrical damage to repair.")
 			return TRUE
 		var/list/damaged_parts = list()
 		for (var/obj/item/mech_component/component in list(arms, legs, body, head))
 			if (component?.burn_damage)
 				damaged_parts += component
-		var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "\The [src] - Fix Component") as null|anything in damaged_parts
+		var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "[src] - Fix Component") as null|anything in damaged_parts
 		if (!input_fix || !user.use_sanity_check(src, tool))
 			return TRUE
 		if (!input_fix.burn_damage)
-			USE_FEEDBACK_FAILURE("\The [src]'s [input_fix.name] no longer needs repair.")
+			USE_FEEDBACK_FAILURE("[src]'s [input_fix.name] no longer needs repair.")
 			return TRUE
 		input_fix.repair_burn_generic(tool, user)
 		return TRUE
@@ -466,32 +463,32 @@
 		update_icon()
 		paint.use(1, user)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] opens \the [tool] and spends some quality time customising \the [src]."),
-			SPAN_NOTICE("You open \the [tool] and spend some quality time customising \the [src].")
+			SPAN_NOTICE("[user] opens [tool] and spends some quality time customising [src]."),
+			SPAN_NOTICE("You open [tool] and spend some quality time customising [src].")
 		)
 		return TRUE
 
 	// Mech Equipment - Install equipment
 	if (istype(tool, /obj/item/mech_equipment))
 		if (hardpoints_locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s hardpoint system is locked.")
+			USE_FEEDBACK_FAILURE("[src]'s hardpoint system is locked.")
 			return TRUE
 		var/obj/item/mech_equipment/mech_equipment = tool
 		if (mech_equipment.owner)
-			USE_FEEDBACK_FAILURE("\The [tool] is already owned by \the [mech_equipment.owner]. This might be a bug.")
+			USE_FEEDBACK_FAILURE("[tool] is already owned by [mech_equipment.owner]. This might be a bug.")
 			return TRUE
 		var/free_hardpoints = list()
 		for (var/hardpoint in hardpoints)
 			if (isnull(hardpoints[hardpoint]) && (!length(mech_equipment.restricted_hardpoints) || (hardpoint in mech_equipment.restricted_hardpoints)))
 				free_hardpoints += hardpoint
 		if (!length(free_hardpoints))
-			USE_FEEDBACK_FAILURE("\The [src] has no free hardpoints for \the [tool].")
+			USE_FEEDBACK_FAILURE("[src] has no free hardpoints for [tool].")
 			return TRUE
-		var/input = input(user, "Where would you like to install \the [tool]?", "\The [src] - Hardpoint Installation") as null|anything in free_hardpoints
+		var/input = input(user, "Where would you like to install [tool]?", "[src] - Hardpoint Installation") as null|anything in free_hardpoints
 		if (!input || !user.use_sanity_check(src, tool, SANITY_CHECK_DEFAULT | SANITY_CHECK_TOOL_UNEQUIP))
 			return TRUE
 		if (hardpoints[input] != null)
-			USE_FEEDBACK_FAILURE("\The [input] slot on \the [src] is no longer free. It has \a [hardpoints[input]] attached.")
+			USE_FEEDBACK_FAILURE("[input] slot on [src] is no longer free. It has [hardpoints[input]] attached.")
 			return TRUE
 		install_system(tool, input, user)
 		return TRUE
@@ -499,10 +496,10 @@
 	// Power Cell - Install cell
 	if (istype(tool, /obj/item/cell))
 		if (!maintenance_protocols)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance protocols must be enabled to install \the [tool].")
+			USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to install [tool].")
 			return TRUE
 		if (body?.cell)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [body.cell] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [body.cell] installed.")
 			return TRUE
 		if (!user.unEquip(tool, body))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -510,8 +507,8 @@
 		body.cell = tool
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
-			SPAN_NOTICE("You install \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
 		return TRUE
 
@@ -522,12 +519,12 @@
 	// Drag the pilot out if possible.
 	if(user.a_intent == I_HURT)
 		if(!LAZYLEN(pilots))
-			to_chat(user, SPAN_WARNING("There is nobody inside \the [src]."))
+			to_chat(user, SPAN_WARNING("There is nobody inside [src]."))
 		else if(!hatch_closed)
 			var/mob/pilot = pick(pilots)
-			user.visible_message(SPAN_DANGER("\The [user] is trying to pull \the [pilot] out of \the [src]!"))
+			user.visible_message(SPAN_DANGER("[user] is trying to pull [pilot] out of [src]!"))
 			if(do_after(user, 3 SECONDS, src, DO_PUBLIC_UNIQUE) && user.Adjacent(src) && (pilot in pilots) && !hatch_closed)
-				user.visible_message(SPAN_DANGER("\The [user] drags \the [pilot] out of \the [src]!"))
+				user.visible_message(SPAN_DANGER("[user] drags [pilot] out of [src]!"))
 				eject(pilot, silent=1)
 		else if(hatch_closed)
 			if(MUTATION_FERAL in user.mutations)
@@ -546,7 +543,7 @@
 		playsound(loc, body.damage_sound, 40, 1)
 
 /mob/living/exosuit/proc/attack_self(mob/user)
-	return visible_message("\The [src] pokes itself.")
+	return visible_message("[src] pokes itself.")
 
 /mob/living/exosuit/proc/rename(mob/user)
 	if(user != src && !(user in pilots))
@@ -555,7 +552,7 @@
 	if(!new_name || new_name == name || (user != src && !(user in pilots)))
 		return
 	SetName(new_name)
-	to_chat(user, SPAN_NOTICE("You have redesignated this exosuit as \the [name]."))
+	to_chat(user, SPAN_NOTICE("You have redesignated this exosuit as [name]."))
 
 /mob/living/exosuit/get_inventory_slot(obj/item/I)
 	for(var/h in hardpoints)

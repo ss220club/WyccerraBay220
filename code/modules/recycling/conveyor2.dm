@@ -96,6 +96,8 @@
 
 /obj/machinery/conveyor/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	if(!MACHINE_IS_BROKEN(src))
 		var/obj/item/conveyor_construct/C = new/obj/item/conveyor_construct(src.loc)
 		C.id = id
@@ -241,6 +243,8 @@
 
 /obj/machinery/conveyor_switch/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	var/obj/item/conveyor_switch_construct/C = new/obj/item/conveyor_switch_construct(src.loc)
 	C.id = id
 	transfer_fingerprints_to(C)

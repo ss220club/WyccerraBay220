@@ -109,7 +109,7 @@
 		to_chat(user, SPAN_NOTICE("You should unsecure [src] firstly. Use a screwdriver."))
 		return
 	visible_message(SPAN_DANGER("[user] begins disassembling [src]..."))
-	if(!tool.use_as_tool(src, user, 6 SECONDS, do_flags = DO_REPAIR_CONSTRUCT))
+	if(!tool.use_as_tool(src, user, 6 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/item/barrier/B = new /obj/item/barrier(get_turf(user))
 	visible_message(SPAN_NOTICE("[user] dismantled [src]."))

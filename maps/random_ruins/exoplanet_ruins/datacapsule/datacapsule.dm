@@ -57,7 +57,8 @@
 	if(!drive)
 		USE_FEEDBACK_FAILURE("\The [src] has no drive to remove.")
 		return
-	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	drive.origin_tech = list(
 		TECH_DATA = rand(4, 5),
 		TECH_ENGINEERING = rand(4, 5),

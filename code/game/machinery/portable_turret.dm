@@ -278,7 +278,7 @@ var/global/list/turret_icons
 	//If the turret is destroyed, you can remove it with a crowbar to
 	//try and salvage its components
 	to_chat(user, SPAN_NOTICE("You begin prying the metal coverings off."))
-	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	if(prob(70))
 		to_chat(user, SPAN_NOTICE("You remove the turret and salvage some components."))

@@ -8,3 +8,8 @@
 #define COMSIG_ATOM_ENTERED "atom_entered"
 /// Sent from the atom that just Entered src. From base of atom/Entered(): (/atom/destination, atom/old_loc, list/atom/old_locs)
 #define COMSIG_ATOM_ENTERING "atom_entering"
+
+
+//machinery
+#define COMSIG_AREA_APC_DELETED "area_apc_gone"
+#define COMSIG_AREA_APC_POWER_CHANGE "area_apc_power_change"

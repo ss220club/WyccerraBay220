@@ -15,7 +15,7 @@
 	///2 = wired/built, 1 = circuit installed, 0 = frame
 	var/buildstage = 2
 	var/number = 0
-	var/last_tick //used to delay the powercheck
+	var/area/linked_area
 	intercom_handling = TRUE
 
 /obj/item/device/radio/intercom/get_storage_cost()
@@ -93,7 +93,7 @@
 
 /obj/item/device/radio/intercom/Initialize(loc, dir, atom/frame)
 	. = ..()
-	START_PROCESSING(SSobj, src)
+	loop_area_check()
 
 	if (dir)
 		set_dir(dir)
@@ -147,10 +147,6 @@
 /obj/item/device/radio/intercom/raider/Initialize()
 	. = ..()
 	internal_channels[num2text(RAID_FREQ)] = list(access_syndicate)
-
-/obj/item/device/radio/intercom/Destroy()
-	STOP_PROCESSING(SSobj, src)
-	return ..()
 
 /obj/item/device/radio/intercom/attack_ai(mob/user)
 	add_fingerprint(user)
@@ -322,25 +318,26 @@
 	.["Wirecutters"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
 	.["Wrench"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
 
-/obj/item/device/radio/intercom/Process()
-	if (wiresexposed)
-		on = FALSE
-		return
-	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))
-		last_tick = world.timeofday
-		var/old_on = on
+/obj/item/device/radio/intercom/proc/change_status()
+	on = linked_area.powered(EQUIP)
+	icon_state = on ? "intercom" : "intercom-p"
 
-		if(!src.loc)
-			on = FALSE
-		else
-			var/area/A = get_area(src)
-			if(!A)
-				on = FALSE
-			else
-				on = A.powered(EQUIP) // set "on" to the power status
+/obj/item/device/radio/intercom/proc/loop_area_check()
+	var/area/target_area = get_area(src)
+	if(!target_area?.apc)
+		addtimer(CALLBACK(src, PROC_REF(loop_area_check)), 30 SECONDS) // We don't proces if there is no APC , no point in doing so is there ?
+		return FALSE
+	linked_area = target_area
+	RegisterSignal(target_area, COMSIG_AREA_APC_DELETED, PROC_REF(on_apc_removal))
+	RegisterSignal(target_area, COMSIG_AREA_APC_POWER_CHANGE, PROC_REF(change_status))
 
-		if (on != old_on)
-			update_icon()
+/obj/item/device/radio/intercom/proc/on_apc_removal()
+	UnregisterSignal(linked_area , COMSIG_AREA_APC_DELETED)
+	UnregisterSignal(linked_area, COMSIG_AREA_APC_POWER_CHANGE)
+	linked_area = null
+	on = FALSE
+	update_icon()
+	addtimer(CALLBACK(src, PROC_REF(loop_area_check)), 30 SECONDS)
 
 /obj/item/device/radio/intercom/on_update_icon()
 	if (buildstage == 2 && wiresexposed)
@@ -349,8 +346,6 @@
 		icon_state = "intercom-b1"
 	else if (buildstage == 0)
 		icon_state = "intercom-f"
-	else if (!on)
-		icon_state = "intercom-p"
 	else
 		icon_state = "intercom_[broadcasting][listening]"
 

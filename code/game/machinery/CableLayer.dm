@@ -30,6 +30,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!cable || !cable?.amount)
 		to_chat(usr, SPAN_WARNING("There's no more cable on the reel."))
+		return
 	var/m = round(input(usr,"Please specify the length of cable to cut","Cut cable",min(cable.amount,30)) as num, 1)
 	m = min(m, cable.amount)
 	m = min(m, 30)

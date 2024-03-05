@@ -977,7 +977,7 @@ About the new airlock wires panel:
 		return
 	if (p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
 		user.visible_message("[user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
-		if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		to_chat(user, SPAN_NOTICE("You've removed the airlock electronics!"))
 		deconstruct(user)

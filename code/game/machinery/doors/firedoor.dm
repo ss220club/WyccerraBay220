@@ -207,7 +207,7 @@
 				SPAN_NOTICE("You start levering out [src]'s electronics."),
 				SPAN_ITALIC("You hear metal bumping against metal.")
 			)
-			if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			if(blocked && density && hatch_open)
 				playsound(loc, 'sound/items/Deconstruct.ogg', 100, TRUE)
@@ -231,7 +231,7 @@
 		SPAN_WARNING("You hear metal groaning and grinding!")
 	)
 	playsound(loc, 'sound/machines/airlock_creaking.ogg', 100, TRUE)
-	if(!tool.use_as_tool(src, user, 3 SECONDS, do_flags = DO_REPAIR_CONSTRUCT))
+	if(!tool.use_as_tool(src, user, 3 SECONDS, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	if(inoperable() || !density)
 		user.visible_message(

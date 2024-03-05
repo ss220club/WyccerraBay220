@@ -152,7 +152,7 @@
 		to_chat(user, SPAN_NOTICE("[src]'s motors resist your effort."))
 		return
 	to_chat(user, SPAN_NOTICE("You begin prying at [src]..."))
-	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT) || operating || (!MACHINE_IS_BROKEN(src) && is_powered()))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || operating || (!MACHINE_IS_BROKEN(src) && is_powered()))
 		return
 	force_toggle()
 

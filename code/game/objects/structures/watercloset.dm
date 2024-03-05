@@ -207,7 +207,7 @@
 		SPAN_NOTICE("[user] starts to [cistern ? "lift" : "replace"] [src]'s cistern with [tool]."),
 		SPAN_NOTICE("You start to [cistern ? "lift" : "replace"] [src]'s cistern with [tool].")
 	)
-	if(!tool.use_as_tool(src, user, 3 SECONDS, do_flags = DO_REPAIR_CONSTRUCT))
+	if(!tool.use_as_tool(src, user, 3 SECONDS, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, TRUE)
 	user.visible_message(

@@ -108,7 +108,7 @@
 	if(!inoperable() || isopen)
 		return
 	to_chat(user, SPAN_NOTICE("You begin prying the unit open."))
-	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, do_flags = DO_REPAIR_CONSTRUCT) || !inoperable() || isopen || islocked)
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT) || !inoperable() || isopen || islocked)
 		return
 	isopen = TRUE
 	to_chat(user, SPAN_NOTICE("You pry the unit open."))

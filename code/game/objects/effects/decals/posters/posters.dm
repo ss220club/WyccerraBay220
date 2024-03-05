@@ -55,20 +55,21 @@
 
 /obj/structure/sign/poster/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Wirecutters - Remove poster
-	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-	if (ruined)
+	if(ruined)
 		user.visible_message(
 			SPAN_NOTICE("[user] removes the remnants of [src] with [tool]."),
 			SPAN_NOTICE("You remove the remnants of [src] with [tool].")
 		)
-		qdel_self()
-	else
-		user.visible_message(
-			SPAN_NOTICE("[user] removes [src] with [tool]."),
-			SPAN_NOTICE("You remove [src] with [tool].")
-		)
-		roll_and_drop(user.loc)
+		qdel(src)
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [src] with [tool]."),
+		SPAN_NOTICE("You remove [src] with [tool].")
+	)
+	roll_and_drop(user.loc)
 
 
 /obj/structure/sign/poster/attack_hand(mob/user as mob)

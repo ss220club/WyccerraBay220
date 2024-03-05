@@ -69,6 +69,8 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!open)
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	passenger_allowed = !passenger_allowed
 	user.visible_message(SPAN_NOTICE("[user] [passenger_allowed ? "cuts" : "mends"] a cable in [src]."), SPAN_NOTICE("You [passenger_allowed ? "cut" : "mend"] the load limiter cable."))
 

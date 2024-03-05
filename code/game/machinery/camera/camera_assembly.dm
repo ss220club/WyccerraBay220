@@ -90,13 +90,15 @@
 
 /obj/item/camera_assembly/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(state == ASSEMBLY_WIRED)
-		new/obj/item/stack/cable_coil(get_turf(src), 2)
-		playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		to_chat(user, "You cut the wires from the circuits.")
-		state = ASSEMBLY_WELDED
+	if(state != ASSEMBLY_WIRED)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new/obj/item/stack/cable_coil(get_turf(src), 2)
+	to_chat(user, "You cut the wires from the circuits.")
+	state = ASSEMBLY_WELDED
 
-/obj/item/camera_assembly/wirecutter_act(mob/living/user, obj/item/tool)
+/obj/item/camera_assembly/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	switch(state)
 		if(ASSEMBLY_WRENCHED)

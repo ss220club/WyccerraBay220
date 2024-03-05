@@ -21,14 +21,13 @@
 
 /obj/item/flora/pottedplantsmall/fern/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-	visible_message(SPAN_NOTICE("\The [user] starts trimming the [src] with \the [tool]."))
-	if(do_after(user, (tool.toolspeed * 6) SECONDS, src, DO_PUBLIC_UNIQUE))
-		playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		to_chat(user, SPAN_NOTICE("You trim \the [src] with \the [tool]. You probably should've used a pair of scissors."))
-		trimmed = TRUE
-		addtimer(CALLBACK(src, PROC_REF(grow)), 90 MINUTES, TIMER_UNIQUE|TIMER_OVERRIDE)
-		update_icon()
+	visible_message(SPAN_NOTICE("[user] starts trimming the [src] with [tool]."))
+	if(!tool.use_as_tool(src, user, 6 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_PUBLIC_UNIQUE))
+		return
+	to_chat(user, SPAN_NOTICE("You trim [src] with [tool]. You probably should've used a pair of scissors."))
+	trimmed = TRUE
+	addtimer(CALLBACK(src, PROC_REF(grow)), 90 MINUTES, TIMER_UNIQUE|TIMER_OVERRIDE)
+	update_icon()
 
 /obj/item/flora/pottedplantsmall/fern/on_update_icon()
 	. = ..()

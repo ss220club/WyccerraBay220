@@ -35,10 +35,12 @@
 //Don't want to render prison breaks impossible
 /obj/machinery/flasher/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	disable = !disable
 	user.visible_message(
-		SPAN_WARNING("\The [user] has [disable ? "dis" : ""]connected \the [src]'s flashbulb!"),
-		SPAN_WARNING("You [disable? "dis" : ""]connect \the [src]'s flashbulb!")
+		SPAN_WARNING("[user] has [disable ? "dis" : ""]connected [src]'s flashbulb!"),
+		SPAN_WARNING("You [disable? "dis" : ""]connect [src]'s flashbulb!")
 	)
 
 //Let the AI trigger them directly.

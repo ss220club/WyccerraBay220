@@ -848,14 +848,16 @@
 
 /obj/machinery/alarm/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(buildstage == 2)
-		if(!wiresexposed)
-			return
-		user.visible_message(SPAN_WARNING("[user] has cut the wires inside [src]!"), "You have cut the wires inside [src].")
-		playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		new/obj/item/stack/cable_coil(get_turf(src), 5)
-		buildstage = 1
-		update_icon()
+	if(buildstage != 2)
+		return
+	if(!wiresexposed)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(SPAN_WARNING("[user] has cut the wires inside [src]!"), "You have cut the wires inside [src].")
+	new/obj/item/stack/cable_coil(get_turf(src), 5)
+	buildstage = 1
+	update_icon()
 
 /obj/machinery/alarm/use_tool(obj/item/W, mob/living/user, list/click_params)
 	switch(buildstage)
@@ -1048,15 +1050,17 @@ FIRE ALARM
 
 /obj/machinery/firealarm/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(buildstage == 2)
-		user.visible_message(
-			SPAN_NOTICE("[user] has cut the wires inside [src]!"),
-			SPAN_NOTICE("You have cut the wires inside [src].")
-		)
-		new/obj/item/stack/cable_coil(get_turf(src), 5)
-		playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		buildstage = 1
-		update_icon()
+	if(buildstage != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] has cut the wires inside [src]!"),
+		SPAN_NOTICE("You have cut the wires inside [src].")
+	)
+	new/obj/item/stack/cable_coil(get_turf(src), 5)
+	buildstage = 1
+	update_icon()
 
 /obj/machinery/firealarm/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if ((. = ..()))

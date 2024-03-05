@@ -29,7 +29,7 @@
 	set category = "Object"
 
 	chamber_offset = 0
-	visible_message(SPAN_WARNING("\The [usr] spins the cylinder of \the [src]!"), \
+	visible_message(SPAN_WARNING("[usr] spins the cylinder of [src]!"), \
 	SPAN_NOTICE("You hear something metallic spin and click."))
 	playsound(src.loc, 'sound/weapons/revolver_spin.ogg', 100, 1)
 	loaded = shuffle(loaded)
@@ -103,11 +103,13 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Wirecutters - Remove toy marking
 	if (snipped)
-		USE_FEEDBACK_FAILURE("\The [src] has already had it's barrel snipped.")
+		USE_FEEDBACK_FAILURE("[src] has already had it's barrel snipped.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] snips \a [src]'s toy markings with \a [tool]."),
-		SPAN_NOTICE("You snip \the [src]'s toy markings with \the [tool]."),
+		SPAN_NOTICE("[user] snips \a [src]'s toy markings with \a [tool]."),
+		SPAN_NOTICE("You snip [src]'s toy markings with [tool]."),
 		range = 3
 	)
 	set_snipped()

@@ -139,14 +139,15 @@ var/global/list/tank_gauge_cache = list()
 		return
 
 	if(!proxyassembly.assembly)
-		if(do_after(user, (tool.toolspeed * 1) SECOND, src, DO_PUBLIC_UNIQUE))
-			to_chat(user, SPAN_NOTICE("You quickly clip the wire from the tank."))
-			CLEAR_FLAGS(tank_flags, TANK_FLAG_WIRED)
-			update_icon(TRUE)
+		if(!tool.use_as_tool(src, user, 1 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE))
+			return
+		to_chat(user, SPAN_NOTICE("You quickly clip the wire from the tank."))
+		CLEAR_FLAGS(tank_flags, TANK_FLAG_WIRED)
+		update_icon(TRUE)
 		return
 
 	to_chat(user, SPAN_NOTICE("You carefully begin clipping the wires that attach to the tank."))
-	if(!do_after(user, 10 SECONDS, src))
+	if(!tool.use_as_tool(src, user, 10 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT))
 		to_chat(user, SPAN_DANGER("You slip and bump the igniter!"))
 		if(prob(85))
 			proxyassembly.receive_signal()

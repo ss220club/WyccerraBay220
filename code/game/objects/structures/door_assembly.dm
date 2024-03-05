@@ -158,28 +158,21 @@
 
 /obj/structure/door_assembly/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (state < ASSEMBLY_STATE_WIRED)
+	if(state < ASSEMBLY_STATE_WIRED)
 		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
 		return
-	if (state > ASSEMBLY_STATE_WIRED)
+	if(state > ASSEMBLY_STATE_WIRED)
 		return
-	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts cutting [src]'s wires with [tool]."),
 		SPAN_NOTICE("You start cutting [src]'s wires with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return
-	if (state < ASSEMBLY_STATE_WIRED)
-		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
-		return
-	if (state > ASSEMBLY_STATE_WIRED)
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ELECTRICAL, do_flags = DO_REPAIR_CONSTRUCT) || state != ASSEMBLY_STATE_WIRED)
 		return
 	var/obj/item/stack/cable_coil/cable = new(loc, 1)
 	cable.add_fingerprint(user, tool = tool)
 	state = ASSEMBLY_STATE_FRAME
 	update_state()
-	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] cuts [src]'s wires with [tool]."),
 		SPAN_NOTICE("You cut [src]'s wires with [tool].")

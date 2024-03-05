@@ -155,17 +155,12 @@
 		if (GIRDER_STATE_NORMAL)
 			USE_FEEDBACK_FAILURE("[src] has no reinforcements to remove.")
 		if (GIRDER_STATE_REINFORCEMENT_UNSECURED)
-			playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 			user.visible_message(
 				SPAN_NOTICE("[user] starts removing [src]'s support struts with [tool]."),
 				SPAN_NOTICE("You start removing [src]'s support struts with [tool].")
 			)
-			if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+			if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
 				return
-			if (state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
-				USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-				return
-			playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 			if (reinf_material)
 				reinf_material.place_dismantled_product(get_turf(src))
 				reinf_material = null

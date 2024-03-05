@@ -204,17 +204,12 @@
 		if (is_wired != current_state)
 			USE_FEEDBACK_FAILURE("[src]'s state has changed.")
 			return
-	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts [input == "Adjust Wiring" ? "adjusting" : "removing"] the wiring in [src] with [tool]."),
 		SPAN_NOTICE("You start [input == "Adjust Wiring" ? "adjusting" : "removing"] the wiring in [src] with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 3) SECONDS, SKILL_ELECTRICAL, src) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_ELECTRICAL, do_flags = DO_REPAIR_CONSTRUCT) || is_wired != current_state)
 		return
-	if (is_wired != current_state)
-		USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-		return
-	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	is_wired = input == "Adjust Wiring" ? FRAME_WIRED_ADJUSTED : FALSE
 	update_icon()
 	if (input == "Remove Wiring")

@@ -234,10 +234,11 @@
 	if (!wiresexposed)
 		USE_FEEDBACK_FAILURE("[src]'s wire panel needs to be opened before you can cut the wiring.")
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	new /obj/item/stack/cable_coil(get_turf(src), 5)
 	b_stat = FALSE
 	buildstage = 1
-	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	update_icon()
 	user.visible_message(
 		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),

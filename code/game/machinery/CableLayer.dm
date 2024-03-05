@@ -34,7 +34,8 @@
 	m = min(m, cable.amount)
 	m = min(m, 30)
 	if(m)
-		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT) || !m)
+			return
 		use_cable(m)
 		var/obj/item/stack/cable_coil/CC = new (get_turf(src))
 		CC.amount = m

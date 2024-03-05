@@ -85,6 +85,8 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	to_chat(user, SPAN_WARNING("You [wires_intact? "cut" : "mend"] [src]'s wires!"))
 	wires_intact = !wires_intact
 	update_icon()

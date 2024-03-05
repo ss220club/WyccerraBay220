@@ -358,12 +358,13 @@
 	if (!polarized)
 		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
 		return
-	if (opacity)
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(opacity)
 		toggle()
 	new /obj/item/stack/cable_coil(user.loc, 1)
 	polarized = FALSE
 	id = null
-	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),
 		SPAN_NOTICE("You cut [src]'s wiring with [tool].")

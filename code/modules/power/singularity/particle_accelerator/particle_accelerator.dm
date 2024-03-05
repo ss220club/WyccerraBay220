@@ -148,6 +148,8 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	if (construction_state > CONSTRUCT_STATE_WIRED)
 		USE_FEEDBACK_FAILURE("[src]'s panel must be open before you can access the wiring.")
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	construction_state = CONSTRUCT_STATE_ANCHORED
 	update_state()
 	update_icon()
@@ -336,10 +338,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 
 /obj/machinery/particle_accelerator/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(construct_state == 2)
-		user.visible_message("[user.name] removes some wires from the [src.name].", \
-			"You remove some wires.")
-		construct_state = 1
+	if(construct_state != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message("[user.name] removes some wires from the [src.name].", \
+		"You remove some wires.")
+	construct_state = 1
 	check_step()
 
 /obj/machinery/particle_accelerator/use_tool(obj/item/I, mob/living/user, list/click_params)

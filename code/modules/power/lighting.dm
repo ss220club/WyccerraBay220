@@ -105,6 +105,8 @@
 	if (stage != LIGHT_STAGE_WIRED)
 		to_chat(user, SPAN_WARNING("There are no exposed wires to cut!"))
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	stage = LIGHT_STAGE_EMPTY
 	update_icon()
 	new /obj/item/stack/cable_coil(get_turf(loc), 1, "red")
@@ -113,7 +115,6 @@
 		SPAN_NOTICE("You cut [src]'s wires and remove them from the frame'."),
 		SPAN_ITALIC("You hear snipping and cables being cut.")
 	)
-	playsound(loc, 'sound/items/Wirecutter.ogg', 50, TRUE)
 
 /obj/machinery/light_construct/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/stack/cable_coil))

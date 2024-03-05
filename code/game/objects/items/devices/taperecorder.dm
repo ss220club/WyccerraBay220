@@ -478,6 +478,8 @@
 
 /obj/item/device/tape/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	cut(user)
 
 /obj/item/device/tape/use_tool(obj/item/tool, mob/user, list/click_params)

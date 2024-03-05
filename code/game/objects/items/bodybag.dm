@@ -37,12 +37,14 @@
 /obj/structure/closet/body_bag/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!label)
-		USE_FEEDBACK_FAILURE("\The [src] has no label to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no label to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	set_label(null)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] removes \the [src]'s label with \a [tool]."),
-		SPAN_NOTICE("You remove \the [src]'s label with \the [tool].")
+		SPAN_NOTICE("[user] removes [src]'s label with [tool]."),
+		SPAN_NOTICE("You remove [src]'s label with [tool].")
 	)
 
 /obj/structure/closet/body_bag/use_tool(obj/item/tool, mob/user, list/click_params)
@@ -54,8 +56,8 @@
 			return TRUE
 		set_label(input)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] labels \the [src] with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s label with \the [tool] to: [SPAN_INFO("'[label]'")]")
+			SPAN_NOTICE("[user] labels [src] with [tool]."),
+			SPAN_NOTICE("You set [src]'s label with [tool] to: [SPAN_INFO("'[label]'")]")
 		)
 		return TRUE
 
@@ -92,15 +94,15 @@
 
 /obj/structure/closet/body_bag/proc/fold(user)
 	if(!(ishuman(user) || isrobot(user)))
-		to_chat(user, SPAN_NOTICE("You lack the dexterity to close \the [name]."))
+		to_chat(user, SPAN_NOTICE("You lack the dexterity to close [name]."))
 		return FALSE
 
 	if(opened)
-		to_chat(user, SPAN_NOTICE("You must close \the [name] before it can be folded."))
+		to_chat(user, SPAN_NOTICE("You must close [name] before it can be folded."))
 		return FALSE
 
 	if(length(contents))
-		to_chat(user, SPAN_NOTICE("You can't fold \the [name] while it has something inside it."))
+		to_chat(user, SPAN_NOTICE("You can't fold [name] while it has something inside it."))
 		return FALSE
 
 	visible_message("[user] folds up the [name]")

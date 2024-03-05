@@ -261,13 +261,14 @@
 		return
 	if(!density)
 		return
+	if(!tool.use_as_tool(src, user, volume = 25, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	hatch_open = !hatch_open
 	user.visible_message(
 		SPAN_NOTICE("[user] [hatch_open ? "opens" : "closes"] [src]'s maintenance hatch."),
 		SPAN_NOTICE("You [hatch_open ? "open" : "close"] [src]'s maintenance hatch."),
 		SPAN_ITALIC("You hear screws being adjusted.")
 	)
-	playsound(loc, 'sound/items/Screwdriver.ogg', 25, TRUE)
 	update_icon()
 
 /obj/machinery/door/firedoor/welder_act(mob/living/user, obj/item/tool)

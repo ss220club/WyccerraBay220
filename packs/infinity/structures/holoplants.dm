@@ -89,6 +89,8 @@ GLOBAL_LIST_INIT(recomended_holoplants_colors, list(COLOR_PALE_RED_GRAY,COLOR_BL
 
 /obj/structure/holoplant/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	enabled = !enabled
 	brightness_on = brightness_on ? 0 : initial(brightness_on)
 	to_chat(usr, SPAN_NOTICE("You switch [enabled ? "on" : "off"] the [src]"))

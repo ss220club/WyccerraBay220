@@ -26,7 +26,7 @@
 /obj/item/weldingtool/electric/use_after(obj/O, mob/living/user)
 	if(istype(O, /obj/structure/reagent_dispensers/fueltank))
 		if(!welding)
-			to_chat(user, SPAN_WARNING("\The [src] runs on an internal charge and does not need to be refuelled."))
+			to_chat(user, SPAN_WARNING("[src] runs on an internal charge and does not need to be refuelled."))
 		return TRUE
 	return ..()
 
@@ -48,11 +48,13 @@
 /obj/item/weldingtool/electric/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!cell)
-		to_chat(user, SPAN_WARNING("\The [src] has no cell installed."))
+		to_chat(user, SPAN_WARNING("[src] has no cell installed."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	cell.dropInto(get_turf(src))
 	user.put_in_hands(cell)
-	to_chat(user, SPAN_NOTICE("You pop \the [cell] out of \the [src]."))
+	to_chat(user, SPAN_NOTICE("You pop [cell] out of [src]."))
 	welding = FALSE
 	cell = null
 	update_icon()
@@ -62,11 +64,11 @@
 		return
 	if(istype(W, /obj/item/cell))
 		if(cell)
-			to_chat(user, SPAN_WARNING("\The [src] already has a cell installed."))
+			to_chat(user, SPAN_WARNING("[src] already has a cell installed."))
 		else if(user.unEquip(W))
 			cell = W
 			cell.forceMove(src)
-			to_chat(user, SPAN_NOTICE("You slot \the [cell] into \the [src]."))
+			to_chat(user, SPAN_NOTICE("You slot [cell] into [src]."))
 			update_icon()
 		return
 	. = ..()

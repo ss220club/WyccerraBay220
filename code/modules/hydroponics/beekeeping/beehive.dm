@@ -63,8 +63,7 @@
 		to_chat(user, SPAN_NOTICE("You can't dismantle [src] with these bees inside."))
 		return
 	to_chat(user, SPAN_NOTICE("You start dismantling [src]..."))
-	playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
-	if(!do_after(user, (tool.toolspeed * 3) SECONDS, src, DO_PUBLIC_UNIQUE))
+	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_PUBLIC_UNIQUE))
 		return
 	user.visible_message(SPAN_NOTICE("[user] dismantles [src]."), SPAN_NOTICE("You dismantle [src]."))
 	new /obj/item/beehive_assembly(loc)

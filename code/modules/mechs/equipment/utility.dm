@@ -31,19 +31,19 @@
 		if(chosen_obj.density)
 			for(var/atom/A in get_turf(src))
 				if(A != src && A.density && !(A.atom_flags & ATOM_FLAG_CHECKS_BORDER))
-					to_chat(user, SPAN_WARNING("\The [A] blocks you from pulling out \the [chosen_obj]."))
+					to_chat(user, SPAN_WARNING("[A] blocks you from pulling out [chosen_obj]."))
 					return
 		if(!do_after(user, 0.5 SECONDS, src, DO_PUBLIC_UNIQUE)) return
 		if(!chosen_obj) return
 		if(chosen_obj.density)
 			for(var/atom/A in get_turf(src))
 				if(A != src && A.density && !(A.atom_flags & ATOM_FLAG_CHECKS_BORDER))
-					to_chat(user, SPAN_WARNING("\The [A] blocks you from pulling out \the [chosen_obj]."))
+					to_chat(user, SPAN_WARNING("[A] blocks you from pulling out [chosen_obj]."))
 					return
 		if(user.put_in_active_hand(chosen_obj))
-			src.visible_message(SPAN_NOTICE("\The [user] carefully grabs \the [chosen_obj] from \the [src]."))
+			src.visible_message(SPAN_NOTICE("[user] carefully grabs [chosen_obj] from [src]."))
 		else if(chosen_obj.dropInto(get_turf(src)))
-			src.visible_message(SPAN_NOTICE("\The [user] pulls \the [chosen_obj] from \the [src]."))
+			src.visible_message(SPAN_NOTICE("[user] pulls [chosen_obj] from [src]."))
 
 		if(!length(contents))
 			qdel_self()
@@ -73,7 +73,7 @@
 			if(!do_after(user, 2 SECONDS, owner, DO_PUBLIC_UNIQUE)) return
 			if(owner.hatch_closed || !chosen_obj) return
 			if(user.put_in_active_hand(chosen_obj))
-				owner.visible_message(SPAN_NOTICE("\The [user] carefully grabs \the [chosen_obj] from \the [src]."))
+				owner.visible_message(SPAN_NOTICE("[user] carefully grabs [chosen_obj] from [src]."))
 				playsound(src, 'sound/mecha/hydraulic.ogg', 50, 1)
 				carrying -= chosen_obj
 	. = ..()
@@ -95,81 +95,81 @@
 				if(istype(O, /obj/machinery/door/firedoor))
 					var/obj/machinery/door/firedoor/FD = O
 					if(FD.blocked)
-						FD.visible_message(SPAN_DANGER("\The [owner] begins prying on \the [FD]!"))
+						FD.visible_message(SPAN_DANGER("[owner] begins prying on [FD]!"))
 						if(do_after(owner, 10 SECONDS, FD, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && FD.blocked)
 							playsound(FD, 'sound/effects/meteorimpact.ogg', 100, 1)
 							playsound(FD, 'sound/machines/airlock_creaking.ogg', 100, 1)
 							FD.blocked = FALSE
 							addtimer(CALLBACK(FD, TYPE_PROC_REF(/obj/machinery/door/firedoor, open), TRUE), 0)
 							FD.set_broken(TRUE)
-							FD.visible_message(SPAN_WARNING("\The [owner] tears \the [FD] open!"))
+							FD.visible_message(SPAN_WARNING("[owner] tears [FD] open!"))
 					else
-						FD.visible_message(SPAN_DANGER("\The [owner] begins forcing \the [FD]!"))
+						FD.visible_message(SPAN_DANGER("[owner] begins forcing [FD]!"))
 						if(do_after(owner, 4 SECONDS, FD, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && !FD.blocked)
 							playsound(FD, 'sound/machines/airlock_creaking.ogg', 100, 1)
 							if(FD.density)
-								FD.visible_message(SPAN_DANGER("\The [owner] forces \the [FD] open!"))
+								FD.visible_message(SPAN_DANGER("[owner] forces [FD] open!"))
 								addtimer(CALLBACK(FD, TYPE_PROC_REF(/obj/machinery/door/firedoor, open), TRUE), 0)
 							else
-								FD.visible_message(SPAN_WARNING("\The [owner] forces \the [FD] closed!"))
+								FD.visible_message(SPAN_WARNING("[owner] forces [FD] closed!"))
 								addtimer(CALLBACK(FD, TYPE_PROC_REF(/obj/machinery/door/firedoor, close), TRUE), 0)
 					return
 				else if(istype(O, /obj/machinery/door/airlock))
 					var/obj/machinery/door/airlock/AD = O
 					if(!AD.operating && !AD.locked)
 						if(AD.welded)
-							AD.visible_message(SPAN_DANGER("\The [owner] begins prying on \the [AD]!"))
+							AD.visible_message(SPAN_DANGER("[owner] begins prying on [AD]!"))
 							if(do_after(owner, 15 SECONDS, AD, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && !AD.locked)
 								AD.welded = FALSE
 								AD.update_icon()
 								playsound(AD, 'sound/effects/meteorimpact.ogg', 100, 1)
 								playsound(AD, 'sound/machines/airlock_creaking.ogg', 100, 1)
-								AD.visible_message(SPAN_DANGER("\The [owner] tears \the [AD] open!"))
+								AD.visible_message(SPAN_DANGER("[owner] tears [AD] open!"))
 								addtimer(CALLBACK(AD, TYPE_PROC_REF(/obj/machinery/door/airlock, open), TRUE), 0)
 								AD.set_broken(TRUE)
 								return
 						else
-							AD.visible_message(SPAN_DANGER("\The [owner] begins forcing \the [AD]!"))
+							AD.visible_message(SPAN_DANGER("[owner] begins forcing [AD]!"))
 							if((MACHINE_IS_BROKEN(AD) || !AD.is_powered() || do_after(owner, 5 SECONDS, AD, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS)) && !(AD.operating || AD.welded || AD.locked))
 								playsound(AD, 'sound/machines/airlock_creaking.ogg', 100, 1)
 								if(AD.density)
 									addtimer(CALLBACK(AD, TYPE_PROC_REF(/obj/machinery/door/airlock, open), TRUE), 0)
 									if(!MACHINE_IS_BROKEN(AD) && AD.is_powered())
 										AD.set_broken(TRUE)
-									AD.visible_message(SPAN_DANGER("\The [owner] forces \the [AD] open!"))
+									AD.visible_message(SPAN_DANGER("[owner] forces [AD] open!"))
 								else
 									addtimer(CALLBACK(AD, TYPE_PROC_REF(/obj/machinery/door/airlock, close), TRUE), 0)
 									if(!MACHINE_IS_BROKEN(AD) && AD.is_powered())
 										AD.set_broken(TRUE)
-									AD.visible_message(SPAN_DANGER("\The [owner] forces \the [AD] closed!"))
+									AD.visible_message(SPAN_DANGER("[owner] forces [AD] closed!"))
 					if(AD.locked)
 						to_chat(user, SPAN_NOTICE("The airlock's bolts prevent it from being forced."))
 					return
 
-				to_chat(user, SPAN_WARNING("\The [target] is firmly secured."))
+				to_chat(user, SPAN_WARNING("[target] is firmly secured."))
 				return
 
 			if(length(carrying) >= carrying_capacity)
-				to_chat(user, SPAN_WARNING("\The [src] is fully loaded!"))
+				to_chat(user, SPAN_WARNING("[src] is fully loaded!"))
 				return
 
-			owner.visible_message(SPAN_NOTICE("\The [owner] begins loading \the [O]."))
+			owner.visible_message(SPAN_NOTICE("[owner] begins loading [O]."))
 			if(do_after(owner, 2 SECONDS, O, DO_PUBLIC_UNIQUE & ~DO_USER_SAME_HAND))
 				if(O in carrying || O.buckled_mob || O.anchored || (locate(/mob/living) in O)) //Repeat checks
 					return
 				if(length(carrying) >= carrying_capacity)
-					to_chat(user, SPAN_WARNING("\The [src] is fully loaded!"))
+					to_chat(user, SPAN_WARNING("[src] is fully loaded!"))
 					return
 				O.forceMove(src)
 				carrying += O
-				owner.visible_message(SPAN_NOTICE("\The [owner] loads \the [O] into its cargo compartment."))
+				owner.visible_message(SPAN_NOTICE("[owner] loads [O] into its cargo compartment."))
 				playsound(src, 'sound/mecha/hydraulic.ogg', 50, 1)
 
 		//attacking - Cannot be carrying something, cause then your clamp would be full
 		else if(istype(target,/mob/living))
 			var/mob/living/M = target
 			if(user.a_intent == I_HURT)
-				admin_attack_log(user, M, "attempted to clamp [M] with [src] ", "Was subject to a clamping attempt.", ", using \a [src], attempted to clamp")
+				admin_attack_log(user, M, "attempted to clamp [M] with [src] ", "Was subject to a clamping attempt.", ", using [src], attempted to clamp")
 				owner.setClickCooldown(owner.arms ? owner.arms.action_delay * 3 : 30) //This is an inefficient use of your powers
 				if(prob(33))
 					owner.visible_message(SPAN_DANGER("[owner] swings its [src] in a wide arc at [target] but misses completely!"))
@@ -196,7 +196,7 @@
 
 /obj/item/mech_equipment/clamp/proc/drop_carrying(mob/user, choose_object)
 	if(!length(carrying))
-		to_chat(user, SPAN_WARNING("You are not carrying anything in \the [src]."))
+		to_chat(user, SPAN_WARNING("You are not carrying anything in [src]."))
 		return
 	var/obj/chosen_obj = carrying[1]
 	if(choose_object)
@@ -206,10 +206,10 @@
 	if(chosen_obj.density)
 		for(var/atom/A in get_turf(src))
 			if(A != owner && A.density && !(A.atom_flags & ATOM_FLAG_CHECKS_BORDER))
-				to_chat(user, SPAN_WARNING("\The [A] blocks you from putting down \the [chosen_obj]."))
+				to_chat(user, SPAN_WARNING("[A] blocks you from putting down [chosen_obj]."))
 				return
 
-	owner.visible_message(SPAN_NOTICE("\The [owner] unloads \the [chosen_obj]."))
+	owner.visible_message(SPAN_NOTICE("[owner] unloads [chosen_obj]."))
 	playsound(src, 'sound/mecha/hydraulic.ogg', 50, 1)
 	chosen_obj.forceMove(get_turf(src))
 	carrying -= chosen_obj
@@ -286,7 +286,7 @@
 	. = ..()
 	if(.)
 		toggle()
-		to_chat(user, "You switch \the [src] [on ? "on" : "off"].")
+		to_chat(user, "You switch [src] [on ? "on" : "off"].")
 
 /obj/item/mech_equipment/light/proc/toggle()
 	on = !on
@@ -355,7 +355,7 @@
 	if(locked)
 		if(owner)
 			for(var/pilot in owner.pilots)
-				to_chat(pilot, SPAN_NOTICE("Lock on \the [locked] disengaged."))
+				to_chat(pilot, SPAN_NOTICE("Lock on [locked] disengaged."))
 		endanimation()
 		locked = null
 	//It's possible beam self destroyed, match active
@@ -386,10 +386,10 @@
 	if(.)
 		if(!locked)
 			mode = mode == CATAPULT_SINGLE ? CATAPULT_AREA : CATAPULT_SINGLE
-			to_chat(user, SPAN_NOTICE("You set \the [src] to [mode == CATAPULT_SINGLE ? "single" : "multi"]-target mode."))
+			to_chat(user, SPAN_NOTICE("You set [src] to [mode == CATAPULT_SINGLE ? "single" : "multi"]-target mode."))
 			update_icon()
 		else
-			to_chat(user, SPAN_NOTICE("You cannot change the mode \the [src] while it is locked on to a target."))
+			to_chat(user, SPAN_NOTICE("You cannot change the mode [src] while it is locked on to a target."))
 
 /obj/item/mech_equipment/catapult/afterattack(atom/target, mob/living/user, inrange, params)
 	. = ..()
@@ -543,9 +543,9 @@
 	if (user && !user.unEquip(DH))
 		return
 	if (drill_head)
-		visible_message(SPAN_NOTICE("\The [user] detaches \the [drill_head] mounted on \the [src]."))
+		visible_message(SPAN_NOTICE("[user] detaches [drill_head] mounted on [src]."))
 		drill_head.dropInto(get_turf(src))
-	user.visible_message(SPAN_NOTICE("\The [user] mounts \the [drill_head] on \the [src]."))
+	user.visible_message(SPAN_NOTICE("[user] mounts [drill_head] on [src]."))
 	DH.forceMove(src)
 	drill_head = DH
 
@@ -581,13 +581,13 @@
 		return
 
 	if (!drill_head)
-		to_chat(user, SPAN_WARNING("\The [src] doesn't have a head!"))
+		to_chat(user, SPAN_WARNING("[src] doesn't have a head!"))
 		return
 
 	if (ismob(target))
 		var/mob/tmob = target
 		if (tmob.unacidable)
-			to_chat(user, SPAN_WARNING("\The [target] can't be drilled away."))
+			to_chat(user, SPAN_WARNING("[target] can't be drilled away."))
 			return
 		else
 			to_chat(tmob, FONT_HUGE(SPAN_DANGER("You're about to get drilled - dodge!")))
@@ -595,11 +595,11 @@
 	else if (isobj(target))
 		var/obj/tobj = target
 		if (tobj.unacidable)
-			to_chat(user, SPAN_WARNING("\The [target] can't be drilled away."))
+			to_chat(user, SPAN_WARNING("[target] can't be drilled away."))
 			return
 
 	else if (istype(target, /turf/unsimulated))
-		to_chat(user, SPAN_WARNING("\The [target] can't be drilled away."))
+		to_chat(user, SPAN_WARNING("[target] can't be drilled away."))
 		return
 
 	var/obj/item/cell/mech_cell = owner.get_cell()
@@ -614,7 +614,7 @@
 
 	playsound(src, 'sound/mecha/mechdrill.ogg', 50, 1)
 	owner.visible_message(
-		SPAN_WARNING("\The [owner] starts to drill \the [target]."),
+		SPAN_WARNING("[owner] starts to drill [target]."),
 		blind_message = SPAN_WARNING("You hear a large motor whirring.")
 	)
 
@@ -633,7 +633,7 @@
 	if(EM)
 		EM.particles.spawning = FALSE
 	if (src != owner.selected_system)
-		to_chat(user, SPAN_WARNING("You must keep \the [src] selected to use it."))
+		to_chat(user, SPAN_WARNING("You must keep [src] selected to use it."))
 		return
 	if (drill_head.durability <= 0)
 		drill_head.shatter()
@@ -664,7 +664,7 @@
 		var/turf/simulated/wall/wall = target
 		var/wall_hardness = max(wall.material.hardness, wall.reinf_material ? wall.reinf_material.hardness : 0)
 		if (wall_hardness > drill_head.material.hardness)
-			to_chat(user, SPAN_WARNING("\The [wall] is too hard to drill through with \the [drill_head]."))
+			to_chat(user, SPAN_WARNING("[wall] is too hard to drill through with [drill_head]."))
 			drill_head.durability -= 2
 			return
 
@@ -673,7 +673,7 @@
 		audible = "a terrible rending of metal and flesh"
 
 	owner.visible_message(
-		SPAN_DANGER("\The [owner] drives \the [src] into \the [target]."),
+		SPAN_DANGER("[owner] drives [src] into [target]."),
 		blind_message = SPAN_WARNING("You hear [audible].")
 	)
 	log_and_message_admins("used [src] on [target]", user, owner.loc)
@@ -821,16 +821,16 @@
 		if (slideCheck(TT))
 			playsound(src, 'sound/magic/forcewall.ogg', 30, 1)
 			owner.visible_message(
-				SPAN_WARNING("\The [src] charges up in preparation for a slide!"),
+				SPAN_WARNING("[src] charges up in preparation for a slide!"),
 				blind_message = SPAN_WARNING("You hear a loud hum and an intense crackling.")
 			)
 			new /obj/temporary(get_step(owner.loc, reverse_direction(owner.dir)), 2 SECONDS, 'icons/effects/effects.dmi',"cyan_sparkles")
 			owner.setClickCooldown(2 SECONDS)
 			if (do_after(owner, 2 SECONDS, target, (DO_DEFAULT | DO_PUBLIC_PROGRESS | DO_USER_UNIQUE_ACT) & ~DO_USER_CAN_TURN) && slideCheck(TT))
-				owner.visible_message(SPAN_DANGER("Burning hard, \the [owner] thrusts forward!"))
+				owner.visible_message(SPAN_DANGER("Burning hard, [owner] thrusts forward!"))
 				owner.throw_at(get_ranged_target_turf(owner, owner.dir, slide_distance), slide_distance, 1, owner, FALSE)
 			else
-				owner.visible_message(SPAN_DANGER("\The [src] sputters and powers down"))
+				owner.visible_message(SPAN_DANGER("[src] sputters and powers down"))
 				owner.sparks.set_up(3,0,owner)
 				owner.sparks.start()
 
@@ -898,11 +898,11 @@
 	var/network = input("Which network would you like to configure it for?") as null|anything in (all_networks)
 	if(!network)
 		to_chat(user, SPAN_WARNING("You cannot connect to any camera network!."))
-	var/delay = 2 SECONDS * user.skill_delay_mult(SKILL_DEVICES)
-	if(do_after(user, delay, src, DO_DEFAULT | DO_BOTH_UNIQUE_ACT) && network)
-		camera.network = list(network)
-		camera.update_coverage(TRUE)
-		to_chat(user, SPAN_NOTICE("You configure the camera for \the [network] network."))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !network)
+		return
+	camera.network = list(network)
+	camera.update_coverage(TRUE)
+	to_chat(user, SPAN_NOTICE("You configure the camera for [network] network."))
 
 /obj/item/mech_equipment/camera/attack_self(mob/user)
 	. = ..()
@@ -911,7 +911,7 @@
 			deactivate()
 		else
 			activate()
-		to_chat(user, SPAN_NOTICE("You toggle \the [src] [active ? "on" : "off"]"))
+		to_chat(user, SPAN_NOTICE("You toggle [src] [active ? "on" : "off"]"))
 
 /obj/item/mech_equipment/camera/get_hardpoint_maptext()
 	return "[english_list(camera.network)]: [active ? "ONLINE" : "OFFLINE"]"

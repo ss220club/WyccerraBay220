@@ -378,13 +378,7 @@
 		SPAN_NOTICE("[user] starts removing [src]'s power cell with [tool]."),
 		SPAN_NOTICE("You start removing [src]'s power cell with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-		return
-	if(!maintenance_protocols)
-		USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to access the power cell.")
-		return
-	if(!body?.cell)
-		USE_FEEDBACK_FAILURE("[src] has no power cell to remove.")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !maintenance_protocols || !body?.cell)
 		return
 	user.put_in_hands(body.cell)
 	power = MECH_POWER_OFF

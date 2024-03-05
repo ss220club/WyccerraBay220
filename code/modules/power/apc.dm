@@ -489,15 +489,17 @@
 				if(!terminal())
 					to_chat(user, SPAN_WARNING("You must attach a wire connection first!"))
 					return
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
 				has_electronics = ELECTRONICS_SECURED
 				set_stat(MACHINE_STAT_MAINT, FALSE)
-				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You screw the circuit electronics into place.")
 				update_icon()
 			if(ELECTRONICS_SECURED)
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
 				has_electronics = ELECTRONICS_PLUGGED
 				set_stat(MACHINE_STAT_MAINT, TRUE)
-				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You unfasten the electronics.")
 				update_icon()
 			if(ELECTRONICS_NONE)
@@ -505,6 +507,8 @@
 		return
 
 	// Otherwise, if not opened, expose the wires.
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	wiresexposed = !wiresexposed
 	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
 	update_icon()

@@ -92,14 +92,16 @@
 
 /obj/item/device/assembly_holder/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Screwdriver - Toggle secured
 	a_left.set_secure(TRUE)
 	a_right.set_secure(TRUE)
 	secured = !secured
 	update_icon()
 	user.visible_message(
-		SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
-		SPAN_NOTICE("You adjust \the [src] with \the [tool]. It [secured ? "is now ready to use" : "can now be taken apart"].")
+		SPAN_NOTICE("[user] adjusts [src] with [tool]."),
+		SPAN_NOTICE("You adjust [src] with [tool]. It [secured ? "is now ready to use" : "can now be taken apart"].")
 	)
 
 
@@ -168,7 +170,7 @@
 	. = ..()
 	if (distance > 1)
 		return
-	to_chat(user, "\The [src] is [secured ? "ready": "not secured"]!")
+	to_chat(user, "[src] is [secured ? "ready": "not secured"]!")
 
 
 /obj/item/device/assembly_holder/timer_igniter

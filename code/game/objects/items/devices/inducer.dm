@@ -56,6 +56,8 @@
 
 /obj/item/inducer/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	opened = !opened
 	to_chat(user, SPAN_NOTICE("You [opened ? "open" : "close"] the battery compartment."))
 	update_icon()

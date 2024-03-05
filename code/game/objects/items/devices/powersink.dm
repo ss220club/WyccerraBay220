@@ -69,27 +69,31 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle connection to cable
 	if (mode != DISCONNECTED)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		user.visible_message(
-			SPAN_NOTICE("\The [user] detaches \a [src] from \the [attached] with \a [tool]."),
-			SPAN_NOTICE("You detach \the [src] from \the [attached] with \the [tool].")
+			SPAN_NOTICE("[user] detaches [src] from [attached] with [tool]."),
+			SPAN_NOTICE("You detach [src] from [attached] with [tool].")
 		)
 		set_mode(DISCONNECTED)
 		return
 	if (!isturf(loc))
-		USE_FEEDBACK_FAILURE("\The [src] must be placed on the ground before you can connect it.")
+		USE_FEEDBACK_FAILURE("[src] must be placed on the ground before you can connect it.")
 		return
 	var/turf/turf = loc
 	if (!turf.is_plating())
-		USE_FEEDBACK_FAILURE("\The [turf]'s plating must be removed before you can connect \the [src].")
+		USE_FEEDBACK_FAILURE("[turf]'s plating must be removed before you can connect [src].")
 		return
 	attached = locate() in turf
 	if (!attached)
-		USE_FEEDBACK_FAILURE("\The [src] must be placed over an exposed, powered cable node before it can be connected.")
+		USE_FEEDBACK_FAILURE("[src] must be placed over an exposed, powered cable node before it can be connected.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	set_mode(CLAMPED_OFF)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] attaches \a [src] to \the [attached] with \a [tool]."),
-		SPAN_NOTICE("You attach \the [src] to \the [attached] with \the [tool].")
+		SPAN_NOTICE("[user] attaches [src] to [attached] with [tool]."),
+		SPAN_NOTICE("You attach [src] to [attached] with [tool].")
 	)
 
 
@@ -106,8 +110,8 @@
 
 		if(CLAMPED_OFF)
 			user.visible_message( \
-				"[user] activates \the [src]!", \
-				SPAN_NOTICE("You activate \the [src]."),
+				"[user] activates [src]!", \
+				SPAN_NOTICE("You activate [src]."),
 				SPAN_CLASS("italics", "You hear a click."))
 			message_admins("Power sink activated by [key_name_admin(user)] at (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 			log_game("Power sink activated by [key_name(user)] at [get_area_name(src)]")
@@ -115,8 +119,8 @@
 
 		if(OPERATING)
 			user.visible_message( \
-				"[user] deactivates \the [src]!", \
-				SPAN_NOTICE("You deactivate \the [src]."),
+				"[user] deactivates [src]!", \
+				SPAN_NOTICE("You deactivate [src]."),
 				SPAN_CLASS("italics", "You hear a click."))
 			set_mode(CLAMPED_OFF)
 

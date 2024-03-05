@@ -104,7 +104,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			if(powered)
 				to_chat(user, desc_holder)
 			else
-				to_chat(user, "\The [src] is assembled")
+				to_chat(user, "[src] is assembled")
 
 
 /obj/structure/particle_accelerator/can_anchor(obj/item/tool, mob/user, silent)
@@ -113,7 +113,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		return
 	if (construction_state > CONSTRUCT_STATE_ANCHORED)
 		if (!silent)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be further dismantled before you can move it.")
+			USE_FEEDBACK_FAILURE("[src] needs to be further dismantled before you can move it.")
 		return FALSE
 
 
@@ -126,7 +126,9 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 /obj/structure/particle_accelerator/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (construction_state < CONSTRUCT_STATE_WIRED)
-		USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can close the panel.")
+		USE_FEEDBACK_FAILURE("[src] needs to be wired before you can close the panel.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	if (construction_state == CONSTRUCT_STATE_WIRED)
 		construction_state = CONSTRUCT_STATE_COMPLETE
@@ -134,45 +136,45 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		construction_state = CONSTRUCT_STATE_WIRED
 	update_icon()
 	user.visible_message(
-		SPAN_NOTICE("\The [user] [construction_state == CONSTRUCT_STATE_COMPLETE ? "closes" : "opens"] \the [src]'s maintenance panel with \a [tool]."),
-		SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_COMPLETE ? "close" : "open"] \the [src]'s maintenance panel with \the [tool].")
+		SPAN_NOTICE("[user] [construction_state == CONSTRUCT_STATE_COMPLETE ? "closes" : "opens"] [src]'s maintenance panel with [tool]."),
+		SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_COMPLETE ? "close" : "open"] [src]'s maintenance panel with [tool].")
 	)
 
 /obj/structure/particle_accelerator/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (construction_state < CONSTRUCT_STATE_WIRED)
-		USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
 		return
 	if (construction_state > CONSTRUCT_STATE_WIRED)
-		USE_FEEDBACK_FAILURE("\The [src]'s panel must be open before you can access the wiring.")
+		USE_FEEDBACK_FAILURE("[src]'s panel must be open before you can access the wiring.")
 		return
 	construction_state = CONSTRUCT_STATE_ANCHORED
 	update_state()
 	update_icon()
 	user.visible_message(
-		SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
-		SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
+		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),
+		SPAN_NOTICE("You cut [src]'s wiring with [tool].")
 	)
 
 /obj/structure/particle_accelerator/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Add wiring
 	if (isCoil(tool))
 		if (construction_state < CONSTRUCT_STATE_ANCHORED)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be anchored before you can wire it.")
+			USE_FEEDBACK_FAILURE("[src] needs to be anchored before you can wire it.")
 			return TRUE
 		if (construction_state > CONSTRUCT_STATE_ANCHORED)
-			USE_FEEDBACK_FAILURE("\The [src] is already wired.")
+			USE_FEEDBACK_FAILURE("[src] is already wired.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire [src].")
 			return TRUE
 		construction_state = CONSTRUCT_STATE_WIRED
 		update_state()
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] wires \the [src] with \a [tool]."),
-			SPAN_NOTICE("You wire \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] wires [src] with [tool]."),
+			SPAN_NOTICE("You wire [src] with [tool].")
 		)
 		return TRUE
 	return ..()
@@ -273,7 +275,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			if(powered)
 				to_chat(user, desc_holder)
 			else
-				to_chat(user, "\The [src] is assembled")
+				to_chat(user, "[src] is assembled")
 
 /obj/machinery/particle_accelerator/ex_act(severity)
 	switch(severity)
@@ -299,10 +301,14 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	. = ITEM_INTERACT_SUCCESS
 	switch(construct_state)
 		if(2)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			user.visible_message("[user.name] closes the [src.name]'s access panel.", \
 				"You close the access panel.")
 			construct_state = 3
 		if(3)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			user.visible_message("[user.name] opens the [src.name]'s access panel.", \
 				"You open the access panel.")
 			construct_state = 2

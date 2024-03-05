@@ -86,22 +86,19 @@
 			if(reinf_material)
 				USE_FEEDBACK_FAILURE("[src] already has [reinf_material.adjective_name] reinforcement.")
 				return
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			reinforcing = !reinforcing
 			user.visible_message(
 				SPAN_NOTICE("[user] adjusts [src] with [tool]. It can now be [reinforcing ? "reinforced" : "constructed"]."),
 				SPAN_NOTICE("You adjust [src] with [tool]. It can now be [reinforcing ? "reinforced" : "constructed"].")
 			)
 		if(GIRDER_STATE_REINFORCEMENT_UNSECURED)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 			user.visible_message(
 				SPAN_NOTICE("[user] starts securing [src]'s support struts with [tool]."),
 				SPAN_NOTICE("You starts securing [src]'s support struts with [tool].")
 			)
-			if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-				return
-			if(state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
-				USE_FEEDBACK_FAILURE("[src]'s state has changed.")
+			if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != GIRDER_STATE_REINFORCEMENT_UNSECURED)
 				return
 			state = GIRDER_STATE_REINFORCED
 			user.visible_message(
@@ -109,17 +106,12 @@
 				SPAN_NOTICE("You secure [src]'s support struts with [tool].")
 			)
 		if(GIRDER_STATE_REINFORCED)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 			user.visible_message(
 				SPAN_NOTICE("[user] starts unsecuring [src]'s support struts with [tool]."),
 				SPAN_NOTICE("You starts unsecuring [src]'s support struts with [tool].")
 			)
-			if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+			if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != GIRDER_STATE_REINFORCED)
 				return
-			if(state != GIRDER_STATE_REINFORCED)
-				USE_FEEDBACK_FAILURE("[src]'s state has changed.")
-				return
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 			state = GIRDER_STATE_REINFORCEMENT_UNSECURED
 			user.visible_message(
 				SPAN_NOTICE("[user] unsecures [src]'s support struts with [tool]."),

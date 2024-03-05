@@ -134,15 +134,11 @@
 	if(state != ASSEMBLY_STATE_CIRCUIT)
 		USE_FEEDBACK_FAILURE("[src] needs a circuit before you can finish it.")
 		return
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts finishing [src] with [tool]."),
 		SPAN_NOTICE("You start finishing [src] with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return
-	if(state != ASSEMBLY_STATE_CIRCUIT)
-		USE_FEEDBACK_FAILURE("[src] needs a circuit before you can finish it.")
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != ASSEMBLY_STATE_CIRCUIT)
 		return
 	var/path
 	if(istext(glass))
@@ -154,7 +150,6 @@
 	var/obj/machinery/door/airlock/airlock = new path(loc, src)
 	transfer_fingerprints_to(airlock)
 	airlock.add_fingerprint(user, tool = tool)
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] finishes [airlock] with [tool]."),
 		SPAN_NOTICE("You finishes [airlock] with [tool].")

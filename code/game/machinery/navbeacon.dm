@@ -39,10 +39,12 @@ var/global/list/navbeacons = list()
 
 /obj/machinery/navbeacon/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	open = !open
 	user.visible_message(
-		SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] cover of \the [src]."),
-		SPAN_NOTICE("You [open ? "open" : "close"] cover of \the [src].")
+		SPAN_NOTICE("[user] [open ? "opens" : "closes"] cover of [src]."),
+		SPAN_NOTICE("You [open ? "open" : "close"] cover of [src].")
 	)
 	update_icon()
 

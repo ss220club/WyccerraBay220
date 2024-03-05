@@ -183,15 +183,13 @@
 			SPAN_NOTICE("[user] begins to attach the details in the desired order."),
 			SPAN_NOTICE("You begin to attach the details in the desired order.")
 		)
-		playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
-		if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || broken_state != GRAV_NEEDS_SCREWDRIVER)
+		if(!tool.use_as_tool(middle, user, 15 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_SCREWDRIVER)
 			return
 		health += max(initial(health), health + 250)
 		user.visible_message(
 			SPAN_NOTICE("[user] attached the details."),
 			SPAN_NOTICE("You have attached the details.")
 		)
-		playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 		stat &= ~MACHINE_BROKEN_GENERIC
 		set_broken_state(0)
 		update_icon()

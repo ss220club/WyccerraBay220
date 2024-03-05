@@ -16,6 +16,8 @@
 
 /obj/item/assembly/shock_kit/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	status = !status
 	to_chat(user, SPAN_NOTICE("[src] is now [status ? "secured" : "unsecured"]!"))
 	add_fingerprint(user)

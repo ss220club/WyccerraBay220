@@ -89,7 +89,7 @@
 
 /obj/item/gun/magnetic/proc/show_ammo(mob/user)
 	if(loaded)
-		to_chat(user, SPAN_NOTICE("It has \a [loaded] loaded."))
+		to_chat(user, SPAN_NOTICE("It has [loaded] loaded."))
 
 /obj/item/gun/magnetic/examine(mob/user)
 	. = ..()
@@ -108,16 +108,17 @@
 /obj/item/gun/magnetic/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!removable_components)
-		USE_FEEDBACK_FAILURE("\The [src]'s components can't be swapped out.")
+		USE_FEEDBACK_FAILURE("[src]'s components can't be swapped out.")
 		return
 	if (!capacitor)
-		USE_FEEDBACK_FAILURE("\The [src] has no capacitor to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no capacitor to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.put_in_hands(capacitor)
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] detaches \a [capacitor] from \a [src] with \a [tool]."),
-		SPAN_NOTICE("You detach \the [capacitor] from \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] detaches [capacitor] from [src] with [tool]."),
+		SPAN_NOTICE("You detach [capacitor] from [src] with [tool].")
 	)
 	capacitor = null
 	power_per_tick = 0
@@ -127,10 +128,10 @@
 	// Capacitor - Install capacitor
 	if (istype(tool, /obj/item/stock_parts/capacitor))
 		if (!removable_components)
-			USE_FEEDBACK_FAILURE("\The [src]'s components can't be swapped out.")
+			USE_FEEDBACK_FAILURE("[src]'s components can't be swapped out.")
 			return TRUE
 		if (capacitor)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [capacitor] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [capacitor] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -140,18 +141,18 @@
 		update_icon()
 		playsound(src, 'sound/machines/click.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] slots \a [tool] into \a [src]."),
-			SPAN_NOTICE("You slot \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] slots [tool] into [src]."),
+			SPAN_NOTICE("You slot [tool] into [src].")
 		)
 		return TRUE
 
 	// Cell - Install cell
 	if (istype(tool, /obj/item/cell))
 		if (!removable_components)
-			USE_FEEDBACK_FAILURE("\The [src]'s components can't be swapped out.")
+			USE_FEEDBACK_FAILURE("[src]'s components can't be swapped out.")
 			return TRUE
 		if (cell)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [cell] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [cell] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -160,8 +161,8 @@
 		update_icon()
 		playsound(src, 'sound/machines/click.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] slots \a [tool] into \a [src]."),
-			SPAN_NOTICE("You slot \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] slots [tool] into [src]."),
+			SPAN_NOTICE("You slot [tool] into [src].")
 		)
 		return TRUE
 
@@ -175,30 +176,30 @@
 			var/obj/item/stack/loaded_ammo = loaded
 			if (!istype(loaded_ammo))
 				if (loaded)
-					USE_FEEDBACK_FAILURE("\The [src] already has \a [loaded] loaded.")
+					USE_FEEDBACK_FAILURE("[src] already has [loaded] loaded.")
 					return TRUE
 				ammo_count = min(load_sheet_max, ammo.amount)
 				loaded = new load_type(src, ammo_count)
 				loaded_ammo = loaded
 			else
 				if (loaded_ammo.type != ammo.type)
-					USE_FEEDBACK_FAILURE("\The [src] is currently loaded with [loaded_ammo.get_stack_name()]. \The [ammo.get_stack_name()] is not cannot be mixed with this.")
+					USE_FEEDBACK_FAILURE("[src] is currently loaded with [loaded_ammo.get_stack_name()]. [ammo.get_stack_name()] is not cannot be mixed with this.")
 					return TRUE
 				ammo_count = min(load_sheet_max - loaded_ammo.amount, ammo.amount)
 				loaded_ammo.amount += ammo_count
 			if (!ammo_count)
-				USE_FEEDBACK_FAILURE("\The [src] is already fully loaded.")
+				USE_FEEDBACK_FAILURE("[src] is already fully loaded.")
 				return TRUE
 			ammo.use(ammo_count)
 			user.visible_message(
-				SPAN_NOTICE("\The [user] loads \a [src] with [ammo.get_vague_name(ammo_count > 1)]."),
-				SPAN_NOTICE("You load \the [src] with [ammo.get_exact_name(ammo_count)].")
+				SPAN_NOTICE("[user] loads [src] with [ammo.get_vague_name(ammo_count > 1)]."),
+				SPAN_NOTICE("You load [src] with [ammo.get_exact_name(ammo_count)].")
 			)
 			if (load_sheet_max > 1)
-				to_chat(user, SPAN_INFO("\The [src] now has [loaded_ammo.get_exact_name()] out of [load_sheet_max] loaded."))
+				to_chat(user, SPAN_INFO("[src] now has [loaded_ammo.get_exact_name()] out of [load_sheet_max] loaded."))
 		else
 			if (loaded)
-				USE_FEEDBACK_FAILURE("\The [src] already has \a [loaded] loaded.")
+				USE_FEEDBACK_FAILURE("[src] already has [loaded] loaded.")
 				return TRUE
 			if (!user.unEquip(tool, src))
 				FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -206,7 +207,7 @@
 			if (istype(tool, /obj/item/magnetic_ammo))
 				var/obj/item/magnetic_ammo/mag = tool
 				if (load_type != mag.basetype)
-					USE_FEEDBACK_FAILURE("\The [mag] doesn't fit in \the [src].")
+					USE_FEEDBACK_FAILURE("[mag] doesn't fit in [src].")
 					return TRUE
 				projectile_type = mag.projectile_type
 			loaded = tool
@@ -230,7 +231,7 @@
 
 		if(removing)
 			user.put_in_hands(removing)
-			user.visible_message(SPAN_NOTICE("\The [user] removes \the [removing] from \the [src]."))
+			user.visible_message(SPAN_NOTICE("[user] removes [removing] from [src]."))
 			playsound(loc, 'sound/machines/click.ogg', 10, 1)
 			update_icon()
 			return
@@ -254,7 +255,7 @@
 
 	if(gun_unreliable && prob(gun_unreliable))
 		spawn(3) // So that it will still fire - considered modifying Fire() to return a value but burst fire makes that annoying.
-			visible_message(SPAN_DANGER("\The [src] explodes with the force of the shot!"))
+			visible_message(SPAN_DANGER("[src] explodes with the force of the shot!"))
 			explosion(get_turf(src), 2, EX_ACT_LIGHT)
 			qdel(src)
 

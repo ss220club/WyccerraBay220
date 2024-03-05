@@ -32,27 +32,20 @@
 /obj/structure/decorative/ed209/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!user.skill_check(SKILL_DEVICES, SKILL_BASIC))
-		USE_FEEDBACK_FAILURE("You're not skill enough to salvage \the [src].")
+		USE_FEEDBACK_FAILURE("You're not skill enough to salvage [src].")
 		return
 	if(salvaged)
-		USE_FEEDBACK_FAILURE("It doesn't seem like there's anything of use left on \the [src].")
+		USE_FEEDBACK_FAILURE("It doesn't seem like there's anything of use left on [src].")
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts rummaging through \the [src] with \a [tool]."),
-		SPAN_NOTICE("You start looking for useful components \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] starts rummaging through [src] with [tool]."),
+		SPAN_NOTICE("You start looking for useful components [src] with [tool].")
 	)
-	if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_DEVICES, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || salvaged)
 		return
-	if(!user.skill_check(SKILL_DEVICES, SKILL_BASIC))
-		USE_FEEDBACK_FAILURE("You're not skill enough to salvage \the [src].")
-		return
-	if(salvaged)
-		USE_FEEDBACK_FAILURE("It doesn't seem like there's anything of use left on \the [src].")
-		return
-	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] detaches some components from \the [src] with \a [tool]."),
-		SPAN_NOTICE("You detach some useful components from \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] detaches some components from [src] with [tool]."),
+		SPAN_NOTICE("You detach some useful components from [src] with [tool].")
 	)
 	var/obj/item/part = pickweight(loot)
 	part = new part(get_turf(user))

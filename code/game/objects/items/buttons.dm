@@ -65,13 +65,16 @@ GLOBAL_LIST_INIT(possible_switch_offsets, list(
 
 /obj/item/frame/light_switch/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(isturf(user.loc))
-		var/obj/machinery/light_switch/S = new(user.loc)
-		if(position_with_direction(S, user))
-			to_chat(user, "You fasten \the [S] with your [tool].")
-			qdel(src)
-		else
-			qdel(S)
+	if(!isturf(user.loc))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/machinery/light_switch/S = new(user.loc)
+	if(position_with_direction(S, user))
+		to_chat(user, "You fasten [S] with your [tool].")
+		qdel(src)
+	else
+		qdel(S)
 
 /obj/item/frame/light_switch/windowtint/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -80,10 +83,13 @@ GLOBAL_LIST_INIT(possible_switch_offsets, list(
 
 /obj/item/frame/light_switch/windowtint/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(isturf(user.loc))
-		var/obj/machinery/button/windowtint/S = new(user.loc)
-		if(position_with_direction(S, user))
-			to_chat(user, "You fasten \the [S] with your [tool].")
-			qdel(src)
-		else
-			qdel(S)
+	if(!isturf(user.loc))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/machinery/button/windowtint/S = new(user.loc)
+	if(position_with_direction(S, user))
+		to_chat(user, "You fasten [S] with your [tool].")
+		qdel(src)
+	else
+		qdel(S)

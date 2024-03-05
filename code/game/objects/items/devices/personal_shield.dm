@@ -48,8 +48,9 @@
 
 /obj/item/device/personal_shield/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	open = !open
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	update_icon()
 	user.visible_message(
 		SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),

@@ -28,21 +28,19 @@
 
 /obj/structure/bookcase/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] begins dismantling \the [src] with \a [tool]."),
-		SPAN_NOTICE("You begin dismantling \the [src] with \a [tool].")
+		SPAN_NOTICE("[user] begins dismantling [src] with [tool]."),
+		SPAN_NOTICE("You begin dismantling [src] with [tool].")
 	)
-	if(!user.do_skilled(2.5 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return TRUE
+	if(!tool.use_as_tool(src, user, 2.5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	var/obj/item/stack/material/wood/wood = new (loc, 5)
 	transfer_fingerprints_to(wood)
 	for(var/obj/item/book/book in contents)
 		book.dropInto(loc)
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-		SPAN_NOTICE("You dismantle \the [src] with \a [tool].")
+		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
+		SPAN_NOTICE("You dismantle [src] with [tool].")
 	)
 	qdel(src)
 
@@ -63,8 +61,8 @@
 			return TRUE
 		SetName("[initial(name)] ([input])")
 		user.visible_message(
-			SPAN_NOTICE("\The [user] re-labels \the [src] with \a [tool]."),
-			SPAN_NOTICE("You re-label \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] re-labels [src] with [tool]."),
+			SPAN_NOTICE("You re-label [src] with [tool].")
 		)
 		return TRUE
 

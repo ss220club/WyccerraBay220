@@ -53,6 +53,10 @@
 /obj/machinery/floorlayer/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	T = input("Choose tile type.", "Tiles") as null|anything in contents
+	if(!T)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 
 /obj/machinery/floorlayer/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

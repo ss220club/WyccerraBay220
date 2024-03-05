@@ -113,6 +113,8 @@
 		if (!reinforced)
 			USE_FEEDBACK_FAILURE("[src] has no reinforcements to remove.")
 			return
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		remove_reinforced(tool, user)
 		if (!reinforced)
 			update_desc()

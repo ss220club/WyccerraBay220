@@ -31,7 +31,7 @@
 	if(enabled)
 		bsod = 1
 		update_icon()
-		to_chat(usr, "You press a hard-reset button on \the [src]. It displays a brief debug screen before shutting down.")
+		to_chat(usr, "You press a hard-reset button on [src]. It displays a brief debug screen before shutting down.")
 		shutdown_computer(FALSE)
 		spawn(2 SECONDS)
 			bsod = 0
@@ -82,7 +82,7 @@
 		user = usr
 
 	if(!portable_drive)
-		to_chat(user, "There is no portable device connected to \the [src].")
+		to_chat(user, "There is no portable device connected to [src].")
 		return
 
 	uninstall_component(user, portable_drive)
@@ -130,16 +130,18 @@
 	var/obj/item/stock_parts/computer/H = find_hardware_by_name(choice)
 	if(!H)
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	uninstall_component(user, H)
 
 /obj/item/modular_computer/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	var/list/components = get_all_components()
 	if(length(components))
-		to_chat(user, "Remove all components from \the [src] before disassembling it.")
+		to_chat(user, "Remove all components from [src] before disassembling it.")
 		return
 	new /obj/item/stack/material/steel( get_turf(src.loc), steel_sheet_cost )
-	src.visible_message("\The [src] has been disassembled by [user].")
+	src.visible_message("[src] has been disassembled by [user].")
 	qdel(src)
 
 /obj/item/modular_computer/welder_act(mob/living/user, obj/item/tool)
@@ -150,13 +152,13 @@
 		return
 
 	if(!get_damage_value())
-		to_chat(user, "\The [src] does not require repairs.")
+		to_chat(user, "[src] does not require repairs.")
 		return
 
-	to_chat(user, "You begin repairing damage to \the [src]...")
+	to_chat(user, "You begin repairing damage to [src]...")
 	if(do_after(user, damage / (1 SECONDS), src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(round(damage / 75)))
 		revive_health()
-		to_chat(user, "You repair \the [src].")
+		to_chat(user, "You repair [src].")
 
 /obj/item/modular_computer/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/card/id)) // ID Card, try to insert it.
@@ -200,7 +202,7 @@
 		if(C.hardware_size <= max_hardware_size)
 			try_install_component(user, C)
 		else
-			to_chat(user, "This component is too large for \the [src].")
+			to_chat(user, "This component is too large for [src].")
 	. = ..()
 
 /obj/item/modular_computer/examine(mob/user)

@@ -51,12 +51,13 @@
 
 /obj/item/weldingtool/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 10, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	status = !status
 	if(status)
 		to_chat(user, SPAN_NOTICE("You secure the welder."))
 	else
 		to_chat(user, SPAN_NOTICE("The welder can now be attached and modified."))
-	playsound(src, 'sound/items/Screwdriver.ogg', 10, 1)
 	add_fingerprint(user)
 
 /obj/item/weldingtool/attackby(obj/item/W as obj, mob/user as mob)

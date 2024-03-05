@@ -295,24 +295,28 @@
 /obj/structure/window/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Reinforced Window
-	if (reinf_material)
+	if(reinf_material)
 		switch(construction_state)
-			if (CONSTRUCT_STATE_UNANCHORED)
-				if (!can_install_here(user))
+			if(CONSTRUCT_STATE_UNANCHORED)
+				if(!can_install_here(user))
+					return
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 					return
 				set_anchored(!anchored)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 				user.visible_message(
 					SPAN_NOTICE("[user] [!anchored ? "un" : null]fastens [src] [!anchored ? "from" : "to"] the floor with [tool]."),
 					SPAN_NOTICE("You [!anchored ? "un" : null]fasten [src] [!anchored ? "from" : "to"] the floor with [tool].")
 				)
 				return
-			if (CONSTRUCT_STATE_ANCHORED)
+			if(CONSTRUCT_STATE_ANCHORED)
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
 				construction_state = CONSTRUCT_STATE_COMPLETE
-			if (CONSTRUCT_STATE_COMPLETE)
+			if(CONSTRUCT_STATE_COMPLETE)
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
 				construction_state = CONSTRUCT_STATE_ANCHORED
 		update_nearby_icons()
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 		user.visible_message(
 			SPAN_NOTICE("[user] [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fastens [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with [tool]."),
 			SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fasten [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with [tool].")
@@ -321,12 +325,13 @@
 	// Regular Windows
 	if (!anchored && !can_install_here(user))
 		return
-	if (anchored)
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(anchored)
 		construction_state = CONSTRUCT_STATE_UNANCHORED
 	else
 		construction_state = CONSTRUCT_STATE_ANCHORED
 	set_anchored(!anchored)
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] [!anchored ? "un" : null]fastens [src] [!anchored ? "from" : "to"] the floor with [tool]."),
 		SPAN_NOTICE("You [!anchored ? "un" : null]fasten [src] [!anchored ? "from" : "to"] the floor with [tool].")
@@ -747,6 +752,8 @@
 
 /obj/machinery/button/windowtint/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	var/obj/item/frame/light_switch/windowtint/frame = new /obj/item/frame/light_switch/windowtint(user.loc, 1)
 	transfer_fingerprints_to(frame)
 	qdel(src)

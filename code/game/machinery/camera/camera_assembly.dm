@@ -37,21 +37,22 @@
 /obj/item/camera_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(state == ASSEMBLY_WIRED)
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		var/input = sanitize(input(usr, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
+		var/input = sanitize(input(user, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
 		if(!input)
-			to_chat(usr, "No input found please hang up and try your call again.")
+			to_chat(user, "No input found please hang up and try your call again.")
 			return
 		var/list/tempnetwork = splittext(input, ",")
 		if(length(tempnetwork) < 1)
-			to_chat(usr, "No network found please hang up and try your call again.")
+			to_chat(user, "No network found please hang up and try your call again.")
+			return
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		var/area/camera_area = get_area(src)
 		var/temptag = "[sanitize(camera_area.name)] ([rand(1, 999)])"
-		input = sanitizeSafe(input(usr, "How would you like to name the camera?", "Set Camera Name", camera_name ? camera_name : temptag), MAX_LNAME_LEN)
+		input = sanitizeSafe(input(user, "How would you like to name the camera?", "Set Camera Name", camera_name ? camera_name : temptag), MAX_LNAME_LEN)
 		state = ASSEMBLY_SCREWED
-		var/obj/machinery/camera/C = new(src.loc)
-		src.forceMove(C)
+		var/obj/machinery/camera/C = new(loc)
+		forceMove(C)
 		C.assembly = src
 		C.auto_turn()
 		C.replace_networks(uniquelist(tempnetwork))
@@ -122,7 +123,7 @@
 
 	// Upgrades!
 	if(is_type_in_list(W, possible_upgrades) && !is_type_in_list(W, upgrades) && user.unEquip(W, src)) // Is a possible upgrade and isn't in the camera already.
-		to_chat(user, "You attach \the [W] into the assembly inner circuits.")
+		to_chat(user, "You attach [W] into the assembly inner circuits.")
 		upgrades += W
 		return
 	..()
@@ -143,7 +144,7 @@
 		return 0
 
 	if(WT.can_use(1, user))
-		to_chat(user, SPAN_NOTICE("You start to weld \the [src].."))
+		to_chat(user, SPAN_NOTICE("You start to weld [src].."))
 		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
 		busy = 1
 		if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(1, user))

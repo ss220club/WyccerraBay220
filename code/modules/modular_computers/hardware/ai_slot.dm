@@ -21,16 +21,19 @@
 
 /obj/item/stock_parts/computer/ai_slot/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(stored_card)
-		to_chat(user, "You manually remove \the [stored_card] from \the [src].")
-		do_eject_ai(user)
+	if(!stored_card)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You manually remove [stored_card] from [src].")
+	do_eject_ai(user)
 
 /obj/item/stock_parts/computer/ai_slot/attackby(obj/item/W, mob/user)
 	if(..())
 		return TRUE
 	if(istype(W, /obj/item/aicard))
 		if(stored_card)
-			to_chat(user, "\The [src] is already occupied.")
+			to_chat(user, "[src] is already occupied.")
 			return
 		if(!user.unEquip(W, src))
 			return
@@ -59,7 +62,7 @@
 		device = locate() in src
 
 	if(!device.stored_card)
-		to_chat(user, "There is no intellicard connected to \the [src].")
+		to_chat(user, "There is no intellicard connected to [src].")
 		return
 
 	device.do_eject_ai(user)

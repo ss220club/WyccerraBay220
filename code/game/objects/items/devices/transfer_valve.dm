@@ -23,32 +23,33 @@
 /obj/item/device/transfer_valve/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!armed)
-		USE_FEEDBACK_FAILURE("\The [src] isn't armed.")
+		USE_FEEDBACK_FAILURE("[src] isn't armed.")
 		return
 	if (!panel_open)
-		USE_FEEDBACK_FAILURE("\The [src]'s panel is closed.")
+		USE_FEEDBACK_FAILURE("[src]'s panel is closed.")
 		return
 	wires.Interact(user)
 
 /obj/item/device/transfer_valve/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!tank_one || !tank_two || !attached_device)
-		USE_FEEDBACK_FAILURE("\The [src] isn't assembled.")
+		USE_FEEDBACK_FAILURE("[src] isn't assembled.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panel_open = !panel_open
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] [panel_open ? "opens" : "closes"] \a [src]'s control panel with \a [tool]."),
-		SPAN_NOTICE("You [panel_open ? "open" : "close"] \the [src]'s control panel with \the [tool].")
+		SPAN_NOTICE("[user] [panel_open ? "opens" : "closes"] [src]'s control panel with [tool]."),
+		SPAN_NOTICE("You [panel_open ? "open" : "close"] [src]'s control panel with [tool].")
 	)
 
 /obj/item/device/transfer_valve/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!armed)
-		USE_FEEDBACK_FAILURE("\The [src] isn't armed.")
+		USE_FEEDBACK_FAILURE("[src] isn't armed.")
 		return
 	if (!panel_open)
-		USE_FEEDBACK_FAILURE("\The [src]'s panel is closed.")
+		USE_FEEDBACK_FAILURE("[src]'s panel is closed.")
 		return
 	wires.Interact(user)
 
@@ -57,13 +58,13 @@
 	if (isassembly(tool))
 		var/obj/item/device/assembly/assembly = tool
 		if (armed)
-			USE_FEEDBACK_FAILURE("\The [src] is armed and cannot be modified.")
+			USE_FEEDBACK_FAILURE("[src] is armed and cannot be modified.")
 			return TRUE
 		if (attached_device)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [attached_device] attached.")
+			USE_FEEDBACK_FAILURE("[src] already has [attached_device] attached.")
 			return TRUE
 		if (assembly.secured)
-			USE_FEEDBACK_FAILURE("\The [tool] isn't ready to be attached.")
+			USE_FEEDBACK_FAILURE("[tool] isn't ready to be attached.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -73,18 +74,18 @@
 		attached_device.set_secure(TRUE)
 		attacher = user
 		SSnano.update_uis(src)
-		GLOB.bombers += "[key_name(user)] attach \a [tool] to a transfer valve."
-		log_and_message_admins("[key_name_admin(user)] attached \a [tool] to a transfer valve.", user, get_turf(src))
+		GLOB.bombers += "[key_name(user)] attach [tool] to a transfer valve."
+		log_and_message_admins("[key_name_admin(user)] attached [tool] to a transfer valve.", user, get_turf(src))
 		user.visible_message(
-			SPAN_NOTICE("\The [user] attaches \a [tool] to \a [src]."),
-			SPAN_NOTICE("You attach \the [tool] to \the [src].")
+			SPAN_NOTICE("[user] attaches [tool] to [src]."),
+			SPAN_NOTICE("You attach [tool] to [src].")
 		)
 		return TRUE
 
 	// Tank - Attach tank
 	if (istype(tool, /obj/item/tank))
 		if (tank_one && tank_two)
-			USE_FEEDBACK_FAILURE("\The [src] already has two tanks attached.")
+			USE_FEEDBACK_FAILURE("[src] already has two tanks attached.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -98,8 +99,8 @@
 		update_icon()
 		SSnano.update_uis(src)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] attaches \a [tool] to \a [src]."),
-			SPAN_NOTICE("You attach \the [tool] to \the [src].")
+			SPAN_NOTICE("[user] attaches [tool] to [src]."),
+			SPAN_NOTICE("You attach [tool] to [src].")
 		)
 		return TRUE
 
@@ -168,7 +169,7 @@
 	if(armed && href_list["activate"])
 		attached_device.activate()
 		visible_message(SPAN_WARNING("The [attached_device] blips!"), range = 3)
-		message_admins("[key_name_admin(usr)] triggered \the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.loc.x];Y=[src.loc.y];Z=[src.loc.z]'>JMP</a>)")
+		message_admins("[key_name_admin(usr)] triggered [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.loc.x];Y=[src.loc.y];Z=[src.loc.z]'>JMP</a>)")
 	return TRUE // Returning 1 sends an update to attached UIs
 
 /obj/item/device/transfer_valve/process_activation(obj/item/device/D)

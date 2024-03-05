@@ -33,27 +33,29 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!airtank)
 		return
-	to_chat(user, "You remove \the [airtank] from \the [src].")
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You remove [airtank] from [src].")
 	airtank.dropInto(loc)
 	airtank = null
 
 /obj/item/bodybag/rescue/attackby(obj/item/W, mob/user, click_params)
 	if(istype(W,/obj/item/tank))
 		if(airtank)
-			to_chat(user, "\The [src] already has an air tank installed.")
+			to_chat(user, "[src] already has an air tank installed.")
 			return TRUE
 		if(user.unEquip(W))
 			W.forceMove(src)
 			airtank = W
-			to_chat(user, "You install \the [W] in \the [src].")
+			to_chat(user, "You install [W] in [src].")
 			return TRUE
 	. = ..()
 
 /obj/item/bodybag/rescue/examine(mob/user)
 	. = ..()
 	if(airtank)
-		to_chat(user,"The pressure meter on \the [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
-		to_chat(user,"The distribution valve on \the [airtank] is set to '[airtank.distribute_pressure] kPa'.")
+		to_chat(user,"The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
+		to_chat(user,"The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
 	else
 		to_chat(user, SPAN_WARNING("The air tank is missing."))
 
@@ -92,13 +94,15 @@
 /obj/structure/closet/body_bag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!airtank)
-		USE_FEEDBACK_FAILURE("\The [src] has no airtank to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no airtank to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	airtank.dropInto(loc)
 	update_icon()
 	user.visible_message(
-		SPAN_NOTICE("\The [user] removes \the [src]'s [airtank.name] with \a [tool]."),
-		SPAN_NOTICE("You remove \the [src]'s [airtank.name] with \the [tool].")
+		SPAN_NOTICE("[user] removes [src]'s [airtank.name] with [tool]."),
+		SPAN_NOTICE("You remove [src]'s [airtank.name] with [tool].")
 	)
 	airtank = null
 
@@ -106,15 +110,15 @@
 	// Tank - Install air tank
 	if (istype(tool, /obj/item/tank))
 		if (airtank)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [airtank] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [airtank] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		set_tank(tool)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
-			SPAN_NOTICE("You install \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
 		return TRUE
 
@@ -148,12 +152,12 @@
 /obj/structure/closet/body_bag/rescue/examine(mob/user)
 	. = ..()
 	if(airtank)
-		to_chat(user,"The pressure meter on \the [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
-		to_chat(user,"The distribution valve on \the [airtank] is set to '[airtank.distribute_pressure] kPa'.")
+		to_chat(user,"The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
+		to_chat(user,"The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
 	else
 		to_chat(user, SPAN_WARNING("The air tank is missing."))
 	to_chat(user,"The pressure meter on [src] shows '[atmo.return_pressure()] kPa'.")
 	if(Adjacent(user)) //The bag's rather thick and opaque from a distance.
-		to_chat(user, SPAN_INFO("You peer into \the [src]."))
+		to_chat(user, SPAN_INFO("You peer into [src]."))
 		for(var/mob/living/L in contents)
 			L.examine(arglist(args))

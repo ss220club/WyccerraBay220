@@ -11,6 +11,8 @@
 
 /obj/structure/sign/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Scrwedriver - Unfasten sign
 	var/obj/item/sign/S = new(loc)
 	S.SetName(name)
@@ -19,8 +21,8 @@
 	S.sign_state = icon_state
 	transfer_fingerprints_to(S)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] unfastens \the [src] with \a [tool]."),
-		SPAN_NOTICE("You unfasten \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] unfastens [src] with [tool]."),
+		SPAN_NOTICE("You unfasten [src] with [tool].")
 	)
 	qdel(src)
 
@@ -36,7 +38,8 @@
 	if(!isturf(user.loc))
 		return
 	var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
-	if(direction == "Cancel") return
+	if(direction == "Cancel")
+		return
 	var/obj/structure/sign/S = new(user.loc)
 	switch(direction)
 		if("North")
@@ -47,17 +50,20 @@
 			S.pixel_y = -32
 		if("West")
 			S.pixel_x = -32
-		else return
+		else
+			return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	S.SetName(name)
 	S.desc = desc
 	S.icon_state = sign_state
-	to_chat(user, "You fasten \the [S] with your [tool].")
+	to_chat(user, "You fasten [S] with your [tool].")
 	qdel(src)
 
 /obj/structure/sign/double/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_BLOCKING
 	// Screwdriver - Block interaction
-	USE_FEEDBACK_FAILURE("\The [src] cannot be removed.")
+	USE_FEEDBACK_FAILURE("[src] cannot be removed.")
 
 /obj/structure/sign/double/map
 	name = "map"
@@ -367,7 +373,7 @@
 
 /obj/structure/sign/directions/New()
 	..()
-	desc = "A direction sign, pointing out which way \the [src] is."
+	desc = "A direction sign, pointing out which way [src] is."
 
 /obj/structure/sign/directions/science
 	name = "\improper Research Division"

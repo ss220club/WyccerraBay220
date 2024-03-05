@@ -26,6 +26,8 @@
 
 /obj/item/plastique/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	open_panel = !open_panel
 	to_chat(user, SPAN_NOTICE("You [open_panel ? "open" : "close"] the wire panel."))
 
@@ -74,7 +76,7 @@
 			log_game("[key_name(user)] planted [src.name] on [key_name(target)] with [timer] second fuse")
 
 		else
-			log_and_message_admins("planted \a [src] with a [timer] second fuse on \the [target].")
+			log_and_message_admins("planted \a [src] with a [timer] second fuse on [target].")
 
 		target.AddOverlays(image_overlay)
 		to_chat(user, "Bomb has been planted. Timer counting down from [timer].")

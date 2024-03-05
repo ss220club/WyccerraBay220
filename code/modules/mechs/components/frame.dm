@@ -135,32 +135,11 @@
 		else
 			USE_FEEDBACK_FAILURE("[src] needs internal reinforcement before you can complete it.")
 		return
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts finishing [src] with [tool]."),
 		SPAN_NOTICE("You start finishing [src] with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 5) SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
-		return
-	// Check for basic components.
-	if (!(arms && legs && head && body))
-		USE_FEEDBACK_FAILURE("[src] is still missing parts and cannot be completed.")
-		return
-	// Check for wiring.
-	if (is_wired < FRAME_WIRED_ADJUSTED)
-		if (is_wired == FRAME_WIRED)
-			USE_FEEDBACK_FAILURE("[src]'s wiring needs to be adjusted before you can complete it.")
-		else
-			USE_FEEDBACK_FAILURE("[src] needs to be wired before you can complete it.")
-		return
-	// Check for basing metal internal plating.
-	if (is_reinforced < FRAME_REINFORCED_WELDED)
-		if (is_reinforced == FRAME_REINFORCED)
-			USE_FEEDBACK_FAILURE("[src]'s internal reinforcement needs to be secured before you can complete it.")
-		else if (is_reinforced == FRAME_REINFORCED_SECURE)
-			USE_FEEDBACK_FAILURE("[src]'s internal reinforcement needs to be welded before you can complete it.")
-		else
-			USE_FEEDBACK_FAILURE("[src] needs internal reinforcement before you can complete it.")
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !(arms && legs && head && body) || is_wired < FRAME_WIRED_ADJUSTED || is_reinforced < FRAME_REINFORCED_WELDED)
 		return
 	var/mob/living/exosuit/exosuit = new(get_turf(src), src)
 	transfer_fingerprints_to(exosuit)
@@ -168,7 +147,6 @@
 	legs = null
 	head = null
 	body = null
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] finishes constructing [exosuit] with [tool]."),
 		SPAN_NOTICE("You finish constructing [exosuit] with [tool].")

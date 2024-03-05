@@ -36,9 +36,10 @@
 
 /obj/item/storage/secure/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(do_after(user, (tool.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-		open = !open
-		user.show_message(SPAN_NOTICE("You [open ? "open" : "close"] the service panel."))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	user.show_message(SPAN_NOTICE("You [open ? "open" : "close"] the service panel."))
 
 /obj/item/storage/secure/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (!locked)

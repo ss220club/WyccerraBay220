@@ -49,6 +49,8 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(path == 2)
 		return
+	if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	if(stage == 1)
 		path = 1
 		if(length(beakers))
@@ -57,7 +59,6 @@
 		else
 			to_chat(user, SPAN_NOTICE("You lock the empty assembly."))
 			SetName("fake grenade")
-		playsound(loc, 'sound/items/Screwdriver.ogg', 25, -3)
 		icon_state = initial(icon_state) +"_locked"
 		stage = 2
 		return
@@ -68,7 +69,6 @@
 			return
 		else
 			to_chat(user, SPAN_NOTICE("You unlock the assembly."))
-			playsound(loc, 'sound/items/Screwdriver.ogg', 25, -3)
 			SetName("unsecured grenade with [length(beakers)] containers[detonator?" and detonator":""]")
 			icon_state = initial(icon_state) + (detonator?"_ass":"")
 			stage = 1

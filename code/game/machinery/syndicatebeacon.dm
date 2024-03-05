@@ -134,12 +134,16 @@
 		to_chat(user, SPAN_DANGER("You need to deactivate the beacon first!"))
 		return
 	if(anchored)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		anchored = FALSE
 		to_chat(user, SPAN_NOTICE("You unscrew the beacon from the floor."))
 		disconnect_from_network()
 		return
 	if(!connect_to_network())
 		to_chat(user, "This device must be placed over an exposed cable.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	anchored = TRUE
 	to_chat(user, SPAN_NOTICE("You screw the beacon to the floor and attach the cable."))

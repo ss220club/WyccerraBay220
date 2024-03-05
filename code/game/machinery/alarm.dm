@@ -827,10 +827,13 @@
 
 /obj/machinery/alarm/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(buildstage == 2)
-		wiresexposed = !wiresexposed
-		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
-		update_icon()
+	if(buildstage != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	wiresexposed = !wiresexposed
+	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+	update_icon()
 
 /obj/machinery/alarm/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -1024,9 +1027,12 @@ FIRE ALARM
 
 /obj/machinery/firealarm/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(buildstage == 2)
-		wiresexposed = !wiresexposed
-		update_icon()
+	if(buildstage != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	wiresexposed = !wiresexposed
+	update_icon()
 
 /obj/machinery/firealarm/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

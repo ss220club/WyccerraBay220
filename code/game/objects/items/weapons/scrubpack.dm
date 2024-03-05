@@ -59,7 +59,7 @@
 						display = "low ([display])"
 					else
 						display = "very low ([display])"
-			to_chat(user, "\The [tank] pressure is [display]")
+			to_chat(user, "[tank] pressure is [display]")
 		if (cell)
 			var/display = cell.percent()
 			if (user.skill_check(SKILL_ELECTRICAL, SKILL_BASIC))
@@ -72,57 +72,55 @@
 						display = "low ([display]%)"
 			else
 				display = "[display]%"
-			to_chat(user, "\The [cell] charge is [display]")
+			to_chat(user, "[cell] charge is [display]")
 
 /obj/item/scrubpack/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (enabled)
-		to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
+	if(enabled)
+		to_chat(user, SPAN_WARNING("Turn [src] off first!"))
 		return
-	if (!cell && !tank)
-		to_chat(user, SPAN_WARNING("\The [src] doesn't have anything you can remove."))
+	if(!cell && !tank)
+		to_chat(user, SPAN_WARNING("[src] doesn't have anything you can remove."))
 		return
 	var/list/options = list()
-	if (cell)
+	if(cell)
 		options += "cell"
-	if (tank)
+	if(tank)
 		options += "tank"
 	var/selection = input("Which would you like to remove?") as null|anything in options
-	if (!selection)
+	if(!selection)
 		return
-	var/time_cost = 5 - round(user.get_skill_value(SKILL_ATMOS) * 0.5) //0,1,1,2,2
-	if (!do_after(user, time_cost SECONDS, src, do_flags = DO_PUBLIC_UNIQUE))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_PUBLIC_UNIQUE))
 		return
 	var/removed
-	if (selection == "cell")
+	if(selection == "cell")
 		user.put_in_hands(cell)
 		removed = cell
 		cell = null
-	else if (selection == "tank")
+	else if(selection == "tank")
 		user.put_in_hands(tank)
 		removed = tank
 		tank = null
 	user.visible_message(
-		SPAN_ITALIC("\The [user] removes \the [removed] from \the [src]."),
-		SPAN_ITALIC("You remove the [selection] from \the [src]."),
+		SPAN_ITALIC("[user] removes [removed] from [src]."),
+		SPAN_ITALIC("You remove the [selection] from [src]."),
 		SPAN_ITALIC("You can hear metal scratching on metal."),
 		range = 5
 	)
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 
 /obj/item/scrubpack/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/cell))
 		if (cell)
-			to_chat(user, SPAN_WARNING("\The [src] already has \an [cell]."))
+			to_chat(user, SPAN_WARNING("[src] already has \an [cell]."))
 			return TRUE
 		if (istype(W, /obj/item/cell/device))
-			to_chat(user, SPAN_WARNING("\The [W] is too small for \the [src]."))
+			to_chat(user, SPAN_WARNING("[W] is too small for [src]."))
 			return TRUE
 		if (!user.unEquip(W, src))
 			return
 		user.visible_message(
-			SPAN_ITALIC("\The [user] fits \the [W] to \the [src]."),
-			SPAN_ITALIC("You fit \the [W] to \the [src]."),
+			SPAN_ITALIC("[user] fits [W] to [src]."),
+			SPAN_ITALIC("You fit [W] to [src]."),
 			SPAN_ITALIC("You can hear metal scratching on metal."),
 			range = 5
 		)
@@ -131,16 +129,16 @@
 
 	if (istype(W, /obj/item/tank))
 		if (tank)
-			to_chat(user, SPAN_WARNING("\The [src] already has \an [tank]."))
+			to_chat(user, SPAN_WARNING("[src] already has \an [tank]."))
 			return TRUE
 		if (!istype(W, tank_permit))
-			to_chat(user, SPAN_WARNING("\The [src] can't fit \a [W]."))
+			to_chat(user, SPAN_WARNING("[src] can't fit [W]."))
 			return TRUE
 		if (!user.unEquip(W, src))
 			return
 		user.visible_message(
-			SPAN_ITALIC("\The [user] fits \the [W] to \the [src]."),
-			SPAN_ITALIC("You fit \the [W] to \the [src]."),
+			SPAN_ITALIC("[user] fits [W] to [src]."),
+			SPAN_ITALIC("You fit [W] to [src]."),
 			SPAN_ITALIC("You can hear metal scratching on metal."),
 			range = 5
 		)
@@ -168,19 +166,19 @@
 		if (!cell) mods += "a cell"
 		if (!tank) mods += "a tank"
 		if (length(mods))
-			to_chat(user, SPAN_WARNING("You try to turn on \the [src], but it's missing [english_list(mods)]."))
+			to_chat(user, SPAN_WARNING("You try to turn on [src], but it's missing [english_list(mods)]."))
 			enabled = FALSE
 			return
 		if (cell.charge < charge_cost)
-			to_chat(user, SPAN_WARNING("You try to turn on \the [src], but it's out of charge."))
+			to_chat(user, SPAN_WARNING("You try to turn on [src], but it's out of charge."))
 			enabled = FALSE
 			return
-		to_chat(user, SPAN_ITALIC("You turn on \the [src]."))
+		to_chat(user, SPAN_ITALIC("You turn on [src]."))
 		START_PROCESSING(SSobj, src)
 		icon_state = "scrubpack_on"
 		set_sound_state(TRUE)
 	else
-		to_chat(user, SPAN_ITALIC("You turn off \the [src]."))
+		to_chat(user, SPAN_ITALIC("You turn off [src]."))
 		STOP_PROCESSING(SSobj, src)
 		icon_state = "scrubpack"
 		set_sound_state(FALSE)
@@ -188,7 +186,7 @@
 /obj/item/scrubpack/Process()
 	var/datum/gas_mixture/tank_air = tank.return_air()
 	if (tank_air.return_pressure() > TANK_LEAK_PRESSURE * 0.8)
-		audible_message(SPAN_ITALIC("\The [src] beeps stridently and stops working."))
+		audible_message(SPAN_ITALIC("[src] beeps stridently and stops working."))
 		STOP_PROCESSING(SSobj, src)
 		icon_state = "scrubpack"
 		set_sound_state(FALSE)
@@ -226,7 +224,7 @@
 
 	var/final_cost = max(charge_cost * 0.1, total_filter_moles / volume_rate)
 	if (!cell.checked_use(final_cost))
-		audible_message(SPAN_ITALIC("\The [src] beeps stridently and stops working."))
+		audible_message(SPAN_ITALIC("[src] beeps stridently and stops working."))
 		STOP_PROCESSING(SSobj, src)
 		icon_state = "scrubpack"
 		set_sound_state(FALSE)

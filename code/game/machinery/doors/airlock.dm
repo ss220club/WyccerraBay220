@@ -1006,22 +1006,21 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (p_open)
-		if (MACHINE_IS_BROKEN(src))
-			to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
-			return TRUE
-		else
-			p_open = FALSE
-			user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on [src]."), SPAN_NOTICE("You close the maintenance panel on [src]."))
-			playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
-			update_icon()
-			return TRUE
-	else
+	if(!p_open)
+		if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		p_open = TRUE
 		user.visible_message(SPAN_NOTICE("[user.name] opens the maintenance panel on [src]."), SPAN_NOTICE("You open the maintenance panel on [src]."))
-		playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
 		update_icon()
-		return TRUE
+		return
+	if(MACHINE_IS_BROKEN(src))
+		to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	p_open = FALSE
+	user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on [src]."), SPAN_NOTICE("You close the maintenance panel on [src]."))
+	update_icon()
 
 /obj/machinery/door/airlock/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

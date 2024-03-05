@@ -53,7 +53,7 @@
 	upgradeEmpProof()
 	upgradeXRay()
 
-	to_chat(user, "\The [src] has been upgraded. It now has X-Ray capability and EMP resistance.")
+	to_chat(user, "[src] has been upgraded. It now has X-Ray capability and EMP resistance.")
 	return 1
 
 /obj/machinery/camera/apply_visual(mob/living/carbon/human/M)
@@ -158,7 +158,7 @@
 	if(user.species.can_shred(user))
 		set_status(0)
 		user.do_attack_animation(src)
-		visible_message(SPAN_WARNING("\The [user] slashes at [src]!"))
+		visible_message(SPAN_WARNING("[user] slashes at [src]!"))
 		playsound(src.loc, 'sound/weapons/slash.ogg', 100, 1)
 		add_hiddenprint(user)
 		kill_health()
@@ -171,12 +171,13 @@
 
 /obj/machinery/camera/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	panel_open = !panel_open
 	user.visible_message(
-		SPAN_WARNING("\The [user] screws \the [src]'s panel [panel_open ? "open" : "closed"]!"),
-		SPAN_NOTICE("You screw \the [src]'s panel [panel_open ? "open" : "closed"].")
+		SPAN_WARNING("[user] screws [src]'s panel [panel_open ? "open" : "closed"]!"),
+		SPAN_NOTICE("You screw [src]'s panel [panel_open ? "open" : "closed"].")
 	)
-	playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 
 /obj/machinery/camera/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -197,11 +198,11 @@
 				assembly.dir = dir
 				if(MACHINE_IS_BROKEN(src))
 					assembly.state = 2
-					to_chat(user, SPAN_NOTICE("You repaired \the [src] frame."))
+					to_chat(user, SPAN_NOTICE("You repaired [src] frame."))
 					cancelCameraAlarm()
 				else
 					assembly.state = 1
-					to_chat(user, SPAN_NOTICE("You cut \the [src] free from the wall."))
+					to_chat(user, SPAN_NOTICE("You cut [src] free from the wall."))
 					new /obj/item/stack/cable_coil(loc, 2)
 				assembly = null //so qdel doesn't eat it.
 			qdel(src)
@@ -391,7 +392,7 @@
 		return 0
 
 	if(WT.can_use(1, user))
-		to_chat(user, SPAN_NOTICE("You start to weld \the [src].."))
+		to_chat(user, SPAN_NOTICE("You start to weld [src].."))
 		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
 		busy = 1
 		if(do_after(user, 10 SECONDS, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(1, user))

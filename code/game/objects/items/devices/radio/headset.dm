@@ -337,19 +337,21 @@
 
 /obj/item/device/radio/headset/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!length(encryption_keys))
-		USE_FEEDBACK_FAILURE("\The [src] has no encryption keys to remove.")
+	if(!length(encryption_keys))
+		USE_FEEDBACK_FAILURE("[src] has no encryption keys to remove.")
 		return
-	for (var/channel_name in channels)
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	for(var/channel_name in channels)
 		radio_controller.remove_object(src, radiochannels[channel_name])
 		secure_radio_connections[channel_name] = null
-	for (var/obj/key as anything in encryption_keys)
+	for(var/obj/key as anything in encryption_keys)
 		key.dropInto(get_turf(user))
 	encryption_keys.Cut()
 	recalculateChannels(TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] pops \a [src]'s encryption keys out with \a [tool]."),
-		SPAN_NOTICE("You pop \the [src]'s encryption keys out with \the [tool]."),
+		SPAN_NOTICE("[user] pops [src]'s encryption keys out with [tool]."),
+		SPAN_NOTICE("You pop [src]'s encryption keys out with [tool]."),
 		range = 2
 	)
 
@@ -357,7 +359,7 @@
 	// Encryption Key - Install key
 	if (istype(tool, /obj/item/device/encryptionkey))
 		if (length(encryption_keys) >= max_keys)
-			USE_FEEDBACK_FAILURE("\The [src] can't hold any more encryption keys.")
+			USE_FEEDBACK_FAILURE("[src] can't hold any more encryption keys.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -365,8 +367,8 @@
 		encryption_keys += tool
 		recalculateChannels(TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [tool] into \a [src]."),
-			SPAN_NOTICE("You insert \the [tool] into \the [src]."),
+			SPAN_NOTICE("[user] inserts [tool] into [src]."),
+			SPAN_NOTICE("You insert [tool] into [src]."),
 			range = 2
 		)
 		return TRUE

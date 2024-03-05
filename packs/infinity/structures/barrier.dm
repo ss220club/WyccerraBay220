@@ -120,17 +120,18 @@
 
 /obj/structure/barrier/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(density)
-		visible_message(SPAN_DANGER("[user] begins to [deployed ? "un" : ""]deploy [src]..."))
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
-		if(do_after(user, 3 SECONDS, src))
-			visible_message(SPAN_NOTICE("[user] has [deployed ? "un" : ""]deployed [src]."))
-			deployed = !deployed
-			if(deployed)
-				basic_chance = 70
-			else
-				basic_chance = 50
-			update_icon()
+	if(!density)
+		return
+	visible_message(SPAN_DANGER("[user] begins to [deployed ? "un" : ""]deploy [src]..."))
+	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	visible_message(SPAN_NOTICE("[user] has [deployed ? "un" : ""]deployed [src]."))
+	deployed = !deployed
+	if(deployed)
+		basic_chance = 70
+	else
+		basic_chance = 50
+	update_icon()
 
 /obj/structure/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

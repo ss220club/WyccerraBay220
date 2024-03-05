@@ -65,6 +65,8 @@
 
 /obj/item/grenade/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	switch(det_time)
 		if (1)
 			det_time = 1 SECONDS

@@ -577,29 +577,31 @@
 
 /mob/living/silicon/robot/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!opened)
+	if(!opened)
 		USE_FEEDBACK_FAILURE("[src]'s maintenance panel must be opened before you can access the wiring or radio.")
-		return TRUE
+		return
 	var/input = input(user, "What would you like to access?", "[name] - Screwdriver Access") as null|anything in list("Wiring", "Radio")
-	if (!input || !user.use_sanity_check(src, tool))
-		return TRUE
-	if (!opened)
+	if(!input)
+		return
+	if(!opened)
 		USE_FEEDBACK_FAILURE("[src]'s maintenance panel must be opened before you can access the wiring or radio.")
-		return TRUE
+		return
 	switch (input)
 		// Passthrough to radio
-		if ("Radio")
-			if (!silicon_radio)
+		if("Radio")
+			if(!silicon_radio)
 				USE_FEEDBACK_FAILURE("[src] doesn't have a radio to access.")
-				return TRUE
+				return
 			var/result = tool.resolve_attackby(silicon_radio, user)
-			if (result)
+			if(result)
 				update_icon()
 		// Toggle wire panel
-		if ("Wiring")
-			if (cell)
+		if("Wiring")
+			if(cell)
 				USE_FEEDBACK_FAILURE("[src]'s power cell must be removed before you can access the wiring.")
-				return TRUE
+				return
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			wiresexposed = !wiresexposed
 			update_icon()
 			user.visible_message(

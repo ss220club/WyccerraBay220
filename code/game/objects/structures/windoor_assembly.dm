@@ -110,21 +110,16 @@
 	if (!electronics)
 		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
 		return
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts removing [src]'s circuits with [tool]."),
 		SPAN_NOTICE("You start removing [src]'s circuits with [tool].")
 	)
-	if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return
-	if (!electronics)
-		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !electronics)
 		return
 	electronics.dropInto(loc)
 	electronics.add_fingerprint(user, tool = tool)
 	electronics = null
 	update_icon()
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] starts removing [src]'s circuits with [tool]."),
 		SPAN_NOTICE("You start removing [src]'s circuits with [tool].")

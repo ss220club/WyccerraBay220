@@ -29,11 +29,7 @@
 	if(emag)
 		//Stops people from just unscrewing the monitor and putting it back to get the console working again.
 		to_chat(user, SPAN_WARNING("It is too hot to mess with!"))
-
-/obj/machinery/computer/message_monitor/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(inoperable())
-		return ..()
-	. = ..()
+		. = ITEM_INTERACT_BLOCKING
 
 /obj/machinery/computer/message_monitor/emag_act(remaining_charges, mob/user)
 	// Will create sparks and print out the console's password. You will then have to wait a while for the console to be back online.

@@ -51,8 +51,7 @@
 
 /obj/structure/sign/poster/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_BLOCKING
-	USE_FEEDBACK_FAILURE("You must use wirecutters to remove \the [src].")
-
+	USE_FEEDBACK_FAILURE("You must use wirecutters to remove [src].")
 
 /obj/structure/sign/poster/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -60,14 +59,14 @@
 	playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
 	if (ruined)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] removes the remnants of \the [src] with \a [tool]."),
-			SPAN_NOTICE("You remove the remnants of \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] removes the remnants of [src] with [tool]."),
+			SPAN_NOTICE("You remove the remnants of [src] with [tool].")
 		)
 		qdel_self()
 	else
 		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] removes [src] with [tool]."),
+			SPAN_NOTICE("You remove [src] with [tool].")
 		)
 		roll_and_drop(user.loc)
 
@@ -80,7 +79,7 @@
 		if(ruined || !user.Adjacent(src))
 			return
 
-		visible_message(SPAN_WARNING("\The [user] rips \the [src] in a single, decisive motion!") )
+		visible_message(SPAN_WARNING("[user] rips [src] in a single, decisive motion!") )
 		playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		ruined = 1
 		icon_state = "poster_ripped"

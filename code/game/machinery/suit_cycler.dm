@@ -78,6 +78,8 @@
 
 /obj/machinery/suit_cycler/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	panel_open = !panel_open
 	to_chat(user, "You [panel_open ?  "open" : "close"] the maintenance panel.")
 	updateUsrDialog()

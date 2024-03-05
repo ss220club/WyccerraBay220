@@ -106,14 +106,16 @@ var/global/list/tank_gauge_cache = list()
 					descriptive = "cold"
 				else
 					descriptive = "bitterly cold"
-		to_chat(user, SPAN_ITALIC("\The [src] feels [descriptive]."))
+		to_chat(user, SPAN_ITALIC("[src] feels [descriptive]."))
 
 /obj/item/tank/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	add_fingerprint(user)
 	user.visible_message(
-		SPAN_ITALIC("\The [user] starts to use \the [tool] on \the [src]."),
-		SPAN_ITALIC("You start to force \the [src]'s emergency relief valve with \the [tool]."),
+		SPAN_ITALIC("[user] starts to use [tool] on [src]."),
+		SPAN_ITALIC("You start to force [src]'s emergency relief valve with [tool]."),
 		SPAN_ITALIC("You can hear metal scratching on metal."),
 		range = 5
 	)
@@ -170,21 +172,21 @@ var/global/list/tank_gauge_cache = list()
 	. = ITEM_INTERACT_SUCCESS
 	var/obj/item/weldingtool/WT = tool
 	if (GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
-		to_chat(user, SPAN_WARNING("\The [src]'s emergency relief valve must be closed before you can weld it shut!"))
+		to_chat(user, SPAN_WARNING("[src]'s emergency relief valve must be closed before you can weld it shut!"))
 		return
 	if(WT.can_use(1,user))
 		add_fingerprint(user)
 		if(!GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-			to_chat(user, SPAN_NOTICE("You begin welding the \the [src] emergency pressure relief valve."))
+			to_chat(user, SPAN_NOTICE("You begin welding the [src] emergency pressure relief valve."))
 			if(do_after(user, (tool.toolspeed * 4) SECONDS, src, DO_PUBLIC_UNIQUE) && WT.remove_fuel(1, user))
-				to_chat(user, "[SPAN_NOTICE("You carefully weld \the [src] emergency pressure relief valve shut.")][SPAN_WARNING(" \The [src] may now rupture under pressure!")]")
+				to_chat(user, "[SPAN_NOTICE("You carefully weld [src] emergency pressure relief valve shut.")][SPAN_WARNING(" [src] may now rupture under pressure!")]")
 				SET_FLAGS(tank_flags, TANK_FLAG_WELDED)
 				CLEAR_FLAGS(tank_flags, TANK_FLAG_LEAKING)
 			else
 				GLOB.bombers += "[key_name(user)] attempted to weld a [src]. [air_contents.temperature-T0C]"
 				log_and_message_admins("attempted to weld a [src]. [air_contents.temperature-T0C]", user)
 				if(WT.welding)
-					to_chat(user, SPAN_DANGER("You accidentally rake \the [tool] across \the [src]!"))
+					to_chat(user, SPAN_DANGER("You accidentally rake [tool] across [src]!"))
 					maxintegrity -= rand(2,6)
 					integrity = min(integrity,maxintegrity)
 					air_contents.add_thermal_energy(rand(2000,50000))
@@ -205,23 +207,23 @@ var/global/list/tank_gauge_cache = list()
 
 	if(isCoil(W))
 		if (GET_FLAGS(tank_flags, TANK_FLAG_WIRED))
-			to_chat(user, SPAN_WARNING("\The [src] is already wired."))
+			to_chat(user, SPAN_WARNING("[src] is already wired."))
 		else
 			add_fingerprint(user)
 			var/obj/item/stack/cable_coil/C = W
 			var/single = C.get_amount() == 1
 			if(C.use(1))
 				SET_FLAGS(tank_flags, TANK_FLAG_WIRED)
-				to_chat(user, SPAN_NOTICE("You attach [single ? "" : "some of "]\the [C] to \the [src]."))
+				to_chat(user, SPAN_NOTICE("You attach [single ? "" : "some of "][C] to [src]."))
 				update_icon(TRUE)
 		return
 
 	if(istype(W, /obj/item/device/assembly_holder))
 		if(GET_FLAGS(tank_flags, TANK_FLAG_WIRED))
 			add_fingerprint(user)
-			to_chat(user, SPAN_NOTICE("You begin attaching the assembly to \the [src]."))
+			to_chat(user, SPAN_NOTICE("You begin attaching the assembly to [src]."))
 			if(do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE))
-				to_chat(user, SPAN_NOTICE("You finish attaching the assembly to \the [src]."))
+				to_chat(user, SPAN_NOTICE("You finish attaching the assembly to [src]."))
 				GLOB.bombers += "[key_name(user)] attached an assembly to a wired [src]. Temp: [air_contents.temperature-T0C]"
 				log_and_message_admins("attached an assembly to a wired [src]. Temp: [air_contents.temperature-T0C]", user)
 				assemble_bomb(W,user)
@@ -308,10 +310,10 @@ var/global/list/tank_gauge_cache = list()
 				can_open_valve = 1
 
 		if(can_open_valve)
-			to_chat(user, SPAN_NOTICE("You open \the [src] valve."))
+			to_chat(user, SPAN_NOTICE("You open [src] valve."))
 			location.set_internals(src)
 		else
-			to_chat(user, SPAN_WARNING("You need something to connect to \the [src]."))
+			to_chat(user, SPAN_WARNING("You need something to connect to [src]."))
 
 /obj/item/tank/remove_air(amount)
 	. = air_contents.remove(amount)
@@ -464,7 +466,7 @@ var/global/list/tank_gauge_cache = list()
 				return
 			T.assume_air(air_contents)
 			playsound(get_turf(src), 'sound/weapons/gunshot/shotgun.ogg', 20, 1)
-			visible_message("[icon2html(src, viewers(get_turf(src)))] [SPAN_DANGER("\The [src] flies apart!")]", SPAN_WARNING("You hear a bang!"))
+			visible_message("[icon2html(src, viewers(get_turf(src)))] [SPAN_DANGER("[src] flies apart!")]", SPAN_WARNING("You hear a bang!"))
 			T.hotspot_expose(air_contents.temperature, 70, 1)
 
 			var/strength = 1+((pressure-TANK_LEAK_PRESSURE)/TANK_FRAGMENT_SCALE)
@@ -495,7 +497,7 @@ var/global/list/tank_gauge_cache = list()
 
 			T.assume_air(leaked_gas)
 			if(!GET_FLAGS(tank_flags, TANK_FLAG_LEAKING))
-				visible_message("[icon2html(src, viewers(get_turf(src)))] [SPAN_WARNING("\The [src] relief valve flips open with a hiss!")]", "You hear hissing.")
+				visible_message("[icon2html(src, viewers(get_turf(src)))] [SPAN_WARNING("[src] relief valve flips open with a hiss!")]", "You hear hissing.")
 				playsound(loc, 'sound/effects/spray.ogg', 10, 1, -3)
 				SET_FLAGS(tank_flags, TANK_FLAG_LEAKING)
 				#ifdef FIREDBG

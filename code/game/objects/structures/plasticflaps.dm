@@ -63,6 +63,8 @@
 	if (anchored)
 		USE_FEEDBACK_FAILURE("[src] has to be unanchored before you can adjust the airflow.")
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	if (airtight)
 		clear_airtight()
 	else

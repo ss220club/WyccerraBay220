@@ -25,12 +25,13 @@
 
 /obj/item/device/multitool/hacktool/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Screwdriver - Toggle hack mode
 	in_hack_mode = !in_hack_mode
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
-		SPAN_NOTICE("You adjust \the [src] with \the [tool]. It is now in [in_hack_mode ? "hacking" : "normal"] mode.")
+		SPAN_NOTICE("[user] adjusts [src] with [tool]."),
+		SPAN_NOTICE("You adjust [src] with [tool]. It is now in [in_hack_mode ? "hacking" : "normal"] mode.")
 	)
 
 /obj/item/device/multitool/hacktool/resolve_attackby(atom/A, mob/user)
@@ -54,7 +55,7 @@
 		known_targets.Swap(1, found)	// Move the last hacked item first
 		return 1
 
-	to_chat(user, SPAN_NOTICE("You begin hacking \the [target]..."))
+	to_chat(user, SPAN_NOTICE("You begin hacking [target]..."))
 	is_hacking = 1
 	// Hackin takes roughly 15-25 seconds. Fairly small random span to avoid people simply aborting and trying again.
 	var/hack_result = do_after(user, (15 SECONDS + rand(0, 5 SECONDS) + rand(0, 5 SECONDS)), target, do_flags = (DO_DEFAULT | DO_BOTH_UNIQUE_ACT) & ~DO_SHOW_PROGRESS)

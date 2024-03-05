@@ -117,12 +117,12 @@
 
 /obj/machinery/suit_storage_unit/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
-		panelopen = !panelopen
-		playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
-		to_chat(user, SPAN_NOTICE("You [panelopen ? "open" : "close"] the unit's maintenance panel."))
-		SStgui.update_uis(src)
-		update_icon()
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	panelopen = !panelopen
+	to_chat(user, SPAN_NOTICE("You [panelopen ? "open" : "close"] the unit's maintenance panel."))
+	SStgui.update_uis(src)
+	update_icon()
 
 /obj/machinery/suit_storage_unit/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if ((. = ..()))

@@ -80,18 +80,24 @@
 	healthcheck()
 
 /obj/vehicle/crowbar_act(mob/living/user, obj/item/tool)
-	if(cell && open)
-		. = ITEM_INTERACT_SUCCESS
-		if(!tool.use_as_tool(src, user, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		remove_cell(user)
+	. = ITEM_INTERACT_SKIP_TO_ATTACK
+	if(!cell || !open)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	remove_cell(user)
 
 /obj/vehicle/screwdriver_act(mob/living/user, obj/item/tool)
-	if(!locked)
-		open = !open
-		update_icon()
-		to_chat(user, SPAN_NOTICE("Maintenance panel is now [open ? "opened" : "closed"]."))
-		return ITEM_INTERACT_SUCCESS
+	. = ITEM_INTERACT_SKIP_TO_ATTACK
+	if(locked)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	update_icon()
+	to_chat(user, SPAN_NOTICE("Maintenance panel is now [open ? "opened" : "closed"]."))
 
 /obj/vehicle/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

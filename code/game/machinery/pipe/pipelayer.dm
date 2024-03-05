@@ -60,6 +60,8 @@
 	m = min(m, round(metal))
 	m = round(m)
 	if(m)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		use_metal(m)
 		var/obj/item/stack/material/steel/MM = new (get_turf(src))
 		MM.amount = m

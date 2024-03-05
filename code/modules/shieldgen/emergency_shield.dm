@@ -197,13 +197,13 @@
 
 /obj/machinery/shieldgen/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	playsound(src.loc, 'sound/items/Screwdriver.ogg', 100, 1)
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	if(is_open)
 		to_chat(user, SPAN_NOTICE("You close the panel."))
-		is_open = FALSE
 	else
 		to_chat(user, SPAN_NOTICE("You open the panel and expose the wiring."))
-		is_open = TRUE
+	is_open = !is_open
 
 /obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isCoil(W) && malfunction && is_open)

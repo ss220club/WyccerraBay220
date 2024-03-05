@@ -68,14 +68,18 @@
 		to_chat(user, SPAN_NOTICE("There is no bullet in the casing to inscribe anything into."))
 		return
 	var/tmp_label = ""
-	var/label_text = sanitizeSafe(input(user, "Inscribe some text into \the [initial(BB.name)]","Inscription",tmp_label), MAX_NAME_LEN)
+	var/label_text = sanitizeSafe(input(user, "Inscribe some text into [initial(BB.name)]","Inscription",tmp_label), MAX_NAME_LEN)
 	if(length(label_text) > 20)
 		to_chat(user, SPAN_WARNING("The inscription can be at most 20 characters long."))
 	else if(!label_text)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		to_chat(user, SPAN_NOTICE("You scratch the inscription off of [initial(BB)]."))
 		BB.SetName(initial(BB.name))
 	else
-		to_chat(user, SPAN_NOTICE("You inscribe \"[label_text]\" into \the [initial(BB.name)]."))
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		to_chat(user, SPAN_NOTICE("You inscribe \"[label_text]\" into [initial(BB.name)]."))
 		BB.SetName("[initial(BB.name)] (\"[label_text]\")")
 
 /obj/item/ammo_casing/on_update_icon()
@@ -179,7 +183,7 @@
 			var/obj/item/ammo_casing/C = stored_ammo[length(stored_ammo)]
 			stored_ammo-=C
 			user.put_in_hands(C)
-			user.visible_message("\The [user] removes \a [C] from [src].", SPAN_NOTICE("You remove \a [C] from [src]."))
+			user.visible_message("[user] removes \a [C] from [src].", SPAN_NOTICE("You remove \a [C] from [src]."))
 			update_icon()
 	else
 		..()

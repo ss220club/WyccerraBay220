@@ -44,17 +44,19 @@
 
 /obj/item/device/taperecorder/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	maintenance = !maintenance
 	user.visible_message(
-		SPAN_NOTICE("\The [user] [maintenance ? "opens" : "closes"] \a [src]'s lid with \a [tool]."),
-		SPAN_NOTICE("You [maintenance ? "open" : "close"] \the [src]'s lid with \the [tool].")
+		SPAN_NOTICE("[user] [maintenance ? "opens" : "closes"] [src]'s lid with [tool]."),
+		SPAN_NOTICE("You [maintenance ? "open" : "close"] [src]'s lid with [tool].")
 	)
 
 /obj/item/device/taperecorder/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Tape - Insert tape
 	if (istype(tool, /obj/item/device/tape))
 		if (mytape)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [mytape] inside.")
+			USE_FEEDBACK_FAILURE("[src] already has [mytape] inside.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -62,8 +64,8 @@
 		mytape = tool
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [tool] into \a [src]."),
-			SPAN_NOTICE("You insert \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] inserts [tool] into [src]."),
+			SPAN_NOTICE("You insert [tool] into [src].")
 		)
 		return TRUE
 
@@ -91,7 +93,7 @@
 	if(usr.incapacitated())
 		return
 	if(!mytape)
-		to_chat(usr, SPAN_NOTICE("There's no tape in \the [src]."))
+		to_chat(usr, SPAN_NOTICE("There's no tape in [src]."))
 		return
 	if(emagged)
 		to_chat(usr, SPAN_NOTICE("The tape seems to be stuck inside."))
@@ -156,7 +158,7 @@
 	var/turf/T = get_turf(loc)
 	if(ismob(loc))
 		var/mob/M = loc
-		to_chat(M, SPAN_DANGER("\The [src] explodes!"))
+		to_chat(M, SPAN_DANGER("[src] explodes!"))
 	if(T)
 		T.hotspot_expose(700,125)
 		explosion(T, 1, EX_ACT_LIGHT)
@@ -195,7 +197,7 @@
 			if (!mytape)
 				if(ismob(loc))
 					var/mob/M = loc
-					to_chat(M, SPAN_NOTICE("\The [src]'s tape has been removed."))
+					to_chat(M, SPAN_NOTICE("[src]'s tape has been removed."))
 				stop_recording()
 				break
 			mytape.used_capacity++
@@ -457,27 +459,21 @@
 /obj/item/device/tape/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if (!max_capacity)
-		USE_FEEDBACK_FAILURE("\The [src] has no tape to wind.")
+		USE_FEEDBACK_FAILURE("[src] has no tape to wind.")
 		return
 	if (!ruined)
-		USE_FEEDBACK_FAILURE("\The [src]'s tape doesn't need re-winding.")
+		USE_FEEDBACK_FAILURE("[src]'s tape doesn't need re-winding.")
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] starts winding \a [src]'s tape back in with \a [tool]."),
-		SPAN_NOTICE("You start winding \the [src]'s tape back in with \the [tool].")
+		SPAN_NOTICE("[user] starts winding [src]'s tape back in with [tool]."),
+		SPAN_NOTICE("You start winding [src]'s tape back in with [tool].")
 	)
-	if (!do_after(user, 12 SECONDS, src, DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-		return
-	if (!max_capacity)
-		USE_FEEDBACK_FAILURE("\The [src] has no tape to wind.")
-		return
-	if (!ruined)
-		USE_FEEDBACK_FAILURE("\The [src]'s tape doesn't need re-winding.")
+	if(!tool.use_as_tool(src, user, 12 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT) || !max_capacity || !ruined)
 		return
 	fix()
 	user.visible_message(
-		SPAN_NOTICE("\The [user] winds \a [src]'s tape back in with \a [tool]."),
-		SPAN_NOTICE("You wind \the [src]'s tape back in with \the [tool].")
+		SPAN_NOTICE("[user] winds [src]'s tape back in with [tool]."),
+		SPAN_NOTICE("You wind [src]'s tape back in with [tool].")
 	)
 
 /obj/item/device/tape/wirecutter_act(mob/living/user, obj/item/tool)
@@ -498,8 +494,8 @@
 			return TRUE
 		SetName("[initial(name)] - '[input]'")
 		user.visible_message(
-			SPAN_NOTICE("\The [user] labels \a [src] with \a [tool]."),
-			SPAN_NOTICE("You label \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] labels [src] with [tool]."),
+			SPAN_NOTICE("You label [src] with [tool].")
 		)
 		return TRUE
 	. = ..()

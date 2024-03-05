@@ -596,13 +596,15 @@
 /obj/machinery/disposal/deliveryChute/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(c_mode==0)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		c_mode=1
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		to_chat(user, "You remove the screws around the power connection.")
 		return
 	if(c_mode==1)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		c_mode=0
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		to_chat(user, "You attach the screws around the power connection.")
 		return
 

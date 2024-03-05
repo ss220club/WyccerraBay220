@@ -205,10 +205,11 @@
 	if (buildstage < 2)
 		USE_FEEDBACK_FAILURE("[src] has no wiring to expose.")
 		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	wiresexposed = !wiresexposed
 	b_stat = !b_stat
 	update_icon()
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] [wiresexposed ? "opens" : "closes"] [src]'s wiring panel with [tool]."),
 		SPAN_NOTICE("You [wiresexposed ? "open" : "close"] [src]'s wiring panel with [tool].")

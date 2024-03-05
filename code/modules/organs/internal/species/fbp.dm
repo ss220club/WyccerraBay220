@@ -78,12 +78,10 @@
 
 /obj/item/organ/internal/cell/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(open)
-		open = FALSE
-		to_chat(user, SPAN_NOTICE("You screw the battery panel in place."))
-	else
-		open = TRUE
-		to_chat(user, SPAN_NOTICE("You unscrew the battery panel."))
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	to_chat(user, SPAN_NOTICE("You [open ? null : "un"]screw the battery panel."))
 
 /obj/item/organ/internal/cell/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/cell))

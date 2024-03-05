@@ -17,6 +17,8 @@
 
 /obj/item/rig/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	p_open = !p_open
 	to_chat(user, "You [p_open ? "open" : "close"] the wire cover.")
 

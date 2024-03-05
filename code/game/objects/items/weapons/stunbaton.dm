@@ -80,13 +80,16 @@
 
 /obj/item/melee/baton/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(bcell)
-		bcell.update_icon()
-		bcell.dropInto(loc)
-		bcell = null
-		to_chat(user, SPAN_NOTICE("You remove the cell from the [src]."))
-		status = 0
-		update_icon()
+	if(!bcell)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	bcell.update_icon()
+	bcell.dropInto(loc)
+	bcell = null
+	to_chat(user, SPAN_NOTICE("You remove the cell from the [src]."))
+	status = 0
+	update_icon()
 
 /obj/item/melee/baton/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/cell/device))

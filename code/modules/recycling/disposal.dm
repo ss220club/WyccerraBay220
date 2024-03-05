@@ -93,13 +93,15 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 			to_chat(user, "Eject the items first!")
 			return
 		if(mode == 0) // It's off but still not unscrewed
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			mode = -1 // Set it to doubleoff l0l
-			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		if(mode == -1)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			mode = 0
-			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 
 /obj/machinery/disposal/welder_act(mob/living/user, obj/item/tool)
@@ -603,8 +605,9 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 
 /obj/structure/disposaloutlet/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	mode = !mode
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
 	user.visible_message(
 		SPAN_NOTICE("[user] [mode ? "removes" : "attaches"] the screws around [src]'s power connection with  [tool]."),
 		SPAN_NOTICE("You [mode ? "remove" : "attach"] the screws around [src]'s power connection with [tool].")

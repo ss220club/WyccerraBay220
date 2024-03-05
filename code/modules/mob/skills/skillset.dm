@@ -132,18 +132,17 @@
  */
 
 /mob/proc/do_skilled(base_delay, skill_path, atom/target = null, factor = 0.3, do_flags = DO_PUBLIC_UNIQUE)
-	var/delay_multiplier = skill_delay_mult(skill_path, factor)
+	var/delay_multiplier = skill_delay_total(skill_path, factor)
 	base_delay *= delay_multiplier
 	return do_after(src, base_delay, target, do_flags)
 
 /mob/proc/skill_delay_total(skill_path, factor = 0.3)
-	. = 1
 	if(isnull(skill_path))
-		return
+		return 1
 	if(islist(skill_path))
-		for (var/path as anything in skill_path)
+		for(var/path as anything in skill_path)
 			var/check_delay = skill_delay_mult(path, factor)
-			if (check_delay < .)
+			if (check_delay < . || isnull(.))
 				. = check_delay
 	else
 		. = skill_delay_mult(skill_path, factor)

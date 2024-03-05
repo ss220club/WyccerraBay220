@@ -59,7 +59,7 @@ avoid code duplication. This includes items that may sometimes act as a standard
 		if(item_interact_result & ITEM_INTERACT_SUCCESS)
 			. = TRUE
 		if(item_interact_result & ITEM_INTERACT_BLOCKING)
-			. = FALSE
+			return TRUE
 	if(!. && user.a_intent == I_HURT)
 		use_call = "weapon"
 		. = atom.use_weapon(src, user, click_params)

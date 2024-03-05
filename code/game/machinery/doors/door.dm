@@ -202,7 +202,7 @@
 		return
 	if(!density)
 		to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
-		return TRUE
+		return
 
 	if(!tool.tool_use_check(user, 2))
 		return

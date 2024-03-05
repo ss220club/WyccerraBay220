@@ -99,7 +99,11 @@ var/global/const/FALLOFF_SOUNDS = 0.5
 
 	S.volume *= get_sound_volume_multiplier()
 
-	var/turf/T = get_turf(src)
+	var/turf/mob_turf = get_turf(src)
+	if(!mob_turf)
+		stack_trace("Mob is in null space, it seems")
+		return
+
 	// 3D sounds, the technology is here!
 	if(isturf(turf_source))
 		//sound volume falloff with distance

@@ -38,6 +38,8 @@
 		if(A.name == N)
 			return A
 
+	stack_trace("Area name [N] not found")
+
 /proc/get_area_master(O)
 	RETURN_TYPE(/area)
 	var/area/A = get_area(O)

@@ -122,8 +122,8 @@
 			update_material()
 
 /obj/structure/table/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(user.a_intent == I_HURT)
+		. = ITEM_INTERACT_SUCCESS
 		if(!material)
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
@@ -148,6 +148,7 @@
 		return
 
 	if(can_plate && !material)
+		. = ITEM_INTERACT_SUCCESS
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		dismantle(tool, user)

@@ -468,7 +468,7 @@
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	opened = COVER_CLOSED
+	opened = COVER_OPEN
 	user.visible_message(SPAN_NOTICE("[user] pries the cover open on [src]."), SPAN_NOTICE("You pry the cover open."))
 	update_icon()
 

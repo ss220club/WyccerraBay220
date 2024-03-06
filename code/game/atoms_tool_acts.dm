@@ -52,6 +52,11 @@
 		if(TOOL_ANALYZER)
 			act_result = analyzer_act(user, tool)
 
+	if(!act_result)
+		var/signal_post_act = SEND_SIGNAL(src, COMSIG_ATOM_TOOL_ACT_EMPTY, user, tool)
+		if(signal_post_act)
+			return signal_post_act
+
 	SEND_SIGNAL(src, COMSIG_ATOM_TOOL_ACT_RESULT(tool_type), user, tool, act_result)
 
 	if(!act_result)

@@ -25,7 +25,6 @@
 	var/auth = 0 // Are they authenticated?
 
 /obj/machinery/computer/message_monitor/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(emag)
 		//Stops people from just unscrewing the monitor and putting it back to get the console working again.
 		to_chat(user, SPAN_WARNING("It is too hot to mess with!"))

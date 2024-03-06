@@ -24,6 +24,8 @@
 #define COMSIG_ATOM_TOOL_ACT(tooltype) "tool_act_[tooltype]"
 /// This is called after the act
 #define COMSIG_ATOM_TOOL_ACT_RESULT(tooltype) "tool_act_result_[tooltype]"
+/// This is called after act's fail
+#define COMSIG_ATOM_TOOL_ACT_EMPTY "tool_act_empty"
 // Notifies tools that something is happening.
 // Sucessful actions against an atom.
 ///Called from /atom/proc/tool_act (atom)

@@ -42,6 +42,13 @@ SUBSYSTEM_DEF(tts220)
 
 	var/list/tts_queue = list()
 	var/list/tts_effects_queue = list()
+	/// Lazy list of request that need to performed to TTS provider API
+	VAR_PRIVATE/list/tts_requests_queue
+
+	/// The channel used for radio tts. Should be an exact one to not spam with radio messages, but queque them instead
+	VAR_PRIVATE/tts_channel_radio
+	/// List of currently existing binding of atom and sound channel: `atom` => `sound_channel`. SS220 TODO: free channel when atom is detroyed and may be on some other circumstances
+	VAR_PRIVATE/list/tts_local_channels_by_owner = list()
 
 	/// Mapping of BYOND gender to TTS gender
 	VAR_PRIVATE/list/gender_table = list(
@@ -60,14 +67,12 @@ SUBSYSTEM_DEF(tts220)
 	VAR_PRIVATE/sanitized_messages_cache_miss = 0
 	/// List of all messages that were sanitized as: `meesage md5 hash` => `message`
 	VAR_PRIVATE/list/sanitized_messages_cache = list()
+
 	/// List of all available TTS seed names
 	VAR_PRIVATE/list/tts_seeds_names = list()
 	/// List of all available TTS seed names, mapped by donator level for faster access
 	VAR_PRIVATE/list/tts_seeds_names_by_donator_levels = list()
-	/// List of currently existing binding of atom and sound channel: `atom` => `sound_channel`
-	VAR_PRIVATE/list/tts_local_channels_by_owner = list()
-	/// Lazy list of request that need to performed to TTS provider API
-	VAR_PRIVATE/list/tts_requests_queue
+
 	/// List of all tts seeds mapped by TTS gender: `tts gender` => `list of seeds`
 	VAR_PRIVATE/list/tts_seeds_by_gender
 	/// Replacement map for acronyms for proper TTS spelling
@@ -94,11 +99,12 @@ SUBSYSTEM_DEF(tts220)
 
 /datum/controller/subsystem/tts220/Initialize(start_timeofday)
 	if(!config.tts_enabled)
+		is_enabled = FALSE
 		flags |= SS_NO_FIRE
 		return
 
 	load_replacements()
-	TTS_radio_channel = GLOB.sound_channels.RequestChannel("CHANNEL_TTS_RADIO")
+	tts_channel_radio = GLOB.sound_channels.RequestChannel("TTS_RADIO")
 
 /datum/controller/subsystem/tts220/fire()
 	tts_rps = tts_rps_counter
@@ -314,7 +320,7 @@ SUBSYSTEM_DEF(tts220)
 	if(is_local)
 		output.channel = get_local_channel_by_owner(speaker)
 	else
-		output.channel = TTS_radio_channel
+		output.channel = tts_channel_radio
 		output.wait = TRUE
 
 	if(isnull(speaker))

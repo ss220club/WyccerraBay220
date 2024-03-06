@@ -193,7 +193,7 @@
 		var/obj/item/pen/pen = user.IsHolding(/obj/item/pen)
 		if(istype(pen))
 			add_fingerprint(user)
-			P.attackby(pen, user)
+			pen.resolve_attackby(P, user)
 		else
 			to_chat(user, SPAN_WARNING("You need a pen to write on [P]."))
 		. = TOPIC_REFRESH

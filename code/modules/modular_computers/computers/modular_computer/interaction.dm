@@ -189,11 +189,11 @@
 			return
 	if(istype(W, /obj/item/paper) || istype(W, /obj/item/paper_bundle))
 		if(nano_printer)
-			nano_printer.attackby(W, user)
+			W.resolve_attackby(nano_printer, user)
 	if(istype(W, /obj/item/aicard))
 		if(!ai_slot)
 			return
-		ai_slot.attackby(W, user)
+		W.resolve_attackby(ai_slot, user)
 
 	if(!modifiable)
 		return ..()

@@ -138,6 +138,6 @@
 
 	var/obj/item/pipe/P = new(w_turf)
 	P.set_dir(p_dir)
-	P.attackby(W , src)
+	W.resolve_attackby(P, src) // TODO: does this even work?
 
 	return 1

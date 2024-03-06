@@ -262,7 +262,7 @@ GLOBAL_LIST_INIT(machine_path_to_circuit_type, cache_circuits_by_build_path())
 	for(var/obj/item/stock_parts/part in component_parts)
 		if(!components_are_accessible(part.type))
 			continue
-		if((. = part.attackby(tool, user)))
+		if((. = tool.resolve_attackby(part, user)))
 			return ITEM_INTERACT_SUCCESS
 	if(construct_state && construct_state.attackby(tool, user, src))
 		return ITEM_INTERACT_SUCCESS

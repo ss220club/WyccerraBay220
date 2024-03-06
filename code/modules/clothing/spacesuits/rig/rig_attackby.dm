@@ -121,7 +121,7 @@
 
 	// Pass repair items on to the chestpiece.
 	if(chest && istype(W,/obj/item/stack/material))
-		return chest.attackby(W,user)
+		return W.resolve_attackby(chest, user)
 
 	// Lock or unlock the access panel.
 	if(W.GetIdCard())

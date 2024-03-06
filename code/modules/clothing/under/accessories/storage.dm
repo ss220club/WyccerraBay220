@@ -40,7 +40,7 @@
 
 /obj/item/clothing/accessory/storage/attackby(obj/item/I, mob/user)
 	if (container)
-		return container.attackby(I, user)
+		return I.resolve_attackby(container, user)
 
 
 /obj/item/clothing/accessory/storage/emp_act(severity)

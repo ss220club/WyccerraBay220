@@ -972,9 +972,6 @@ About the new airlock wires panel:
 		return 1
 
 /obj/machinery/door/airlock/crowbar_act(mob/living/user, obj/item/tool)
-	var/removed = remove_repairing()
-	if(removed)
-		return removed
 	. = ITEM_INTERACT_SUCCESS
 	if(p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
 		user.visible_message("[user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
@@ -1031,9 +1028,6 @@ About the new airlock wires panel:
 		if(cut_bolts(tool, user))
 			. = ITEM_INTERACT_SUCCESS
 			return
-	var/fixed = weld_to_fix(user, tool)
-	if(fixed)
-		return fixed
 	if(repairing || operating == DOOR_OPERATING_YES || !density)
 		return
 	. = ITEM_INTERACT_SUCCESS

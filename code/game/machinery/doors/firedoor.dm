@@ -195,9 +195,6 @@
 		addtimer(CALLBACK(src, PROC_REF(attempt_autoclose)), 10 SECONDS) //Just in case a fire alarm is turned off while the firedoor is going through an autoclose cycle
 
 /obj/machinery/door/firedoor/crowbar_act(mob/living/user, obj/item/tool)
-	var/removed = remove_repairing(user, tool)
-	if(removed)
-		return removed
 	if(operating)
 		return
 	. = ITEM_INTERACT_SUCCESS
@@ -275,9 +272,6 @@
 	update_icon()
 
 /obj/machinery/door/firedoor/welder_act(mob/living/user, obj/item/tool)
-	var/fixed = weld_to_fix(user, tool)
-	if(fixed)
-		return fixed
 	if(repairing || operating)
 		return
 	. = ITEM_INTERACT_SUCCESS

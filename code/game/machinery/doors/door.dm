@@ -83,6 +83,9 @@
 
 	update_nearby_tiles(need_rebuild=1)
 
+	RegisterSignal(src, COMSIG_ATOM_TOOL_ACT(TOOL_WELDER), PROC_REF(weld_to_fix))
+	RegisterSignal(src, COMSIG_ATOM_TOOL_ACT(TOOL_CROWBAR), PROC_REF(remove_repairing))
+
 	if(autoset_access)
 #ifdef UNIT_TEST
 		if(length(req_access))
@@ -188,32 +191,32 @@
 		return TRUE
 
 /obj/machinery/door/crowbar_act(mob/living/user, obj/item/tool)
-	return remove_repairing(user, tool)
+	. = ..() // see COMSIG_ATOM_TOOL_ACT signal
 
-/obj/machinery/door/proc/remove_repairing(mob/living/user, obj/item/tool)
+/obj/machinery/door/proc/remove_repairing(obj/machinery/door/door, mob/living/user, obj/item/tool)
 	if(!repairing)
 		return
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT) || !repairing)
 		return
 	to_chat(user, SPAN_NOTICE("You remove [repairing]."))
 	repairing.dropInto(user.loc)
 	repairing = null
 
 /obj/machinery/door/welder_act(mob/living/user, obj/item/tool)
-	return weld_to_fix()
+	. = ..() // see COMSIG_ATOM_TOOL_ACT signal
 
-/obj/machinery/door/proc/weld_to_fix(mob/living/user, obj/item/tool)
+/obj/machinery/door/proc/weld_to_fix(obj/machinery/door/door, mob/living/user, obj/item/tool)
 	if(!repairing)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!density)
 		to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
 		return
-	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 2))
 		return
 	to_chat(user, SPAN_NOTICE("You start to fix dents and weld [repairing] into place."))
-	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing)
+	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing || !density)
 		return
 	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
 	restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)

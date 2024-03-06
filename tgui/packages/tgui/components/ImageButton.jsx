@@ -4,6 +4,7 @@
  * @license MIT
  */
 
+import { resolveAsset } from '../assets';
 import { classes, pureComponentHooks } from 'common/react';
 import { computeBoxClassName, computeBoxProps } from './Box';
 import { Icon } from './Icon';
@@ -21,6 +22,7 @@ export const ImageButton = (props) => {
     disabled,
     disabledContent,
     image,
+    imageUrl,
     imageAsset,
     imageSize,
     tooltip,
@@ -59,9 +61,14 @@ export const ImageButton = (props) => {
           <div className={classes([imageAsset, image])} />
         ) : (
           <img
-            src={`data:image/jpeg;base64,${image}`}
+            src={
+              imageUrl
+                ? resolveAsset(imageUrl)
+                : `data:image/jpeg;base64,${image}`
+            }
             style={{
               width: imageSize,
+              height: imageSize,
               '-ms-interpolation-mode': 'nearest-neighbor',
             }}
           />

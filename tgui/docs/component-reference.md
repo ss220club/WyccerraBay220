@@ -567,6 +567,7 @@ Makes the vertical button square if empty.
 - `disabled: boolean` - Makes button disabled (red) if true. Also disables onClick.
 - `disabledContent: string` - If button disabled and disabledContent filled, it will be used instead content.
 - `image: string` - Base64 image, simple. Disabled if asset support enabled.
+- `imageUrl: string` - PNG image or other asset. Make sure you use existing simple asset! Example: imageUrl={'image.png'}
 - `imageAsset: string` - If you have enabled asset support, write here which spritesheet to use.
 Example: imageAsset={'spritesheet_name64x64'}
 - `imageSize: string` - Sets the size of the image and adjusts the size of the button itself accordingly.

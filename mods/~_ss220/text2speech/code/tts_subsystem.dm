@@ -448,10 +448,7 @@ SUBSYSTEM_DEF(tts220)
 		return word
 
 	var/match = SStts220.tts_acronym_replacements[lowertext(word)]
-	if(match)
-		return match
-
-	return word
+	return match || word
 
 /datum/controller/subsystem/tts220/proc/get_local_channel_by_owner(owner)
 	PRIVATE_PROC(TRUE)

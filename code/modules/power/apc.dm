@@ -514,9 +514,9 @@
 	update_icon()
 
 /obj/machinery/power/apc/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
-	if (!opened && wiresexposed)
+	if(!opened && wiresexposed)
 		wires.Interact(user)
+		return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/power/apc/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

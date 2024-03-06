@@ -437,7 +437,7 @@
 				to_chat(user, SPAN_WARNING("Disconnect the wires first."))
 				return
 			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
-			if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || opened || (has_electronics == 1) || !terminal())
+			if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !opened || (has_electronics != ELECTRONICS_PLUGGED) || terminal())
 				return
 			has_electronics = ELECTRONICS_NONE
 			if(MACHINE_IS_BROKEN(src))
@@ -874,6 +874,8 @@
 			needs_powerdown_sound = TRUE
 
 /obj/machinery/power/apc/proc/isWireCut(wireIndex)
+	if(!wires)
+		return TRUE
 	return wires.IsIndexCut(wireIndex)
 
 

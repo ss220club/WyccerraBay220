@@ -8,26 +8,32 @@ SUBSYSTEM_DEF(tts220)
 	wait = 1 SECONDS
 	runlevels = RUNLEVEL_LOBBY | RUNLEVELS_DEFAULT
 
+	/// All time tts uses
 	var/tts_wanted = 0
+	/// Amount of errored requests to providers
 	var/tts_request_failed = 0
+	/// Amount of successfull requests to providers
 	var/tts_request_succeeded = 0
+	/// Amount of cache hits
 	var/tts_reused = 0
+	/// Assoc list of request error codes
 	var/list/tts_errors = list()
+	/// Last errored requests' contents
 	var/tts_error_raw = ""
 
 	// Simple Moving Average RPS
 	var/list/tts_rps_list = list()
 	var/tts_sma_rps = 0
 
-	// Requests per Second (RPS), only real API requests
+	/// Requests per Second (RPS), only real API requests
 	var/tts_rps = 0
 	var/tts_rps_counter = 0
 
-	// Total Requests per Second (TRPS), all TTS request, even reused
+	/// Total Requests per Second (TRPS), all TTS request, even reused
 	var/tts_trps = 0
 	var/tts_trps_counter = 0
 
-	// Reused Requests per Second (RRPS), only reused requests
+	/// Reused Requests per Second (RRPS), only reused requests
 	var/tts_rrps = 0
 	var/tts_rrps_counter = 0
 
@@ -40,7 +46,9 @@ SUBSYSTEM_DEF(tts220)
 	var/tts_requests_queue_limit = 100
 	var/tts_rps_limit = 11
 
+	/// General request queue
 	var/list/tts_queue = list()
+	/// Ffmpeg queue
 	var/list/tts_effects_queue = list()
 	/// Lazy list of request that need to performed to TTS provider API
 	VAR_PRIVATE/list/tts_requests_queue
@@ -75,8 +83,8 @@ SUBSYSTEM_DEF(tts220)
 
 	/// List of all tts seeds mapped by TTS gender: `tts gender` => `list of seeds`
 	VAR_PRIVATE/list/tts_seeds_by_gender
-	/// Replacement map for acronyms for proper TTS spelling
-	VAR_PRIVATE/list/tts_acronym_replacements
+	/// Replacement map for acronyms for proper TTS spelling. Not private because `replacetext` can use only global procs
+	var/list/tts_acronym_replacements
 	/// Replacement map for jobs for proper TTS spelling
 	VAR_PRIVATE/list/tts_job_replacements
 
@@ -100,11 +108,14 @@ SUBSYSTEM_DEF(tts220)
 /datum/controller/subsystem/tts220/Initialize(start_timeofday)
 	if(!config.tts_enabled)
 		is_enabled = FALSE
-		flags |= SS_NO_FIRE
 		return
 
 	load_replacements()
 	tts_channel_radio = GLOB.sound_channels.RequestChannel("TTS_RADIO")
+
+/datum/controller/subsystem/tts220/disable()
+	. = ..()
+	is_enabled = FALSE
 
 /datum/controller/subsystem/tts220/fire()
 	tts_rps = tts_rps_counter
@@ -124,7 +135,7 @@ SUBSYSTEM_DEF(tts220)
 	tts_sma_rps = round(rps_sum / length(tts_rps_list), 0.1)
 
 	var/free_rps = clamp(tts_rps_limit - tts_rps, 0, tts_rps_limit)
-	var/requests = tts_requests_queue.Copy(1, clamp(LAZYLEN(tts_requests_queue), 0, free_rps) + 1)
+	var/requests = LAZYCOPY(tts_requests_queue, 1, clamp(LAZYLEN(tts_requests_queue), 0, free_rps) + 1)
 	for(var/request in requests)
 		var/text = request[1]
 		var/datum/tts_seed/seed = request[2]
@@ -132,7 +143,7 @@ SUBSYSTEM_DEF(tts220)
 		var/datum/tts_provider/provider = seed.provider
 		provider.request(text, seed, proc_callback)
 		tts_rps_counter++
-	tts_requests_queue.Cut(1, clamp(LAZYLEN(tts_requests_queue), 0, free_rps) + 1)
+	LAZYCUT(tts_requests_queue, 1, clamp(LAZYLEN(tts_requests_queue), 0, free_rps) + 1)
 
 	if(sanitized_messages_caching)
 		sanitized_messages_cache.Cut()
@@ -176,7 +187,7 @@ SUBSYSTEM_DEF(tts220)
 		tts_rps_counter++
 		return TRUE
 
-	tts_requests_queue += list(list(text, seed, proc_callback))
+	LAZYADD(tts_requests_queue, list(list(text, seed, proc_callback)))
 	return TRUE
 
 /datum/controller/subsystem/tts220/proc/get_tts(atom/speaker, mob/listener, message, seed_name, is_local = TRUE, effect = SOUND_EFFECT_NONE, traits = TTS_TRAIT_RATE_FASTER, preSFX = null, postSFX = null)
@@ -396,7 +407,7 @@ SUBSYSTEM_DEF(tts220)
 	var/static/regex/forbidden_symbols = new(@"[^a-zA-Z0-9а-яА-ЯёЁ,!?+./ \r\n\t:—()-]", "g")
 	. = forbidden_symbols.Replace(., "")
 	var/static/regex/acronyms = new(@"(?<![a-zA-Zа-яёА-ЯЁ])[a-zA-Zа-яёА-ЯЁ]+?(?![a-zA-Zа-яёА-ЯЁ])", "gm")
-	. = replacetext_char(., acronyms, /datum/controller/subsystem/tts220/proc/tts_acronym_replacer)
+	. = replacetext_char(., acronyms, /proc/tts_acronym_replacer)
 
 	if(LAZYLEN(tts_job_replacements))
 		for(var/job in tts_job_replacements)
@@ -431,12 +442,12 @@ SUBSYSTEM_DEF(tts220)
 
 	return pick(tts_by_gender)
 
-/datum/controller/subsystem/tts220/proc/tts_acronym_replacer(word)
-	PRIVATE_PROC(TRUE)
-	if(!word || !LAZYLEN(tts_acronym_replacements))
+/// Proc intended to use with `replacetext`. Is global because `replacetext` cant use non globabl procs.
+/proc/tts_acronym_replacer(word)
+	if(!word || !LAZYLEN(SStts220.tts_acronym_replacements))
 		return word
 
-	var/match = tts_acronym_replacements[lowertext(word)]
+	var/match = SStts220.tts_acronym_replacements[lowertext(word)]
 	if(match)
 		return match
 

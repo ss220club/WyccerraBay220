@@ -170,7 +170,6 @@
 /datum/gear/tactical/pcarrier
 	display_name = "black plate carrier"
 	path = /obj/item/clothing/suit/armor/pcarrier
-	cost = 1
 	slot = slot_wear_suit
 	allowed_roles = ARMORED_ROLES
 

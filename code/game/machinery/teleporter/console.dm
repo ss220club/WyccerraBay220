@@ -145,7 +145,7 @@
 	if (active == effective)
 		return
 	active = effective
-	if (!active && !locate(/datum/event/bsd_instability) in SSevent.active_events)
+	if (!active && !SSevent.is_event_of_type_active(/datum/event/bsd_instability))
 		pad.interlude_chance = initial(pad.interlude_chance)
 	set_timer(!active)
 	if (notify && effective)
@@ -165,7 +165,7 @@
 			deltimer(active_timer)
 			active_timer = null
 	else
-		active_timer = addtimer(new Callback(src, PROC_REF(clear_target)), 1 MINUTE, TIMER_UNIQUE | TIMER_OVERRIDE | TIMER_STOPPABLE)
+		active_timer = addtimer(CALLBACK(src, PROC_REF(clear_target)), 1 MINUTE, TIMER_UNIQUE | TIMER_OVERRIDE | TIMER_STOPPABLE)
 
 
 /obj/machinery/computer/teleporter/proc/get_targets()

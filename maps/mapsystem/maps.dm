@@ -62,14 +62,6 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 	var/list/map_admin_faxes = list()
 
-	var/shuttle_docked_message
-	var/shuttle_leaving_dock
-	var/shuttle_called_message
-	var/shuttle_recall_message
-	var/emergency_shuttle_docked_message
-	var/emergency_shuttle_leaving_dock
-	var/emergency_shuttle_recall_message
-
 	var/list/station_networks = list() 		// Camera networks that will show up on the console.
 
 	var/list/holodeck_programs = list() // map of string ids to /datum/holodeck_program instances
@@ -106,7 +98,8 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 	var/away_site_budget = 0
 	var/min_offmap_players = 0
 
-	var/list/loadout_blacklist	//list of types of loadout items that will not be pickable
+	/// Set of types of loadout items that will not be pickable as: type => TRUE
+	var/list/loadout_blacklist
 
 	//Economy stuff
 	var/starting_money = 75000		//Money in station account
@@ -238,7 +231,11 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 	var/maint_all_access = FALSE
 
+	var/base_lobby_html
+
 /datum/map/New()
+	base_lobby_html = file2text('html/lobby_screen/lobby.html')
+
 	if(!map_levels)
 		map_levels = station_levels.Copy()
 	if(!allowed_jobs)
@@ -249,9 +246,54 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 				allowed_jobs += jtype
 	if(!LAZYLEN(planet_size))
 		planet_size = list(world.maxx, world.maxy)
-	current_lobby_screen = pick(lobby_screens)
 	game_year = text2num(time2text(world.timeofday, "YYYY")) + DEFAULT_GAME_YEAR_OFFSET
 
+/datum/map/proc/update_titlescreens()
+	for(var/mob/new_player/player in GLOB.player_list)
+		update_titlescreen(player.client)
+
+/datum/map/proc/update_titlescreen(client/C)
+	if (isnull(C))
+		return
+
+	var/state = Master.current_runlevel || 0
+	var/mob/new_player/player = C.mob
+	send_output(C, "[state]-[player.ready]", "lobbybrowser:setStatus")
+	if (SScharacter_setup.initialized)
+		var/char_name = C.prefs.real_name || "Random"
+		char_name += C.prefs.job_high ? " ([C.prefs.job_high])" : null
+		// We encode it twice becase of special characters and `byond bug id: 2399401`
+		send_output(C, url_encode(url_encode(char_name)), "lobbybrowser:setCharacterName")
+
+/mob/new_player/Topic(href, href_list)
+	if (href_list["lobby_init"])
+		GLOB.using_map.update_titlescreen(client)
+		return TOPIC_HANDLED
+	if (href_list["lobby_ready"])
+		ready = !ready
+		GLOB.using_map.update_titlescreen(client)
+		return TOPIC_HANDLED
+	if (href_list["change_character"])
+		client.prefs.open_load_dialog(src, TRUE)
+		return TOPIC_HANDLED
+	if (href_list["lobby_wiki"])
+		client.link_wiki()
+		return TOPIC_HANDLED
+	if (href_list["lobby_discord"])
+		client.link_discord()
+		return TOPIC_HANDLED
+	if (href_list["lobby_changelog"])
+		client.changes()
+		return TOPIC_HANDLED
+	if (href_list["lobby_github"])
+		client.link_source()
+		return TOPIC_HANDLED
+	. = ..()
+
+
+/hook/roundstart/proc/update_lobby_browsers()
+	GLOB.using_map.update_titlescreens()
+	return TRUE
 
 /datum/map/proc/get_lobby_track(banned)
 	var/path = /singleton/audio/track/absconditus
@@ -285,11 +327,11 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 		if ("company_name") company_name = value
 		if ("company_short") company_short = value
 		if ("shuttle_docked_message") shuttle_docked_message = value
-		if ("shuttle_leaving_dock") shuttle_leaving_dock = value
+		if ("shuttle_leaving_message") shuttle_leaving_message = value
 		if ("shuttle_called_message") shuttle_called_message = value
 		if ("shuttle_recall_message") shuttle_recall_message = value
 		if ("emergency_shuttle_docked_message") emergency_shuttle_docked_message = value
-		if ("emergency_shuttle_leaving_dock") emergency_shuttle_leaving_dock = value
+		if ("emergency_shuttle_leaving_message") emergency_shuttle_leaving_message = value
 		if ("emergency_shuttle_recall_message") emergency_shuttle_recall_message = value
 		if ("starting_money") starting_money = text2num_or_default(value, starting_money)
 		if ("department_money") department_money = text2num_or_default(value, department_money)
@@ -420,8 +462,9 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 	if(!use_overmap)
 		return
 
+	var/static/list/exoplanet_types = subtypesof(/obj/overmap/visitable/sector/exoplanet)
 	for(var/i = 0, i < num_exoplanets, i++)
-		var/exoplanet_type = pick(subtypesof(/obj/overmap/visitable/sector/exoplanet))
+		var/exoplanet_type = pick(exoplanet_types)
 		var/obj/overmap/visitable/sector/exoplanet/new_planet = new exoplanet_type(null, planet_size[1], planet_size[2])
 		new_planet.build_level()
 
@@ -564,10 +607,26 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 	)
 
 /datum/map/proc/show_titlescreen(client/C)
+	if(!C)
+		return
+
 	winset(C, "lobbybrowser", "is-disabled=false;is-visible=true")
 
-	show_browser(C, current_lobby_screen, "file=titlescreen.png;display=0")
-	show_browser(C, file('html/lobby_titlescreen.html'), "window=lobbybrowser")
+	if(!isnewplayer(C.mob))
+		return
+
+	var/datum/asset/lobby_assets = get_asset_datum(/datum/asset/group/lobby) // Sending fonts+png+mp4 assets to the client
+	lobby_assets.send(C)
+
+	if (!Master.current_runlevel)
+		// Sending big video only if it's needed
+		var/datum/asset/loop = get_asset_datum(/datum/asset/simple/lobby_loop)
+		loop.send(C)
+
+	var/mob/new_player/player = C.mob
+
+	show_browser(C, replacetext_char(base_lobby_html, "\[player-ref]", "\ref[player]"), "window=lobbybrowser")
+	update_titlescreen(C)
 
 /datum/map/proc/hide_titlescreen(client/C)
 	if(C.mob) // Check if the client is still connected to something

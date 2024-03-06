@@ -20,7 +20,7 @@ var/global/const/GC_CURRENTLY_BEING_QDELETED = -1
 
 SUBSYSTEM_DEF(garbage)
 	name = "Garbage"
-	priority = SS_PRIORITY_GARBAGE
+	priority = FIRE_PRIORITY_GARBAGE
 	wait = 10 SECONDS
 	flags = SS_POST_FIRE_TIMING | SS_BACKGROUND | SS_NEEDS_SHUTDOWN
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
@@ -48,7 +48,7 @@ SUBSYSTEM_DEF(garbage)
 
 /datum/controller/subsystem/garbage/Shutdown()
 	var/list/qdel_log = list()
-	sortTim(details_by_path, cmp = /proc/cmp_qdel_details_time, associative = TRUE)
+	sortTim(details_by_path, cmp = GLOBAL_PROC_REF(cmp_qdel_details_time), associative = TRUE)
 	for (var/path in details_by_path)
 		var/datum/qdel_details/details = details_by_path[path]
 		qdel_log += "Path: [path]"
@@ -65,12 +65,7 @@ SUBSYSTEM_DEF(garbage)
 			qdel_log += "\tSleeps: [details.slept_destroy]"
 		if (details.no_hint)
 			qdel_log += "\tNo hint: [details.no_hint] times"
-	// [SIERRA-EDIT] - RUST_G
-	// var/log_file = file("[GLOB.log_directory]/qdel.log") // SIERRA-EDIT - ORIGINAL
-	// to_file(log_file, jointext(qdel_log, "\n")) // SIERRA-EDIT - ORIGINAL
 	rustg_log_write_formatted("[GLOB.log_directory]/qdel.log", jointext(qdel_log, "\n"))
-	// [/SIERRA-EDIT]
-
 
 /datum/controller/subsystem/garbage/Initialize(start_uptime)
 	pause_deletion_queue = config.deletion_starts_paused
@@ -204,15 +199,19 @@ SUBSYSTEM_DEF(garbage)
 
 
 /// Queue datum D for garbage collection / deletion. Calls the datum's Destroy() and sets its gc_destroyed value.
+/// If not datum passed, proc will crash
 /proc/qdel(datum/datum)
+	if(!datum)
+		return
+
+	if(!istype(datum))
+		crash_with("qdel() can only handle /datum (sub)types, was passed: [log_info_line(datum)]")
+		return
+
 	var/static/list/details_by_path = SSgarbage.details_by_path
 	var/static/list/collection_queue = SSgarbage.collection_queue
 	var/static/list/deletion_queue = SSgarbage.deletion_queue
-	if (!datum)
-		return
-	if (!istype(datum))
-		crash_with("qdel() can only handle /datum (sub)types, was passed: [log_info_line(datum)]")
-		return
+
 	var/datum/qdel_details/details = details_by_path[datum.type]
 	if (!details)
 		details = new

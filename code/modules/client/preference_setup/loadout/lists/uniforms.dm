@@ -1,7 +1,7 @@
 /datum/gear/uniform
-	sort_category = "Uniforms and Casual Dress"
+	category = GEAR_CATEGORY_UNIFORMS_AND_CASUAL_DRESS
 	slot = slot_w_uniform
-	category = /datum/gear/uniform
+	abstract_type = /datum/gear/uniform
 
 /datum/gear/uniform/jumpsuit
 	display_name = "jumpsuit, colour select"
@@ -212,3 +212,9 @@
 /datum/gear/uniform/pj_blue
 	display_name = "blue pajamas"
 	path = /obj/item/clothing/under/bluepyjamas
+
+/datum/gear/uniform/harness
+	display_name = "gear harness (Full Body Prosthetic, Diona, Giant Armoured Serpentid)"
+	path = /obj/item/clothing/under/harness
+	category = GEAR_CATEGORY_UNIFORMS_AND_CASUAL_DRESS
+	whitelisted = list(SPECIES_IPC,SPECIES_DIONA, SPECIES_NABBER)

@@ -4,6 +4,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	var/species = SPECIES_HUMAN
 	var/gender = MALE					//gender of character (well duh)
 	var/pronouns = PRONOUNS_THEY_THEM
+	var/tts_seed = "arthas" // TTS seed
 	var/b_type = "A+"					//blood type (not-chooseable)
 	var/head_hair_style = "Bald"				//Hair type
 	var/head_hair_color = "#000000"
@@ -15,18 +16,17 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	var/base_skin = ""
 	var/list/body_markings = list()
 	var/list/body_descriptors = list()
-
 	// maps each organ to either null(intact), "cyborg" or "amputated"
 	// will probably not be able to do this for head and torso ;)
 	var/list/organ_data
 	var/list/rlimb_data
 	var/disabilities = 0
 
-
 /datum/category_item/player_setup_item/physical/body
 	name = "Body"
 	sort_order = 2
 	var/hide_species = TRUE
+	var/static/explorer_users = list()
 
 /datum/category_item/player_setup_item/physical/body/load_character(datum/pref_record_reader/R)
 	pref.species = R.read("species")
@@ -35,6 +35,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	pref.age = R.read("age")
 	pref.gender = R.read("gender")
 	pref.pronouns = R.read("pronouns")
+	pref.tts_seed = R.read("tts_seed")
 	if(R.get_version() < 3 && !(pref.pronouns))
 		switch (pref.gender)
 			if (MALE)
@@ -71,6 +72,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	W.write("species", pref.species)
 	W.write("gender", pref.gender)
 	W.write("pronouns", pref.pronouns)
+	W.write("tts_seed", pref.tts_seed)
 	W.write("age", pref.age)
 	W.write("head_hair_color", pref.head_hair_color)
 	W.write("facial_hair_color", pref.facial_hair_color)
@@ -144,6 +146,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	. += "<br /><br /><b>Body</b> [BTN("random", "Randomize")]"
 	. += "<br />[TBTN("gender", pref.gender, "Bodytype")]"
 	. += "<br />[TBTN("pronouns", pref.pronouns, "Pronouns")]"
+	. += "<br />[TBTN("tts_explorer", pref.tts_seed, "Voice")]"
 	. += "<br />[TBTN("age", pref.age, "Age")]"
 	. += "<br />[TBTN("blood_type", pref.b_type, "Blood Type")]"
 	. += "<br />[VTBTN("disabilities", NEARSIGHTED, pref.disabilities & NEARSIGHTED ? "Yes" : "No", "Glasses")]"
@@ -277,6 +280,14 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			pref.pronouns = new_pronouns
 		return TOPIC_REFRESH
 
+	if(href_list["tts_explorer"])
+		var/datum/tgui_module/tts_seeds_explorer/explorer = explorer_users[usr]
+		if(!explorer)
+			explorer = new(src)
+			explorer_users[usr] = explorer
+		explorer.tgui_interact(usr)
+		return TOPIC_NOACTION
+
 	else if(href_list["change_descriptor"])
 		if(mob_species.descriptors)
 			var/desc_id = href_list["change_descriptor"]
@@ -308,7 +319,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				var/datum/species/current_species = all_species[species]
 				if(!(current_species.spawn_flags & SPECIES_CAN_JOIN))
 					continue
-				else if((current_species.spawn_flags & SPECIES_IS_WHITELISTED) && !is_alien_whitelisted(preference_mob(),current_species))
+				else if((current_species.spawn_flags & SPECIES_IS_WHITELISTED) && !is_any_alien_whitelisted(preference_mob(),current_species))
 					continue
 			species_to_pick += species
 
@@ -343,7 +354,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			sanitize_organs()
 
 			if(!HasAppearanceFlag(all_species[pref.species], SPECIES_APPEARANCE_HAS_UNDERWEAR))
-				pref.all_underwear.Cut()
+				LAZYCLEARLIST(pref.all_underwear)
 
 			return TOPIC_REFRESH_UPDATE_PREVIEW
 

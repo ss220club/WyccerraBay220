@@ -83,7 +83,7 @@ Notes:
 	queueHide = !!showing
 
 	if (queueHide)
-		addtimer(new Callback(src, PROC_REF(do_hide)), 1)
+		addtimer(CALLBACK(src, PROC_REF(do_hide)), 1)
 	else
 		do_hide()
 

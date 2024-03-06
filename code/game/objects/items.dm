@@ -101,14 +101,11 @@
 	var/attack_ignore_harm_check = FALSE
 
 
-/obj/item/New()
-	..()
+/obj/item/Initialize()
+	. = ..()
 	if(randpixel && (!pixel_x && !pixel_y) && isturf(loc)) //hopefully this will prevent us from messing with mapper-set pixel_x/y
 		pixel_x = rand(-randpixel, randpixel)
 		pixel_y = rand(-randpixel, randpixel)
-
-/obj/item/Initialize()
-	. = ..()
 	if(islist(armor))
 		for(var/type in armor)
 			if(armor[type]) // Don't set it if it gives no armor anyway, which is many items.
@@ -204,7 +201,7 @@
 			desc_comp += "[SPAN_NOTICE("Testing potentials:")]<BR>"
 			//var/list/techlvls = params2list(origin_tech)
 			for(var/T in origin_tech)
-				desc_comp += "Tech: Level [origin_tech[T]] [CallTechName(T)] <BR>"
+				desc_comp += "Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]] <BR>"
 		else
 			desc_comp += "No tech origins detected.<BR>"
 
@@ -334,7 +331,7 @@
 	GLOB.item_unequipped_event.raise_event(src, user)
 
 	if(user && (z_flags & ZMM_MANGLE_PLANES))
-		addtimer(new Callback(user, TYPE_PROC_REF(/mob, check_emissive_equipment)), 0, TIMER_UNIQUE)
+		addtimer(CALLBACK(user, TYPE_PROC_REF(/mob, check_emissive_equipment)), 0, TIMER_UNIQUE)
 
 
 // called just as an item is picked up (loc is not yet changed)
@@ -375,7 +372,7 @@ note this isn't called during the initial dressing of a player
 	GLOB.item_equipped_event.raise_event(src, user, slot)
 
 	if(user && (z_flags & ZMM_MANGLE_PLANES))
-		addtimer(new Callback(user, TYPE_PROC_REF(/mob, check_emissive_equipment)), 0, TIMER_UNIQUE)
+		addtimer(CALLBACK(user, TYPE_PROC_REF(/mob, check_emissive_equipment)), 0, TIMER_UNIQUE)
 
 
 /obj/item/proc/equipped_robot(mob/user)
@@ -825,7 +822,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	if(!user.client)
 		return
 
-	user.client.view = world.view
+	user.client.view = user.get_preference_value(/datum/client_preference/client_view)
 	if(!user.hud_used.hud_shown)
 		user.toggle_zoom_hud()
 
@@ -846,7 +843,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	if(slot == slot_r_hand_str || slot == slot_l_hand_str)
 		return 0
 
-	if(icon_state in icon_states(sprite_sheets[bodytype]))
+	if(ICON_HAS_STATE(sprite_sheets[bodytype], icon_state))
 		return 1
 
 	return (slot != slot_wear_suit_str && slot != slot_head_str)

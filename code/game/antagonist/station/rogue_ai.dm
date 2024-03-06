@@ -18,8 +18,8 @@ GLOBAL_DATUM_INIT(malf, /datum/antagonist/rogue_ai, new)
 	min_player_age = 18
 	skill_setter = /datum/antag_skill_setter/ai
 
-/datum/antagonist/rogue_ai/can_become_antag(datum/mind/player, ignore_role)
-	. = ..(player, ignore_role)
+/datum/antagonist/rogue_ai/can_become_antag(datum/mind/player, ignore_role, forced)
+	. = ..()
 	if(jobban_isbanned(player.current, "AI"))
 		return 0
 	return .

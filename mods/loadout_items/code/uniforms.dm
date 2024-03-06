@@ -115,7 +115,7 @@
 	desc = "The utility uniform of the SCG Expeditionary Corps, made from biohazard resistant material. This one has gold trim."
 	icon_state = "blackutility_com"
 	worn_state = "blackutility_com"
-	
+
 // Unathi garnments
 
 /obj/item/clothing/under/medic/paramedic
@@ -143,7 +143,7 @@
 	icon_state = "desertuniform"
 	item_state = "desertuniform"
 	worn_state = "desertuniform"
-	rolled_sleeves = 0  //0 = unrolled, 1 = rolled, -1 = cannot be toggled
+	rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_UNROLLED
 
 /obj/item/clothing/under/security/officer
 	name = "large security uniform"
@@ -157,7 +157,7 @@
 	icon_state = "unsecuniform"
 	item_state = "unsecuniform"
 	worn_state = "unsecuniform"
-	rolled_sleeves = 0  //0 = unrolled, 1 = rolled, -1 = cannot be toggled
+	rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_UNROLLED
 
 // Avalon
 

@@ -55,6 +55,9 @@
 	/// log world.log to game log
 	var/static/log_world_output = FALSE
 
+	/// log signals messages
+	var/static/log_signals = FALSE
+
 	/// Allows admins with relevant permissions to have their own ooc colour
 	var/static/allow_admin_ooccolor = FALSE
 
@@ -98,6 +101,9 @@
 
 	/// Length of time before round start (in seconds)
 	var/static/pre_game_time = 180
+
+	/// If we want to bypass gamemode vote
+	var/static/bypass_gamemode_vote = FALSE
 
 	/// vote does not default to nochange/norestart (tbi)
 	var/static/vote_no_default = FALSE
@@ -440,14 +446,26 @@
 
 	var/static/enable_cold_mist = FALSE
 
-
 	/// If the runechat is enabled on the server
 	var/static/runechat_enabled = TRUE
 
-	// [SIERRA-ADD]
 	var/static/shutdown_on_reboot = FALSE
+
 	var/static/auto_local_admin = FALSE
-	// [/SIERRA-ADD]
+
+	/// Type of assets delivery transport. Valid values: simple, webroot. Simple is the default.
+	var/static/asset_transport = "simple"
+
+	/// Set this to TRUE to have the server passively send all browser assets to each client in the background.
+	/// (instead of waiting for them to be needed)
+	var/static/asset_simple_preload = FALSE
+
+	/// Local folder to save assets to.
+	var/static/asset_cdn_webroot = "data/asset-store/"
+
+	/// If you want to test this locally, you simpily run the `localhost-asset-webroot-server.py`
+	/// python3 script to host assets stored in `data/asset-store/` via http://localhost:58715/
+	var/static/asset_cdn_url = "http://localhost:58715/"
 
 
 /datum/configuration/New()
@@ -500,6 +518,14 @@
 			// [SS220-ADD]
 			if ("auto_local_admin")
 				config.auto_local_admin = TRUE
+			if ("asset_transport")
+				config.asset_transport = value
+			if ("asset_simple_preload")
+				config.asset_simple_preload = value
+			if ("asset_cdn_webroot")
+				config.asset_cdn_webroot = value
+			if ("asset_cdn_url")
+				config.asset_cdn_url = value
 			// [SS220-ADDEND]
 			if ("resource_urls")
 				resource_urls = splittext(value, " ")
@@ -539,6 +565,8 @@
 				log_adminwarn = TRUE
 			if ("log_world_output")
 				log_world_output = TRUE
+			if ("log_signals")
+				log_signals = TRUE
 			if ("log_hrefs")
 				log_hrefs = TRUE
 			if ("log_runtime")
@@ -609,6 +637,8 @@
 				vote_autogamemode_timeleft = text2num(value)
 			if ("pre_game_time")
 				pre_game_time = text2num(value)
+			if ("bypass_gamemode_vote")
+				bypass_gamemode_vote = TRUE
 			if ("ert_admin_only")
 				ert_admin_call_only = TRUE
 			if ("respawn_delay")

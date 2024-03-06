@@ -133,41 +133,42 @@
 	#define OBFUSCATION_LAYER           5.2
 	#define BASE_AREA_LAYER             999
 
-#define OBSERVER_PLANE             2
+#define OBSERVER_PLANE 2
 
-#define LIGHTING_PLANE             3 // For Lighting. - The highest plane (ignoring all other even higher planes)
-	#define LIGHTBULB_LAYER        0
-	#define LIGHTING_LAYER         1
-	#define ABOVE_LIGHTING_LAYER   2
+#define LIGHTING_PLANE 3 // For Lighting. - The highest plane (ignoring all other even higher planes)
+	#define LIGHTBULB_LAYER 0
+	#define LIGHTING_LAYER 1
+	#define ABOVE_LIGHTING_LAYER 2
 
-#define EFFECTS_ABOVE_LIGHTING_PLANE   7 // SS220 Bloom Lighting // For glowy eyes, laser beams, etc. that shouldn't be affected by darkness
-	#define EYE_GLOW_LAYER         1
-	#define BEAM_PROJECTILE_LAYER  2
+#define EFFECTS_ABOVE_LIGHTING_PLANE 7 // For glowy eyes, laser beams, etc. that shouldn't be affected by darkness
+	#define EYE_GLOW_LAYER 1
+	#define BEAM_PROJECTILE_LAYER 2
 	#define SUPERMATTER_WALL_LAYER 3
 	#define SPEECH_INDICATOR_LAYER 4
 
-#define FULLSCREEN_PLANE                8 // SS220 Bloom Lighting // for fullscreen overlays that do not cover the hud.
-
-	#define FULLSCREEN_LAYER    0
-	#define DAMAGE_LAYER        1
-	#define IMPAIRED_LAYER      2
-	#define BLIND_LAYER         3
-	#define CRIT_LAYER          4
-
-#define HUD_PLANE                    9 // SS220 Bloom Lighting
-	#define UNDER_HUD_LAYER              0
-	#define HUD_BASE_LAYER               2
-	#define HUD_ITEM_LAYER               3
-	#define HUD_ABOVE_ITEM_LAYER         4
-	#define HUD_ABOVE_HUD_LAYER          5
-
-#define RUNECHAT_PLANE               10
-
 /// This plane masks out lighting, to create an "emissive" effect for e.g glowing screens in otherwise dark areas.
-#define EMISSIVE_PLANE 11 // SS220 Bloom Lighting
+#define EMISSIVE_PLANE 8
 #define EMISSIVE_TARGET "*emissive"
 	/// The layer you should use when you -really- don't want an emissive overlay to be blocked.
 	#define EMISSIVE_LAYER_UNBLOCKABLE 9999
+
+#define FULLSCREEN_PLANE 9 // for fullscreen overlays that do not cover the hud.
+
+	#define FULLSCREEN_LAYER 0
+	#define DAMAGE_LAYER 1
+	#define IMPAIRED_LAYER 2
+	#define BLIND_LAYER 3
+	#define CRIT_LAYER 4
+
+#define HUD_PLANE 10
+	#define UNDER_HUD_LAYER 0
+	#define HUD_BASE_LAYER 2
+	#define HUD_CLICKABLE_LAYER 3
+	#define HUD_ITEM_LAYER 4
+	#define HUD_ABOVE_ITEM_LAYER 5
+	#define HUD_ABOVE_HUD_LAYER 6
+
+#define RUNECHAT_PLANE 11
 
 //-------------------- Rendering ---------------------
 

@@ -80,6 +80,7 @@ SUBSYSTEM_DEF(tts220)
 	for(var/path in subtypesof(/datum/tts_provider))
 		var/datum/tts_provider/provider = new path
 		tts_providers[provider.name] += provider
+
 	for(var/path in subtypesof(/datum/tts_seed))
 		var/datum/tts_seed/seed = new path
 		if(seed.value == "STUB")
@@ -89,7 +90,7 @@ SUBSYSTEM_DEF(tts220)
 		tts_seeds_names += seed.name
 		tts_seeds_names_by_donator_levels["[seed.required_donator_level]"] += list(seed.name)
 		LAZYADDASSOCLIST(tts_seeds_by_gender, seed.gender, seed.name)
-	tts_seeds_names = sortTim(tts_seeds_names, /proc/cmp_text_asc)
+	tts_seeds_names = sortTim(tts_seeds_names, GLOBAL_PROC_REF(cmp_text_asc))
 
 /datum/controller/subsystem/tts220/Initialize(start_timeofday)
 	if(!config.tts_enabled)
@@ -97,6 +98,7 @@ SUBSYSTEM_DEF(tts220)
 		return
 
 	load_replacements()
+	TTS_radio_channel = GLOB.sound_channels.RequestChannel("CHANNEL_TTS_RADIO")
 
 /datum/controller/subsystem/tts220/fire()
 	tts_rps = tts_rps_counter
@@ -306,20 +308,17 @@ SUBSYSTEM_DEF(tts220)
 	var/turf/turf_source = get_turf(speaker)
 
 	var/volume = 100
-	var/channel = GLOB.CHANNEL_TTS_RADIO
-	if(is_local)
-		volume *= 1
-		channel = get_local_channel_by_owner(speaker)
-	else
-		volume *= 1
-		channel = GLOB.CHANNEL_TTS_RADIO
 
 	var/sound/output = sound(voice)
 	output.status = SOUND_STREAM
+	if(is_local)
+		output.channel = get_local_channel_by_owner(speaker)
+	else
+		output.channel = TTS_radio_channel
+		output.wait = TRUE
 
 	if(isnull(speaker))
 		output.wait = TRUE
-		output.channel = channel
 		output.volume = volume
 		output.environment = -1
 
@@ -335,7 +334,7 @@ SUBSYSTEM_DEF(tts220)
 	if(preSFX)
 		play_sfx(listener, preSFX, output.channel, output.volume, output.environment)
 
-	output = listener.playsound_local(turf_source, output, volume, wait = TRUE)
+	output = listener.playsound_local(turf_source, output, volume)
 
 	if(!output || output.volume <= 0)
 		return
@@ -396,13 +395,13 @@ SUBSYSTEM_DEF(tts220)
 	if(LAZYLEN(tts_job_replacements))
 		for(var/job in tts_job_replacements)
 			. = replacetext_char(., job, tts_job_replacements[job])
-		. = rustg_latin_to_cyrillic(.)
+	. = rustg_latin_to_cyrillic(.)
 
 	var/static/regex/decimals = new(@"-?\d+\.\d+", "g")
-	. = replacetext_char(., decimals, /proc/dec_in_words)
+	. = replacetext_char(., decimals, GLOBAL_PROC_REF(dec_in_words))
 
 	var/static/regex/numbers = new(@"-?\d+", "g")
-	. = replacetext_char(., numbers, /proc/num_in_words)
+	. = replacetext_char(., numbers, GLOBAL_PROC_REF(num_in_words))
 	if(sanitized_messages_caching)
 		sanitized_messages_cache[hash] = .
 

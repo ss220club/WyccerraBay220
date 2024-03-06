@@ -70,6 +70,7 @@
 /obj/structure/lift/button/interact(mob/user)
 	if(!..())
 		return
+	playsound(src, 'sound/effects/butelev.ogg', 50)
 	light_up()
 	pressed(user)
 	if(floor == lift.current_floor)
@@ -132,6 +133,7 @@
 /obj/structure/lift/panel/OnTopic(user, href_list)
 	if(href_list["move_to_floor"])
 		lift.queue_move_to(locate(href_list["move_to_floor"]))
+		playsound(src, 'sound/effects/butelev.ogg', 50)
 		. = TOPIC_REFRESH
 	if(href_list["open_doors"])
 		lift.open_doors()

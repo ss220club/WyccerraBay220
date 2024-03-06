@@ -50,3 +50,5 @@
 #define STANCE_ATTACKING    12  // Ditto
 
 #define STANCES_COMBAT      list(STANCE_ALERT, STANCE_APPROACH, STANCE_FIGHT, STANCE_BLINDFIGHT, STANCE_REPOSITION)
+
+#define AUTO_ANNOUNCER_NAME "Автоматическая система оповещений"

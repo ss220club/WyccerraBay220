@@ -1,4 +1,3 @@
-
 //These datums are used to populate the asset cache, the proc "register()" does this.
 //Place any asset datums you create in asset_list_items.dm
 
@@ -29,22 +28,35 @@ GLOBAL_LIST_EMPTY(asset_datums)
 //If you don't need anything complicated.
 /datum/asset/simple
 	_abstract = /datum/asset/simple
+	/// List of assets for this datum in the form of asset_filename = asset_file. At runtime the asset_file will be converted into a asset_cache datum
 	var/assets = list()
+	/// Set to true to have this asset also be sent via browse_rsc when cdn asset transports are enabled
+	var/legacy = FALSE
+	/// TRUE for keeping local asset names when browse_rsc backend is used
+	var/keep_local_name = FALSE
 
 /datum/asset/simple/register()
 	for(var/asset_name in assets)
-		assets[asset_name] = register_asset(asset_name, assets[asset_name])
+		var/datum/asset_cache_item/ACI = SSassets.transport.register_asset(asset_name, assets[asset_name])
+		if(!ACI)
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			continue
+		if(legacy)
+			ACI.legacy = TRUE
+		if(keep_local_name)
+			ACI.keep_local_name = keep_local_name
+		assets[asset_name] = ACI
 
 /datum/asset/simple/send(client)
-	. = send_asset_list(client, assets)
+	. = SSassets.transport.send_assets(client, assets)
 
 /datum/asset/simple/get_url_mappings()
 	. = list()
-	for (var/asset_name in assets)
+	for(var/asset_name in assets)
 		var/datum/asset_cache_item/ACI = assets[asset_name]
-		if (!ACI)
+		if(!ACI)
 			continue
-		.[asset_name] = ACI.url
+		.[asset_name] = SSassets.transport.get_asset_url(asset_name, assets[asset_name])
 
 
 // For registering or sending multiple others at once
@@ -83,64 +95,67 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	var/list/sprites = list()  // "foo_bar" -> list("32x32", 5)
 
 /datum/asset/spritesheet/register()
-	if (!name)
+	SHOULD_NOT_OVERRIDE(TRUE)
+
+	if(!name)
 		CRASH("spritesheet [type] cannot register without a name")
+
+	create_spritesheets()
+	realize_spritesheets()
+
+/datum/asset/spritesheet/proc/realize_spritesheets()
 	ensure_stripped()
 	for(var/size_id in sizes)
 		var/size = sizes[size_id]
-		register_asset("[name]_[size_id].png", size[SPRSZ_STRIPPED])
-	var/res_name = "spritesheet_[name].css"
-	var/fname = "data/spritesheets/[res_name]"
-	fdel(fname)
-	text2file(generate_css(), fname)
-	register_asset(res_name, fcopy_rsc(fname))
-	fdel(fname)
+		SSassets.transport.register_asset("[name]_[size_id].png", size[SPRSZ_STRIPPED])
+	var/css_name = "spritesheet_[name].css"
+	var/file_directory = "data/spritesheets/[css_name]"
+	fdel(file_directory)
+	text2file(generate_css(), file_directory)
+	SSassets.transport.register_asset(css_name, fcopy_rsc(file_directory))
+	fdel(file_directory)
 
-/datum/asset/spritesheet/send(client/C)
-	if (!name)
+/datum/asset/spritesheet/send(client/client)
+	if(!name)
 		return
 	var/all = list("spritesheet_[name].css")
 	for(var/size_id in sizes)
 		all += "[name]_[size_id].png"
-	. = send_asset_list(C, all)
+	. = SSassets.transport.send_assets(client, all)
 
 /datum/asset/spritesheet/get_url_mappings()
-	if (!name)
+	if(!name)
 		return
-	. = list("spritesheet_[name].css" = get_asset_url("spritesheet_[name].css"))
+
+	. = list("spritesheet_[name].css" = SSassets.transport.get_asset_url("spritesheet_[name].css"))
 	for(var/size_id in sizes)
-		.["[name]_[size_id].png"] = get_asset_url("[name]_[size_id].png")
-
-
+		.["[name]_[size_id].png"] = SSassets.transport.get_asset_url("[name]_[size_id].png")
 
 /datum/asset/spritesheet/proc/ensure_stripped(sizes_to_strip = sizes)
 	for(var/size_id in sizes_to_strip)
 		var/size = sizes[size_id]
-		if (size[SPRSZ_STRIPPED])
+		if(size[SPRSZ_STRIPPED])
 			continue
 
-		#ifdef RUST_G
 		// save flattened version
-		var/fname = "data/spritesheets/[name]_[size_id].png"
-		fcopy(size[SPRSZ_ICON], fname)
-		var/error = call(RUST_G, "dmi_strip_metadata")(fname)
+		var/png_name = "[name]_[size_id].png"
+		var/file_directory = "data/spritesheets/[png_name]"
+		fcopy(size[SPRSZ_ICON], file_directory)
+		var/error = rustg_dmi_strip_metadata(file_directory)
 		if(length(error))
-			stack_trace("Failed to strip [name]_[size_id].png: [error]")
-		size[SPRSZ_STRIPPED] = icon(fname)
-		fdel(fname)
-		#else
-		#warn It looks like you don't have RUST_G enabled. Without RUST_G, the RPD icons will not function, so it strongly recommended you reenable it.
-		#endif
+			stack_trace("Failed to strip [png_name]: [error]")
+		size[SPRSZ_STRIPPED] = icon(file_directory)
+		fdel(file_directory)
 
 /datum/asset/spritesheet/proc/generate_css()
 	var/list/out = list()
 
-	for (var/size_id in sizes)
+	for(var/size_id in sizes)
 		var/size = sizes[size_id]
 		var/icon/tiny = size[SPRSZ_ICON]
-		out += ".[name][size_id]{display:inline-block;width:[tiny.Width()]px;height:[tiny.Height()]px;background:url('[get_asset_url("[name]_[size_id].png")]') no-repeat;}"
+		out += ".[name][size_id]{display:inline-block;width:[tiny.Width()]px;height:[tiny.Height()]px;background:url('[SSassets.transport.get_asset_url("[name]_[size_id].png")]') no-repeat;}"
 
-	for (var/sprite_id in sprites)
+	for(var/sprite_id in sprites)
 		var/sprite = sprites[sprite_id]
 		var/size_id = sprite[SPR_SIZE]
 		var/idx = sprite[SPR_IDX]
@@ -156,57 +171,96 @@ GLOBAL_LIST_EMPTY(asset_datums)
 
 	return out.Join("\n")
 
+/// Override this in order to start the creation of the spritehseet.
+/// This is where all your Insert, InsertAll, etc calls should be inside.
+/datum/asset/spritesheet/proc/create_spritesheets()
+	SHOULD_CALL_PARENT(FALSE)
+	CRASH("create_spritesheets() not implemented for [type]!")
+
 /datum/asset/spritesheet/proc/Insert(sprite_name, icon/I, icon_state="", dir=SOUTH, frame=1, moving=FALSE)
 	I = icon(I, icon_state=icon_state, dir=dir, frame=frame, moving=moving)
-	if (!I || !length(icon_states(I)))  // that direction or state doesn't exist
+	if(!I || ICON_IS_EMPTY(I))  // that direction or state doesn't exist
 		return
+	//any sprite modifications we want to do (aka, coloring a greyscaled asset)
+	I = ModifyInserted(I)
 	var/size_id = "[I.Width()]x[I.Height()]"
 	var/size = sizes[size_id]
 
-	if (sprites[sprite_name])
+	if(sprites[sprite_name])
 		CRASH("duplicate sprite \"[sprite_name]\" in sheet [name] ([type])")
 
-	if (size)
+	if(size)
 		var/position = size[SPRSZ_COUNT]++
+		// Icons are essentially representations of files + modifications
+		// Because of this, byond keeps them in a cache. It does this in a really dumb way tho
+		// It's essentially a FIFO queue. So after we do icon() some amount of times, our old icons go out of cache
+		// When this happens it becomes impossible to modify them, trying to do so will instead throw a
+		// "bad icon" error.
+		// What we're doing here is ensuring our icon is in the cache by refreshing it, so we can modify it w/o runtimes.
 		var/icon/sheet = size[SPRSZ_ICON]
+		var/icon/sheet_copy = icon(sheet)
 		size[SPRSZ_STRIPPED] = null
-		sheet.Insert(I, icon_state=sprite_name)
+		sheet_copy.Insert(I, icon_state=sprite_name)
+		size[SPRSZ_ICON] = sheet_copy
+
 		sprites[sprite_name] = list(size_id, position)
 	else
 		sizes[size_id] = size = list(1, I, null)
 		sprites[sprite_name] = list(size_id, 0)
 
+/**
+ * A simple proc handing the Icon for you to modify before it gets turned into an asset.
+ *
+ * Arguments:
+ * * I: icon being turned into an asset
+ */
+/datum/asset/spritesheet/proc/ModifyInserted(icon/pre_asset)
+	return pre_asset
+
 /datum/asset/spritesheet/proc/InsertAll(prefix, icon/I, list/directions)
-	if (length(prefix))
+	if(length(prefix))
 		prefix = "[prefix]-"
 
-	if (!directions)
+	if(!directions)
 		directions = list(SOUTH)
 
-	for (var/icon_state_name in icon_states(I))
-		for (var/direction in directions)
-			var/prefix2 = (length(directions) > 1) ? "[dir2text(direction)]-" : ""
+	for(var/icon_state_name in ICON_STATES(I))
+		for(var/direction in directions)
+			var/prefix2 = (length(directions)) ? "[dir2text(direction)]-" : ""
 			Insert("[prefix][prefix2][icon_state_name]", I, icon_state=icon_state_name, dir=direction)
 
 /datum/asset/spritesheet/proc/css_tag()
 	return {"<link rel="stylesheet" href="[css_filename()]" />"}
 
 /datum/asset/spritesheet/proc/css_filename()
-	return get_asset_url("spritesheet_[name].css")
+	return SSassets.transport.get_asset_url("spritesheet_[name].css")
 
 /datum/asset/spritesheet/proc/icon_tag(sprite_name)
 	var/sprite = sprites[sprite_name]
-	if (!sprite)
+	if(!sprite)
 		return null
 	var/size_id = sprite[SPR_SIZE]
-	return {"<span class="[name][size_id] [sprite_name]"></span>"}
+	return {"<span class='[name][size_id] [sprite_name]'></span>"}
 
 /datum/asset/spritesheet/proc/icon_class_name(sprite_name)
 	var/sprite = sprites[sprite_name]
-	if (!sprite)
+	if(!sprite)
 		return null
 	var/size_id = sprite[SPR_SIZE]
 	return {"[name][size_id] [sprite_name]"}
+
+/**
+ * Returns the size class (ex design32x32) for a given sprite's icon
+ *
+ * Arguments:
+ * * sprite_name - The sprite to get the size of
+ */
+/datum/asset/spritesheet/proc/icon_size_id(sprite_name)
+	var/sprite = sprites[sprite_name]
+	if(!sprite)
+		return null
+	var/size_id = sprite[SPR_SIZE]
+	return "[name][size_id]"
 
 #undef SPR_SIZE
 #undef SPR_IDX
@@ -219,10 +273,9 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	_abstract = /datum/asset/spritesheet/simple
 	var/list/assets
 
-/datum/asset/spritesheet/simple/register()
-	for (var/key in assets)
+/datum/asset/spritesheet/simple/create_spritesheets()
+	for(var/key in assets)
 		Insert(key, assets[key])
-	..()
 
 //Generates assets based on iconstates of a single icon
 /datum/asset/simple/icon_states
@@ -236,18 +289,18 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	var/generic_icon_names = FALSE //generate icon filenames using generate_asset_name() instead the above format
 
 /datum/asset/simple/icon_states/register(_icon = icon)
-	for(var/icon_state_name in icon_states(_icon))
+	for(var/icon_state_name in ICON_STATES(_icon))
 		for(var/direction in directions)
 			var/asset = icon(_icon, icon_state_name, direction, frame, movement_states)
-			if (!asset)
+			if(!asset)
 				continue
 			asset = fcopy_rsc(asset) //dedupe
-			var/prefix2 = (length(directions) > 1) ? "[dir2text(direction)]." : ""
-			var/asset_name = sanitize_filename("[prefix].[prefix2][icon_state_name].png")
-			if (generic_icon_names)
+			var/prefix2 = (length(directions)) ? "[dir2text(direction)]." : ""
+			var/asset_name = "[prefix].[prefix2][icon_state_name].png"
+			if(generic_icon_names)
 				asset_name = "[generate_asset_name(asset)].png"
 
-			register_asset(asset_name, asset)
+			SSassets.transport.register_asset(asset_name, asset)
 
 /datum/asset/simple/icon_states/multiple_icons
 	_abstract = /datum/asset/simple/icon_states/multiple_icons
@@ -256,3 +309,52 @@ GLOBAL_LIST_EMPTY(asset_datums)
 /datum/asset/simple/icon_states/multiple_icons/register()
 	for(var/i in icons)
 		..(i)
+
+/// Namespace'ed assets (for static css and html files)
+/// When sent over a cdn transport, all assets in the same asset datum will exist in the same folder, as their plain names.
+/// Used to ensure css files can reference files by url() without having to generate the css at runtime, both the css file and the files it depends on must exist in the same namespace asset datum. (Also works for html)
+/// For example `blah.css` with asset `blah.png` will get loaded as `namespaces/a3d..14f/f12..d3c.css` and `namespaces/a3d..14f/blah.png`. allowing the css file to load `blah.png` by a relative url rather then compute the generated url with get_url_mappings().
+/// The namespace folder's name will change if any of the assets change. (excluding parent assets)
+/datum/asset/simple/namespaced
+	_abstract = /datum/asset/simple/namespaced
+	/// parents - list of the parent asset or assets (in name = file assoicated format) for this namespace.
+	/// parent assets must be referenced by their generated url, but if an update changes a parent asset, it won't change the namespace's identity.
+	var/list/parents = list()
+
+/datum/asset/simple/namespaced/register()
+	if(legacy)
+		assets |= parents
+	var/list/hashlist = list()
+	var/list/sorted_assets = sortTim(assets, GLOBAL_PROC_REF(cmp_text_asc), TRUE)
+
+	for(var/asset_name in sorted_assets)
+		var/datum/asset_cache_item/ACI = new(asset_name, sorted_assets[asset_name])
+		if(!ACI?.hash)
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			continue
+		hashlist += ACI.hash
+		sorted_assets[asset_name] = ACI
+	var/namespace = md5(hashlist.Join())
+
+	for(var/asset_name in parents)
+		var/datum/asset_cache_item/ACI = new(asset_name, parents[asset_name])
+		if(!ACI?.hash)
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			continue
+		ACI.namespace_parent = TRUE
+		sorted_assets[asset_name] = ACI
+
+	for(var/asset_name in sorted_assets)
+		var/datum/asset_cache_item/ACI = sorted_assets[asset_name]
+		if(!ACI?.hash)
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			continue
+		ACI.namespace = namespace
+
+	assets = sorted_assets
+	..()
+
+/// Get a html string that will load a html asset.
+/// Needed because byond doesn't allow you to browse() to a url.
+/datum/asset/simple/namespaced/proc/get_htmlloader(filename)
+	return url2htmlloader(SSassets.transport.get_asset_url(filename, assets[filename]))

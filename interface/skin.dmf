@@ -117,58 +117,52 @@ menu "menu"
 window "mainwindow"
 	elem "mainwindow"
 		type = MAIN
-		pos = 281,0
+		pos = 0,0
 		size = 640x440
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-default = true
-		statusbar = false
 		saved-params = "pos;size;is-minimized;is-maximized"
+		on-size = "onresize"
+		title = "SS220 | WyccStation (Sierra)"
+		statusbar = false
 		is-maximized = true
-		icon = 'icons\\ss13_64.png'
+		icon = 'icons\\ws220.png'
 		macro = "default"
 		menu = "menu"
-		on-size = "onresize"
-		outer-size = 1874x1096
-		inner-size = 1858x1037
+	elem "mainvsplit"
+		type = CHILD
+		pos = 0,0
+		size = 0x0
+		anchor1 = 0,0
+		anchor2 = 100,100
+		saved-params = "splitter"
+		right = "rpane"
+		is-vert = true
 	elem "asset_cache_browser"
 		type = BROWSER
 		pos = 0,0
 		size = 200x200
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = ""
-	elem "mainvsplit"
-		type = CHILD
-		pos = 0,0
-		size = 640x440
-		anchor1 = 0,0
-		anchor2 = 100,100
-		background-color = none
-		saved-params = "splitter"
-		right = "rpane"
-		is-vert = true
 	elem "tooltip"
 		type = BROWSER
 		pos = 0,0
 		size = 999x999
-		anchor1 = none
-		anchor2 = none
-		background-color = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
 		is-visible = false
 		saved-params = ""
 
 window "mapwindow"
 	elem "mapwindow"
 		type = MAIN
-		pos = 219,0
+		pos = 281,0
 		size = 640x480
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
 		on-status = ".winset \"statusbar.text=[[*]]\" "
@@ -181,17 +175,17 @@ window "mapwindow"
 		font-family = "Arial Rounded MT Bold,Arial Black,Arial,sans-serif"
 		font-size = 7
 		is-default = true
-		saved-params = "icon-size"
-		style = ".maptext { font-family: 'Small Fonts'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; }"
+		saved-params = "icon-size;zoom-mode"
+		zoom-mode = distort
 		on-show = ".winset\"mainwindow.mainvsplit.left=mapwindow\""
 		on-hide = ".winset\"mainwindow.mainvsplit.left=\""
+		style = ".center { text-align: center; } .maptext { font-family: 'MS Serif'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; } .small { font-size: 6px; } .big { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .yell { font-weight: bold; } .emote { font-size: 6px; } .italics { font-size: 6px; font-style: italic; }"
 	elem "lobbybrowser"
 		type = BROWSER
 		pos = 0,0
 		size = 640x480
 		anchor1 = 0,0
 		anchor2 = 100,100
-		background-color = none
 		is-visible = false
 		is-disabled = true
 		saved-params = ""
@@ -200,21 +194,146 @@ window "mapwindow"
 		pos = 0,464
 		size = 280x16
 		anchor1 = 0,100
-		is-visible = true
+		anchor2 = -1,-1
+		text-color = #a4bad6
+		background-color = #171717
+		border = line
+		saved-params = ""
 		text = ""
 		align = left
-		background-color = #171717
-		text-color = #a4bad6
+
+window "rpane"
+	elem "rpane"
+		type = MAIN
+		pos = 291,0
+		size = 987x369
+		anchor1 = -1,-1
+		anchor2 = -1,-1
+		background-color = none
+		saved-params = "pos;size;is-minimized;is-maximized"
+		is-pane = true
+		outer-size = 1003x427
+		inner-size = 987x388
+	elem "rpanewindow"
+		type = CHILD
+		pos = 0,20
+		size = 1001x1558
+		anchor1 = 0,0
+		anchor2 = 100,100
+		background-color = none
+		saved-params = "splitter"
+		right = "outputwindow"
+		is-vert = false
+	elem "credits"
+		type = BUTTON
+		pos = 0,7
+		size = 119x18
+		anchor1 = 0,0
+		anchor2 = 14,0
+		background-color = #ffffff
 		border = line
+		saved-params = "is-checked"
+		text = "Авторы"
+		command = "Credits"
+		is-flat = true
+	elem "changelog"
+		type = BUTTON
+		pos = 124,7
+		size = 119x18
+		anchor1 = 14,0
+		anchor2 = 28,0
+		background-color = #ffffff
+		border = line
+		saved-params = "is-checked"
+		text = "Чейнджлог"
+		command = "Changelog"
+		is-flat = true
+		group = "rpanemode"
+	elem "linkwiki"
+		type = BUTTON
+		pos = 248,7
+		size = 119x18
+		anchor1 = 28,0
+		anchor2 = 40,0
+		background-color = #ffffff
+		border = line
+		saved-params = "is-checked"
+		text = "Wiki"
+		command = "link-wiki"
+		is-flat = true
+		group = "rpanemode"
+	elem "linkdiscord"
+		type = BUTTON
+		pos = 372,7
+		size = 119x18
+		anchor1 = 40,0
+		anchor2 = 52,0
+		background-color = #ffffff
+		border = line
+		saved-params = "is-checked"
+		text = "Discord"
+		command = "link-discord"
+		is-flat = true
+		group = "rpanemode"
+	elem "linkrules"
+		type = BUTTON
+		pos = 496,7
+		size = 119x18
+		anchor1 = 52,0
+		anchor2 = 64,0
+		background-color = #ffffff
+		border = line
+		saved-params = "is-checked"
+		text = "Правила"
+		command = "link-rules"
+		is-flat = true
+		group = "rpanemode"
+	elem "linksource"
+		type = BUTTON
+		pos = 620,7
+		size = 119x18
+		anchor1 = 64,0
+		anchor2 = 76,0
+		background-color = #ffffff
+		border = line
+		saved-params = "is-checked"
+		text = "GitHub"
+		command = "link-source"
+		is-flat = true
+	elem "linkissue"
+		type = BUTTON
+		pos = 744,7
+		size = 119x18
+		anchor1 = 76,0
+		anchor2 = 88,0
+		background-color = #ffffff
+		border = line
+		saved-params = "is-checked"
+		text = "Багрепорт"
+		command = "link-issue"
+		is-flat = true
+	elem "fullscreenb"
+		type = BUTTON
+		pos = 868,7
+		size = 119x18
+		anchor1 = 88,0
+		anchor2 = 100,0
+		font-style = "bold"
+		background-color = #ffffff
+		border = line
+		saved-params = "is-checked"
+		text = "Fullscreen"
+		command = "fullscreen"
+		is-flat = true
+		group = "rpanemode"
 
 window "outputwindow"
 	elem "outputwindow"
 		type = MAIN
-		pos = 219,0
+		pos = 291,0
 		size = 658x450
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		titlebar = false
 		statusbar = false
@@ -222,12 +341,55 @@ window "outputwindow"
 		can-minimize = false
 		can-resize = false
 		is-pane = true
-		outer-size = 672x464
-		inner-size = 658x450
+	elem "input"
+		type = INPUT
+		pos = 0,424
+		size = 611x20
+		anchor1 = 0,100
+		anchor2 = 100,100
+		is-default = true
+		border = line
+		saved-params = "command"
+	elem "oocbutton"
+		type = BUTTON
+		pos = 599,460
+		size = 40x20
+		anchor1 = 100,100
+		anchor2 = -1,-1
+		border = line
+		saved-params = "is-checked"
+		text = "OOC"
+		command = ".winset \"oocbutton.is-checked=true ? input.command=\"!ooc \\\"\" : input.command=\"\"oocbutton.is-checked=true ? mebutton.is-checked=false\"\"oocbutton.is-checked=true ? saybutton.is-checked=false\""
+		is-flat = true
+		button-type = pushbox
+	elem "saybutton"
+		type = BUTTON
+		pos = 610,424
+		size = 48x20
+		anchor1 = 100,100
+		anchor2 = -1,-1
+		border = line
+		saved-params = "is-checked"
+		text = "Chat"
+		command = ".winset \"saybutton.is-checked=true?input.command=\"!say \\\"\" macrobutton.is-checked=false:input.command=\"\"saybutton.is-checked=true?mebutton.is-checked=false\""
+		is-flat = true
+		button-type = pushbox
+	elem "mebutton"
+		type = BUTTON
+		pos = 559,460
+		size = 40x20
+		anchor1 = 100,100
+		anchor2 = -1,-1
+		border = line
+		saved-params = "is-checked"
+		text = "Me"
+		command = ".winset \"mebutton.is-checked=true ? input.command=\"!me \\\"\" : input.command=\"\"mebutton.is-checked=true ? saybutton.is-checked=false\"\"mebutton.is-checked=true ? oocbutton.is-checked=false\""
+		is-flat = true
+		button-type = pushbox
 	elem "browseroutput"
 		type = BROWSER
 		pos = 0,0
-		size = 658x424
+		size = 658x418
 		anchor1 = 0,0
 		anchor2 = 100,100
 		background-color = #ffffff
@@ -236,169 +398,86 @@ window "outputwindow"
 	elem "output"
 		type = OUTPUT
 		pos = 0,0
-		size = 658x424
+		size = 658x418
 		anchor1 = 0,0
 		anchor2 = 100,100
 		is-default = true
 		saved-params = ""
-	elem "input"
-		type = INPUT
-		pos = 0,430
-		size = 610x20
-		anchor1 = 0,100
-		anchor2 = 100,100
-		background-color = #f0f0f0
-		is-default = true
-		border = line
-		saved-params = "command"
-	elem "saybutton"
-		type = BUTTON
-		pos = 610,430
-		size = 48x20
-		anchor1 = 100,100
-		anchor2 = -1,-1
-		background-color = none
-		border = line
-		is-flat = true
-		saved-params = "is-checked"
-		text = "Chat"
-		command = ".winset \"saybutton.is-checked=true?input.command=\"!say \\\"\" macrobutton.is-checked=false:input.command=\"\"saybutton.is-checked=true?mebutton.is-checked=false\""
-		button-type = pushbox
-
-window "rpane"
-	elem "rpane"
-		type = MAIN
-		pos = 219,0
-		size = 640x480
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = none
-		saved-params = "pos;size;is-minimized;is-maximized"
-		is-pane = true
-		outer-size = 656x538
-		inner-size = 640x499
-	elem "rpanewindow"
-		type = CHILD
-		pos = 0,0
-		size = 640x474
-		anchor1 = 0,0
-		anchor2 = 100,100
-		background-color = none
-		saved-params = "splitter"
-		right = "outputwindow"
-		is-vert = false
-	elem "linkrules"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 8,7
-		size = 66x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Правила"
-		command = "link-rules"
-		group = "rpanemode"
-	elem "linkwiki"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 73,7
-		size = 60x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Wiki"
-		command = "link-wiki"
-		group = "rpanemode"
-	elem "linkdiscord"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 132,7
-		size = 60x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Discord"
-		command = "link-discord"
-		group = "rpanemode"
-	elem "linksource"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 211,7
-		size = 60x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "GitHub"
-		command = "link-source"
-	elem "linkissue"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 270,7
-		size = 76x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Багрепорт"
-		command = "link-issue"
-	elem "changelog"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 365,7
-		size = 74x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Ченджлог"
-		command = "Changelog"
-		group = "rpanemode"
-	elem "credits"
-		border = line
-		is-flat = true
-		type = BUTTON
-		pos = 438,7
-		size = 64x18
-		anchor1 = -1,-1
-		anchor2 = -1,-1
-		background-color = #ffffff
-		saved-params = "is-checked"
-		text = "Авторы"
-		command = "Credits"
-		group = "rpanemode"
 
 window "infowindow"
 	elem "infowindow"
 		type = MAIN
-		pos = 219,0
+		pos = 281,0
 		size = 640x480
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
-		title = "Info"
 		is-pane = true
-		outer-size = 656x538
-		inner-size = 640x499
 	elem "info"
 		type = INFO
 		pos = 0,0
-		size = 638x477
+		size = 0x0
 		anchor1 = 0,0
 		anchor2 = 100,100
 		is-default = true
 		saved-params = ""
 		highlight-color = #00aa00
-		tab-background-color = none
-		on-show = ".winset\"rpane.infob.is-visible=true;rpane.infob.pos=65,0 rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
+		on-show = ".winset\"rpane.infob.is-visible=true;rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
 		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""
+
+window "preference_window"
+	elem "preference_window"
+		type = MAIN
+		pos = 291,0
+		size = 1200x800
+		anchor1 = none
+		anchor2 = none
+		background-color = none
+		saved-params = "pos;size;is-minimized;is-maximized"
+		is-visible = false
+		statusbar = false
+	elem "preference_browser"
+		type = BROWSER
+		pos = 0,0
+		size = 1000x800
+		anchor1 = 0,0
+		anchor2 = 90,100
+		background-color = none
+		saved-params = ""
+	elem "character_preview_map"
+		type = MAP
+		pos = 1000,0
+		size = 200x800
+		anchor1 = 90,0
+		anchor2 = 100,100
+		right-click = true
+		saved-params = "zoom;letterbox;zoom-mode"
+
+window "id_card_window"
+	elem "id_card_window"
+		type = MAIN
+		pos = 291,0
+		size = 600x200
+		anchor1 = none
+		anchor2 = none
+		background-color = none
+		saved-params = "pos;size;is-minimized;is-maximized"
+		is-visible = false
+		statusbar = false
+	elem "id_card_browser"
+		type = BROWSER
+		pos = 0,0
+		size = 600x200
+		anchor1 = 0,0
+		anchor2 = 100,100
+		background-color = none
+		saved-params = ""
+	elem "id_card_map"
+		type = MAP
+		pos = 330,48
+		size = 252x128
+		anchor1 = 0,0
+		anchor2 = 100,100
+		background-color = #262626
+		right-click = true
+		saved-params = "zoom;letterbox;zoom-mode"

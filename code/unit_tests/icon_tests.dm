@@ -11,26 +11,29 @@
 
 /datum/unit_test/icon_test/robots_shall_have_eyes_for_each_state/start_test()
 	var/missing_states = 0
-	var/list/valid_states = icon_states('icons/mob/robots.dmi') + icon_states('icons/mob/robots_drones.dmi') + icon_states('icons/mob/robots_flying.dmi')
+	var/list/valid_icons = list('icons/mob/robots.dmi', 'icons/mob/robots_drones.dmi', 'icons/mob/robots_flying.dmi')
+	var/list/valid_states = ICON_STATES(valid_icons)
 
-	var/list/original_valid_states = valid_states.Copy()
 	for(var/icon_state in valid_states)
 		if(icon_state in excepted_icon_states_)
 			continue
+
 		if(text_starts_with(icon_state, "eyes-"))
 			continue
+
 		if(findtext(icon_state, "openpanel"))
 			continue
+
 		var/eye_icon_state = "eyes-[icon_state]"
-		if(!(eye_icon_state in valid_states))
+		if(!ANY_ICON_HAS_STATE(valid_icons, eye_icon_state))
 			log_unit_test("Eye icon state [eye_icon_state] is missing.")
 			missing_states++
 
 	if(missing_states)
 		fail("[missing_states] eye icon state\s [missing_states == 1 ? "is" : "are"] missing.")
-		var/list/difference = uniquemergelist(original_valid_states, valid_states)
+		var/list/difference = uniquemergelist(valid_states, valid_states)
 		if(length(difference))
-			log_unit_test("[ascii_yellow]---  DEBUG  --- ICON STATES AT START: " + jointext(original_valid_states, ",") + "[ascii_reset]")
+			log_unit_test("[ascii_yellow]---  DEBUG  --- ICON STATES AT START: " + jointext(valid_states, ",") + "[ascii_reset]")
 			log_unit_test("[ascii_yellow]---  DEBUG  --- ICON STATES AT END: "   + jointext(valid_states, ",") + "[ascii_reset]")
 			log_unit_test("[ascii_yellow]---  DEBUG  --- UNIQUE TO EACH LIST: " + jointext(difference, ",") + "[ascii_reset]")
 	else
@@ -47,7 +50,6 @@
 	)
 
 	var/list/failed_sprite_accessories = list()
-	var/icon_state_cache = list()
 	var/duplicates_found = FALSE
 
 	for(var/sprite_accessory_main_type in sprite_accessory_subtypes)
@@ -66,15 +68,10 @@
 
 			var/sat_icon = initial(sat.icon)
 			if(sat_icon)
-				var/sat_icon_states = icon_state_cache[sat_icon]
-				if(!sat_icon_states)
-					sat_icon_states = icon_states(sat_icon)
-					icon_state_cache[sat_icon] = sat_icon_states
-
 				var/sat_icon_state = initial(sat.icon_state)
 				if(sat_icon_state)
 					sat_icon_state = "[sat_icon_state]_s"
-					if(!(sat_icon_state in sat_icon_states))
+					if(!ICON_HAS_STATE(sat_icon, sat_icon_state))
 						failed = TRUE
 						log_bad("[sat] - \"[sat_icon_state]\" did not exist in '[sat_icon]'.")
 				else
@@ -101,24 +98,17 @@
 	name = "ICON STATE - Posters Shall Have Icon States"
 
 /datum/unit_test/icon_test/posters_shall_have_icon_states/start_test()
-	var/contraband_icons = icon_states('icons/obj/structures/contraband.dmi')
-	// [SIERRA-ADD] - NYC_POSTERS
-	var/new_year_icons = icon_states('mods/nyc_posters/icons/nyc_posters.dmi')
-	// [/SIERRA-ADD]
-	// [SIERRA-ADD] - TAJARA
-	var/tjposter_icons = icon_states('mods/tajara/icons/posters.dmi')
-	// [/SIERRA-ADD]
-
 	var/list/invalid_posters = list()
 
 	for(var/poster_type in subtypesof(/singleton/poster))
 		if (is_abstract(poster_type))
 			continue
 		var/singleton/poster/P = GET_SINGLETON(poster_type)
-		// [SIERRA-EDIT] - NYC_POSTERS - TAJARA
-		// if(!(P.icon_state in contraband_icons)) // SIERRA-EDIT - ORIGINAL
-		if(!(P.icon_state in contraband_icons) && !(P.icon_state in new_year_icons) && !(P.icon_state in tjposter_icons))
-		// [/SIERRA-EDIT]
+
+		if(!ICON_HAS_STATE('icons/obj/structures/contraband.dmi', P.icon_state) \
+			&& !ICON_HAS_STATE('mods/nyc_posters/icons/nyc_posters.dmi', P.icon_state) \
+			&& !ICON_HAS_STATE('mods/tajara/icons/posters.dmi', P.icon_state) \
+		)
 			invalid_posters += poster_type
 
 	if(length(invalid_posters))
@@ -139,14 +129,8 @@
 		var/singleton/item_modifier/item_modifier = im
 		for(var/type_setup_type in item_modifier.type_setups)
 			var/list/type_setup = item_modifier.type_setups[type_setup_type]
-			var/list/icon_states = icon_states_by_type[type_setup_type]
-
-			if(!icon_states)
-				var/obj/item/I = type_setup_type
-				icon_states = icon_states(initial(I.icon))
-				LAZYSET(icon_states_by_type, type_setup_type, icon_states)
-
-			if(!(type_setup["icon_state"] in icon_states))
+			var/obj/item/item_type = type_setup_type
+			if(!ICON_HAS_STATE(initial(item_type.icon), type_setup["icon_state"]))
 				bad_modifiers += type_setup_type
 
 	if(length(bad_modifiers))
@@ -159,19 +143,13 @@
 	name = "ICON STATE - Random Spawners Shall Have Icon States"
 
 /datum/unit_test/icon_test/random_spawners_shall_have_icon_states/start_test()
-	var/states_per_icon = list()
 	var/list/invalid_spawners = list()
 	for(var/random_type in typesof(/obj/random))
 		var/obj/random/R = random_type
 		var/icon = initial(R.icon)
 		var/icon_state = initial(R.icon_state) || ""
 
-		var/icon_states = states_per_icon[icon]
-		if(!icon_states)
-			icon_states = icon_states(icon)
-			states_per_icon[icon] = icon_states
-
-		if(!(icon_state in icon_states))
+		if(!ICON_HAS_STATE(icon, icon_state))
 			invalid_spawners += random_type
 
 	if(length(invalid_spawners))

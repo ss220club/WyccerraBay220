@@ -44,11 +44,9 @@
 		update_skybox_offsets()
 		return
 
-	var/matrix/M = matrix()
 	var/x_translate = -((T.x/world.maxx)) * skybox.dimension_x
 	var/y_translate = -((T.y/world.maxy)) * skybox.dimension_y
-	M.Translate(x_translate, y_translate)
-	skybox.transform = M
+	skybox.SetTransform(offset_x = x_translate, offset_y = y_translate)
 
 /client/proc/deferred_skybox_update(rebuild)
 	set waitfor = FALSE

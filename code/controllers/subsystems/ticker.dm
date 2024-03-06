@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(ticker)
 	name = "Ticker"
 	wait = 10
-	priority = SS_PRIORITY_TICKER
+	priority = FIRE_PRIORITY_TICKER
 	init_order = SS_INIT_TICKER
 	flags = SS_NO_TICK_CHECK | SS_KEEP_TIMING
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
@@ -9,9 +9,9 @@ SUBSYSTEM_DEF(ticker)
 	var/pregame_timeleft
 	var/start_ASAP = FALSE          //the game will start as soon as possible, bypassing all pre-game nonsense
 	var/list/gamemode_vote_results  //Will be a list, in order of preference, of form list(config_tag = number of votes).
-	var/bypass_gamemode_vote = 0    //Intended for use with admin tools. Will avoid voting and ignore any results.
+	var/bypass_gamemode_vote = TRUE    //Intended for use with admin tools. Will avoid voting and ignore any results.
 
-	var/master_mode = "extended"    //The underlying game mode (so "secret" or the voted mode). Saved to default back to previous round's mode in case the vote failed. This is a config_tag.
+	var/master_mode = "secret"    //The underlying game mode (so "secret" or the voted mode). Saved to default back to previous round's mode in case the vote failed. This is a config_tag.
 	var/datum/game_mode/mode        //The actual gamemode, if selected.
 	var/round_progressing = 1       //Whether the lobby clock is ticking down.
 
@@ -50,6 +50,7 @@ SUBSYSTEM_DEF(ticker)
 
 /datum/controller/subsystem/ticker/Initialize(start_uptime)
 	pregame_timeleft = config.pre_game_time SECONDS
+	bypass_gamemode_vote = config.bypass_gamemode_vote
 	build_mode_cache()
 	to_world(SPAN_INFO("<B>Welcome to the pre-game lobby!</B>"))
 	to_world("Please, setup your character and select ready. Game will start in [round(pregame_timeleft/10)] seconds")
@@ -112,8 +113,10 @@ SUBSYSTEM_DEF(ticker)
 	if(start_ASAP)
 		start_now()
 		return
+
 	if(round_progressing && last_fire)
 		pregame_timeleft -= world.time - last_fire
+
 	if(pregame_timeleft <= 0)
 		Master.SetRunLevel(RUNLEVEL_SETUP)
 		return
@@ -570,9 +573,9 @@ Helpers
 		return
 	if(istype(SSvote.active_vote, /datum/vote/gamemode))
 		SSvote.cancel_vote(user)
-		bypass_gamemode_vote = 1
+		bypass_gamemode_vote = TRUE
 	Master.SetRunLevel(RUNLEVEL_SETUP)
-	return 1
+	return TRUE
 
 
 /hook/roundstart/proc/PlayWelcomeSound()

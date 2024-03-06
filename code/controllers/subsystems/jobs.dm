@@ -38,6 +38,9 @@ SUBSYSTEM_DEF(jobs)
 	// Create main map jobs.
 	primary_job_datums.Cut()
 	for(var/jobtype in (list(DEFAULT_JOB_TYPE) | GLOB.using_map.allowed_jobs))
+		if(!jobtype)
+			stack_trace("`null` jobtype exists in `GLOB.using_map.allowed_jobs` and `DEFAULT_JOB_TYPE`")
+
 		var/datum/job/job = get_by_path(jobtype)
 		if(!job)
 			job = new jobtype
@@ -151,8 +154,7 @@ SUBSYSTEM_DEF(jobs)
 /datum/controller/subsystem/jobs/proc/check_latejoin_blockers(mob/new_player/joining, datum/job/job)
 	if(!check_general_join_blockers(joining, job))
 		return FALSE
-	if(job.minimum_character_age && (joining.client.prefs.age < job.minimum_character_age))
-		to_chat(joining, SPAN_WARNING("Your character's in-game age is too low for this job."))
+	if(job.is_restricted(joining.client.prefs, joining))
 		return FALSE
 	if(!job.player_old_enough(joining.client))
 		to_chat(joining, SPAN_WARNING("Your player age (days since first seen on the server) is too low for this job."))
@@ -365,74 +367,54 @@ SUBSYSTEM_DEF(jobs)
 		return TRUE
 	return FALSE
 
-/datum/controller/subsystem/jobs/proc/equip_custom_loadout(mob/living/carbon/human/H, datum/job/job)
-
-	if(!H || !H.client)
+/datum/controller/subsystem/jobs/proc/equip_custom_loadout(mob/living/carbon/human/human_to_equip, datum/job/job)
+	if(!human_to_equip?.client)
 		return
 
 	// Equip custom gear loadout, replacing any job items
-	var/list/spawn_in_storage = list()
-	var/list/loadout_taken_slots = list()
-	if(H.client.prefs.Gear() && job.loadout_allowed)
-		for(var/thing in H.client.prefs.Gear())
-			var/datum/gear/G = gear_datums[thing]
-			if(G)
-				var/permitted = 0
-				if(G.allowed_branches)
-					if(H.char_branch && (H.char_branch.type in G.allowed_branches))
-						permitted = 1
-				else
-					permitted = 1
-
-				if(permitted)
-					if(G.allowed_roles)
-						if(job.type in G.allowed_roles)
-							permitted = 1
-						else
-							permitted = 0
-					else
-						permitted = 1
-
-				if(permitted && G.allowed_skills)
-					for(var/required in G.allowed_skills)
-						if(!H.skill_check(required,G.allowed_skills[required]))
-							permitted = 0
-
-				// [SIERRA-ADD] - LOADOUT_ITEMS - Поддержка фракционных предметов в лодауте
-				if(permitted && G.allowed_factions)
-					var/singleton/cultural_info/faction = H.get_cultural_value(TAG_FACTION)
-					var/facname = faction ? faction.name : "Unset"
-					if(!(facname in G.allowed_factions))
-						permitted = 0
-				// [/SIERRA-ADD]
-
-				if(G.whitelisted && (!(H.species.name in G.whitelisted)))
-					permitted = 0
-
-				if(!permitted)
-					to_chat(H, SPAN_WARNING("Your current species, job, branch, skills or whitelist status does not permit you to spawn with [thing]!"))
-					continue
-
-				if(!G.slot || G.slot == slot_tie || (G.slot in loadout_taken_slots) || !G.spawn_on_mob(H, H.client.prefs.Gear()[G.display_name]))
-					spawn_in_storage.Add(G)
-				else
-					loadout_taken_slots.Add(G.slot)
+	var/list/spawn_in_storage = equip_gear(human_to_equip, job)
 
 	// do accessories last so they don't attach to a suit that will be replaced
-	if(H.char_rank && H.char_rank.accessory)
-		for(var/accessory_path in H.char_rank.accessory)
-			var/list/accessory_data = H.char_rank.accessory[accessory_path]
-			if(islist(accessory_data))
-				var/amt = accessory_data[1]
-				var/list/accessory_args = accessory_data.Copy()
-				accessory_args[1] = src
-				for(var/i in 1 to amt)
-					H.equip_to_slot_or_del(new accessory_path(arglist(accessory_args)), slot_tie)
-			else
-				for(var/i in 1 to (isnull(accessory_data)? 1 : accessory_data))
-					H.equip_to_slot_or_del(new accessory_path(src), slot_tie)
-
+	equip_accessories(human_to_equip)
 	return spawn_in_storage
+
+/// Equips all the loadout gear to `human_to_equip`.
+/// Returns the list of gear, that couldn't be equipped to any inventory slot.
+/datum/controller/subsystem/jobs/proc/equip_gear(mob/living/carbon/human/human_to_equip, datum/job/job)
+	if(!job.loadout_allowed)
+		return list()
+
+	var/list/gear_to_equip = human_to_equip.client.prefs.Gear()
+	if(!length(gear_to_equip))
+		return list()
+
+	var/list/loadout_taken_slots = list()
+	var/list/failed_to_equip_gear = list()
+	for(var/gear_name as anything in gear_to_equip)
+		var/datum/gear/gear_item = gear_datums[gear_name]
+		if(!gear_item)
+			stack_trace("Non-existing gear: `gear_name`")
+			continue
+
+		if(!gear_item.is_permitted_to_equip(human_to_equip, job))
+			to_chat(human_to_equip, SPAN_WARNING("Your current species, job, branch, skills or whitelist status does not permit you to spawn with [gear_name]!"))
+			continue
+
+		var/failed_to_equip = !gear_item.slot || gear_item.slot == slot_tie || loadout_taken_slots["[gear_item.slot]"] || !gear_item.spawn_on_mob(human_to_equip, gear_to_equip[gear_item.display_name])
+		if(failed_to_equip)
+			failed_to_equip_gear += gear_item
+			continue
+
+		loadout_taken_slots["[gear_item.slot]"] = TRUE
+
+	return failed_to_equip_gear
+
+/datum/controller/subsystem/jobs/proc/equip_accessories(mob/living/carbon/human/human_to_equip)
+	if(!human_to_equip.char_rank || !length(human_to_equip.char_rank.accessory))
+		return
+
+	for(var/accessory_path in human_to_equip.char_rank.accessory)
+		human_to_equip.equip_to_slot_or_del(new accessory_path, slot_tie)
 
 /datum/controller/subsystem/jobs/proc/equip_rank(mob/living/carbon/human/H, rank, joined_late = 0)
 	if(!H)
@@ -525,8 +507,9 @@ SUBSYSTEM_DEF(jobs)
 		return other_mob
 
 	if(spawn_in_storage)
-		for(var/datum/gear/G in spawn_in_storage)
-			G.spawn_in_storage_or_drop(H, H.client.prefs.Gear()[G.display_name])
+		var/datum/gear_slot/picked_gear_slot = H.client.prefs.get_picked_gear_slot()
+		for(var/datum/gear/gear_to_spawn as anything in spawn_in_storage)
+			gear_to_spawn.spawn_in_storage_or_drop(H, picked_gear_slot.get_gear_tweaks(gear_to_spawn.display_name))
 
 	if(istype(H)) //give humans wheelchairs, if they need them.
 		var/obj/item/organ/external/l_foot = H.get_organ(BP_L_FOOT)

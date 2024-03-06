@@ -1,6 +1,6 @@
 /datum/gear/storage
-	sort_category = "Storage Accessories"
-	category = /datum/gear/storage
+	category = GEAR_CATEGORY_STORAGE_ACCESSORIES
+	abstract_type = /datum/gear/storage
 	slot = slot_tie
 
 /datum/gear/storage/vest

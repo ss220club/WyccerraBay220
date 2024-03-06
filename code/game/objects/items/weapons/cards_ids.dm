@@ -202,8 +202,8 @@ var/global/const/NO_EMAG_ACT = -50
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
 	var/sex = "\[UNSET\]"
-	var/icon/front
-	var/icon/side
+	var/obj/screen/front
+	var/obj/screen/side
 
 	//alt titles are handled a bit weirdly in order to unobtrusively integrate into existing ID system
 	var/assignment = null	//can be alt title or the actual job
@@ -250,7 +250,11 @@ var/global/const/NO_EMAG_ACT = -50
 		return STATUS_INTERACTIVE
 
 /obj/item/card/id/OnTopic(mob/user, list/href_list)
-	if(href_list["look_at_id"])
+	if(href_list["close"])
+		clear_id_photos_from_user_screen(user)
+		return TOPIC_NOACTION
+
+	else if(href_list["look_at_id"])
 		if(istype(user))
 			examinate(user, src)
 			return TOPIC_HANDLED
@@ -264,15 +268,11 @@ var/global/const/NO_EMAG_ACT = -50
 /obj/item/card/id/proc/prevent_tracking()
 	return 0
 
-/obj/item/card/id/proc/show(mob/user as mob)
-	if(front && side)
-		send_rsc(user, front, "front.png")
-		send_rsc(user, side, "side.png")
-	var/datum/browser/popup = new(user, "idcard", name, 600, 250)
+/obj/item/card/id/proc/show(mob/user)
+	add_id_photos_to_user_screen(user)
+	var/datum/browser/popup = new(user, "id_card_window", name, 600, 200, src)
 	popup.set_content(dat())
-	popup.set_title_image(usr.browse_rsc_icon(src.icon, src.icon_state))
 	popup.open()
-	return
 
 /obj/item/card/id/proc/get_display_name()
 	. = registered_name
@@ -285,8 +285,35 @@ var/global/const/NO_EMAG_ACT = -50
 
 /obj/item/card/id/proc/set_id_photo(mob/M)
 	M.ImmediateOverlayUpdate()
-	front = getFlatIcon(M, SOUTH, always_use_defdir = 1)
-	side = getFlatIcon(M, WEST, always_use_defdir = 1)
+	var/mutable_appearance/mob_appearance = new/mutable_appearance(M)
+	front = generate_id_photo(mob_appearance, SOUTH, 0)
+	side = generate_id_photo(mob_appearance, WEST, 1)
+
+/obj/item/card/id/proc/generate_id_photo(mutable_appearance/mob_appearance, dir, horizontal_position = 0)
+	var/obj/screen/preview_image = new
+	preview_image.appearance = mob_appearance
+	preview_image.dir = dir
+	preview_image.plane = HUD_PLANE
+	preview_image.screen_loc = "id_card_map:[horizontal_position],0"
+	return preview_image
+
+/obj/item/card/id/proc/add_id_photos_to_user_screen(mob/user)
+	if(!user?.client)
+		return
+
+	if(front)
+		user.client.screen += front
+	if(side)
+		user.client.screen += side
+
+/obj/item/card/id/proc/clear_id_photos_from_user_screen(mob/user)
+	if(!user?.client)
+		return
+
+	if(front)
+		user.client.screen -= front
+	if(side)
+		user.client.screen -= side
 
 /mob/proc/set_id_info(obj/item/card/id/id_card)
 	id_card.age = 0
@@ -342,8 +369,6 @@ var/global/const/NO_EMAG_ACT = -50
 	dat += text("Fingerprint: []</A><BR>\n", fingerprint_hash)
 	dat += text("Blood Type: []<BR>\n", blood_type)
 	dat += text("DNA Hash: []<BR><BR>\n", dna_hash)
-	if(front && side)
-		dat +="<td align = center valign = top>Photo:<br><img src=front.png height=80 width=80 border=4><img src=side.png height=80 width=80 border=4></td>"
 	dat += "</tr></table>"
 	return jointext(dat,null)
 

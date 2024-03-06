@@ -126,7 +126,6 @@
 /datum/gear/tactical/pcarrier
 	display_name = "empty plate carriers selection"
 	path = /obj/item/clothing/suit/armor/pcarrier
-	cost = 1
 	slot = slot_wear_suit
 	allowed_roles = ARMORED_ROLES
 

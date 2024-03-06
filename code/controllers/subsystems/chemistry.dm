@@ -1,8 +1,9 @@
 SUBSYSTEM_DEF(chemistry)
 	name = "Chemistry"
-	priority = SS_PRIORITY_CHEMISTRY
+	priority = FIRE_PRIORITY_CHEMISTRY
 	init_order = SS_INIT_CHEMISTRY
 	wait = 0.5 SECONDS
+	var/static/list/reagent_types_by_name = list()
 	var/static/list/reactions_by_id = list()
 	var/static/list/reactions_by_result = list()
 	var/static/list/datum/reagent/random/random_chem_prototypes = list()
@@ -30,6 +31,7 @@ SUBSYSTEM_DEF(chemistry)
 				reactions_by_id[id] = list()
 			reactions_by_id[id] += reaction
 
+	build_reagents_types_by_name_map()
 
 /datum/controller/subsystem/chemistry/Recover()
 	queue.Cut()
@@ -76,3 +78,16 @@ SUBSYSTEM_DEF(chemistry)
 			continue
 		if(get_prototype(type, temperature)) //returns truthy if it's valid for the given temperature
 			return type
+
+/datum/controller/subsystem/chemistry/proc/get_reagent_type_by_name(reagent_name)
+	if(!length(reagent_types_by_name))
+		build_reagents_types_by_name_map()
+
+	return reagent_types_by_name[reagent_name]
+
+/datum/controller/subsystem/chemistry/proc/build_reagents_types_by_name_map()
+	if(length(reagent_types_by_name))
+		return
+
+	for(var/datum/reagent/reagent_path as anything in subtypesof(/datum/reagent))
+		reagent_types_by_name[initial(reagent_path.name)] = reagent_path

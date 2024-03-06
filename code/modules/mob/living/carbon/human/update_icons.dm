@@ -327,7 +327,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human
 	var/list/icon_render_keys = list()
 
-/mob/living/carbon/human/proc/update_body(update_icons=1)
+/mob/living/carbon/human/proc/update_body(update_icons = TRUE)
 	//Update all limbs and visible organs one by one
 	var/list/needs_update = list()
 	var/limb_count_update = FALSE
@@ -781,27 +781,32 @@ var/global/list/damage_icon_parts = list()
 	for(var/obj/item/organ/external/E in organs)
 		if(BP_IS_ROBOTIC(E) || E.is_stump())
 			continue
+
 		var/how_open = round(E.how_open())
 		if(how_open <= 0)
 			continue
+
 		var/surgery_icon = E.species.get_surgery_overlay_icon(src)
 		if(!surgery_icon)
 			continue
-		var/list/surgery_states = icon_states(surgery_icon)
+
 		var/base_state = "[E.icon_name][how_open]"
 		var/overlay_state = "[base_state]-flesh"
 		var/list/overlays_to_add
-		if(overlay_state in surgery_states)
+
+		if(ICON_HAS_STATE(surgery_icon, overlay_state))
 			var/image/flesh = image(icon = surgery_icon, icon_state = overlay_state, layer = -HO_SURGERY_LAYER)
 			flesh.color = E.species.get_flesh_colour(src)
 			LAZYADD(overlays_to_add, flesh)
 		overlay_state = "[base_state]-blood"
-		if(overlay_state in surgery_states)
+
+		if(ICON_HAS_STATE(surgery_icon, overlay_state))
 			var/image/blood = image(icon = surgery_icon, icon_state = overlay_state, layer = -HO_SURGERY_LAYER)
 			blood.color = E.species.get_blood_colour(src)
 			LAZYADD(overlays_to_add, blood)
 		overlay_state = "[base_state]-bones"
-		if(overlay_state in surgery_states)
+
+		if(ICON_HAS_STATE(surgery_icon, overlay_state))
 			LAZYADD(overlays_to_add, image(icon = surgery_icon, icon_state = overlay_state, layer = -HO_SURGERY_LAYER))
 		total.AddOverlays(overlays_to_add)
 

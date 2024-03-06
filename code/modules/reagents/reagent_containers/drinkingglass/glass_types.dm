@@ -3,6 +3,7 @@
 	base_name = "glass"
 	base_icon = "square"
 	icon = 'icons/obj/food/drink_glasses/square.dmi'
+	icon_state = "square"
 	desc = "Your standard drinking glass."
 	filling_states = "20;40;60;80;100"
 	volume = 30
@@ -15,6 +16,7 @@
 	base_name = "glass"
 	base_icon = "rocks"
 	icon = 'icons/obj/food/drink_glasses/rocks.dmi'
+	icon_state = "rocks"
 	filling_states = "25;50;75;100"
 	volume = 20
 	possible_transfer_amounts = "5;10;20"
@@ -26,6 +28,7 @@
 	base_name = "glass"
 	base_icon = "shake"
 	icon = 'icons/obj/food/drink_glasses/shake.dmi'
+	icon_state = "shake"
 	filling_states = "25;50;75;100"
 	volume = 30
 	possible_transfer_amounts = "5;10;15;30"
@@ -37,6 +40,7 @@
 	base_name = "glass"
 	base_icon = "cocktail"
 	icon = 'icons/obj/food/drink_glasses/cocktail.dmi'
+	icon_state = "cocktail"
 	filling_states = "33;66;100"
 	volume = 15
 	possible_transfer_amounts = "5;10;15"
@@ -48,6 +52,7 @@
 	base_name = "shot"
 	base_icon = "shot"
 	icon = 'icons/obj/food/drink_glasses/shot.dmi'
+	icon_state = "shot"
 	filling_states = "33;66;100"
 	volume = 5
 	matter = list(MATERIAL_GLASS = 15)
@@ -59,6 +64,7 @@
 	base_name = "pint"
 	base_icon = "pint"
 	icon = 'icons/obj/food/drink_glasses/pint.dmi'
+	icon_state = "pint"
 	filling_states = "16;33;50;66;83;100"
 	volume = 60
 	matter = list(MATERIAL_GLASS = 125)
@@ -71,6 +77,7 @@
 	base_name = "mug"
 	base_icon = "mug"
 	icon = 'icons/obj/food/drink_glasses/mug.dmi'
+	icon_state = "mug"
 	filling_states = "25;50;75;100"
 	volume = 40
 	possible_transfer_amounts = "5;10;20;40"
@@ -82,6 +89,7 @@
 	base_name = "glass"
 	base_icon = "wine"
 	icon = 'icons/obj/food/drink_glasses/wine.dmi'
+	icon_state = "wine"
 	filling_states = "20;40;60;80;100"
 	volume = 25
 	possible_transfer_amounts = "5;10;15;25"
@@ -93,6 +101,7 @@
 	base_name = "glass"
 	base_icon = "flute"
 	icon = 'icons/obj/food/drink_glasses/flute.dmi'
+	icon_state = "flute"
 	filling_states = "20;40;60;80;100"
 	volume = 25
 	possible_transfer_amounts = "5;10;15;25"
@@ -104,6 +113,7 @@
 	base_name = "pitcher"
 	base_icon = "carafe"
 	icon = 'icons/obj/food/drink_glasses/carafe.dmi'
+	icon_state = "carafe"
 	filling_states = "10;20;30;40;50;60;70;80;90;100"
 	volume = 120
 	matter = list(MATERIAL_GLASS = 250)
@@ -265,6 +275,7 @@
 	base_name = "pineapple mug"
 	base_icon = "pineapple"
 	icon = 'icons/obj/food/drink_glasses/pineapple.dmi'
+	icon_state = "pineapple"
 	filling_states = "25;50;75;100"
 	volume = 40
 	possible_transfer_amounts = "5;10;20;40"
@@ -275,6 +286,7 @@
 	base_name = "coconut cup"
 	base_icon = "coconut"
 	icon = 'icons/obj/food/drink_glasses/coconut.dmi'
+	icon_state = "coconut"
 	desc = "A cup made from a hollowed coconut."
 	filling_states = "20;40;60;80;100"
 	volume = 30
@@ -287,6 +299,7 @@
 	base_name = "glass"
 	base_icon = "cognac"
 	icon = 'icons/obj/food/drink_glasses/cognac.dmi'
+	icon_state = "cognac"
 	filling_states = "25;50;75;100"
 	volume = 20
 	possible_transfer_amounts = "5;10;20"
@@ -298,6 +311,7 @@
 	base_name = "goblet"
 	base_icon = "goblet"
 	icon = 'icons/obj/food/drink_glasses/goblet.dmi'
+	icon_state = "goblet"
 	filling_states = "20;40;60;80;100"
 	volume = 25
 	possible_transfer_amounts = "5;10;15;25"

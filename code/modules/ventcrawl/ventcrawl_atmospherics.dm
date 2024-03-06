@@ -23,7 +23,8 @@
 	// [SIERRA-ADD] - SSINPUT
 	direction &= ~(direction & ~initialize_directions)
 	// [SIERRA-ADD]
-	ventcrawl_to(user,findConnecting(direction),direction)
+	direction = DIR_TO_CARDINAL(direction)
+	ventcrawl_to(user, findConnecting(direction), direction)
 
 /obj/machinery/atmospherics/proc/ventcrawl_to(mob/living/user, obj/machinery/atmospherics/target_move, direction)
 	if(target_move)

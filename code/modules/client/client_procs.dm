@@ -56,8 +56,10 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		return
 
 	// Tgui Topic middleware
-	if(!tgui_Topic(href_list))
+	if(tgui_Topic(href_list))
 		return
+	if(href_list["reload_tguipanel"])
+		nuke_chat()
 
 	//Admin PM
 	if(href_list["priv_msg"])
@@ -96,6 +98,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		to_chat(src, "<span class='danger'>An error has been detected in how your client is receiving resources. Attempting to correct.... (If you keep seeing these messages you might want to close byond and reconnect)</span>")
 		to_target(src, browse("...", "window=asset_cache_browser"))
 		return
+
 	if(href_list["asset_cache_preload_data"])
 		asset_cache_preload_data(href_list["asset_cache_preload_data"])
 		return
@@ -105,7 +108,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
-		if("chat")		return chatOutput.Topic(href, href_list)
 
 	switch(href_list["action"])
 		if("openLink")
@@ -135,6 +137,9 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	///////////
 /client/New(TopicData)
 	TopicData = null							//Prevent calls to client.Topic from connect
+
+	// Create tgui panel. Dpn't put it bellow to_chat() procs, will runtime
+	tgui_panel = new(src, "browseroutput")
 
 	switch (connection)
 		if ("seeker", "web") // check for invalid connection type. do nothing if valid
@@ -181,7 +186,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	GLOB.clients += src
 	GLOB.ckey_directory[ckey] = src
 
-	//SS220 edit
 	// Automatic admin rights for people connecting locally.
 	// Concept stolen from /tg/ with deepest gratitude.
 	var/local_connection = (config.auto_local_admin && (isnull(address) || GLOB.localhost_addresses[address]))
@@ -199,17 +203,15 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	prefs = SScharacter_setup.preferences_datums[ckey]
 	if(!prefs)
 		prefs = new /datum/preferences(src)
+
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
 	fps = prefs.clientfps
 
-	// [SIERRA-ADD] - EX666_ECOSYSTEM
 	load_player_discord(src)
-	// [SIERRA-ADD]
 
 	. = ..()	//calls mob.Login()
 
-	view = get_preference_value(/datum/client_preference/client_view) || GLOB.PREF_CLIENT_VIEW_LARGE
 	connection_time = world.time
 	connection_realtime = world.realtime
 	connection_timeofday = world.timeofday
@@ -256,10 +258,12 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	if(holder)
 		src.control_freak = 0 //Devs need 0 for profiler access
 
-	// [SIERRA-ADD] - SSINPUT
 	if(SSinput.initialized)
 		set_macros()
-	// [/SIERRA-ADD]
+
+	// Initialize tgui panel
+	tgui_panel.initialize()
+
 	// This turns out to be a touch too much when a bunch of people are connecting at once from a restart during init.
 	if (GAME_STATE & RUNLEVELS_DEFAULT)
 		spawn()
@@ -294,7 +298,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		GLOB.admins -= src
 	if (watched_variables_window)
 		STOP_PROCESSING(SSprocessing, watched_variables_window)
-	QDEL_NULL(chatOutput)
 	GLOB.ckey_directory -= ckey
 	ticket_panels -= src
 	GLOB.clients -= src
@@ -409,43 +412,14 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		sleep(config.stat_delay)
 
 
-//Sends resource files to client cache
-/client/proc/getFiles()
-	for(var/file in args)
-		send_rsc(src, file, null)
-
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
-	getFiles(
-		'html/search.js',
-		'html/panels.css',
-		'html/spacemag.css',
-		'html/images/loading.gif',
-		'html/images/ntlogo.png',
-		'html/images/bluentlogo.png',
-		'html/images/sollogo.png',
-		'html/images/terralogo.png',
-		'html/images/talisman.png',
-		'html/images/exologo.png',
-		'html/images/xynlogo.png',
-		'html/images/daislogo.png',
-		'html/images/eclogo.png',
-		'html/images/FleetLogo.png',
-		'html/images/sfplogo.png',
-		'html/images/falogo.png',
-		// [SIERRA-ADD] ,
-		'html/images/ofbluelogo.png',
-		'html/images/ofntlogo.png',
-		'html/images/foundlogo.png',
-		'html/images/ccalogo.png',
-		'html/images/sierralogo.png',
-		// [/SIERRA-ADD]
-		)
-	spawn(10) // Removing this spawn causes all clients to not get verbs.
+	spawn(1 SECOND) // Removing this spawn causes all clients to not get verbs.
 		// Load info on what assets the client has
 		show_browser(src, 'code/modules/asset_cache/validate_assets.html', "window=asset_cache_browser")
 		// Precache the client with all other assets slowly, so as to not block other browse() calls
-		addtimer(new Callback(GLOBAL_PROC, PROC_REF(getFilesSlow), src, SSassets.preload, FALSE), 5 SECONDS)
+		if(config.asset_simple_preload)
+			addtimer(CALLBACK(SSassets.transport, TYPE_PROC_REF(/datum/asset_transport, send_assets_slow), src, SSassets.transport.preload), 5 SECONDS)
 
 /mob/proc/MayRespawn()
 	return 0
@@ -486,18 +460,11 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		winset(usr, "mainwindow", "can-resize=false")
 		winset(usr, "mainwindow", "is-maximized=false")
 		winset(usr, "mainwindow", "is-maximized=true")
-		// [SIERRA-REMOVE] - SSINPUT
-		// winset(usr, "mainwindow", "statusbar=false")
-		// [/SIERRA-REMOVE]
 		winset(usr, "mainwindow", "menu=")
-//		winset(usr, "mainwindow.mainvsplit", "size=0x0")
 	else
 		winset(usr, "mainwindow", "is-maximized=false")
 		winset(usr, "mainwindow", "titlebar=true")
 		winset(usr, "mainwindow", "can-resize=true")
-		// [SIERRA-REMOVE] - SSINPUT
-		// winset(usr, "mainwindow", "statusbar=true")
-		// [/SIERRA-REMOVE]
 		winset(usr, "mainwindow", "menu=menu")
 
 	fit_viewport()

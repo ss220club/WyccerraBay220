@@ -203,7 +203,7 @@
 					checkperm = TRUE
 			PreFire(atom, user)
 			if (checkperm)
-				addtimer(new Callback(user.aiming, TYPE_PROC_REF(/obj/aiming_overlay, toggle_permission), TARGET_CAN_CLICK, TRUE), 1)
+				addtimer(CALLBACK(user.aiming, TYPE_PROC_REF(/obj/aiming_overlay, toggle_permission), TARGET_CAN_CLICK, TRUE), 1)
 		else
 			if (suicide && user.zone_sel.selecting == BP_MOUTH && istype(user, /mob/living/carbon/human))
 				handle_suicide(user)
@@ -667,6 +667,7 @@
 		user.visible_message(SPAN_WARNING("[user] switches the safety of \the [src] [safety_state ? "on" : "off"]."), SPAN_NOTICE("You switch the safety of \the [src] [safety_state ? "on" : "off"]."), range = 3)
 		last_safety_check = world.time
 		playsound(src, 'sound/weapons/flipblade.ogg', 15, 1)
+	SEND_SIGNAL(src, COMSIG_GUN_TOGGLE_SAFETY, safety_state)
 
 /obj/item/gun/verb/toggle_safety_verb()
 	set src in usr

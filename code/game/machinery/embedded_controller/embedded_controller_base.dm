@@ -3,7 +3,7 @@
 	anchored = TRUE
 	idle_power_usage = 10
 	var/datum/computer/file/embedded_program/program	//the currently executing program
-	var/on = 1
+	var/on = TRUE
 
 /obj/machinery/embedded_controller/Initialize()
 	if(program)
@@ -16,7 +16,7 @@
 	return ..()
 
 /obj/machinery/embedded_controller/proc/post_signal(datum/signal/signal, comm_line)
-	return 0
+	return FALSE
 
 /obj/machinery/embedded_controller/receive_signal(datum/signal/signal, receive_method, receive_param)
 	if(!signal || signal.encryption) return

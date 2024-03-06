@@ -182,7 +182,7 @@
 
 	admin_attack_log(user, occupant, "Gibbed the victim", "Was gibbed", "gibbed")
 	src.occupant.ghostize()
-	addtimer(new Callback(src, PROC_REF(finish_gibbing)), gib_time)
+	addtimer(CALLBACK(src, PROC_REF(finish_gibbing)), gib_time)
 
 	var/list/gib_products = shuffle(occupant.harvest_meat() | occupant.harvest_skin() | occupant.harvest_bones())
 	if(length(gib_products) <= 0)

@@ -19,22 +19,14 @@
 /datum/preferences/proc/save_pref_record(record_key, list/data)
 	var/path = get_path(client_ckey, record_key)
 	var/text = json_encode(data)
+
 	if(isnull(text))
-		CRASH("failed to encode JSON for [path]")
+		crash_with("Failed to encode JSON for [path]")
+		return
 
-	// Why this dance? If text2file fails, we want to leave the record as it was.
-
-	var/tmp_path = "[path].tmp"
-	// If we crashed at the end previously, we'll have a junk tmpfile, which text2file would append to.
-	if(fexists(tmp_path))
-		if(!fdel(tmp_path))
-			CRASH("failed to remove junk existing tmpfile at [tmp_path]")
-	if(!text2file(text,tmp_path))
-		CRASH("failed to write record to tmpfile at [tmp_path]")
-	if(!fcopy(tmp_path, path))
-		CRASH("failed to copy tmpfile at [tmp_path] to [path]")
-	if(!fdel(tmp_path))
-		CRASH("failed to remove tmpfile at [tmp_path]")
+	var/error = rustg_file_write(text, path)
+	if (error)
+		crash_with(error)
 
 /datum/preferences/proc/load_preferences()
 	var/datum/pref_record_reader/R = load_pref_record("preferences")
@@ -83,6 +75,6 @@
 
 /datum/preferences/proc/sanitize_preferences()
 	player_setup.sanitize_setup()
-	return 1
+	return TRUE
 
 #undef PREF_SER_VERSION

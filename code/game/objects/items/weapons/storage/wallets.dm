@@ -70,7 +70,7 @@
 	if (front_id)
 		var/tiny_state = "id-generic"
 		var/check_state = "id-[front_id.icon_state]"
-		if (check_state in icon_states(icon))
+		if (ICON_HAS_STATE(icon, check_state))
 			tiny_state = check_state
 		var/image/tiny_image = new/image(icon, icon_state = tiny_state)
 		tiny_image.appearance_flags = DEFAULT_APPEARANCE_FLAGS | RESET_COLOR
@@ -144,7 +144,7 @@
 /obj/item/storage/wallet/poly/emp_act(severity)
 	icon_state = "wallet-emp"
 	update_icon()
-	addtimer(new Callback(src, PROC_REF(resolve_emp_timer)), 5 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(resolve_emp_timer)), 5 SECONDS)
 	..()
 
 

@@ -1,12 +1,8 @@
 /mob/new_player/Login()
 	update_Login_details()	//handles setting lastKnownIP and computer_id for use by the ban systems as well as checking for multikeying
-	// [SIERRA-ADD] - EX666_ECOSYSTEM
 	if(config.usewhitelist_database && config.overflow_server_url && !whitelist_check())
 		to_target(src, link(config.overflow_server_url))
-	// [/SIERRA-ADD]
-	// [SIERRA-ADD] - STATUSBAR
 	winset(client, "mapwindow.statusbar", "is-visible=false")
-	// [/SIERRA-ADD]
 	if (config.motd)
 		to_chat(src, "<div class=\"motd\">[config.motd]</div>", handle_whitespace=FALSE)
 	to_chat(src, "<div class='info'>Game ID: <div class='danger'>[game_id]</div></div>")
@@ -17,13 +13,15 @@
 		mind.current = src
 
 	loc = null
-	GLOB.using_map.show_titlescreen(client)
+
+	invoke_async(GLOB.using_map, TYPE_PROC_REF(/datum/map, show_titlescreen), client)
+
 	my_client = client
 	set_sight(sight|SEE_TURFS)
 
 	// Add to player list if missing
 	if (!GLOB.player_list.Find(src))
-		ADD_SORTED(GLOB.player_list, src, /proc/cmp_mob_key)
+		ADD_SORTED(GLOB.player_list, src, GLOBAL_PROC_REF(cmp_mob_key))
 
 	new_player_panel()
 
@@ -40,8 +38,6 @@
 /mob/new_player/proc/deferred_login()
 	if(client)
 		client.playtitlemusic()
-		if(client.get_preference_value(/datum/client_preference/goonchat) == GLOB.PREF_YES)
-			client.chatOutput.start()
 
 	var/singleton/security_state/security_state = GET_SINGLETON(GLOB.using_map.security_state)
 	var/singleton/security_level/SL = security_state.current_security_level

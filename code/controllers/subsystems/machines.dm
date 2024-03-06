@@ -37,7 +37,7 @@ if(Datum.is_processing) {\
 SUBSYSTEM_DEF(machines)
 	name = "Machines"
 	init_order = SS_INIT_MACHINES
-	priority = SS_PRIORITY_MACHINERY
+	priority = FIRE_PRIORITY_MACHINERY
 	flags = SS_KEEP_TIMING
 	var/static/current_step = SSMACHINES_PIPENETS
 	var/static/cost_pipenets = 0
@@ -45,18 +45,16 @@ SUBSYSTEM_DEF(machines)
 	var/static/cost_powernets = 0
 	var/static/cost_power_objects = 0
 	var/static/list/pipenets = list()
-	var/static/list/machinery = list()
-	var/static/list/machinery_by_type = list()
 	var/static/list/powernets = list()
 	var/static/list/power_objects = list()
 	var/static/list/processing = list()
 	var/static/list/queue = list()
-
+	var/static/list/machinery = list()
+	var/static/list/machinery_by_type = list()
 
 /datum/controller/subsystem/machines/Recover()
 	current_step = SSMACHINES_PIPENETS
 	queue.Cut()
-
 
 /datum/controller/subsystem/machines/Initialize(start_uptime)
 	makepowernets()
@@ -115,10 +113,7 @@ SUBSYSTEM_DEF(machines)
 		CRASH("Null machinery was tried to be unregistered")
 
 	machinery -= machine
-	var/list/machinery_of_type = machinery_by_type[machine.type]
-	machinery_of_type -= machine
-	if(!length(machinery_of_type))
-		machinery_by_type -= machine.type
+	LAZYREMOVEASSOC(machinery_by_type, machine.type, machine)
 
 	var/area/A = get_area(machine)
 	if(A)

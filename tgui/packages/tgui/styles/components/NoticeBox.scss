@@ -20,7 +20,6 @@ $bg-map: colors.$bg-map !default;
   $text-color: if($luminance > 0.35, rgba(0, 0, 0, 1), rgba(255, 255, 255, 1));
 
   padding: 0.33em 0.5em;
-  margin-bottom: 0.5em;
   box-shadow: none;
   font-weight: bold;
   font-style: italic;

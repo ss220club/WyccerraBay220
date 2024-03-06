@@ -137,7 +137,7 @@
 	ClearOverlays()
 	icon_state = "[seed.get_trait(TRAIT_PRODUCT_ICON)]-product"
 	color = seed.get_trait(TRAIT_PRODUCT_COLOUR)
-	if("[seed.get_trait(TRAIT_PRODUCT_ICON)]-leaf" in icon_states('icons/obj/flora/hydroponics_products.dmi'))
+	if(ICON_HAS_STATE('icons/obj/flora/hydroponics_products.dmi', "[seed.get_trait(TRAIT_PRODUCT_ICON)]-leaf"))
 		var/image/fruit_leaves = image('icons/obj/flora/hydroponics_products.dmi',"[seed.get_trait(TRAIT_PRODUCT_ICON)]-leaf")
 		fruit_leaves.color = seed.get_trait(TRAIT_PLANT_COLOUR)
 		AddOverlays(fruit_leaves)
@@ -181,7 +181,7 @@
 				pin.name = "[src.name] pin"
 				pin.icon = 'icons/obj/flora/hydroponics_products.dmi'
 				pin.icon_state = "[seed.get_trait(TRAIT_PRODUCT_ICON)]-product"
-				if("[seed.get_trait(TRAIT_PRODUCT_ICON)]-leaf" in icon_states('icons/obj/flora/hydroponics_products.dmi'))
+				if(ICON_HAS_STATE('icons/obj/flora/hydroponics_products.dmi', "[seed.get_trait(TRAIT_PRODUCT_ICON)]-leaf"))
 					var/image/fruit_leaves = image('icons/obj/flora/hydroponics_products.dmi',"[seed.get_trait(TRAIT_PRODUCT_ICON)]-leaf")
 					fruit_leaves.color = seed.get_trait(TRAIT_PLANT_COLOUR)
 					pin.AddOverlays(fruit_leaves)

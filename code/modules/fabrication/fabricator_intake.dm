@@ -51,7 +51,7 @@
 			var/image/adding_mat_overlay = image(icon, "[base_icon_state]_mat")
 			adding_mat_overlay.color = mat_colour
 			AddOverlays(adding_mat_overlay)
-			addtimer(new Callback(src, TYPE_PROC_REF(/atom, CutOverlays), adding_mat_overlay), 1 SECOND)
+			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, CutOverlays), adding_mat_overlay), 1 SECOND)
 		if(istype(thing, /obj/item/stack))
 			var/obj/item/stack/S = thing
 			S.use(stacks_used)
@@ -83,7 +83,7 @@
 	var/reagents_taken = take_reagents(O, user)
 	if(reagents_taken != SUBSTANCE_TAKEN_NONE && !has_recycler)
 		show_intake_message(user, reagents_taken, O)
-		updateUsrDialog()
+		SStgui.update_uis(src)
 		return TRUE
 	// Take everything if we have a recycler.
 	if(has_recycler && !is_robot_module(O) && user.unEquip(O))
@@ -98,7 +98,8 @@
 				user.put_in_active_hand(stack)
 		else
 			qdel(O)
-		updateUsrDialog()
+
+		SStgui.update_uis(src)
 		return TRUE
 
 /obj/machinery/fabricator/physical_attack_hand(mob/user)
@@ -110,7 +111,8 @@
 	if((fab_status_flags & FAB_DISABLED) && !panel_open)
 		to_chat(user, SPAN_WARNING("\The [src] is disabled!"))
 		return TRUE
-	interact(user)
+
+	tgui_interact(user)
 	return TRUE
 
 #undef SUBSTANCE_TAKEN_FULL

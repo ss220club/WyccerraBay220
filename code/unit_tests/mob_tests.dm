@@ -491,15 +491,13 @@ var/global/default_mobloc = null
 		fail("[icon_file] is not a valid icon file.")
 		return 1
 
-	var/list/valid_states = icon_states(icon_file)
-
-	if(!length(valid_states))
-		return 1
+	if(ICON_IS_EMPTY(icon_file))
+		return TRUE
 
 	for(var/i = 1 to length(SSrobots.all_module_names))
 		var/modname = lowertext(SSrobots.all_module_names[i])
 		var/bad_msg = "[ascii_red]--------------- [modname]"
-		if(!(modname in valid_states))
+		if(!ICON_HAS_STATE(icon_file, modname))
 			log_unit_test("[bad_msg] does not contain a valid icon state in [icon_file][ascii_reset]")
 			failed=1
 
@@ -542,7 +540,7 @@ var/global/default_mobloc = null
 
 				for(var/base in S.base_skin_colours)
 					for(var/gen in gender_test)
-						if(!("[icon_name][gen][S.base_skin_colours[base]]" in icon_states(S.icobase)))
+						if(!ICON_HAS_STATE(S.icobase, "[icon_name][gen][S.base_skin_colours[base]]"))
 							to_fail = TRUE
 							log_debug("[S.name] has missing icon: [icon_name][gen][S.base_skin_colours[base]] for base [base] and limb tag [tag].")
 			if(to_fail)

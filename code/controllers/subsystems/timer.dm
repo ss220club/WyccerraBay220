@@ -26,7 +26,7 @@ var/global/const/TIMER_NO_HASH_WAIT = FLAG(4)
 SUBSYSTEM_DEF(timer)
 	name = "Timer"
 	flags = SS_NO_INIT | SS_TICKER
-	priority = SS_PRIORITY_TIMER
+	priority = FIRE_PRIORITY_TIMER
 	wait = 1
 
 	var/list/datum/timer/queue = list()

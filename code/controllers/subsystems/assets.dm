@@ -2,17 +2,37 @@ SUBSYSTEM_DEF(assets)
 	name = "Assets"
 	init_order = SS_INIT_ASSETS
 	flags = SS_NO_FIRE
-	var/list/cache = list()
+	var/list/datum/asset_cache_item/cache = list()
 	var/list/preload = list()
+	var/datum/asset_transport/transport = new()
 
 /datum/controller/subsystem/assets/Initialize(timeofday)
-	for(var/type in typesof(/datum/asset))
-		var/datum/asset/A = type
-		if (type != initial(A._abstract))
-			get_asset_datum(type)
+	load_assets()
+	apply_configuration()
 
-	preload = cache.Copy()
+/datum/controller/subsystem/assets/Recover()
+	cache = SSassets.cache
+	preload = SSassets.preload
 
-	for(var/client/C in GLOB.clients)
-		addtimer(new Callback(GLOBAL_PROC, .proc/getFilesSlow, C, preload, FALSE), 10)
-	return ..()
+/datum/controller/subsystem/assets/proc/apply_configuration()
+	var/newtransporttype = /datum/asset_transport
+	if(config.asset_transport == "webroot")
+		newtransporttype = /datum/asset_transport/webroot
+
+	if(newtransporttype == transport.type)
+		return
+
+	var/datum/asset_transport/newtransport = new newtransporttype
+	if(newtransport.validate_config())
+		transport = newtransport
+
+	transport.Initialize(cache)
+
+/datum/controller/subsystem/assets/proc/load_assets()
+	for(var/datum/asset/asset_type as anything in typesof(/datum/asset))
+		if(asset_type == initial(asset_type._abstract))
+			continue
+
+		get_asset_datum(asset_type)
+
+	transport.Initialize(cache)

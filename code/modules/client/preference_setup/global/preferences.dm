@@ -154,20 +154,6 @@ var/global/list/_client_preferences_by_type
 	key = "CHAT_GHOSTRADIO"
 	options = list(GLOB.PREF_ALL_CHATTER, GLOB.PREF_NEARBY)
 
-/datum/client_preference/preview_scale
-	description = "Options Preview Scale"
-	key = "PREVIEW_SCALE"
-	options = list(GLOB.PREF_MEDIUM, GLOB.PREF_LARGE, GLOB.PREF_SMALL)
-
-/datum/client_preference/preview_scale/changed(mob/mob, val)
-	var/datum/preferences/prefs = mob.client?.prefs
-	if (!prefs)
-		return
-	prefs.update_preview_icon(TRUE)
-	if (!prefs.popup)
-		return
-	prefs.update_setup_window(usr)
-
 /datum/client_preference/language_display
 	description = "Show Language Names"
 	key = "LANGUAGE_DISPLAY"
@@ -318,21 +304,6 @@ var/global/list/_client_preferences_by_type
 	options = list(GLOB.PREF_YES, GLOB.PREF_NO)
 	default_value = GLOB.PREF_NO
 
-/datum/client_preference/goonchat
-	description = "Use Goon Chat"
-	key = "USE_GOONCHAT"
-
-/datum/client_preference/goonchat/changed(mob/preference_mob, new_value)
-	if(preference_mob && preference_mob.client)
-		var/client/C = preference_mob.client
-		if(new_value == GLOB.PREF_YES)
-			C.chatOutput.loaded = FALSE
-			C.chatOutput.start()
-		else
-			C.force_white_theme()
-			winset(C, "output", "is-visible=true;is-disabled=false")
-			winset(C, "browseroutput", "is-visible=false")
-
 /datum/client_preference/notify_ghost_trap
 	description = "Notify when ghost-trap roles are available."
 	key = "GHOST_TRAP"
@@ -395,6 +366,11 @@ var/global/list/_client_preferences_by_type
 /datum/client_preference/staff/show_rlooc
 	description = "Remote LOOC chat"
 	key = "CHAT_RLOOC"
+	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
+
+/datum/client_preference/ooc_donation_color
+	description = "OOC donator color"
+	key = "OOC_DONATION_COLOR"
 	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
 
 /********************

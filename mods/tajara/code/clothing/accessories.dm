@@ -176,14 +176,11 @@
 
 
 // Tajaran clothing
-/datum/gear/passport/tajara
+/datum/gear/document/passport/tajara
 	display_name = "(Tajara) passport"
 	path = /obj/item/passport/xeno/tajara
 	whitelisted = list(SPECIES_TAJARA)
 	flags = 0
-	sort_category = "Xenowear"
-	custom_setup_proc = TYPE_PROC_REF(/obj/item/passport, set_info)
-	cost = 0
 
 /obj/item/passport/xeno/tajara
 	name = "\improper Tajaran passport"
@@ -196,7 +193,6 @@
 /datum/gear/gloves/dress/modified
 	display_name = "modified gloves, dress"
 	path = /obj/item/clothing/gloves/color/white/modified
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_TAJARA, SPECIES_UNATHI, SPECIES_YEOSA)
 
 /obj/item/clothing/under/taj_old_uniform
@@ -310,19 +306,16 @@
 	desc = "Amulet of Tajara, created from the primordial stone according to their belief, able to protect according to their primitive religion from evil spirits and their servants. The runes on the amulet are etched with acid."
 	icon_state = "taj_amulet_3"
 
-
 /datum/gear/head/zhan_scarf/neck
 	display_name = "(Tajara) Tua-Tari scarf"
 	path = /obj/item/clothing/accessory/scarf/tajaran
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 	flags = GEAR_HAS_COLOR_SELECTION
 
 /datum/gear/uniform/tajara
 	display_name = "(Tajara) vintage uniform"
 	path = /obj/item/clothing/under/taj_old_uniform
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 
 /obj/item/clothing/suit/storage/taj_overcoat
 	name = "vintage tajaran overcoat"
@@ -341,13 +334,11 @@
 	display_name = "(Tajara) vintage tajaran overcoat"
 	path = /obj/item/clothing/suit/storage/taj_overcoat
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 
 /datum/gear/shoes/tajara
 	display_name = "(Tajara) vintage boots"
 	path = /obj/item/clothing/shoes/taj_old_shoes
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 
 /datum/gear/shoes/tajara/taj_new_shoes
 	display_name = "(Tajara) military boots"
@@ -366,9 +357,7 @@
 	display_name = "(Tajara) talisman selection"
 	path = /obj/item/clothing/accessory/amulet
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 	flags = GEAR_HAS_TYPE_SELECTION
-
 
 //Taj clothing.
 
@@ -433,15 +422,11 @@
 	desc = "An extremely decorated cape with an intricately runed design has been woven into the fabric of this cape with great care. This cape can only be found within the Tajaran elite."
 	icon_state = "leadercape"
 
-
-
 // Taj clothing
 /datum/gear/eyes/medical/tajblind
 	display_name = "(Tajara) veil, medical"
 	path = /obj/item/clothing/glasses/hud/health/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/medical/tajblind/New()
 	return
@@ -450,8 +435,6 @@
 	display_name = "(Tajara) veil, industrial"
 	path = /obj/item/clothing/glasses/meson/prescription/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/meson/tajblind/New()
 	return
@@ -460,15 +443,11 @@
 	display_name = "(Tajara) veil, science "
 	path = /obj/item/clothing/glasses/hud/science/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/security/tajblind
 	display_name = "(Tajara) veil, sleek"
 	path = /obj/item/clothing/glasses/hud/security/prot/sunglasses/tajblind
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/security/tajblind/New()
 	return
@@ -476,9 +455,7 @@
 /datum/gear/eyes/visors
 	display_name = "(Tajara) visor selection"
 	path = /obj/item/clothing/glasses/tajvisor
-	sort_category = "Xenowear"
 	whitelisted = list(SPECIES_TAJARA)
-	cost = 1
 
 /datum/gear/eyes/visors/New()
 	..()
@@ -496,15 +473,11 @@
 	display_name = "(Tajara) visor, science "
 	path = /obj/item/clothing/glasses/hud/science/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/medical/tajvisor
 	display_name = "(Tajara) visor, medical"
 	path = /obj/item/clothing/glasses/hud/health/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/medical/tajvisor/New()
 	return
@@ -513,8 +486,6 @@
 	display_name = "(Tajara) visor, security"
 	path = /obj/item/clothing/glasses/hud/security/prot/sunglasses/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/security/tajvisor/New()
 	return
@@ -523,8 +494,6 @@
 	display_name = "(Tajara) visor, industrial"
 	path = /obj/item/clothing/glasses/meson/prescription/tajvisor
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
-	cost = 1
 
 /datum/gear/eyes/meson/tajvisor/New()
 	return
@@ -533,14 +502,12 @@
 	display_name = "(Tajara) visor, engineering"
 	path = /obj/item/clothing/glasses/meson/prescription/tajvisor/hybrid
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 	cost = 3
 
 /datum/gear/shoes/caligae
 	display_name = "(Tajara) caligae"
 	path = /obj/item/clothing/shoes/sandal/xeno/caligae
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 
 /datum/gear/shoes/caligae/New()
 	..()
@@ -555,13 +522,11 @@
 	display_name = "(Tajara) Zhan headscarf"
 	path = /obj/item/clothing/head/xeno/scarf
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 
 /datum/gear/accessory/capes
 	display_name = "(Tajara) shoulder capes"
 	path = /obj/item/clothing/accessory/shouldercape
 	whitelisted = list(SPECIES_TAJARA)
-	sort_category = "Xenowear"
 
 /datum/gear/accessory/capes/New()
 	..()

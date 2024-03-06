@@ -261,7 +261,7 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	animate(alpha = 0, time = CHAT_MESSAGE_EOL_FADE)
 
 	// Desctruct yourself
-	addtimer(new Callback(src, PROC_REF(unregister_and_qdel_self)), lifespan + CHAT_MESSAGE_GRACE_PERIOD, TIMER_UNIQUE|TIMER_OVERRIDE)
+	addtimer(CALLBACK(src, PROC_REF(unregister_and_qdel_self)), lifespan + CHAT_MESSAGE_GRACE_PERIOD, TIMER_UNIQUE|TIMER_OVERRIDE)
 
 /datum/chatmessage/proc/get_current_alpha(time_spent)
 	if(time_spent < CHAT_MESSAGE_SPAWN_TIME)

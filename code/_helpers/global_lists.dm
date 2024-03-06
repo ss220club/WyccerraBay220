@@ -171,13 +171,16 @@ var/global/list/string_slot_flags = list(
 		var/particles/P = new path()
 		GLOB.all_particles[P.name] = P
 
+	for(var/datum/tech/tech_type as anything in subtypesof(/datum/tech))
+		GLOB.tech_id_to_name[initial(tech_type.id)] = initial(tech_type.name)
+
 	return TRUE
 
 //*** params cache
 var/global/list/paramslist_cache = list()
 
-#define cached_key_number_decode(key_number_data) cached_params_decode(key_number_data, /proc/key_number_decode)
-#define cached_number_list_decode(number_list_data) cached_params_decode(number_list_data, /proc/number_list_decode)
+#define cached_key_number_decode(key_number_data) cached_params_decode(key_number_data, GLOBAL_PROC_REF(key_number_decode))
+#define cached_number_list_decode(number_list_data) cached_params_decode(number_list_data, GLOBAL_PROC_REF(number_list_decode))
 
 /proc/cached_params_decode(params_data, decode_proc)
 	. = paramslist_cache[params_data]

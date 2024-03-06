@@ -206,7 +206,7 @@
 		return FALSE
 	return TRUE
 
-/obj/proc/wrench_floor_bolts(obj/item, mob/user, obj/item/tool, act_result, delay = 2 SECONDS)
+/obj/proc/wrench_floor_bolts(obj/item, mob/living/user, obj/item/tool, act_result, delay = 2 SECONDS)
 	if(act_result)
 		return
 	if(!can_anchor(tool, user))

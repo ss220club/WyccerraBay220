@@ -52,6 +52,8 @@
 		if(TOOL_ANALYZER)
 			act_result = analyzer_act(user, tool)
 
+	SEND_SIGNAL(src, COMSIG_ATOM_TOOL_ACT_RESULT(tool_type), user, tool, act_result)
+
 	if(!act_result)
 		return NONE
 
@@ -59,7 +61,6 @@
 	log_game()
 	log_tool("[key_name(user)] used [tool] on [src] at [x], [y], [z]")
 	SEND_SIGNAL(tool, COMSIG_TOOL_ATOM_ACTED_PRIMARY(tool_type), src)
-	SEND_SIGNAL(tool, COMSIG_ATOM_TOOL_ACT_RESULT(tool_type), user, tool, act_result)
 	return act_result
 
 /**

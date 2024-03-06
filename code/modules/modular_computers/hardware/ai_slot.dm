@@ -20,9 +20,9 @@
 	..()
 
 /obj/item/stock_parts/computer/ai_slot/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!stored_card)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	to_chat(user, "You manually remove [stored_card] from [src].")

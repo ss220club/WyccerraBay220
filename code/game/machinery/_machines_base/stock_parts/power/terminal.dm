@@ -116,7 +116,6 @@
 			return TRUE
 
 /obj/item/stock_parts/power/terminal/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	var/obj/machinery/machine = loc
 	if(!istype(machine))
 		return
@@ -126,8 +125,10 @@
 	if(terminal_dir && user.loc != T)
 		return null // Wrong terminal handler.
 	if(istype(T) && !T.is_plating())
+		. = ITEM_INTERACT_SUCCESS
 		to_chat(user, SPAN_WARNING("You must remove the floor plating in front of [machine] first."))
 		return
+	. = ITEM_INTERACT_SUCCESS
 	user.visible_message(SPAN_WARNING("[user] dismantles the power terminal from [machine]."), \
 						"You begin to cut the cables...")
 	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))

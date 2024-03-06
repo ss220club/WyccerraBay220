@@ -13,7 +13,7 @@
 
 /singleton/machine_construction/frame/unwrenched/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if(I.tool_behaviour == TOOL_WRENCH)
-		if(!I.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
 		to_chat(user, SPAN_NOTICE("You wrench [machine] into place."))
@@ -21,7 +21,7 @@
 	if(I.tool_behaviour == TOOL_WELDER)
 		if(!I.tool_use_check(user, 3))
 			return TRUE
-		if(!I.use_as_tool(src, user, 2 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, 2 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
 		to_chat(user, SPAN_NOTICE("You deconstruct [machine]."))
@@ -46,7 +46,7 @@
 
 /singleton/machine_construction/frame/wrenched/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if(I.tool_behaviour == TOOL_WRENCH)
-		if(!I.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/frame/unwrenched)
 		to_chat(user, SPAN_NOTICE("You unfasten [machine]."))
@@ -97,7 +97,7 @@
 			to_chat(user, SPAN_WARNING("This frame does not accept circuit boards of this type!"))
 			return TRUE
 	if(I.tool_behaviour == TOOL_WIRECUTTER)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
 		to_chat(user, SPAN_NOTICE("You remove the cables."))
@@ -121,7 +121,7 @@
 
 /singleton/machine_construction/frame/awaiting_parts/attackby(obj/item/I, mob/user, obj/machinery/constructable_frame/machine)
 	if(I.tool_behaviour == TOOL_CROWBAR)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_circuit)
 		machine.circuit.dropInto(machine.loc)
@@ -129,7 +129,7 @@
 		to_chat(user, SPAN_NOTICE("You remove the circuit board."))
 		return
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		var/obj/machinery/new_machine = new machine.circuit.build_path(machine.loc, machine.dir, FALSE)
 		machine.circuit.construct(new_machine)

@@ -15,7 +15,7 @@
 	if((. = ..()))
 		return
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
 		machine.panel_open = TRUE
@@ -48,14 +48,14 @@
 
 /singleton/machine_construction/tcomms/panel_open/proc/state_interactions(obj/item/I, mob/user, obj/machinery/machine)
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_closed)
 		machine.panel_open = FALSE
 		to_chat(user, "You fasten the bolts.")
 		return
 	if(I.tool_behaviour == TOOL_WRENCH)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/unwrenched)
 		to_chat(user, "You dislodge the external plating.")
@@ -67,13 +67,13 @@
 
 /singleton/machine_construction/tcomms/panel_open/unwrenched/state_interactions(obj/item/I, mob/user, obj/machinery/machine)
 	if(I.tool_behaviour == TOOL_WRENCH)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
 		to_chat(user, "You secure the external plating.")
 		return
 	if(I.tool_behaviour == TOOL_WIRECUTTER)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/no_cable)
 		to_chat(user, "You remove the cables.")
@@ -99,7 +99,7 @@
 			to_chat(user, SPAN_WARNING("You need five coils of wire for this."))
 			return TRUE
 	if(I.tool_behaviour == TOOL_CROWBAR)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
 		machine.dismantle()
@@ -109,7 +109,7 @@
 		return machine.part_replacement(I, user)
 
 	if(I.tool_behaviour == TOOL_WRENCH)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		return machine.part_removal(user)
 

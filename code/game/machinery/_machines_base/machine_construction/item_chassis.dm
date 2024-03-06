@@ -8,7 +8,7 @@
 	if((. = ..()))
 		return
 	if(I.tool_behaviour == TOOL_WRENCH)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(down_state)
 		machine.dismantle()

@@ -23,10 +23,10 @@
 	if((. = ..()))
 		return
 	if (!machine.can_use_tools)
-		to_chat(user, SPAN_WARNING("[src] cannot be modified!"))
+		to_chat(user, SPAN_WARNING("[machine] cannot be modified!"))
 		return TRUE
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(down_state)
 		machine.panel_open = TRUE
@@ -66,13 +66,13 @@
 	if((. = ..()))
 		return
 	if(I.tool_behaviour == TOOL_CROWBAR)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(down_state)
 		machine.dismantle()
 		return
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
-		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		TRANSFER_STATE(up_state)
 		machine.panel_open = FALSE

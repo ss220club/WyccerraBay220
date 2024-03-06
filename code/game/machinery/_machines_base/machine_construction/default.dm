@@ -23,13 +23,14 @@
 	if((. = ..()))
 		return
 	if (!machine.can_use_tools)
-		to_chat(user, SPAN_WARNING("\The [src] cannot be modified!"))
+		to_chat(user, SPAN_WARNING("[src] cannot be modified!"))
 		return TRUE
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
+		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		TRANSFER_STATE(down_state)
-		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = TRUE
-		to_chat(user, SPAN_NOTICE("You open the maintenance hatch of \the [machine]."))
+		to_chat(user, SPAN_NOTICE("You open the maintenance hatch of [machine]."))
 		machine.update_icon()
 		return
 	if(istype(I, /obj/item/storage/part_replacer))
@@ -65,14 +66,17 @@
 	if((. = ..()))
 		return
 	if(I.tool_behaviour == TOOL_CROWBAR)
+		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		TRANSFER_STATE(down_state)
 		machine.dismantle()
 		return
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
+		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		TRANSFER_STATE(up_state)
-		playsound(get_turf(machine), 'sound/items/Screwdriver.ogg', 50, 1)
 		machine.panel_open = FALSE
-		to_chat(user, SPAN_NOTICE("You close the maintenance hatch of \the [machine]."))
+		to_chat(user, SPAN_NOTICE("You close the maintenance hatch of [machine]."))
 		machine.update_icon()
 		return
 

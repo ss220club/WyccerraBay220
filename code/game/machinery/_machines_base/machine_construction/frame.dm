@@ -13,11 +13,11 @@
 
 /singleton/machine_construction/frame/unwrenched/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if(I.tool_behaviour == TOOL_WRENCH)
-		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
-			TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
-			to_chat(user, SPAN_NOTICE("You wrench [machine] into place."))
-			machine.anchored = TRUE
+		if(!I.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
+		to_chat(user, SPAN_NOTICE("You wrench [machine] into place."))
+		machine.anchored = TRUE
 	if(I.tool_behaviour == TOOL_WELDER)
 		if(!I.tool_use_check(user, 3))
 			return TRUE
@@ -46,12 +46,12 @@
 
 /singleton/machine_construction/frame/wrenched/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if(I.tool_behaviour == TOOL_WRENCH)
-		playsound(machine.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, (I.toolspeed * 2) SECONDS, machine, DO_REPAIR_CONSTRUCT))
-			TRANSFER_STATE(/singleton/machine_construction/frame/unwrenched)
-			to_chat(user, SPAN_NOTICE("You unfasten [machine]."))
-			machine.anchored = FALSE
+		if(!I.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
+		TRANSFER_STATE(/singleton/machine_construction/frame/unwrenched)
+		to_chat(user, SPAN_NOTICE("You unfasten [machine]."))
+		machine.anchored = FALSE
+		return
 	if(isCoil(I))
 		var/obj/item/stack/cable_coil/C = I
 		if(C.get_amount() < 5)
@@ -97,8 +97,9 @@
 			to_chat(user, SPAN_WARNING("This frame does not accept circuit boards of this type!"))
 			return TRUE
 	if(I.tool_behaviour == TOOL_WIRECUTTER)
+		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		TRANSFER_STATE(/singleton/machine_construction/frame/wrenched)
-		playsound(machine.loc, 'sound/items/Wirecutter.ogg', 50, 1)
 		to_chat(user, SPAN_NOTICE("You remove the cables."))
 		new /obj/item/stack/cable_coil(machine.loc, 5)
 
@@ -120,14 +121,16 @@
 
 /singleton/machine_construction/frame/awaiting_parts/attackby(obj/item/I, mob/user, obj/machinery/constructable_frame/machine)
 	if(I.tool_behaviour == TOOL_CROWBAR)
+		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_circuit)
-		playsound(machine.loc, 'sound/items/Crowbar.ogg', 50, 1)
 		machine.circuit.dropInto(machine.loc)
 		machine.circuit = null
 		to_chat(user, SPAN_NOTICE("You remove the circuit board."))
 		return
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
-		playsound(machine.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		var/obj/machinery/new_machine = new machine.circuit.build_path(machine.loc, machine.dir, FALSE)
 		machine.circuit.construct(new_machine)
 		new_machine.install_component(machine.circuit, refresh_parts = FALSE)

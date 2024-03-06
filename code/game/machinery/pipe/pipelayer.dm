@@ -70,6 +70,8 @@
 /obj/machinery/pipelayer/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	P_type_t = input("Choose pipe type", "Pipe type") as null|anything in Pipes
+	if(!P_type_t)
+		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	P_type = Pipes[P_type_t]

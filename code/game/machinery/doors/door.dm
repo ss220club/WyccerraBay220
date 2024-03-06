@@ -188,22 +188,28 @@
 		return TRUE
 
 /obj/machinery/door/crowbar_act(mob/living/user, obj/item/tool)
+	return remove_repairing(user, tool)
+
+/obj/machinery/door/proc/remove_repairing(mob/living/user, obj/item/tool)
+	if(!repairing)
+		return
 	. = ITEM_INTERACT_SUCCESS
-	if(repairing)
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		to_chat(user, SPAN_NOTICE("You remove [repairing]."))
-		repairing.dropInto(user.loc)
-		repairing = null
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You remove [repairing]."))
+	repairing.dropInto(user.loc)
+	repairing = null
 
 /obj/machinery/door/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
+	return weld_to_fix()
+
+/obj/machinery/door/proc/weld_to_fix(mob/living/user, obj/item/tool)
 	if(!repairing)
 		return
 	if(!density)
 		to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
 		return
-
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 2))
 		return
 	to_chat(user, SPAN_NOTICE("You start to fix dents and weld [repairing] into place."))

@@ -1,5 +1,4 @@
 /obj/machinery/floorlayer
-
 	name = "automatic floor layer"
 	icon = 'icons/obj/machines/pipe_dispenser.dmi'
 	icon_state = "pipe_d"
@@ -8,6 +7,7 @@
 	var/on = 0
 	var/obj/item/stack/tile/T
 	var/list/mode = list("dismantle"=0,"laying"=0,"collect"=0)
+	var/list/tiles = list()
 
 /obj/machinery/floorlayer/New()
 	T = new/obj/item/stack/tile/floor(src)
@@ -39,10 +39,10 @@
 
 /obj/machinery/floorlayer/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!length(contents))
+	if(!length(tiles))
 		to_chat(user, SPAN_NOTICE("[src] is empty."))
 		return
-	var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in contents
+	var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in tiles
 	if(E)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
@@ -52,7 +52,7 @@
 
 /obj/machinery/floorlayer/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	T = input("Choose tile type.", "Tiles") as null|anything in contents
+	T = input("Choose tile type.", "Tiles") as null|anything in tiles
 	if(!T)
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
@@ -75,7 +75,7 @@
 		if(!user.unEquip(W, T))
 			return TRUE
 		to_chat(user, SPAN_NOTICE("[W] successfully loaded."))
-		TakeTile(T)
+		TakeTile(W)
 		return TRUE
 	return ..()
 
@@ -98,14 +98,14 @@
 	return new_turf.is_plating()
 
 /obj/machinery/floorlayer/proc/TakeNewStack()
-	for(var/obj/item/stack/tile/tile in contents)
+	for(var/obj/item/stack/tile/tile in tiles)
 		T = tile
 		return 1
 	return 0
 
 /obj/machinery/floorlayer/proc/SortStacks()
-	for(var/obj/item/stack/tile/tile1 in contents)
-		for(var/obj/item/stack/tile/tile2 in contents)
+	for(var/obj/item/stack/tile/tile1 in tiles)
+		for(var/obj/item/stack/tile/tile2 in tiles)
 			tile2.transfer_to(tile1)
 
 /obj/machinery/floorlayer/proc/layFloor(turf/w_turf)
@@ -116,9 +116,10 @@
 	return 1
 
 /obj/machinery/floorlayer/proc/TakeTile(obj/item/stack/tile/tile)
-	if(!T)	T = tile
+	if(!T)
+		T = tile
+	tiles += tile
 	tile.forceMove(src)
-
 	SortStacks()
 
 /obj/machinery/floorlayer/proc/CollectTiles(turf/w_turf)

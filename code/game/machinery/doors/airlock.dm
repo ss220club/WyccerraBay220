@@ -972,9 +972,10 @@ About the new airlock wires panel:
 		return 1
 
 /obj/machinery/door/airlock/crowbar_act(mob/living/user, obj/item/tool)
+	var/removed = remove_repairing()
+	if(removed)
+		return removed
 	. = ITEM_INTERACT_SUCCESS
-	if(repairing)
-		return
 	if(p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
 		user.visible_message("[user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 		if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
@@ -998,7 +999,6 @@ About the new airlock wires panel:
 	else
 		spawn(0)
 		close(1)
-		return
 
 /obj/machinery/door/airlock/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -1027,12 +1027,16 @@ About the new airlock wires panel:
 	attack_hand(user)
 
 /obj/machinery/door/airlock/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!repairing && MACHINE_IS_BROKEN(src) && locked) //bolted and broken
 		if(cut_bolts(tool, user))
+			. = ITEM_INTERACT_SUCCESS
 			return
+	var/fixed = weld_to_fix(user, tool)
+	if(fixed)
+		return fixed
 	if(repairing || operating == DOOR_OPERATING_YES || !density)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 1))
 		return
 	user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),

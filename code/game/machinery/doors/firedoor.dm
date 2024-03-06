@@ -195,9 +195,12 @@
 		addtimer(CALLBACK(src, PROC_REF(attempt_autoclose)), 10 SECONDS) //Just in case a fire alarm is turned off while the firedoor is going through an autoclose cycle
 
 /obj/machinery/door/firedoor/crowbar_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
+	var/removed = remove_repairing(user, tool)
+	if(removed)
+		return removed
 	if(operating)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(blocked && !repairing)
 		if(!hatch_open)
 			to_chat(user, SPAN_DANGER("You must open the maintenance hatch first!"))
@@ -272,9 +275,12 @@
 	update_icon()
 
 /obj/machinery/door/firedoor/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
+	var/fixed = weld_to_fix(user, tool)
+	if(fixed)
+		return fixed
 	if(repairing || operating)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 2))
 		return
 	user.visible_message(

@@ -19,10 +19,10 @@ SUBSYSTEM_DEF(icon_update)
 
 
 /datum/controller/subsystem/icon_update/Initialize(start_uptime)
-	fire(FALSE, TRUE)
+	fire()
 
 
-/datum/controller/subsystem/icon_update/fire(resumed, no_mc_tick)
+/datum/controller/subsystem/icon_update/fire(resumed)
 	var/atom/atom
 	var/list/params
 	var/queue_length = length(queue)
@@ -35,11 +35,8 @@ SUBSYSTEM_DEF(icon_update)
 			atom.update_icon(arglist(params))
 		else
 			atom.update_icon()
-		if (no_mc_tick)
-			if (i % 100)
-				continue
-			CHECK_TICK
-		else if (MC_TICK_CHECK)
+
+		if (MC_TICK_CHECK)
 			queue.Cut(1, i + 1)
 			return
 	if (queue_length)

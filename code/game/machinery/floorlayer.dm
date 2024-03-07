@@ -11,6 +11,7 @@
 
 /obj/machinery/floorlayer/New()
 	T = new/obj/item/stack/tile/floor(src)
+	TakeTile(T)
 	..()
 
 /obj/machinery/floorlayer/Move(new_turf,M_Dir)

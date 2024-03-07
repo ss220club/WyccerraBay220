@@ -191,7 +191,7 @@
 		return TRUE
 
 /obj/machinery/door/crowbar_act(mob/living/user, obj/item/tool)
-	. = ..() // see COMSIG_ATOM_TOOL_ACT signal
+	. = ..() // see COMSIG_ATOM_TOOL_ACT signal //TODO220: make it a component
 
 /obj/machinery/door/proc/remove_repairing(obj/machinery/door/door, mob/living/user, obj/item/tool)
 	if(!repairing)
@@ -204,7 +204,7 @@
 	repairing = null
 
 /obj/machinery/door/welder_act(mob/living/user, obj/item/tool)
-	. = ..() // see COMSIG_ATOM_TOOL_ACT signal
+	. = ..() // see COMSIG_ATOM_TOOL_ACT signal //TODO220: make it a component
 
 /obj/machinery/door/proc/weld_to_fix(obj/machinery/door/door, mob/living/user, obj/item/tool)
 	if(!repairing)

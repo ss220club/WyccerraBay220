@@ -29,7 +29,7 @@ SUBSYSTEM_DEF(overlays)
 	LIST_RESIZE(state_cache, 0)
 	LIST_RESIZE(icon_cache, 0)
 	cache_size = 0
-	for(var/atom/atom)
+	for(var/atom/atom as anything in world)
 		if(atom.atom_flags & ATOM_AWAITING_OVERLAY_UPDATE)
 			SSoverlays.queue += atom
 
@@ -37,7 +37,7 @@ SUBSYSTEM_DEF(overlays)
 
 
 /datum/controller/subsystem/overlays/Initialize(start_uptime)
-	fire()
+	flush_queue()
 
 
 /datum/controller/subsystem/overlays/UpdateStat(time)
@@ -58,6 +58,19 @@ SUBSYSTEM_DEF(overlays)
 			break
 
 	queue.Cut(1, queue_position)
+
+/datum/controller/subsystem/overlays/proc/flush_queue()
+	var/queue_position = 1
+	while(length(queue) >= queue_position)
+		process_atom_overlays_update(queue[queue_position])
+		queue_position++
+		CHECK_TICK
+
+	LIST_RESIZE(queue, 0)
+
+/datum/controller/subsystem/overlays/proc/process_atom_overlays_update(atom/atom_to_update)
+	if(!QDELETED(atom_to_update) && atom_to_update.atom_flags & ATOM_AWAITING_OVERLAY_UPDATE)
+		atom_to_update.UpdateOverlays()
 
 
 /datum/controller/subsystem/overlays/proc/GetStateAppearance(icon, state)

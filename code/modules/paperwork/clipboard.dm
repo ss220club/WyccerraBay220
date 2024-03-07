@@ -113,7 +113,7 @@
 
 				if(istype(I, /obj/item/pen))
 
-					P.resolve_attackby(I, usr)
+					I.resolve_attackby(P, usr)
 
 		else if(href_list["remove"])
 			var/obj/item/P = locate(href_list["remove"])

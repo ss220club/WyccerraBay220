@@ -81,7 +81,7 @@
 
 /obj/structure/bed/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (HAS_FLAGS(bed_flags, BED_FLAG_CANNOT_BE_DISMANTLED))
+	if(HAS_FLAGS(bed_flags, BED_FLAG_CANNOT_BE_DISMANTLED))
 		USE_FEEDBACK_FAILURE("[src] cannot be dismantled.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

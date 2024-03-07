@@ -184,7 +184,7 @@
 
 /obj/item/clothing/suit/space/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(istype(loc,/mob/living/carbon/human))
+	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		if(H.wear_suit == src)
 			to_chat(user, SPAN_WARNING("You cannot repair [src] while it is being worn."))

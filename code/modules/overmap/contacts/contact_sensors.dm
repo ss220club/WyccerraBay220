@@ -196,7 +196,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	var/obj/item/device/multitool/mtool = tool
 	var/obj/item/ship_tracker/tracker = mtool.get_buffer()
-	if(!tracker || !istype(tracker))
+	if(!istype(tracker))
 		return
 	if(tracker in trackers)
 		trackers -= tracker

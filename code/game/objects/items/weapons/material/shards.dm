@@ -48,9 +48,9 @@
 		alpha = 255
 
 /obj/item/material/shard/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!material.shard_can_repair)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	material.place_sheet(get_turf(src))

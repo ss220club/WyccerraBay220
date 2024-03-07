@@ -52,9 +52,9 @@ GLOBAL_LIST_EMPTY(admin_departments)
 
 /obj/machinery/photocopier/faxmachine/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	to_chat(user, SPAN_NOTICE("\The [src]'s department tag is set to [department]."))
+	to_chat(user, SPAN_NOTICE("[src]'s department tag is set to [department]."))
 	if(!emagged)
-		to_chat(user, SPAN_WARNING("\The [src]'s department configuration is vendor locked."))
+		to_chat(user, SPAN_WARNING("[src]'s department configuration is vendor locked."))
 		return
 	var/list/option_list = GLOB.alldepartments.Copy() + GLOB.admin_departments.Copy() + "(Custom)" + "(Cancel)"
 	var/new_department = input(user, "Which department do you want to tag this fax machine as? Choose '(Custom)' to enter a custom department or '(Cancel) to cancel.", "Fax Machine Department Tag") as null|anything in option_list
@@ -68,29 +68,29 @@ GLOBAL_LIST_EMPTY(admin_departments)
 		to_chat(user, SPAN_WARNING("Invalid department tag selected."))
 		return
 	department = new_department
-	to_chat(user, SPAN_NOTICE("You reconfigure \the [src]'s department tag to [department]."))
+	to_chat(user, SPAN_NOTICE("You reconfigure [src]'s department tag to [department]."))
 
 /obj/machinery/photocopier/faxmachine/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(istype(O, /obj/item/paper))
 		var/obj/item/paper/P = O
 		if(!P.readable)
-			to_chat(user, SPAN_NOTICE("\The [src] beeps. Error, invalid document detected."))
+			to_chat(user, SPAN_NOTICE("[src] beeps. Error, invalid document detected."))
 			return TRUE
 
 	if(isid(O))
 		if(!user.unEquip(O, src))
 			return TRUE
 		scan = O
-		to_chat(user, SPAN_NOTICE("You insert \the [O] into \the [src]."))
+		to_chat(user, SPAN_NOTICE("You insert [O] into [src]."))
 		return TRUE
 
 	if (istype(O, /obj/item/modular_computer/pda))
 		if (LAZYISIN(linked_pdas, O))
 			unlink_pda(O)
-			to_chat(user, SPAN_NOTICE("You remove \the [O] from \the [src]'s notifications list."))
+			to_chat(user, SPAN_NOTICE("You remove [O] from [src]'s notifications list."))
 			return TRUE
 		link_pda(O)
-		to_chat(user, SPAN_NOTICE("You add \the [O] to \the [src]'s notifications list. It will now be pinged whenever a fax is received."))
+		to_chat(user, SPAN_NOTICE("You add [O] to [src]'s notifications list. It will now be pinged whenever a fax is received."))
 		return TRUE
 
 	return ..()
@@ -115,9 +115,9 @@ GLOBAL_LIST_EMPTY(admin_departments)
 
 /obj/machinery/photocopier/faxmachine/emag_act(remaining_charges, mob/user, emag_source)
 	if (emagged)
-		to_chat(user, SPAN_WARNING("\The [src]'s systems have already been hacked."))
+		to_chat(user, SPAN_WARNING("[src]'s systems have already been hacked."))
 		return
-	to_chat(user, SPAN_NOTICE("You unlock \the [src]'s department tagger. You can now modify it's department tag to disguise faxes as being from another department or even off-ship using a multitool."))
+	to_chat(user, SPAN_NOTICE("You unlock [src]'s department tagger. You can now modify it's department tag to disguise faxes as being from another department or even off-ship using a multitool."))
 	emagged = TRUE
 	return TRUE
 
@@ -240,7 +240,7 @@ GLOBAL_LIST_EMPTY(admin_departments)
 
 	flick("faxreceive", src)
 	playsound(loc, "sound/machines/dotprinter.ogg", 50, 1)
-	visible_message(SPAN_NOTICE("\The [src] pings, \"New fax received from [origin_department].\""))
+	visible_message(SPAN_NOTICE("[src] pings, \"New fax received from [origin_department].\""))
 
 	// Notify any linked PDAs
 	if (LAZYLEN(linked_pdas))

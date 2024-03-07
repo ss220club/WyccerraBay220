@@ -80,9 +80,9 @@
 	)
 
 /obj/item/material/coin/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(isnull(string_color))
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	new /obj/item/stack/cable_coil (get_turf(user), 1, string_color)

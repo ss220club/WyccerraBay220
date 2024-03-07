@@ -46,7 +46,7 @@ avoid code duplication. This includes items that may sometimes act as a standard
  * Returns boolean to indicate whether the attack call was handled or not.
  */
 /obj/item/proc/resolve_attackby(atom/atom, mob/living/user, click_params)
-	if (!atom.can_use_item(src, user, click_params))
+	if(!atom.can_use_item(src, user, click_params))
 		return FALSE
 	atom.pre_use_item(src, user, click_params)
 	var/use_call
@@ -55,12 +55,10 @@ avoid code duplication. This includes items that may sometimes act as a standard
 	. = use_before(atom, user, click_params)
 	if(!.)
 		use_call = "tool"
-		var/item_interact_result = atom.item_interaction(user, src, click_params)
-		if(item_interact_result & ITEM_INTERACT_SUCCESS)
-			. = TRUE
-		if(item_interact_result & ITEM_INTERACT_BLOCKING)
-			return TRUE
-	if(!. && user.a_intent == I_HURT)
+		. = atom.item_interaction(user, src, click_params)
+		if(. & ITEM_INTERACT_BLOCKING)
+			return
+	if((!. && user.a_intent == I_HURT) || (. & ITEM_INTERACT_SKIP_TO_ATTACK))
 		use_call = "weapon"
 		. = atom.use_weapon(src, user, click_params)
 	if(!.)

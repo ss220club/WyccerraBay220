@@ -99,9 +99,9 @@
 	update_icon()
 
 /obj/machinery/sealgen/multitool_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(locked)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	field_color = input(usr, "Choose field colour.", "Field color", initial(field_color)) as color|null
 	to_chat(usr, SPAN_NOTICE("You change [src] field <font color='[field_color]'>color.</font>"))
 	colorize()
@@ -127,8 +127,8 @@
 		off()
 
 /obj/machinery/sealgen/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(hatch_open)
+		. = ITEM_INTERACT_SUCCESS
 		wires.Interact(user)
 
 /obj/machinery/sealgen/use_tool(obj/item/W, mob/living/user, list/click_params)

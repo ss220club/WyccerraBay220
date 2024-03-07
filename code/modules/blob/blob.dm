@@ -178,10 +178,10 @@
 
 /obj/blob/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (pruned)
+	if(pruned)
 		USE_FEEDBACK_FAILURE("[src] has already been pruned.")
 		return
-	if (prob(user.skill_fail_chance(SKILL_SCIENCE, 90, SKILL_EXPERIENCED)))
+	if(prob(user.skill_fail_chance(SKILL_SCIENCE, 90, SKILL_EXPERIENCED)))
 		USE_FEEDBACK_FAILURE("You fail to collect a sample from [src].")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

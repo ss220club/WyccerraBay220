@@ -100,9 +100,9 @@
 	return ..()
 
 /obj/machinery/crusher_base/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!panel_open)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	to_chat(user, SPAN_NOTICE("You start [valve_open ? "closing" : "opening"] the pressure relief valve of [src]."))
 	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !panel_open)
 		return

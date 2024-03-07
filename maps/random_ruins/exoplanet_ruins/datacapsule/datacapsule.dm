@@ -55,7 +55,7 @@
 /obj/structure/backup_server/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!drive)
-		USE_FEEDBACK_FAILURE("\The [src] has no drive to remove.")
+		USE_FEEDBACK_FAILURE("[src] has no drive to remove.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -69,8 +69,8 @@
 	drive.add_fingerprint(user, tool = tool)
 	user.put_in_hands(drive)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] pries a drive from \the [src] with \a [tool]."),
-		SPAN_NOTICE("You pry \a [drive] from \the [src] with \a [tool].")
+		SPAN_NOTICE("[user] pries a drive from [src] with [tool]."),
+		SPAN_NOTICE("You pry [drive] from [src] with [tool].")
 	)
 	drive = null
 

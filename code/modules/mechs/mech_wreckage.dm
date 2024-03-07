@@ -53,7 +53,7 @@
 
 /obj/structure/mech_wreckage/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!prepared)
+	if(!prepared)
 		USE_FEEDBACK_FAILURE("[src] is too solid to dismantle. Try cutting through it first.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
@@ -67,7 +67,7 @@
 
 /obj/structure/mech_wreckage/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (prepared)
+	if(prepared)
 		USE_FEEDBACK_FAILURE("[src] has already been weakened.")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

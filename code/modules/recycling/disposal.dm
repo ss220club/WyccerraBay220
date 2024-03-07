@@ -87,27 +87,28 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	return ..()
 
 /obj/machinery/disposal/screwdriver_act(mob/living/user, obj/item/tool)
+	if(mode > 0)
+		return
 	. = ITEM_INTERACT_SUCCESS
-	if(mode <= 0)
-		if(length(contents) > LAZYLEN(component_parts))
-			to_chat(user, "Eject the items first!")
+	if(length(contents) > LAZYLEN(component_parts))
+		to_chat(user, "Eject the items first!")
+		return
+	if(mode == 0) // It's off but still not unscrewed
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		if(mode == 0) // It's off but still not unscrewed
-			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-				return
-			mode = -1 // Set it to doubleoff l0l
-			to_chat(user, "You remove the screws around the power connection.")
+		mode = -1 // Set it to doubleoff l0l
+		to_chat(user, "You remove the screws around the power connection.")
+		return
+	if(mode == -1)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		if(mode == -1)
-			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-				return
-			mode = 0
-			to_chat(user, "You attach the screws around the power connection.")
+		mode = 0
+		to_chat(user, "You attach the screws around the power connection.")
 
 /obj/machinery/disposal/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(mode != -1)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(length(contents) > LAZYLEN(component_parts))
 		to_chat(user, "Eject the items first!")
 		return

@@ -68,16 +68,16 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	switch(det_time)
-		if (1)
+		if(1)
 			det_time = 1 SECONDS
 			to_chat(user, SPAN_NOTICE("You set the [name] for 1 second detonation time."))
-		if (1 SECONDS)
+		if(1 SECONDS)
 			det_time = 3 SECONDS
 			to_chat(user, SPAN_NOTICE("You set the [name] for 3 second detonation time."))
-		if (3 SECONDS)
+		if(3 SECONDS)
 			det_time = 5 SECONDS
 			to_chat(user, SPAN_NOTICE("You set the [name] for 5 second detonation time."))
-		if (5 SECONDS)
+		if(5 SECONDS)
 			det_time = 1
 			to_chat(user, SPAN_NOTICE("You set the [name] for instant detonation."))
 	add_fingerprint(user)

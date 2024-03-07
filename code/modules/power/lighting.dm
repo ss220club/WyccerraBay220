@@ -82,9 +82,9 @@
 	qdel(src)
 
 /obj/machinery/light_construct/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	switch(stage)
 		if(LIGHT_STAGE_EMPTY)
+			. = ITEM_INTERACT_SUCCESS
 			to_chat(user, SPAN_NOTICE("You begin deconstructing [src]."))
 			if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
@@ -96,13 +96,15 @@
 			)
 			qdel(src)
 		if(LIGHT_STAGE_WIRED)
+			. = ITEM_INTERACT_SUCCESS
 			to_chat(user, SPAN_WARNING("You have to remove the wires first."))
 		if(LIGHT_STAGE_COMPLETE)
+			. = ITEM_INTERACT_SUCCESS
 			to_chat(user, SPAN_WARNING("You have to unscrew the case first."))
 
 /obj/machinery/light_construct/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (stage != LIGHT_STAGE_WIRED)
+	if(stage != LIGHT_STAGE_WIRED)
 		to_chat(user, SPAN_WARNING("There are no exposed wires to cut!"))
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

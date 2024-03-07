@@ -79,7 +79,6 @@
 
 /obj/structure/heavy_vehicle_frame/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-
 	// Remove reinforcement
 	if(is_reinforced == FRAME_REINFORCED)
 		user.visible_message(
@@ -96,38 +95,37 @@
 			SPAN_NOTICE("You remove [src]'s reinforcements with [tool].")
 		)
 		return
-
 	// Remove component
 	var/input = input(user, "Which component would you like to remove?", "[src] - Remove Component") as null|anything in list(arms, body, legs, head)
-	if (!input || !user.use_sanity_check(src, tool) || !uninstall_component(input, user))
+	if(!input || !user.use_sanity_check(src, tool) || !uninstall_component(input, user))
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	if (input == arms)
+	if(input == arms)
 		arms = null
-	else if (input == body)
+	else if(input == body)
 		body = null
-	else if (input == legs)
+	else if(input == legs)
 		legs = null
-	else if (input == head)
+	else if(input == head)
 		head = null
 	update_icon()
 
 /obj/structure/heavy_vehicle_frame/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Check for basic components.
-	if (!(arms && legs && head && body))
+	if(!(arms && legs && head && body))
 		USE_FEEDBACK_FAILURE("[src] is still missing parts and cannot be completed.")
 		return
 	// Check for wiring.
-	if (is_wired < FRAME_WIRED_ADJUSTED)
+	if(is_wired < FRAME_WIRED_ADJUSTED)
 		if (is_wired == FRAME_WIRED)
 			USE_FEEDBACK_FAILURE("[src]'s wiring needs to be adjusted before you can complete it.")
 		else
 			USE_FEEDBACK_FAILURE("[src] needs to be wired before you can complete it.")
 		return
 	// Check for basing metal internal plating.
-	if (is_reinforced < FRAME_REINFORCED_WELDED)
+	if(is_reinforced < FRAME_REINFORCED_WELDED)
 		if (is_reinforced == FRAME_REINFORCED)
 			USE_FEEDBACK_FAILURE("[src]'s internal reinforcement needs to be secured before you can complete it.")
 		else if (is_reinforced == FRAME_REINFORCED_SECURE)
@@ -163,13 +161,13 @@
 		return
 	var/current_state = is_reinforced
 	var/input
-	if (is_reinforced == FRAME_REINFORCED_SECURE)
+	if(is_reinforced == FRAME_REINFORCED_SECURE)
 		input = "Remove Reinforcements"
 	else
 		input = input(user, "What would you like to do with the reinforcements?", "[src] - Reinforcements") as null|anything in list("Secure Reinforcements", "Remove Reinforcements")
-		if (!input || !user.use_sanity_check(src, tool))
+		if(!input || !user.use_sanity_check(src, tool))
 			return
-		if (current_state != is_reinforced)
+		if(current_state != is_reinforced)
 			USE_FEEDBACK_FAILURE("[src]'s state has changed.")
 			return
 	user.visible_message(
@@ -190,12 +188,12 @@
 
 /obj/structure/heavy_vehicle_frame/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!is_wired)
+	if(!is_wired)
 		USE_FEEDBACK_FAILURE("[src] has no wiring to adjust or remove.")
 		return
 	var/input
 	var/current_state = is_wired
-	if (is_wired == FRAME_WIRED_ADJUSTED)
+	if(is_wired == FRAME_WIRED_ADJUSTED)
 		input = "Remove Wiring"
 	else
 		input = input(user, "What would you like to do with the wiring?", "[src] - Wiring") as null|anything in list("Adjust Wiring", "Remove Wiring")
@@ -212,7 +210,7 @@
 		return
 	is_wired = input == "Adjust Wiring" ? FRAME_WIRED_ADJUSTED : FALSE
 	update_icon()
-	if (input == "Remove Wiring")
+	if(input == "Remove Wiring")
 		new /obj/item/stack/cable_coil(loc, 10)
 	user.visible_message(
 		SPAN_NOTICE("[user] [input == "Adjust Wiring" ? "adjusts" : "removes"] the wiring in [src] with [tool]."),
@@ -221,10 +219,10 @@
 
 /obj/structure/heavy_vehicle_frame/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!is_reinforced)
+	if(!is_reinforced)
 		USE_FEEDBACK_FAILURE("[src] has no reinforcements to weld.")
 		return
-	if (is_reinforced == FRAME_REINFORCED)
+	if(is_reinforced == FRAME_REINFORCED)
 		USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be secured before you can weld them.")
 		return
 	if(!tool.tool_use_check(user, 1))

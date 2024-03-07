@@ -570,7 +570,7 @@
 
 /mob/living/silicon/robot/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!wiresexposed)
+	if(!wiresexposed)
 		USE_FEEDBACK_FAILURE("[src]'s wiring must be exposed before you can access them.")
 		return
 	wires.Interact(user)
@@ -611,17 +611,17 @@
 
 /mob/living/silicon/robot/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!wiresexposed)
+	if(!wiresexposed)
 		USE_FEEDBACK_FAILURE("[src]'s wiring must be exposed before you can access them.")
 		return
 	wires.Interact(user)
 
 /mob/living/silicon/robot/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (user == src)
+	if(user == src)
 		USE_FEEDBACK_FAILURE("You lack the reach to be able to repair yourself.")
 		return
-	if (!getBruteLoss())
+	if(!getBruteLoss())
 		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
 		return
 	if(!tool.tool_use_check(user, 1))

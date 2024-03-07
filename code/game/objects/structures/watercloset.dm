@@ -683,7 +683,7 @@
 		SPAN_NOTICE("[user] detaches [src] from the floor with [tool]."),
 		SPAN_NOTICE("You detach [src] from the floor with [tool].")
 	)
-	qdel_self()
+	qdel(src)
 
 /obj/structure/hygiene/faucet/attack_hand(mob/user)
 	. = ..()

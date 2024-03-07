@@ -23,9 +23,9 @@
 	add_fingerprint(user)
 
 /obj/item/assembly/shock_kit/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(status)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	part1.dropInto(loc)

@@ -74,17 +74,17 @@
 		generate_field()
 
 /obj/machinery/atmospheric_field_generator/multitool_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	to_chat(user, SPAN_NOTICE("You toggle [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
 	alwaysactive = !alwaysactive
 	update_icon()
 
 /obj/machinery/atmospheric_field_generator/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	to_chat(user, SPAN_WARNING("You [wires_intact? "cut" : "mend"] [src]'s wires!"))
@@ -92,9 +92,9 @@
 	update_icon()
 
 /obj/machinery/atmospheric_field_generator/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!hatch_open)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 5))
 		return
 	user.visible_message("[user] starts to disassemble [src].", "You start to disassemble [src].")

@@ -559,14 +559,17 @@
 		update_icon()
 
 /obj/item/mech_equipment/mounted_system/flamethrower/crowbar_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
+	if(!CanPhysicallyInteract(user))
+		return
 	var/obj/item/flamethrower/full/mech/FM = holding
-	if(FM.beaker)
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		user.visible_message(SPAN_NOTICE("[user] pries out [FM.beaker] using [tool]."))
-		FM.beaker.dropInto(get_turf(user))
-		FM.beaker = null
+	if(!FM.beaker)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(SPAN_NOTICE("[user] pries out [FM.beaker] using [tool]."))
+	FM.beaker.dropInto(get_turf(user))
+	FM.beaker = null
 
 /obj/item/mech_equipment/mounted_system/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
 	if(!CanPhysicallyInteract(user))

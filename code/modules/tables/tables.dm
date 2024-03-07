@@ -92,34 +92,36 @@
 	. = ..()
 
 /obj/structure/table/crowbar_act(mob/living/user, obj/item/tool)
+	if(user.a_intent != I_HURT)
+		return
 	. = ITEM_INTERACT_SUCCESS
-	if(user.a_intent == I_HURT)
-		if(!carpeted)
-			USE_FEEDBACK_FAILURE("[src] has no carpeting to remove.")
-			return
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		new /obj/item/stack/tile/carpet(loc)
-		carpeted = FALSE
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("[user] removes the carpeting from [src] with [tool]."),
-			SPAN_NOTICE("You remove the carpeting from [src] with [tool].")
-		)
+	if(!carpeted)
+		USE_FEEDBACK_FAILURE("[src] has no carpeting to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/stack/tile/carpet(loc)
+	carpeted = FALSE
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] removes the carpeting from [src] with [tool]."),
+		SPAN_NOTICE("You remove the carpeting from [src] with [tool].")
+	)
 
 /obj/structure/table/screwdriver_act(mob/living/user, obj/item/tool)
+	if(user.a_intent != I_HURT)
+		return
 	. = ITEM_INTERACT_SUCCESS
-	if(user.a_intent == I_HURT)
-		if (!reinforced)
-			USE_FEEDBACK_FAILURE("[src] has no reinforcements to remove.")
-			return
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		remove_reinforced(tool, user)
-		if (!reinforced)
-			update_desc()
-			update_icon()
-			update_material()
+	if(!reinforced)
+		USE_FEEDBACK_FAILURE("[src] has no reinforcements to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	remove_reinforced(tool, user)
+	if(!reinforced)
+		update_desc()
+		update_icon()
+		update_material()
 
 /obj/structure/table/wrench_act(mob/living/user, obj/item/tool)
 	if(user.a_intent == I_HURT)
@@ -138,14 +140,13 @@
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		remove_material(tool, user)
-		if (!material)
+		if(!material)
 			update_connections(TRUE)
 			update_icon()
 			for (var/obj/structure/table/table in oview(src, 1))
 				table.update_icon()
 			update_desc()
 			update_material()
-		return
 
 	if(can_plate && !material)
 		. = ITEM_INTERACT_SUCCESS
@@ -154,6 +155,8 @@
 		dismantle(tool, user)
 
 /obj/structure/table/welder_act(mob/living/user, obj/item/tool)
+	if(user.a_intent != I_HURT)
+		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!health_damaged())
 		USE_FEEDBACK_FAILURE("[src] isn't damaged.")

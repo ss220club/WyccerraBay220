@@ -39,7 +39,7 @@
 		SPAN_NOTICE("[user] starts to remove [augment] from [src] with [tool]."),
 		SPAN_NOTICE("You start to remove [augment] from [src] with [tool].")
 	)
-	if(!tool.use_as_tool(src, user, 10 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE) && !augment)
+	if(!tool.use_as_tool(src, user, 10 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE) || !augment)
 		return
 	user.put_in_hands(augment)
 	playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)

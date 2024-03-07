@@ -415,9 +415,9 @@
 	return
 
 /obj/machinery/portable_atmospherics/hydroponics/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!mechanical)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	//If there's a connector here, the portable_atmospherics setup can handle it.
 	if(locate(/obj/machinery/atmospherics/portables_connector) in loc) // TODO: what's this
 		var/obj/machinery/atmospherics/portables_connector/connector = locate(/obj/machinery/atmospherics/portables_connector)

@@ -68,13 +68,13 @@
 
 /obj/item/organ/internal/cell/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(open)
-		if(cell)
-			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-				return
-			user.put_in_hands(cell)
-			to_chat(user, SPAN_NOTICE("You remove [cell] from [src]."))
-			cell = null
+	if(!open || !cell)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.put_in_hands(cell)
+	to_chat(user, SPAN_NOTICE("You remove [cell] from [src]."))
+	cell = null
 
 /obj/item/organ/internal/cell/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -84,13 +84,14 @@
 	to_chat(user, SPAN_NOTICE("You [open ? null : "un"]screw the battery panel."))
 
 /obj/item/organ/internal/cell/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/cell))
+	if(istype(W, /obj/item/cell))
 		if(open)
 			if(cell)
 				to_chat(user, SPAN_WARNING("There is a power cell already installed."))
 			else if(user.unEquip(W, src))
 				cell = W
 				to_chat(user, SPAN_NOTICE("You insert [cell]."))
+		return TRUE
 	. = ..()
 
 /obj/item/organ/internal/cell/replaced()

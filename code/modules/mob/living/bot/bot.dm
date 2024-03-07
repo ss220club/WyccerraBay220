@@ -90,7 +90,7 @@
 
 /mob/living/bot/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (locked)
+	if(locked)
 		USE_FEEDBACK_FAILURE("[src]'s access panel must be unlocked before you can open it.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

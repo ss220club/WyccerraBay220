@@ -127,10 +127,10 @@
 
 /obj/structure/windoor_assembly/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (state != WINDOOR_STATE_WIRED)
+	if(state != WINDOOR_STATE_WIRED)
 		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
 		return
-	if (electronics)
+	if(electronics)
 		USE_FEEDBACK_FAILURE("[src]'s electronics need to be removed before you can cut the wiring.")
 		return
 	user.visible_message(

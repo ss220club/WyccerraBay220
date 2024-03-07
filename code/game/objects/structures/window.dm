@@ -247,13 +247,13 @@
 
 /obj/structure/window/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!reinf_material)
+	if(!reinf_material)
 		USE_FEEDBACK_FAILURE("[src] doesn't have a reinforced frame to pry out.")
 		return
-	if (construction_state == CONSTRUCT_STATE_COMPLETE)
+	if(construction_state == CONSTRUCT_STATE_COMPLETE)
 		USE_FEEDBACK_FAILURE("[src] needs to be unfastened from the frame before you can pry it out.")
 		return
-	if (!anchored)
+	if(!anchored)
 		USE_FEEDBACK_FAILURE("[src] isn't anchored and doesn't need to be pried.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
@@ -269,11 +269,11 @@
 
 /obj/structure/window/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!polarized)
+	if(!polarized)
 		USE_FEEDBACK_FAILURE("[src] is not wired and cannot be toggled.")
 		return
 	// Toggle Tinting
-	if (anchored)
+	if(anchored)
 		toggle()
 		playsound(src, 'sound/effects/pop.ogg', 50, TRUE)
 		user.visible_message(
@@ -323,7 +323,7 @@
 		)
 		return
 	// Regular Windows
-	if (!anchored && !can_install_here(user))
+	if(!anchored && !can_install_here(user))
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -355,7 +355,7 @@
 
 /obj/structure/window/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!polarized)
+	if(!polarized)
 		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
@@ -389,12 +389,12 @@
 
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window
-	if (isCoil(tool))
-		if (polarized)
+	if(isCoil(tool))
+		if(polarized)
 			USE_FEEDBACK_FAILURE("[src] is already polarized.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
-		if (!cable.use(1))
+		if(!cable.use(1))
 			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire and polarize [src].")
 			return TRUE
 		playsound(src, 'sound/effects/sparks1.ogg', 50, TRUE)
@@ -406,18 +406,18 @@
 		return TRUE
 
 	// Material Stack - Repair window
-	if (istype(tool, /obj/item/stack/material))
-		if (!health_damaged())
+	if(istype(tool, /obj/item/stack/material))
+		if(!health_damaged())
 			USE_FEEDBACK_FAILURE("[src] doesn't need repairs.")
 			return TRUE
-		if ((repair_pending + get_current_health()) >= get_max_health())
+		if((repair_pending + get_current_health()) >= get_max_health())
 			USE_FEEDBACK_FAILURE("[src] already has enough new [material] applied.")
 			return TRUE
 		var/obj/item/stack/material/stack = tool
-		if (material != stack.material || reinf_material != stack.reinf_material)
+		if(material != stack.material || reinf_material != stack.reinf_material)
 			USE_FEEDBACK_FAILURE("[src] must be repaired with the same type of [get_material_display_name()] it was made of.")
 			return TRUE
-		if (!stack.use(1))
+		if(!stack.use(1))
 			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to repair [src].")
 			return TRUE
 		repair_pending += get_repaired_per_unit()
@@ -425,21 +425,21 @@
 			SPAN_NOTICE("[user] replaces some of [src]'s damaged [material] with [tool]."),
 			SPAN_NOTICE("You replace some of [src]'s damaged [material] with [tool].")
 		)
-		if (repair_pending < get_damage_value())
+		if(repair_pending < get_damage_value())
 			user.show_message(SPAN_WARNING("It looks like it could use more sheets"), VISIBLE_MESSAGE)
 		return TRUE
 
 	// Plasmacutter - Dismantle window
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
+	if(istype(tool, /obj/item/gun/energy/plasmacutter))
 		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if (!plasmacutter.slice(user))
+		if(!plasmacutter.slice(user))
 			return TRUE
 		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 		user.visible_message(
 			SPAN_NOTICE("[user] starts slicing [src] apart with [tool]."),
 			SPAN_NOTICE("You start slicing [src] apart with [tool].")
 		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
+		if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 			return TRUE
 		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 		user.visible_message(

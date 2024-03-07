@@ -99,18 +99,19 @@
 		return ..()
 
 /obj/item/flamethrower/screwdriver_act(mob/living/user, obj/item/tool)
+	if(!igniter || lit || complete)
+		return
 	. = ITEM_INTERACT_SUCCESS
-	if(igniter && !lit && !complete)
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		status = !status
-		to_chat(user, SPAN_NOTICE("[igniter] is now [status ? "secured" : "unsecured"]!"))
-		update_icon()
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	status = !status
+	to_chat(user, SPAN_NOTICE("[igniter] is now [status ? "secured" : "unsecured"]!"))
+	update_icon()
 
 /obj/item/flamethrower/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(status || complete)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	if(weldtool)

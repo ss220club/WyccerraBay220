@@ -22,7 +22,7 @@
 /obj/structure/closet/coffin/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle lock
-	if (opened)
+	if(opened)
 		USE_FEEDBACK_FAILURE("[src] needs to be closed before you can screw the lid shut.")
 		return
 	user.visible_message(

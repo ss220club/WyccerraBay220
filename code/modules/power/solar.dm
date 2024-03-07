@@ -217,13 +217,14 @@ var/global/solar_gen_rate = 1500
 		glass_type = null
 
 /obj/item/solar_assembly/crowbar_act(mob/living/user, obj/item/tool)
+	if(!tracker)
+		return
 	. = ITEM_INTERACT_SUCCESS
-	if(tracker)
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		new /obj/item/tracker_electronics(src.loc)
-		tracker = FALSE
-		user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/tracker_electronics(src.loc)
+	tracker = FALSE
+	user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))
 
 /obj/item/solar_assembly/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

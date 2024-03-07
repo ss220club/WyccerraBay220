@@ -33,7 +33,7 @@
 
 /obj/structure/closet/crate/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!rigged)
+	if(!rigged)
 		USE_FEEDBACK_FAILURE("[src] has no wiring to cut.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
@@ -41,7 +41,7 @@
 	rigged = FALSE
 	new /obj/item/stack/cable_coil(loc, 1)
 	user.visible_message(
-		SPAN_NOTICE("[user] cuts [src]'s wiring with \a [tool]."),
+		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),
 		SPAN_NOTICE("You cuts [src]'s wiring with [tool].")
 	)
 
@@ -59,7 +59,7 @@
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("[user] attaches \a [tool] to [src]."),
+			SPAN_NOTICE("[user] attaches [tool] to [src]."),
 			SPAN_NOTICE("You attach [tool] to [src].")
 		)
 		return TRUE

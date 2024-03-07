@@ -107,10 +107,10 @@
 
 /obj/item/gun/magnetic/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!removable_components)
+	if(!removable_components)
 		USE_FEEDBACK_FAILURE("[src]'s components can't be swapped out.")
 		return
-	if (!capacitor)
+	if(!capacitor)
 		USE_FEEDBACK_FAILURE("[src] has no capacitor to remove.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

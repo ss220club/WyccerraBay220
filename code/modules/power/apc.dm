@@ -474,13 +474,13 @@
 
 /obj/machinery/power/apc/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!opened && wiresexposed)
+	if(!opened && wiresexposed)
 		wires.Interact(user)
 
 /obj/machinery/power/apc/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(opened)
-		if (get_cell())
+		if(get_cell())
 			to_chat(user, SPAN_WARNING("Either close the cover or remove the cell first."))
 			return
 

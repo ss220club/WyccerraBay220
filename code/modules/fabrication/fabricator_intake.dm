@@ -71,19 +71,19 @@
 		to_chat(user, SPAN_WARNING("[src] cannot process [thing]."))
 
 /obj/machinery/fabricator/multitool_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(stat)
-		to_chat(user, SPAN_WARNING("[src] is not operating."))
+		USE_FEEDBACK_FAILURE("[src] is not operating.")
 		return
 	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
 		attack_hand(user)
 
 /obj/machinery/fabricator/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(stat)
-		to_chat(user, SPAN_WARNING("[src] is not operating."))
+		USE_FEEDBACK_FAILURE("[src] is not operating.")
 		return
 	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
 		attack_hand(user)
 
 /obj/machinery/fabricator/use_tool(obj/item/O, mob/living/user, list/click_params)

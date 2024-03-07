@@ -39,9 +39,9 @@
 	return ..()
 
 /obj/item/gun/projectile/shotgun/pump/exploration/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!reinforced)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 25, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	to_chat(user, SPAN_WARNING("You remove [reinforced] that was reinforcing [src]."))

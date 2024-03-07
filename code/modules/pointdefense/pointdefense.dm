@@ -88,10 +88,11 @@
 	pointdefense.get_new_tag(user)
 	//Check if there is more than 1 controller
 	var/datum/local_network/lan = pointdefense.get_local_network()
-	if(lan)
-		var/list/pointdefense_controllers = lan.get_devices(/obj/machinery/pointdefense_control)
-		if(pointdefense_controllers && length(pointdefense_controllers) > 1)
-			lan.remove_device(src)
+	if(!lan)
+		return
+	var/list/pointdefense_controllers = lan.get_devices(/obj/machinery/pointdefense_control)
+	if(pointdefense_controllers && length(pointdefense_controllers) > 1)
+		lan.remove_device(src)
 
 /obj/machinery/pointdefense
 	name = "point defense battery"

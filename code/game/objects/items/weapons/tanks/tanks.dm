@@ -122,13 +122,10 @@ var/global/list/tank_gauge_cache = list()
 	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
 		to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
 		return
-	var/reduction = round(user.get_skill_value(SKILL_ATMOS) * 0.5) //0,1,1,2,2
-	if(do_after(user, (5 - reduction) SECONDS, src, DO_PUBLIC_UNIQUE))
-		if (GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-			to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
-			return
-		FLIP_FLAGS(tank_flags, TANK_FLAG_FORCED)
-		to_chat(user, SPAN_NOTICE("You finish forcing the valve [GET_FLAGS(tank_flags, TANK_FLAG_FORCED) ? "open" : "closed"]."))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_REPAIR_CONSTRUCT) || GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
+		return
+	FLIP_FLAGS(tank_flags, TANK_FLAG_FORCED)
+	to_chat(user, SPAN_NOTICE("You finish forcing the valve [GET_FLAGS(tank_flags, TANK_FLAG_FORCED) ? "open" : "closed"]."))
 
 /obj/item/tank/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -172,7 +169,7 @@ var/global/list/tank_gauge_cache = list()
 /obj/item/tank/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	var/obj/item/weldingtool/WT = tool
-	if (GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
+	if(GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
 		to_chat(user, SPAN_WARNING("[src]'s emergency relief valve must be closed before you can weld it shut!"))
 		return
 	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))

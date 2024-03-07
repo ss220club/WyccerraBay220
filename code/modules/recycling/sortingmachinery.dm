@@ -594,24 +594,24 @@
 	return
 
 /obj/machinery/disposal/deliveryChute/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
-	if(c_mode==0)
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		c_mode=1
-		to_chat(user, "You remove the screws around the power connection.")
-		return
-	if(c_mode==1)
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		c_mode=0
-		to_chat(user, "You attach the screws around the power connection.")
-		return
+	switch(c_mode)
+		if(0)
+			. = ITEM_INTERACT_SUCCESS
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			c_mode = 1
+			to_chat(user, SPAN_NOTICE("You remove the screws around the power connection."))
+		if(1)
+			. = ITEM_INTERACT_SUCCESS
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			c_mode = 0
+			to_chat(user, SPAN_NOTICE("You attach the screws around the power connection."))
 
 /obj/machinery/disposal/deliveryChute/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(c_mode != 1)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 1))
 		return
 	to_chat(user, "You start slicing the floorweld off the delivery chute.")

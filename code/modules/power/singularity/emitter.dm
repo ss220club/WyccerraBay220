@@ -197,10 +197,10 @@
 /obj/machinery/power/emitter/wrench_act(mob/living/user, obj/item/tool)
 	if(active)
 		to_chat(user, SPAN_WARNING("Turn [src] off first."))
-		return ITEM_INTERACT_BLOCKING
+		return ITEM_INTERACT_SUCCESS
 	if(state == EMITTER_WELDED)
 		to_chat(user, SPAN_WARNING("[src] needs to be unwelded from the floor before you raise its bolts."))
-		return ITEM_INTERACT_BLOCKING
+		return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/power/emitter/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -200,7 +200,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if (!cell)
 		USE_FEEDBACK_FAILURE("[src] has no cell to remove.")
-		return TRUE
+		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.put_in_hands(cell)

@@ -42,9 +42,9 @@
 		ruin()
 
 /obj/item/music_tape/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!ruined)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	to_chat(user, SPAN_NOTICE("You start winding [src] back in..."))
 	if(!tool.use_as_tool(src, user, 12 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT))
 		return

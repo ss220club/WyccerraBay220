@@ -66,11 +66,12 @@
 			loaded_disk = null
 
 /obj/machinery/botany/crowbar_act(mob/living/user, obj/item/tool)
+	if(!open)
+		return
 	. = ITEM_INTERACT_SUCCESS
-	if(open)
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		dismantle()
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	dismantle()
 
 /obj/machinery/botany/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

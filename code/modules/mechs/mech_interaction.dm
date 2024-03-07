@@ -356,7 +356,7 @@
 		return
 	var/list/parts = list()
 	for(var/hardpoint in hardpoints)
-		if (hardpoints[hardpoint])
+		if(hardpoints[hardpoint])
 			parts += hardpoint
 	var/input = input(user, "Which component would you like to remove?", "[src] - Remove Hardpoint") as null|anything in parts
 	if(!input || !user.use_sanity_check(src, tool))

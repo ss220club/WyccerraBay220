@@ -108,9 +108,7 @@
 	to_chat(user, SPAN_NOTICE("It has [max_installed_software - LAZYLEN(installed_software)] empty slot\s remaining out of [max_installed_software]."))
 
 /obj/item/mech_component/control_module/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
-	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-		return
+	. = ..()
 	update_software()
 
 /obj/item/mech_component/control_module/attackby(obj/item/thing, mob/user)

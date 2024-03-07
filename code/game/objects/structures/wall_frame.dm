@@ -77,7 +77,7 @@
 		SPAN_NOTICE("You start dismantling [src] with [tool].")
 	)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
-		return TRUE
+		return
 	user.visible_message(
 		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
 		SPAN_NOTICE("You dismantle [src] with [tool].")

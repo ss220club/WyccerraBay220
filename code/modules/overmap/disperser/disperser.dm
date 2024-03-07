@@ -13,6 +13,7 @@
 		to_chat(user, "The maintenance panel is open.")
 
 /obj/machinery/disperser/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	if(!panel_open)
 		to_chat(user,SPAN_NOTICE("The maintenance panel must be screwed open for this!"))
 		return

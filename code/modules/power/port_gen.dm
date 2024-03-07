@@ -295,7 +295,7 @@
 
 /obj/machinery/power/port_gen/pacman/wrench_act(mob/living/user, obj/item/tool)
 	if(active)
-		to_chat(SPAN_WARNING("Turn off [src] before wrenching its bolts."))
+		USE_FEEDBACK_FAILURE("Turn off [src] before wrenching its bolts.")
 		return ITEM_INTERACT_BLOCKING
 
 /obj/machinery/power/port_gen/pacman/use_tool(obj/item/O, mob/living/user, list/click_params)

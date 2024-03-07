@@ -153,9 +153,9 @@
 		update_materials()
 
 /obj/item/stack/material/welder_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!reinf_material || !reinf_material.stack_type)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 2) || !can_use(2))
 		return
 	if(!tool.use_as_tool(src, user, amount = 2, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

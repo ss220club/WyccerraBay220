@@ -177,9 +177,9 @@
 
 // Fixing the gravity generator.
 /obj/machinery/gravity_generator/main/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(broken_state != GRAV_NEEDS_SCREWDRIVER)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	user.visible_message(
 		SPAN_NOTICE("[user] begins to attach the details in the desired order."),
 		SPAN_NOTICE("You begin to attach the details in the desired order.")
@@ -196,9 +196,9 @@
 	update_icon()
 
 /obj/machinery/gravity_generator/main/wrench_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(broken_state != GRAV_NEEDS_WRENCH)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	user.visible_message(
 		SPAN_NOTICE("[user] screws the parts back."),
 		SPAN_NOTICE("You begin to screw the parts back.")
@@ -214,6 +214,8 @@
 	update_icon()
 
 /obj/machinery/gravity_generator/main/welder_act(mob/living/user, obj/item/tool)
+	if(broken_state != GRAV_NEEDS_WELDING)
+		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_use_check(user, 1))
 		return

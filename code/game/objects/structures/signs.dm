@@ -34,11 +34,13 @@
 	var/sign_state = ""
 
 /obj/item/sign/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!isturf(user.loc))
 		return
+	. = ITEM_INTERACT_SUCCESS
 	var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
 	if(direction == "Cancel")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/structure/sign/S = new(user.loc)
 	switch(direction)
@@ -50,10 +52,6 @@
 			S.pixel_y = -32
 		if("West")
 			S.pixel_x = -32
-		else
-			return
-	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-		return
 	S.SetName(name)
 	S.desc = desc
 	S.icon_state = sign_state

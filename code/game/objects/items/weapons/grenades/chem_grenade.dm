@@ -46,33 +46,33 @@
 			C.throw_mode_on()
 
 /obj/item/grenade/chem_grenade/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(path == 2)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	if(stage == 1)
-		path = 1
-		if(length(beakers))
-			to_chat(user, SPAN_NOTICE("You lock the assembly."))
-			SetName("grenade")
-		else
-			to_chat(user, SPAN_NOTICE("You lock the empty assembly."))
-			SetName("fake grenade")
-		icon_state = initial(icon_state) +"_locked"
-		stage = 2
-		return
-	if(stage == 2)
-		if(active && prob(95))
-			to_chat(user, SPAN_WARNING("You trigger the assembly!"))
-			detonate()
-			return
-		else
-			to_chat(user, SPAN_NOTICE("You unlock the assembly."))
-			SetName("unsecured grenade with [length(beakers)] containers[detonator?" and detonator":""]")
-			icon_state = initial(icon_state) + (detonator?"_ass":"")
-			stage = 1
-			active = 0
+	switch(stage)
+		if(1)
+			path = 1
+			if(length(beakers))
+				to_chat(user, SPAN_NOTICE("You lock the assembly."))
+				SetName("grenade")
+			else
+				to_chat(user, SPAN_NOTICE("You lock the empty assembly."))
+				SetName("fake grenade")
+			icon_state = initial(icon_state) +"_locked"
+			stage = 2
+		if(2)
+			if(active && prob(95))
+				to_chat(user, SPAN_WARNING("You trigger the assembly!"))
+				detonate()
+				return
+			else
+				to_chat(user, SPAN_NOTICE("You unlock the assembly."))
+				SetName("unsecured grenade with [length(beakers)] containers[detonator?" and detonator":""]")
+				icon_state = initial(icon_state) + (detonator?"_ass":"")
+				stage = 1
+				active = 0
 
 /obj/item/grenade/chem_grenade/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)

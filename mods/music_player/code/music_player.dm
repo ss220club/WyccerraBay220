@@ -202,34 +202,37 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 /obj/item/music_player/crowbar_act(mob/living/user, obj/item/tool)
 	switch(panel)
 		if(PANEL_OPENED)
+			. = ITEM_INTERACT_SUCCESS
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			user.visible_message(SPAN_NOTICE("[user] re-attaches [src]'s front panel with [tool]."), SPAN_NOTICE("You re-attach [src]'s front panel."))
 			panel = PANEL_UNSCREWED
 			update_icon()
-			return ITEM_INTERACT_SUCCESS
 		if(PANEL_UNSCREWED)
+			. = ITEM_INTERACT_SUCCESS
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			user.visible_message(SPAN_NOTICE("[user] unhinges [src]'s front panel with [tool]."), SPAN_NOTICE("You unhinge [src]'s front panel."))
 			panel = PANEL_OPENED
 			update_icon()
-			return ITEM_INTERACT_SUCCESS
 
 /obj/item/music_player/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	switch(panel)
 		if(PANEL_UNSCREWED)
+			. = ITEM_INTERACT_SUCCESS
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			user.visible_message(SPAN_NOTICE("[user] screw [src]'s front panel with [tool]."), SPAN_NOTICE("You screw [src]'s front panel."))
 			panel = PANEL_CLOSED
 		if(PANEL_CLOSED)
+			. = ITEM_INTERACT_SUCCESS
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			user.visible_message(SPAN_NOTICE("[user] unscrew [src]'s front panel with [tool]."), SPAN_NOTICE("You unscrew [src]'s front panel."))
 			panel = PANEL_UNSCREWED
 		if(PANEL_OPENED)
+			. = ITEM_INTERACT_SUCCESS
 			var/choices = list()
 			if(cell)
 				choices += "Remove cell"

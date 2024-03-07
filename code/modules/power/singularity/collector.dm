@@ -90,8 +90,8 @@ var/global/list/rad_collectors = list()
 		to_chat(user, SPAN_WARNING("The controls are locked!"))
 
 /obj/machinery/power/rad_collector/crowbar_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(P && !locked)
+		. = ITEM_INTERACT_SUCCESS
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		eject()
@@ -99,11 +99,11 @@ var/global/list/rad_collectors = list()
 /obj/machinery/power/rad_collector/wrench_act(mob/living/user, obj/item/tool)
 	if(P)
 		to_chat(user, SPAN_NOTICE("Remove the phoron tank first."))
-		return ITEM_INTERACT_BLOCKING
+		return ITEM_INTERACT_SUCCESS
 	for(var/obj/machinery/power/rad_collector/R in get_turf(src))
 		if(R != src)
 			to_chat(user, SPAN_WARNING("You cannot install more than one collector on the same spot."))
-			return ITEM_INTERACT_BLOCKING
+			return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/power/rad_collector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/tank/phoron))

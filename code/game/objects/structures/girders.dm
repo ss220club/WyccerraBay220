@@ -74,12 +74,12 @@
 	)
 
 /obj/structure/girder/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver
 	// - Unsecure support struts
 	// - Allow reinforcement
 	switch(state)
 		if(GIRDER_STATE_NORMAL)
+			. = ITEM_INTERACT_SUCCESS
 			if(!anchored)
 				USE_FEEDBACK_FAILURE("[src] needs to be anchored before you can add reinforcements.")
 				return
@@ -94,6 +94,7 @@
 				SPAN_NOTICE("You adjust [src] with [tool]. It can now be [reinforcing ? "reinforced" : "constructed"].")
 			)
 		if(GIRDER_STATE_REINFORCEMENT_UNSECURED)
+			. = ITEM_INTERACT_SUCCESS
 			user.visible_message(
 				SPAN_NOTICE("[user] starts securing [src]'s support struts with [tool]."),
 				SPAN_NOTICE("You starts securing [src]'s support struts with [tool].")
@@ -106,6 +107,7 @@
 				SPAN_NOTICE("You secure [src]'s support struts with [tool].")
 			)
 		if(GIRDER_STATE_REINFORCED)
+			. = ITEM_INTERACT_SUCCESS
 			user.visible_message(
 				SPAN_NOTICE("[user] starts unsecuring [src]'s support struts with [tool]."),
 				SPAN_NOTICE("You starts unsecuring [src]'s support struts with [tool].")
@@ -150,11 +152,12 @@
 	reset_girder()
 
 /obj/structure/girder/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	switch (state)
 		if (GIRDER_STATE_NORMAL)
+			. = ITEM_INTERACT_SUCCESS
 			USE_FEEDBACK_FAILURE("[src] has no reinforcements to remove.")
 		if (GIRDER_STATE_REINFORCEMENT_UNSECURED)
+			. = ITEM_INTERACT_SUCCESS
 			user.visible_message(
 				SPAN_NOTICE("[user] starts removing [src]'s support struts with [tool]."),
 				SPAN_NOTICE("You start removing [src]'s support struts with [tool].")

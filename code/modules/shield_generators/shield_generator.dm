@@ -211,13 +211,13 @@
 	return ..()
 
 /obj/machinery/power/shield_generator/multitool_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
 		attack_hand(user)
 
 /obj/machinery/power/shield_generator/wirecutter_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
 		attack_hand(user)
 
 /obj/machinery/power/shield_generator/proc/energy_failure()

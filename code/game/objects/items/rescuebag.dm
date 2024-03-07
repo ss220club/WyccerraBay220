@@ -30,9 +30,9 @@
 	qdel(src)
 
 /obj/item/bodybag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SUCCESS
 	if(!airtank)
 		return
+	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	to_chat(user, "You remove [airtank] from [src].")

@@ -22,9 +22,13 @@
 /// Args: (mob/living/user, obj/item/tool)
 /// Return any ITEM_INTERACT_ flags as relevant (see tools.dm)
 #define COMSIG_ATOM_TOOL_ACT(tooltype) "tool_act_[tooltype]"
-/// This is called after the act
+/// Sent from [atom/proc/item_interaction], when the interaction is complete. Use it as "post-act"
+/// Args: (mob/living/user, obj/item/tool, act_result)
+/// Return any ITEM_INTERACT_ flags as relevant (see tools.dm)
 #define COMSIG_ATOM_TOOL_ACT_RESULT(tooltype) "tool_act_result_[tooltype]"
-/// This is called after act's fail
+/// Sent from [atom/proc/item_interaction], when the interaction has failed (no act_result)
+/// Args: (mob/living/user, obj/item/tool)
+/// Return any ITEM_INTERACT_ flags as relevant (see tools.dm)
 #define COMSIG_ATOM_TOOL_ACT_EMPTY "tool_act_empty"
 // Notifies tools that something is happening.
 // Sucessful actions against an atom.

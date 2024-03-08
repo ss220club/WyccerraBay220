@@ -252,7 +252,7 @@
 
 			if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || PS.amount < 10)
 				return TRUE
-       
+
 			PS.use(10)
 			health += 250
 			user.visible_message(
@@ -263,7 +263,6 @@
 			set_broken_state(GRAV_NEEDS_WELDING)
 			update_icon()
 			return TRUE
-      
 	return ..()
 
 /obj/machinery/gravity_generator/part/attack_ghost(mob/user)

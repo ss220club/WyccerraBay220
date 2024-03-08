@@ -29,20 +29,24 @@
 
 /obj/structure/ladder/Initialize()
 	. = ..()
-	// the upper will connect to the lower
-	if(allowed_directions & DOWN) //we only want to do the top one, as it will initialize the ones before it.
-		for(var/obj/structure/ladder/L in GetBelow(src))
-			if(L.allowed_directions & UP)
-				target_down = L
-				L.target_up = src
-				var/turf/T = get_turf(src)
-				T.ReplaceWithLattice()
-				return
-	update_icon()
-
-
 	set_extension(src, /datum/extension/turf_hand)
+	queue_icon_update()
+	return INITIALIZE_HINT_LATELOAD
 
+/obj/structure/ladder/LateInitialize(mapload, ...)
+	. = ..()
+	// the upper will connect to the lower
+	if(!(allowed_directions & DOWN)) //we only want to do the top one, as it will initialize the ones before it.
+		return
+
+	var/obj/structure/ladder/ladder_below = locate() in GetBelow(src)
+	if(!ladder_below || !(ladder_below.allowed_directions & UP))
+		return
+
+	target_down = ladder_below
+	ladder_below.target_up = src
+	var/turf/turf_ladder_on = get_turf(src)
+	turf_ladder_on.ReplaceWithLattice()
 
 /obj/structure/ladder/Destroy()
 	if(target_down)

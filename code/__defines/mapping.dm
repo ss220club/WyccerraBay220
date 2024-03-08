@@ -27,3 +27,7 @@
 		crash_with("Deleting duplicate of [log_info_line(src)]"); \
 		return INITIALIZE_HINT_QDEL; \
 	}
+
+/// Just a list of all the area objects in the game
+/// Note, areas can have duplicate types
+GLOBAL_LIST_EMPTY(areas)

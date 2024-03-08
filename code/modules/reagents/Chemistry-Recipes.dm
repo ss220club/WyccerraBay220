@@ -1334,14 +1334,17 @@
 	reaction_sound = 'sound/effects/teleport.ogg'
 
 /datum/chemical_reaction/slime/teleport/on_reaction(datum/reagents/holder)
-	var/list/turfs = list()
-	for(var/turf/T in orange(holder.my_atom,6))
-		turfs += T
-	for(var/atom/movable/a in viewers(holder.my_atom,2))
-		if(!a.simulated)
+	var/list/possible_teleport_locations = list()
+	for(var/turf/possible_teleport_location as anything in ORANGE_TURFS(holder.my_atom, 6))
+		possible_teleport_locations += possible_teleport_location
+
+	for(var/mob/viewer as anything in viewers(holder.my_atom, 2))
+		if(!viewer.simulated)
 			continue
-		a.forceMove(pick(turfs))
-	..()
+
+		viewer.forceMove(pick(possible_teleport_locations))
+
+	. = ..()
 
 //pyrite
 /datum/chemical_reaction/slime/paint

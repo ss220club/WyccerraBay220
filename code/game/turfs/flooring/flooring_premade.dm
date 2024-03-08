@@ -330,7 +330,7 @@
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 
-/turf/simulated/floor/snow/New()
+/turf/simulated/floor/snow/Initialize(mapload, added_to_area_cache)
 	icon_state = pick("snow[rand(1,12)]","snow0")
 	..()
 
@@ -349,9 +349,9 @@
 	icon_state = "desert"
 	has_resources = 1
 
-/turf/simulated/floor/beach/sand/desert/New()
+/turf/simulated/floor/beach/sand/desert/Initialize(mapload, added_to_area_cache)
+	. = ..()
 	icon_state = "desert[rand(0,5)]"
-	..()
 
 /turf/simulated/floor/beach/coastline
 	name = "coastline"
@@ -373,8 +373,8 @@
 /turf/simulated/floor/beach/water/ocean
 	icon_state = "seadeep"
 
-/turf/simulated/floor/beach/water/New()
-	..()
+/turf/simulated/floor/beach/water/Initialize(mapload, added_to_area_cache)
+	. = ..()
 	AddOverlays(image("icon"='icons/misc/beach.dmi',"icon_state"="water5","layer"=MOB_LAYER+0.1))
 
 /turf/simulated/floor/crystal

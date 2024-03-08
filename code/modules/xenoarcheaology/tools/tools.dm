@@ -230,7 +230,7 @@
 	var/turf/T = get_turf(src)
 	var/zlevels = GetConnectedZlevels(T.z)
 	var/cur_dist = world.maxx+world.maxy
-	for(var/obj/machinery/tele_beacon/R in world)
+	for(var/obj/machinery/tele_beacon/R as anything in SSmachines.get_machinery_of_type(/obj/machinery/tele_beacon))
 		if(!R.functioning())
 			continue
 		if(R.z in zlevels)

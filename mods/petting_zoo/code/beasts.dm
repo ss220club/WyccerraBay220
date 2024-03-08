@@ -19,8 +19,8 @@
 	say_list_type = /datum/say_list/butterfly
 	ai_holder = /datum/ai_holder/simple_animal/passive
 
-/mob/living/simple_animal/butterfly/New()
-	..()
+/mob/living/simple_animal/butterfly/Initialize(mapload, ...)
+	. = ..()
 	color = rgb(rand(0, 255), rand(0, 255), rand(0, 255))
 
 /datum/say_list/butterfly
@@ -209,8 +209,8 @@
 	emote_hear = list("hops.")
 	emote_see = list("hops around","bounces up and down")
 
-/mob/living/simple_animal/friendly/rabbit/New()
-	..()
+/mob/living/simple_animal/friendly/rabbit/Initialize(mapload, ...)
+	. = ..()
 	if(!body_color)
 		body_color = pick( list("brown","black","white") )
 	icon_state = "rabbit_[body_color]"

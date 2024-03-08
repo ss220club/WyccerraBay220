@@ -110,7 +110,7 @@
 	for (var/obj/machinery/bluespacedrive/drive in drives)
 		drive.instability_event_active = FALSE
 		drive.set_light(1, 5, 15, 10, COLOR_CYAN)
-		for (var/turf/simulated/floor/floor in range(turf_conversion_range, drive))
+		for (var/turf/simulated/floor/floor in RANGE_TURFS(drive, turf_conversion_range))
 			if (istype(floor.flooring, /singleton/flooring/bluespace))
 				floor.ChangeTurf(/turf/simulated/floor/plating)
 	for (var/obj/structure/stairs/stair in stairs)

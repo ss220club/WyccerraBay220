@@ -17,7 +17,7 @@
 	chargedesc = "ENFER"
 
 /obj/structure/ship_munition/disperser_charge/fire/fire(turf/target, strength, range)
-	for(var/turf/T in range(range, target))
+	for(var/turf/T as anything in RANGE_TURFS(target, range))
 		var/obj/fake_fire/bluespace/disperserf = new(T)
 		disperserf.lifetime = strength * 20
 

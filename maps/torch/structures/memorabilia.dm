@@ -82,5 +82,5 @@
 	. = ..()
 	if(.)
 		var/turf/T = get_turf(src)
-		if(!isspace(T) && !istype(T, /turf/simulated/floor/carpet))
+		if(!isspaceturf(T) && !istype(T, /turf/simulated/floor/carpet))
 			playsound(T, pick(move_sounds), 75, 1)

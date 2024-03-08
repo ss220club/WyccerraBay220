@@ -247,7 +247,7 @@
 		src.compressor.starter = !src.compressor.starter
 		. = TOPIC_REFRESH
 	else if (href_list["doors"])
-		for(var/obj/machinery/door/blast/D in src.doors)
+		for(var/obj/machinery/door/blast/D in doors)
 			if (door_status == 0)
 				spawn( 0 )
 					D.open()

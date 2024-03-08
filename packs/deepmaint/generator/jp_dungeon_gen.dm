@@ -644,11 +644,11 @@
 				border_turfs+=l
 
 	for(var/turf/t in border_turfs)
-		for(var/turf/t2 in range(t, 1))
-			if(t2.is_wall()&&!(t2 in border_turfs))
-				for(var/turf/t3 in range(t2, 1))
+		for(var/turf/t2 as anything in RANGE_TURFS(t, 1))
+			if(t2.is_wall() && !(t2 in border_turfs))
+				for(var/turf/t3 as anything in RANGE_TURFS(t2, 1))
 					if(!t3.is_wall())
-						border_turfs+=t2
+						border_turfs += t2
 						break
 
 	numits = 0
@@ -694,8 +694,14 @@
 			region1.addBorder(region2.getBorder())
 			regions-=region2
 
-		for(var/turf/t in region1.getBorder()) if(!(t in border_turfs)) border_turfs+=t
-		for(var/turf/t in path)	for(var/turf/t2 in range(t, 1))	if(!(t2 in border_turfs)) border_turfs+=t2
+		for(var/turf/t in region1.getBorder())
+			if(!(t in border_turfs))
+				border_turfs+=t
+
+		for(var/turf/t in path)
+			for(var/turf/t2 as anything in RANGE_TURFS(t, 1))
+				if(!(t2 in border_turfs))
+					border_turfs+=t2
 
 	for(var/obj/procedural/jp_dungeonroom/r in rooms)
 		r.finalise()
@@ -1187,9 +1193,10 @@ to the floor that return true from is_wall().
 /obj/procedural/jp_dungeonroom/preexist/square/New()
 	..()
 
-	for(var/turf/t in range(centre, size)) turfs += t
+	for(var/turf/t as anything in RANGE_TURFS(centre, size))
+		turfs += t
 
-	for(var/turf/t in turfs)
+	for(var/turf/t as anything in turfs)
 		for(var/turf/t2 in gen.getAdjacent(t))
 			if(t2 in turfs)
 				continue
@@ -1218,15 +1225,14 @@ return true from is_wall()
 	..()
 	var/radsqr = size*size
 
-	for(var/turf/t in range(centre, size))
+	for(var/turf/t as anything in RANGE_TURFS(centre, size))
 		var/ti = t.x-getX()
 		var/tj = t.y-getY()
 
-		if(ti*ti + tj*tj>radsqr) continue
+		if(ti*ti + tj*tj>radsqr)
+			continue
 
 		turfs += t
-
-
 
 	for(var/turf/t in turfs)
 		for(var/turf/t2 in gen.getAdjacent(t))
@@ -1252,11 +1258,11 @@ the arms of the plus sign - there are only four.
 
 /obj/procedural/jp_dungeonroom/preexist/cross/New()
 	..()
-	for(var/turf/t in range(centre, size))
+	for(var/turf/t as anything in RANGE_TURFS(centre, size))
 		if(t.x == getX() || t.y == getY())
 			turfs += t
 
-	for(var/turf/t in range(centre, size+1))
+	for(var/turf/t as anything in RANGE_TURFS(centre, size + 1))
 		if(t in turfs) continue
 		if(t.is_wall() && (t.x == getX() || t.y == getY()))
 			border+=t

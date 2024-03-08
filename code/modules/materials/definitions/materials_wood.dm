@@ -5,7 +5,7 @@
 	stack_type = /obj/item/stack/material/wood
 	icon_colour = WOOD_COLOR_GENERIC
 	integrity = 75
-	sheet_icon_base = "sheet-wood"
+	sheet_icon_base = "wood"
 	wall_icon_base = "wood"
 	table_icon_base = "wood"
 	explosion_resistance = 2

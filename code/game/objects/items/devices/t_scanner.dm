@@ -1,7 +1,7 @@
 #define OVERLAY_CACHE_LEN 50
 
 /obj/item/device/t_scanner
-	name = "\improper T-ray scanner"
+	name = "T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner, capable of penetrating conventional hull materials."
 	icon = 'icons/obj/tools/t_ray_scanner.dmi'
 	icon_state = "t-ray0"

@@ -5,6 +5,7 @@
 
 @use '../base.scss';
 @use '../colors.scss';
+@use './Divider.scss';
 @use '../functions.scss' as *;
 
 $color-default: colors.bg(base.$color-bg-section) !default;
@@ -32,8 +33,29 @@ $bg-map: colors.$bg-map !default;
   }
 }
 
-.ImageButton {
+.ImageButton__image {
+  line-height: 0;
+  align-self: center;
+}
+
+.ImageButton__vertical {
   display: inline-block;
+}
+
+.ImageButton__horizontal {
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  margin-top: 0.5em;
+  align-items: center;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0.5em;
+  }
 }
 
 @each $color-name, $color-value in $bg-map {
@@ -56,13 +78,36 @@ $bg-map: colors.$bg-map !default;
   border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
 }
 
-.ImageButton__content {
+.ImageButton__content__vertical {
   height: 1.6em;
   padding-top: 2px;
   border: 0;
   text-align: center;
   font-size: 11px;
   font-weight: bold;
+}
+
+.ImageButton__content__horizontal {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  flex-grow: 1;
+}
+
+.ImageButton__content__horizontal--title {
+  font-weight: bold;
+  margin: base.em(6px);
+  margin-bottom: 0;
+}
+
+.ImageButton__content__horizontal--content {
+  margin: base.em(6px);
+}
+
+.ImageButton__content__horizontal--divider {
+  margin: base.em(6px);
+  margin-bottom: 0;
+  border-top: Divider.$thickness solid Divider.$color;
 }
 
 .ImageButton__content--ellipsis {

@@ -18,7 +18,7 @@
 
 /singleton/communication_channel/ooc/looc/do_communicate(client/C, message)
 	var/mob/M = C.mob ? C.mob.get_looc_mob() : null
-	var/list/listening_hosts = hosts_in_view_range(M)
+	var/list/listening_hosts = hearers_in_range(M)
 	var/list/listening_clients = list()
 
 	var/key = C.key

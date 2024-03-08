@@ -1,115 +1,152 @@
-/datum/fabricator_recipe/bucket
+/singleton/fabricator_recipe/bucket
+	id = "bucket"
 	path = /obj/item/reagent_containers/glass/bucket
 
-/datum/fabricator_recipe/flashlight
+/singleton/fabricator_recipe/flashlight
+	id = "flashlight"
 	path = /obj/item/device/flashlight
 
-/datum/fabricator_recipe/floor_light
+/singleton/fabricator_recipe/floor_light
+	id = "floor_light"
 	path = /obj/machinery/floor_light
 
-/datum/fabricator_recipe/extinguisher
+/singleton/fabricator_recipe/extinguisher
+	id = "extinguisher"
 	path = /obj/item/extinguisher/empty
 
-/datum/fabricator_recipe/extinguisher/mini
+/singleton/fabricator_recipe/extinguisher/mini
+	id = "mini"
 	path = /obj/item/extinguisher/mini/empty
 
-/datum/fabricator_recipe/jar
+/singleton/fabricator_recipe/jar
+	id = "jar"
 	path = /obj/item/glass_jar
 
-/datum/fabricator_recipe/radio_headset
+/singleton/fabricator_recipe/radio_headset
+	id = "radio_headset"
 	path = /obj/item/device/radio/headset
 
-/datum/fabricator_recipe/radio_bounced
+/singleton/fabricator_recipe/radio_bounced
+	id = "radio_bounced"
 	path = /obj/item/device/radio/off
 
-/datum/fabricator_recipe/suit_cooler
+/singleton/fabricator_recipe/suit_cooler
+	id = "suit_cooler"
 	path = /obj/item/device/suit_cooling_unit
 
-/datum/fabricator_recipe/weldermask
+/singleton/fabricator_recipe/weldermask
+	id = "weldermask"
 	path = /obj/item/clothing/head/welding
 
-/datum/fabricator_recipe/knife
+/singleton/fabricator_recipe/knife
+	id = "knife"
 	path = /obj/item/material/knife/kitchen
 
-/datum/fabricator_recipe/taperecorder
+/singleton/fabricator_recipe/taperecorder
+	id = "taperecorder"
 	path = /obj/item/device/taperecorder/empty
 
-/datum/fabricator_recipe/tape
+/singleton/fabricator_recipe/tape
+	id = "tape"
 	path = /obj/item/device/tape
 
-/datum/fabricator_recipe/tube/large/warm
-	path = /obj/item/light/tube/large/warm
-
-/datum/fabricator_recipe/tube/large/cool
-	path = /obj/item/light/tube/large/cool
-
-/datum/fabricator_recipe/tube/large/white
-	path = /obj/item/light/tube/large/white
-
-/datum/fabricator_recipe/tube/warm
+/singleton/fabricator_recipe/tube_warm
+	id = "tube_warm"
 	path = /obj/item/light/tube/warm
 
-/datum/fabricator_recipe/tube/cool
+/singleton/fabricator_recipe/tube_cool
+	id = "tube_cool"
 	path = /obj/item/light/tube/cool
 
-/datum/fabricator_recipe/tube/white
+/singleton/fabricator_recipe/tube_white
+	id = "tube_white"
 	path = /obj/item/light/tube/white
 
-/datum/fabricator_recipe/bulb/warm
+/singleton/fabricator_recipe/bulb_warm
+	id = "bulb_warm"
 	path = /obj/item/light/bulb/warm
 
-/datum/fabricator_recipe/bulb/cool
+/singleton/fabricator_recipe/bulb_cool
+	id = "bulb_cool"
 	path = /obj/item/light/bulb/cool
 
-/datum/fabricator_recipe/bulb/white
+/singleton/fabricator_recipe/bulb_white
+	id = "bulb_white"
 	path = /obj/item/light/bulb/white
 
-/datum/fabricator_recipe/ashtray_glass
+/singleton/fabricator_recipe/tube_large_warm
+	id = "large_tube_warm"
+	path = /obj/item/light/tube/large/warm
+
+/singleton/fabricator_recipe/tube_large_cool
+	id = "large_tube_cool"
+	path = /obj/item/light/tube/large/cool
+
+/singleton/fabricator_recipe/tube_large_white
+	id = "large_tube_white"
+	path = /obj/item/light/tube/large/white
+
+/singleton/fabricator_recipe/ashtray_glass
+	id = "ashtray_glass"
 	path = /obj/item/material/ashtray/glass
 
-/datum/fabricator_recipe/weldinggoggles
+/singleton/fabricator_recipe/weldinggoggles
+	id = "welding_goggles"
 	path = /obj/item/clothing/glasses/welding
 
-/datum/fabricator_recipe/blackpen
+/singleton/fabricator_recipe/blackpen
+	id = "blackpen"
 	path = /obj/item/pen
 
-/datum/fabricator_recipe/bluepen
+/singleton/fabricator_recipe/bluepen
+	id = "bluepen"
 	path = /obj/item/pen/blue
 
-/datum/fabricator_recipe/redpen
+/singleton/fabricator_recipe/redpen
+	id = "redpen"
 	path = /obj/item/pen/red
 
-/datum/fabricator_recipe/greenpen
+/singleton/fabricator_recipe/greenpen
+	id = "greenpen"
 	path = /obj/item/pen/green
 
-/datum/fabricator_recipe/clipboard_steel
+/singleton/fabricator_recipe/clipboard_steel
+	id = "clipboard_steel"
 	name = "clipboard, steel"
 	path = /obj/item/material/clipboard/steel
 
-/datum/fabricator_recipe/clipboard_alum
+/singleton/fabricator_recipe/clipboard_alum
+	id = "clipboard_alum"
 	name = "clipboard, aluminium"
 	path = /obj/item/material/clipboard/aluminium
 
-/datum/fabricator_recipe/clipboard_glass
+/singleton/fabricator_recipe/clipboard_glass
+	id = "clipboard_glass"
 	name = "clipboard, glass"
 	path = /obj/item/material/clipboard/glass
 
-/datum/fabricator_recipe/clipboard_alum
+/singleton/fabricator_recipe/clipboard_alum
+	id = "clipboard_alum"
 	name = "clipboard, plastic"
 	path = /obj/item/material/clipboard/plastic
 
-/datum/fabricator_recipe/destTagger
+/singleton/fabricator_recipe/destTagger
+	id = "dest_tagger"
 	path = /obj/item/device/destTagger
 
-/datum/fabricator_recipe/labeler
+/singleton/fabricator_recipe/labeler
+	id = "labeler"
 	path = /obj/item/hand_labeler
 
-/datum/fabricator_recipe/handcuffs
-	path = /obj/item/handcuffs
-	hidden = TRUE
-
-/datum/fabricator_recipe/plunger
+/singleton/fabricator_recipe/plunger
+	id = "plunger"
 	path = /obj/item/clothing/mask/plunger
 
-/datum/fabricator_recipe/toolbox
+/singleton/fabricator_recipe/toolbox
+	id = "toolbox"
 	path = /obj/item/storage/toolbox
+
+/singleton/fabricator_recipe/handcuffs
+	id = "handcuffs"
+	path = /obj/item/handcuffs
+	hidden = TRUE

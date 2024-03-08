@@ -1,49 +1,68 @@
-/datum/fabricator_recipe/tool
-	path = /obj/item/crowbar
+/singleton/fabricator_recipe/tool
+	abstract_type = /singleton/fabricator_recipe/tool
 	category = "Tools"
 
-/datum/fabricator_recipe/tool/prybar
+/singleton/fabricator_recipe/tool/crowbar
+	id =  "crowbar"
+	path = /obj/item/crowbar
+
+/singleton/fabricator_recipe/tool/prybar
+	id =  "prybar"
 	path = /obj/item/crowbar/prybar
 
-/datum/fabricator_recipe/tool/rescuetool
+/singleton/fabricator_recipe/tool/rescuetool
+	id =  "rescuetool"
 	path = /obj/item/crowbar/emergency_forcing_tool
 
-/datum/fabricator_recipe/tool/int_wirer
+/singleton/fabricator_recipe/tool/int_wirer
+	id =  "int_wirer"
 	path = /obj/item/device/integrated_electronics/wirer
 
-/datum/fabricator_recipe/tool/int_debugger
+/singleton/fabricator_recipe/tool/int_debugger
+	id =  "int_debugger"
 	path = /obj/item/device/integrated_electronics/debugger
 
-/datum/fabricator_recipe/tool/int_analyzer
+/singleton/fabricator_recipe/tool/int_analyzer
+	id =  "int_analyzer"
 	path = /obj/item/device/integrated_electronics/analyzer
 
-/datum/fabricator_recipe/tool/multitool
+/singleton/fabricator_recipe/tool/multitool
+	id =  "multitool"
 	path = /obj/item/device/multitool
 
-/datum/fabricator_recipe/tool/t_scanner
+/singleton/fabricator_recipe/tool/t_scanner
+	id =  "t_scanner"
 	path = /obj/item/device/t_scanner
 
-/datum/fabricator_recipe/tool/weldertool
+/singleton/fabricator_recipe/tool/weldertool
+	id =  "weldertool"
 	path = /obj/item/weldingtool
 
-/datum/fabricator_recipe/tool/screwdriver
+/singleton/fabricator_recipe/tool/screwdriver
+	id =  "screwdriver"
 	path = /obj/item/screwdriver
 
-/datum/fabricator_recipe/tool/wirecutters
+/singleton/fabricator_recipe/tool/wirecutters
+	id =  "wirecutters"
 	path = /obj/item/wirecutters
 
-/datum/fabricator_recipe/tool/wrench
+/singleton/fabricator_recipe/tool/wrench
+	id =  "wrench"
 	path = /obj/item/wrench
 
-/datum/fabricator_recipe/tool/hatchet
+/singleton/fabricator_recipe/tool/hatchet
+	id =  "hatchet"
 	path = /obj/item/material/hatchet
 
-/datum/fabricator_recipe/tool/minihoe
+/singleton/fabricator_recipe/tool/minihoe
+	id =  "minihoe"
 	path = /obj/item/material/minihoe
 
-/datum/fabricator_recipe/tool/welder_industrial
+/singleton/fabricator_recipe/tool/welder_industrial
+	id =  "welder_industrial"
 	path = /obj/item/weldingtool/largetank
 	hidden = TRUE
 
-/datum/fabricator_recipe/tool/designator
+/singleton/fabricator_recipe/tool/designator
+	id =  "designator"
 	path = /obj/item/device/drone_designator

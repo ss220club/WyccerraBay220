@@ -1,2 +1,2 @@
-/turf/simulated/wall/elevator/New(newloc)
-	..(newloc,MATERIAL_ELEVATORIUM)
+/turf/simulated/wall/elevator/Initialize(mapload, added_to_area_cache)
+	. = ..(mapload, added_to_area_cache, MATERIAL_ELEVATORIUM)

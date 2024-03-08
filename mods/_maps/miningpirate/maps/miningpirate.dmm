@@ -1113,7 +1113,7 @@
 "TS" = (/obj/structure/table/rack/dark,/obj/random/ammo,/obj/random/firstaid,/turf/simulated/floor/wood,/area/miningpirate/miningpirate_dormitory)
 "TT" = (/obj/structure/broken_cryo,/turf/simulated/floor/steel_dirty,/area/space)
 "TW" = (/obj/structure/barricade/spike,/turf/simulated/floor/tiled/dark,/area/miningpirate/miningpirate_hallway)
-"TZ" = (/obj/structure/shuttle/engine/propulsion{icon_state = "burst_s"},/obj/structure/window/reinforced{dir = 1; health = null},/turf/simulated/floor,/area/space)
+"TZ" = (/obj/structure/shuttle/engine/propulsion{icon_state = "burst_s"},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor,/area/space)
 "Ua" = (/obj/decal/cleanable/blood/drip,/obj/floor_decal/corner/paleblue/border,/turf/simulated/floor/tiled/white,/area/miningpirate/miningpirate_med)
 "Uf" = (/obj/structure/table/rack/dark,/obj/random/ammo,/obj/machinery/light{dir = 8; on = 1},/obj/random/smokes,/turf/simulated/floor/wood,/area/miningpirate/miningpirate_dormitory)
 "Ug" = (/obj/machinery/light{dir = 4; icon_state = "tube1"},/turf/simulated/floor/tiled/dark,/area/miningpirate/miningpirate_hallway)

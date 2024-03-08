@@ -278,11 +278,6 @@
 /obj/structure/disposalpipe/hides_under_flooring()
 	return 1
 
-// *** TEST verb
-//client/verb/dispstop()
-//	for(var/obj/structure/disposalholder/H in world)
-//		H.active = 0
-
 // a straight or bent segment
 /obj/structure/disposalpipe/segment
 	icon_state = "pipe-s" // Sadly this var stores state. "pipe-c" is corner. Should be changed, but requires huge map diff.

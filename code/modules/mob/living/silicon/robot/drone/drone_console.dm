@@ -22,8 +22,8 @@
 	var/dat
 	dat += "<B>Maintenance Units</B><BR>"
 
-	for(var/mob/living/silicon/robot/drone/D in world)
-		if(D.z != src.z)
+	for(var/mob/living/silicon/robot/drone/D as anything in SSmobs.get_mobs_of_type(/mob/living/silicon/robot/drone))
+		if(D.z != z)
 			continue
 		dat += "<BR>[D.real_name] ([D.stat == 2 ? SPAN_COLOR("red", "INACTIVE") : SPAN_COLOR("green", "ACTIVE")])"
 		dat += "<span style='font-size: 9'><BR>Cell charge: [D.cell.charge]/[D.cell.maxcharge]."
@@ -64,15 +64,15 @@
 	else if (href_list["ping"])
 
 		to_chat(usr, SPAN_NOTICE("You issue a maintenance request for all active drones, highlighting [drone_call_area]."))
-		for(var/mob/living/silicon/robot/drone/D in world)
-			if(D.client && D.stat == 0)
+		for(var/mob/living/silicon/robot/drone/D as anything in SSmobs.get_mobs_of_type(/mob/living/silicon/robot/drone))
+			if(D.client && D.stat == CONSCIOUS)
 				to_chat(D, "-- Maintenance drone presence requested in: [drone_call_area].")
 
 	else if (href_list["resync"])
 
 		var/mob/living/silicon/robot/drone/D = locate(href_list["resync"])
 
-		if(D.stat != 2)
+		if(D.stat != DEAD)
 			to_chat(usr, SPAN_DANGER("You issue a law synchronization directive for the drone."))
 			D.law_resync()
 
@@ -80,7 +80,7 @@
 
 		var/mob/living/silicon/robot/drone/D = locate(href_list["shutdown"])
 
-		if(D.stat != 2)
+		if(D.stat != DEAD)
 			to_chat(usr, SPAN_DANGER("You issue a kill command for the unfortunate drone."))
 			message_admins("[key_name_admin(usr)] issued kill order for drone [key_name_admin(D)] from control console.")
 			log_game("[key_name(usr)] issued kill order for [key_name(src)] from control console.")

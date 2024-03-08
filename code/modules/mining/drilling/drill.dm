@@ -236,7 +236,7 @@
 	resource_field = list()
 	need_update_field = 0
 
-	for (var/turf/simulated/T in range(2, src))
+	for (var/turf/simulated/T in RANGE_TURFS(src, 2))
 		if (T.has_resources)
 			resource_field += T
 

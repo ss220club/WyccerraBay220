@@ -1,19 +1,24 @@
 /turf/simulated
 	name = "station"
+	simulated = TRUE
+	initial_gas = list(GAS_OXYGEN = MOLES_O2STANDARD, GAS_NITROGEN = MOLES_N2STANDARD)
+
 	var/wet = 0
-	var/image/wet_overlay = null
 
 	//Mining resources (for the large drills).
 	var/has_resources
-	var/list/resources
-
 	var/thermite = 0
-	initial_gas = list(GAS_OXYGEN = MOLES_O2STANDARD, GAS_NITROGEN = MOLES_N2STANDARD)
 	var/to_be_destroyed = 0 //Used for fire, if a melting temperature was reached, it will be destroyed
 	var/max_fire_temperature_sustained = 0 //The max temperature of the fire which it was subjected to
 	var/dirt = 0
-
 	var/timer_id
+	var/image/wet_overlay = null
+	var/list/resources
+
+/turf/simulated/pre_change()
+	. = ..()
+	if(zone)
+		zone.rebuild()
 
 // This is not great.
 /turf/simulated/proc/wet_floor(wet_val = 1, overwrite = FALSE)
@@ -43,10 +48,14 @@
 		B.clean_blood()
 	..()
 
-/turf/simulated/New()
-	..()
+/turf/simulated/Initialize(mapload, added_to_area_cache)
+	. = ..()
+	if(GAME_STATE >= RUNLEVEL_GAME)
+		fluid_update()
+
 	if(istype(loc, /area/chapel))
-		holy = 1
+		holy = TRUE
+
 	levelupdate()
 
 /turf/simulated/proc/AddTracks(typepath,bloodDNA,comingdir,goingdir,bloodcolor=COLOR_BLOOD_HUMAN)
@@ -205,10 +214,7 @@
 	damage_health(damage, attack.get_damage_type(), attack.damage_flags())
 	return TRUE
 
-/turf/simulated/Initialize()
-	if(GAME_STATE >= RUNLEVEL_GAME)
-		fluid_update()
-	. = ..()
+
 
 /turf/simulated/damage_health(damage, damage_type, damage_flags, severity, skip_can_damage_check = FALSE)
 	if (HAS_FLAGS(damage_flags, DAMAGE_FLAG_TURF_BREAKER))

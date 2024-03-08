@@ -183,9 +183,10 @@
 		C.name = "plated catwalk"
 		C.update_icon()
 	activated = 1
-	for(var/turf/T in orange(src, 1))
-		for(var/obj/wallframe_spawn/other in T)
-			if(!other.activated) other.activate()
+
+	for(var/obj/wallframe_spawn/other in orange(src, 1))
+		if(!other.activated)
+			other.activate()
 
 /obj/catwalk_plated/dark
 	icon_state = "catwalk_plateddark"

@@ -8,19 +8,52 @@
 		return
 	if(!islist(predicates))
 		predicates = list(predicates)
-	for(var/area/A)
+	for(var/area/A as anything in GLOB.areas)
 		if(all_predicates_true(list(A), predicates))
 			. += A
 
 /proc/get_area_turfs(area/A, list/predicates)
 	RETURN_TYPE(/list)
-	. = list()
 	A = istype(A) ? A : locate(A)
 	if(!A)
-		return
-	for(var/turf/T in A.contents)
-		if(!predicates || all_predicates_true(list(T), predicates))
-			. += T
+		return list()
+
+	if(!A.has_turfs())
+		return list()
+
+	var/list/all_area_turfs = A.get_turfs_from_all_z()
+	if(!length(predicates))
+		return all_area_turfs
+
+	var/list/area_turfs = list()
+	for(var/turf/T as anything in all_area_turfs)
+		if(all_predicates_true(list(T), predicates))
+			area_turfs += T
+
+	return area_turfs
+
+/proc/get_turfs_in_areas(list/areas, list/predicates)
+	if(!islist(areas))
+		areas = list(areas)
+
+	var/list/turfs = list()
+	for(var/area/current_area as anything in areas)
+		var/list/current_area_turfs = get_area_turfs(current_area, predicates)
+		if(!current_area_turfs)
+			continue
+
+		turfs |= current_area_turfs
+
+	return turfs
+
+/// Returns set of area refs as: area_ref => TRUE
+/// For fast area checking
+/proc/get_area_refs_set(list/areas)
+	var/list/area_refs_set = list()
+	for(var/area/single_area as anything in areas)
+		area_refs_set[ref(single_area)] = TRUE
+
+	return area_refs_set
 
 /proc/get_subarea_turfs(area/A, list/predicates)
 	RETURN_TYPE(/list)
@@ -28,10 +61,18 @@
 	A = istype(A) ? A.type : A
 	if(!ispath(A))
 		return
+
 	for(var/sub_area_type in typesof(A))
 		var/area/sub_area = locate(sub_area_type)
-		for(var/turf/T in sub_area.contents)
-			if(!predicates || all_predicates_true(list(T), predicates))
+		if(!sub_area.has_turfs())
+			continue
+
+		var/list/all_area_turfs = sub_area.get_turfs_from_all_z()
+		if(!length(predicates))
+			. += all_area_turfs
+
+		for(var/turf/T as anything in all_area_turfs)
+			if(all_predicates_true(list(T), predicates))
 				. += T
 
 /proc/group_areas_by_name(list/predicates)
@@ -58,7 +99,7 @@
 /proc/pick_area_turf(areatype, list/predicates)
 	RETURN_TYPE(/turf)
 	var/list/turfs = get_area_turfs(areatype, predicates)
-	if(turfs && length(turfs))
+	if(length(turfs))
 		return pick(turfs)
 
 /proc/pick_area(list/predicates)

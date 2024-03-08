@@ -101,12 +101,16 @@
 		number = 1
 		var/area/A = get_area(src)
 		if(A)
-			for(var/obj/machinery/camera/C in A)
-				if(C == src) continue
+			for(var/obj/machinery/camera/C in A.machinery_list)
+				if(C == src)
+					continue
+
 				if(C.number)
-					number = max(number, C.number+1)
+					number = max(number, C.number + 1)
+
 			c_tag = "[A.name][number == 1 ? "" : " #[number]"]"
 		invalidateCameraCache()
+
 	GLOB.moved_event.register(src, src, PROC_REF(camera_moved))
 
 

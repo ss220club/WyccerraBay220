@@ -248,29 +248,28 @@
 			launch()
 		..()
 
-/obj/machinery/cryopod/New()
-	announce = new /obj/item/device/radio/intercom(src)
-	..()
-
 /obj/machinery/cryopod/Destroy()
 	if(occupant)
 		occupant.forceMove(loc)
 	. = ..()
 
-/obj/machinery/cryopod/Initialize()
+/obj/machinery/cryopod/Initialize(mapload, ...)
+	. = ..()
+	announce = new /obj/item/device/radio/intercom(src)
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/machinery/cryopod/LateInitialize(mapload, ...)
 	. = ..()
 	find_control_computer()
 
-/obj/machinery/cryopod/proc/find_control_computer(urgent=0)
-	// Workaround for http://www.byond.com/forum/?post=2007448
-	for(var/obj/machinery/computer/cryopod/C in src.loc.loc)
-		control_computer = C
-		break
-	// control_computer = locate(/obj/machinery/computer/cryopod) in src.loc.loc
+/obj/machinery/cryopod/proc/find_control_computer(urgent = FALSE)
+	var/area/my_area = get_area(src)
+	if(my_area)
+		control_computer = locate(/obj/machinery/computer/cryopod) in my_area.machinery_list
 
 	// Don't send messages unless we *need* the computer, and less than five minutes have passed since last time we messaged
-	if(!control_computer && urgent && last_no_computer_message + 5*60*10 < world.time)
-		log_and_message_admins("Cryopod in [src.loc.loc] could not find control computer!")
+	if(!control_computer && urgent && last_no_computer_message + 5 MINUTES < world.time)
+		log_and_message_admins("Cryopod in [my_area] could not find control computer!")
 		last_no_computer_message = world.time
 
 	return control_computer != null

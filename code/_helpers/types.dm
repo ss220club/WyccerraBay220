@@ -29,6 +29,13 @@
 		return list()
 	return result.Copy()
 
+/proc/types_of_real_list(list/datum/things)
+	RETURN_TYPE(/list)
+	var/list/types = list()
+	for(var/datum/thing as anything in things)
+		types |= typesof_real(thing)
+
+	return types
 
 /// `subtypesof()` without abstract types included.
 /proc/subtypesof_real(datum/thing)

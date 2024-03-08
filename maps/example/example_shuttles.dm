@@ -13,7 +13,7 @@
 	name = "Example"
 	shuttle_area = /area/shuttle/escape
 	dock_target = "example_shuttle_starboard"
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 
 	location = 0
 	waypoint_station = "nav_example_station"

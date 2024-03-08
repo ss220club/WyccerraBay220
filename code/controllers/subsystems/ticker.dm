@@ -494,9 +494,14 @@ Helpers
 
 /datum/controller/subsystem/ticker/proc/declare_completion()
 	to_world("<br><br><br><H1>A round of [mode.name] has ended!</H1>")
-	for(var/client/C)
-		if(!C.credits)
-			C.RollCredits()
+	for(var/client/C as anything in GLOB.clients)
+		if(!C)
+			continue
+
+		if(C.credits)
+			continue
+
+		C.RollCredits()
 
 	GLOB.using_map.roundend_player_status()
 

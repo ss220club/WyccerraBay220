@@ -66,9 +66,11 @@
 /mob/living/simple_animal/passive/mushroom/proc/spore_explode()
 	if(!seed)
 		return
+
 	if(world.time < harvest_time + min_explode_time)
 		return
-	for(var/turf/simulated/target_turf in orange(1,src))
+
+	for(var/turf/simulated/target_turf in ORANGE_TURFS(src, 1))
 		if(prob(60) && !target_turf.density && src.Adjacent(target_turf))
 			new /obj/machinery/portable_atmospherics/hydroponics/soil/invisible(target_turf,seed)
 	death(0)

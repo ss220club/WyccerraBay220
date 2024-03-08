@@ -165,7 +165,7 @@
 		living.ear_deaf = max(living.ear_deaf, 15)
 	if (!change_turf)
 		return
-	for (var/turf/simulated/floor/floor in range(range, src))
+	for(var/turf/simulated/floor/floor in RANGE_TURFS(src, range))
 		if (prob(25))
 			continue
 		floor.ChangeTurf(/turf/simulated/floor/bluespace)

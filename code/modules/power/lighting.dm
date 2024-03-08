@@ -352,7 +352,7 @@
 /obj/machinery/light/proc/set_mode(new_mode)
 	if(current_mode != new_mode)
 		current_mode = new_mode
-		update_icon(FALSE)
+		update_icon()
 
 /// Return's the current mode's `l_color` value or, if there is no `current_mode`, the lightbulb's color.
 /obj/machinery/light/proc/get_mode_color()

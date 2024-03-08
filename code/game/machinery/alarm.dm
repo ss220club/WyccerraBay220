@@ -1179,23 +1179,25 @@ FIRE ALARM
 /obj/machinery/firealarm/proc/reset()
 	if (!( src.working ))
 		return
+
 	var/area/area = get_area(src)
-	for(var/obj/machinery/firealarm/FA in area)
+	for(var/obj/machinery/firealarm/FA in area.machinery_list)
 		GLOB.fire_alarm.clearAlarm(loc, FA)
+
 	update_icon()
 	return
 
 /obj/machinery/firealarm/proc/alarm(duration = 0)
-	if (!( src.working))
+	if (!(src.working))
 		return
+
 	var/area/area = get_area(src)
-	for(var/obj/machinery/firealarm/FA in area)
+	for(var/obj/machinery/firealarm/FA in area.machinery_list)
 		GLOB.fire_alarm.triggerAlarm(loc, FA, duration)
+
 	update_icon()
 	playsound(src, 'sound/machines/fire_alarm.ogg', 75, 0)
 	return
-
-
 
 /obj/machinery/firealarm/New(loc, dir, atom/frame)
 	..(loc)

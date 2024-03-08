@@ -71,10 +71,12 @@
 /obj/shuttle_landmark/proc/is_valid(datum/shuttle/shuttle)
 	if(shuttle.current_location == src)
 		return FALSE
-	for(var/area/A in shuttle.shuttle_area)
-		var/list/translation = get_turf_translation(get_turf(shuttle.current_location), get_turf(src), A.contents)
+
+	for(var/area/area_on_shuttle as anything in shuttle.shuttle_area)
+		var/list/translation = get_turf_translation(get_turf(shuttle.current_location), get_turf(src), get_area_turfs(area_on_shuttle))
 		if(check_collision(base_area, list_values(translation)))
 			return FALSE
+
 	var/conn = GetConnectedZlevels(z)
 	for(var/w in (z - shuttle.multiz) to z)
 		if(!(w in conn))
@@ -131,7 +133,7 @@
 
 /obj/shuttle_landmark/automatic/clearing/LateInitialize(mapload)
 	..()
-	for(var/turf/T in range(radius, src))
+	for(var/turf/T as anything in RANGE_TURFS(src, radius))
 		if(T.density)
 			T.ChangeTurf(get_base_turf_by_area(T))
 

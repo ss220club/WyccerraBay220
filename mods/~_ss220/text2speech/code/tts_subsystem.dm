@@ -7,7 +7,7 @@
 SUBSYSTEM_DEF(tts220)
 	name = "Text-to-Speech 220"
 	init_order = SS_INIT_DEFAULT
-	wait = 1 SECONDS
+	wait = 0.5 SECONDS
 	runlevels = RUNLEVEL_LOBBY | RUNLEVELS_DEFAULT
 
 	/// All time tts uses
@@ -128,7 +128,8 @@ SUBSYSTEM_DEF(tts220)
 	is_enabled = FALSE
 
 /datum/controller/subsystem/tts220/fire()
-	fire_networking()
+	if(world.time - 1 SECOND < last_fire)
+		fire_networking()
 	fire_sound_processing()
 
 /datum/controller/subsystem/tts220/proc/fire_networking()

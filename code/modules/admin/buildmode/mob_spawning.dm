@@ -256,12 +256,12 @@ GLOBAL_LIST_INIT(mob_spawners, list())
 		spawner.center = current_turf
 		to_chat(user, "Spawner created in [current_area].")
 
-	if (pa["ctrl"])
-		if (pa["left"])
+	if (pa[CTRL_CLICK])
+		if (pa[LEFT_CLICK])
 			copied_spawner = spawner.copy()
 			to_chat(user, "Spawner from area [current_area] copied.")
 
-		else if (pa["right"])
+		else if (pa[RIGHT_CLICK])
 			if (length(copied_spawner) == 0)
 				to_chat(user, SPAN_WARNING("No spawner copied, cannot paste settings!"))
 				return
@@ -269,10 +269,10 @@ GLOBAL_LIST_INIT(mob_spawners, list())
 			spawner.paste(copied_spawner)
 			to_chat(user, "Spawner pasted in area [current_area].")
 
-	else if (pa["left"])
+	else if (pa[LEFT_CLICK])
 		ui_interact(user)
 
-	else if (pa["right"])
+	else if (pa[RIGHT_CLICK])
 		if (spawner)
 			QDEL_NULL(spawner)
 			to_chat(user, "Deleted spawner in [current_area].")

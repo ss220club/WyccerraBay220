@@ -126,11 +126,11 @@
 		. = TOPIC_HANDLED
 
 /datum/build_mode/turret/OnClick(atom/object, list/pa)
-	if (pa["right"])
+	if (pa[RIGHT_CLICK])
 		if (istype(object, /obj/machinery/porta_turret))
 			qdel(object)
 
-	if (pa["left"])
+	if (pa[LEFT_CLICK])
 		if (!object)
 			return
 

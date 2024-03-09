@@ -50,9 +50,9 @@
 		return
 	var/old_value = A.vars[var_to_edit]
 	var/new_value
-	if (parameters["left"])
+	if (parameters[LEFT_CLICK])
 		new_value = value_to_set
-	if (parameters["right"])
+	if (parameters[RIGHT_CLICK])
 		new_value = initial(A.vars[var_to_edit])
 	if (old_value == new_value)
 		return

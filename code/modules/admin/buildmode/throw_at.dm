@@ -14,10 +14,10 @@
 	to_chat(user, SPAN_NOTICE("***********************************************************"))
 
 /datum/build_mode/throw_at/OnClick(atom/A, list/parameters)
-	if(parameters["left"])
+	if(parameters[LEFT_CLICK])
 		if(istype(A, /atom/movable))
 			SetThrowable(A)
-	else if(parameters["right"])
+	else if(parameters[RIGHT_CLICK])
 		if(to_throw)
 			if(!isturf(to_throw.loc))
 				to_chat(user, SPAN_WARNING("\The [to_throw] is currently not on a turf and cannot be thrown."))

@@ -12,28 +12,28 @@
 	next_click = world.time + 1
 
 	var/list/modifiers = params2list(params)
-	if (modifiers["ctrl"] && modifiers["alt"] && modifiers["shift"])
+	if (modifiers[CTRL_CLICK] && modifiers[ALT_CLICK] && modifiers[SHIFT_CLICK])
 		if (A.BorgCtrlAltShiftClick(src) || A.AICtrlAltShiftClick(src) || CtrlAltShiftClickOn(A))
 			return TRUE
-	else if (modifiers["ctrl"] && modifiers["alt"])
+	else if (modifiers[CTRL_CLICK] && modifiers[ALT_CLICK])
 		if (A.BorgCtrlAltClick(src) || A.AICtrlAltClick(src) || CtrlAltClickOn(A))
 			return TRUE
-	else if (modifiers["shift"] && modifiers["ctrl"])
+	else if (modifiers[SHIFT_CLICK] && modifiers[CTRL_CLICK])
 		if (A.BorgCtrlShiftClick(src) || A.AICtrlShiftClick(src) || CtrlShiftClickOn(A))
 			return TRUE
-	else if (modifiers["shift"] && modifiers["alt"])
+	else if (modifiers[SHIFT_CLICK] && modifiers[ALT_CLICK])
 		if (A.BorgAltShiftClick(src) || A.AIAltShiftClick(src) || AltShiftClickOn(A))
 			return TRUE
 	else if (modifiers["middle"])
 		if (A.BorgMiddleClick(src) || A.AIMiddleClick(src) || MiddleClickOn(A))
 			return TRUE
-	else if (modifiers["shift"])
+	else if (modifiers[SHIFT_CLICK])
 		if (A.BorgShiftClick(src) || A.AIShiftClick(src) || ShiftClickOn(A))
 			return TRUE
-	else if (modifiers["alt"])
+	else if (modifiers[ALT_CLICK])
 		if (A.BorgAltClick(src) || A.AIAltClick(src) || AltClickOn(A))
 			return TRUE
-	else if (modifiers["ctrl"])
+	else if (modifiers[CTRL_CLICK])
 		if (A.BorgCtrlClick(src) || A.AICtrlClick(src) || CtrlClickOn(A))
 			return TRUE
 

@@ -17,7 +17,7 @@
 	return "[A.loc.name]([A.x],[A.y],[A.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[A.x];Y=[A.y];Z=[A.z]'>JMP</a>)"
 
 /datum/build_mode/copypaste/OnClick(atom/object, list/parameters)
-	if(parameters["left"])
+	if(parameters[LEFT_CLICK])
 		var/turf/T = get_turf(object)
 		if(stored)
 			DuplicateObjectDeep(stored, perfectcopy=1, sameloc=0, newloc=T)
@@ -25,7 +25,7 @@
 			to_chat(SPAN_NOTICE("Successfully copied [stored] ([stored.type]) to [T.loc.name]!"))
 		else
 			to_chat(usr, SPAN_DANGER("No template! You have to select something using RMB."))
-	if (parameters["right"])
+	if (parameters[RIGHT_CLICK])
 		if(ismovable(object)) // No copying turfs
 			to_chat(usr, SPAN_NOTICE("[object] ([object.type]) set as template."))
 			stored = object

@@ -32,7 +32,7 @@
 // Safely merges L2 into L1 as lazy lists, initializing L1 if necessary.
 #define LAZYMERGELIST(L1, L2) if (length(L2)) { if (!L1) { L1 = list() } L1 |= L2 }
 /// Copies the L from element START to elememt END if L is initialized, otherwise returns an empty list.
-#define LAZYCOPY(L, START, END) ( L ? L.Copy(START, END) : list() )
+#define LAZYCOPY_RANGE(L, START, END) ( L ? L.Copy(START, END) : list() )
 /// Cuts the L from element START to elememt END if L is initialized, otherwise returns an empty list.
 #define LAZYCUT(L, START, END) ( L ? L.Cut(START, END) : list() )
 // Reads L or an empty list if L is not a list.  Note: Does NOT assign, L may be an expression.

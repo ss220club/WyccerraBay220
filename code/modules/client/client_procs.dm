@@ -388,6 +388,27 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	var/DBQuery/query_accesslog = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[serverip]','[sql_ckey]','[sql_ip]','[sql_computerid]');")
 	query_accesslog.Execute()
 
+	// IP Reputation Check
+	if(config.ip_reputation)
+		if(config.ipr_allow_existing && player_age >= config.ipr_minimum_age)
+			log_admin("Skipping IP reputation check on [key] with [address] because of player age")
+		else if(update_ip_reputation()) //It is set now
+			if(ip_reputation >= config.ipr_bad_score) //It's bad
+
+				//Log it
+				log_and_message_admins("[key] at [address] has bad IP reputation: [ip_reputation]. Will be kicked if enabled in config.")
+				//Take action if required
+				if(config.ipr_block_bad_ips && config.ipr_allow_existing) //We allow players of an age, but you don't meet it
+					to_chat(src,"Sorry, we only allow VPN/Proxy/Tor usage for players who have spent at least [config.ipr_minimum_age] days on the server. If you are unable to use the internet without your VPN/Proxy/Tor, please contact an admin out-of-game to let them know so we can accomidate this.")
+					qdel(src)
+					return 0
+				else if(config.ipr_block_bad_ips) //We don't allow players of any particular age
+					to_chat(src,"Sorry, we do not accept connections from users via VPN/Proxy/Tor connections.")
+					qdel(src)
+					return 0
+		else
+			log_admin("Couldn't perform IP check on [key] with [address]")
+
 
 #undef UPLOAD_LIMIT
 
@@ -514,3 +535,63 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 		pct += delta
 		winset(src, "mainwindow.mainvsplit", "splitter=[pct]")
+
+//This is for getipintel.net.
+//You're welcome to replace this proc with your own that does your own cool stuff.
+//Just set the client's ip_reputation var and make sure it makes sense with your config settings (higher numbers are worse results)
+/client/proc/update_ip_reputation()
+	var/request = "http://check.getipintel.net/check.php?ip=[address]&contact=[config.ipr_email]"
+	var/http[] = world.Export(request)
+
+	/*DEBUG
+	world.log << "Requested this: [request]"
+	for(var/entry in http)
+		world.log << "[entry] : [http[entry]]"
+	*/
+
+	if(!http || !islist(http)) //If we couldn't check, the service might be down, fail-safe.
+		log_admin("Couldn't connect to getipintel.net to check [address] for [key]")
+		return FALSE
+
+	//429 is rate limit exceeded
+	if(text2num(http["STATUS"]) == 429)
+		log_and_message_admins("getipintel.net reports HTTP status 429. IP reputation checking is now disabled. If you see this, let a developer know.")
+		config.ip_reputation = FALSE
+		return FALSE
+
+	var/content = file2text(http["CONTENT"]) //world.Export actually returns a file object in CONTENT
+	var/score = text2num(content)
+	if(isnull(score))
+		return FALSE
+
+	//Error handling
+	if(score < 0)
+		var/fatal = TRUE
+		var/ipr_error = "getipintel.net IP reputation check error while checking [address] for [key]: "
+		switch(score)
+			if(-1)
+				ipr_error += "No input provided"
+			if(-2)
+				fatal = FALSE
+				ipr_error += "Invalid IP provided"
+			if(-3)
+				fatal = FALSE
+				ipr_error += "Unroutable/private IP (spoofing?)"
+			if(-4)
+				fatal = FALSE
+				ipr_error += "Unable to reach database"
+			if(-5)
+				ipr_error += "Our IP is banned or otherwise forbidden"
+			if(-6)
+				ipr_error += "Missing contact info"
+
+		log_and_message_admins(ipr_error)
+		if(fatal)
+			config.ip_reputation = FALSE
+			log_and_message_admins("With this error, IP reputation checking is disabled for this shift. Let a developer know.")
+		return FALSE
+
+	//Went fine
+	else
+		ip_reputation = score
+		return TRUE

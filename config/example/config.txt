@@ -498,3 +498,22 @@ ASSET_CDN_URL http://localhost:58715/
 
 ## Minimum age of byond account that allowed to play without discord verification
 #MINIMUM_BYONDACC_AGE 10
+
+## IP Reputation Checking
+# Enable/disable IP reputation checking (present/nonpresent)
+IP_REPUTATION
+
+# Set the e-mail address problems can go to for IPR checks (e-mail address)
+IPR_EMAIL whatever@whatever.com
+
+# Above this value, reputation scores are considered 'bad' (number)
+IPR_BAD_SCORE 1
+
+# If you want the people disconnected. Otherwise it just logs. (present/nonpresent)
+IPR_BLOCK_BAD_IPS
+
+# If players of a certain length of playtime are allowed anyway (REQUIRES DATABASE) (present/nonpresent)
+IPR_ALLOW_EXISTING
+
+# And what that age is (number)
+IPR_MINIMUM_AGE 5

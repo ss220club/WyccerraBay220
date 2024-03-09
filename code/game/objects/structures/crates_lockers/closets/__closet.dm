@@ -308,17 +308,17 @@
 
 	return ..()
 
+/obj/structure/closet/welder_act_secondary(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	slice_into_parts(tool, user)
+	return
+
 /obj/structure/closet/welder_act(mob/living/user, obj/item/tool)
 	if(opened)
 		return
 	. = ITEM_INTERACT_SUCCESS
-
-	if(user.a_intent == I_HURT)
-		if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		slice_into_parts(tool, user)
-		return
-
 	if(!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
 		USE_FEEDBACK_FAILURE("[src] can't be welded shut.")
 		return

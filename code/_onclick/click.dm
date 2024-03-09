@@ -130,9 +130,9 @@
 	var/sdepth = A.storage_depth(src)
 	if((!isturf(A) && A == loc) || (sdepth != -1 && sdepth <= 1))
 		if(W)
-			var/resolved = W.resolve_attackby(A, src, modifiers)
+			var/resolved = W.resolve_attackby(A, src, params)
 			if(!resolved && A && W)
-				W.afterattack(A, src, 1, modifiers) // 1 indicates adjacency
+				W.afterattack(A, src, TRUE, params) // 1 indicates adjacency
 		else
 			if(ismob(A)) // No instant mob attacking
 				setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
@@ -151,9 +151,9 @@
 		if(A.Adjacent(src)) // see adjacent.dm
 			if(W)
 				// Return TRUE in resolve_attackby() to prevent afterattack() effects (when safely moving items for example)
-				var/resolved = W.resolve_attackby(A,src, modifiers)
+				var/resolved = W.resolve_attackby(A, src, params)
 				if(!resolved && A && W)
-					W.afterattack(A, src, 1, modifiers) // 1: clicking something Adjacent
+					W.afterattack(A, src, TRUE, params) // 1: clicking something Adjacent
 			else
 				if(ismob(A)) // No instant mob attacking
 					setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
@@ -163,7 +163,7 @@
 			return
 		else // non-adjacent click
 			if(W)
-				W.afterattack(A, src, 0, modifiers) // 0: not Adjacent
+				W.afterattack(A, src, FALSE, params) // 0: not Adjacent
 			else
 				RangedAttack(A, modifiers)
 

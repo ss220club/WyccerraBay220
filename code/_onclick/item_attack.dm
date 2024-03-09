@@ -51,16 +51,18 @@ avoid code duplication. This includes items that may sometimes act as a standard
 	atom.pre_use_item(src, user, click_params)
 	var/use_call
 
+	var/list/modifiers = params2list(click_params)
+	var/is_right_clicking = LAZYACCESS(modifiers, RIGHT_CLICK)
 	use_call = "use"
 	. = use_before(atom, user, click_params)
-	if(!.)
-		use_call = "tool"
-		. = atom.item_interaction(user, src, click_params)
-		if(. & ITEM_INTERACT_BLOCKING)
-			return
-	if((!. && user.a_intent == I_HURT) || (. & ITEM_INTERACT_SKIP_TO_ATTACK))
+	if(!. && user.a_intent == I_HURT)
 		use_call = "weapon"
 		. = atom.use_weapon(src, user, click_params)
+	if(!.)
+		use_call = "tool"
+		. = atom.item_interaction(user, src, click_params, is_right_clicking)
+		if(. & ITEM_INTERACT_BLOCKING)
+			return
 	if(!.)
 		use_call = "tool"
 		. = atom.use_tool(src, user, click_params)

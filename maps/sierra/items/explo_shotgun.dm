@@ -38,22 +38,26 @@
 		return TRUE
 	return ..()
 
+/obj/item/gun/projectile/shotgun/pump/exploration/wirecutter_act(mob/living/user, obj/item/tool)
+	if(!reinforced)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 25, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_WARNING("You remove [reinforced] that was reinforcing [src]."))
+	reinforced.dropInto(loc)
+	reinforced = null
+	explosion_chance = initial(explosion_chance)
+	bulk = initial(bulk)
+	update_icon()
+
 /obj/item/gun/projectile/shotgun/pump/exploration/use_tool(obj/item/tool, mob/user, list/click_params)
 	if(!reinforced && istype(tool, /obj/item/pipe) && user.unEquip(tool, src))
 		reinforced = tool
-		to_chat(user, SPAN_WARNING("You reinforce \the [src] with \the [reinforced]."))
+		to_chat(user, SPAN_WARNING("You reinforce [src] with [reinforced]."))
 		playsound(src, 'sound/effects/tape.ogg',25)
 		explosion_chance = 10
 		bulk = bulk + 4
-		update_icon()
-		return TRUE
-	if(reinforced && isWirecutter(tool))
-		to_chat(user, SPAN_WARNING("You remove \the [reinforced] that was reinforcing \the [src]."))
-		playsound(src.loc, 'sound/items/Wirecutter.ogg', 25, 1)
-		reinforced.dropInto(loc)
-		reinforced = null
-		explosion_chance = initial(explosion_chance)
-		bulk = initial(bulk)
 		update_icon()
 		return TRUE
 	return ..()

@@ -25,3 +25,10 @@
 //#define ANNOUNCER_ANIMES 'sound/wyccstation/announcements/anime.ogg'
 //#define ANNOUNCER_GRANOMALIES 'sound/wyccstation/announcements/anomaly_gravity.ogg'
 //#define ANNOUNCER_NEWAI 'sound/wyccstation/announcements/new_ai_1.ogg'
+
+///Tools
+#define DEFAULT_CROWBAR_SOUND 'sound/items/Crowbar.ogg'
+#define DEFAULT_SCREWDRIVER_SOUND 'sound/items/Screwdriver.ogg'
+#define DEFAULT_WRENCH_SOUND 'sound/items/Ratchet.ogg'
+#define DEFAULT_WIRECUTTER_SOUND 'sound/items/Wirecutter.ogg'
+#define DEFAULT_WELDER_SOUND 'sound/items/Welder.ogg'

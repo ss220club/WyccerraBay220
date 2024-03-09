@@ -195,7 +195,7 @@
 /obj/aura/mechshield/aura_check_bullet(obj/item/projectile/proj, def_zone)
 	if (active && shields?.charge)
 		proj.damage = shields.stop_damage(proj.damage)
-		user.visible_message(SPAN_WARNING("\The [shields.owner]'s shields flash and crackle."))
+		user.visible_message(SPAN_WARNING("[shields.owner]'s shields flash and crackle."))
 		flick("shield_impact", src)
 		playsound(user,'sound/effects/basscannon.ogg',35,1)
 		new /obj/effect/smoke/illumination(user.loc, 5, 4, 1, "#ffffff")
@@ -211,7 +211,7 @@
 /obj/aura/mechshield/aura_check_thrown(atom/movable/thrown_atom, datum/thrownthing/thrown_datum)
 	. = ..()
 	if (active && shields?.charge && thrown_datum.speed <= 5)
-		user.visible_message(SPAN_WARNING("\The [shields.owner]'s shields flash briefly as they deflect \the [thrown_atom]."))
+		user.visible_message(SPAN_WARNING("[shields.owner]'s shields flash briefly as they deflect [thrown_atom]."))
 		flick("shield_impact", src)
 		playsound(user, 'sound/effects/basscannon.ogg', 10, TRUE)
 		return AURA_FALSE|AURA_CANCEL
@@ -246,7 +246,7 @@
 		return ..()
 
 	if (user.a_intent == I_HURT)
-		user.visible_message(SPAN_DANGER("\The [user] swings \the [src] at \the [A]!"))
+		user.visible_message(SPAN_DANGER("[user] swings [src] at [A]!"))
 		playsound(user, 'sound/mecha/mechmove03.ogg', 35, 1)
 		return ..()
 
@@ -260,7 +260,7 @@
 		var/mob/living/exosuit/E = MC.owner
 		if (E)
 			E.setClickCooldown(1.35 SECONDS)
-			E.visible_message(SPAN_DANGER("\The [E] swings \the [src] back, preparing for an attack!"), blind_message = SPAN_DANGER("You hear the loud hissing of hydraulics!"))
+			E.visible_message(SPAN_DANGER("[E] swings [src] back, preparing for an attack!"), blind_message = SPAN_DANGER("You hear the loud hissing of hydraulics!"))
 			playsound(E, 'sound/mecha/mech_punch_fast.ogg', 35, 1)
 			if (do_after(E, 1.2 SECONDS, get_turf(user), DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && E && MC)
 				for (var/mob/living/M in orange(1, E))
@@ -300,11 +300,11 @@
 	if (.)
 		if (user.a_intent == I_HURT )
 			if (last_push + 1.6 SECONDS < world.time)
-				owner.visible_message(SPAN_WARNING("\The [owner] retracts \the [src], preparing to push with it!"), blind_message = SPAN_WARNING("You hear the whine of hydraulics and feel a rush of air!"))
+				owner.visible_message(SPAN_WARNING("[owner] retracts [src], preparing to push with it!"), blind_message = SPAN_WARNING("You hear the whine of hydraulics and feel a rush of air!"))
 				owner.setClickCooldown(0.7 SECONDS)
 				last_push = world.time
 				if (do_after(owner, 0.5 SECONDS, get_turf(owner), DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && owner)
-					owner.visible_message(SPAN_WARNING("\The [owner] slams the area in front \the [src]!"), blind_message = SPAN_WARNING("You hear a loud hiss and feel a strong gust of wind!"))
+					owner.visible_message(SPAN_WARNING("[owner] slams the area in front [src]!"), blind_message = SPAN_WARNING("You hear a loud hiss and feel a strong gust of wind!"))
 					playsound(src ,'sound/effects/bang.ogg',35,1)
 					var/list/turfs = list()
 					var/front = get_step(get_turf(owner), owner.dir)
@@ -323,7 +323,7 @@
 	. = ..()
 	if (.) //FORM A SHIELD WALL!
 		if (last_max_block + 2 SECONDS < world.time)
-			owner.visible_message(SPAN_WARNING("\The [owner] raises \the [src], locking it in place!"), blind_message = SPAN_WARNING("You hear the whir of motors and scratching metal!"))
+			owner.visible_message(SPAN_WARNING("[owner] raises [src], locking it in place!"), blind_message = SPAN_WARNING("You hear the whir of motors and scratching metal!"))
 			playsound(src ,'sound/effects/bamf.ogg',35,1)
 			owner.setClickCooldown(0.8 SECONDS)
 			blocking = TRUE
@@ -412,7 +412,7 @@
 /obj/aura/mech_ballistic/aura_check_bullet(obj/item/projectile/proj, def_zone)
 	. = ..()
 	if (shield && prob(shield.block_chance(proj.damage, proj.armor_penetration, source = proj)))
-		user.visible_message(SPAN_WARNING("\The [proj] is blocked by \the [user]'s [shield]."))
+		user.visible_message(SPAN_WARNING("[proj] is blocked by [user]'s [shield]."))
 		user.bullet_impact_visuals(proj, def_zone, 0)
 		return AURA_FALSE|AURA_CANCEL
 
@@ -425,14 +425,14 @@
 			throw_damage = object.throwforce * (thrown_datum.speed / THROWFORCE_SPEED_DIVISOR)
 
 		if (prob(shield.block_chance(throw_damage, 0, source = thrown_atom, attacker = thrown_datum.thrower)))
-			user.visible_message(SPAN_WARNING("\The [thrown_atom] bounces off \the [user]'s [shield]."))
+			user.visible_message(SPAN_WARNING("[thrown_atom] bounces off [user]'s [shield]."))
 			playsound(user.loc, 'sound/weapons/Genhit.ogg', 50, 1)
 			return AURA_FALSE|AURA_CANCEL
 
 /obj/aura/mech_ballistic/aura_check_weapon(obj/item/weapon, mob/attacker, click_params)
 	. = ..()
 	if (shield && prob(shield.block_chance(weapon.force, weapon.armor_penetration, source = weapon, attacker = user)))
-		user.visible_message(SPAN_WARNING("\The [weapon] is blocked by \the [user]'s [shield]."))
+		user.visible_message(SPAN_WARNING("[weapon] is blocked by [user]'s [shield]."))
 		playsound(user.loc, 'sound/weapons/Genhit.ogg', 50, TRUE)
 		return AURA_FALSE|AURA_CANCEL
 
@@ -479,7 +479,7 @@
 	. = ..()
 	if(.)
 		if(world.time < next_use)
-			to_chat(user, SPAN_WARNING("\The [src] is recharging!"))
+			to_chat(user, SPAN_WARNING("[src] is recharging!"))
 			return
 		next_use = world.time + 20
 		area_flash()
@@ -489,7 +489,7 @@
 	. = ..()
 	if(.)
 		if(world.time < next_use)
-			to_chat(user, SPAN_WARNING("\The [src] is recharging!"))
+			to_chat(user, SPAN_WARNING("[src] is recharging!"))
 			return
 		var/mob/living/O = target
 		owner.setClickCooldown(5)
@@ -558,24 +558,30 @@
 	if(owner && holding)
 		update_icon()
 
-/obj/item/mech_equipment/mounted_system/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
-	if(!CanPhysicallyInteract(user))	return
+/obj/item/mech_equipment/mounted_system/flamethrower/crowbar_act(mob/living/user, obj/item/tool)
+	if(!CanPhysicallyInteract(user))
+		return
+	var/obj/item/flamethrower/full/mech/FM = holding
+	if(!FM.beaker)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(SPAN_NOTICE("[user] pries out [FM.beaker] using [tool]."))
+	FM.beaker.dropInto(get_turf(user))
+	FM.beaker = null
 
+/obj/item/mech_equipment/mounted_system/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
+	if(!CanPhysicallyInteract(user))
+		return
 	var/obj/item/flamethrower/full/mech/FM = holding
 	if(istype(FM))
-		if(isCrowbar(W) && FM.beaker)
-			if(FM.beaker)
-				user.visible_message(SPAN_NOTICE("\The [user] pries out \the [FM.beaker] using \the [W]."))
-				FM.beaker.dropInto(get_turf(user))
-				FM.beaker = null
-			return
-
 		if (istype(W, /obj/item/reagent_containers) && W.is_open_container() && (W.w_class <= FM.max_beaker))
 			if(FM.beaker)
 				to_chat(user, SPAN_NOTICE("There is already a tank inserted!"))
 				return
 			if(user.unEquip(W, FM))
-				user.visible_message(SPAN_NOTICE("\The [user] inserts \the [W] inside \the [src]."))
+				user.visible_message(SPAN_NOTICE("[user] inserts [W] inside [src]."))
 				FM.beaker = W
 			return
 	..()

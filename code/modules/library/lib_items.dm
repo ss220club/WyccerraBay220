@@ -26,6 +26,23 @@
 	update_icon()
 	. = ..()
 
+/obj/structure/bookcase/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] begins dismantling [src] with [tool]."),
+		SPAN_NOTICE("You begin dismantling [src] with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 2.5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/stack/material/wood/wood = new (loc, 5)
+	transfer_fingerprints_to(wood)
+	for(var/obj/item/book/book in contents)
+		book.dropInto(loc)
+	user.visible_message(
+		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
+		SPAN_NOTICE("You dismantle [src] with [tool].")
+	)
+	qdel(src)
 
 /obj/structure/bookcase/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Book - Add book to shelf
@@ -44,33 +61,12 @@
 			return TRUE
 		SetName("[initial(name)] ([input])")
 		user.visible_message(
-			SPAN_NOTICE("\The [user] re-labels \the [src] with \a [tool]."),
-			SPAN_NOTICE("You re-label \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] re-labels [src] with [tool]."),
+			SPAN_NOTICE("You re-label [src] with [tool].")
 		)
 		return TRUE
 
-	// Screwdriver - Dismantle bookshelf
-	if (isScrewdriver(tool))
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] begins dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You begin dismantling \the [src] with \a [tool].")
-		)
-		if (!user.do_skilled(2.5 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		var/obj/item/stack/material/wood/wood = new (loc, 5)
-		transfer_fingerprints_to(wood)
-		for (var/obj/item/book/book in contents)
-			book.dropInto(loc)
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \a [tool].")
-		)
-		qdel_self()
-		return TRUE
-
-	return ..()
+	. = ..()
 
 
 /obj/structure/bookcase/attack_hand(mob/user as mob)
@@ -233,7 +229,7 @@
 					src.author = newauthor
 			else
 				return
-	else if(istype(W, /obj/item/material/knife) || isWirecutter(W))
+	else if(istype(W, /obj/item/material/knife) || W.tool_behaviour == TOOL_WIRECUTTER)
 		if(carved)	return
 		to_chat(user, SPAN_NOTICE("You begin to carve out [title]."))
 		if(do_after(user, 3 SECONDS, src, DO_PUBLIC_UNIQUE))

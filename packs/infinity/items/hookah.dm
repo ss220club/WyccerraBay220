@@ -155,7 +155,7 @@
 			text = zippomes
 		else if(istype(tool, /obj/item/flame/lighter))
 			text = lightermes
-		else if(isWelder(tool))
+		else if(tool.tool_behaviour == TOOL_WELDER)
 			text = weldermes
 		else if(istype(tool, /obj/item/device/assembly/igniter))
 			text = ignitermes

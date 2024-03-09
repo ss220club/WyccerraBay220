@@ -60,50 +60,48 @@
 	active_power_usage = 1500
 	field_type = /obj/structure/atmospheric_retention_field/impassable
 
-
-/obj/machinery/atmospheric_field_generator/use_tool(obj/item/tool, mob/user, list/click_params)
-	if(isCrowbar(tool) && isactive)
+/obj/machinery/atmospheric_field_generator/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(isactive)
 		USE_FEEDBACK_FAILURE("You can't open the ARF-G whilst it's running!")
-		return TRUE
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You [hatch_open? "close" : "open"] [src]'s access hatch."))
+	hatch_open = !hatch_open
+	update_icon()
+	if(alwaysactive && wires_intact)
+		generate_field()
 
-	if(isCrowbar(tool) && !isactive)
-		to_chat(user, SPAN_NOTICE("You [hatch_open? "close" : "open"] \the [src]'s access hatch."))
-		hatch_open = !hatch_open
-		update_icon()
-		if(alwaysactive && wires_intact)
-			generate_field()
-		return TRUE
+/obj/machinery/atmospheric_field_generator/multitool_act(mob/living/user, obj/item/tool)
+	if(!hatch_open)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	to_chat(user, SPAN_NOTICE("You toggle [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
+	alwaysactive = !alwaysactive
+	update_icon()
 
-	if(hatch_open && isMultitool(tool))
-		to_chat(user, SPAN_NOTICE("You toggle \the [src]'s activation behavior to [alwaysactive? "emergency" : "always-on"]."))
-		alwaysactive = !alwaysactive
-		update_icon()
-		return TRUE
+/obj/machinery/atmospheric_field_generator/wirecutter_act(mob/living/user, obj/item/tool)
+	if(!hatch_open)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_WARNING("You [wires_intact? "cut" : "mend"] [src]'s wires!"))
+	wires_intact = !wires_intact
+	update_icon()
 
-	if(hatch_open && isWirecutter(tool))
-		to_chat(user, SPAN_WARNING("You [wires_intact? "cut" : "mend"] \the [src]'s wires!"))
-		wires_intact = !wires_intact
-		update_icon()
-		return TRUE
-
-	if(hatch_open && (isWelder(tool)))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(5, user))
-			to_chat(user, SPAN_WARNING("You need more fuel to complete this task."))
-			return TRUE // uses up 5 fuel.
-
-		user.visible_message("[user] starts to disassemble \the [src].", "You start to disassemble \the [src].")
-		playsound(loc, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-
-		if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if(!src || !user || !welder.remove_fuel(5, user))
-				return TRUE
-
-			to_chat(user, SPAN_NOTICE("You fully disassemble \the [src]. There were no salvageable parts."))
-			qdel_self()
-			return TRUE
-
-	return ..()
+/obj/machinery/atmospheric_field_generator/welder_act(mob/living/user, obj/item/tool)
+	if(!hatch_open)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_use_check(user, 5))
+		return
+	user.visible_message("[user] starts to disassemble [src].", "You start to disassemble [src].")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You fully disassemble [src]. There were no salvageable parts."))
+	qdel(src)
 
 /obj/machinery/atmospheric_field_generator/perma/Initialize()
 	. = ..()

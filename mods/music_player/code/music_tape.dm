@@ -41,24 +41,34 @@
 		to_chat(user, SPAN_NOTICE("You pull out all the tape!"))
 		ruin()
 
+/obj/item/music_tape/screwdriver_act(mob/living/user, obj/item/tool)
+	if(!ruined)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	to_chat(user, SPAN_NOTICE("You start winding [src] back in..."))
+	if(!tool.use_as_tool(src, user, 12 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You wound [src] back in."))
+	fix()
+
 /obj/item/music_tape/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	if(ruined && (isScrewdriver(tool) || istype(tool, /obj/item/pen)))
-		to_chat(user, SPAN_NOTICE("You start winding \the [src] back in..."))
+	if(ruined && istype(tool, /obj/item/pen))
+		to_chat(user, SPAN_NOTICE("You start winding [src] back in..."))
 		if(do_after(user, 12 SECONDS, target = src) && user.use_sanity_check(src, tool))
-			to_chat(user, SPAN_NOTICE("You wound \the [src] back in."))
+			to_chat(user, SPAN_NOTICE("You wound [src] back in."))
 			fix()
 		return TRUE
 
 	if(istype(tool, /obj/item/pen))
 		if(loc == user && !user.incapacitated())
-			var/new_name = input(user, "What would you like to label \the [src]?", "\improper [src] labeling", name) as null|text
+			var/new_name = input(user, "What would you like to label [src]?", "\improper [src] labeling", name) as null|text
 			if(isnull(new_name) || new_name == name)
 				return TRUE
 
 			new_name = sanitizeSafe(new_name)
 
 			if(new_name)
-				to_chat(user, SPAN_NOTICE("You label \the [src] '[new_name]'."))
+				to_chat(user, SPAN_NOTICE("You label [src] '[new_name]'."))
 				if(track)
 					track.title = "tape - \"[new_name]\""
 				SetName("tape - \"[new_name]\"")

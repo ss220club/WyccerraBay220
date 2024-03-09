@@ -245,13 +245,14 @@
 		pointdefense.set_tag(null, initial_id_tag)
 		update_icon()
 
+/obj/machinery/drone_pad/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/transport = get_extension(src, /datum/extension/local_network_member)
+	transport.get_new_tag(user)
+	update_icon()
+
 /obj/machinery/drone_pad/use_tool(obj/item/tool, mob/user)
 	var/datum/extension/local_network_member/transport = get_extension(src, /datum/extension/local_network_member)
-	if (isMultitool(tool))
-		transport.get_new_tag(user)
-		update_icon()
-		return TRUE
-
 	var/obj/item/device/drone_designator/designator = tool
 	if (istype(designator))
 		if (!transport.id_tag)

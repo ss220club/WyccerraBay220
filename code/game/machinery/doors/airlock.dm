@@ -265,17 +265,15 @@
 	frequency =  1380
 	locked = 1
 
-/obj/machinery/door/airlock/external/escapepod/use_tool(obj/item/C, mob/living/user, list/click_params)
-	if(p_open && !arePowerSystemsOn())
-		if(isWrench(C))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-			user.visible_message(SPAN_WARNING("[user.name] starts frantically pumping the bolt override mechanism!"), SPAN_WARNING("You start frantically pumping the bolt override mechanism!"))
-			if(do_after(user, 16 SECONDS, src, DO_REPAIR_CONSTRUCT))
-				visible_message("\The [src] bolts [locked ? "disengage" : "engage"]!")
-				locked = !locked
-			return TRUE
-
-	return ..()
+/obj/machinery/door/airlock/external/escapepod/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!p_open || arePowerSystemsOn())
+		return
+	user.visible_message(SPAN_WARNING("[user.name] starts frantically pumping the bolt override mechanism!"), SPAN_WARNING("You start frantically pumping the bolt override mechanism!"))
+	if(!tool.use_as_tool(src, user, 16 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	visible_message("[src] bolts [locked ? "disengage" : "engage"]!")
+	locked = !locked
 
 /obj/machinery/door/airlock/external/bolted
 	locked = 1
@@ -561,7 +559,7 @@ About the new airlock wires panel:
 	else if(duration)	//electrify door for the given duration seconds
 		if(usr)
 			shockedby += text("\[[time_stamp()]\] - [key_name(usr)]")
-			admin_attacker_log(usr, "electrified \the [name] [duration == -1 ? "permanently" : "for [duration] second\s"]")
+			admin_attacker_log(usr, "electrified [name] [duration == -1 ? "permanently" : "for [duration] second\s"]")
 		else
 			shockedby += text("\[[time_stamp()]\] - EMP)")
 		message = "The door is now electrified [duration == -1 ? "permanently" : "for [duration] second\s"]."
@@ -813,10 +811,10 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/attack_hand(mob/user)
 	if (MUTATION_FERAL in user.mutations)
 		if (src.welded)
-			to_chat(user, SPAN_WARNING("You can't pry \the [src] open, it's welded shut!"))
+			to_chat(user, SPAN_WARNING("You can't pry [src] open, it's welded shut!"))
 			return
 		if (src.locked)
-			to_chat(user, SPAN_WARNING("You can't pry \the [src] open, it's bolted tight!"))
+			to_chat(user, SPAN_WARNING("You can't pry [src] open, it's bolted tight!"))
 			return
 	return ..()
 
@@ -903,10 +901,9 @@ About the new airlock wires panel:
 	var/cut_verb
 	var/cut_sound
 
-	if(isWelder(item))
-		var/obj/item/weldingtool/WT = item
-		if(!WT.remove_fuel(3,user))
-			return 0
+	if(item.tool_behaviour == TOOL_WELDER)
+		if(!item.use_as_tool(src, user, amount = 3, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		cut_verb = "cutting"
 		cut_sound = 'sound/items/Welder.ogg'
 	else if(istype(item,/obj/item/gun/energy/plasmacutter)) //They could probably just shoot them out, but who cares!
@@ -933,7 +930,7 @@ About the new airlock wires panel:
 		if (!F.wielded)
 			return 0
 		user.visible_message(
-			SPAN_DANGER("\The [user] smashes the bolt cover open!"),
+			SPAN_DANGER("[user] smashes the bolt cover open!"),
 			SPAN_WARNING("You smash the bolt cover open!")
 			)
 		playsound(src, 'sound/weapons/smash.ogg', 100, 1)
@@ -946,14 +943,14 @@ About the new airlock wires panel:
 
 	if (src.lock_cut_state == BOLTS_FINE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] begins [cut_verb] through the bolt cover on [src]."),
+			SPAN_NOTICE("[user] begins [cut_verb] through the bolt cover on [src]."),
 			SPAN_NOTICE("You begin [cut_verb] through the bolt cover.")
 			)
 
 		playsound(src, cut_sound, 100, 1)
 		if (do_after(user, cut_delay, src, DO_REPAIR_CONSTRUCT))
 			user.visible_message(
-				SPAN_NOTICE("\The [user] removes the bolt cover from [src]"),
+				SPAN_NOTICE("[user] removes the bolt cover from [src]"),
 				SPAN_NOTICE("You remove the cover and expose the door bolts.")
 				)
 			src.lock_cut_state = BOLTS_EXPOSED
@@ -961,36 +958,105 @@ About the new airlock wires panel:
 
 	if (src.lock_cut_state == BOLTS_EXPOSED)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] begins [cut_verb] through [src]'s bolts."),
+			SPAN_NOTICE("[user] begins [cut_verb] through [src]'s bolts."),
 			SPAN_NOTICE("You begin [cut_verb] through the door bolts.")
 			)
 		playsound(src, cut_sound, 100, 1)
 		if (do_after(user, cut_delay, src, DO_REPAIR_CONSTRUCT))
 			user.visible_message(
-				SPAN_NOTICE("\The [user] severs the door bolts, unlocking [src]."),
+				SPAN_NOTICE("[user] severs the door bolts, unlocking [src]."),
 				SPAN_NOTICE("You sever the door bolts, unlocking the door.")
 				)
 			src.lock_cut_state = BOLTS_CUT
 			src.unlock(1) //force it
 		return 1
 
+/obj/machinery/door/airlock/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
+		user.visible_message("[user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
+		if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		to_chat(user, SPAN_NOTICE("You've removed the airlock electronics!"))
+		deconstruct(user)
+		return
+	if(arePowerSystemsOn())
+		to_chat(user, SPAN_NOTICE("The airlock's motors resist your efforts to force it."))
+		return
+	if(locked)
+		to_chat(user, SPAN_NOTICE("The airlock's bolts prevent it from being forced."))
+		return
+	if(brace)
+		to_chat(user, SPAN_NOTICE("The airlock's brace holds it firmly in place."))
+		return
+	if(density)
+		spawn(0)
+		open(1)
+		return
+	else
+		spawn(0)
+		close(1)
+
+/obj/machinery/door/airlock/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	attack_hand(user)
+
+/obj/machinery/door/airlock/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!p_open)
+		if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		p_open = TRUE
+		user.visible_message(SPAN_NOTICE("[user.name] opens the maintenance panel on [src]."), SPAN_NOTICE("You open the maintenance panel on [src]."))
+		update_icon()
+		return
+	if(MACHINE_IS_BROKEN(src))
+		to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	p_open = FALSE
+	user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on [src]."), SPAN_NOTICE("You close the maintenance panel on [src]."))
+	update_icon()
+
+/obj/machinery/door/airlock/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	attack_hand(user)
+
+/obj/machinery/door/airlock/welder_act(mob/living/user, obj/item/tool)
+	if(!repairing && MACHINE_IS_BROKEN(src) && locked) //bolted and broken
+		if(cut_bolts(tool, user))
+			. = ITEM_INTERACT_SUCCESS
+			return
+	if(repairing || operating == DOOR_OPERATING_YES || !density)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_use_check(user, 1))
+		return
+	user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),
+						SPAN_NOTICE("You begin welding [src] [welded ? "open" : "closed"]."))
+	if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || repairing || operating == DOOR_OPERATING_YES || !density)
+		return
+	welded = !welded
+	update_icon()
+
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)
 	// Brace is considered installed on the airlock, so interacting with it is protected from electrification.
 	if(brace && C && (istype(C.GetIdCard(), /obj/item/card/id) || istype(C, /obj/item/material/twohanded/jack)))
-		return brace.attackby(C, user)
+		return C.resolve_attackby(brace, user)
 
 	if(!brace && istype(C, /obj/item/airlock_brace))
 		var/obj/item/airlock_brace/A = C
 		if(!density)
-			to_chat(user, SPAN_WARNING("You must close \the [src] before installing \the [A]!"))
+			to_chat(user, SPAN_WARNING("You must close [src] before installing [A]!"))
 			return TRUE
 
-		if(!length(A.req_access) && (alert("\the [A]'s 'Access Not Set' light is flashing. Install it anyway?", "Access not set", "Yes", "No") == "No"))
+		if(!length(A.req_access) && (alert("[A]'s 'Access Not Set' light is flashing. Install it anyway?", "Access not set", "Yes", "No") == "No"))
 			return TRUE
 
 		playsound(user, 'sound/machines/lockreset.ogg', 50, 1)
 		if(do_after(user, 6 SECONDS, src, DO_REPAIR_CONSTRUCT) && density && A && user.unEquip(A, src))
-			to_chat(user, SPAN_NOTICE("You successfully install \the [A]."))
+			to_chat(user, SPAN_NOTICE("You successfully install [A]."))
 			brace = A
 			brace.airlock = src
 			update_icon()
@@ -1005,72 +1071,12 @@ About the new airlock wires panel:
 		if (cut_bolts(C,user))
 			return TRUE
 
-	if (!repairing && isWelder(C) && operating != DOOR_OPERATING_YES && density)
-		var/obj/item/weldingtool/W = C
-		if(!W.can_use(1, user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-		user.visible_message(SPAN_WARNING("\The [user] begins welding \the [src] [welded ? "open" : "closed"]!"),
-							SPAN_NOTICE("You begin welding \the [src] [welded ? "open" : "closed"]."))
-		if(do_after(user, (rand(3,5)) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if (density && operating != DOOR_OPERATING_YES && !repairing && W.remove_fuel(1, user))
-				playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-				welded = !welded
-				update_icon()
-				return TRUE
-		else
-			to_chat(user, SPAN_NOTICE("You must remain still to complete this task."))
-			return TRUE
-
-	if (isScrewdriver(C))
-		if (p_open)
-			if (MACHINE_IS_BROKEN(src))
-				to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
-				return TRUE
-			else
-				p_open = FALSE
-				user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on \the [src]."), SPAN_NOTICE("You close the maintenance panel on \the [src]."))
-				playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
-				update_icon()
-				return TRUE
-		else
-			p_open = TRUE
-			user.visible_message(SPAN_NOTICE("[user.name] opens the maintenance panel on \the [src]."), SPAN_NOTICE("You open the maintenance panel on \the [src]."))
-			playsound(src.loc, "sound/items/Screwdriver.ogg", 20)
-			update_icon()
-			return TRUE
-
-	if (isWirecutter(C) || isMultitool(C) || istype(C, /obj/item/device/assembly/signaler))
+	if (istype(C, /obj/item/device/assembly/signaler))
 		return attack_hand(user)
 
 	if (istype(C, /obj/item/pai_cable))
 		var/obj/item/pai_cable/cable = C
 		cable.resolve_attackby(src, user)
-
-	if (!repairing && isCrowbar(C))
-		if (p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
-			user.visible_message("\The [user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
-			if(do_after(user, 4 SECONDS, src, DO_REPAIR_CONSTRUCT))
-				to_chat(user, SPAN_NOTICE("You've removed the airlock electronics!"))
-				deconstruct(user)
-				return TRUE
-		else if(arePowerSystemsOn())
-			to_chat(user, SPAN_NOTICE("The airlock's motors resist your efforts to force it."))
-			return TRUE
-		else if(locked)
-			to_chat(user, SPAN_NOTICE("The airlock's bolts prevent it from being forced."))
-			return TRUE
-		else if(brace)
-			to_chat(user, SPAN_NOTICE("The airlock's brace holds it firmly in place."))
-			return TRUE
-		else
-			if(density)
-				spawn(0)	open(1)
-				return TRUE
-			else
-				spawn(0)	close(1)
-				return TRUE
 
 			//if door is unbroken, hit with fire axe using harm intent
 	if (istype(C, /obj/item/material/twohanded/fireaxe) && !MACHINE_IS_BROKEN(src) && user.a_intent == I_HURT)
@@ -1078,9 +1084,9 @@ About the new airlock wires panel:
 		if (F.wielded)
 			playsound(src, 'sound/weapons/smash.ogg', 100, 1)
 			if (damage_health(F.force_wielded * 2, F.damtype))
-				user.visible_message(SPAN_DANGER("[user] smashes \the [C] into the airlock's control panel! It explodes in a shower of sparks!"), SPAN_DANGER("You smash \the [C] into the airlock's control panel! It explodes in a shower of sparks!"))
+				user.visible_message(SPAN_DANGER("[user] smashes [C] into the airlock's control panel! It explodes in a shower of sparks!"), SPAN_DANGER("You smash [C] into the airlock's control panel! It explodes in a shower of sparks!"))
 			else
-				user.visible_message(SPAN_DANGER("[user] smashes \the [C] into the airlock's control panel!"))
+				user.visible_message(SPAN_DANGER("[user] smashes [C] into the airlock's control panel!"))
 			return TRUE
 
 	if (istype(C, /obj/item/material/twohanded/fireaxe) && !arePowerSystemsOn())
@@ -1093,14 +1099,14 @@ About the new airlock wires panel:
 				if(F.wielded)
 					spawn(0)	open(1)
 				else
-					to_chat(user, SPAN_WARNING("You need to be wielding \the [C] to do that."))
+					to_chat(user, SPAN_WARNING("You need to be wielding [C] to do that."))
 				return TRUE
 			else
 				var/obj/item/material/twohanded/fireaxe/F = C
 				if(F.wielded)
 					spawn(0)	close(1)
 				else
-					to_chat(user, SPAN_WARNING("You need to be wielding \the [C] to do that."))
+					to_chat(user, SPAN_WARNING("You need to be wielding [C] to do that."))
 				return TRUE
 
 	return ..()
@@ -1153,7 +1159,7 @@ About the new airlock wires panel:
 		p_open = TRUE
 		if (secured_wires)
 			lock()
-		visible_message("\The [src]'s control panel bursts open, sparks spewing out!")
+		visible_message("[src]'s control panel bursts open, sparks spewing out!")
 		var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
 		s.set_up(5, 1, src)
 		s.start()
@@ -1368,7 +1374,7 @@ About the new airlock wires panel:
 	if (lock_cut_state == BOLTS_CUT)
 		to_chat(user, "The door bolts have been cut.")
 	if(brace)
-		to_chat(user, "\The [brace] is installed on \the [src], preventing it from opening.")
+		to_chat(user, "[brace] is installed on [src], preventing it from opening.")
 		brace.examine_damage_state(user)
 
 /obj/machinery/door/airlock/autoname

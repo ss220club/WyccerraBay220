@@ -251,7 +251,9 @@ export const SettingsAdvanced = (props, context) => {
           <LabeledList>
             <LabeledList.Item
               label={'Макс. сообщений'}
-              tooltip={'Максимум отображаемых сообщений'}
+              tooltip={
+                'Максимум отображаемых сообщений. Значения выше 1500 могут негативно сказаться на производительности!'
+              }
             >
               <NumberInput
                 width={5}

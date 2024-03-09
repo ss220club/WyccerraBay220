@@ -70,7 +70,8 @@
 	if(config.ffmpeg_cpuaffinity)
 		taskset = "taskset -ac [config.ffmpeg_cpuaffinity]"
 
-	var/list/output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "[effect.ffmpeg_arguments]" [filename_output]"})
+	var/command = {"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "[effect.ffmpeg_arguments]" [filename_output]"}
+	var/list/output = world.shelleo(command)
 
 	var/errorlevel = output[SHELLEO_ERRORLEVEL]
 	var/stdout = output[SHELLEO_STDOUT]

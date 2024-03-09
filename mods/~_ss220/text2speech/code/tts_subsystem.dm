@@ -11,47 +11,47 @@ SUBSYSTEM_DEF(tts220)
 	runlevels = RUNLEVEL_LOBBY | RUNLEVELS_DEFAULT
 
 	/// All time tts uses
-	var/tts_wanted = 0
+	VAR_PRIVATE/tts_wanted = 0
 	/// Amount of errored requests to providers
-	var/tts_request_failed = 0
+	VAR_PRIVATE/tts_request_failed = 0
 	/// Amount of successfull requests to providers
-	var/tts_request_succeeded = 0
+	VAR_PRIVATE/tts_request_succeeded = 0
 	/// Amount of cache hits
-	var/tts_reused = 0
+	VAR_PRIVATE/tts_reused = 0
 	/// Assoc list of request error codes
-	var/list/tts_errors = list()
+	VAR_PRIVATE/list/tts_errors = list()
 	/// Last errored requests' contents
-	var/tts_error_raw = ""
+	VAR_PRIVATE/tts_error_raw = ""
 
 	// Simple Moving Average RPS
-	var/list/tts_rps_list = list()
-	var/tts_sma_rps = 0
+	VAR_PRIVATE/list/tts_rps_list = list()
+	VAR_PRIVATE/tts_sma_rps = 0
 
 	/// Requests per Second (RPS), only real API requests
-	var/tts_rps = 0
-	var/tts_rps_counter = 0
+	VAR_PRIVATE/tts_rps = 0
+	VAR_PRIVATE/tts_rps_counter = 0
 
 	/// Total Requests per Second (TRPS), all TTS request, even reused
-	var/tts_trps = 0
-	var/tts_trps_counter = 0
+	VAR_PRIVATE/tts_trps = 0
+	VAR_PRIVATE/tts_trps_counter = 0
 
 	/// Reused Requests per Second (RRPS), only reused requests
-	var/tts_rrps = 0
-	var/tts_rrps_counter = 0
+	VAR_PRIVATE/tts_rrps = 0
+	VAR_PRIVATE/tts_rrps_counter = 0
 
-	var/is_enabled = TRUE
+	VAR_PRIVATE/is_enabled = TRUE
 	/// List of all available TTS seeds
-	var/list/datum/tts_seed/tts_seeds = list()
+	VAR_PRIVATE/list/datum/tts_seed/tts_seeds = list()
 	/// List of all available TTS providers
-	var/list/datum/tts_provider/tts_providers = list()
+	VAR_PRIVATE/list/datum/tts_provider/tts_providers = list()
 
-	var/tts_requests_queue_limit = 100
-	var/tts_rps_limit = 11
+	VAR_PRIVATE/tts_requests_queue_limit = 100
+	VAR_PRIVATE/tts_rps_limit = 11
 
 	/// General request queue
-	var/list/tts_queue = list()
-	/// Ffmpeg queue. Is an assoc list. Each entry is a filename mapped to the list of sound processing requests which require it.
-	var/list/tts_effects_queue = list()
+	VAR_PRIVATE/list/tts_queue = list()
+	/// Ffmpeg queue. Is an assoc lazy list. Each entry is a filename mapped to the list of sound processing requests which require it.
+	VAR_PRIVATE/list/tts_effects_queue = list()
 	/// Lazy list of request that need to performed to TTS provider API
 	VAR_PRIVATE/list/tts_requests_queue
 
@@ -167,16 +167,21 @@ SUBSYSTEM_DEF(tts220)
 		sanitized_messages_cache_miss = 0
 
 /datum/controller/subsystem/tts220/proc/fire_sound_processing()
-	while(LAZYLEN(tts_effects_queue))
-		var/list/filename_requests = tts_effects_queue[1]
+	var/queue_position = 1
+	while(LAZYLEN(tts_effects_queue) >= queue_position)
+		var/filename = tts_effects_queue[queue_position]
+		var/list/filename_requests = tts_effects_queue[filename]
 		var/datum/sound_effect_request/request = filename_requests[1]
 		apply_sound_effect(request.effect, request.original_filename, request.output_filename)
 
 		for(var/datum/sound_effect_request/adjacent_request in filename_requests)
-			if(adjacent_request == request)
-				continue
 			invoke_async(adjacent_request.cb)
-		tts_effects_queue.Cut(1,2)
+
+		queue_position++
+		if(MC_TICK_CHECK)
+			break
+
+	LAZYCUT(tts_effects_queue, 1, queue_position)
 
 /datum/controller/subsystem/tts220/Recover()
 	is_enabled = SStts220.is_enabled

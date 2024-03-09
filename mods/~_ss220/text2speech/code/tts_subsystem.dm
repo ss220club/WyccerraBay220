@@ -166,7 +166,7 @@ SUBSYSTEM_DEF(tts220)
 		sanitized_messages_cache_hit = 0
 		sanitized_messages_cache_miss = 0
 
-/datum/controller/subsystem/tts220/fire_sound_processing()
+/datum/controller/subsystem/tts220/proc/fire_sound_processing()
 	while(LAZYLEN(tts_effects_queue))
 		var/list/filename_requests = tts_effects_queue[1]
 		var/datum/sound_effect_request/request = filename_requests[1]
@@ -330,10 +330,10 @@ SUBSYSTEM_DEF(tts220)
 		else
 			CRASH("Invalid sound effect chosen.")
 
-/datum/controller/subsystem/tts220/proc/queue_sound_effect_processing(pure_filename, effect, processed_filename, /datum/callback/output_tts_cb)
+/datum/controller/subsystem/tts220/proc/queue_sound_effect_processing(pure_filename, effect, processed_filename, datum/callback/output_tts_cb)
 	var/datum/sound_effect_request/request = new
-	request.original_filename="[pure_filename].ogg"
-	request.output_filename=processed_filename
+	request.original_filename = "[pure_filename].ogg"
+	request.output_filename = processed_filename
 	request.effect = GET_SINGLETON(sound_effects[effect])
 	request.cb = output_tts_cb
 	LAZYADD(tts_effects_queue[processed_filename], request)
@@ -487,6 +487,12 @@ SUBSYSTEM_DEF(tts220)
 		channel = GLOB.sound_channels.RequestChannel("[owner]_TTS_CHANNEL")
 		tts_local_channels_by_owner[owner] = channel
 	return channel
+
+/datum/sound_effect_request
+	var/original_filename
+	var/output_filename
+	var/singleton/sound_effect/effect
+	var/datum/callback/cb
 
 #undef TTS_REPLACEMENTS_FILE_PATH
 #undef TTS_ACRONYM_REPLACEMENTS

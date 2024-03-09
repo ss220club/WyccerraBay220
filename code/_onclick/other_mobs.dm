@@ -45,7 +45,7 @@
 
 	Otherwise pretty standard.
 */
-/mob/living/carbon/human/UnarmedAttack(atom/A, proximity)
+/mob/living/carbon/human/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 
 	if(!..())
 		return
@@ -54,10 +54,10 @@
 	// If the gloves do anything, have them return 1 to stop
 	// normal attack_hand() here.
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
-	if(istype(G) && G.Touch(A,1))
+	if(istype(G) && G.Touch(target, 1))
 		return
 
-	A.attack_hand(src)
+	target.attack_hand(src)
 
 
 /**
@@ -69,6 +69,8 @@
 /atom/proc/attack_hand(mob/user)
 	return
 
+/atom/proc/attack_hand_secondary(mob/user)
+	return
 
 /**
  * Called when a mob attempts to use an empty hand on itself.
@@ -110,13 +112,13 @@
 /mob/living/carbon/alien/RestrainedClickOn(atom/A)
 	return
 
-/mob/living/carbon/alien/UnarmedAttack(atom/A, proximity)
+/mob/living/carbon/alien/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 
 	if(!..())
 		return 0
 
 	setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-	A.attack_generic(src,rand(5,6),"bitten")
+	target.attack_generic(src,rand(5,6),"bitten")
 
 /*
 	Slimes
@@ -126,22 +128,22 @@
 /mob/living/carbon/slime/RestrainedClickOn(atom/A)
 	return
 
-/mob/living/carbon/slime/UnarmedAttack(atom/A, proximity)
+/mob/living/carbon/slime/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 
 	if(!..())
 		return
 
 	// Eating
 	if(Victim)
-		if (Victim == A)
+		if (Victim == target)
 			Feedstop()
 		return
 
 	//should have already been set if we are attacking a mob, but it doesn't hurt and will cover attacking non-mobs too
 	setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-	var/mob/living/M = A
+	var/mob/living/M = target
 	if(!istype(M))
-		A.attack_generic(src, (is_adult ? rand(20,40) : rand(5,25)), "glomped") // Basic attack.
+		target.attack_generic(src, (is_adult ? rand(20,40) : rand(5,25)), "glomped") // Basic attack.
 	else
 		var/power = max(0, min(10, (powerlevel + rand(0, 3))))
 
@@ -151,7 +153,7 @@
 			if (I_DISARM) // We stun the target, with the intention to feed
 				var/stunprob = 1
 
-				if (powerlevel > 0 && !istype(A, /mob/living/carbon/slime))
+				if (powerlevel > 0 && !istype(target, /mob/living/carbon/slime))
 					switch(power * 10)
 						if(0) stunprob *= 10
 						if(1 to 2) stunprob *= 20
@@ -177,7 +179,7 @@
 					M.visible_message(SPAN_DANGER("[src] has pounced at [M]!"), SPAN_DANGER("[src] has pounced at you!"))
 					M.Weaken(power)
 				else
-					A.attack_generic(src, (is_adult ? rand(20,40) : rand(5,25)), "glomped")
+					target.attack_generic(src, (is_adult ? rand(20,40) : rand(5,25)), "glomped")
 
 /*
 	New Players:
@@ -189,21 +191,21 @@
 /*
 	Animals
 */
-/mob/living/simple_animal/UnarmedAttack(atom/A, proximity)
+/mob/living/simple_animal/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	if (!..())
 		return
 	setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-	if (istype(A,/mob/living))
+	if (isliving(target))
 		if (!get_natural_weapon() || a_intent == I_HELP)
-			custom_emote(VISIBLE_MESSAGE, "[friendly] [A]!")
+			custom_emote(VISIBLE_MESSAGE, "[friendly] [target]!")
 			return
 		if (ckey)
-			admin_attack_log(src, A, "Has attacked its victim.", "Has been attacked by its attacker.")
+			admin_attack_log(src, target, "Has attacked its victim.", "Has been attacked by its attacker.")
 	if (a_intent == I_HELP)
-		A.attack_animal(src)
+		target.attack_animal(src)
 	else if (get_natural_weapon())
 		var/obj/item/weapon = get_natural_weapon()
-		weapon.resolve_attackby(A, src)
+		weapon.resolve_attackby(target, src)
 
 
 /**

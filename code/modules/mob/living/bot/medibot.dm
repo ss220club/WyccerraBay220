@@ -42,15 +42,16 @@
 				last_newpatient_speak = world.time
 			break
 
-/mob/living/bot/medbot/UnarmedAttack(mob/living/carbon/human/H, proximity)
+/mob/living/bot/medbot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	if(!..())
 		return
 
 	if(!on)
 		return
 
-	if(!istype(H))
+	if(!ishuman(target))
 		return
+	var/mob/living/carbon/human/H = target
 
 	if(busy)
 		return

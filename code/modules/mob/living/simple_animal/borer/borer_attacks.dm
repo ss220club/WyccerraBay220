@@ -1,12 +1,12 @@
-/mob/living/simple_animal/borer/UnarmedAttack(atom/A, proximity)
+/mob/living/simple_animal/borer/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 
-	if(!isliving(A) || a_intent != I_GRAB)
+	if(!isliving(target) || a_intent != I_GRAB)
 		return ..()
 
 	if(host || !can_use_borer_ability(requires_host_value = FALSE, check_last_special = FALSE))
 		return
 
-	var/mob/living/M = A
+	var/mob/living/M = target
 	if(M.has_brain_worms())
 		to_chat(src, SPAN_WARNING("You cannot take a host who already has a passenger!"))
 		return

@@ -142,8 +142,8 @@
 	clicks, you can do so here, but you will have to
 	change attack_robot() above to the proper function
 */
-/mob/living/silicon/robot/UnarmedAttack(atom/A)
-	A.attack_robot(src)
+/mob/living/silicon/robot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
+	target.attack_robot(src)
 
 /mob/living/silicon/robot/RangedAttack(atom/A, params)
 	A.attack_robot(src)
@@ -155,6 +155,5 @@
  * **Parameters**:
  * - `user` - The mob clicking on the atom.
  */
-/atom/proc/attack_robot(mob/user as mob)
+/atom/proc/attack_robot(mob/user)
 	attack_ai(user)
-	return

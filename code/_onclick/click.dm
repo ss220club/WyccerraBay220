@@ -136,7 +136,7 @@
 		else
 			if(ismob(A)) // No instant mob attacking
 				setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-			UnarmedAttack(A, 1)
+			UnarmedAttack(A, TRUE, modifiers)
 
 		trigger_aiming(TARGET_CAN_CLICK)
 		return 1
@@ -157,7 +157,7 @@
 			else
 				if(ismob(A)) // No instant mob attacking
 					setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-				UnarmedAttack(A, 1)
+				UnarmedAttack(A, TRUE, modifiers)
 
 			trigger_aiming(TARGET_CAN_CLICK)
 			return
@@ -183,20 +183,26 @@
 	return
 
 /**
- * Called when the mob interacts with something it is adjacent to. For complex mobs, this includes interacting with an empty hand or empty module. Generally, this translates to `attack_hand()`, `attack_robot()`, etc.
+ * UnarmedAttack: The higest level of mob click chain discounting click itself.
  *
- * Exception: This is also called when telekinesis is used, even if not adjacent to the target.
+ * This handles, just "clicking on something" without an item. It translates
+ * into [atom/proc/attack_hand], [atom/proc/attack_animal] etc.
  *
- * **Parameters**:
- * - `A` - The atom that was clicked on/interacted with.
- * - `proximity_flag` - Whether or not the mob was at range from the targeted atom. Generally, this is always `1` unless telekinesis was used, where this will be `0`. This is not currently passed to attack_hand, and is instead used in human click code to allow glove touches only at melee range.
+ * Note: proximity_flag here is used to distinguish between normal usage (flag=1),
+ * and usage when clicking on things telekinetically (flag=0).  This proc will
+ * not be called at ranged except with telekinesis.
  *
- * Returns boolean - Whether or not the mob was able to perform the interaction.
+ * proximity_flag is not currently passed to attack_hand, and is instead used
+ * in human click code to allow glove touches only at melee range.
+ *
+ * modifiers is a lazy list of click modifiers this attack had,
+ * used for figuring out different properties of the click, mostly right vs left and such.
  */
-/mob/proc/UnarmedAttack(atom/A, proximity_flag)
+
+/mob/proc/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	return
 
-/mob/living/UnarmedAttack(atom/A, proximity_flag)
+/mob/living/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 
 	if(GAME_STATE < RUNLEVEL_GAME)
 		to_chat(src, "You cannot attack people before the game has started.")

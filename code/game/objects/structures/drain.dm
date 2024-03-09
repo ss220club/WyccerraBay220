@@ -11,34 +11,29 @@
 	can_drain = 1
 	var/welded
 
+/obj/structure/hygiene/drain/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/drain/drain_item = new(loc)
+	transfer_fingerprints_to(drain_item)
+	user.visible_message(
+		SPAN_NOTICE("[user] unwrenches [src] from the floor with [tool]."),
+		SPAN_NOTICE("You unwrench [src] from the floor with [tool].")
+	)
+	qdel(src)
 
-/obj/structure/hygiene/drain/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/hygiene/drain/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Weld the drain closed
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		welded = !welded
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [welded ? "un" : "welds"] \the [src] with \a [tool]."),
-			SPAN_NOTICE("You [welded ? "un" : "weld"] \the [src] with \the [tool].")
-		)
-		update_icon()
-		return TRUE
-
-	// Wrench - Dismantle drain
-	if (isWrench(tool))
-		var/obj/item/drain/drain_item = new(loc)
-		transfer_fingerprints_to(drain_item)
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] unwrenches \the [src] from the floor with \a [tool]."),
-			SPAN_NOTICE("You unwrench \the [src] from the floor with \the [tool].")
-		)
-		qdel_self()
-		return TRUE
-
-	return ..()
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	welded = !welded
+	user.visible_message(
+		SPAN_NOTICE("[user] [welded ? "un" : "welds"] [src] with [tool]."),
+		SPAN_NOTICE("You [welded ? "un" : "weld"] [src] with [tool].")
+	)
+	update_icon()
 
 
 /obj/structure/hygiene/drain/on_update_icon()
@@ -62,17 +57,16 @@
 	icon_state = "drain"
 	var/constructed_type = /obj/structure/hygiene/drain
 
-/obj/item/drain/attackby(obj/item/thing, mob/user)
-	if(isWrench(thing))
-		if (!isturf(loc))
-			USE_FEEDBACK_FAILURE("\The [src] needs to be placed on the floor before you can secure it.")
-			return TRUE
-		new constructed_type(src.loc)
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		to_chat(user, SPAN_WARNING("[user] wrenches the [src] down."))
-		qdel(src)
+/obj/item/drain/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!isturf(loc))
+		USE_FEEDBACK_FAILURE("[src] needs to be placed on the floor before you can secure it.")
 		return
-	return ..()
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new constructed_type(src.loc)
+	to_chat(user, SPAN_WARNING("[user] wrenches the [src] down."))
+	qdel(src)
 
 /obj/structure/hygiene/drain/bath
 	name = "sealable drain"
@@ -84,7 +78,7 @@
 	. = ..()
 	if(!welded)
 		closed = !closed
-		user.visible_message(SPAN_NOTICE("\The [user] has [closed ? "closed" : "opened"] the drain."))
+		user.visible_message(SPAN_NOTICE("[user] has [closed ? "closed" : "opened"] the drain."))
 	update_icon()
 
 /obj/structure/hygiene/drain/bath/on_update_icon()

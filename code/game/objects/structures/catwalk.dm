@@ -64,7 +64,7 @@
 
 /obj/structure/catwalk/proc/deconstruct(mob/user)
 	playsound(src, 'sound/items/Welder.ogg', 100, 1)
-	to_chat(user, SPAN_NOTICE("Slicing \the [src] joints ..."))
+	to_chat(user, SPAN_NOTICE("Slicing [src] joints ..."))
 	new /obj/item/stack/material/rods(src.loc)
 	new /obj/item/stack/material/rods(src.loc)
 	//Lattice would delete itself, but let's save ourselves a new obj
@@ -74,21 +74,27 @@
 		new plated_tile.build_type(src.loc)
 	qdel(src)
 
+/obj/structure/catwalk/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!plated_tile)
+		USE_FEEDBACK_FAILURE("[src] is not plated and has no hatch to open.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	hatch_open = !hatch_open
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] pries [src]'s maintenance hatch open with [tool]."),
+		SPAN_NOTICE("You pry [src]'s maintenance hatch open with [tool].")
+	)
+
+/obj/structure/catwalk/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	deconstruct(user)
 
 /obj/structure/catwalk/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Toggle hatch
-	if (isCrowbar(tool))
-		if (!plated_tile)
-			USE_FEEDBACK_FAILURE("\The [src] is not plated and has no hatch to open.")
-			return TRUE
-		hatch_open = !hatch_open
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pries \the [src]'s maintenance hatch open with \a [tool]."),
-			SPAN_NOTICE("You pry \the [src]'s maintenance hatch open with \the [tool].")
-		)
-		return TRUE
-
 	// Plasma Cutter - Deconstruct
 	if (istype(tool, /obj/item/gun/energy/plasmacutter))
 		var/obj/item/gun/energy/plasmacutter/cutter = tool
@@ -97,31 +103,23 @@
 		deconstruct(user)
 		return TRUE
 
-	// Welding Tool - Deconstruct
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
-
 	// Floor Tile - Plate catwalk
 	if (istype(tool, /obj/item/stack/tile))
 		if (plated_tile)
-			USE_FEEDBACK_FAILURE("\The [src] is already plated.")
+			USE_FEEDBACK_FAILURE("[src] is already plated.")
 			return TRUE
 		var/obj/item/stack/tile/stack = tool
 		if (!stack.can_use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to plate \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to plate [src].")
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts plating \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start plating \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] starts plating [src] with [tool]."),
+			SPAN_NOTICE("You start plating [src] with [tool].")
 		)
 		if (!user.do_skilled(1 SECOND, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 			return TRUE
 		if (!stack.use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to plate \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to plate [src].")
 			return TRUE
 		var/list/singletons = GET_SINGLETON_SUBTYPE_MAP(/singleton/flooring)
 		for (var/flooring_type in singletons)
@@ -134,8 +132,8 @@
 		update_icon()
 		SetName("plated catwalk")
 		user.visible_message(
-			SPAN_NOTICE("\The [user] plates \the [src] with \a [tool]."),
-			SPAN_NOTICE("You plate \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] plates [src] with [tool]."),
+			SPAN_NOTICE("You plate [src] with [tool].")
 		)
 		return TRUE
 

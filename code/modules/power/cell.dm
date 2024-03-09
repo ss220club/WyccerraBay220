@@ -65,7 +65,7 @@
 	return (charge >= amount)
 
 // use power from a cell, returns the amount actually used
-/obj/item/cell/proc/use(amount)
+/obj/item/cell/use(amount)
 	var/used = min(charge, amount)
 	charge -= used
 	update_icon()

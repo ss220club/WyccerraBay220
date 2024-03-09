@@ -37,19 +37,21 @@ var/global/list/navbeacons = list()
 	else
 		icon_state = "[state]"
 
+/obj/machinery/navbeacon/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	user.visible_message(
+		SPAN_NOTICE("[user] [open ? "opens" : "closes"] cover of [src]."),
+		SPAN_NOTICE("You [open ? "open" : "close"] cover of [src].")
+	)
+	update_icon()
+
 /obj/machinery/navbeacon/use_tool(obj/item/I, mob/living/user, list/click_params)
 	var/turf/T = loc
 	if(!T.is_plating())
 		return TRUE// prevent intraction when T-scanner revealed
-
-	if(isScrewdriver(I))
-		open = !open
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] cover of \the [src]."),
-			SPAN_NOTICE("You [open ? "open" : "close"] cover of \the [src].")
-		)
-		update_icon()
-		return TRUE
 
 	if (I.GetIdCard())
 		if(open)

@@ -9,12 +9,12 @@
 	var/refund_type = /obj/item/stack/material/steel
 	var/reverse = 0 //if resulting object faces opposite its dir (like light fixtures)
 
-/obj/item/frame/attackby(obj/item/W as obj, mob/user as mob)
-	if(isWrench(W))
-		new refund_type( get_turf(src.loc), refund_amt)
-		qdel(src)
+/obj/item/frame/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	..()
+	new refund_type( get_turf(src.loc), refund_amt)
+	qdel(src)
 
 /obj/item/frame/proc/try_build(turf/on_wall)
 	if(!build_machine_type)
@@ -35,10 +35,10 @@
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc
 	if (!istype(loc, /turf/simulated/floor))
-		to_chat(usr, SPAN_DANGER("\The [src] cannot be placed on this spot."))
+		to_chat(usr, SPAN_DANGER("[src] cannot be placed on this spot."))
 		return
 	if ((A.requires_power == 0 || A.name == "Space") && !isLightFrame())
-		to_chat(usr, SPAN_DANGER("\The [src] cannot be placed in this area."))
+		to_chat(usr, SPAN_DANGER("[src] cannot be placed in this area."))
 		return
 
 	if(gotwallitem(loc, ndir))

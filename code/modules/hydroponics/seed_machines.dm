@@ -65,6 +65,21 @@
 			visible_message("[icon2html(src, viewers(get_turf(src)))] [src] beeps and spits out [loaded_disk].")
 			loaded_disk = null
 
+/obj/machinery/botany/crowbar_act(mob/living/user, obj/item/tool)
+	if(!open)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	dismantle()
+
+/obj/machinery/botany/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the maintenance panel."))
+
 /obj/machinery/botany/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W,/obj/item/seeds))
 		if(seed)
@@ -76,15 +91,6 @@
 		else if(user.unEquip(W, src))
 			seed = W
 			to_chat(user, "You load [W] into [src].")
-		return TRUE
-
-	if(isScrewdriver(W))
-		open = !open
-		to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the maintenance panel."))
-		return TRUE
-
-	if(open && isCrowbar(W))
-		dismantle()
 		return TRUE
 
 	if(istype(W,/obj/item/disk/botany))

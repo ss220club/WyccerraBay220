@@ -74,6 +74,10 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 	if (config.log_game)
 		game_log("GAME", text)
 
+/proc/log_tool(text)
+	if (config.log_tool)
+		game_log("TOOL", text)
+
 /proc/log_vote(text)
 	if (config.log_vote)
 		game_log("VOTE", text)

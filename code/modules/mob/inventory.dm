@@ -4,7 +4,7 @@
 	var/obj/item/in_slot = get_equipped_item(slot)
 	if (istype(in_slot))
 		if (istype(in_hand))
-			in_slot.attackby(in_hand, src)
+			in_hand.resolve_attackby(in_slot, src)
 		else
 			in_slot.attack_hand(src)
 	else
@@ -114,7 +114,7 @@
 		for(var/obj/item/storage/storage_item in backpack)
 			if(!storage_item.can_be_inserted(item_to_equip, src))
 				continue
-				
+
 			storage_item.handle_item_insertion(item_to_equip)
 			if (storage_item.use_sound)
 				playsound(src, storage_item.use_sound, 50, 1, -5)
@@ -124,11 +124,11 @@
 	for(var/obj/item/storage/storage_item in src)
 		if(!storage_item.can_be_inserted(item_to_equip, src))
 			continue
-			
+
 		storage_item.handle_item_insertion(item_to_equip)
 		if(storage_item.use_sound)
 			playsound(src, storage_item.use_sound, 50, 1, -5)
-			
+
 		return TRUE
 
 	return FALSE

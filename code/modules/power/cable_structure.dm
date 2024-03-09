@@ -136,33 +136,30 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/proc/get_powernet()			//TODO: remove this as it is obsolete
 	return powernet
 
+/obj/structure/cable/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] scans [src] with [tool]."),
+		SPAN_NOTICE("You scan [src] with [tool].")
+	)
+	shock(user, 5, 0.2)
+	if(!powernet?.avail)
+		to_chat(user, SPAN_WARNING("[src] is not powered."))
+	else
+		to_chat(user, SPAN_INFO("[src] has [get_wattage()] flowing through it."))
+
+/obj/structure/cable/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	cut_wire(tool, user)
 
 /obj/structure/cable/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Join cable
 	if (isCoil(tool))
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.can_use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to add cable to \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to add cable to [src].")
 			return TRUE
 		cable.JoinCable(src, user)
-		return TRUE
-
-	// Multitool - Measure power
-	if (isMultitool(tool))
-		user.visible_message(
-			SPAN_NOTICE("\The [user] scans \the [src] with \a [tool]."),
-			SPAN_NOTICE("You scan \the [src] with \the [tool].")
-		)
-		shock(user, 5, 0.2)
-		if (!powernet?.avail)
-			to_chat(user, SPAN_WARNING("\The [src] is not powered."))
-		else
-			to_chat(user, SPAN_INFO("\The [src] has [get_wattage()] flowing through it."))
-		return TRUE
-
-	// Wirecutter - Cut wire
-	if (isWirecutter(tool))
-		cut_wire(tool, user)
 		return TRUE
 
 	// Sharp Objects - Cut cable
@@ -173,14 +170,14 @@ By design, d1 is the smallest direction and d2 is the highest
 			delay_time = 8 SECONDS
 			delay_message = "sawing away roughly at"
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts [delay_message] \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start [delay_message] \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] starts [delay_message] [src] with [tool]."),
+			SPAN_NOTICE("You start [delay_message] [src] with [tool].")
 		)
 		if (!user.do_skilled(delay_time, SKILL_ELECTRICAL, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts through \the [src] with \a [tool]."),
-			SPAN_NOTICE("You cut through \the [src] with \a [tool].")
+			SPAN_NOTICE("[user] cuts through [src] with [tool]."),
+			SPAN_NOTICE("You cut through [src] with [tool].")
 		)
 		return TRUE
 
@@ -189,25 +186,27 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/proc/cut_wire(obj/item/tool, mob/user)
 	if (d1 == UP || d2 == UP)
-		USE_FEEDBACK_FAILURE("You must cut \the [src] from above.")
+		USE_FEEDBACK_FAILURE("You must cut [src] from above.")
 		return
 	if (breaker_box)
-		USE_FEEDBACK_FAILURE("\The [src] is connected to \the [breaker_box]. You must use that to interact with this cable.")
+		USE_FEEDBACK_FAILURE("[src] is connected to [breaker_box]. You must use that to interact with this cable.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	if (HAS_FLAGS(tool.obj_flags, OBJ_FLAG_CONDUCTIBLE) && shock(user, 50))
 		return
 	var/obj/item/stack/cable_coil/cable = new (loc, (d1 ? 2 : 1), color)
 	transfer_fingerprints_to(cable)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] cuts \the [src] with \a [tool]."),
-		SPAN_NOTICE("You cut \the [src] with \the [tool].")
+		SPAN_NOTICE("[user] cuts [src] with [tool]."),
+		SPAN_NOTICE("You cut [src] with [tool].")
 	)
 	if (HasBelow(z))
 		for (var/turf/turf in GetBelow(src))
 			for (var/obj/structure/cable/c in turf)
 				if (c.d1 == UP || c.d2 == UP)
 					qdel(c)
-	qdel_self()
+	qdel(src)
 
 
 // shock the user with probability prb

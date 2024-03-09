@@ -266,8 +266,8 @@
 		if (opened)
 			return ..()
 		if (!emag_act(INFINITY, user,
-			SPAN_WARNING("\The [user] slices \the [src] open with \a [weapon]!"),
-			SPAN_DANGER("You slice \the [src] open with \the [weapon]!"),
+			SPAN_WARNING("[user] slices [src] open with [weapon]!"),
+			SPAN_DANGER("You slice [src] open with [weapon]!"),
 			SPAN_ITALIC("You hear metal being sliced and sparks flying.")
 		))
 			return TRUE
@@ -286,15 +286,15 @@
 	// Laundry Basket - Dump contents into closet
 	if (istype(weapon, /obj/item/storage/laundry_basket) && length(weapon.contents))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be open before you can dump \the [src] into it.")
+			USE_FEEDBACK_FAILURE("[src] needs to be open before you can dump [src] into it.")
 			return TRUE
 		var/obj/item/storage/laundry_basket/basket = weapon
 		for (var/obj/item/item as anything in basket.contents)
 			basket.remove_from_storage(item, loc, TRUE)
 		basket.finish_bulk_removal()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] empties \a [weapon] into \the [src]."),
-			SPAN_NOTICE("You empty \the [weapon] into \the [src].")
+			SPAN_NOTICE("[user] empties [weapon] into [src]."),
+			SPAN_NOTICE("You empty [weapon] into [src].")
 		)
 		return TRUE
 
@@ -306,16 +306,32 @@
 		slice_into_parts(weapon, user)
 		return TRUE
 
-	// Welding weapon - Dismantle closet
-	if (isWelder(weapon))
-		var/obj/item/weldingtool/welder = weapon
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		slice_into_parts(weapon, user)
-		return TRUE
-
 	return ..()
 
+/obj/structure/closet/welder_act(mob/living/user, obj/item/tool)
+	if(opened)
+		return
+	. = ITEM_INTERACT_SUCCESS
+
+	if(user.a_intent == I_HURT)
+		if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		slice_into_parts(tool, user)
+		return
+
+	if(!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
+		USE_FEEDBACK_FAILURE("[src] can't be welded shut.")
+		return
+	if(user.loc == src)
+		return
+	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	welded = !welded
+	update_icon()
+	user.visible_message(
+		SPAN_WARNING("[user] [welded ? "welds" : "unwelds"] [src] with [tool]."),
+		SPAN_WARNING("You [welded ? "weld" : "unweld"] [src] with [tool].")
+	)
 
 /obj/structure/closet/use_tool(obj/item/tool, mob/user, list/click_params)
 	// General Action - Place item in closet, if open.
@@ -338,29 +354,13 @@
 		togglelock(user, id)
 		return TRUE
 
-	// Welding Tool - Weld closet shut
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
-			USE_FEEDBACK_FAILURE("\The [src] can't be welded shut.")
-			return TRUE
-		if (!welder.can_use(1, user))
-			return TRUE
-		welded = !welded
-		update_icon()
-		user.visible_message(
-			SPAN_WARNING("\The [user] [welded ? "welds" : "unwelds"] \the [src] with \a [tool]."),
-			SPAN_WARNING("You [welded ? "weld" : "unweld"] \the [src] with \the [tool].")
-		)
-		return TRUE
-
 	return ..()
 
 
 /obj/structure/closet/proc/slice_into_parts(obj/W, mob/user)
 	material.place_sheet(src.loc, 2)
-	user.visible_message(SPAN_NOTICE("\The [src] has been cut apart by [user] with \the [W]."), \
-						 SPAN_NOTICE("You have cut \the [src] apart with \the [W]."), \
+	user.visible_message(SPAN_NOTICE("[src] has been cut apart by [user] with [W]."), \
+						 SPAN_NOTICE("You have cut [src] apart with [W]."), \
 						 "You hear welding.")
 	qdel(src)
 
@@ -465,8 +465,8 @@
 	. = TRUE
 	escapee.setClickCooldown(100)
 
-	to_chat(escapee, SPAN_WARNING("You lean on the back of \the [src] and start pushing the door open. (this will take about [breakout_time/(1 SECOND)] second\s)"))
-	visible_message(SPAN_DANGER("\The [src] begins to shake violently!"))
+	to_chat(escapee, SPAN_WARNING("You lean on the back of [src] and start pushing the door open. (this will take about [breakout_time/(1 SECOND)] second\s)"))
+	visible_message(SPAN_DANGER("[src] begins to shake violently!"))
 	shake_animation()
 
 	var/stages = 4
@@ -477,13 +477,13 @@
 				breakout = FALSE
 				open()
 				return
-			to_chat(escapee, SPAN_WARNING("You try to slip free of \the [src] ([i*100/stages]% done)."))
+			to_chat(escapee, SPAN_WARNING("You try to slip free of [src] ([i*100/stages]% done)."))
 		else
 			if (!req_breakout())
 				breakout = FALSE
 				open()
 				return
-			to_chat(escapee, SPAN_WARNING("You stop trying to slip free of \the [src]."))
+			to_chat(escapee, SPAN_WARNING("You stop trying to slip free of [src]."))
 			breakout = FALSE
 			return
 
@@ -494,7 +494,7 @@
 	//Well then break it!
 	breakout = FALSE
 	to_chat(escapee, SPAN_WARNING("You successfully break out!"))
-	visible_message(SPAN_DANGER("\The [escapee] successfully broke out of \the [src]!"))
+	visible_message(SPAN_DANGER("[escapee] successfully broke out of [src]!"))
 	playsound(src.loc, 'sound/effects/grillehit.ogg', 100, 1)
 	break_open()
 	shake_animation()
@@ -528,10 +528,10 @@
 	if(!CanPhysicallyInteract(user))
 		return FALSE
 	if(src.opened)
-		to_chat(user, SPAN_NOTICE("Close \the [src] first."))
+		to_chat(user, SPAN_NOTICE("Close [src] first."))
 		return FALSE
 	if(src.broken)
-		to_chat(user, SPAN_WARNING("\The [src] appears to be broken."))
+		to_chat(user, SPAN_WARNING("[src] appears to be broken."))
 		return FALSE
 	if(user.loc == src)
 		to_chat(user, SPAN_NOTICE("You can't reach the lock from inside."))
@@ -549,7 +549,7 @@
 	if(CanToggleLock(user, id_card))
 		locked = !locked
 		visible_message(
-			SPAN_NOTICE("\The [src] has been [locked ? null : "un"]locked by \the [user]."),
+			SPAN_NOTICE("[src] has been [locked ? null : "un"]locked by [user]."),
 			range = 3
 		)
 		update_icon()
@@ -588,9 +588,9 @@
 		if(visual_feedback)
 			visible_message(visual_feedback, audible_feedback)
 		else if(user && emag_source)
-			visible_message(SPAN_WARNING("\The [src] has been broken by \the [user] with \an [emag_source]!"), "You hear a faint electrical spark.")
+			visible_message(SPAN_WARNING("[src] has been broken by [user] with \an [emag_source]!"), "You hear a faint electrical spark.")
 		else
-			visible_message(SPAN_WARNING("\The [src] sparks and breaks open!"), "You hear a faint electrical spark.")
+			visible_message(SPAN_WARNING("[src] sparks and breaks open!"), "You hear a faint electrical spark.")
 		return 1
 	else
 		. = ..()

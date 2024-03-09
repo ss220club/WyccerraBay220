@@ -207,7 +207,7 @@
 	consume_completion_trigger = FALSE
 
 /singleton/crafting_stage/screwdriver/is_appropriate_tool(obj/item/thing)
-	. = isScrewdriver(thing)
+	. = (thing.tool_behaviour == TOOL_SCREWDRIVER)
 
 /singleton/crafting_stage/screwdriver/on_progress(mob/user)
 	..()

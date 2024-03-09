@@ -289,7 +289,7 @@
 					continue
 				if(NG.amount>=NG.max_amount)
 					continue
-				NG.attackby(G, user)
+				G.resolve_attackby(NG, user)
 			to_chat(user, "You add the newly-formed grass to the stack. It now contains [G.amount] tiles.")
 		qdel(src)
 		return

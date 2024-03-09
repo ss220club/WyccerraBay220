@@ -41,9 +41,9 @@ SUBSYSTEM_DEF(tts220)
 
 	VAR_PRIVATE/is_enabled = TRUE
 	/// List of all available TTS seeds
-	VAR_PRIVATE/list/datum/tts_seed/tts_seeds = list()
+	var/list/datum/tts_seed/tts_seeds = list()
 	/// List of all available TTS providers
-	VAR_PRIVATE/list/datum/tts_provider/tts_providers = list()
+	var/list/datum/tts_provider/tts_providers = list()
 
 	VAR_PRIVATE/tts_requests_queue_limit = 100
 	VAR_PRIVATE/tts_rps_limit = 11

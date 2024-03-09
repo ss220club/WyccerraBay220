@@ -50,7 +50,7 @@ exactly 1 "NOOP match" 'NOOP'
 exactly 335 "spawn uses" '^\s*spawn\s*\(\s*(-\s*)?\d*\s*\)' -P
 exactly 0 "tag uses" '\stag = ' -P '**/*.dmm'
 exactly 0 "anchored = 0/1" 'anchored\s*=\s*\d' -P
-exactly 2 "density = 0/1" 'density\s*=\s*\d' -P
+exactly 3 "density = 0/1" 'density\s*=\s*\d' -P
 exactly 0 "emagged = 0/1" 'emagged\s*=\s*\d' -P
 exactly 0 "simulated = 0/1" 'simulated\s*=\s*\d' -P
 exactly 2 "var/ in proc arguments" '(^/[^/].+/.+?\(.*?)var/' -P

@@ -51,7 +51,7 @@ SUBSYSTEM_DEF(tts220)
 
 	/// General request queue
 	VAR_PRIVATE/list/tts_queue = list()
-	/// Ffmpeg queue. Is an assoc lazy list. Each entry is a filename mapped to the list of sound processing requests which require it.
+	/// Ffmpeg queue. Is an assoc list. Each entry is a filename mapped to the list of sound processing requests which require it.
 	VAR_PRIVATE/list/tts_effects_queue = list()
 	/// Lazy list of request that need to performed to TTS provider API
 	VAR_PRIVATE/list/tts_requests_queue

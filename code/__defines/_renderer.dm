@@ -230,6 +230,11 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	group = RENDER_GROUP_SCREEN
 	plane = RUNECHAT_PLANE
 
+/atom/movable/renderer/balloon_chat
+	name = "Balloon chat"
+	group = RENDER_GROUP_SCREEN
+	plane = BALLOON_CHAT_PLANE
+
 /* *
 * Group renderers
 * We treat some renderers as render groups that other renderers subscribe to. Renderers

@@ -593,35 +593,34 @@
 	update_icon()
 	return
 
-/obj/machinery/disposal/deliveryChute/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isScrewdriver(I))
-		if(c_mode==0)
-			c_mode=1
-			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-			to_chat(user, "You remove the screws around the power connection.")
-			return TRUE
-		else if(c_mode==1)
-			c_mode=0
-			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-			to_chat(user, "You attach the screws around the power connection.")
-			return TRUE
-	if (isWelder(I) && c_mode==1)
-		var/obj/item/weldingtool/W = I
-		if(W.can_use(1,user))
-			to_chat(user, "You start slicing the floorweld off the delivery chute.")
-			if(do_after(user, (I.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-				if(!src || !W.remove_fuel(1, user)) return
-				to_chat(user, "You sliced the floorweld off the delivery chute.")
-				var/obj/structure/disposalconstruct/C = new (loc, src)
-				C.update()
-				qdel(src)
-			return TRUE
-		else
-			to_chat(user, "You need more welding fuel to complete this task.")
-			return TRUE
+/obj/machinery/disposal/deliveryChute/screwdriver_act(mob/living/user, obj/item/tool)
+	switch(c_mode)
+		if(0)
+			. = ITEM_INTERACT_SUCCESS
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			c_mode = 1
+			to_chat(user, SPAN_NOTICE("You remove the screws around the power connection."))
+		if(1)
+			. = ITEM_INTERACT_SUCCESS
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			c_mode = 0
+			to_chat(user, SPAN_NOTICE("You attach the screws around the power connection."))
 
-	return ..()
+/obj/machinery/disposal/deliveryChute/welder_act(mob/living/user, obj/item/tool)
+	if(c_mode != 1)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_use_check(user, 1))
+		return
+	to_chat(user, "You start slicing the floorweld off the delivery chute.")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You sliced the floorweld off the delivery chute.")
+	var/obj/structure/disposalconstruct/C = new (loc, src)
+	C.update()
+	qdel(src)
 
 /obj/machinery/disposal/deliveryChute/Destroy()
 	if(trunk)

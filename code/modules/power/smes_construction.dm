@@ -86,7 +86,7 @@
 	malf_upgraded = 1
 	emp_proof = 1
 	RefreshParts()
-	to_chat(user, "\The [src] has been upgraded. It's transfer rate and capacity has increased, and it is now resistant against EM pulses.")
+	to_chat(user, "[src] has been upgraded. It's transfer rate and capacity has increased, and it is now resistant against EM pulses.")
 	return 1
 
 
@@ -288,17 +288,18 @@
 
 /obj/machinery/power/smes/buildable/cannot_transition_to(state_path, mob/user)
 	if(failing)
-		return SPAN_WARNING("\The [src]'s screen is flashing with alerts. It seems to be overloaded! Touching it now is probably not a good idea.")
+		return SPAN_WARNING("[src]'s screen is flashing with alerts. It seems to be overloaded! Touching it now is probably not a good idea.")
 
 	if(state_path == /singleton/machine_construction/default/deconstructed)
 		if(charge > (capacity/100) && safeties_enabled)
-			return SPAN_WARNING("\The [src]'s safety circuit is preventing modifications while it's charged!")
+			return SPAN_WARNING("[src]'s safety circuit is preventing modifications while it's charged!")
 		if(output_attempt || input_attempt)
-			return SPAN_WARNING("Turn \the [src] off first!")
+			return SPAN_WARNING("Turn [src] off first!")
 		if(!MACHINE_IS_BROKEN(src))
 			return SPAN_WARNING("You have to disassemble the terminal[num_terminals > 1 ? "s" : ""] first!")
 		if(user)
-			if(!do_after(user, 5 SECONDS * number_of_components(/obj/item/stock_parts/smes_coil), src, DO_REPAIR_CONSTRUCT) && isCrowbar(user.get_active_hand()))
+			var/obj/item/tool = user.get_active_hand()
+			if(!do_after(user, 5 SECONDS * number_of_components(/obj/item/stock_parts/smes_coil), src, DO_REPAIR_CONSTRUCT) && tool.tool_behaviour == TOOL_CROWBAR)
 				return MCS_BLOCK
 			if(check_total_system_failure(user))
 				return MCS_BLOCK
@@ -306,45 +307,43 @@
 
 /obj/machinery/power/smes/buildable/can_add_component(obj/item/stock_parts/component, mob/user)
 	if(charge > (capacity/100) && safeties_enabled)
-		to_chat(user,  SPAN_WARNING("\The [src]'s safety circuit is preventing modifications while it's charged!"))
+		to_chat(user,  SPAN_WARNING("[src]'s safety circuit is preventing modifications while it's charged!"))
 		return FALSE
 	. = ..()
 	if(!.)
 		return
 	if(istype(component,/obj/item/stock_parts/smes_coil))
 		if(output_attempt || input_attempt)
-			to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
+			to_chat(user, SPAN_WARNING("Turn [src] off first!"))
 			return FALSE
 		if(!do_after(user, 5 SECONDS, src, DO_REPAIR_CONSTRUCT) || check_total_system_failure(user))
 			return FALSE
 
 /obj/machinery/power/smes/buildable/remove_part_and_give_to_user(path, mob/user)
 	if(charge > (capacity/100) && safeties_enabled)
-		to_chat(user,  SPAN_WARNING("\The [src]'s safety circuit is preventing modifications while it's charged!"))
+		to_chat(user,  SPAN_WARNING("[src]'s safety circuit is preventing modifications while it's charged!"))
 		return
 	if(ispath(path,/obj/item/stock_parts/smes_coil))
 		if(output_attempt || input_attempt)
-			to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
+			to_chat(user, SPAN_WARNING("Turn [src] off first!"))
 			return
 		if(!do_after(user, 5 SECONDS, src, DO_REPAIR_CONSTRUCT) || check_total_system_failure(user))
 			return
 	..()
 
-/obj/machinery/power/smes/buildable/use_tool(obj/item/W, mob/living/user, list/click_params)
+/obj/machinery/power/smes/buildable/can_use_item(obj/item/tool, mob/living/user, click_params)
 	// No more disassembling of overloaded SMESs. You broke it, now enjoy the consequences.
-	if (failing)
-		to_chat(user, SPAN_WARNING("\The [src]'s screen is flashing with alerts. It seems to be overloaded! Touching it now is probably not a good idea."))
-		return TRUE
+	if(failing)
+		USE_FEEDBACK_FAILURE("[src]'s screen is flashing with alerts. It seems to be overloaded! Touching it now is probably not a good idea.")
+		return FALSE
+	. = ..()
 
-	// Multitool - change RCON tag
-	if(isMultitool(W))
-		var/newtag = input(user, "Enter new RCON tag. Use \"NO_TAG\" to disable RCON or leave empty to cancel.", "SMES RCON system") as text
-		if(newtag)
-			RCon_tag = newtag
-			to_chat(user, SPAN_NOTICE("You changed the RCON tag to: [newtag]"))
-		return TRUE
-
-	return ..()
+/obj/machinery/power/smes/buildable/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/newtag = input(user, "Enter new RCON tag. Use \"NO_TAG\" to disable RCON or leave empty to cancel.", "SMES RCON system") as text
+	if(newtag)
+		RCon_tag = newtag
+		to_chat(user, SPAN_NOTICE("You changed the RCON tag to: [newtag]"))
 
 // Proc: toggle_input()
 // Parameters: None

@@ -205,9 +205,6 @@
 	machine_desc = "This is simply a large portable scrubber that can't be moved once it's bolted into place, and is otherwise identical."
 	obj_flags = EMPTY_BITFIELD
 
-/obj/machinery/portable_atmospherics/powered/scrubber/huge/stationary/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isWrench(I))
-		to_chat(user, SPAN_WARNING("The bolts are too tight for you to unscrew!"))
-		return TRUE
-
-	return ..()
+/obj/machinery/portable_atmospherics/powered/scrubber/huge/stationary/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+	to_chat(user, SPAN_WARNING("The bolts are too tight for you to unscrew!"))

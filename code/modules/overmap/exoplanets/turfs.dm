@@ -29,9 +29,15 @@
 	if(E.planetary_area && istype(loc, world.area))
 		change_area(E.planetary_area)
 
+/turf/simulated/floor/exoplanet/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+
+/turf/simulated/floor/exoplanet/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+
 /turf/simulated/floor/exoplanet/use_tool(obj/item/C, mob/living/user, list/click_params)
 	if(diggable && istype(C,/obj/item/shovel))
-		visible_message(SPAN_NOTICE("\The [user] starts digging \the [src]"))
+		visible_message(SPAN_NOTICE("[user] starts digging [src]"))
 		if(do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE))
 			to_chat(user,SPAN_NOTICE("You dig a deep pit."))
 			new /obj/structure/pit(src)
@@ -50,7 +56,7 @@
 		ChangeTurf(/turf/simulated/floor, FALSE, FALSE, TRUE)
 		return TRUE
 
-	else if (isCrowbar(C) || isWelder(C) || istype(C, /obj/item/gun/energy/plasmacutter))
+	else if (istype(C, /obj/item/gun/energy/plasmacutter))
 		return
 	else
 		return ..()
@@ -108,7 +114,7 @@
 	var/obj/item/reagent_containers/RG = O
 	if (reagent_type && istype(RG) && RG.is_open_container() && RG.reagents)
 		RG.reagents.add_reagent(reagent_type, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
-		user.visible_message(SPAN_NOTICE("[user] fills \the [RG] from \the [src]."),SPAN_NOTICE("You fill \the [RG] from \the [src]."))
+		user.visible_message(SPAN_NOTICE("[user] fills [RG] from [src]."),SPAN_NOTICE("You fill [RG] from [src]."))
 		return TRUE
 	else
 		return ..()

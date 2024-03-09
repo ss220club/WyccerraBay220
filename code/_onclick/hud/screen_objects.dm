@@ -84,7 +84,7 @@
 	name = "you shouldn't see this, report coders"
 	icon_state = "blank"
 	layer = HUD_CLICKABLE_LAYER
-	mouse_opacity = MOUSE_OPACITY_PRIORITY
+	mouse_opacity = MOUSE_OPACITY_OPAQUE
 
 /obj/screen/container/Click(location, control, params)
 	if(!usr.canClick())

@@ -14,7 +14,7 @@
 /obj/screen/screentip
 	icon = null
 	icon_state = null
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	screen_loc = "TOP, CENTER - 3"
 	maptext_width = 256
 	maptext_height = 480

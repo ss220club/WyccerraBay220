@@ -431,6 +431,14 @@
 
 /obj/machinery/power/apc/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+
+	// Prying off broken cover
+	if((MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden)) && (opened == COVER_CLOSED || opened == COVER_OPEN))
+		if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		remove_broken_cover(COVER_REMOVED)
+		return
+
 	if(opened) // Closes or removes board.
 		if(has_electronics == ELECTRONICS_PLUGGED)
 			if(terminal())
@@ -459,10 +467,6 @@
 			user.visible_message(SPAN_NOTICE("[user] pries the cover shut on [src]."), SPAN_NOTICE("You pry the cover shut."))
 			update_icon()
 			return
-
-	if(MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden))
-		to_chat(user, SPAN_WARNING("The cover appears broken or stuck."))
-		return
 	if(coverlocked && !(GET_FLAGS(stat, MACHINE_STAT_MAINT)))
 		to_chat(user, SPAN_WARNING("The cover is locked and cannot be opened."))
 		return
@@ -616,6 +620,13 @@
 			update_icon()
 			return TRUE
 
+		// Cover is the only thing broken, we do not need to remove elctronicks to replace cover
+		if(MACHINE_IS_BROKEN(src) && opened == COVER_REMOVED && has_electronics && terminal())
+			user.visible_message(SPAN_NOTICE("[user] replaces missing APC's cover."))
+			if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
+				qdel(W)
+				remove_broken_cover(COVER_CLOSED)
+
 		if(MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden))
 			if (has_electronics)
 				to_chat(user, SPAN_WARNING("You cannot repair this APC until you remove the electronics still inside."))
@@ -628,14 +639,7 @@
 					SPAN_NOTICE("[user.name] has replaced the damaged APC frame with new one."),\
 					"You replace the damaged APC frame with new one.")
 				qdel(W)
-				set_broken(FALSE)
-				// Malf AI, removes the APC from AI's hacked APCs list.
-				if(hacker && hacker.hacked_apcs && (src in hacker.hacked_apcs))
-					hacker.hacked_apcs -= src
-					hacker = null
-				if (opened == COVER_REMOVED)
-					opened = COVER_OPEN
-				queue_icon_update()
+				remove_broken_cover(COVER_CLOSED)
 			return TRUE
 
 	if((. = ..())) // Further interactions are low priority attack stuff.
@@ -646,11 +650,10 @@
 			&& W.force >= 5 \
 			&& W.w_class >= 3.0 \
 			&& prob(W.force) )
-		opened = COVER_REMOVED
-		user.visible_message(SPAN_DANGER("The APC cover was knocked down with the [W.name] by [user.name]!"), \
-			SPAN_DANGER("You knock down the APC cover with your [W.name]!"), \
+		remove_broken_cover(COVER_REMOVED)
+		user.visible_message(SPAN_DANGER("The APC cover was knocked down with the [W] by [user]!"), \
+			SPAN_DANGER("You knock down the APC cover with your [W]!"), \
 			"You hear a bang")
-		update_icon()
 		return TRUE
 
 	if (istype(user, /mob/living/silicon))
@@ -661,7 +664,7 @@
 	return ..()
 
 /obj/machinery/power/apc/use_weapon(obj/item/W, mob/living/user, list/click_params)
-	if(W.force >= 5 && W.w_class >= ITEM_SIZE_NORMAL && prob(W.force))
+	if(W.force >= 5 && W.w_class >= ITEM_SIZE_NORMAL)
 		user.setClickCooldown(user.get_attack_speed(W))
 		user.do_attack_animation(src)
 		user.visible_message(
@@ -669,6 +672,8 @@
 			SPAN_DANGER("You hit the [name] with your [W.name]!"), \
 			"You hear a bang"
 		)
+		if(!prob(W.force))
+			return
 		var/roulette = rand(1,100)
 		switch(roulette)
 			if(1 to 10)
@@ -676,14 +681,22 @@
 				to_chat(user, SPAN_NOTICE("You manage to disable the lock on [src]!"))
 			if(50 to 70)
 				to_chat(user, SPAN_NOTICE("You manage to bash the lid open!"))
-				opened = COVER_CLOSED
+				opened = COVER_OPEN
 			if(90 to 100)
 				to_chat(user, SPAN_WARNING("There's a nasty sound and [src] goes cold..."))
 				set_broken(TRUE)
-		queue_icon_update()
-		playsound(get_turf(src), 'sound/weapons/smash.ogg', 75, 1)
+		update_icon()
 
 	return ..()
+
+/obj/machinery/power/apc/proc/remove_broken_cover(new_opened = COVER_REMOVED)
+	// Malf AI, removes the APC from AI's hacked APCs list.
+	if(hacker && hacker.hacked_apcs && (src in hacker.hacked_apcs))
+		hacker.hacked_apcs -= src
+		hacker = null
+	set_broken(new_opened == COVER_CLOSED ? FALSE : TRUE)
+	opened = new_opened
+	update_icon()
 
 // attack with hand - remove cell (if cover open) or interact with the APC
 
@@ -1086,6 +1099,7 @@
 		..()
 		visible_message(SPAN_NOTICE("[src]'s screen suddenly explodes in rain of sparks and small debris!"))
 		operating = 0
+		update_icon()
 		update()
 	return TRUE
 

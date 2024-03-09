@@ -296,7 +296,6 @@
 				return 1
 
 		else if(agony_amount > 0.5 * max_damage)
-			owner.visible_message(SPAN_WARNING("[owner] reels in pain!"))
 			owner.balloon_alert_to_viewers("корчится от боли!")
 			if(agony_amount > max_damage)
 				owner.Weaken(4)

@@ -47,6 +47,7 @@ SUBSYSTEM_DEF(tts220)
 
 	VAR_PRIVATE/tts_requests_queue_limit = 100
 	VAR_PRIVATE/tts_rps_limit = 11
+	VAR_PRIVATE/last_network_fire = 0
 
 	/// General request queue
 	VAR_PRIVATE/list/tts_queue = list()
@@ -128,11 +129,13 @@ SUBSYSTEM_DEF(tts220)
 	is_enabled = FALSE
 
 /datum/controller/subsystem/tts220/fire()
-	if(last_fire + 1 SECOND >= world.time)
+	if(last_network_fire + 1 SECOND >= world.time)
 		fire_networking()
 	fire_sound_processing()
 
 /datum/controller/subsystem/tts220/proc/fire_networking()
+	last_network_fire = world.time
+
 	tts_rps = tts_rps_counter
 	tts_rps_counter = 0
 	tts_trps = tts_trps_counter

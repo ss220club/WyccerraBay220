@@ -27,22 +27,22 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	if (modifiers[CTRL_CLICK] && modifiers[ALT_CLICK] && modifiers[SHIFT_CLICK])
+	if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (!control_disabled && A.AICtrlAltShiftClick(src))
 			return TRUE
 		if (CtrlAltShiftClickOn(A))
 			return TRUE
-	else if (modifiers[CTRL_CLICK] && modifiers[ALT_CLICK])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (!control_disabled && A.AICtrlAltClick(src))
 			return TRUE
 		if (CtrlAltClickOn(A))
 			return TRUE
-	else if (modifiers[SHIFT_CLICK] && modifiers[CTRL_CLICK])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, CTRL_CLICK))
 		if (!control_disabled && A.AICtrlShiftClick(src))
 			return TRUE
 		if (CtrlShiftClickOn(A))
 			return TRUE
-	else if (modifiers[SHIFT_CLICK] && modifiers[ALT_CLICK])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (!control_disabled && A.AIAltShiftClick(src))
 			return TRUE
 		if (AltShiftClickOn(A))
@@ -52,17 +52,17 @@
 			return TRUE
 		if (MiddleClickOn(A))
 			return TRUE
-	else if (modifiers[SHIFT_CLICK])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (!control_disabled && A.AIShiftClick(src))
 			return TRUE
 		if (ShiftClickOn(A))
 			return TRUE
-	else if (modifiers[ALT_CLICK])
+	else if (LAZYACCESS(modifiers, ALT_CLICK))
 		if (!control_disabled && A.AIAltClick(src))
 			return TRUE
 		if (AltClickOn(A))
 			return TRUE
-	else if (modifiers[CTRL_CLICK])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK))
 		if (!control_disabled && A.AICtrlClick(src))
 			return TRUE
 		if (CtrlClickOn(A))

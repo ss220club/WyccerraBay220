@@ -66,12 +66,12 @@
 	if(!loc) return
 	var/adj = A.Adjacent(src) // Why in the fuck isn't Adjacent() commutative.
 
-	var/modifiers = params2list(params)
-	if(modifiers[SHIFT_CLICK])
+	var/list/modifiers = params2list(params)
+	if(LAZYACCESS(modifiers, SHIFT_CLICK))
 		examinate(user, A)
 		return
 
-	if(modifiers[CTRL_CLICK])
+	if(LAZYACCESS(modifiers, CTRL_CLICK))
 		if(istype(A, /obj/item/mech_equipment))
 			for(var/hardpoint in hardpoints)
 				if(A == hardpoints[hardpoint])

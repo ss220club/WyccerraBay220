@@ -17,9 +17,9 @@
 */
 
 /atom/Click(location, control, params) // This is their reaction to being clicked on (standard proc)
-	var/list/L = params2list(params)
-	var/dragged = L["drag"]
-	if(dragged && !L[dragged])
+	var/list/modifiers = params2list(params)
+	var/dragged = LAZYACCESS(modifiers, DRAG)
+	if(dragged && !LAZYACCESS(modifiers, dragged))
 		return
 
 	var/datum/click_handler/click_handler = usr.GetClickHandler()
@@ -67,28 +67,28 @@
 	next_click = world.time + 1
 
 	var/list/modifiers = params2list(params)
-	if (modifiers[CTRL_CLICK] && modifiers[ALT_CLICK] && modifiers[SHIFT_CLICK])
+	if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (CtrlAltShiftClickOn(A))
 			return TRUE
-	else if (modifiers[SHIFT_CLICK] && modifiers[CTRL_CLICK])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, CTRL_CLICK))
 		if (CtrlShiftClickOn(A))
 			return TRUE
-	else if (modifiers[CTRL_CLICK] && modifiers[ALT_CLICK])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (CtrlAltClickOn(A))
 			return TRUE
-	else if (modifiers[SHIFT_CLICK] && modifiers[ALT_CLICK])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (AltShiftClickOn(A))
 			return TRUE
 	else if (modifiers["middle"])
 		if (MiddleClickOn(A))
 			return TRUE
-	else if (modifiers[SHIFT_CLICK])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (ShiftClickOn(A))
 			return TRUE
-	else if (modifiers[ALT_CLICK])
+	else if (LAZYACCESS(modifiers, ALT_CLICK))
 		if (AltClickOn(A))
 			return TRUE
-	else if (modifiers[CTRL_CLICK])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK))
 		if (CtrlClickOn(A))
 			return TRUE
 

@@ -125,12 +125,13 @@
 
 		. = TOPIC_HANDLED
 
-/datum/build_mode/turret/OnClick(atom/object, list/pa)
-	if (pa[RIGHT_CLICK])
+/datum/build_mode/turret/OnClick(atom/object, params)
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, RIGHT_CLICK))
 		if (istype(object, /obj/machinery/porta_turret))
 			qdel(object)
 
-	if (pa[LEFT_CLICK])
+	if (LAZYACCESS(modifiers, RIGHT_CLICK))
 		if (!object)
 			return
 

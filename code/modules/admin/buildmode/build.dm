@@ -21,16 +21,17 @@
 	build_type = select_subpath(build_type || /obj/item/latexballon)
 	to_chat(user, "Selected Type [build_type]")
 
-/datum/build_mode/build/OnClick(atom/target, list/parameters)
+/datum/build_mode/build/OnClick(atom/target, params)
 	if (!target)
 		return
-	if (parameters[MIDDLE_CLICK] || parameters[CTRL_CLICK] && parameters[LEFT_CLICK])
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, MIDDLE_CLICK) || LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, LEFT_CLICK))
 		if (ispath(target.type, /atom))
 			to_chat(user, "Selected Type [target.type]")
 			build_type = target.type
 			return
 	var/turf/location = get_turf(target)
-	if (parameters[RIGHT_CLICK])
+	if (LAZYACCESS(modifiers, RIGHT_CLICK))
 		if (isturf(target))
 			return
 		if (isobserver(target)) // don't delete ghosts because it causes very weird things to happen
@@ -44,7 +45,7 @@
 			to_chat(M, SPAN_DEBUG(FONT_LARGE("OOC: You have been deleted by an admin using build mode. If this seems to be in error, please adminhelp and let them know.")))
 			M.ghostize()
 		qdel(target)
-	else if (parameters[LEFT_CLICK])
+	else if (LAZYACCESS(modifiers, LEFT_CLICK))
 		if (!build_type)
 			to_chat(user, SPAN_WARNING("Select a type to construct."))
 			return

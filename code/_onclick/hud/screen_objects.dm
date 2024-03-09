@@ -101,10 +101,10 @@
 	screen_loc = ui_zonesel
 	var/selecting = BP_CHEST
 
-/obj/screen/zone_sel/Click(location, control,params)
-	var/list/PL = params2list(params)
-	var/icon_x = text2num(PL["icon-x"])
-	var/icon_y = text2num(PL["icon-y"])
+/obj/screen/zone_sel/Click(location, control, params)
+	var/list/modifiers = params2list(params)
+	var/icon_x = text2num(LAZYACCESS(modifiers, ICON_X))
+	var/icon_y = text2num(LAZYACCESS(modifiers, ICON_Y))
 	var/new_selecting
 
 	switch(icon_y)
@@ -184,9 +184,9 @@
 	var/intent = I_HELP
 
 /obj/screen/intent/Click(location, control, params)
-	var/list/P = params2list(params)
-	var/icon_x = text2num(P["icon-x"])
-	var/icon_y = text2num(P["icon-y"])
+	var/list/modifiers = params2list(params)
+	var/icon_x = text2num(LAZYACCESS(modifiers, ICON_Y))
+	var/icon_y = text2num(LAZYACCESS(modifiers, ICON_Y))
 	intent = I_DISARM
 	if(icon_x <= world.icon_size/2)
 		if(icon_y <= world.icon_size/2)

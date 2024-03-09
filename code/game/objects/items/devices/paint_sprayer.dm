@@ -364,9 +364,9 @@
 	if (A != paint_sprayer)
 		if(!istype(user.buckled) || user.buckled.buckle_movable)
 			user.face_atom(A)
-		if(modifiers[CTRL_CLICK] && paint_sprayer.pick_color(A, user))
+		if(LAZYACCESS(modifiers, CTRL_CLICK) && paint_sprayer.pick_color(A, user))
 			return
-		if(modifiers[SHIFT_CLICK] && paint_sprayer.remove_paint(A, user))
+		if(LAZYACCESS(modifiers, SHIFT_CLICK) && paint_sprayer.remove_paint(A, user))
 			return
 	user.ClickOn(A, params)
 

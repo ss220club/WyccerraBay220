@@ -43,24 +43,25 @@ Shift + Right Click - Select point B
 		return
 	M.color = colors.get(T.loc)
 
-/datum/build_mode/areas/OnClick(atom/A, list/parameters)
-	if (parameters[RIGHT_CLICK] && !parameters[SHIFT_CLICK])
+/datum/build_mode/areas/OnClick(atom/A, params)
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, RIGHT_CLICK) && !LAZYACCESS(modifiers, SHIFT_CLICK))
 		Configurate()
 		return
 	var/turf/T = get_turf(A)
 	var/area/R = T?.loc
 	if ((!T) || (!R))
 		return
-	if (parameters[CTRL_CLICK] || parameters[MIDDLE_CLICK])
+	if (LAZYACCESS(modifiers, CTRL_CLICK) || LAZYACCESS(modifiers, MIDDLE_CLICK))
 		selected_area = R
 		to_chat(user, "Picked area [selected_area.name]")
 	else if (selected_area)
 
-		if (parameters[LEFT_CLICK] && parameters[SHIFT_CLICK])
+		if (LAZYACCESS(modifiers, LEFT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 			coordinate_A = get_turf(A)
 			to_chat(user, SPAN_NOTICE("Defined [coordinate_A] ([coordinate_A.type]) as point A."))
 
-		if (parameters[RIGHT_CLICK] && parameters[SHIFT_CLICK])
+		if (LAZYACCESS(modifiers, RIGHT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 			coordinate_B = get_turf(A)
 			to_chat(user, SPAN_NOTICE("Defined [coordinate_B] ([coordinate_B.type]) as point B."))
 

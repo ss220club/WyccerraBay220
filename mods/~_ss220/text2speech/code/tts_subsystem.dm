@@ -90,14 +90,6 @@ SUBSYSTEM_DEF(tts220)
 	var/list/tts_acronym_replacements
 	/// Replacement map for jobs for proper TTS spelling
 	VAR_PRIVATE/list/tts_job_replacements
-	/// Assoc list with sound effect defines mapped to corresponding singletones
-	VAR_PRIVATE/list/sound_effects = list(
-		SOUND_EFFECT_RADIO = /singleton/sound_effect/radio,
-		SOUND_EFFECT_ROBOT = /singleton/sound_effect/robot,
-		SOUND_EFFECT_RADIO_ROBOT = /singleton/sound_effect/radio_robot,
-		SOUND_EFFECT_MEGAPHONE = /singleton/sound_effect/megaphone,
-		SOUND_EFFECT_MEGAPHONE_ROBOT = /singleton/sound_effect/megaphone_robot
-	)
 
 /datum/controller/subsystem/tts220/PreInit()
 	. = ..()
@@ -178,7 +170,7 @@ SUBSYSTEM_DEF(tts220)
 		var/datum/sound_effect_request/request = filename_requests[1]
 		apply_sound_effect(request.effect, request.original_filename, request.output_filename)
 
-		for(var/datum/sound_effect_request/adjacent_request in filename_requests)
+		for(var/datum/sound_effect_request/adjacent_request as anything in filename_requests)
 			invoke_async(adjacent_request.cb)
 
 		queue_position++
@@ -225,7 +217,7 @@ SUBSYSTEM_DEF(tts220)
 	LAZYADD(tts_requests_queue, list(list(text, seed, proc_callback)))
 	return TRUE
 
-/datum/controller/subsystem/tts220/proc/get_tts(atom/speaker, mob/listener, message, seed_name, is_local = TRUE, effect = SOUND_EFFECT_NONE, traits = TTS_TRAIT_RATE_FASTER, preSFX = null, postSFX = null)
+/datum/controller/subsystem/tts220/proc/get_tts(atom/speaker, mob/listener, message, seed_name, is_local = TRUE, singleton/sound_effect/effect = null, traits = TTS_TRAIT_RATE_FASTER, preSFX = null, postSFX = null)
 	if(!is_enabled)
 		return
 	if(!message)
@@ -262,15 +254,15 @@ SUBSYSTEM_DEF(tts220)
 
 	var/hash = md5(lowertext(text))
 	var/filename = "data/tts_cache/[seed.name]/[hash]"
-
+	var/effect_singleton = GET_SINGLETON(effect)
 
 	if(fexists("[filename].ogg"))
 		tts_reused++
 		tts_rrps_counter++
-		play_tts(speaker, listener, filename, is_local, effect, preSFX, postSFX)
+		play_tts(speaker, listener, filename, is_local, effect_singleton, preSFX, postSFX)
 		return
 
-	var/datum/callback/play_tts_cb = CALLBACK(src, PROC_REF(play_tts), speaker, listener, filename, is_local, effect, preSFX, postSFX)
+	var/datum/callback/play_tts_cb = CALLBACK(src, PROC_REF(play_tts), speaker, listener, filename, is_local, effect_singleton, preSFX, postSFX)
 
 	if(LAZYLEN(tts_queue[filename]))
 		tts_reused++
@@ -278,7 +270,7 @@ SUBSYSTEM_DEF(tts220)
 		LAZYADD(tts_queue[filename], play_tts_cb)
 		return
 
-	queue_request(text, seed, CALLBACK(src, PROC_REF(get_tts_callback), speaker, listener, filename, seed, is_local, effect, preSFX, postSFX))
+	queue_request(text, seed, CALLBACK(src, PROC_REF(get_tts_callback), speaker, listener, filename, seed, is_local, effect_singleton, preSFX, postSFX))
 	LAZYADD(tts_queue[filename], play_tts_cb)
 
 /datum/controller/subsystem/tts220/proc/get_tts_callback(atom/speaker, mob/listener, filename, datum/tts_seed/seed, is_local, effect, preSFX, postSFX, datum/http_response/response)
@@ -322,38 +314,21 @@ SUBSYSTEM_DEF(tts220)
 
 	tts_queue -= filename
 
-/datum/controller/subsystem/tts220/proc/append_filter_to_filename(pure_filename, effect)
-	switch(effect)
-		if(SOUND_EFFECT_NONE)
-			return "[pure_filename].ogg"
-		if(SOUND_EFFECT_RADIO)
-			return "[pure_filename]_radio.ogg"
-		if(SOUND_EFFECT_ROBOT)
-			return "[pure_filename]_robot.ogg"
-		if(SOUND_EFFECT_RADIO_ROBOT)
-			return "[pure_filename]_radio_robot.ogg"
-		if(SOUND_EFFECT_MEGAPHONE)
-			return "[pure_filename]_megaphone.ogg"
-		if(SOUND_EFFECT_MEGAPHONE_ROBOT)
-			return "[pure_filename]_megaphone_robot.ogg"
-		else
-			CRASH("Invalid sound effect chosen.")
-
 /datum/controller/subsystem/tts220/proc/queue_sound_effect_processing(pure_filename, effect, processed_filename, datum/callback/output_tts_cb)
 	var/datum/sound_effect_request/request = new
 	request.original_filename = "[pure_filename].ogg"
 	request.output_filename = processed_filename
-	request.effect = GET_SINGLETON(sound_effects[effect])
+	request.effect = effect
 	request.cb = output_tts_cb
 	LAZYADD(tts_effects_queue[processed_filename], request)
 
-/datum/controller/subsystem/tts220/proc/play_tts(atom/speaker, mob/listener, pure_filename, is_local = TRUE, effect = SOUND_EFFECT_NONE, preSFX = null, postSFX = null)
+/datum/controller/subsystem/tts220/proc/play_tts(atom/speaker, mob/listener, pure_filename, is_local = TRUE, singleton/sound_effect/effect = null, preSFX = null, postSFX = null)
 	if(isnull(listener) || !listener.client)
 		return
 
-	var/filename2play = append_filter_to_filename(pure_filename, effect)
+	var/filename2play = "[pure_filename]_[effect.name]"
 
-	if(effect == SOUND_EFFECT_NONE || fexists(filename2play))
+	if(isnull(effect) || fexists(filename2play))
 		output_tts(speaker, listener, filename2play, is_local, preSFX, postSFX)
 		return
 

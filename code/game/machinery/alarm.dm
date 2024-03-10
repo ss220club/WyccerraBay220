@@ -863,14 +863,7 @@
 	switch(buildstage)
 		if(2)
 			if (isid(W) || istype(W, /obj/item/modular_computer))
-				if(inoperable())
-					to_chat(user, "It does nothing")
-					return TRUE
-				if(allowed(usr) && !wires.IsIndexCut(AALARM_WIRE_IDSCAN))
-					locked = !locked
-					to_chat(user, SPAN_NOTICE("You [ locked ? "lock" : "unlock"] the Air Alarm interface."))
-				else
-					to_chat(user, SPAN_WARNING("Access denied."))
+				togglelock(user)
 				return TRUE
 
 		if(1)
@@ -894,6 +887,24 @@
 				return TRUE
 
 	return ..()
+
+/obj/machinery/alarm/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	togglelock(user)
+
+/obj/machinery/alarm/proc/togglelock(mob/living/user)
+	if(inoperable())
+		USE_FEEDBACK_FAILURE("It does nothing.")
+		return FALSE
+	if(!allowed(user) || wires.IsIndexCut(AALARM_WIRE_IDSCAN))
+		USE_FEEDBACK_FAILURE("Access denied.")
+		return FALSE
+	locked = !locked
+	to_chat(user, SPAN_NOTICE("You [ locked ? "lock" : "unlock"] the Air Alarm interface."))
+	update_icon()
 
 /obj/machinery/alarm/examine(mob/user)
 	. = ..()

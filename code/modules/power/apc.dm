@@ -564,23 +564,7 @@
 
 	// trying to unlock the interface with an ID card
 	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/modular_computer))
-		if(emagged)
-			to_chat(user, "The interface is broken.")
-		else if(opened)
-			to_chat(user, "You must close the cover to swipe an ID card.")
-		else if(wiresexposed)
-			to_chat(user, "You must close the panel")
-		else if(MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
-			to_chat(user, "Nothing happens.")
-		else if(hacker && !hacker.hacked_apcs_hidden)
-			to_chat(user, SPAN_WARNING("Access denied."))
-		else
-			if(has_access(req_access, user.GetAccess()) && !isWireCut(APC_WIRE_IDSCAN))
-				locked = !locked
-				to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
-				update_icon()
-			else
-				to_chat(user, SPAN_WARNING("Access denied."))
+		togglelock(user)
 		return TRUE
 
 	// Inserting board.
@@ -688,6 +672,13 @@
 		update_icon()
 
 	return ..()
+
+/obj/machinery/power/apc/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	togglelock(user)
 
 /obj/machinery/power/apc/proc/remove_broken_cover(new_opened = COVER_REMOVED)
 	// Malf AI, removes the APC from AI's hacked APCs list.
@@ -847,12 +838,7 @@
 		if("overload")
 			overload_lighting()
 		if("toggleaccess")
-			if(istype(usr, /mob/living/silicon))
-				if(emagged || MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
-					to_chat(usr, "The APC does not respond to the command.")
-			else
-				locked = !locked
-				update_icon()
+			togglelock(usr)
 		else
 			return FALSE
 
@@ -1172,6 +1158,27 @@
 	locked = 1
 	update_icon()
 	return 1
+
+/obj/machinery/power/apc/proc/togglelock(mob/living/user)
+	if(emagged)
+		USE_FEEDBACK_FAILURE("The interface is broken.")
+		return FALSE
+	if(opened)
+		USE_FEEDBACK_FAILURE("You must close the cover.")
+		return FALSE
+	if(wiresexposed)
+		USE_FEEDBACK_FAILURE("You must close the panel.")
+		return FALSE
+	if(MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
+		USE_FEEDBACK_FAILURE("Nothing happens.")
+		return FALSE
+	if(!allowed(user) || (hacker && !hacker.hacked_apcs_hidden) || isWireCut(APC_WIRE_IDSCAN))
+		USE_FEEDBACK_FAILURE("Access denied.")
+		return FALSE
+	locked = !locked
+	update_icon()
+	to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
+	return TRUE
 
 /obj/item/module/power_control
 	name = "power control module"

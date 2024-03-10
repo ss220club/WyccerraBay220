@@ -162,4 +162,10 @@
 /atom/proc/attack_robot_secondary(mob/user, list/modifiers)
 	if (SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_ROBOT_SECONDARY, user) & COMPONENT_CANCEL_ATTACK_CHAIN)
 		return
-	return attack_robot(user)
+	return attack_ai_secondary(user, modifiers)
+
+/obj/machinery/power/apc/attack_robot_secondary(mob/user, list/modifiers)
+	return attack_ai_secondary(user, modifiers)
+
+/obj/machinery/alarm/attack_robot_secondary(mob/user, list/modifiers)
+	return attack_ai_secondary(user, modifiers)

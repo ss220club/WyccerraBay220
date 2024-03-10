@@ -85,12 +85,12 @@
 		silicon_camera.captureimage(A, usr)
 		return
 
-	/*
-		AI restrained() currently does nothing
-	if(restrained())
-		RestrainedClickOn(A)
-	else
-	*/
+	if(LAZYACCESS(modifiers, RIGHT_CLICK))
+		var/secondary_result = A.attack_ai_secondary(src, modifiers)
+		if(secondary_result == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN || secondary_result == SECONDARY_ATTACK_CONTINUE_CHAIN)
+			return
+		else if (secondary_result != SECONDARY_ATTACK_CALL_NORMAL)
+			CRASH("attack_robot_secondary did not return a SECONDARY_ATTACK_* define.")
 	A.add_hiddenprint(src)
 	A.attack_ai(src)
 
@@ -116,6 +116,9 @@
  */
 /atom/proc/attack_ai(mob/user as mob)
 	return
+
+/atom/proc/attack_ai_secondary(mob/living/user, modifiers)
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /*
 	The following criminally helpful code is just the previous code cleaned up;
@@ -168,6 +171,18 @@
 		return FALSE
 	Topic(src, list("breaker"="1"))
 	return TRUE
+
+/obj/machinery/power/apc/attack_ai_secondary(mob/living/user, modifiers)
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(user.incapacitated())
+		return
+	togglelock(user)
+
+/obj/machinery/alarm/attack_ai_secondary(mob/living/user, modifiers)
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(user.incapacitated())
+		return
+	togglelock(user)
 
 /obj/machinery/turretid/AICtrlClick() //turns off/on Turrets
 	if(usr.incapacitated())

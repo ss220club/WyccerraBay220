@@ -169,6 +169,7 @@
 	#define HUD_ABOVE_HUD_LAYER 6
 
 #define RUNECHAT_PLANE 11
+#define BALLOON_CHAT_PLANE 12
 
 //-------------------- Rendering ---------------------
 

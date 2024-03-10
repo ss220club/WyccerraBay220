@@ -2,9 +2,8 @@ import { useBackend } from '../backend';
 import {
   Button,
   BlockQuote,
-  Divider,
-  LabeledList,
   Section,
+  StyleableSection,
   Stack,
 } from '../components';
 import { Window } from '../layouts';
@@ -25,6 +24,28 @@ type Credit = {
 
 export const Credits = (props, context) => {
   const { act, data } = useBackend<CreditsData>(context);
+
+  const renderContributors = (title: string, contributors: string[]) => (
+    <StyleableSection
+      title={title}
+      titleStyle={{ 'border-bottom-color': '#1c71b1' }}
+      style={{
+        'text-align': 'center',
+        'font-size': '1.15em',
+        'background-color': '#191919',
+        'border-radius': '0.5em',
+        'border': '0.1em solid #333333',
+        'margin-top': '0.5em',
+      }}
+    >
+      {contributors.map((contributor, index) => (
+        <Stack key={index} inline>
+          {contributor},&nbsp;
+        </Stack>
+      ))}
+    </StyleableSection>
+  );
+
   return (
     <Window width={500} height={700}>
       <Window.Content>
@@ -37,30 +58,16 @@ export const Credits = (props, context) => {
                 </Stack.Item>
                 <Stack.Item>
                   <Stack>
-                    <Stack.Item grow>
-                      <Button
-                        fluid
-                        color="blue"
-                        content={'GitHub'}
-                        onClick={() => act('openGitHub')}
-                      />
-                    </Stack.Item>
-                    <Stack.Item grow>
-                      <Button
-                        fluid
-                        color="blue"
-                        content={'Wiki'}
-                        onClick={() => act('openWiki')}
-                      />
-                    </Stack.Item>
-                    <Stack.Item grow>
-                      <Button
-                        fluid
-                        color="blue"
-                        content={'Discord'}
-                        onClick={() => act('openDiscord')}
-                      />
-                    </Stack.Item>
+                    {['GitHub', 'Wiki', 'Discord'].map((content, index) => (
+                      <Stack.Item grow key={index}>
+                        <Button
+                          fluid
+                          color="blue"
+                          content={content}
+                          onClick={() => act(`open${content}`)}
+                        />
+                      </Stack.Item>
+                    ))}
                   </Stack>
                 </Stack.Item>
                 <Stack.Item mt={2}>
@@ -80,85 +87,65 @@ export const Credits = (props, context) => {
           </Stack.Item>
           <Stack.Divider />
           <Stack.Item grow>
-            <Section
-              fill
-              scrollable
-              style={{ 'background-color': 'rgba(0, 0, 0, 0)' }}
-            >
-              {data.credits.map((credit) => (
-                <Section
-                  key={credit.name}
-                  title={credit.name}
-                  buttons={
-                    credit.linkContributors && (
-                      <Button
-                        fluid
-                        content={'Контрибьюторы'}
-                        onClick={() =>
-                          act('openContributors', {
-                            buildPage: credit.linkContributors,
-                            buildName: credit.name,
-                          })
-                        }
-                      />
-                    )
-                  }
-                  style={{ 'background-color': 'rgba(0, 0, 0, 0.33)' }}
-                >
-                  <LabeledList>
-                    {credit.coders && (
-                      <LabeledList.Item label={'Кодеры'}>
-                        {credit.coders.map((coder, index) => (
-                          <Stack key={index} inline>
-                            {coder},&nbsp;
-                          </Stack>
-                        ))}
-                      </LabeledList.Item>
+            <Section fill scrollable>
+              {data &&
+                data.credits &&
+                data.credits.map((credit, index) => (
+                  <StyleableSection
+                    key={index}
+                    title={
+                      <Stack>
+                        <Stack.Item grow fontSize={1.5}>
+                          {credit.name}
+                        </Stack.Item>
+                        {credit.linkContributors && (
+                          <Stack.Item>
+                            <Button
+                              fluid
+                              color={'blue'}
+                              content={'Контрибьюторы'}
+                              onClick={() =>
+                                act('openContributors', {
+                                  buildPage: credit.linkContributors,
+                                  buildName: credit.name,
+                                })
+                              }
+                            />
+                          </Stack.Item>
+                        )}
+                      </Stack>
+                    }
+                    titleStyle={{
+                      'border-bottom-color': '#1c71b1',
+                    }}
+                    style={{
+                      'background-color': '#222222',
+                      'margin-bottom': '1em',
+                      'border-radius': '0.5em',
+                      'border': '0.1em solid #333333',
+                    }}
+                  >
+                    {credit.coders &&
+                      renderContributors('Кодеры', credit.coders)}
+                    {credit.mappers &&
+                      renderContributors('Мапперы', credit.mappers)}
+                    {credit.spriters &&
+                      renderContributors('Спрайтеры', credit.spriters)}
+                    {credit.ui_designers &&
+                      renderContributors(
+                        'UI/UX Дизайнеры',
+                        credit.ui_designers
+                      )}
+                    {credit.special && (
+                      <Stack.Item>
+                        {renderContributors(
+                          'Отдельная благодарность',
+                          credit.special
+                        )}
+                      </Stack.Item>
                     )}
-                    {credit.mappers && (
-                      <LabeledList.Item label={'Мапперы'}>
-                        {credit.mappers.map((mapper, index) => (
-                          <Stack key={index} inline>
-                            {mapper},&nbsp;
-                          </Stack>
-                        ))}
-                      </LabeledList.Item>
-                    )}
-                    {credit.spriters && (
-                      <LabeledList.Item label={'Спрайтеры'}>
-                        {credit.spriters.map((spriter, index) => (
-                          <Stack key={index} inline>
-                            {spriter},&nbsp;
-                          </Stack>
-                        ))}
-                      </LabeledList.Item>
-                    )}
-                    {credit.ui_designers && (
-                      <LabeledList.Item label={'UI/UX Дизайнеры'}>
-                        {credit.ui_designers.map((ui_designer, index) => (
-                          <Stack key={index} inline>
-                            {ui_designer},&nbsp;
-                          </Stack>
-                        ))}
-                      </LabeledList.Item>
-                    )}
-                  </LabeledList>
-                  {credit.special && (
-                    <Stack.Item mt={3}>
-                      <Section
-                        textAlign="center"
-                        title={'Отдельная благодарность'}
-                      >
-                        {credit.special.map((spec, index) => (
-                          <Stack key={index} inline>
-                            {spec},&nbsp;
-                          </Stack>
-                        ))}
-                      </Section>
-                    </Stack.Item>
-                  )}
-                </Section>
-              ))}
+                  </StyleableSection>
+                ))}
             </Section>
           </Stack.Item>
         </Stack>

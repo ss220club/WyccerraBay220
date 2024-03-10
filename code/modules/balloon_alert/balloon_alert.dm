@@ -28,7 +28,7 @@
 	var/list/hearers = mobs_in_view(vision_distance, src)
 	hearers -= ignored_mobs
 
-	for (var/mob/hearer in hearers)
+	for (var/mob/hearer as anything in hearers)
 		if (hearer.is_blind())
 			continue
 

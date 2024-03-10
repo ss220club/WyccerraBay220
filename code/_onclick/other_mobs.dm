@@ -38,27 +38,48 @@
 				SPAN_DANGER("You [attack_verb] \the [src]!")
 			)
 
+/**
+ * Called when the unarmed attack hasn't been stopped by the LIVING_UNARMED_ATTACK_BLOCKED macro or the right_click_attack_chain proc.
+ * This will call an attack proc that can vary from mob type to mob type on the target.
+ */
+/mob/living/proc/resolve_unarmed_attack(atom/attack_target, list/modifiers)
+	attack_target.attack_animal(src, modifiers)
 
-/*
-	Humans:
-	Adds an exception for gloves, to allow special glove types like the ninja ones.
-
-	Otherwise pretty standard.
-*/
-/mob/living/carbon/human/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
-
-	if(!..())
+/// Checks for RIGHT_CLICK in modifiers and runs resolve_right_click_attack if so. Returns TRUE if normal chain blocked.
+/mob/living/proc/right_click_attack_chain(atom/target, list/modifiers)
+	if (!LAZYACCESS(modifiers, RIGHT_CLICK))
 		return
+	var/secondary_result = resolve_right_click_attack(target, modifiers)
 
-	// Special glove functions:
-	// If the gloves do anything, have them return 1 to stop
-	// normal attack_hand() here.
-	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
-	if(istype(G) && G.Touch(target, 1))
-		return
+	if (secondary_result == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN || secondary_result == SECONDARY_ATTACK_CONTINUE_CHAIN)
+		return TRUE
+	else if (secondary_result != SECONDARY_ATTACK_CALL_NORMAL)
+		CRASH("resolve_right_click_attack (probably attack_hand_secondary) did not return a SECONDARY_ATTACK_* define.")
 
-	target.attack_hand(src)
+/mob/living/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
+	// The sole reason for this signal needing to exist is making FotNS incompatible with Hulk.
+	// Note that it is send before [proc/can_unarmed_attack] is called, keep this in mind.
+	var/sigreturn = SEND_SIGNAL(src, COMSIG_LIVING_EARLY_UNARMED_ATTACK, target, proximity_flag, modifiers)
+	if(sigreturn & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
+	if(sigreturn & COMPONENT_SKIP_ATTACK)
+		return FALSE
 
+	sigreturn = SEND_SIGNAL(src, COMSIG_LIVING_UNARMED_ATTACK, target, proximity_flag, modifiers)
+	if(sigreturn & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
+	if(sigreturn & COMPONENT_SKIP_ATTACK)
+		return FALSE
+
+	if(!right_click_attack_chain(target, modifiers))
+		resolve_unarmed_attack(target, modifiers)
+	return TRUE
+
+/mob/living/carbon/human/resolve_unarmed_attack(atom/target, list/modifiers)
+	return target.attack_hand(src, modifiers)
+
+/mob/living/carbon/human/resolve_right_click_attack(atom/target, list/modifiers)
+	return target.attack_hand_secondary(src, modifiers)
 
 /**
  * Called when the atom is clicked on by a mob with an empty hand.
@@ -66,11 +87,15 @@
  * **Parameters**:
  * - `user` - The mob that clicked on the atom.
  */
-/atom/proc/attack_hand(mob/user)
-	return
+/atom/proc/attack_hand(mob/living/user, list/modifiers)
+	. = FALSE
+	if(SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_HAND, user, modifiers) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		. = TRUE
 
-/atom/proc/attack_hand_secondary(mob/user)
-	return
+/atom/proc/attack_hand_secondary(mob/living/user, list/modifiers)
+	if(SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_HAND_SECONDARY, user, modifiers) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /**
  * Called when a mob attempts to use an empty hand on itself.
@@ -95,15 +120,34 @@
 	if((istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /obj/structure/lattice) || istype(A, /obj/structure/catwalk)) && isturf(loc) && bound_overlay && !is_physically_disabled()) //Climbing through openspace
 		return climb_up(A)
 
-	if(gloves)
-		var/obj/item/clothing/gloves/G = gloves
-		if(istype(G) && G.Touch(A,0)) // for magic gloves
-			return TRUE
-
 	. = ..()
 
 /mob/living/RestrainedClickOn(atom/A)
 	return
+
+/**
+ * Called when an unarmed attack performed with right click hasn't been stopped by the LIVING_UNARMED_ATTACK_BLOCKED macro.
+ * This will call a secondary attack proc that can vary from mob type to mob type on the target.
+ * Sometimes, a target is interacted differently when right_clicked, in that case the secondary attack proc should return
+ * a SECONDARY_ATTACK_* value that's not SECONDARY_ATTACK_CALL_NORMAL.
+ * Otherwise, it should just return SECONDARY_ATTACK_CALL_NORMAL. Failure to do so will result in an exception (runtime error).
+ */
+/mob/living/proc/resolve_right_click_attack(atom/target, list/modifiers)
+	return target.attack_animal_secondary(src, modifiers)
+
+/**
+ * Called when a simple animal is unarmed attacking / clicking on this atom.
+ */
+/atom/proc/attack_animal(mob/user, list/modifiers)
+	SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_ANIMAL, user)
+	attack_hand(user)
+
+/**
+ * Called when a simple animal or basic mob right clicks an atom.
+ * Returns a SECONDARY_ATTACK_* value.
+ */
+/atom/proc/attack_animal_secondary(mob/user, list/modifiers)
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /*
 	Aliens
@@ -112,13 +156,8 @@
 /mob/living/carbon/alien/RestrainedClickOn(atom/A)
 	return
 
-/mob/living/carbon/alien/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
-
-	if(!..())
-		return 0
-
-	setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-	target.attack_generic(src,rand(5,6),"bitten")
+/mob/living/carbon/alien/resolve_unarmed_attack(atom/target, list/modifiers)
+	target.attack_generic(src, rand(5,6), "bitten")
 
 /*
 	Slimes
@@ -206,13 +245,3 @@
 	else if (get_natural_weapon())
 		var/obj/item/weapon = get_natural_weapon()
 		weapon.resolve_attackby(target, src)
-
-
-/**
- * Called when a `simple_animal` mob clicks on the atom with an 'empty hand.'
- *
- * **Parameters**:
- * - `user` - The mob clicking on the atom.
- */
-/atom/proc/attack_animal(mob/user)
-	return attack_hand(user)

@@ -202,17 +202,6 @@
 /mob/proc/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	return
 
-/mob/living/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
-
-	if(GAME_STATE < RUNLEVEL_GAME)
-		to_chat(src, "You cannot attack people before the game has started.")
-		return 0
-
-	if(stat)
-		return 0
-
-	return 1
-
 /*
 	Ranged unarmed attack:
 

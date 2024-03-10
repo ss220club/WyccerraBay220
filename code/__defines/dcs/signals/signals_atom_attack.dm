@@ -20,6 +20,10 @@
 #define COMSIG_ATOM_ATTACK_HAND_SECONDARY "atom_attack_hand_secondary"
 ///from base of atom/animal_attack(): (/mob/user)
 #define COMSIG_ATOM_ATTACK_ANIMAL "attack_animal"
+///from base of atom/attack_robot(): (mob/user)
+#define COMSIG_ATOM_ATTACK_ROBOT "atom_attack_robot"
+///from base of atom/attack_robot_secondary(): (mob/user)
+#define COMSIG_ATOM_ATTACK_ROBOT_SECONDARY "atom_attack_robot_secondary"
 
 /* Attack signals. They should share the returned flags, to standardize the attack chain. */
 /// tool_act -> pre_attack -> target.attackby (item.attack) -> afterattack

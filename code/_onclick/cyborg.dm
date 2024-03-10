@@ -53,17 +53,16 @@
 			to_chat(src, SPAN_CLASS("userdanger", "Your camera isn't functional."))
 		return
 
-	/*
-	cyborg restrained() currently does nothing
-	if(restrained())
-		RestrainedClickOn(A)
-		return
-	*/
-
 	var/obj/item/W = get_active_hand()
 
 	// Cyborgs have no range-checking unless there is item use
 	if(!W)
+		if(LAZYACCESS(modifiers, RIGHT_CLICK))
+			var/secondary_result = A.attack_robot_secondary(src, modifiers)
+			if(secondary_result == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN || secondary_result == SECONDARY_ATTACK_CONTINUE_CHAIN)
+				return
+			else if (secondary_result != SECONDARY_ATTACK_CALL_NORMAL)
+				CRASH("attack_robot_secondary did not return a SECONDARY_ATTACK_* define.")
 		A.add_hiddenprint(src)
 		A.attack_robot(src)
 		return
@@ -156,4 +155,11 @@
  * - `user` - The mob clicking on the atom.
  */
 /atom/proc/attack_robot(mob/user)
+	if (SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_ROBOT, user) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return
 	attack_ai(user)
+
+/atom/proc/attack_robot_secondary(mob/user, list/modifiers)
+	if (SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_ROBOT_SECONDARY, user) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return
+	return attack_robot(user)

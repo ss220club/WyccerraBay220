@@ -132,7 +132,12 @@
 		if(W)
 			var/resolved = W.resolve_attackby(A, src, params)
 			if(!resolved && A && W)
-				W.afterattack(A, src, TRUE, params) // 1 indicates adjacency
+				if(LAZYACCESS(modifiers, RIGHT_CLICK))
+					var/after_attack_secondary_result = W.afterattack_secondary(A, src, TRUE, params)
+					if(after_attack_secondary_result == SECONDARY_ATTACK_CALL_NORMAL)
+						W.afterattack(A, src, TRUE, params)
+				else
+					W.afterattack(A, src, TRUE, params) // 1 indicates adjacency
 		else
 			if(ismob(A)) // No instant mob attacking
 				setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
@@ -153,7 +158,12 @@
 				// Return TRUE in resolve_attackby() to prevent afterattack() effects (when safely moving items for example)
 				var/resolved = W.resolve_attackby(A, src, params)
 				if(!resolved && A && W)
-					W.afterattack(A, src, TRUE, params) // 1: clicking something Adjacent
+					if(LAZYACCESS(modifiers, RIGHT_CLICK))
+						var/after_attack_secondary_result = W.afterattack_secondary(A, src, TRUE, params)
+						if(after_attack_secondary_result == SECONDARY_ATTACK_CALL_NORMAL)
+							W.afterattack(A, src, TRUE, params)
+					else
+						W.afterattack(A, src, TRUE, params) // 1 indicates adjacency
 			else
 				if(ismob(A)) // No instant mob attacking
 					setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
@@ -163,7 +173,12 @@
 			return
 		else // non-adjacent click
 			if(W)
-				W.afterattack(A, src, FALSE, params) // 0: not Adjacent
+				if(LAZYACCESS(modifiers, RIGHT_CLICK))
+					var/after_attack_secondary_result = W.afterattack_secondary(A, src, FALSE, params)
+					if(after_attack_secondary_result == SECONDARY_ATTACK_CALL_NORMAL)
+						W.afterattack(A, src, TRUE, params)
+				else
+					W.afterattack(A, src, FALSE, params) // 1 indicates adjacency
 			else
 				RangedAttack(A, modifiers)
 

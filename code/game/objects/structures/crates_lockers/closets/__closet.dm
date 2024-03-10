@@ -313,7 +313,6 @@
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	slice_into_parts(tool, user)
-	return
 
 /obj/structure/closet/welder_act(mob/living/user, obj/item/tool)
 	if(opened)

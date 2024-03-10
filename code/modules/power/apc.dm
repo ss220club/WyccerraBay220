@@ -1177,7 +1177,7 @@
 		return FALSE
 	locked = !locked
 	update_icon()
-	to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
+	to_chat(user, SPAN_NOTICE("You [ locked ? "lock" : "unlock"] the APC interface."))
 	return TRUE
 
 /obj/item/module/power_control

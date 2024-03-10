@@ -27,7 +27,7 @@
 	var/operating = DOOR_OPERATING_NO
 	/// Boolean. Whether or not the door will automatically close.
 	var/autoclose = FALSE
-	/// Hash of autoclosing timer. Gets written by close_with_delay() proc
+	/// Hash of autoclosing timer. Gets written by close_with_delay() proc. Bloody murderer of close_door_at
 	var/autoclose_timer_hash
 	/// Boolean. Whether or not the door is considered a glass door.
 	var/glass = FALSE
@@ -41,8 +41,6 @@
 	var/obj/item/stack/material/repairing
 	/// Boolean. If set, air zones cannot merge across the door even when it is opened.
 	var/block_air_zones = TRUE
-	/// Integer. The world.time to automatically close the door, if possible. TODO: Replace with timers.
-	var/close_door_at = 0
 	/// List. Directions the door has wall connections in.
 	var/list/connections = list("0", "0", "0", "0")
 	/// List. Objects to blend sprite connections with.
@@ -381,7 +379,6 @@
 		return
 	operating = DOOR_OPERATING_YES
 
-	close_door_at = 0
 	do_animate("closing")
 	src.set_density(1)
 	if(width > 1)

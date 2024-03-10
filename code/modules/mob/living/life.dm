@@ -97,7 +97,7 @@
 
 /mob/living/proc/handle_weakened()
 	if(weakened)
-		weakened = max(weakened-1,0)
+		AdjustWeakened(-1)
 		if(!weakened)
 			update_icons()
 	return weakened

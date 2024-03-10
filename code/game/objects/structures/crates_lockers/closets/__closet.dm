@@ -560,11 +560,13 @@
 /obj/structure/closet/proc/CanToggleLock(mob/user, obj/item/card/id/id_card)
 	return allowed(user) || (istype(id_card) && check_access_list(id_card.GetAccess()))
 
-/obj/structure/closet/AltClick(mob/user)
-	if(!src.opened)
+/obj/structure/closet/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(!opened)
 		togglelock(user)
-		return TRUE
-	return ..()
 
 /obj/structure/closet/emp_act(severity)
 	for (var/atom/A as anything in src)

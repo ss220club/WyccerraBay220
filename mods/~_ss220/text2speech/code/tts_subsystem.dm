@@ -165,15 +165,17 @@ SUBSYSTEM_DEF(tts220)
 /datum/controller/subsystem/tts220/proc/fire_sound_processing()
 	var/queue_position = 1
 	while(LAZYLEN(tts_effects_queue) >= queue_position)
-		var/filename = tts_effects_queue[queue_position]
+		var/filename = tts_effects_queue[queue_position++]
 		var/list/filename_requests = tts_effects_queue[filename]
 		var/datum/sound_effect_request/request = filename_requests[1]
-		apply_sound_effect(request.effect, request.original_filename, request.output_filename)
+
+		if(!apply_sound_effect(request.effect, request.original_filename, request.output_filename))
+			continue
 
 		for(var/datum/sound_effect_request/adjacent_request as anything in filename_requests)
 			invoke_async(adjacent_request.cb)
 
-		queue_position++
+
 		if(MC_TICK_CHECK)
 			break
 

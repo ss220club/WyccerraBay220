@@ -27,6 +27,8 @@
 	var/operating = DOOR_OPERATING_NO
 	/// Boolean. Whether or not the door will automatically close.
 	var/autoclose = FALSE
+	/// Hash of autoclosing timer. Gets written by close_with_delay() proc
+	var/autoclose_timer_hash
 	/// Boolean. Whether or not the door is considered a glass door.
 	var/glass = FALSE
 	/// Boolean. Whether or not the door waits before closing. Generally tied to the timing wire.
@@ -362,12 +364,16 @@
 
 
 	if(autoclose)
-		addtimer(CALLBACK(src, PROC_REF(close)), normalspeed ? 15 SECONDS : 0.5 SECONDS, TIMER_OVERRIDE | TIMER_UNIQUE)
+		close_with_delay(close_delay())
 
 	return 1
 
-/obj/machinery/door/proc/next_close_time()
-	return world.time + (normalspeed ? 150 : 5)
+/obj/machinery/door/proc/close_with_delay(delay)
+	deltimer(autoclose_timer_hash)
+	autoclose_timer_hash = addtimer(CALLBACK(src, PROC_REF(close)), delay, TIMER_OVERRIDE | TIMER_UNIQUE)
+
+/obj/machinery/door/proc/close_delay()
+	return normalspeed ? 15 SECONDS : 0.5 SECONDS
 
 /obj/machinery/door/proc/close(forced = 0)
 	set waitfor = FALSE

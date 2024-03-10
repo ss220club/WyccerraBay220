@@ -1208,7 +1208,7 @@ About the new airlock wires panel:
 		for(var/turf/turf in locs)
 			for(var/atom/movable/AM in turf)
 				if(AM.blocks_airlock())
-					close_door_at = world.time + 6
+					close_with_delay(0.6 SECONDS)
 					return
 
 	var/crushed = FALSE

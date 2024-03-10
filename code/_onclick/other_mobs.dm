@@ -115,10 +115,10 @@
 	if(!. && a_intent == I_GRAB && length(available_maneuvers))
 		. = perform_maneuver(prepared_maneuver || available_maneuvers[1], A)
 
-/mob/living/carbon/human/RangedAttack(atom/A, params)
+/mob/living/carbon/human/ranged_attack(atom/target, modifiers)
 	//Climbing up open spaces
-	if((istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /obj/structure/lattice) || istype(A, /obj/structure/catwalk)) && isturf(loc) && bound_overlay && !is_physically_disabled()) //Climbing through openspace
-		return climb_up(A)
+	if((istype(target, /turf/simulated/floor) || istype(target, /turf/unsimulated/floor) || istype(target, /obj/structure/lattice) || istype(target, /obj/structure/catwalk)) && isturf(loc) && bound_overlay && !is_physically_disabled()) //Climbing through openspace
+		return climb_up(target)
 
 	. = ..()
 

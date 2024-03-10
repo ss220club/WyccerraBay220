@@ -81,14 +81,14 @@
 
 	. = ..()
 
-/mob/living/carbon/alien/diona/RangedAttack(atom/A, params)
+/mob/living/carbon/alien/diona/ranged_attack(atom/target, modifiers)
 	if((a_intent == I_HURT || a_intent == I_GRAB) && holding_item)
 		setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-		visible_message(SPAN_DANGER("\The [src] spits \a [holding_item] at \the [A]!"))
+		visible_message(SPAN_DANGER("\The [src] spits \a [holding_item] at \the [target]!"))
 		var/atom/movable/temp = holding_item
 		unEquip(holding_item)
 		if(temp)
-			temp.throw_at(A, 10, rand(3,5), src)
+			temp.throw_at(target, 10, rand(3,5), src)
 		return TRUE
 	. = ..()
 

@@ -57,7 +57,7 @@
 	* mob/UnarmedAttack(atom,adjacent) - used here only when adjacent, with no item in hand; in the case of humans, checks gloves
 	* atom/resolve_attackby(item,user) - used only when adjacent
 	* item/afterattack(atom,user,adjacent,params) - used for ranged; called when resolve_attackby returns FALSE.
-	* mob/RangedAttack(atom,params) - used only ranged, only used for tk and laser eyes but could be changed
+	* mob/ranged_attack(atom,params) - used only ranged, only used for tk and laser eyes but could be changed
 */
 /mob/proc/ClickOn(atom/A, params)
 
@@ -180,7 +180,10 @@
 				else
 					W.afterattack(A, src, FALSE, params) // 1 indicates adjacency
 			else
-				RangedAttack(A, modifiers)
+				if(LAZYACCESS(modifiers, RIGHT_CLICK))
+					ranged_attack_secondary(A, modifiers)
+				else
+					ranged_attack(A, modifiers)
 
 			trigger_aiming(TARGET_CAN_CLICK)
 	return 1
@@ -232,16 +235,22 @@
  *
  * **Parameters**:
  * - `A` - The atom that was clicked on/interacted with.
- * - `params` - List of click parameters. See BYOND's `CLick()` documentation.
+ * - `modifiers` - List of click parameters. See BYOND's `CLick()` documentation.
  *
  * Returns boolean - Whether or not the mob was able to perform the interaction.
  */
-/mob/proc/RangedAttack(atom/A, params)
+/mob/proc/ranged_attack(atom/A, modifiers)
+	if(SEND_SIGNAL(src, COMSIG_MOB_ATTACK_RANGED, A, modifiers) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
 	if(!length(mutations))
 		return FALSE
 
 	if((MUTATION_LASER in mutations) && a_intent == I_HURT)
 		LaserEyes(A) // moved into a proc below
+		return TRUE
+
+/mob/proc/ranged_attack_secondary(atom/target, list/modifiers)
+	if(SEND_SIGNAL(src, COMSIG_MOB_ATTACK_RANGED_SECONDARY, target, modifiers) & COMPONENT_CANCEL_ATTACK_CHAIN)
 		return TRUE
 
 /**

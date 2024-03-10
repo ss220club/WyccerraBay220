@@ -144,8 +144,8 @@
 /mob/living/silicon/robot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	target.attack_robot(src)
 
-/mob/living/silicon/robot/RangedAttack(atom/A, params)
-	A.attack_robot(src)
+/mob/living/silicon/robot/ranged_attack(atom/target, list/modifiers)
+	target.attack_robot(src)
 	return TRUE
 
 /**

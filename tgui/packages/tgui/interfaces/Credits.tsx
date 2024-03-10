@@ -40,7 +40,8 @@ export const Credits = (props, context) => {
     >
       {contributors.map((contributor, index) => (
         <Stack key={index} inline>
-          {contributor},&nbsp;
+          {contributor}
+          {index !== contributors.length - 1 && <>,&nbsp;</>}
         </Stack>
       ))}
     </StyleableSection>
@@ -62,6 +63,7 @@ export const Credits = (props, context) => {
                       <Stack.Item grow key={index}>
                         <Button
                           fluid
+                          bold
                           color="blue"
                           content={content}
                           onClick={() => act(`open${content}`)}

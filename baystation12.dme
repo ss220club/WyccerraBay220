@@ -1511,7 +1511,6 @@
 #include "code\modules\asset_cache\asset_list.dm"
 #include "code\modules\asset_cache\assets\asset_changelog.dm"
 #include "code\modules\asset_cache\assets\asset_character_preview.dm"
-#include "code\modules\asset_cache\assets\asset_credits.dm"
 #include "code\modules\asset_cache\assets\asset_fontawesome.dm"
 #include "code\modules\asset_cache\assets\asset_lobby_screen.dm"
 #include "code\modules\asset_cache\assets\asset_nanoui_common.dm"

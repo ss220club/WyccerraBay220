@@ -254,7 +254,7 @@ SUBSYSTEM_DEF(tts220)
 
 	var/hash = md5(lowertext(text))
 	var/filename = "data/tts_cache/[seed.name]/[hash]"
-	var/effect_singleton = GET_SINGLETON(effect)
+	var/singleton/sound_effect/effect_singleton = GET_SINGLETON(effect)
 
 	if(fexists("[filename].ogg"))
 		tts_reused++

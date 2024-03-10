@@ -102,14 +102,6 @@
 	update_nearby_tiles()
 	. = ..()
 
-/obj/machinery/door/Process()
-	if(close_door_at && world.time >= close_door_at)
-		if(autoclose)
-			close_door_at = next_close_time()
-			close()
-		else
-			close_door_at = 0
-
 /obj/machinery/door/proc/can_open()
 	if(!density || operating)
 		return 0
@@ -368,8 +360,9 @@
 		set_fillers_opacity(0)
 	operating = DOOR_OPERATING_NO
 
+
 	if(autoclose)
-		close_door_at = next_close_time()
+		addtimer(CALLBACK(src, PROC_REF(close)), normalspeed ? 15 SECONDS : 0.5 SECONDS, TIMER_OVERRIDE | TIMER_UNIQUE)
 
 	return 1
 

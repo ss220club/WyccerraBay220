@@ -166,20 +166,22 @@ SUBSYSTEM_DEF(tts220)
 	var/queue_position = 1
 	while(LAZYLEN(tts_effects_queue) >= queue_position)
 		var/filename = tts_effects_queue[queue_position++]
-		var/list/filename_requests = tts_effects_queue[filename]
-		var/datum/sound_effect_request/request = filename_requests[1]
-
-		if(!apply_sound_effect(request.effect, request.original_filename, request.output_filename))
-			continue
-
-		for(var/datum/sound_effect_request/adjacent_request as anything in filename_requests)
-			invoke_async(adjacent_request.cb)
-
+		invoke_async(src, PROC_REF(process_filename_sound_effect_requests), filename)
 
 		if(MC_TICK_CHECK)
 			break
 
 	LAZYCUT(tts_effects_queue, 1, queue_position)
+
+/datum/controller/subsystem/tts220/proc/process_filename_sound_effect_requests(filename)
+	var/list/filename_requests = tts_effects_queue[filename]
+	var/datum/sound_effect_request/request = filename_requests[1]
+
+	if(!apply_sound_effect(request.effect, request.original_filename, request.output_filename))
+		return
+
+	for(var/datum/sound_effect_request/adjacent_request as anything in filename_requests)
+		invoke_async(adjacent_request.cb)
 
 /datum/controller/subsystem/tts220/Recover()
 	is_enabled = SStts220.is_enabled

@@ -1512,7 +1512,6 @@
 #include "code\modules\asset_cache\asset_list.dm"
 #include "code\modules\asset_cache\assets\asset_changelog.dm"
 #include "code\modules\asset_cache\assets\asset_character_preview.dm"
-#include "code\modules\asset_cache\assets\asset_credits.dm"
 #include "code\modules\asset_cache\assets\asset_fontawesome.dm"
 #include "code\modules\asset_cache\assets\asset_lobby_screen.dm"
 #include "code\modules\asset_cache\assets\asset_nanoui_common.dm"
@@ -3456,5 +3455,6 @@
 #include "mods\_master_files\code\modules\projectiles\projectile\bullets.dm"
 #include "mods\_master_files\maps\sierra\sierra_ranks.dm"
 #include "mods\_master_files\maps\sierra\items\rigs.dm"
+#include "mods\client_verbs\code\credits_datums.dm"
 #include "~code\global_init.dm"
 // END_INCLUDE

@@ -35,14 +35,6 @@
 #define DONATION_TIER_THREE_SUM  500
 #define DONATION_TIER_FOUR_SUM   1000
 
-// GLIDING - Start
 #define DELAY2GLIDESIZE(delay) (world.icon_size / max(ceil(delay / world.tick_lag), 1))
-// GLIDING - End
 
-// LOADOUT_ITEMS - Start
-#define ACCESSORY_SLOT_OVER     "Over"
-// LOADOUT_ITEMS - End
-
-// IPC_COOLING_UNIT - Start
 #define BP_COOLING "cooling system"
-// IPC_COOLING_UNIT - End

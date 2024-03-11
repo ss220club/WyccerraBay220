@@ -1,4 +1,4 @@
-/datum/credits
+/singleton/credits
 	var/name = "Sierra SS13"
 	var/list/coders
 	var/list/mappers
@@ -7,21 +7,21 @@
 	var/list/special
 	var/contributors
 
-/datum/credits/wyccerrabay
+/singleton/credits/wyccerrabay
 	name = "WyccerraBay (SS220)"
 	coders = list("Gaxeer", "awkwardlyconfusedneuralnetwork", "Larentoun", "Furior", "Legendaxe")
 	mappers = list("LordNest")
 	ui_designers = list("Aylong")
 	contributors = "https://github.com/ss220club/WyccerraBay220/graphs/contributors"
 
-/datum/credits/sierrabay
+/singleton/credits/sierrabay
 	name = "SierraBay (EX666)"
 	coders = list("awkwardlyconfusedneuralnetwork", "CuddleAndTea", "LordNest", "SuhEugene")
 	mappers = list("KandJX")
 	spriters = list("Remission")
 	contributors = "https://github.com/SierraBay/SierraBay12/graphs/contributors"
 
-/datum/credits/infinity
+/singleton/credits/infinity
 	name = "Infinity Station"
 	coders = list(
 		"quardbreak", "FireFlashie", "KaReTa", "Sladkoeshka", "Coltrane97", "S.Konoplich",
@@ -38,7 +38,7 @@
 	)
 	contributors = "https://github.com/infinitystation/Baystation12/graphs/contributors"
 
-/datum/credits/baystation
+/singleton/credits/baystation
 	name = "Baystation 12"
 	coders = list(
 		"CrimsonShrike", "MuckerMayhem", "PsiOmegaDelta", "SierraKomodo", "afterthought", "chinsky",
@@ -53,7 +53,7 @@
 	)
 	contributors = "https://github.com/Baystation12/Baystation12/graphs/contributors"
 
-/datum/credits/goonstation
+/singleton/credits/goonstation
 	name = "GoonStation 13"
 	coders = list(
 		"Stuntwaffle", "Showtime", "Pantaloons", "Nannek", "Keelin", "Exadv1", "hobnob",

@@ -26,8 +26,9 @@
 	var/list/data = list()
 
 	var/list/credits = list()
-	for(var/path in subtypesof(/datum/credits))
-		var/datum/credits/build = new path
+	var/credit_singletons = GET_SINGLETON_SUBTYPE_MAP(/singleton/credits)
+	for(var/singleton_type in credit_singletons)
+		var/singleton/credits/build = credit_singletons[singleton_type]
 		credits += list(list(
 			"name" = build.name,
 			"coders" = build.coders,

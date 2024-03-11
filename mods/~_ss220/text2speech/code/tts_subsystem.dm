@@ -330,7 +330,7 @@ SUBSYSTEM_DEF(tts220)
 	if(isnull(listener) || !listener.client)
 		return
 
-	var/filename2play = "[pure_filename]_[effect.name]"
+	var/filename2play = "[pure_filename][effect?.suffix].ogg"
 
 	if(isnull(effect) || fexists(filename2play))
 		output_tts(speaker, listener, filename2play, is_local, preSFX, postSFX)

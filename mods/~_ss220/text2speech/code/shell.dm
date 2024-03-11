@@ -77,34 +77,34 @@
 	var/stdout = output[SHELLEO_STDOUT]
 	var/stderr = output[SHELLEO_STDERR]
 	if(errorlevel)
-		error("Error: apply_sound_effect([effect.name], [filename_input], [filename_output]) - See debug logs.")
-		log_debug("apply_sound_effect([effect.name], [filename_input], [filename_output]) STDOUT: [stdout]")
-		log_debug("apply_sound_effect([effect.name], [filename_input], [filename_output]) STDERR: [stderr]")
+		error("Error: apply_sound_effect([effect.suffix], [filename_input], [filename_output]) - See debug logs.")
+		log_debug("apply_sound_effect([effect.suffix], [filename_input], [filename_output]) STDOUT: [stdout]")
+		log_debug("apply_sound_effect([effect.suffix], [filename_input], [filename_output]) STDERR: [stderr]")
 		return FALSE
 	return TRUE
 
 /singleton/sound_effect
-	var/name
+	var/suffix
 	var/ffmpeg_arguments
 
 /singleton/sound_effect/radio
-	name = "radio"
+	suffix = "_radio"
 	ffmpeg_arguments = "highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log"
 
 /singleton/sound_effect/robot
-	name = "robot"
+	suffix = "_robot"
 	ffmpeg_arguments = "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5"
 
 /singleton/sound_effect/radio_robot
-	name = "radio_robot"
+	suffix = "_radio_robot"
 	ffmpeg_arguments = "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5, highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log"
 
 /singleton/sound_effect/megaphone
-	name = "megaphone"
+	suffix = "_megaphone"
 	ffmpeg_arguments = "highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log"
 
 /singleton/sound_effect/megaphone_robot
-	name = "megaphone_robot"
+	suffix = "_megaphone_robot"
 	ffmpeg_arguments = "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log"
 
 #undef SHELLEO_ERRORLEVEL

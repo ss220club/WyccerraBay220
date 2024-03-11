@@ -91,7 +91,7 @@
 	. = ..()
 	if(radio_controller)
 		radio_controller.add_object(src, frequency)
-	update()
+
 
 /obj/machinery/status_display/emp_act(severity)
 	if(inoperable())

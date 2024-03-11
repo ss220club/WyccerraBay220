@@ -133,7 +133,7 @@ Thus, the two variables affect pump operation are set in New():
 	data["on"] = use_power
 	data["pressure_set"] = round(target_pressure)
 	data["max_pressure"] = max_pressure_setting
-	data["last_flow_rate"] = round(last_flow_rate*10)
+	data["last_flow_rate"] = round(last_flow_rate)
 	data["last_power_draw"] = round(last_power_draw)
 	data["max_power_draw"] = power_rating
 

@@ -6,6 +6,7 @@ import {
   NumberInput,
   LabeledList,
   ProgressBar,
+  Box,
 } from '../components';
 import { Window } from '../layouts';
 
@@ -30,9 +31,9 @@ export const Pump = (props, context) => {
   } = data;
 
   return (
-    <Window width={330} height={200}>
+    <Window width={340} height={200}>
       <Window.Content>
-        <Section>
+        <Section fill>
           <LabeledList>
             <LabeledList.Item label="Питание">
               <Button
@@ -69,13 +70,13 @@ export const Pump = (props, context) => {
               <Button
                 icon="fast-forward"
                 textAlign="center"
-                disabled={pressure_set === 0}
+                disabled={pressure_set === max_pressure}
                 width={2.2}
                 onClick={() => act('max')}
               />
             </LabeledList.Item>
             <LabeledList.Divider />
-            <LabeledList.Item label="Нагрузка">
+            <LabeledList.Item label="Потребление">
               <ProgressBar
                 ranges={{
                   bad: [-Infinity, 0],
@@ -85,12 +86,16 @@ export const Pump = (props, context) => {
                 value={last_power_draw}
                 minValue={0}
                 maxValue={max_power_draw}
-              />
+              >
+                <Box>{last_power_draw} W</Box>
+              </ProgressBar>
             </LabeledList.Item>
             <LabeledList.Item color={'gray'}>
-              Текущее потребление = {last_power_draw} W
-              <LabeledList.Divider />
               Макс. потребление = {max_power_draw} W
+            </LabeledList.Item>
+            <LabeledList.Divider />
+            <LabeledList.Item label="Cкорость потока" color="gray">
+              {last_flow_rate} L/s
             </LabeledList.Item>
           </LabeledList>
         </Section>

@@ -154,7 +154,6 @@ Thus, the two variables affect pump operation are set in New():
 	switch(action)
 		if("power")
 			update_use_power(!use_power)
-			. = TRUE
 			return TRUE
 		if ("min")
 			target_pressure = 0
@@ -166,7 +165,7 @@ Thus, the two variables affect pump operation are set in New():
 			var/new_pressure = text2num(params["rate"])
 			if(isnull(new_pressure))
 				return FALSE
-			target_pressure = new_pressure
+			target_pressure = clamp(new_pressure, 0, max_pressure_setting)
 			return TRUE
 	if(.)
 		src.update_icon()

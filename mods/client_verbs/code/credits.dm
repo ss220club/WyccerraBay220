@@ -45,7 +45,7 @@
 /datum/tgui_module/credits/tgui_act(action, list/params)
 	if(..())
 		return
-	. = TRUE
+	. = FALSE
 
 	switch(action)
 		if("openContributors")

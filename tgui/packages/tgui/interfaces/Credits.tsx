@@ -48,7 +48,7 @@ export const Credits = (props, context) => {
   );
 
   return (
-    <Window width={500} height={700}>
+    <Window width={500} height={700} theme="nologo">
       <Window.Content>
         <Stack fill vertical>
           <Stack.Item>

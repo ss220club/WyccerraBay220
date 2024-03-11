@@ -61,11 +61,12 @@
 	playsound(src, "shatter", 70, 1)
 	visible_message(SPAN_DANGER("\The [src] is smashed into many pieces!"))
 	remove_display()
-	STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+	on_machine_broken()
+
 
 /obj/machinery/status_display/on_revive()
 	..()
-	START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+	on_machine_fixed()
 
 /obj/machinery/status_display/on_update_icon()
 	if (MACHINE_IS_BROKEN(src))
@@ -92,16 +93,9 @@
 	. = ..()
 	if(radio_controller)
 		radio_controller.add_object(src, frequency)
-
-// timed process
-/obj/machinery/status_display/Process()
-	if (MACHINE_IS_BROKEN(src))
-		return PROCESS_KILL
-	if(!is_powered())
-		remove_display()
-		return
 	update()
 
+// EMP
 /obj/machinery/status_display/emp_act(severity)
 	if(inoperable())
 		..(severity)
@@ -109,10 +103,20 @@
 	set_picture("ai_bsod")
 	..(severity)
 
+// how we operate
+
+/obj/machinery/status_display/proc/on_machine_broken()
+	return
+
+/obj/machinery/status_display/proc/on_machine_fixed()
+	update()
+
 // set what is displayed
 /obj/machinery/status_display/proc/update()
 	remove_display()
 	if (MACHINE_IS_BROKEN(src))
+		return
+	if (stat & MACHINE_STAT_NOPOWER)
 		return
 	if(friendc && !ignore_friendc)
 		set_picture("ai_friend")

@@ -249,7 +249,7 @@
 	if(!damage)
 		to_chat(user, "[src] is already fully repaired.")
 		return
-	if(!tool.tool_use_check(user, 5))
+	if(!tool.tool_start_check(user, 5))
 		return
 	if(!tool.use_as_tool(src, user, damage, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !damage)
 		return

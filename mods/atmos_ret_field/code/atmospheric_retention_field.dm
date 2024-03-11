@@ -95,7 +95,7 @@
 	if(!hatch_open)
 		return
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.tool_use_check(user, 5))
+	if(!tool.tool_start_check(user, 5))
 		return
 	user.visible_message("[user] starts to disassemble [src].", "You start to disassemble [src].")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))

@@ -19,7 +19,7 @@
 		to_chat(user, SPAN_NOTICE("You wrench [machine] into place."))
 		machine.anchored = TRUE
 	if(I.tool_behaviour == TOOL_WELDER)
-		if(!I.tool_use_check(user, 3))
+		if(!I.tool_start_check(user, 3))
 			return TRUE
 		if(!I.use_as_tool(machine, user, 2 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return TRUE

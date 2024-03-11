@@ -26,7 +26,7 @@
 	if(!emagged)
 		to_chat(user, SPAN_WARNING("[src]'s locking clamps are not damaged."))
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		"[user] starts to repair [src]'s locking clamps with \an [tool].",

@@ -228,7 +228,7 @@
 /obj/structure/disposalpipe/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Cut pipe
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts slicing [src] with [tool]."),

@@ -624,7 +624,7 @@
 	if(!getBruteLoss())
 		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts repairing some of the dents on [src] with [tool]."),

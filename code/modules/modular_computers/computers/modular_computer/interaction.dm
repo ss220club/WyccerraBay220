@@ -153,7 +153,7 @@
 		return
 	var/damage = get_damage_value()
 	var/amount = round(damage/75)
-	if(!tool.tool_use_check(amount, 1))
+	if(!tool.tool_start_check(amount, 1))
 		return
 	to_chat(user, "You begin repairing damage to [src]...")
 	if(!tool.use_as_tool(src, user, damage / (1 SECONDS), amount, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))

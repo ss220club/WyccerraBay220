@@ -225,7 +225,7 @@
 	if(is_reinforced == FRAME_REINFORCED)
 		USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be secured before you can weld them.")
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	var/current_state = is_reinforced
 	user.visible_message(

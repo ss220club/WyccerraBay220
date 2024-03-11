@@ -138,7 +138,7 @@
 		to_chat(user, SPAN_NOTICE("You inspect [src] but find nothing to weld."))
 		return
 	var/amount = (SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION)
-	if(!tool.tool_use_check(user, amount))
+	if(!tool.tool_start_check(user, amount))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] begins welding the damage on [src]..."),

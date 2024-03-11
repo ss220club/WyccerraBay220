@@ -275,7 +275,7 @@
 	if(repairing || operating)
 		return
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.tool_use_check(user, 2))
+	if(!tool.tool_start_check(user, 2))
 		return
 	user.visible_message(
 		SPAN_WARNING("[user] starts [!blocked ? "welding [src] shut" : "cutting open [src]"]."),

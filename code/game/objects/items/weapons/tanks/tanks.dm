@@ -175,7 +175,7 @@ var/global/list/tank_gauge_cache = list()
 	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
 		to_chat(user, SPAN_NOTICE("The emergency pressure relief valve has already been welded."))
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 
 	add_fingerprint(user)

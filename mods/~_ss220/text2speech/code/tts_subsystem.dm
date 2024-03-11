@@ -121,7 +121,7 @@ SUBSYSTEM_DEF(tts220)
 	is_enabled = FALSE
 
 /datum/controller/subsystem/tts220/fire()
-	if(last_network_fire + 1 SECOND >= world.time)
+	if(last_network_fire + 1 SECOND <= world.time)
 		fire_networking()
 	fire_sound_processing()
 

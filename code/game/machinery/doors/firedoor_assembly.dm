@@ -33,7 +33,7 @@
 		USE_FEEDBACK_FAILURE("[src] needs to be unanchored before you can dismantle it.")
 		return
 
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),

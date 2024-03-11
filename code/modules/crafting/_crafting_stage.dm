@@ -194,8 +194,7 @@
 	consume_completion_trigger = FALSE
 
 /singleton/crafting_stage/welding/is_appropriate_tool(obj/item/thing, mob/user)
-	var/obj/item/weldingtool/T = thing
-	. = istype(T) && T.remove_fuel(1, user) && T.isOn()
+	. = thing.tool_behaviour == TOOL_WELDER && thing.use_as_tool(user, user, amount = 1)
 
 /singleton/crafting_stage/welding/on_progress(mob/user)
 	..()

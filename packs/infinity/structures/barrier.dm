@@ -138,7 +138,7 @@
 	if(health == maxhealth)
 		to_chat(user, SPAN_NOTICE("[src] is fully repaired."))
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	visible_message(SPAN_WARNING("[user] is repairing [src]..."))
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
@@ -250,7 +250,7 @@
 		to_chat(user, SPAN_NOTICE("[src] is fully repaired."))
 		return
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	visible_message(SPAN_WARNING("[user] is repairing [src]..."))
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))

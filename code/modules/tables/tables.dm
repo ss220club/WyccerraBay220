@@ -161,7 +161,7 @@
 	if(!health_damaged())
 		USE_FEEDBACK_FAILURE("[src] isn't damaged.")
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts repairing [src] with [tool]."),

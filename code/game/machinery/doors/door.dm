@@ -205,7 +205,7 @@
 	if(!density)
 		to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
 		return
-	if(!tool.tool_use_check(user, 2))
+	if(!tool.tool_start_check(user, 2))
 		return
 	to_chat(user, SPAN_NOTICE("You start to fix dents and weld [repairing] into place."))
 	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing || !density)

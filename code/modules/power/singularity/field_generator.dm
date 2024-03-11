@@ -124,7 +124,7 @@ field_generator power level display
 			return
 		if(1)
 			. = ITEM_INTERACT_SUCCESS
-			if(!tool.tool_use_check(user, 1))
+			if(!tool.tool_start_check(user, 1))
 				return
 			user.visible_message("[user] starts to weld the [src] to the floor.", \
 				"You start to weld [src] to the floor.", \
@@ -135,7 +135,7 @@ field_generator power level display
 			to_chat(user, "You weld [src] to the floor.")
 		if(2)
 			. = ITEM_INTERACT_SUCCESS
-			if(!tool.tool_use_check(user, 1))
+			if(!tool.tool_start_check(user, 1))
 				return
 			user.visible_message("[user] starts to cut the [src] free from the floor.", \
 				"You start to cut [src] free from the floor.", \

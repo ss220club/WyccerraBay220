@@ -355,7 +355,7 @@ var/global/list/empty_playable_ai_cores = list()
 			if(anchored)
 				USE_FEEDBACK_FAILURE("[src] needs to be unanchored from the floor before you can dismantle it with [tool].")
 				return TRUE
-			if(!tool.tool_use_check(user, 1))
+			if(!tool.tool_start_check(user, 1))
 				return TRUE
 			user.visible_message(
 				SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),

@@ -67,7 +67,7 @@
 	if(!health_damaged())
 		to_chat(user, SPAN_NOTICE("[src] does not require repairs."))
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_ITALIC("[user] begins repairing damage on [src]."),

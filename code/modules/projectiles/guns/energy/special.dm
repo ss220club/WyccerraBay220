@@ -161,17 +161,15 @@
 	projectile_type = /obj/item/projectile/beam/plasmacutter
 	max_shots = 10
 	self_recharge = 1
+	tool_behaviour = TOOL_WELDER
+	toolspeed = 0.7 //plasmacutters can be used as welders, and are faster than standard welders
+	usesound = 'sound/weapons/plasma_cutter.ogg'
+	var/charge_weld = 25 //amount of charge used up to start action (multiplied by amount) and per progress_flash_divisor ticks of welding
 	var/datum/effect/spark_spread/spark_system
 
 	// As an industrial tool the plasma cutter's safety training falls under construction.
 	gun_skill = SKILL_CONSTRUCTION
 	safety_skill = SKILL_TRAINED
-
-/obj/item/gun/energy/plasmacutter/mounted
-	name = "mounted plasma cutter"
-	use_external_power = 1
-	max_shots = 4
-	has_safety = FALSE
 
 /obj/item/gun/energy/plasmacutter/Initialize()
 	. = ..()
@@ -183,17 +181,44 @@
 	QDEL_NULL(spark_system)
 	return ..()
 
+/obj/item/gun/energy/plasmacutter/tool_use_check(mob/living/user, amount)
+	if(safety())
+		balloon_alert(user, "уберите предохранитель!")
+		return FALSE
+	if(QDELETED(power_supply))
+		balloon_alert(user, "нет батареи!")
+		return FALSE
+	if(amount ? power_supply.charge < charge_weld * amount : power_supply.charge < charge_weld)
+		balloon_alert(user, "недостаточно заряда!")
+		return FALSE
+	if(user)
+		user.welding_eyecheck()//located in mob_helpers.dm
+		set_light(5, 0.7, COLOR_LIGHT_CYAN)
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
+	return TRUE
+
+/obj/item/gun/energy/plasmacutter/use(used)
+	return (!QDELETED(power_supply) && power_supply.use(used ? used * charge_weld : charge_weld))
+
+/obj/item/gun/energy/plasmacutter/mounted
+	name = "mounted plasma cutter"
+	use_external_power = 1
+	max_shots = 4
+	has_safety = FALSE
+
 /obj/item/gun/energy/plasmacutter/proc/slice(mob/M = null)
+	if(!tool_use_check(M, 1))
+		return
+	if(!use_as_tool(src, M, amount = 1, volume = 50, do_flags = DO_PUBLIC_UNIQUE))
+		return
 	if(!safety())
 		if(M)
 			M.welding_eyecheck()//Welding tool eye check
-			if(check_accidents(M, "[M] loses grip on \the [src] from its sudden recoil!",gun_skill, 60, safety_skill))
-				return 0
+			if(check_accidents(M, "[M] loses grip on [src] from its sudden recoil!", gun_skill, 60, safety_skill))
+				return FALSE
 		spark_system.start()
-		return 1
+		return TRUE
 	handle_click_empty(M)
-	return 0
-
 
 /obj/item/gun/energy/plasmacutter/IsHeatSource()
 	return 3800

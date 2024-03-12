@@ -171,10 +171,6 @@
 			thermitemelt(user)
 			return TRUE
 
-		else if(istype(W, /obj/item/gun/energy/plasmacutter))
-			thermitemelt(user)
-			return TRUE
-
 		else if( istype(W, /obj/item/melee/energy/blade) )
 			var/obj/item/melee/energy/blade/EB = W
 			EB.spark_system.start()

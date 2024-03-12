@@ -95,14 +95,6 @@
 	deconstruct(user)
 
 /obj/structure/catwalk/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Plasma Cutter - Deconstruct
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = tool
-		if (!cutter.slice(user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
-
 	// Floor Tile - Plate catwalk
 	if (istype(tool, /obj/item/stack/tile))
 		if (plated_tile)

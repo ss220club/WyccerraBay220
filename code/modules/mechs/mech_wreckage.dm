@@ -78,26 +78,6 @@
 		SPAN_NOTICE("You partially cut through [src] with [tool].")
 	)
 
-/obj/structure/mech_wreckage/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Welding Tool, Plasma Cutter - Cut through wreckage
-	if(istype(tool, /obj/item/gun/energy/plasmacutter))
-		if(prepared)
-			USE_FEEDBACK_FAILURE("[src] has already been weakened.")
-			return TRUE
-		if(istype(tool, /obj/item/gun/energy/plasmacutter))
-			var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-			if(!plasmacutter.slice(user))
-				return TRUE
-		prepared = TRUE
-		user.visible_message(
-			SPAN_NOTICE("[user] partially cuts through [src] with [tool]."),
-			SPAN_NOTICE("You partially cut through [src] with [tool].")
-		)
-		return TRUE
-
-	return ..()
-
-
 /obj/structure/mech_wreckage/Destroy()
 	for(var/obj/thing in contents)
 		if(prob(65))

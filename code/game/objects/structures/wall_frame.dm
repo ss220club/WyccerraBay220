@@ -84,6 +84,22 @@
 	)
 	dismantle()
 
+/obj/structure/wall_frame/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_start_check(user, 1))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts slicing [src] apart with [tool]."),
+		SPAN_NOTICE("You start slicing [src] apart with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] slices [src] apart with [tool]."),
+		SPAN_NOTICE("You slice [src] apart with [tool].")
+	)
+	dismantle()
+
 /obj/structure/wall_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Rods - Place Grille
 	if (istype(tool, /obj/item/stack/material/rods))
@@ -97,26 +113,6 @@
 			USE_FEEDBACK_FAILURE("[stack] cannot be used to make a window.")
 			return TRUE
 		place_window(user, loc, tool)
-		return TRUE
-
-	// Plasmacutter - Dismantle
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if (!plasmacutter.slice(user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] starts slicing [src] apart with [tool]."),
-			SPAN_NOTICE("You start slicing [src] apart with [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] slices [src] apart with [tool]."),
-			SPAN_NOTICE("You slice [src] apart with [tool].")
-		)
-		dismantle()
 		return TRUE
 
 	return ..()

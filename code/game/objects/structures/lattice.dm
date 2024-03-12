@@ -75,14 +75,6 @@
 	if(istype(tool, /obj/item/stack/tile) || isCoil(tool))
 		return tool.resolve_attackby(get_turf(src), user, click_params)
 
-	// Plasma Cutter - Deconstruct
-	if(istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = tool
-		if(!cutter.slice(user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
-
 	// Rods - Create catwalk
 	if(istype(tool, /obj/item/stack/material/rods))
 		var/obj/item/stack/material/rods/rods = tool

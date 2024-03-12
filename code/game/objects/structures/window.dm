@@ -429,26 +429,6 @@
 			user.show_message(SPAN_WARNING("It looks like it could use more sheets"), VISIBLE_MESSAGE)
 		return TRUE
 
-	// Plasmacutter - Dismantle window
-	if(istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if(!plasmacutter.slice(user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] starts slicing [src] apart with [tool]."),
-			SPAN_NOTICE("You start slicing [src] apart with [tool].")
-		)
-		if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] slices [src] apart with [tool]."),
-			SPAN_NOTICE("You slice [src] apart with [tool].")
-		)
-		dismantle()
-		return TRUE
-
 	return ..()
 
 

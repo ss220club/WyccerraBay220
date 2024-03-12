@@ -482,9 +482,7 @@ About the new airlock wires panel:
 	return ((!ai_control_disabled || ai_control_bypassed) && !isAllPowerLoss())
 
 /obj/machinery/door/airlock/proc/arePowerSystemsOn()
-	if (inoperable())
-		return 0
-	return (src.main_power_lost_until==0 || src.backup_power_lost_until==0)
+	return operable() && !main_power_lost_until && !backup_power_lost_until
 
 /obj/machinery/door/airlock/requiresID()
 	return !(src.isWireCut(AIRLOCK_WIRE_IDSCAN) || aiDisabledIdScanner)

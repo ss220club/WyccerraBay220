@@ -194,11 +194,15 @@
 	if(user)
 		user.welding_eyecheck()//located in mob_helpers.dm
 		set_light(5, 0.7, COLOR_LIGHT_CYAN)
-		addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 0.5 SECONDS)
 	return TRUE
 
 /obj/item/gun/energy/plasmacutter/use(used)
 	return (!QDELETED(power_supply) && power_supply.use(used ? used * charge_weld : charge_weld))
+
+/obj/item/gun/energy/plasmacutter/on_update_icon()
+	. = ..()
+	set_light(0)
 
 /obj/item/gun/energy/plasmacutter/mounted
 	name = "mounted plasma cutter"

@@ -181,7 +181,7 @@
 		if(user)
 			user.welding_eyecheck()//located in mob_helpers.dm
 			set_light(5, 0.7, COLOR_LIGHT_CYAN)
-			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
+			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 0.5 SECONDS)
 		return TRUE
 	else
 		to_chat(user, SPAN_WARNING("You need more welding fuel to complete this task!"))

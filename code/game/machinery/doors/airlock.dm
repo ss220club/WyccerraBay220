@@ -1031,7 +1031,7 @@ About the new airlock wires panel:
 	if(repairing || operating == DOOR_OPERATING_YES || !density)
 		return
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),
 						SPAN_NOTICE("You begin welding [src] [welded ? "open" : "closed"]."))
@@ -1208,7 +1208,7 @@ About the new airlock wires panel:
 		for(var/turf/turf in locs)
 			for(var/atom/movable/AM in turf)
 				if(AM.blocks_airlock())
-					close_door_at = world.time + 6
+					close_with_delay(0.6 SECONDS)
 					return
 
 	var/crushed = FALSE

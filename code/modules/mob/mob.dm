@@ -840,6 +840,7 @@
 /mob/proc/AdjustParalysis(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(paralysis + amount,0)
+		UpdateLyingBuckledAndVerbStatus()
 	return
 
 /mob/proc/Sleeping(amount)
@@ -853,6 +854,7 @@
 
 /mob/proc/AdjustSleeping(amount)
 	sleeping = max(sleeping + amount,0)
+	UpdateLyingBuckledAndVerbStatus()
 	return
 
 

@@ -89,7 +89,7 @@ var/global/bomb_set
 		switch(removal_stage)
 			if(0)
 				if(O.tool_behaviour == TOOL_WELDER)
-					if(!O.tool_use_check(user, 5))
+					if(!O.tool_start_check(user, 5))
 						return TRUE
 					user.visible_message(
 						SPAN_NOTICE("[user] starts cutting loose the anchoring bolt covers on [src]."),
@@ -122,7 +122,7 @@ var/global/bomb_set
 
 			if(2)
 				if(O.tool_behaviour == TOOL_WELDER)
-					if(!O.tool_use_check(user, 5))
+					if(!O.tool_start_check(user, 5))
 						return TRUE
 					user.visible_message(
 						SPAN_NOTICE("[user] starts cutting apart the anchoring system sealant on [src]."),

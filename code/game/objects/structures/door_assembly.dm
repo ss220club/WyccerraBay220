@@ -183,7 +183,7 @@
 	// Remove glass/plating
 	if(glass)
 		var/glass_noun = istext(glass) ? "[glass] plating" : "glass panel"
-		if(!tool.tool_use_check(user, 1))
+		if(!tool.tool_start_check(user, 1))
 			return
 		user.visible_message(
 			SPAN_NOTICE("[user] starts welding [src]'s [glass_noun] off with [tool]."),
@@ -210,7 +210,7 @@
 	if(anchored)
 		USE_FEEDBACK_FAILURE("[src] must be unanchored before you can dismantle it.")
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),

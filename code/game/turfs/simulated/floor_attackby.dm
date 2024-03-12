@@ -164,7 +164,7 @@
 			return TRUE
 
 		else if(C.tool_behaviour == TOOL_WELDER)
-			if(!C.tool_use_check(user, 2))
+			if(!C.tool_start_check(user, 2))
 				return TRUE
 			if(!is_plating())
 				return TRUE

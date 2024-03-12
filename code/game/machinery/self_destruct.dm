@@ -12,7 +12,7 @@
 /obj/machinery/self_destruct/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(damaged)
-		if(!tool.tool_use_check(user, 10))
+		if(!tool.tool_start_check(user, 10))
 			return
 		user.visible_message(
 			SPAN_NOTICE("[user] begins to repair [src]."),

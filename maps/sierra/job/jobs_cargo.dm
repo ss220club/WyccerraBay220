@@ -74,8 +74,8 @@
 	title = "Prospector"
 	department = "Снабжения"
 	department_flag = SUP
-	total_positions = 4
-	spawn_positions = 4
+	total_positions = 3
+	spawn_positions = 3
 	supervisors = "Квартирмейстеру и Главе Персонала"
 	selection_color = "#515151"
 	economic_power = 7

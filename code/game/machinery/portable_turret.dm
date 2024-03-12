@@ -661,7 +661,7 @@ var/global/list/turret_icons
 				return TRUE
 
 			else if(I.tool_behaviour == TOOL_WELDER)
-				if(!I.tool_use_check(user, 5))
+				if(!I.tool_start_check(user, 5))
 					return TRUE
 				if(!I.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 					return TRUE
@@ -727,7 +727,7 @@ var/global/list/turret_icons
 
 		if(7)
 			if(I.tool_behaviour == TOOL_WELDER)
-				if(!I.tool_use_check(user, 5))
+				if(!I.tool_start_check(user, 5))
 					return TRUE
 				if(!I.use_as_tool(src, user, 3 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 					return TRUE

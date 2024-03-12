@@ -17,9 +17,12 @@
 	update_icon()
 
 
-/obj/machinery/bluespacerelay/operable()
-	return !inoperable(MACHINE_STAT_EMPED)
+/obj/machinery/bluespacerelay/operable(additional_flags)
+	. = ..(additional_flags | MACHINE_STAT_EMPED)
 
+/obj/machinery/bluespacerelay/emp_act(severity)
+	. = ..()
+	update_icon()
 
 /obj/machinery/bluespacerelay/on_update_icon()
 	ClearOverlays()
@@ -30,7 +33,3 @@
 		))
 	if(panel_open)
 		AddOverlays("bspacerelay_panel")
-
-
-/obj/machinery/bluespacerelay/Process()
-	update_icon()

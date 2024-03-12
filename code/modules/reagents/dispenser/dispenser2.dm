@@ -64,12 +64,12 @@
 	C.forceMove(src)
 	cartridges[C.label] = C
 	cartridges = sortAssoc(cartridges)
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 
 /obj/machinery/chemical_dispenser/proc/remove_cartridge(label)
 	. = cartridges[label]
 	cartridges -= label
-	SSnano.update_uis(src)
+	SStgui.update_uis(src)
 
 /obj/machinery/chemical_dispenser/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -107,7 +107,7 @@
 		container =  RC
 		update_icon()
 		to_chat(user, SPAN_NOTICE("You set [RC] on [src]."))
-		SSnano.update_uis(src) // update all UIs attached to src
+		SStgui.update_uis(src)
 		return TRUE
 
 	return ..()
@@ -120,17 +120,35 @@
 	container = null
 	update_icon()
 
-/obj/machinery/chemical_dispenser/ui_interact(mob/user, ui_key = "main",datum/nanoui/ui = null, force_open = 1)
-	// this is the data which will be sent to the ui
-	var/data[0]
+/obj/machinery/chemical_dispenser/interface_interact(mob/user)
+	tgui_interact(user)
+	return TRUE
+
+/obj/machinery/chemical_dispenser/tgui_state(mob/user)
+	return GLOB.default_state
+
+/obj/machinery/chemical_dispenser/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "ChemDispenser", name)
+		ui.set_autoupdate(FALSE)
+		ui.open()
+
+/obj/machinery/chemical_dispenser/tgui_data(mob/user)
+	var/list/data = list()
+
 	data["amount"] = amount
-	data["isBeakerLoaded"] = container ? 1 : 0
-	data["glass"] = accept_drinking
-	var beakerD[0]
+	data["isBeakerLoaded"] = container ? TRUE : FALSE
+	data["drinkingGlass"] = accept_drinking
+
+	var/list/beakerContents = list()
 	if(container && container.reagents && length(container.reagents.reagent_list))
-		for(var/datum/reagent/R in container.reagents.reagent_list)
-			beakerD[LIST_PRE_INC(beakerD)] = list("name" = R.name, "volume" = R.volume)
-	data["beakerContents"] = beakerD
+		for(var/datum/reagent/reagent in container.reagents.reagent_list)
+			beakerContents += list(list(
+				"name" = reagent.name,
+				"volume" = reagent.volume
+			))
+	data["beakerContents"] = beakerContents
 
 	if(container)
 		data["beakerCurrentVolume"] = container.reagents.total_volume
@@ -139,59 +157,52 @@
 		data["beakerCurrentVolume"] = null
 		data["beakerMaxVolume"] = null
 
-	var chemicals[0]
+	var/list/chemicals = list()
 	for(var/label in cartridges)
-		var/obj/item/reagent_containers/chem_disp_cartridge/C = cartridges[label]
-		chemicals[LIST_PRE_INC(chemicals)] = list("label" = label, "amount" = C.reagents.total_volume)
+		var/obj/item/reagent_containers/chem_disp_cartridge/cartridge = cartridges[label]
+		chemicals += list(list(
+			"label" = label,
+			"amount" = cartridge.reagents.total_volume
+		))
 	data["chemicals"] = chemicals
 
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if(!ui)
-		ui = new(user, src, ui_key, "chem_disp.tmpl", ui_title, 390, 680)
-		ui.set_initial_data(data)
-		ui.open()
-		ui.set_auto_update(1)
+	return data
 
-/obj/machinery/chemical_dispenser/OnTopic(mob/user, href_list)
-	if(href_list["amount"])
-		amount = round(text2num(href_list["amount"]), 1) // round to nearest 1
-		amount = max(0, min(120, amount)) // Since the user can actually type the commands himself, some sanity checking
-		return TOPIC_REFRESH
+/obj/machinery/chemical_dispenser/tgui_act(action, params)
+	if(..())
+		return
 
-	if(href_list["dispense"])
-		var/label = href_list["dispense"]
-		if(cartridges[label] && container && container.is_open_container())
-			var/obj/item/reagent_containers/chem_disp_cartridge/C = cartridges[label]
-			var/mult = 1 + (-0.5 + round(rand(), 0.1))*(user.skill_fail_chance(core_skill, 0.3, SKILL_TRAINED))
-			C.reagents.trans_to(container, amount*mult)
-			var/contaminants_left = rand(0, max(SKILL_TRAINED - user.get_skill_value(core_skill), 0)) * can_contaminate
-			var/choices = cartridges.Copy()
-			while(length(choices) && contaminants_left)
-				var/chosen_label = pick_n_take(choices)
-				var/obj/item/reagent_containers/chem_disp_cartridge/choice = cartridges[chosen_label]
-				if(choice == C)
-					continue
-				choice.reagents.trans_to(container, round(rand()*amount/5, 0.1))
-				contaminants_left--
-			return TOPIC_REFRESH
-		return TOPIC_HANDLED
-
-	else if(href_list["ejectBeaker"])
-		eject_beaker(user)
-		return TOPIC_REFRESH
-
-
+	switch(action)
+		if("amount")
+			amount = round(text2num(params["amount"]), 1)
+			amount = max(0, min(120, amount))
+			return TRUE
+		if("dispense")
+			var/label = params["dispense"]
+			if(cartridges[label] && container && container.is_open_container())
+				var/obj/item/reagent_containers/chem_disp_cartridge/C = cartridges[label]
+				var/mult = 1 + (-0.5 + round(rand(), 0.1)) * (usr.skill_fail_chance(core_skill, 0.3, SKILL_TRAINED))
+				C.reagents.trans_to(container, amount * mult)
+				var/contaminants_left = rand(0, max(SKILL_TRAINED - usr.get_skill_value(core_skill), 0)) * can_contaminate
+				var/choices = cartridges.Copy()
+				while(length(choices) && contaminants_left)
+					var/chosen_label = pick_n_take(choices)
+					var/obj/item/reagent_containers/chem_disp_cartridge/choice = cartridges[chosen_label]
+					if(choice == C)
+						continue
+					choice.reagents.trans_to(container, round(rand() * amount / 5, 0.1))
+					contaminants_left--
+				return TRUE
+			return FALSE
+		if("flush")
+			eject_beaker(usr)
+			return TRUE
 
 /obj/machinery/chemical_dispenser/AltClick(mob/user)
 	if(CanDefaultInteract(user))
 		eject_beaker(user)
 		return TRUE
 	return ..()
-
-/obj/machinery/chemical_dispenser/interface_interact(mob/user)
-	ui_interact(user)
-	return TRUE
 
 /obj/machinery/chemical_dispenser/on_update_icon()
 	ClearOverlays()

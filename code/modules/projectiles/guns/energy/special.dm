@@ -211,7 +211,7 @@
 	has_safety = FALSE
 
 /obj/item/gun/energy/plasmacutter/proc/slice(mob/M = null)
-	if(!tool_use_check(M, 1))
+	if(!tool_start_check(M, 1))
 		return
 	if(!use_as_tool(src, M, amount = 1, volume = 50, do_flags = DO_PUBLIC_UNIQUE))
 		return

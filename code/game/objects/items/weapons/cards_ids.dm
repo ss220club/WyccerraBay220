@@ -352,7 +352,7 @@ var/global/const/NO_EMAG_ACT = -50
 /obj/item/card/id/proc/dat()
 	var/list/dat = list("<table><tr><td>")
 	dat += text("Name: []</A><BR>", "[formal_name_prefix][registered_name][formal_name_suffix]")
-	dat += text("Pronouns: []</A><BR>\n", sex)
+	dat += text("Gender: []</A><BR>\n", sex)
 	dat += text("Age: []</A><BR>\n", age)
 
 	if(GLOB.using_map.flags & MAP_HAS_BRANCH)

@@ -69,7 +69,7 @@
 
 /obj/item/device/syndiejaunter/examine(mob/user, distance)
 	. = ..()
-	. += SPAN_NOTICE("Display is [usable ? "online and shows number [usable]" : "offline"]."))
+	. += SPAN_NOTICE("Display is [usable ? "online and shows number [usable]" : "offline"].")
 
 /obj/item/device/syndiejaunter/Initialize()
 	. = ..()

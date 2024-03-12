@@ -60,7 +60,7 @@
 
 	var/list/GM_checked = list()
 
-	for(var/turf/simulated/T in A)
+	for(var/turf/simulated/T in get_area_turfs(A))
 
 		if(!istype(T) || isnull(T.zone))
 			continue

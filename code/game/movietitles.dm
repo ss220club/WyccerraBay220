@@ -174,7 +174,10 @@ GLOBAL_LIST(end_titles)
 	var/list/staff = list("PRODUCTION STAFF:")
 	var/list/staffjobs = list("Coffee Fetcher", "Cameraman", "Angry Yeller", "Chair Operator", "Choreographer", "Historical Consultant", "Costume Designer", "Chief Editor", "Executive Assistant")
 	var/list/goodboys = list()
-	for(var/client/C)
+	for(var/client/C as anything in GLOB.clients)
+		if(!C)
+			continue
+
 		if(!C.holder || C.is_stealthed())
 			continue
 

@@ -97,10 +97,13 @@
 			take_damage(rand(50, 150))
 
 /obj/machinery/gravity_generator/main/emp_act(severity)
-	if(!breaker || stat & (MACHINE_BROKEN_GENERIC|MACHINE_STAT_NOPOWER))
+	if(!breaker || inoperable())
 		return
+
 	if(prob(80 / severity))
 		set_state(FALSE)
+
+	set_stat(MACHINE_STAT_EMPED, TRUE)
 
 /obj/machinery/gravity_generator/main/bullet_act(obj/item/projectile/P, def_zone)
 	switch(P.damage_type)
@@ -133,9 +136,9 @@
 		if(0)
 			charge_count = 0
 			enabled = FALSE
-			visible_message(SPAN_WARNING("\The [src] breaks apart!"))
+			visible_message(SPAN_WARNING("[src] breaks apart!"))
 			set_broken_state(GRAV_NEEDS_PLASTEEL)
-			stat |= MACHINE_BROKEN_GENERIC
+			set_broken(MACHINE_BROKEN_GENERIC, TRUE)
 			set_state(FALSE)
 			update_gravity_status()
 			update_power()
@@ -167,135 +170,120 @@
 		P.main_part = src
 		parts += P
 
+/obj/machinery/gravity_generator/main/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(middle, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	panel_open = !panel_open
+	update_icon()
+	to_chat(user, SPAN_NOTICE("You [panel_open ? "open" : "close"] the maintenance hatch."))
+
 // Fixing the gravity generator.
+/obj/machinery/gravity_generator/main/screwdriver_act(mob/living/user, obj/item/tool)
+	if(broken_state != GRAV_NEEDS_SCREWDRIVER)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] begins to attach the details in the desired order."),
+		SPAN_NOTICE("You begin to attach the details in the desired order.")
+	)
+	if(!tool.use_as_tool(middle, user, 15 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_SCREWDRIVER)
+		return
+	health += max(initial(health), health + 250)
+	user.visible_message(
+		SPAN_NOTICE("[user] attached the details."),
+		SPAN_NOTICE("You have attached the details.")
+	)
+	stat &= ~MACHINE_BROKEN_GENERIC
+	set_broken_state(0)
+	update_icon()
+
+/obj/machinery/gravity_generator/main/wrench_act(mob/living/user, obj/item/tool)
+	if(broken_state != GRAV_NEEDS_WRENCH)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] screws the parts back."),
+		SPAN_NOTICE("You begin to screw the parts back.")
+	)
+	if(!tool.use_as_tool(middle, user, 15 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_WRENCH)
+		return
+	health += 250
+	user.visible_message(
+		SPAN_NOTICE("[user] screwed the parts back."),
+		SPAN_NOTICE("You screwed the parts back.")
+	)
+	set_broken_state(GRAV_NEEDS_SCREWDRIVER)
+	update_icon()
+
+/obj/machinery/gravity_generator/main/welder_act(mob/living/user, obj/item/tool)
+	if(broken_state != GRAV_NEEDS_WELDING)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_start_check(user, 1))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] begins to weld the damaged parts."),
+		SPAN_NOTICE("You begin to weld the damaged parts.")
+	)
+	if(!tool.use_as_tool(src, user, 15 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_WELDING)
+		return
+	health += 250
+	user.visible_message(
+		SPAN_NOTICE("[user] fixed the damaged parts."),
+		SPAN_NOTICE("You fixed the damaged parts.")
+	)
+	set_broken_state(GRAV_NEEDS_WRENCH)
+	update_icon()
+
 /obj/machinery/gravity_generator/main/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	switch(broken_state)
-		if(GRAV_NEEDS_PLASTEEL)
-			if(istype(tool, /obj/item/stack/material/plasteel) || broken_state != GRAV_NEEDS_PLASTEEL)
-				var/obj/item/stack/material/plasteel/PS = tool
-				if(PS.amount < 10)
-					to_chat(user, SPAN_WARNING("You need 10 sheets of plasteel."))
-					return TRUE
-
-				user.visible_message(
-					SPAN_NOTICE("[user] begins to add plasteel to the destroyed frame."),
-					SPAN_NOTICE("You begin to add plasteel to the destroyed frame.")
-				)
-				playsound(loc, 'sound/machines/click.ogg', 75, 1)
-
-				if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || PS.amount < 10)
-					return TRUE
-
-				PS.use(10)
-				health += 250
-				user.visible_message(
-					SPAN_NOTICE("[user] replaced the destroyed frame."),
-					SPAN_NOTICE("You replaced the destroyed frame.")
-				)
-				playsound(loc, 'sound/machines/click.ogg', 75, 1)
-				set_broken_state(GRAV_NEEDS_WELDING)
-				update_icon()
-
+	if(broken_state == GRAV_NEEDS_PLASTEEL)
+		if(istype(tool, /obj/item/stack/material/plasteel) || broken_state != GRAV_NEEDS_PLASTEEL)
+			var/obj/item/stack/material/plasteel/PS = tool
+			if(PS.amount < 10)
+				to_chat(user, SPAN_WARNING("You need 10 sheets of plasteel."))
 				return TRUE
 
-		if(GRAV_NEEDS_WELDING)
-			if(isWelder(tool))
-				user.visible_message(
-					SPAN_NOTICE("[user] begins to weld the damaged parts."),
-					SPAN_NOTICE("You begin to weld the damaged parts.")
-				)
+			user.visible_message(
+				SPAN_NOTICE("[user] begins to add plasteel to the destroyed frame."),
+				SPAN_NOTICE("You begin to add plasteel to the destroyed frame.")
+			)
+			playsound(loc, 'sound/machines/click.ogg', 75, 1)
 
-				playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
-				var/obj/item/weldingtool/WT = tool
-
-				if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || !WT.remove_fuel(1, user) || broken_state != GRAV_NEEDS_WELDING)
-					return TRUE
-
-				health += 250
-				user.visible_message(
-					SPAN_NOTICE("[user] fixed the damaged parts."),
-					SPAN_NOTICE("You fixed the damaged parts.")
-				)
-				playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
-				set_broken_state(GRAV_NEEDS_WRENCH)
-				update_icon()
-
+			if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || PS.amount < 10)
 				return TRUE
 
-		if(GRAV_NEEDS_WRENCH)
-			if(isWrench(tool))
-				user.visible_message(
-					SPAN_NOTICE("[user] screws the parts back."),
-					SPAN_NOTICE("You begin to screw the parts back.")
-				)
-				playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
-
-				if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || broken_state != GRAV_NEEDS_WRENCH)
-					return TRUE
-
-				health += 250
-				user.visible_message(
-					SPAN_NOTICE("[user] screwed the parts back."),
-					SPAN_NOTICE("You screwed the parts back.")
-				)
-				playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
-				set_broken_state(GRAV_NEEDS_SCREWDRIVER)
-				update_icon()
-
-				return TRUE
-
-		if(GRAV_NEEDS_SCREWDRIVER)
-			if(isScrewdriver(tool))
-				user.visible_message(
-					SPAN_NOTICE("[user] begins to attach the details in the desired order."),
-					SPAN_NOTICE("You begin to attach the details in the desired order.")
-				)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
-
-				if(!do_after(user, 15 SECONDS, middle) || !user.use_sanity_check(src, tool) || broken_state != GRAV_NEEDS_SCREWDRIVER)
-					return TRUE
-
-				health += max(initial(health), health + 250)
-				user.visible_message(
-					SPAN_NOTICE("[user] attached the details."),
-					SPAN_NOTICE("You have attached the details.")
-				)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
-				stat &= ~MACHINE_BROKEN_GENERIC
-				set_broken_state(0)
-				update_icon()
-
-				return TRUE
-
-	if(isCrowbar(tool))
-		if(!do_after(user, 5 SECONDS, middle) || !user.use_sanity_check(src, tool))
+			PS.use(10)
+			health += 250
+			user.visible_message(
+				SPAN_NOTICE("[user] replaced the destroyed frame."),
+				SPAN_NOTICE("You replaced the destroyed frame.")
+			)
+			playsound(loc, 'sound/machines/click.ogg', 75, 1)
+			set_broken_state(GRAV_NEEDS_WELDING)
+			update_icon()
 			return TRUE
-
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
-		panel_open = !panel_open
-		update_icon()
-		to_chat(user, SPAN_NOTICE("You [panel_open ? "open" : "close"] the maintenance hatch."))
-
-		return TRUE
-
 	return ..()
 
 /obj/machinery/gravity_generator/part/attack_ghost(mob/user)
 	ui_interact(user)
 
 /obj/machinery/gravity_generator/main/attack_ai(mob/user)
-	if(stat & (MACHINE_BROKEN_GENERIC|MACHINE_STAT_NOPOWER))
+	if(inoperable())
 		return
 
 	ui_interact(user)
 
 /obj/machinery/gravity_generator/main/attack_hand(mob/user)
-	if(stat & MACHINE_BROKEN_GENERIC)
-		to_chat(user, SPAN_WARNING("\The [src] is broken!"))
+	if(reason_broken)
+		to_chat(user, SPAN_WARNING("[src] is broken!"))
 		return
+
 	if(wires && panel_open)
 		wires.Interact(user)
-	if(stat & MACHINE_STAT_NOPOWER)
+		return
+
+	if(!is_powered())
 		return
 
 	ui_interact(user)
@@ -303,7 +291,7 @@
 /obj/machinery/gravity_generator/main/CanUseTopic(mob/user)
 	if(!power_supply)
 		return STATUS_CLOSE
-	if(stat & MACHINE_STAT_EMPED)
+	if(GET_FLAGS(stat, MACHINE_STAT_EMPED))
 		return STATUS_CLOSE
 	return ..()
 
@@ -326,7 +314,7 @@
 
 /obj/machinery/gravity_generator/main/OnTopic(mob/user, href_list, datum/topic_state/state)
 	if(href_list["gentoggle"])
-		if(!can_toggle_breaker || !power_supply || stat & MACHINE_STAT_NOPOWER)
+		if(!can_toggle_breaker || !power_supply || !is_powered())
 			to_chat(user, SPAN_WARNING("You pressed a button, but it doesn’t seem to respond."))
 			return
 		set_state(breaker ? FALSE : TRUE)
@@ -335,12 +323,12 @@
 		if(!emergency_shutoff_button)
 			return
 		if(!charge_count)
-			to_chat(user, SPAN_WARNING("\The [middle] discharged!"))
+			to_chat(user, SPAN_WARNING("[middle] discharged!"))
 			return
 
 		user.visible_message(
-			SPAN_WARNING("[user] starts to press a lot of buttons on \the [src]!"),
-			SPAN_NOTICE("You start to press many buttons on \the [src], as if you know what you are doing.")
+			SPAN_WARNING("[user] starts to press a lot of buttons on [src]!"),
+			SPAN_NOTICE("You start to press many buttons on [src], as if you know what you are doing.")
 		)
 		if(do_after(user, 15 SECONDS, src))
 			emergency_shutoff()
@@ -352,12 +340,12 @@
 	var/charge = charge_count
 	var/was_enabled = enabled
 	charge_count = 0
-	stat ^= MACHINE_STAT_EMPED
+	toggle_stat(MACHINE_STAT_EMPED)
 	enabled = FALSE
 	breaker = FALSE
 	charging_state = POWER_IDLE
 	update_use_power(POWER_USE_IDLE)
-	visible_message(SPAN_DANGER("\The [src] makes a large whirring noise!"))
+	visible_message(SPAN_DANGER("[src] makes a large whirring noise!"))
 
 	for(var/i = 0, i <= 3, i++)
 		switch(i)
@@ -373,7 +361,7 @@
 		playsound(loc, 'sound/effects/EMPulse.ogg', 100, 1)
 		sleep(25)
 
-	stat ^= MACHINE_STAT_EMPED
+	toggle_stat(MACHINE_STAT_EMPED)
 	if(was_enabled)
 		update_gravity_status()
 	update_icon()
@@ -392,7 +380,7 @@
 		P.ClearOverlays()
 
 	var/console
-	if(power_supply && !(stat & (MACHINE_BROKEN_GENERIC|MACHINE_STAT_NOPOWER)))
+	if(power_supply && operable())
 		if(charging_state == POWER_IDLE)
 			console = charge_count ? "console_charged" : "console_discharged"
 		else
@@ -403,7 +391,7 @@
 				P.AddOverlays("[P.sprite_number]_light")
 
 	if(!panel_open)
-		if(power_supply && !(stat & MACHINE_BROKEN_GENERIC|MACHINE_STAT_NOPOWER))
+		if(power_supply && operable())
 			AddOverlays("keyboard_on")
 		else
 			AddOverlays("keyboard_off")
@@ -445,14 +433,12 @@
 
 // Set the charging state based on power/breaker/power_supply(wires) status.
 /obj/machinery/gravity_generator/main/proc/update_power()
-	var/good_state = FALSE
-	if(breaker && power_supply && !(stat & (MACHINE_STAT_NOPOWER|MACHINE_BROKEN_GENERIC)))
-		good_state = TRUE
+	var/operable = breaker && power_supply && operable()
 
-	update_use_power(good_state ? POWER_USE_ACTIVE : POWER_USE_IDLE)
-	if(good_state && charge_count < 100)
+	update_use_power(operable ? POWER_USE_ACTIVE : POWER_USE_IDLE)
+	if(operable && charge_count < 100)
 		charging_state = POWER_UP
-	else if(!good_state && charge_count > 0)
+	else if(!operable && charge_count > 0)
 		charging_state = POWER_DOWN
 	else
 		charging_state = POWER_IDLE
@@ -463,7 +449,7 @@
 // Charge/Discharge and turn on/off gravity when you reach 0/100 percent.
 // Also emit radiation and handle the overlays.
 /obj/machinery/gravity_generator/main/Process()
-	if(stat & MACHINE_BROKEN_GENERIC)
+	if(reason_broken)
 		return
 
 	if(charge_count > 0)
@@ -474,54 +460,66 @@
 		if(prob(75))
 			playsound(loc, 'sound/effects/EMPulse.ogg', 50, 1)
 
+	var/last_charge_count = charge_count
 	switch(charging_state)
 		if(POWER_UP)
 			charge_count = min(100, charge_count + 2)
-			if(charge_count >= 100)
-				set_state(TRUE)
-				if(enabled)
-					return
-				enabled = TRUE
-				update_gravity_status()
-				playsound(loc, 'sound/effects/alert.ogg', 50, 1)
-				if(announcer)
-					GLOB.global_announcer.autosay("Gravitational Generator has been fully charged. Gravitation is enabled!", "Gravity Generator Alert System")
 
 		if(POWER_DOWN)
 			charge_count = max(0, charge_count - 2)
-			if(charge_count <= 0)
-				set_state(FALSE)
-				if(!enabled)
-					return
-				enabled = FALSE
-				update_gravity_status()
-				playsound(loc, 'sound/effects/alert.ogg', 50, 1)
-				if(announcer)
-					GLOB.global_announcer.autosay("Alert! Gravitational Generator has been discharged! Gravitation is disabled.", "Gravity Generator Alert System")
-			else if(announcer && charge_count <= 50 && charge_count % 5 == 0)
+			if(announcer && charge_count <= 50 && charge_count % 5 == 0)
 				GLOB.global_announcer.autosay("Danger! Gravitational Generator discharges detected! Charge status at [charge_count]%", "Gravity Generator Alert System", "Engineering")
 
+	if(last_charge_count <= 100 && charge_count == 100)
+		on_fully_charged()
+
+	else if(last_charge_count > 0 && charge_count == 0)
+		on_discharge()
+
+/obj/machinery/gravity_generator/main/proc/on_discharge()
+	set_state(FALSE)
+	if(!enabled)
+		return
+
+	enabled = FALSE
+	update_gravity_status()
+	playsound(loc, 'sound/effects/alert.ogg', 50, 1)
+	if(announcer)
+		GLOB.global_announcer.autosay("Alert! Gravitational Generator has been discharged! Gravitation is disabled.", "Gravity Generator Alert System")
+
+/obj/machinery/gravity_generator/main/proc/on_fully_charged()
+	set_state(TRUE)
+	if(enabled)
+		return
+
+	enabled = TRUE
+
+	update_gravity_status()
+	playsound(loc, 'sound/effects/alert.ogg', 50, 1)
+	if(announcer)
+		GLOB.global_announcer.autosay("Gravitational Generator has been fully charged. Gravitation is enabled!", "Gravity Generator Alert System")
 
 /obj/machinery/gravity_generator/main/proc/update_gravity_status()
 	shake_everyone()
 	update_connectected_areas_gravity()
 
 /obj/machinery/gravity_generator/main/proc/shake_everyone()
-	for(var/area/A in connected_areas)
-		for(var/mob/living/L in A)
-			if(L.client && !L.stat)
-				shake_camera(L, 5, 1)
+	var/list/area_refs_set = get_area_refs_set(connected_areas)
+	for(var/mob/living/living_mob as anything in GLOB.living_players)
+		if(living_mob.stat)
+			continue
+
+		if(!area_refs_set[ref(get_area(living_mob))])
+			continue
+
+		shake_camera(living_mob, 5, 1)
 
 /obj/machinery/gravity_generator/main/proc/update_connectected_areas_gravity()
-	for(var/area/A in connected_areas)
-		A.gravitychange(enabled ? TRUE : FALSE)
+	for(var/area/area_to_update as anything in connected_areas)
+		area_to_update.gravitychange(enabled)
 
 /obj/machinery/gravity_generator/main/proc/add_areas()
-	var/list/areas = area_repository.get_areas_by_z_level()
-	for(var/i in areas)
-		var/area/A = areas[i]
-		if(is_station_area(A))
-			connected_areas += A
+	connected_areas += get_filtered_areas(list(GLOBAL_PROC_REF(is_not_space_area), GLOBAL_PROC_REF(is_station_area)))
 
 #undef GRAV_NEEDS_SCREWDRIVER
 #undef GRAV_NEEDS_WELDING

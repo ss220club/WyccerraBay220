@@ -79,7 +79,7 @@
 	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES)
 		var/effect = isrobot(speaker) ? SOUND_EFFECT_ROBOT : SOUND_EFFECT_NONE
 		var/traits = TTS_TRAIT_RATE_FASTER
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), speaker, src, display_message, speaker.tts_seed, TRUE, effect, traits)
+		invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), speaker, src, display_message, speaker.tts_seed, TRUE, effect, traits)
 
 	if (italics)
 		display_message = "<i>[display_message]</i>"
@@ -177,7 +177,7 @@
 
 	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES && (src != speaker || isrobot(src) || isAI(src)) && speaker.name != AUTO_ANNOUNCER_NAME)
 		var/effect = isrobot(speaker) ? SOUND_EFFECT_RADIO_ROBOT : SOUND_EFFECT_RADIO
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), src, src, message, speaker.tts_seed, FALSE, effect, null, null, 'mods/~_ss220/text2speech/code/sound/radio_chatter.ogg')
+		invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), src, src, message, speaker.tts_seed, FALSE, effect, null, null, 'mods/~_ss220/text2speech/code/sound/radio_chatter.ogg')
 
 	var/speaker_name = vname ? vname : speaker.name
 

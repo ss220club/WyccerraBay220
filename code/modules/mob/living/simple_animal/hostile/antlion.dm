@@ -57,14 +57,14 @@
 /mob/living/simple_animal/hostile/retaliate/beast/antlion/proc/diggy()
 	var/list/turf_targets = list()
 	if (ai_holder.target)
-		for (var/turf/T in range(2, get_turf(ai_holder.target)))
+		for (var/turf/T as anything in ORANGE_TURFS(ai_holder.target, 2))
 			if (!T.is_floor())
 				continue
 			if (T.z != src.z)
 				continue
 			turf_targets += T
 	else
-		for (var/turf/T in orange(5, src))
+		for(var/turf/T as anything in ORANGE_TURFS(src, 5))
 			if (!T.is_floor())
 				continue
 			if (T.z != src.z)

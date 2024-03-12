@@ -225,11 +225,11 @@ GLOBAL_LIST_INIT(machine_path_to_circuit_type, cache_circuits_by_build_path())
 	if(!(component.part_flags & PART_FLAG_HAND_REMOVE))
 		return 0
 	if(!components_are_accessible(component.type))
-		to_chat(user, SPAN_WARNING("The insertion point for \the [component] is inaccessible!"))
+		to_chat(user, SPAN_WARNING("The insertion point for [component] is inaccessible!"))
 		return 0
 	for(var/path in maximum_component_parts)
 		if(istype(component, path) && (number_of_components(path) == maximum_component_parts[path]))
-			to_chat(user, SPAN_WARNING("There are too many parts of this type installed in \the [src] already!"))
+			to_chat(user, SPAN_WARNING("There are too many parts of this type installed in [src] already!"))
 			return 0
 	return 1
 
@@ -237,17 +237,20 @@ GLOBAL_LIST_INIT(machine_path_to_circuit_type, cache_circuits_by_build_path())
 /obj/machinery/proc/component_stat_change(obj/item/stock_parts/part, old_stat, flag)
 
 /obj/machinery/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	if (component_attackby(tool, user))
+	if(component_attackby(src, user, tool))
 		return TRUE
 	return ..()
+
+/obj/machinery/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_ATOM_TOOL_ACT_EMPTY, PROC_REF(component_attackby))
 
 /obj/machinery/can_anchor(obj/item/tool, mob/user, silent)
 	if (use_power == POWER_USE_ACTIVE)
 		if (!silent)
-			to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
+			to_chat(user, SPAN_WARNING("Turn [src] off first!"))
 		return FALSE
 	return ..()
-
 
 /obj/machinery/post_anchor_change()
 	update_use_power(anchored)
@@ -255,13 +258,14 @@ GLOBAL_LIST_INIT(machine_path_to_circuit_type, cache_circuits_by_build_path())
 	..()
 
 /// Passes `attackby()` calls through to components within the machine, if they are accessible.
-/obj/machinery/proc/component_attackby(obj/item/I, mob/user)
+/obj/machinery/proc/component_attackby(obj/machinery/machine, mob/living/user, obj/item/tool)
 	for(var/obj/item/stock_parts/part in component_parts)
 		if(!components_are_accessible(part.type))
 			continue
-		if((. = part.attackby(I, user)))
-			return
-	return construct_state && construct_state.attackby(I, user, src)
+		if((. = tool.resolve_attackby(part, user)))
+			return ITEM_INTERACT_SUCCESS
+	if(construct_state && construct_state.attackby(tool, user, src))
+		return ITEM_INTERACT_SUCCESS
 
 /// Passes `attack_hand()` calls through to components within the machine, if they are accessible.
 /obj/machinery/proc/component_attack_hand(mob/user)
@@ -317,15 +321,15 @@ Standard helpers for users interacting with machinery parts.
 	if(isstack(part))
 		var/obj/item/stack/stack = part
 		if (!stack.can_use(number))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, number, "to install into \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, number, "to install into [src].")
 			return FALSE
 		install_component(stack.split(number, TRUE))
 	else
 		user.unEquip(part, src)
 		install_component(part)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] installs \the [part] in \the [src]!"),
-		SPAN_NOTICE("You install \the [part] in \the [src]!")
+		SPAN_NOTICE("[user] installs [part] in [src]!"),
+		SPAN_NOTICE("You install [part] in [src]!")
 	)
 	return TRUE
 
@@ -339,7 +343,7 @@ Standard helpers for users interacting with machinery parts.
 		if(components_are_accessible(path))
 			removable_parts[initial(part.name)] = path
 	if(length(removable_parts))
-		var/input = input(user, "Which part would you like to uninstall from \the [src]?", "Part Removal") as null|anything in removable_parts
+		var/input = input(user, "Which part would you like to uninstall from [src]?", "Part Removal") as null|anything in removable_parts
 		if(!input || QDELETED(src) || !Adjacent(user) || user.incapacitated())
 			return TRUE
 		var/path = removable_parts[input]
@@ -354,8 +358,8 @@ Standard helpers for users interacting with machinery parts.
 	if(part)
 		user.put_in_hands(part) // Already dropped at loc, so that's the fallback.
 		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \the [part] from \the [src]."),
-			SPAN_NOTICE("You remove \the [part] from \the [src].")
+			SPAN_NOTICE("[user] removes [part] from [src]."),
+			SPAN_NOTICE("You remove [part] from [src].")
 		)
 
 /// Returns a list of required components that are missing from the machine, or `null` if no components are missing or the machine lacks a `construct_state`.

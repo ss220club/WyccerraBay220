@@ -57,7 +57,7 @@
 		var/turf/origin = get_turf(src)
 		if(!origin)
 			return
-		for(var/turf/T in range(range, origin))
+		for(var/turf/T as anything in RANGE_TURFS(origin, range))
 			var/use_alpha = 255 - (step_alpha * get_dist(origin, T))
 			for(var/atom/A in T.contents)
 				if(A.fluorescent == ATOM_FLOURESCENCE_INACTIVE)

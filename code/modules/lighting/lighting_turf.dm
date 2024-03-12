@@ -24,11 +24,6 @@
 /turf/proc/setup_local_ambient()
 	return
 
-/turf/Initialize(mapload, ...)
-	. = ..()
-	if(mapload)
-		setup_local_ambient()
-
 /turf/proc/set_ambient_light(color, multiplier)
 	if (color == ambient_light && multiplier == ambient_light_multiplier)
 		return

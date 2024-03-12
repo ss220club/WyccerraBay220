@@ -36,7 +36,6 @@
 		/material/plastic =   12500
 	)
 
-	var/show_category = "All"
 	var/fab_status_flags = 0
 	var/mat_efficiency = 1.1
 	var/build_time_multiplier = 1

@@ -36,13 +36,14 @@
 	return A
 
 /atom/movable/proc/throw_at_random(include_own_turf, maxrange, speed)
-	var/list/turfs = trange(maxrange, src)
+	var/list/turfs = RANGE_TURFS(src, maxrange)
 	if(!maxrange)
 		maxrange = 1
 
 	if(!include_own_turf)
 		turfs -= get_turf(src)
-	if (length(turfs))
+
+	if(length(turfs))
 		throw_at(pick(turfs), maxrange, speed)
 
 /atom/movable/proc/do_simple_ranged_interaction(mob/user)

@@ -52,7 +52,7 @@
 		connect_to_network()
 
 /obj/machinery/power/emitter/Destroy()
-	log_and_message_admins("deleted \the [src]")
+	log_and_message_admins("deleted [src]")
 	investigate_log("[SPAN_COLOR("red", "deleted")] at ([x],[y],[z])","singulo")
 	return ..()
 
@@ -88,7 +88,7 @@
 
 	if (state == EMITTER_WELDED)
 		if (!powernet)
-			to_chat(user, SPAN_WARNING("You try to turn on \the [src], but it doesn't seem to be receiving power."))
+			to_chat(user, SPAN_WARNING("You try to turn on [src], but it doesn't seem to be receiving power."))
 			return TRUE
 		if (!locked)
 			var/area/A = get_area(src)
@@ -96,14 +96,14 @@
 				active = FALSE
 				if (user?.Adjacent(src))
 					user.visible_message(
-						SPAN_NOTICE("\The [user] turns off \the [src]."),
-						SPAN_NOTICE("You power down \the [src]."),
+						SPAN_NOTICE("[user] turns off [src]."),
+						SPAN_NOTICE("You power down [src]."),
 						SPAN_ITALIC("You hear a switch being flicked.")
 					)
 				else
-					visible_message(SPAN_NOTICE("\The [src] turns off."))
+					visible_message(SPAN_NOTICE("[src] turns off."))
 				playsound(src, "switch", 50)
-				log_and_message_admins("turned off \the [src] in [A.name]", user, src)
+				log_and_message_admins("turned off [src] in [A.name]", user, src)
 				investigate_log("turned [SPAN_COLOR("red", "off")] by [key_name_admin(user || usr)] in [A.name]","singulo")
 			else
 				active = TRUE
@@ -111,23 +111,23 @@
 					operator_skill = user.get_skill_value(core_skill)
 				if (user?.Adjacent(src))
 					user.visible_message(
-						SPAN_NOTICE("\The [user] turns on \the [src]."),
-						SPAN_NOTICE("You configure \the [src] and turn it on."), // Mention configuration to allude to operator skill playing into efficiency
+						SPAN_NOTICE("[user] turns on [src]."),
+						SPAN_NOTICE("You configure [src] and turn it on."), // Mention configuration to allude to operator skill playing into efficiency
 						SPAN_ITALIC("You hear a switch being flicked.")
 					)
 				else
-					visible_message(SPAN_NOTICE("\The [src] turns on."))
+					visible_message(SPAN_NOTICE("[src] turns on."))
 				playsound(src, "switch", 50)
 				update_efficiency()
 				shot_number = 0
 				fire_delay = get_initial_fire_delay()
-				log_and_message_admins("turned on \the [src] in [A.name]", user, src)
+				log_and_message_admins("turned on [src] in [A.name]", user, src)
 				investigate_log("turned [SPAN_COLOR("green", "on")] by [key_name_admin(user || usr)] in [A.name]","singulo")
 			update_icon()
 		else
 			to_chat(user, SPAN_WARNING("The controls are locked!"))
 	else
-		to_chat(user, SPAN_WARNING("\The [src] needs to be firmly secured to the floor first."))
+		to_chat(user, SPAN_WARNING("[src] needs to be firmly secured to the floor first."))
 		return TRUE
 
 /obj/machinery/power/emitter/proc/update_efficiency()
@@ -155,13 +155,13 @@
 			if (!powered)
 				powered = TRUE
 				update_icon()
-				visible_message(SPAN_WARNING("\The [src] powers up!"))
+				visible_message(SPAN_WARNING("[src] powers up!"))
 				investigate_log("regained power and turned [SPAN_COLOR("green", "on")]","singulo")
 		else
 			if (powered)
 				powered = FALSE
 				update_icon()
-				visible_message(SPAN_WARNING("\The [src] powers down!"))
+				visible_message(SPAN_WARNING("[src] powers down!"))
 				investigate_log("lost power and turned [SPAN_COLOR("red", "off")]","singulo")
 			return
 
@@ -194,64 +194,58 @@
 		state = EMITTER_LOOSE
 	..()
 
-/obj/machinery/power/emitter/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isWrench(W))
-		if (active)
-			to_chat(user, SPAN_WARNING("Turn \the [src] off first."))
-			return TRUE
+/obj/machinery/power/emitter/wrench_act(mob/living/user, obj/item/tool)
+	if(active)
+		to_chat(user, SPAN_WARNING("Turn [src] off first."))
+		return ITEM_INTERACT_SUCCESS
+	if(state == EMITTER_WELDED)
+		to_chat(user, SPAN_WARNING("[src] needs to be unwelded from the floor before you raise its bolts."))
+		return ITEM_INTERACT_SUCCESS
 
-		if (state == EMITTER_WELDED)
-			to_chat(user, SPAN_WARNING("\The [src] needs to be unwelded from the floor before you raise its bolts."))
-			return TRUE
-
-	if (isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		if (active)
-			to_chat(user, SPAN_WARNING("Turn \the [src] off first."))
-			return TRUE
-		switch(state)
-			if (EMITTER_LOOSE)
-				to_chat(user, SPAN_WARNING("\The [src] needs to be wrenched to the floor."))
-			if (EMITTER_WRENCHED)
-				if (WT.can_use(1, user))
-					playsound(loc, 'sound/items/Welder.ogg', 50, TRUE)
-					user.visible_message(
-						SPAN_NOTICE("\The [user] starts to weld \the [src] to the floor."),
-						SPAN_NOTICE("You start to weld \the [src] to the floor."),
-						SPAN_ITALIC("You hear welding.")
-					)
-					if (do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if (!WT.remove_fuel(1, user))
-							return TRUE
-						state = EMITTER_WELDED
-						playsound(loc, 'sound/items/Welder2.ogg', 50, TRUE)
-						user.visible_message(
-							SPAN_NOTICE("\The [user] welds \the [src] to the floor."),
-							SPAN_NOTICE("You weld the base of \the [src] to the floor, securing it in place."),
-							SPAN_ITALIC("You hear welding.")
-						)
-						connect_to_network()
-			if (EMITTER_WELDED)
-				if (WT.can_use(1, user))
-					playsound(loc, 'sound/items/Welder.ogg', 50, TRUE)
-					user.visible_message(
-						SPAN_NOTICE("\The [user] starts to cut \the [src] free from the floor."),
-						SPAN_NOTICE("You start to cut \the [src] free from the floor."),
-						SPAN_ITALIC("You hear welding.")
-					)
-					if (do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if (!WT.remove_fuel(1, user))
-							return TRUE
-						state = EMITTER_WRENCHED
-						playsound(loc, 'sound/items/Welder2.ogg', 50, TRUE)
-						user.visible_message(
-							SPAN_NOTICE("\The [user] cuts \the [src] free from the floor."),
-							SPAN_NOTICE("You cut \the [src] free from the floor."),
-							SPAN_ITALIC("You hear welding.")
-						)
-						disconnect_from_network()
+/obj/machinery/power/emitter/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(active)
+		to_chat(user, SPAN_WARNING("Turn [src] off first."))
 		return TRUE
+	switch(state)
+		if(EMITTER_LOOSE)
+			to_chat(user, SPAN_WARNING("[src] needs to be wrenched to the floor."))
+		if(EMITTER_WRENCHED)
+			if(!tool.tool_start_check(user, 1))
+				return
+			user.visible_message(
+				SPAN_NOTICE("[user] starts to weld [src] to the floor."),
+				SPAN_NOTICE("You start to weld [src] to the floor."),
+				SPAN_ITALIC("You hear welding.")
+			)
+			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			state = EMITTER_WELDED
+			user.visible_message(
+				SPAN_NOTICE("[user] welds [src] to the floor."),
+				SPAN_NOTICE("You weld the base of [src] to the floor, securing it in place."),
+				SPAN_ITALIC("You hear welding.")
+			)
+			connect_to_network()
+		if(EMITTER_WELDED)
+			if(!tool.tool_start_check(user, 1))
+				return
+			user.visible_message(
+				SPAN_NOTICE("[user] starts to cut [src] free from the floor."),
+				SPAN_NOTICE("You start to cut [src] free from the floor."),
+				SPAN_ITALIC("You hear welding.")
+			)
+			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			state = EMITTER_WRENCHED
+			user.visible_message(
+				SPAN_NOTICE("[user] cuts [src] free from the floor."),
+				SPAN_NOTICE("You cut [src] free from the floor."),
+				SPAN_ITALIC("You hear welding.")
+			)
+			disconnect_from_network()
 
+/obj/machinery/power/emitter/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(W, /obj/item/card/id) || istype(W, /obj/item/modular_computer))
 		if (emagged)
 			to_chat(user, SPAN_WARNING("The control lock seems to be broken."))
@@ -259,11 +253,11 @@
 		if (has_access(req_lock_access, W.GetAccess()))
 			locked = !locked
 			user.visible_message(
-				SPAN_NOTICE("\The [user] [locked ? "locks" : "unlocks"] \the [src]'s controls."),
+				SPAN_NOTICE("[user] [locked ? "locks" : "unlocks"] [src]'s controls."),
 				SPAN_NOTICE("You [locked ? "lock" : "unlock"] the controls.")
 			)
 		else
-			to_chat(user, SPAN_WARNING("\The [src]'s controls flash an 'Access denied' warning."))
+			to_chat(user, SPAN_WARNING("[src]'s controls flash an 'Access denied' warning."))
 		return TRUE
 
 	return ..()
@@ -274,7 +268,7 @@
 		emagged = TRUE
 		req_access.Cut()
 		req_lock_access.Cut()
-		user.visible_message(SPAN_WARNING("\The [user] messes with \the [src]'s controls."), SPAN_WARNING("You short out the control lock."))
+		user.visible_message(SPAN_WARNING("[user] messes with [src]'s controls."), SPAN_WARNING("You short out the control lock."))
 		user.playsound_local(loc, "sparks", 50, TRUE)
 		return TRUE
 

@@ -17,12 +17,11 @@
 	stat_immune = 0
 	maximum_component_parts = list(/obj/item/stock_parts = 15)
 
-/obj/machinery/telecomms/use_tool(obj/item/P, mob/living/user, list/click_params)
-	// Using a multitool lets you access the receiver's interface
-	if(isMultitool(P))
-		interface_interact(user)
-		return TRUE
+/obj/machinery/telecomms/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	interface_interact(user)
 
+/obj/machinery/telecomms/use_tool(obj/item/P, mob/living/user, list/click_params)
 	// REPAIRING: Use Nanopaste to repair 10-20 integrity points.
 	if(istype(P, /obj/item/stack/nanopaste))
 		var/obj/item/stack/nanopaste/T = P

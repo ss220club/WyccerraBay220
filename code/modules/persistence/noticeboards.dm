@@ -85,6 +85,44 @@
 /obj/structure/noticeboard/on_update_icon()
 	icon_state = "[base_icon_state][LAZYLEN(notices)]"
 
+/obj/structure/noticeboard/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/choice = input("Which direction do you wish to place the noticeboard?", "Noticeboard Offset") as null|anything in list("North", "South", "East", "West")
+	if(!choice)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	switch(choice)
+		if("North")
+			pixel_x = 0
+			pixel_y = 32
+		if("South")
+			pixel_x = 0
+			pixel_y = -32
+		if("East")
+			pixel_x = 32
+			pixel_y = 0
+		if("West")
+			pixel_x = -32
+			pixel_y = 0
+	user.visible_message(
+		SPAN_NOTICE("[user] adjusts [src]'s positioning with [tool]."),
+		SPAN_NOTICE("You set [src]'s positioning to [choice] with [tool].")
+	)
+
+/obj/structure/noticeboard/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
+		SPAN_NOTICE("You start dismantling [src] with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
+		SPAN_NOTICE("You dismantle [src] with [tool].")
+	)
+	dismantle()
 
 /obj/structure/noticeboard/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Paper, Photo - Attach
@@ -93,7 +131,7 @@
 			USE_FEEDBACK_FAILURE("You are banned from leaving persistent information across rounds.")
 			return TRUE
 		if (LAZYLEN(notices) >= max_notices)
-			USE_FEEDBACK_FAILURE("\The [src] is already full of notices. There's no room for \the [tool].")
+			USE_FEEDBACK_FAILURE("[src] is already full of notices. There's no room for [tool].")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(tool, user)
@@ -101,54 +139,12 @@
 		add_paper(tool)
 		SSpersistence.track_value(tool, /datum/persistent/paper)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] pins \a [tool] to \the [src]."),
-			SPAN_NOTICE("You pin \the [tool] to \the [src].")
+			SPAN_NOTICE("[user] pins [tool] to [src]."),
+			SPAN_NOTICE("You pin [tool] to [src].")
 		)
 		return TRUE
 
-	// Screwdriver - Set board direction
-	if (isScrewdriver(tool))
-		var/choice = input("Which direction do you wish to place the noticeboard?", "Noticeboard Offset") as null|anything in list("North", "South", "East", "West")
-		if (!choice || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		switch(choice)
-			if("North")
-				pixel_x = 0
-				pixel_y = 32
-			if("South")
-				pixel_x = 0
-				pixel_y = -32
-			if("East")
-				pixel_x = 32
-				pixel_y = 0
-			if("West")
-				pixel_x = -32
-				pixel_y = 0
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \the [src]'s positioning with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s positioning to [choice] with \the [tool].")
-		)
-		return TRUE
-
-	// Wrench - Dismantle board
-	if (isWrench(tool))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dismantling \the [src] with \a [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 5) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \a [tool].")
-		)
-		dismantle()
-		return TRUE
-
-	return ..()
+	. = ..()
 
 
 /obj/structure/noticeboard/attack_ai(mob/user)
@@ -197,9 +193,9 @@
 		var/obj/item/pen/pen = user.IsHolding(/obj/item/pen)
 		if(istype(pen))
 			add_fingerprint(user)
-			P.attackby(pen, user)
+			pen.resolve_attackby(P, user)
 		else
-			to_chat(user, SPAN_WARNING("You need a pen to write on \the [P]."))
+			to_chat(user, SPAN_WARNING("You need a pen to write on [P]."))
 		. = TOPIC_REFRESH
 
 	if(. == TOPIC_REFRESH)

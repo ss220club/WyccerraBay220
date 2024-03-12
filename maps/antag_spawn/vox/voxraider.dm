@@ -30,7 +30,7 @@
 	current_location = "nav_vox_raider_start"
 	defer_initialisation = TRUE
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/vox
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 	range = 2
 	fuel_consumption = 0
 	skill_needed = SKILL_UNSKILLED

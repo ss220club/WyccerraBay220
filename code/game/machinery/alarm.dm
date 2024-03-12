@@ -231,14 +231,14 @@
 		if(!get_danger_level(target_temperature, TLV["temperature"]) && abs(environment.temperature - target_temperature) > 2.0)
 			update_use_power(POWER_USE_ACTIVE)
 			regulating_temperature = 1
-			visible_message("\The [src] clicks as it starts [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
+			visible_message("[src] clicks as it starts [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
 			"You hear a click and a faint electronic hum.")
 	else
 		//check for when we should stop adjusting temperature
 		if (get_danger_level(target_temperature, TLV["temperature"]) || abs(environment.temperature - target_temperature) <= 0.5)
 			update_use_power(POWER_USE_IDLE)
 			regulating_temperature = 0
-			visible_message("\The [src] clicks quietly as it stops [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
+			visible_message("[src] clicks quietly as it stops [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
 			"You hear a click as a faint electronic humming stops.")
 
 	if (regulating_temperature)
@@ -649,7 +649,7 @@
 		return STATUS_CLOSE
 
 	if(aidisabled && issilicon(user))
-		to_chat(user, SPAN_WARNING("AI control for \the [src] interface has been disabled."))
+		to_chat(user, SPAN_WARNING("AI control for [src] interface has been disabled."))
 		return STATUS_CLOSE
 
 	. = shorted ? STATUS_DISABLED : STATUS_INTERACTIVE
@@ -812,23 +812,56 @@
 			apply_mode()
 			return TOPIC_REFRESH
 
+/obj/machinery/alarm/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 1)
+		return
+	to_chat(user, "You start prying out the circuit.")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || buildstage != 1)
+		return
+	to_chat(user, "You pry out the circuit!")
+	var/obj/item/airalarm_electronics/circuit = new /obj/item/airalarm_electronics()
+	circuit.dropInto(user.loc)
+	buildstage = 0
+	update_icon()
+
+/obj/machinery/alarm/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	wiresexposed = !wiresexposed
+	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+	update_icon()
+
+/obj/machinery/alarm/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 0)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You remove the fire alarm assembly from the wall!")
+	var/obj/item/frame/air_alarm/frame = new /obj/item/frame/air_alarm(get_turf(user))
+	transfer_fingerprints_to(frame)
+	qdel(src)
+
+/obj/machinery/alarm/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 2)
+		return
+	if(!wiresexposed)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(SPAN_WARNING("[user] has cut the wires inside [src]!"), "You have cut the wires inside [src].")
+	new/obj/item/stack/cable_coil(get_turf(src), 5)
+	buildstage = 1
+	update_icon()
+
 /obj/machinery/alarm/use_tool(obj/item/W, mob/living/user, list/click_params)
 	switch(buildstage)
 		if(2)
-			if (isScrewdriver(W))
-				wiresexposed = !wiresexposed
-				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
-				update_icon()
-				return TRUE
-
-			if (wiresexposed && isWirecutter(W))
-				user.visible_message(SPAN_WARNING("[user] has cut the wires inside \the [src]!"), "You have cut the wires inside \the [src].")
-				playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-				new/obj/item/stack/cable_coil(get_turf(src), 5)
-				buildstage = 1
-				update_icon()
-				return TRUE
-
 			if (isid(W) || istype(W, /obj/item/modular_computer))
 				if(inoperable())
 					to_chat(user, "It does nothing")
@@ -844,26 +877,13 @@
 			if (isCoil(W))
 				var/obj/item/stack/cable_coil/C = W
 				if (C.use(5))
-					to_chat(user, SPAN_NOTICE("You wire \the [src]."))
+					to_chat(user, SPAN_NOTICE("You wire [src]."))
 					buildstage = 2
 					update_icon()
 					return TRUE
 				else
-					to_chat(user, SPAN_WARNING("You need 5 pieces of cable to do wire \the [src]."))
+					to_chat(user, SPAN_WARNING("You need 5 pieces of cable to do wire [src]."))
 					return TRUE
-
-			if (isCrowbar(W))
-				to_chat(user, "You start prying out the circuit.")
-				playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-				if (!do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-					return TRUE
-
-				to_chat(user, "You pry out the circuit!")
-				var/obj/item/airalarm_electronics/circuit = new /obj/item/airalarm_electronics()
-				circuit.dropInto(user.loc)
-				buildstage = 0
-				update_icon()
-				return TRUE
 
 		if(0)
 			if (istype(W, /obj/item/airalarm_electronics))
@@ -871,14 +891,6 @@
 				qdel(W)
 				buildstage = 1
 				update_icon()
-				return TRUE
-
-			if (isWrench(W))
-				to_chat(user, "You remove the fire alarm assembly from the wall!")
-				var/obj/item/frame/air_alarm/frame = new /obj/item/frame/air_alarm(get_turf(user))
-				transfer_fingerprints_to(frame)
-				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-				qdel(src)
 				return TRUE
 
 	return ..()
@@ -995,60 +1007,77 @@ FIRE ALARM
 		alarm(rand(30/severity, 60/severity))
 	..()
 
+/obj/machinery/firealarm/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 1)
+		return
+	to_chat(user, "You start prying out the circuit.")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You pry out the circuit!")
+	var/obj/item/firealarm_electronics/circuit = new /obj/item/firealarm_electronics()
+	circuit.dropInto(user.loc)
+	buildstage = 0
+	update_icon()
+
+/obj/machinery/firealarm/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage == 2)
+		detecting = !detecting
+		user.visible_message(
+			SPAN_NOTICE("[user] has [detecting? "re" : "dis"]connected [src]'s detecting unit!"),
+			SPAN_NOTICE("You have [detecting? "re" : "dis"]connected [src]'s detecting unit.")
+		)
+
+/obj/machinery/firealarm/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	wiresexposed = !wiresexposed
+	update_icon()
+
+/obj/machinery/firealarm/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 0)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, "You remove the fire alarm assembly from the wall!")
+	new /obj/item/frame/fire_alarm(get_turf(user))
+	qdel(src)
+
+/obj/machinery/firealarm/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] has cut the wires inside [src]!"),
+		SPAN_NOTICE("You have cut the wires inside [src].")
+	)
+	new/obj/item/stack/cable_coil(get_turf(src), 5)
+	buildstage = 1
+	update_icon()
+
 /obj/machinery/firealarm/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if ((. = ..()))
 		return
-
-	if(isScrewdriver(W) && buildstage == 2)
-		wiresexposed = !wiresexposed
-		update_icon()
-		return TRUE
-
 	if(wiresexposed)
 		switch(buildstage)
-			if(2)
-				if(isMultitool(W))
-					detecting = !detecting
-					user.visible_message(
-						SPAN_NOTICE("\The [user] has [detecting? "re" : "dis"]connected \the [src]'s detecting unit!"),
-						SPAN_NOTICE("You have [detecting? "re" : "dis"]connected \the [src]'s detecting unit.")
-					)
-					return TRUE
-
-				if (isWirecutter(W))
-					user.visible_message(
-						SPAN_NOTICE("\The [user] has cut the wires inside \the [src]!"),
-						SPAN_NOTICE("You have cut the wires inside \the [src].")
-					)
-					new/obj/item/stack/cable_coil(get_turf(src), 5)
-					playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
-					buildstage = 1
-					update_icon()
-					return TRUE
-
 			if(1)
 				if(istype(W, /obj/item/stack/cable_coil))
 					var/obj/item/stack/cable_coil/C = W
 					if (C.use(5))
-						to_chat(user, SPAN_NOTICE("You wire \the [src]."))
+						to_chat(user, SPAN_NOTICE("You wire [src]."))
 						buildstage = 2
 						update_icon()
 						return TRUE
 					else
-						to_chat(user, SPAN_WARNING("You need 5 pieces of cable to wire \the [src]."))
+						to_chat(user, SPAN_WARNING("You need 5 pieces of cable to wire [src]."))
 						return TRUE
-				if(isCrowbar(W))
-					to_chat(user, "You start prying out the circuit.")
-					playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-					if (!do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						return TRUE
-
-					to_chat(user, "You pry out the circuit!")
-					var/obj/item/firealarm_electronics/circuit = new /obj/item/firealarm_electronics()
-					circuit.dropInto(user.loc)
-					buildstage = 0
-					update_icon()
-					return TRUE
 			if(0)
 				if(istype(W, /obj/item/firealarm_electronics))
 					to_chat(user, "You insert the circuit!")
@@ -1057,14 +1086,7 @@ FIRE ALARM
 					update_icon()
 					return TRUE
 
-				if (isWrench(W))
-					to_chat(user, "You remove the fire alarm assembly from the wall!")
-					new /obj/item/frame/fire_alarm(get_turf(user))
-					playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-					qdel(src)
-					return TRUE
-
-	to_chat(user, SPAN_WARNING("You fumble with \the [W] and trigger the alarm!"))
+	to_chat(user, SPAN_WARNING("You fumble with [W] and trigger the alarm!"))
 	alarm()
 	return TRUE
 
@@ -1158,23 +1180,25 @@ FIRE ALARM
 /obj/machinery/firealarm/proc/reset()
 	if (!( src.working ))
 		return
+
 	var/area/area = get_area(src)
-	for(var/obj/machinery/firealarm/FA in area)
+	for(var/obj/machinery/firealarm/FA in area.machinery_list)
 		GLOB.fire_alarm.clearAlarm(loc, FA)
+
 	update_icon()
 	return
 
 /obj/machinery/firealarm/proc/alarm(duration = 0)
-	if (!( src.working))
+	if (!(src.working))
 		return
+
 	var/area/area = get_area(src)
-	for(var/obj/machinery/firealarm/FA in area)
+	for(var/obj/machinery/firealarm/FA in area.machinery_list)
 		GLOB.fire_alarm.triggerAlarm(loc, FA, duration)
+
 	update_icon()
 	playsound(src, 'sound/machines/fire_alarm.ogg', 75, 0)
 	return
-
-
 
 /obj/machinery/firealarm/New(loc, dir, atom/frame)
 	..(loc)

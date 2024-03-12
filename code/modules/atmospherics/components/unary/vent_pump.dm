@@ -271,63 +271,49 @@
 	if(welded)
 		to_chat(user, "It seems welded shut.")
 
-/obj/machinery/atmospherics/unary/vent_pump/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWrench(W))
-		if (is_powered() && use_power)
-			to_chat(user, SPAN_WARNING("You cannot unwrench \the [src], turn it off first."))
-			return TRUE
-		var/turf/T = src.loc
-		if (node && node.level==ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
-			to_chat(user, SPAN_WARNING("You must remove the plating first."))
-			return TRUE
-		var/datum/gas_mixture/int_air = return_air()
-		var/datum/gas_mixture/env_air = loc.return_air()
-		if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-			to_chat(user, SPAN_WARNING("You cannot unwrench \the [src], it is too exerted due to internal pressure."))
-			return TRUE
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src]..."))
-		if (!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return TRUE
-		user.visible_message( \
-			SPAN_NOTICE("\The [user] unfastens \the [src]."), \
-			SPAN_NOTICE("You have unfastened \the [src]."), \
-			"You hear a ratchet.")
-		new /obj/item/pipe(loc, src)
-		qdel(src)
-		return TRUE
+/obj/machinery/atmospherics/unary/vent_pump/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/browser/popup = new(user, "Vent Configuration Utility", "[src] Configuration Panel", 600, 200)
+	popup.set_content(jointext(get_console_data(),"<br>"))
+	popup.open()
 
-	if(isMultitool(W))
-		var/datum/browser/popup = new(user, "Vent Configuration Utility", "[src] Configuration Panel", 600, 200)
-		popup.set_content(jointext(get_console_data(),"<br>"))
-		popup.open()
-		return TRUE
+/obj/machinery/atmospherics/unary/vent_pump/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(is_powered() && use_power)
+		to_chat(user, SPAN_WARNING("You cannot unwrench [src], turn it off first."))
+		return
+	var/turf/T = src.loc
+	if(node && node.level==ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
+		to_chat(user, SPAN_WARNING("You must remove the plating first."))
+		return
+	var/datum/gas_mixture/int_air = return_air()
+	var/datum/gas_mixture/env_air = loc.return_air()
+	if((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+		to_chat(user, SPAN_WARNING("You cannot unwrench [src], it is too exerted due to internal pressure."))
+		return
+	to_chat(user, SPAN_NOTICE("You begin to unfasten [src]..."))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message( \
+		SPAN_NOTICE("[user] unfastens [src]."), \
+		SPAN_NOTICE("You have unfastened [src]."), \
+		"You hear a ratchet.")
+	new /obj/item/pipe(loc, src)
+	qdel(src)
 
-	if (isWelder(W))
-		var/obj/item/weldingtool/WT = W
-
-		if(!WT.can_use(1,user))
-			return TRUE
-
-		to_chat(user, SPAN_NOTICE("Now welding \the [src]."))
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-
-		if(!do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return TRUE
-
-		if(!src || !WT.remove_fuel(1, user))
-			return TRUE
-
-		welded = !welded
-		update_icon()
-		playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [welded ? "welds \the [src] shut" : "unwelds \the [src]"]."), \
-			SPAN_NOTICE("You [welded ? "weld \the [src] shut" : "unweld \the [src]"]."), \
-			"You hear welding.")
-		return TRUE
-
-	return ..()
+/obj/machinery/atmospherics/unary/vent_pump/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_start_check(user, 1))
+		return
+	to_chat(user, SPAN_NOTICE("Now welding [src]."))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	welded = !welded
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] [welded ? "welds [src] shut" : "unwelds [src]"]."), \
+		SPAN_NOTICE("You [welded ? "weld [src] shut" : "unweld [src]"]."), \
+		"You hear welding.")
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/get_console_data()
 	. = list()

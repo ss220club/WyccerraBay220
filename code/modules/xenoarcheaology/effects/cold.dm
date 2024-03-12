@@ -26,7 +26,7 @@
 /datum/artifact_effect/cold/destroyed_effect()
 	. = ..()
 
-	for (var/turf/T in trange(5, get_turf(holder)))
+	for (var/turf/T as anything in RANGE_TURFS(holder, 5))
 		var/datum/gas_mixture/env = T.return_air()
 		if (env)
 			env.temperature -= 10

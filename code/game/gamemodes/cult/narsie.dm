@@ -70,7 +70,7 @@ var/global/list/narsie_list = list()
 		mezzer()
 
 /obj/singularity/narsie/large/eat()
-	for (var/turf/A in orange(consume_range, src))
+	for (var/turf/A as anything in ORANGE_TURFS(src, consume_range))
 		consume(A)
 
 /obj/singularity/narsie/mezzer()
@@ -345,7 +345,7 @@ var/global/list/narsie_list = list()
 	grav_pull = 0
 
 /obj/singularity/narsie/wizard/eat()
-	for (var/turf/T in trange(consume_range, src))
+	for (var/turf/T in RANGE_TURFS(src, consume_range))
 		consume(T)
 
 /obj/singularity/narsie/proc/narsie_spawn_animation()

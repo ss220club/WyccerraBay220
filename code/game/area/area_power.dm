@@ -124,7 +124,7 @@
 	used_equip = 0
 	used_light = 0
 	used_environ = 0
-	for(var/obj/machinery/M in src)
+	for(var/obj/machinery/M as anything in machinery_list)
 		switch(M.power_channel)
 			if(EQUIP)
 				used_equip += M.get_power_usage()

@@ -16,6 +16,8 @@
 	attack_verb = list("pinched", "nipped")
 	sharp = TRUE
 	edge = TRUE
+	tool_behaviour = TOOL_WIRECUTTER
+	usesound = DEFAULT_WIRECUTTER_SOUND
 
 	var/build_from_parts = TRUE
 	var/handle_icon = "cutters_handle"

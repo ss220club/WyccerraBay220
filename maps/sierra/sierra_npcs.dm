@@ -3,12 +3,14 @@
 	id = "Punitelli"
 	item_path = /mob/living/carbon/human/monkey/punitelli
 
-/mob/living/carbon/human/monkey/punitelli/New()
-	..()
+/mob/living/carbon/human/monkey/punitelli/Initialize(mapload, ...)
+	. = ..()
 	name = "Warrant Officer Punitelli"
 	real_name = name
-	var/obj/item/clothing/C
-	C = new /obj/item/clothing/under/solgov/utility/expeditionary/monkey(src)
+	invoke_async(src, PROC_REF(dress))
+
+/mob/living/carbon/human/monkey/punitelli/proc/dress()
+	var/obj/item/clothing/C = new /obj/item/clothing/under/solgov/utility/expeditionary/monkey(src)
 	equip_to_appropriate_slot(C)
 	put_in_hands(new /obj/item/reagent_containers/food/drinks/glass2/coffeecup/punitelli)
 	equip_to_appropriate_slot(new /obj/item/clothing/mask/smokable/cigarette/jerichos)

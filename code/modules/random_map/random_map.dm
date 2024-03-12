@@ -170,15 +170,19 @@ var/global/list/map_count = list()
 	var/current_cell = get_map_cell(x,y)
 	if(!current_cell)
 		return 0
+
 	var/turf/T = locate((origin_x-1)+x,(origin_y-1)+y,origin_z)
 	if(!T || (target_turf_type && !istype(T,target_turf_type)))
 		return 0
+
 	var/newpath = get_appropriate_path(map[current_cell])
 	if(newpath)
 		T.ChangeTurf(newpath)
+
 	get_additional_spawns(map[current_cell],T,get_spawn_dir(x, y))
+
 	if(use_area)
-		ChangeArea(T, use_area)
+		T.change_area(use_area)
 	return T
 
 /datum/random_map/proc/get_spawn_dir()

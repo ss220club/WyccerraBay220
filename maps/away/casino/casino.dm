@@ -61,8 +61,8 @@
 
 /datum/shuttle/autodock/overmap/casino_cutter
 	name = "Casino Cutter"
-	warmup_time = 15
-	move_time = 60
+	warmup_time = 15 SECONDS
+	move_time = 6 SECONDS
 	shuttle_area = /area/casino/casino_cutter
 	current_location = "nav_casino_hangar"
 	landmark_transition = "nav_casino_transit"

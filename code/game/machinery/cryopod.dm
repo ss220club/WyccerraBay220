@@ -252,20 +252,23 @@
 		occupant.forceMove(loc)
 	. = ..()
 
-/obj/machinery/cryopod/Initialize()
+/obj/machinery/cryopod/Initialize(mapload, ...)
+	. = ..()
+	announce = new /obj/item/device/radio/intercom(src)
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/machinery/cryopod/LateInitialize(mapload, ...)
 	. = ..()
 	find_control_computer()
 
-/obj/machinery/cryopod/proc/find_control_computer(urgent=0)
-	// Workaround for http://www.byond.com/forum/?post=2007448
-	for(var/obj/machinery/computer/cryopod/C in src.loc.loc)
-		control_computer = C
-		break
-	// control_computer = locate(/obj/machinery/computer/cryopod) in src.loc.loc
+/obj/machinery/cryopod/proc/find_control_computer(urgent = FALSE)
+	var/area/my_area = get_area(src)
+	if(my_area)
+		control_computer = locate(/obj/machinery/computer/cryopod) in my_area.machinery_list
 
 	// Don't send messages unless we *need* the computer, and less than five minutes have passed since last time we messaged
-	if(!control_computer && urgent && last_no_computer_message + 5*60*10 < world.time)
-		log_and_message_admins("Cryopod in [src.loc.loc] could not find control computer!")
+	if(!control_computer && urgent && last_no_computer_message + 5 MINUTES < world.time)
+		log_and_message_admins("Cryopod in [my_area] could not find control computer!")
 		last_no_computer_message = world.time
 
 	return control_computer != null
@@ -584,32 +587,26 @@
 	else
 		to_chat(user, SPAN_NOTICE("The glass is already open."))
 
-
-/obj/structure/broken_cryo/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Open cryopod
-	if (isCrowbar(tool))
-		if (!closed)
-			USE_FEEDBACK_FAILURE("\The [src] is already open.")
-			return TRUE
-		busy = TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts prying \the [src]'s cover off with \a [tool]."),
-			SPAN_NOTICE("You start prying \the [src]'s cover off with \the [tool].")
-		)
-		if (!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		closed = FALSE
-		update_icon()
-		var/obj/dead = new remains_type(loc)
-		dead.dir = dir
-		user.visible_message(
-			SPAN_NOTICE("\The [user] opens \the [src]'s cover with \a [tool], exposing \a [dead]."),
-			SPAN_NOTICE("You open \the [src]'s cover with \the [tool], exposing \a [dead].")
-		)
-		return TRUE
-
-	return ..()
-
+/obj/structure/broken_cryo/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!closed)
+		USE_FEEDBACK_FAILURE("[src] is already open.")
+		return
+	busy = TRUE
+	user.visible_message(
+		SPAN_NOTICE("[user] starts prying [src]'s cover off with [tool]."),
+		SPAN_NOTICE("You start prying [src]'s cover off with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT) || !closed)
+		return
+	closed = FALSE
+	update_icon()
+	var/obj/dead = new remains_type(loc)
+	dead.dir = dir
+	user.visible_message(
+		SPAN_NOTICE("[user] opens [src]'s cover with [tool], exposing [dead]."),
+		SPAN_NOTICE("You open [src]'s cover with [tool], exposing [dead].")
+	)
 
 /obj/structure/broken_cryo/on_update_icon()
 	icon_state = initial(icon_state)

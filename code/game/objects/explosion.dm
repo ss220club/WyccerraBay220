@@ -99,7 +99,7 @@
 
 
 /proc/secondaryexplosion(turf/epicenter, range)
-	for(var/turf/tile in range(range, epicenter))
+	for(var/turf/tile as anything in RANGE_TURFS(epicenter, range))
 		tile.ex_act(EX_ACT_HEAVY)
 
 

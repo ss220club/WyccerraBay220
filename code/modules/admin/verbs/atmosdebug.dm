@@ -10,33 +10,69 @@
 		return
 
 	to_chat(usr, "Checking for disconnected pipes...")
-	//all plumbing - yes, some things might get stated twice, doesn't matter.
-	for (var/obj/machinery/atmospherics/plumbing in world)
-		if (plumbing.nodealert)
+
+	var/list/all_atmos_machinery = SSmachines.get_machinery_of_type(/obj/machinery/atmospherics)
+	for(var/obj/machinery/atmospherics/plumbing as anything in all_atmos_machinery)
+		if(istype(plumbing, /obj/machinery/atmospherics/pipe/manifold))
+			var/obj/machinery/atmospherics/pipe/manifold/pipe = plumbing
+			if (!pipe.node1 || !pipe.node2 || !pipe.node3)
+				to_chat(usr, "Unconnected [pipe.name] located at [pipe.x],[pipe.y],[pipe.z] ([get_area(pipe.loc)])")
+
+		else if(istype(plumbing, /obj/machinery/atmospherics/pipe/simple))
+			var/obj/machinery/atmospherics/pipe/simple/pipe = plumbing
+			if (!pipe.node1 || !pipe.node2)
+				to_chat(usr, "Unconnected [pipe.name] located at [pipe.x],[pipe.y],[pipe.z] ([get_area(pipe.loc)])")
+
+		else if (plumbing.nodealert)
 			to_chat(usr, "Unconnected [plumbing.name] located at [plumbing.x],[plumbing.y],[plumbing.z] ([get_area(plumbing.loc)])")
 
-	//Manifolds
-	for (var/obj/machinery/atmospherics/pipe/manifold/pipe in world)
-		if (!pipe.node1 || !pipe.node2 || !pipe.node3)
-			to_chat(usr, "Unconnected [pipe.name] located at [pipe.x],[pipe.y],[pipe.z] ([get_area(pipe.loc)])")
-
-	//Pipes
-	for (var/obj/machinery/atmospherics/pipe/simple/pipe in world)
-		if (!pipe.node1 || !pipe.node2)
-			to_chat(usr, "Unconnected [pipe.name] located at [pipe.x],[pipe.y],[pipe.z] ([get_area(pipe.loc)])")
-
 	to_chat(usr, "Checking for overlapping pipes...")
-	next_turf:
-		for(var/turf/T)
-			for(var/dir in GLOB.cardinal)
-				var/list/connect_types = list(1 = 0, 2 = 0, 3 = 0)
-				for(var/obj/machinery/atmospherics/pipe in T)
-					if(dir & pipe.initialize_directions)
-						for(var/connect_type in pipe.connect_types)
-							connect_types[connect_type] += 1
-						if(connect_types[1] > 1 || connect_types[2] > 1 || connect_types[3] > 1)
-							to_chat(usr, "Overlapping pipe ([pipe.name]) located at [T.x],[T.y],[T.z] ([get_area(T)])")
-							continue next_turf
+
+	var/list/pipes_by_turfs = list()
+	for(var/obj/machinery/atmospherics/pipe as anything in all_atmos_machinery)
+		var/turf/pipe_loc = get_turf(pipe)
+		if(!pipe_loc)
+			stack_trace("Pipe without loc: [pipe] - [ref(pipe)]")
+			continue
+
+		var/list/pipes = pipes_by_turfs[ref(pipe_loc)]
+		if(!pipes)
+			pipes = list()
+
+		pipes += pipe
+
+		pipes_by_turfs[ref(pipe_loc)] += pipes
+
+	var/list/overlapping_pipes_logs = list()
+	for(var/turf_ref in pipes_by_turfs)
+		var/list/pipes_on_same_turf = pipes_by_turfs[turf_ref]
+		if(length(pipes_on_same_turf) <= 1)
+			continue
+
+		for(var/cardinal_dir in GLOB.cardinal)
+			var/list/connection_types = list()
+			for(var/obj/machinery/atmospherics/pipe as anything in pipes_on_same_turf)
+				if(!(cardinal_dir & pipe.initialize_directions))
+					continue
+
+				var/list/connections_by_dir = connection_types["[pipe.connect_types]"]
+				if(!connections_by_dir)
+					connections_by_dir = list()
+					connection_types["[pipe.connect_types]"] = connections_by_dir
+
+				connections_by_dir |= list(pipe)
+
+			for(var/connection_type in connection_types)
+				var/list/duplication_pipes = connection_types[connection_type]
+				if(length(duplication_pipes) <= 1)
+					continue
+
+				for(var/obj/machinery/atmospherics/pipe as anything in duplication_pipes)
+					overlapping_pipes_logs += "Overlapping pipe [pipe.name] detected at [pipe.x], [pipe.y], [pipe.z]"
+
+	if(length(overlapping_pipes_logs))
+		to_chat(usr, overlapping_pipes_logs.Join("<br>"))
+
 	to_chat(usr, "Done")
 
 /client/proc/powerdebug()

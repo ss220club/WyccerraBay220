@@ -4,18 +4,18 @@ SUBSYSTEM_DEF(fabrication)
 	init_order = SS_INIT_MISC_LATE
 
 	/**
-	 * List of lists(Strings => Paths - Subtypes of `/datum/fabricator_recipe`). Global list of fabricator recipes. Set during `Initialize()`.
+	 * Assoc list of ("fabricator_type" => (Set of subtypes of `/singleton/fabricator_recipe`) ). Set during `Initialize()`.
 	 *
 	 * Example formatting:
 	 * ```dm
 	 * 	list(
 	 * 		"general" = list(
-	 * 			/datum/fabricator_recipe/A,
-	 * 			/datum/fabricator_recipe/B
+	 * 			/singleton/fabricator_recipe/A,
+	 * 			/singleton/fabricator_recipe/B
 	 * 		),
 	 * 		"microlathe" = list(
-	 * 			/datum/fabricator_recipe/C,
-	 * 			/datum/fabricator_recipe/D
+	 * 			/singleton/fabricator_recipe/C,
+	 * 			/singleton/fabricator_recipe/D
 	 * 		)
 	 * 	)
 	 * ```
@@ -23,7 +23,7 @@ SUBSYSTEM_DEF(fabrication)
 	var/static/list/recipes = list()
 
 	/**
-	 * List of lists (Strings => Strings). Global list of recipe categories. These are pulled from the recipes provided in `recipes`. Set during `Initialize()`.
+	 * Assoc list of ("fabricator_type" => "categories_available"). Global list of recipe categories. These are pulled from the recipes provided in `recipes`. Set during `Initialize()`.
 	 *
 	 * Example formatting:
 	 * ```dm
@@ -42,7 +42,7 @@ SUBSYSTEM_DEF(fabrication)
 	var/static/list/categories = list()
 
 	/**
-	 * List of lists (Paths (`/obj/item`) => Paths (`/singleting/crafting_stage`)). Global list of crafting stages. These are pulled from each crafting stage's `begins_with_object_type` var. Set during `Initialize()`.
+	 * List of lists (Paths (`/obj/item`) => Paths (`/singleton/crafting_stage`)). Global list of crafting stages. These are pulled from each crafting stage's `begins_with_object_type` var. Set during `Initialize()`.
 	 */
 	var/static/list/stages_by_type = list()
 
@@ -52,27 +52,24 @@ SUBSYSTEM_DEF(fabrication)
 
 
 /datum/controller/subsystem/fabrication/Initialize(start_uptime)
-	for (var/datum/fabricator_recipe/recipe as anything in subtypesof(/datum/fabricator_recipe))
-		recipe = new recipe
-		if (!recipe.name)
+	var/list/recipes_map = GET_SINGLETON_SUBTYPE_MAP(/singleton/fabricator_recipe)
+	for(var/recipe_type in recipes_map)
+		var/singleton/fabricator_recipe/recipe = recipes_map[recipe_type]
+		if(!recipe.name)
 			continue
-		for (var/type in recipe.fabricator_types)
-			if (!recipes[type])
-				recipes[type] = list()
-			recipes[type] += recipe
-			if (!categories[type])
-				categories[type] = list()
-			categories[type] |= recipe.category
+
+		for(var/fabricator_type in recipe.fabricator_types)
+			LAZYADDASSOCLIST(recipes, fabricator_type, recipe)
+			LAZYORASSOCLIST(categories, fabricator_type, recipe.category)
+
 	var/list/stages = GET_SINGLETON_SUBTYPE_MAP(/singleton/crafting_stage)
 	for (var/id in stages)
 		var/singleton/crafting_stage/stage = stages[id]
-		var/type = stage.begins_with_object_type
+		var/stage_begins_with_type = stage.begins_with_object_type
 		if (!ispath(type))
 			continue
-		if (!stages_by_type[type])
-			stages_by_type[type] = list()
-		stages_by_type[type] |= stage
 
+		LAZYORASSOCLIST(stages_by_type, stage_begins_with_type, stage)
 
 /**
  * Retrieves a list of categories for the given root type.
@@ -82,8 +79,8 @@ SUBSYSTEM_DEF(fabrication)
  *
  * Returns list of strings. The categories associated with the given root type.
  */
-/datum/controller/subsystem/fabrication/proc/get_categories(type)
-	return categories[type]
+/datum/controller/subsystem/fabrication/proc/get_categories(fabricator_type)
+	return categories[fabricator_type]
 
 
 /**
@@ -92,10 +89,10 @@ SUBSYSTEM_DEF(fabrication)
  * **Parameters**:
  * - `type` - The root type to fetch from the `recipes` list.
  *
- * Returns list of paths (`/datum/fabricator_recipe`). The recipes associated with the given root type.
+ * Returns list of paths (`/singleton/fabricator_recipe`). The recipes associated with the given root type.
  */
-/datum/controller/subsystem/fabrication/proc/get_recipes(type)
-	return recipes[type]
+/datum/controller/subsystem/fabrication/proc/get_recipes(fabricator_type)
+	return recipes[fabricator_type]
 
 
 /**
@@ -106,14 +103,15 @@ SUBSYSTEM_DEF(fabrication)
  *
  * Returns list of paths (`/singleton/crafting_stage`). The initial crafting stages with the given type set as their `begins_with_object_type`.
  */
-/datum/controller/subsystem/fabrication/proc/find_crafting_recipes(type)
-	if (isnull(stages_by_type[type]))
-		stages_by_type[type] = FALSE
+/datum/controller/subsystem/fabrication/proc/find_crafting_recipes(begins_with_object_type)
+	if (isnull(stages_by_type[begins_with_object_type]))
+		stages_by_type[begins_with_object_type] = FALSE
 		for (var/match in stages_by_type)
-			if (ispath(type, match))
-				stages_by_type[type] = stages_by_type[match]
+			if (ispath(begins_with_object_type, match))
+				stages_by_type[begins_with_object_type] = stages_by_type[match]
 				break
-	return stages_by_type[type]
+
+	return stages_by_type[begins_with_object_type]
 
 
 /**
@@ -130,9 +128,10 @@ SUBSYSTEM_DEF(fabrication)
 	var/turf/turf = get_turf(target)
 	if (!turf)
 		return
+
 	var/list/stages = SSfabrication.find_crafting_recipes(target.type)
 	for (var/singleton/crafting_stage/stage in stages)
-		if (stage.can_begin_with(target) && stage.is_appropriate_tool(tool))
+		if (stage.can_begin_with(target) && stage.is_appropriate_tool(tool, user))
 			var/obj/item/crafting_holder/crafting = new (turf, stage, target, tool, user)
 			if (stage.progress_to(tool, user, crafting))
 				return crafting

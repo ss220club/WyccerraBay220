@@ -5,7 +5,7 @@
 	sound_landing = 'sound/effects/rocket_backwards.ogg'
 	var/number
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
-	warmup_time = 2
+	warmup_time = 2 SECONDS
 
 /obj/shuttle_landmark/escape_pod/start
 	name = "Docked"
@@ -61,7 +61,7 @@ SIERRA_ESCAPE_POD(11)
 	logging_home_tag = "nav_petrov_start"
 	logging_access = access_petrov_helm
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
-	warmup_time = 7
+	warmup_time = 7 SECONDS
 
 /datum/shuttle/autodock/ferry/petrov/New(_name, obj/shuttle_landmark/initial_location)
 	shuttle_area = subtypesof(/area/shuttle/petrov)
@@ -136,7 +136,7 @@ SIERRA_ESCAPE_POD(11)
 	waypoint_station = "nav_admin_start"
 	waypoint_offsite = "nav_admin_out"
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling
-	warmup_time = 7
+	warmup_time = 7 SECONDS
 
 /obj/shuttle_landmark/admin/start
 	name = "Centcom"
@@ -160,7 +160,7 @@ SIERRA_ESCAPE_POD(11)
 	waypoint_offsite = "nav_ferry_start"
 	waypoint_station = "nav_ferry_out"
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling
-	warmup_time = 7
+	warmup_time = 7 SECONDS
 
 /obj/shuttle_landmark/ferry/start
 	name = "Centcom"
@@ -303,7 +303,7 @@ SIERRA_ESCAPE_POD(11)
 	waypoint_offsite = "nav_specops_start"
 	current_location = "nav_specops_start"
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling
-	warmup_time = 7
+	warmup_time = 7 SECONDS
 
 /obj/shuttle_landmark/specops/start
 	name = "Centcom"
@@ -324,7 +324,7 @@ SIERRA_ESCAPE_POD(11)
 	waypoint_offsite = "nav_cargo_start"
 	waypoint_station = "nav_cargo_station"
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling
-	warmup_time = 7
+	warmup_time = 7 SECONDS
 
 /obj/shuttle_landmark/supply/centcom
 	name = "Offsite"
@@ -338,7 +338,7 @@ SIERRA_ESCAPE_POD(11)
 
 /datum/shuttle/autodock/overmap/exploration_shuttle
 	name = "Charon"
-	move_time = 90
+	move_time = 9 SECONDS
 	shuttle_area = list(/area/exploration_shuttle/seats_place, /area/exploration_shuttle/cockpit, /area/exploration_shuttle/medical, /area/exploration_shuttle/power, /area/exploration_shuttle/cargo_l, /area/exploration_shuttle/cargo_r, /area/exploration_shuttle/airlock)
 	dock_target = "calypso_shuttle"
 	current_location = "nav_hangar_calypso"
@@ -348,7 +348,7 @@ SIERRA_ESCAPE_POD(11)
 	logging_home_tag = "nav_hangar_calypso"
 	logging_access = access_expedition_shuttle_helm
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
-	warmup_time = 7
+	warmup_time = 7 SECONDS
 
 /datum/shuttle/autodock/overmap/exploration_shuttle/refresh_fuel_ports_list()	// Setting access onto APC and air alarms
 	..()
@@ -392,7 +392,7 @@ SIERRA_ESCAPE_POD(11)
 
 /datum/shuttle/autodock/overmap/guppy
 	name = "Guppy"
-	move_time = 30
+	move_time = 3 SECONDS
 	shuttle_area = /area/guppy_hangar/start
 	dock_target ="guppy_shuttle"
 	current_location = "nav_hangar_guppy"
@@ -404,7 +404,7 @@ SIERRA_ESCAPE_POD(11)
 	logging_access = access_guppy_helm
 	skill_needed = SKILL_UNSKILLED
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 
 /obj/shuttle_landmark/sierra/hangar/guppy
 	name = "Guppy Hangar"
@@ -438,7 +438,7 @@ SIERRA_ESCAPE_POD(11)
 
 /datum/shuttle/autodock/overmap/crucian
 	name = "Crucian"
-	move_time = 40
+	move_time = 4 SECONDS
 	shuttle_area = /area/crucian_hangar/start
 	dock_target ="crucian_shuttle"
 	current_location = "nav_hangar_crucian"
@@ -450,7 +450,7 @@ SIERRA_ESCAPE_POD(11)
 	logging_access = access_guppy_helm
 	skill_needed = SKILL_UNSKILLED
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
-	warmup_time = 6
+	warmup_time = 6 SECONDS
 
 /obj/shuttle_landmark/sierra/hangar/crucian
 	name = "Auxiliary Hangar"

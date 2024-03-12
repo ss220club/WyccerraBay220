@@ -1,7 +1,7 @@
 #define waypoint_sector(waypoint) map_sectors["[waypoint.z]"]
 
 /datum/shuttle/autodock/overmap
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 
 	var/range = 0	//how many overmap tiles can shuttle go, for picking destinations and returning.
 	var/fuel_consumption = 0 //Amount of moles of gas consumed per trip; If zero, then shuttle is magic and does not need fuel
@@ -45,8 +45,11 @@
 	return ..() && can_go()
 
 /datum/shuttle/autodock/overmap/get_travel_time()
-	var/distance_mod = get_dist(waypoint_sector(current_location),waypoint_sector(next_location))
-	var/skill_mod = 0.2*(skill_needed - operator_skill)
+	var/distance_mod = 0
+	if(current_location != next_location)
+		distance_mod = get_dist(waypoint_sector(current_location), waypoint_sector(next_location))
+
+	var/skill_mod = 0.2 * (skill_needed - operator_skill)
 	return move_time * (1 + distance_mod + skill_mod)
 
 /datum/shuttle/autodock/overmap/process_launch()
@@ -143,35 +146,35 @@
 	else
 		icon_state = icon_closed
 
+/obj/structure/fuel_port/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	opened = !opened
+	playsound(src, opened ? 'sound/effects/locker_open.ogg' : 'sound/effects/locker_close.ogg', 50, TRUE)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] [opened ? "opens" : "closes"] [src] with [tool]."),
+		SPAN_NOTICE("You [opened ? "open" : "close"] [src] with [tool].")
+	)
 
 /obj/structure/fuel_port/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Toggle open
-	if (isCrowbar(tool))
-		opened = !opened
-		playsound(src, opened ? 'sound/effects/locker_open.ogg' : 'sound/effects/locker_close.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [opened ? "opens" : "closes"] \the [src] with \a [tool]."),
-			SPAN_NOTICE("You [opened ? "open" : "close"] \the [src] with \the [tool].")
-		)
-		return TRUE
-
 	// Tank - Insert tank
 	if (istype(tool, /obj/item/tank))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be opened before you can insert \the [tool].")
+			USE_FEEDBACK_FAILURE("[src] needs to be opened before you can insert [tool].")
 			return TRUE
 		var/obj/item/tank/tank = locate() in src
 		if (tank)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [tank] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [tank] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [tool] in \the [src]."),
-			SPAN_NOTICE("You insert \the [tool] in \the [src].")
+			SPAN_NOTICE("[user] inserts [tool] in [src]."),
+			SPAN_NOTICE("You insert [tool] in [src].")
 		)
 		return TRUE
 

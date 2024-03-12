@@ -184,8 +184,7 @@
 			to_chat(user, SPAN_NOTICE("You configure \the [src] to print bulbs in the color: <span style='color: [lighting_tone];'>■</span>"))
 
 
-/obj/item/device/lightreplacer/proc/Use(mob/user)
-
+/obj/item/device/lightreplacer/use(mob/user)
 	playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
 	AddUses(-1)
 	return 1
@@ -206,7 +205,7 @@
 		to_chat(U, "There is a working [target.get_fitting_name()] already inserted.")
 	else if(!CanUse(U))
 		to_chat(U, "\The [src]'s refill light blinks red.")
-	else if(Use(U))
+	else if(use(U))
 		to_chat(U, SPAN_NOTICE("You replace the [target.get_fitting_name()] with the [src]."))
 
 		var/bulb_color = null

@@ -735,6 +735,10 @@
 	},
 /turf/simulated/floor,
 /area/constructionsite)
+"Di" = (
+/obj/machinery/fabricator/micro,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "Dn" = (
 /obj/structure/hygiene/sink{
 	pixel_y = -12
@@ -884,6 +888,17 @@
 	},
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
+"Ko" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Kr" = (
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "Kt" = (
 /obj/structure/table/rack,
 /obj/item/reagent_containers/glass/beaker/noreact{
@@ -951,6 +966,12 @@
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
+"Nz" = (
+/obj/item/stack/material/steel/fifty,
+/obj/item/stack/material/plastic/fifty,
+/obj/item/stack/material/glass/fifty,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
 "NA" = (
 /obj/machinery/atmospherics/portables_connector{
 	dir = 8
@@ -1932,8 +1953,8 @@ cp
 cp
 kr
 cp
-cp
-cp
+Kr
+Kr
 Wt
 aX
 sN
@@ -1971,8 +1992,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2010,8 +2031,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2049,8 +2070,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2088,8 +2109,8 @@ cp
 cp
 cp
 cp
-cp
-bZ
+Kr
+Ko
 cp
 cp
 cp
@@ -4201,7 +4222,7 @@ Ll
 Ll
 Ll
 Ll
-Ll
+Nz
 Ll
 Ya
 va
@@ -4239,7 +4260,7 @@ va
 Ll
 Ll
 Ll
-Ll
+Di
 Lq
 Ll
 sL

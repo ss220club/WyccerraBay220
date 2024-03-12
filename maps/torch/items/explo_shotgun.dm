@@ -38,12 +38,27 @@
 		return TRUE
 	return ..()
 
+/obj/item/gun/projectile/shotgun/pump/exploration/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!reinforced)
+		USE_FEEDBACK_FAILURE("[src] has no reinforcement to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	reinforced.dropInto(loc)
+	explosion_chance = initial(explosion_chance)
+	bulk = initial(bulk)
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [reinforced] from [src] with [tool]."),
+		SPAN_NOTICE("You remove [reinforced] from [src] with [tool].")
+	)
 
 /obj/item/gun/projectile/shotgun/pump/exploration/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Pipe - Reinforce gun
 	if (istype(tool, /obj/item/pipe))
 		if (reinforced)
-			USE_FEEDBACK_FAILURE("\The [src] is already reinforced with \a [reinforced].")
+			USE_FEEDBACK_FAILURE("[src] is already reinforced with [reinforced].")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -54,27 +69,10 @@
 		update_icon()
 		playsound(src, 'sound/effects/tape.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] reinforces \a [src] with \a [tool]."),
-			SPAN_NOTICE("You reinforce \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] reinforces [src] with [tool]."),
+			SPAN_NOTICE("You reinforce [src] with [tool].")
 		)
 		return TRUE
-
-
-	// Wirecutter - Remove reinforcement
-	if (isWirecutter(tool))
-		if (!reinforced)
-			USE_FEEDBACK_FAILURE("\The [src] has no reinforcement to remove.")
-			return TRUE
-		reinforced.dropInto(loc)
-		explosion_chance = initial(explosion_chance)
-		bulk = initial(bulk)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [reinforced] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [reinforced] from \the [src] with \the [tool].")
-		)
-		return TRUE
-
 
 	return ..()
 

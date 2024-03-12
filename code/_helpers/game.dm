@@ -32,9 +32,13 @@
 
 /proc/get_area_name(N) //get area by its name
 	RETURN_TYPE(/area)
-	for(var/area/A in world)
+	for(var/area/A as anything in GLOB.areas)
+	/// TODO: Cache areas by name, but check out if area names are updated anywhere
+	/// and add `set_name` for this case, to properly update entry in cache
 		if(A.name == N)
 			return A
+
+	stack_trace("Area name [N] not found")
 
 /proc/get_area_master(O)
 	RETURN_TYPE(/area)
@@ -114,15 +118,6 @@
 	//turfs += centerturf
 	return atoms
 
-/proc/trange(rad = 0, turf/centre = null) //alternative to range (ONLY processes turfs and thus less intensive)
-	RETURN_TYPE(/list)
-	if(!centre)
-		return
-
-	var/turf/x1y1 = locate(((centre.x-rad)<1 ? 1 : centre.x-rad),((centre.y-rad)<1 ? 1 : centre.y-rad),centre.z)
-	var/turf/x2y2 = locate(((centre.x+rad)>world.maxx ? world.maxx : centre.x+rad),((centre.y+rad)>world.maxy ? world.maxy : centre.y+rad),centre.z)
-	return block(x1y1,x2y2)
-
 /proc/get_dist_euclidian(atom/Loc1 as turf|mob|obj,atom/Loc2 as turf|mob|obj)
 	var/dx = Loc1.x - Loc2.x
 	var/dy = Loc1.y - Loc2.y
@@ -146,7 +141,7 @@
 
 	var/rsq = radius * (radius+0.5)
 
-	for(var/turf/T in range(radius, centerturf))
+	for(var/turf/T as anything in RANGE_TURFS(centerturf, radius))
 		var/dx = T.x - centerturf.x
 		var/dy = T.y - centerturf.y
 		if(dx*dx + dy*dy <= rsq)
@@ -398,6 +393,24 @@
 	spawn(duration)
 		for(var/client/C in show_to)
 			C.images -= I
+
+/// Adds an image to a client's `.images`. Useful as a callback.
+/proc/add_image_to_client(image/image_to_remove, client/add_to)
+	add_to?.images += image_to_remove
+
+/// Like add_image_to_client, but will add the image from a list of clients
+/proc/add_image_to_clients(image/image_to_remove, list/show_to)
+	for(var/client/add_to as anything in show_to)
+		add_to.images += image_to_remove
+
+/// Removes an image from a client's `.images`. Useful as a callback.
+/proc/remove_image_from_client(image/image_to_remove, client/remove_from)
+	remove_from?.images -= image_to_remove
+
+/// Like remove_image_from_client, but will remove the image from a list of clients
+/proc/remove_image_from_clients(image/image_to_remove, list/hide_from)
+	for(var/client/remove_from as anything in hide_from)
+		remove_from.images -= image_to_remove
 
 /datum/projectile_data
 	var/src_x

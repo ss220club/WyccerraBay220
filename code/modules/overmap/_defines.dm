@@ -19,8 +19,8 @@ var/global/list/map_sectors = list()
 	opacity = 1
 	density = TRUE
 
-/turf/unsimulated/map/New()
-	..()
+/turf/unsimulated/map/Initialize(mapload, added_to_area_cache)
+	. = ..()
 	name = "[x]-[y]"
 	var/list/numbers = list()
 

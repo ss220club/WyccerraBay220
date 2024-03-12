@@ -57,7 +57,7 @@
 /datum/shuttle/autodock/ferry/lift
 	name = "Cargo Lift"
 	shuttle_area = /area/ship/scrap/shuttle/lift
-	warmup_time = 3	//give those below some time to get out of the way
+	warmup_time = 3	SECONDS
 	waypoint_station = "nav_bearcat_lift_bottom"
 	waypoint_offsite = "nav_bearcat_lift_top"
 	sound_takeoff = 'sound/effects/lift_heavy_start.ogg'

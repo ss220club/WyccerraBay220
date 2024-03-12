@@ -1,7 +1,7 @@
 #define OVERLAY_CACHE_LEN 50
 
 /obj/item/device/t_scanner
-	name = "\improper T-ray scanner"
+	name = "T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner, capable of penetrating conventional hull materials."
 	icon = 'icons/obj/tools/t_ray_scanner.dmi'
 	icon_state = "t-ray0"
@@ -127,7 +127,7 @@
 	var/turf/center = get_turf(src.loc)
 	if(!center) return
 
-	for(var/turf/T in range(scan_range, center))
+	for(var/turf/T as anything in RANGE_TURFS(center, scan_range))
 		for(var/mob/M in T.contents)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M

@@ -37,27 +37,27 @@
 /obj/machinery/chemical_dispenser/proc/add_cartridge(obj/item/reagent_containers/chem_disp_cartridge/C, mob/user)
 	if(!istype(C))
 		if(user)
-			to_chat(user, SPAN_WARNING("\The [C] will not fit in \the [src]!"))
+			to_chat(user, SPAN_WARNING("[C] will not fit in [src]!"))
 		return
 
 	if(length(cartridges) >= DISPENSER_MAX_CARTRIDGES)
 		if(user)
-			to_chat(user, SPAN_WARNING("\The [src] does not have any slots open for \the [C] to fit into!"))
+			to_chat(user, SPAN_WARNING("[src] does not have any slots open for [C] to fit into!"))
 		return
 
 	if(!C.label)
 		if(user)
-			to_chat(user, SPAN_WARNING("\The [C] does not have a label!"))
+			to_chat(user, SPAN_WARNING("[C] does not have a label!"))
 		return
 
 	if(cartridges[C.label])
 		if(user)
-			to_chat(user, SPAN_WARNING("\The [src] already contains a cartridge with that label!"))
+			to_chat(user, SPAN_WARNING("[src] already contains a cartridge with that label!"))
 		return
 
 	if(user)
 		if(user.unEquip(C))
-			to_chat(user, SPAN_NOTICE("You add \the [C] to \the [src]."))
+			to_chat(user, SPAN_NOTICE("You add [C] to [src]."))
 		else
 			return
 
@@ -71,23 +71,26 @@
 	cartridges -= label
 	SSnano.update_uis(src)
 
+/obj/machinery/chemical_dispenser/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/label = input(user, "Which cartridge would you like to remove?", "Chemical Dispenser") as null|anything in cartridges
+	if(!label)
+		return
+	var/obj/item/reagent_containers/chem_disp_cartridge/C = remove_cartridge(label)
+	if(C)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		to_chat(user, SPAN_NOTICE("You remove [C] from [src]."))
+		C.dropInto(loc)
+
 /obj/machinery/chemical_dispenser/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(W, /obj/item/reagent_containers/chem_disp_cartridge))
 		add_cartridge(W, user)
 		return TRUE
 
-	if (isScrewdriver(W))
-		var/label = input(user, "Which cartridge would you like to remove?", "Chemical Dispenser") as null|anything in cartridges
-		if(!label) return TRUE
-		var/obj/item/reagent_containers/chem_disp_cartridge/C = remove_cartridge(label)
-		if(C)
-			to_chat(user, SPAN_NOTICE("You remove \the [C] from \the [src]."))
-			C.dropInto(loc)
-		return TRUE
-
 	if (istype(W, /obj/item/reagent_containers/glass) || istype(W, /obj/item/reagent_containers/food) || istype(W, /obj/item/reagent_containers/ivbag))
 		if(container)
-			to_chat(user, SPAN_WARNING("There is already \a [container] on \the [src]!"))
+			to_chat(user, SPAN_WARNING("There is already \a [container] on [src]!"))
 			return TRUE
 
 		var/obj/item/reagent_containers/RC = W
@@ -97,13 +100,13 @@
 			return TRUE
 
 		if(!RC.is_open_container())
-			to_chat(user, SPAN_WARNING("You don't see how \the [src] could dispense reagents into \the [RC]."))
+			to_chat(user, SPAN_WARNING("You don't see how [src] could dispense reagents into [RC]."))
 			return TRUE
 		if(!user.unEquip(RC, src))
 			return TRUE
 		container =  RC
 		update_icon()
-		to_chat(user, SPAN_NOTICE("You set \the [RC] on \the [src]."))
+		to_chat(user, SPAN_NOTICE("You set [RC] on [src]."))
 		SSnano.update_uis(src) // update all UIs attached to src
 		return TRUE
 

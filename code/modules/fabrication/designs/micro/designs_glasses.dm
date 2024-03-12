@@ -1,43 +1,59 @@
-/datum/fabricator_recipe/drinkingglass
-	path = /obj/item/reagent_containers/food/drinks/glass2/square
+/singleton/fabricator_recipe/drinkingglass
+	abstract_type = /singleton/fabricator_recipe/drinkingglass
 	category = "Drinking Glasses"
 	fabricator_types = list(FABRICATOR_CLASS_MICRO)
 
-/datum/fabricator_recipe/drinkingglass/rocks
+/singleton/fabricator_recipe/drinkingglass/square
+	id =  "square"
+	path = /obj/item/reagent_containers/food/drinks/glass2/square
+/singleton/fabricator_recipe/drinkingglass/rocks
+	id =  "rocks"
 	path = /obj/item/reagent_containers/food/drinks/glass2/rocks
 
-/datum/fabricator_recipe/drinkingglass/shake
+/singleton/fabricator_recipe/drinkingglass/shake
+	id =  "shake"
 	path = /obj/item/reagent_containers/food/drinks/glass2/shake
 
-/datum/fabricator_recipe/drinkingglass/cocktail
+/singleton/fabricator_recipe/drinkingglass/cocktail
+	id =  "cocktail"
 	path = /obj/item/reagent_containers/food/drinks/glass2/cocktail
 
-/datum/fabricator_recipe/drinkingglass/shot
+/singleton/fabricator_recipe/drinkingglass/shot
+	id =  "shot"
 	path = /obj/item/reagent_containers/food/drinks/glass2/shot
 
-/datum/fabricator_recipe/drinkingglass/pint
+/singleton/fabricator_recipe/drinkingglass/pint
+	id =  "pint"
 	path = /obj/item/reagent_containers/food/drinks/glass2/pint
 
-/datum/fabricator_recipe/drinkingglass/mug
+/singleton/fabricator_recipe/drinkingglass/mug
+	id =  "mug"
 	path = /obj/item/reagent_containers/food/drinks/glass2/mug
 
-/datum/fabricator_recipe/drinkingglass/wine
+/singleton/fabricator_recipe/drinkingglass/wine
+	id =  "wine"
 	path = /obj/item/reagent_containers/food/drinks/glass2/wine
 
-/datum/fabricator_recipe/drinkingglass/carafe
+/singleton/fabricator_recipe/drinkingglass/carafe
+	id =  "carafe"
 	path = /obj/item/reagent_containers/food/drinks/glass2/carafe
 
-/datum/fabricator_recipe/drinkingglass/flute
+/singleton/fabricator_recipe/drinkingglass/flute
+	id =  "flute"
 	path = /obj/item/reagent_containers/food/drinks/glass2/flute
 
-/datum/fabricator_recipe/drinkingglass/coffecup
+/singleton/fabricator_recipe/drinkingglass/coffeecup
+	id =  "coffecup"
 	path = /obj/item/reagent_containers/food/drinks/glass2/coffeecup
 
-/datum/fabricator_recipe/drinkingglass/cognac
+/singleton/fabricator_recipe/drinkingglass/cognac
+	id =  "cognac"
 	path = /obj/item/reagent_containers/food/drinks/glass2/cognac
 
-/datum/fabricator_recipe/drinkingglass/goblet
+/singleton/fabricator_recipe/drinkingglass/goblet
+	id =  "goblet"
 	path = /obj/item/reagent_containers/food/drinks/glass2/goblet
 
-/datum/fabricator_recipe/drinkingglass/coffeecup/glass
+/singleton/fabricator_recipe/drinkingglass/coffeecup/glass
+	id =  "glass"
 	path = /obj/item/reagent_containers/food/drinks/glass2/coffeecup/glass

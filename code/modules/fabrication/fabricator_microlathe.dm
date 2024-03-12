@@ -15,10 +15,7 @@
 	)
 	machine_name = "microlathe"
 	machine_desc = "A smaller-sized autolathe, typically used for cutlery, dinnerware, and drinking glasses."
-
-//Subtype for mapping, starts preloaded with glass and set to print glasses
-/obj/machinery/fabricator/micro/bartender
-	show_category = "Drinking Glasses"
+	
 
 /obj/machinery/fabricator/micro/bartender/Initialize()
 	. = ..()

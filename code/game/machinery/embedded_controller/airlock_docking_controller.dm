@@ -11,18 +11,15 @@
 		var/datum/computer/file/embedded_program/docking/airlock/docking_program = program
 		docking_program.display_name = display_name
 
-/obj/machinery/embedded_controller/radio/airlock/docking_port/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isMultitool(W))
-		var/datum/computer/file/embedded_program/docking/airlock/docking_program = program
-		var/code = docking_program.docking_codes
-		if(!code)
-			code = "N/A"
-		else
-			code = stars(code)
-		to_chat(user,"[W]'s screen displays '[code]'")
-		return TRUE
-
-	return ..()
+/obj/machinery/embedded_controller/radio/airlock/docking_port/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/computer/file/embedded_program/docking/airlock/docking_program = program
+	var/code = docking_program.docking_codes
+	if(!code)
+		code = "N/A"
+	else
+		code = stars(code)
+	to_chat(user,"[tool]'s screen displays '[code]'")
 
 /obj/machinery/embedded_controller/radio/airlock/docking_port/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/nanoui/master_ui = null, datum/topic_state/state = GLOB.default_state)
 	var/data[0]

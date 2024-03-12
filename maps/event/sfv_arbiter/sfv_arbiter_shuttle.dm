@@ -1,6 +1,6 @@
 /datum/shuttle/autodock/overmap/sfv_arbiter
 	name = "SFV Arbiter"
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 	shuttle_area = list(/area/map_template/sfv_arbiter)
 	current_location = "nav_sfv_arbiter_start"
 	dock_target = "sfv_arbiter_shuttle"

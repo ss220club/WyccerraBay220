@@ -9,7 +9,10 @@ export const SETTINGS_TABS = [
     id: 'general',
     name: 'Основные',
   },
-
+  {
+    id: 'advanced',
+    name: 'Дополнительные',
+  },
   {
     id: 'textHighlight',
     name: 'Выделение',

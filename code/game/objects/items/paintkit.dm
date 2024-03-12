@@ -18,7 +18,7 @@
 	new_icon_file = CUSTOM_ITEM_OBJ
 	. = src
 
-/obj/item/device/kit/proc/use(amt, mob/user)
+/obj/item/device/kit/use(amt, mob/user)
 	uses -= amt
 	playsound(get_turf(user), 'sound/items/Screwdriver.ogg', 50, 1)
 	if(uses<1)

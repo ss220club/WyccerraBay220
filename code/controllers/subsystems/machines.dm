@@ -113,24 +113,20 @@ SUBSYSTEM_DEF(machines)
 		CRASH("Null machinery was tried to be unregistered")
 
 	machinery -= machine
-	var/list/machinery_of_type = machinery_by_type[machine.type]
-	machinery_of_type -= machine
-	if(!length(machinery_of_type))
-		machinery_by_type -= machine.type
+	LAZYREMOVEASSOC(machinery_by_type, machine.type, machine)
 
 	var/area/A = get_area(machine)
 	if(A)
 		LAZYREMOVE(A.machinery_list, machine)
 
 /datum/controller/subsystem/machines/proc/get_machinery_of_type(obj/machinery/machinery_type)
-	if(!machinery_type)
-		return list()
+	if(istype(machinery_type))
+		var/obj/machinery/passed_machinery = machinery_type
+		machinery_type = passed_machinery.type
 
 	if(!ispath(machinery_type))
-		machinery_type = machinery_type.type
-
-	if(!ispath(machinery_type, /obj/machinery))
-		CRASH("Non-machinery type passed in `/datum/controller/subsystem/machines/proc/get_machinery_of_type`")
+		stack_trace("Non-machinery type passed in `/datum/controller/subsystem/machines/proc/get_machinery_of_type`")
+		return list()
 
 	if(machinery_type == /obj/machinery)
 		return get_all_machinery()
@@ -138,8 +134,10 @@ SUBSYSTEM_DEF(machines)
 	var/list/machinery = list()
 	for(var/type in typesof(machinery_type))
 		var/list/machinery_of_type = machinery_by_type[type]
-		if(machinery_of_type)
-			machinery += machinery_of_type
+		if(!length(machinery_of_type))
+			continue
+
+		machinery += machinery_of_type
 
 	return machinery
 
@@ -164,7 +162,6 @@ SUBSYSTEM_DEF(machines)
 
 
 /datum/controller/subsystem/machines/proc/setup_atmos_machinery(list/machines)
-	set background = TRUE
 	var/list/atmos_machines = list()
 	for (var/obj/machinery/atmospherics/machine in machines)
 		atmos_machines += machine

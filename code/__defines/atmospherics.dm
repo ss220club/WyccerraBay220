@@ -4,11 +4,11 @@
 #define PIPE_ROTATE_ONEDIR   2 // Only has one dir, south
 
 //Connection Type Definitions
-#define CONNECT_TYPE_REGULAR        1
-#define CONNECT_TYPE_SUPPLY         2
-#define CONNECT_TYPE_SCRUBBER       4
-#define CONNECT_TYPE_HE				8
-#define CONNECT_TYPE_FUEL           16
+#define CONNECT_TYPE_REGULAR        FLAG(0)
+#define CONNECT_TYPE_SUPPLY         FLAG(1)
+#define CONNECT_TYPE_SCRUBBER       FLAG(2)
+#define CONNECT_TYPE_HE				FLAG(3)
+#define CONNECT_TYPE_FUEL           FLAG(4)
 
 #define DISPOSAL_FLIP_NONE          0
 #define DISPOSAL_FLIP_FLIP          1

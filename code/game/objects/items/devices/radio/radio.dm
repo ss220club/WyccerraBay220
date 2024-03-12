@@ -83,7 +83,7 @@
 		if(!has_cell.checked_use(power_usage * CELLRATE)) // Use power and display if we run out.
 			on = FALSE
 			STOP_PROCESSING(SSobj, src)
-			visible_message(SPAN_WARNING("[icon2html(src, viewers(src))] [src] lets out a quiet click as it powers down."), SPAN_WARNING("You hear \a [src] let out a quiet click."))
+			visible_message(SPAN_WARNING("[icon2html(src, viewers(src))] [src] lets out a quiet click as it powers down."), SPAN_WARNING("You hear [src] let out a quiet click."))
 			return FALSE
 
 
@@ -281,7 +281,7 @@
 		if(cell && b_stat)
 			var/mob/user = usr
 			user.put_in_hands(cell)
-			to_chat(user, SPAN_NOTICE("You remove [cell] from \the [src]."))
+			to_chat(user, SPAN_NOTICE("You remove [cell] from [src]."))
 			cell = null
 		return TRUE
 
@@ -324,26 +324,48 @@
 	return null
 
 /obj/item/device/radio/talk_into(mob/living/M, message, channel, verb = "says", datum/language/speaking = null)
-	if(!on) return 0 // the device has to be on
+	// the device has to be on
+	if (!on)
+		return FALSE
 	//  Fix for permacell radios, but kinda eh about actually fixing them.
-	if(!M || !message) return 0
+	if (!M || !message)
+		return FALSE
 
-	if(speaking && (speaking.flags & (NONVERBAL|SIGNLANG))) return 0
+	if (speaking && (speaking.flags & (NONVERBAL|SIGNLANG)))
+		return FALSE
 
 	if (!broadcasting)
+		var/list/headset_z_group = GetConnectedZlevels(get_z(src))
+		//needs to account for turfs
+		var/turf/self_turf = get_turf(src)
+		if (!self_turf)
+			return FALSE
+		var/self_x = self_turf.x
+		var/self_y = self_turf.y
+		for (var/obj/item/device/radio_jammer/jammer as anything in GLOB.radio_jammers)
+			var/turf/jammer_turf = get_turf(jammer)
+			if (!jammer_turf)
+				continue
+			var/dx = self_x - jammer_turf.x
+			var/dy = self_y - jammer_turf.y
+			if (dx*dx + dy*dy <= jammer.square_radius && (jammer_turf.z in headset_z_group))
+				to_chat(M,SPAN_WARNING("Instead of the familiar radio crackle, \the [src] emits a faint buzzing sound."))
+				playsound(loc, 'sound/effects/zzzt.ogg', 20, 0, -1)
+				return FALSE
+
 		// Sedation chemical effect should prevent radio use (Chloral and Soporific)
 		var/mob/living/carbon/C = M
 		if (istype(C))
 			if ((C.chem_effects[CE_SEDATE] || C.incapacitated(INCAPACITATION_UNRESISTING)))
-				to_chat(M, SPAN_WARNING("You're unable to reach \the [src]."))
+				to_chat(M, SPAN_WARNING("You're unable to reach [src]."))
 				return 0
 
 			if (C.chem_effects[CE_VOICELOSS])
-				to_chat(M, SPAN_WARNING("Your voice is too quiet for \the [src] to pickup!"))
+				to_chat(M, SPAN_WARNING("Your voice is too quiet for [src] to pickup!"))
 				return FALSE
 
 			if (C.radio_interrupt_cooldown > world.time)
-				to_chat(M, SPAN_WARNING("You're disrupted as you reach for \the [src]."))
+				to_chat(M, SPAN_WARNING("You're disrupted as you reach for [src]."))
 				return 0
 
 		if(istype(M)) M.trigger_aiming(TARGET_CAN_RADIO)
@@ -554,7 +576,6 @@
 
 
 /obj/item/device/radio/hear_talk(mob/M as mob, msg, verb = "says", datum/language/speaking = null)
-
 	if (broadcasting)
 		if(get_dist(src, M) <= canhear_range)
 			talk_into(M, msg,null,verb,speaking)
@@ -605,38 +626,38 @@
 	. = ..()
 	if (distance <= 1 || loc == user)
 		if (b_stat)
-			to_chat(user, SPAN_NOTICE("\The [src] can be attached and modified!"))
+			to_chat(user, SPAN_NOTICE("[src] can be attached and modified!"))
 		else
-			to_chat(user, SPAN_NOTICE("\The [src] can not be modified or attached!"))
+			to_chat(user, SPAN_NOTICE("[src] can not be modified or attached!"))
 		if (power_usage && cell)
-			to_chat(user, SPAN_NOTICE("\The [src] charge meter reads [round(cell.percent(), 0.1)]%."))
+			to_chat(user, SPAN_NOTICE("[src] charge meter reads [round(cell.percent(), 0.1)]%."))
 
+/obj/item/device/radio/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	b_stat = !b_stat
+	user.visible_message(
+		SPAN_NOTICE("[user] adjusts [src] with [tool]."),
+		SPAN_NOTICE("You adjust [src] with [tool]. It can [b_stat ? "now" : "no longer"] be attached or modified.")
+	)
 
 /obj/item/device/radio/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Make attachable
-	if (isScrewdriver(tool))
-		b_stat = !b_stat
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
-			SPAN_NOTICE("You adjust \the [src] with \the [tool]. It can [b_stat ? "now" : "no longer"] be attached or modified.")
-		)
-		return TRUE
-
 	// Device Cell - Install power cell
 	if (istype(tool, /obj/item/cell/device))
 		if (!power_usage)
-			USE_FEEDBACK_FAILURE("\The [src] doesn't need a power cell.")
+			USE_FEEDBACK_FAILURE("[src] doesn't need a power cell.")
 			return TRUE
 		if (cell)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [cell] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [cell] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		cell = tool
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \a [src]."),
-			SPAN_NOTICE("You install \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
 		return TRUE
 
@@ -707,12 +728,30 @@
 		var/datum/robot_component/C = R.components["radio"]
 		R.cell_use_power(C.active_usage)
 
+/obj/item/device/radio/borg/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!keyslot)
+		USE_FEEDBACK_FAILURE("[src] doesn't have an encryption key to remove.")
+		return
+	for (var/channel_name in channels)
+		radio_controller.remove_object(src, radiochannels[channel_name])
+		secure_radio_connections[channel_name] = null
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.put_in_hands(keyslot)
+	recalculateChannels()
+	user.visible_message(
+		SPAN_NOTICE("[user] pops [keyslot] out of [src] with [tool]."),
+		SPAN_NOTICE("You pop [keyslot] out of [src] with [tool]."),
+		range = 2
+	)
+	keyslot = null
 
 /obj/item/device/radio/borg/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Encryption Key - Insert key
 	if (istype(tool, /obj/item/device/encryptionkey))
 		if (keyslot)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [keyslot] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [keyslot] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -720,32 +759,12 @@
 		keyslot = tool
 		recalculateChannels()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] slots \a [tool] into \a [src]."),
-			SPAN_NOTICE("You slot \the [tool] into \the [src]."),
+			SPAN_NOTICE("[user] slots [tool] into [src]."),
+			SPAN_NOTICE("You slot [tool] into [src]."),
 			range = 2
 		)
 		return TRUE
-
-	// Screwdriver - Remove encryption key
-	if (isScrewdriver(tool))
-		if (!keyslot)
-			USE_FEEDBACK_FAILURE("\The [src] doesn't have an encryption key to remove.")
-			return TRUE
-		for (var/channel_name in channels)
-			radio_controller.remove_object(src, radiochannels[channel_name])
-			secure_radio_connections[channel_name] = null
-		user.put_in_hands(keyslot)
-		recalculateChannels()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pops \a [keyslot] out of \a [src] with \a [tool]."),
-			SPAN_NOTICE("You pop \the [keyslot] out of \the [src] with \the [tool]."),
-			range = 2
-		)
-		keyslot = null
-		return TRUE
-
 	return ..()
-
 
 /obj/item/device/radio/borg/recalculateChannels()
 	src.channels = list()

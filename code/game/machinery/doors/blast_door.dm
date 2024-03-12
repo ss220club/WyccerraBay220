@@ -141,16 +141,26 @@
 /obj/machinery/door/blast/attack_hand(mob/user)
 	if (MUTATION_FERAL in user.mutations)
 		if ((!is_powered() || MACHINE_IS_BROKEN(src)) && density)
-			visible_message(SPAN_DANGER("\The [user] manages to pry \the [src] open!"))
+			visible_message(SPAN_DANGER("[user] manages to pry [src] open!"))
 			return force_open()
 	return ..()
 
 // If we are clicked with crowbar or wielded fire axe, try to manually open the door.
 // This only works on broken doors or doors without power. Also allows repair with Plasteel.
+/obj/machinery/door/blast/crowbar_act(mob/living/user, obj/item/tool)
+	if(operating || (!MACHINE_IS_BROKEN(src) && is_powered()))
+		to_chat(user, SPAN_NOTICE("[src]'s motors resist your effort."))
+		return
+	to_chat(user, SPAN_NOTICE("You begin prying at [src]..."))
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || operating || (!MACHINE_IS_BROKEN(src) && is_powered()))
+		return
+	force_toggle()
+
 /obj/machinery/door/blast/use_tool(obj/item/C, mob/living/user, list/click_params)
-	if(isCrowbar(C) || (istype(C, /obj/item/material/twohanded/fireaxe) && C:wielded == 1))
-		if(((!is_powered()) || MACHINE_IS_BROKEN(src)) && !( operating ))
-			to_chat(user, SPAN_NOTICE("You begin prying at \the [src]..."))
+	if(istype(C, /obj/item/material/twohanded/fireaxe))
+		var/obj/item/material/twohanded/fireaxe/fireaxe = C
+		if(((!is_powered()) || MACHINE_IS_BROKEN(src)) && !( operating ) && fireaxe.wielded)
+			to_chat(user, SPAN_NOTICE("You begin prying at [src]..."))
 			if(do_after(user, (C.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
 				force_toggle()
 		else
@@ -160,21 +170,21 @@
 	if(istype(C, /obj/item/stack/material) && C.get_material_name() == MATERIAL_PLASTEEL)
 		var/amt = ceil(get_damage_value() / 150)
 		if(!amt)
-			to_chat(user, SPAN_NOTICE("\The [src] is already fully functional."))
+			to_chat(user, SPAN_NOTICE("[src] is already fully functional."))
 			return TRUE
 		var/obj/item/stack/P = C
 		if(!P.can_use(amt))
 			to_chat(user, SPAN_WARNING("You don't have enough sheets to repair this! You need at least [amt] sheets."))
 			return TRUE
-		to_chat(user, SPAN_NOTICE("You begin repairing \the [src]..."))
+		to_chat(user, SPAN_NOTICE("You begin repairing [src]..."))
 		if(do_after(user, 5 SECONDS, src, DO_REPAIR_CONSTRUCT))
 			if(P.use(amt))
-				to_chat(user, SPAN_NOTICE("You have repaired \the [src]."))
+				to_chat(user, SPAN_NOTICE("You have repaired [src]."))
 				revive_health()
 			else
 				to_chat(user, SPAN_WARNING("You don't have enough sheets to repair this! You need at least [amt] sheets."))
 		else
-			to_chat(user, SPAN_WARNING("You must remain still while working on \the [src]."))
+			to_chat(user, SPAN_WARNING("You must remain still while working on [src]."))
 		return TRUE
 
 	return ..()

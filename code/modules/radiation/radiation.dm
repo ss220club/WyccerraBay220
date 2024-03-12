@@ -34,7 +34,7 @@
 
 /turf/proc/calc_rad_resistance()
 	cached_rad_resistance = 0
-	for(var/obj/O in src.contents)
+	for(var/obj/O in src)
 		if(!(O.rad_resistance_modifier <= 0) && O.density)
 			var/material/M = O.get_material()
 			if(!M)	continue

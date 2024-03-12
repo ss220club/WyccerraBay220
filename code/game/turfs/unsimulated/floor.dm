@@ -2,6 +2,7 @@
 	name = "floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "Floor3"
+	decals_available = TRUE
 
 /turf/unsimulated/floor/bluespace //non-doomsday version of bluespace for transit and wizden
 	name = "\proper bluespace"

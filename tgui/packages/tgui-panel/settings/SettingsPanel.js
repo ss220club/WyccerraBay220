@@ -4,6 +4,7 @@
  * @license MIT
  */
 
+import { capitalize } from 'common/string';
 import { toFixed } from 'common/math';
 import { useLocalState } from 'tgui/backend';
 import { useDispatch, useSelector } from 'common/redux';
@@ -12,7 +13,6 @@ import {
   Button,
   ColorBox,
   Divider,
-  Dropdown,
   Input,
   LabeledList,
   NumberInput,
@@ -20,6 +20,7 @@ import {
   Stack,
   Tabs,
   TextArea,
+  Collapsible,
 } from 'tgui/components';
 import { ChatPageSettings } from '../chat';
 import { clearChat, rebuildChat, saveChatToDisk } from '../chat/actions';
@@ -38,6 +39,7 @@ import {
   selectHighlightSettings,
   selectHighlightSettingById,
 } from './selectors';
+import { chatRenderer } from '../chat/renderer';
 
 export const SettingsPanel = (props, context) => {
   const activeTab = useSelector(context, selectActiveTab);
@@ -67,6 +69,7 @@ export const SettingsPanel = (props, context) => {
       </Stack.Item>
       <Stack.Item grow basis={0}>
         {activeTab === 'general' && <SettingsGeneral />}
+        {activeTab === 'advanced' && <SettingsAdvanced />}
         {activeTab === 'chatPage' && <ChatPageSettings />}
         {activeTab === 'textHighlight' && <TextHighlightSettings />}
       </Stack.Item>
@@ -82,117 +85,211 @@ export const SettingsGeneral = (props, context) => {
   const dispatch = useDispatch(context);
   const [freeFont, setFreeFont] = useLocalState(context, 'freeFont', false);
   return (
-    <Section height="150px">
-      <LabeledList>
-        <LabeledList.Item label="Тема">
-          <Dropdown
-            selected={theme}
-            options={THEMES}
-            onSelected={(value) =>
-              dispatch(
-                updateSettings({
-                  theme: value,
-                })
-              )
-            }
-          />
-        </LabeledList.Item>
-        <LabeledList.Item label="Шрифт">
-          <Stack inline align="baseline">
+    <Section fill>
+      <Stack fill vertical>
+        <LabeledList>
+          <LabeledList.Item label="Тема">
+            {THEMES.map((THEME) => (
+              <Button
+                key={THEME}
+                content={capitalize(THEME)}
+                selected={theme === THEME}
+                color="transparent"
+                onClick={() =>
+                  dispatch(
+                    updateSettings({
+                      theme: THEME,
+                    })
+                  )
+                }
+              />
+            ))}
+          </LabeledList.Item>
+          <LabeledList.Item label="Font style">
             <Stack.Item>
               {(!freeFont && (
-                <Dropdown
-                  selected={fontFamily}
-                  options={FONTS}
-                  onSelected={(value) =>
-                    dispatch(
-                      updateSettings({
-                        fontFamily: value,
-                      })
-                    )
+                <Collapsible
+                  title={fontFamily}
+                  width={'100%'}
+                  buttons={
+                    <Button
+                      content="Свой шрифт"
+                      icon={freeFont ? 'lock-open' : 'lock'}
+                      color={freeFont ? 'good' : 'bad'}
+                      onClick={() => {
+                        setFreeFont(!freeFont);
+                      }}
+                    />
                   }
-                />
+                >
+                  {FONTS.map((FONT) => (
+                    <Button
+                      key={FONT}
+                      content={FONT}
+                      fontFamily={FONT}
+                      selected={fontFamily === FONT}
+                      color="transparent"
+                      onClick={() =>
+                        dispatch(
+                          updateSettings({
+                            fontFamily: FONT,
+                          })
+                        )
+                      }
+                    />
+                  ))}
+                </Collapsible>
               )) || (
-                <Input
-                  value={fontFamily}
-                  onChange={(e, value) =>
-                    dispatch(
-                      updateSettings({
-                        fontFamily: value,
-                      })
-                    )
-                  }
-                />
+                <Stack>
+                  <Input
+                    width={'100%'}
+                    value={fontFamily}
+                    onChange={(e, value) =>
+                      dispatch(
+                        updateSettings({
+                          fontFamily: value,
+                        })
+                      )
+                    }
+                  />
+                  <Button
+                    ml={0.5}
+                    content="Custom font"
+                    icon={freeFont ? 'lock-open' : 'lock'}
+                    color={freeFont ? 'good' : 'bad'}
+                    onClick={() => {
+                      setFreeFont(!freeFont);
+                    }}
+                  />
+                </Stack>
               )}
             </Stack.Item>
-            <Stack.Item>
-              <Button
-                content="Свой шрифт"
-                icon={freeFont ? 'lock-open' : 'lock'}
-                color={freeFont ? 'good' : 'bad'}
-                onClick={() => {
-                  setFreeFont(!freeFont);
-                }}
+          </LabeledList.Item>
+          <LabeledList.Item label="Размер шрифта">
+            <NumberInput
+              width="4.2em"
+              step={1}
+              stepPixelSize={10}
+              minValue={8}
+              maxValue={32}
+              value={fontSize}
+              unit="px"
+              format={(value) => toFixed(value)}
+              onChange={(e, value) =>
+                dispatch(
+                  updateSettings({
+                    fontSize: value,
+                  })
+                )
+              }
+            />
+          </LabeledList.Item>
+          <LabeledList.Item label="Отступ строк">
+            <NumberInput
+              width="4.2em"
+              step={0.01}
+              stepPixelSize={2}
+              minValue={0.8}
+              maxValue={5}
+              value={lineHeight}
+              format={(value) => toFixed(value, 2)}
+              onDrag={(e, value) =>
+                dispatch(
+                  updateSettings({
+                    lineHeight: value,
+                  })
+                )
+              }
+            />
+          </LabeledList.Item>
+        </LabeledList>
+        <Divider />
+        <Stack>
+          <Stack.Item grow>
+            <Button
+              content="Сохранить логи"
+              icon="save"
+              tooltip="Экспортировать историю текущей вкладки, в виде HTML файла"
+              onClick={() => dispatch(saveChatToDisk())}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Button.Confirm
+              icon="trash"
+              confirmContent="Вы уверены?"
+              content="Очистить чат"
+              tooltip="Очистить историю текущей вкладки."
+              onClick={() => dispatch(clearChat())}
+            />
+          </Stack.Item>
+        </Stack>
+      </Stack>
+    </Section>
+  );
+};
+
+export const SettingsAdvanced = (props, context) => {
+  const { messageStackInSeconds, maxTotalMessage } = useSelector(
+    context,
+    selectSettings
+  );
+  const SetMessageStackingTime = (value, context) => {
+    const dispatch = useDispatch(context);
+    dispatch(updateSettings({ messageStackInSeconds: value }));
+    chatRenderer.setMessageDelayStacking(value);
+  };
+
+  const SetMessageTotal = (value, context) => {
+    const dispatch = useDispatch(context);
+    dispatch(updateSettings({ maxTotalMessage: value }));
+    chatRenderer.setMessageDelayStacking(value);
+  };
+  return (
+    <Section height={'150px'}>
+      <Stack>
+        <Stack.Item>
+          <LabeledList>
+            <LabeledList.Item
+              label={'Макс. сообщений'}
+              tooltip={
+                'Максимум отображаемых сообщений. Значения выше 1500 могут негативно сказаться на производительности!'
+              }
+            >
+              <NumberInput
+                width={5}
+                step={100}
+                stepPixelSize={3}
+                minValue={0}
+                maxValue={25000}
+                value={maxTotalMessage}
+                format={(value) => toFixed(value)}
+                onChange={(e, value) => SetMessageTotal(value, context)}
               />
-            </Stack.Item>
-          </Stack>
-        </LabeledList.Item>
-        <LabeledList.Item label="Размер шрифта">
-          <NumberInput
-            width="4.2em"
-            step={1}
-            stepPixelSize={10}
-            minValue={8}
-            maxValue={32}
-            value={fontSize}
-            unit="px"
-            format={(value) => toFixed(value)}
-            onChange={(e, value) =>
-              dispatch(
-                updateSettings({
-                  fontSize: value,
-                })
-              )
-            }
-          />
-        </LabeledList.Item>
-        <LabeledList.Item label="Отступ строк">
-          <NumberInput
-            width="4.2em"
-            step={0.01}
-            stepPixelSize={2}
-            minValue={0.8}
-            maxValue={5}
-            value={lineHeight}
-            format={(value) => toFixed(value, 2)}
-            onDrag={(e, value) =>
-              dispatch(
-                updateSettings({
-                  lineHeight: value,
-                })
-              )
-            }
-          />
-        </LabeledList.Item>
-      </LabeledList>
-      <Divider />
-      <Stack fill>
-        <Stack.Item grow mt={0.15}>
-          <Button
-            content="Сохранить логи"
-            icon="save"
-            tooltip="Экспортировать историю текущей вкладки, в виде HTML файла."
-            onClick={() => dispatch(saveChatToDisk())}
-          />
+            </LabeledList.Item>
+          </LabeledList>
         </Stack.Item>
-        <Stack.Item mt={0.15}>
-          <Button.Confirm
-            icon="trash"
-            confirmContent="Вы уверены?"
-            content="Очистить чат"
-            tooltip="Очистить историю текущей вкладки."
-            onClick={() => dispatch(clearChat())}
-          />
+        <Stack.Divider />
+        <Stack.Item>
+          <LabeledList>
+            <LabeledList.Item
+              label="Время стака"
+              tooltip={
+                'Время которое одинаковые сообщения будут стакаться, не создавая копию'
+              }
+            >
+              <NumberInput
+                width={5}
+                step={1}
+                stepPixelSize={3}
+                minValue={0}
+                maxValue={600}
+                value={messageStackInSeconds}
+                unit="sec"
+                format={(value) => toFixed(value)}
+                onChange={(e, value) => SetMessageStackingTime(value, context)}
+              />
+            </LabeledList.Item>
+          </LabeledList>
         </Stack.Item>
       </Stack>
     </Section>

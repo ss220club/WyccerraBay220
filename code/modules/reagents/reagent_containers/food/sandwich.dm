@@ -3,7 +3,7 @@
 		if (is_path_in_list(W.type, list(/obj/item/reagent_containers/food/snacks/custombowl, /obj/item/reagent_containers/food/snacks/csandwich)))
 			return
 		var/obj/item/reagent_containers/food/snacks/csandwich/S = new(get_turf(src))
-		S.attackby(W,user)
+		W.resolve_attackby(S, user)
 		qdel(src)
 		return
 	. = ..()

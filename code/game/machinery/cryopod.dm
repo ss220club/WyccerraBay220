@@ -254,7 +254,6 @@
 
 /obj/machinery/cryopod/Initialize(mapload, ...)
 	. = ..()
-	announce = new /obj/item/device/radio/intercom(src)
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/machinery/cryopod/LateInitialize(mapload, ...)

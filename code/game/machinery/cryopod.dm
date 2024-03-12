@@ -157,7 +157,6 @@
 	var/mob/occupant = null       // Person waiting to be despawned.
 	var/time_till_despawn = 9000  // Down to 15 minutes //30 minutes-ish is too long
 	var/time_entered = 0          // Used to keep track of the safe period.
-	var/obj/item/device/radio/intercom/announce //
 	var/announce_despawn = TRUE
 
 	var/obj/machinery/computer/cryopod/control_computer
@@ -247,10 +246,6 @@
 		if(occupant && !launched)
 			launch()
 		..()
-
-/obj/machinery/cryopod/New()
-	announce = new /obj/item/device/radio/intercom(src)
-	..()
 
 /obj/machinery/cryopod/Destroy()
 	if(occupant)
@@ -345,7 +340,6 @@
 	//Delete all items not on the preservation list.
 	var/list/items = src.contents.Copy()
 	items -= occupant // Don't delete the occupant
-	items -= announce // or the autosay radio.
 	items -= component_parts
 
 	for(var/obj/item/W in items)
@@ -408,7 +402,7 @@
 	log_and_message_admins("[key_name(occupant)] ([role_alt_title]) entered cryostorage.")
 
 	if(announce_despawn)
-		invoke_async(announce, TYPE_PROC_REF(/obj/item/device/radio, autosay), "[occupant.real_name], [role_alt_title], [on_store_message]", "[on_store_name]")
+		invoke_async(GLOB.global_announcer, TYPE_PROC_REF(/obj/item/device/radio, autosay), "[occupant.real_name], [role_alt_title], [on_store_message]", "[on_store_name]", "Common")
 
 	var/despawnmessage = replacetext(on_store_visible_message, "$occupant$", occupant.real_name)
 	visible_message(SPAN_NOTICE("\The [initial(name)] " + despawnmessage), range = 3)
@@ -488,7 +482,6 @@
 	//Eject any items that aren't meant to be in the pod.
 	var/list/items = contents - component_parts
 	if(occupant) items -= occupant
-	if(announce) items -= announce
 
 	for(var/obj/item/W in items)
 		W.dropInto(loc)

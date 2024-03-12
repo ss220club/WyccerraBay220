@@ -86,8 +86,6 @@
 			visible_message(SPAN_WARNING("[icon2html(src, viewers(src))] [src] lets out a quiet click as it powers down."), SPAN_WARNING("You hear [src] let out a quiet click."))
 			return FALSE
 
-
-
 /obj/item/device/radio/Destroy()
 	QDEL_NULL(wires)
 	GLOB.listening_objects -= src
@@ -907,7 +905,7 @@
 	anchored = TRUE
 	simulated = FALSE
 	power_usage = 0
-	channels=list("Engineering" = 1, "Security" = 1, "Medical" = 1, "Command" = 1, "Common" = 1, "Science" = 1, "Supply" = 1, "Service" = 1, "Exploration" = 1)
+	channels=list("Engineering" = 1, "Security" = 1, "Medical" = 1, "Command" = 1, "Common" = 1, "Science" = 1, "Supply" = 1, "Service" = 1, "Exploration" = 1, "Response Team" = 1)
 	cell = null
 	on = TRUE
 

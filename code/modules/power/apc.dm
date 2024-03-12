@@ -187,7 +187,7 @@
 		area = A
 	if(autoname)
 		SetName("\improper [area.name] APC")
-	area.apc = src
+	area.set_apc(src)
 
 	. = ..()
 
@@ -204,8 +204,8 @@
 	power_change()
 
 /obj/machinery/power/apc/Destroy()
-	src.update()
-	area.apc = null
+	update()
+	area.remove_apc()
 	area.power_light = 0
 	area.power_equip = 0
 	area.power_environ = 0

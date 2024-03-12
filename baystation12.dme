@@ -102,6 +102,7 @@
 #include "code\__defines\zmimic.dm"
 #include "code\__defines\dcs\flags.dm"
 #include "code\__defines\dcs\helpers.dm"
+#include "code\__defines\dcs\signals\signals_area.dm"
 #include "code\__defines\dcs\signals\signals_atom.dm"
 #include "code\__defines\dcs\signals\signals_atom_attack.dm"
 #include "code\__defines\dcs\signals\signals_atom_movable.dm"

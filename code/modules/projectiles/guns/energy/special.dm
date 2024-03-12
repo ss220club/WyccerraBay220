@@ -176,6 +176,7 @@
 	spark_system = new /datum/effect/spark_spread
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
+	RegisterSignal(src, COMSIG_TOOL_ATOM_ACTED_PRIMARY(TOOL_WELDER), TYPE_PROC_REF(/atom, update_icon))
 
 /obj/item/gun/energy/plasmacutter/Destroy()
 	QDEL_NULL(spark_system)
@@ -194,7 +195,6 @@
 	if(user)
 		user.welding_eyecheck()//located in mob_helpers.dm
 		set_light(5, 0.7, COLOR_LIGHT_CYAN)
-		addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 0.5 SECONDS)
 	return TRUE
 
 /obj/item/gun/energy/plasmacutter/use(used)

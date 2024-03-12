@@ -18,7 +18,7 @@
 	cur_command = new_command
 
 	//if there's no power, recieve the signal but just don't do anything. This allows airlocks to continue to work normally once power is restored
-	if(!arePowerSystemsOn())
+	if(!operable())
 		return
 	invoke_async(src, PROC_REF(execute_current_command))
 

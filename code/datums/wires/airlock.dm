@@ -49,7 +49,7 @@ var/global/const/AIRLOCK_WIRE_LIGHT = 2048
 
 /datum/wires/airlock/GetInteractWindow(mob/user)
 	var/obj/machinery/door/airlock/A = holder
-	var/haspower = A.arePowerSystemsOn() //If there's no power, then no lights will be on.
+	var/haspower = A.operable() //If there's no power, then no lights will be on.
 
 	. += ..()
 	. += text("<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]",
@@ -131,7 +131,7 @@ var/global/const/AIRLOCK_WIRE_LIGHT = 2048
 	switch(index)
 		if(AIRLOCK_WIRE_IDSCAN)
 			//Sending a pulse through flashes the red light on the door (if the door has power).
-			if(A.arePowerSystemsOn() && A.density)
+			if(A.operable() && A.density)
 				A.do_animate("deny")
 		if(AIRLOCK_WIRE_MAIN_POWER1, AIRLOCK_WIRE_MAIN_POWER2)
 			//Sending a pulse through either one causes a breaker to trip, disabling the door for 10 seconds if backup power is connected, or 1 minute if not (or until backup power comes back on, whichever is shorter).

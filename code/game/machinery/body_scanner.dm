@@ -19,7 +19,7 @@
 /obj/machinery/bodyscanner/examine(mob/user, distance, is_adjacent)
 	. = ..()
 	if(occupant && is_adjacent)
-		. += occupant.examine(arglist(args))
+		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(examinate), user, occupant), 0.1 SECONDS)
 
 /obj/machinery/bodyscanner/relaymove(mob/user)
 	..()

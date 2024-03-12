@@ -102,7 +102,7 @@
 	if (is_adjacent) //The bag's rather thick and opaque from a distance.
 		. += SPAN_INFO("You peer into [src].")
 		for(var/mob/living/L in contents)
-			. += L.examine(arglist(args))
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(examinate), user, L), 0.1 SECONDS)
 
 /obj/item/usedcryobag
 	name = "used stasis bag"

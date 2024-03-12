@@ -28,7 +28,7 @@
 		. += SPAN_NOTICE("It seems to be empty.")
 		return
 	. += SPAN_NOTICE("It contains:")
-	. += augment.examine(arglist(args))
+	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(examinate), user, augment), 0.1 SECONDS)
 
 /obj/item/device/augment_implanter/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

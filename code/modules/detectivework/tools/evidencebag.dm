@@ -98,4 +98,4 @@
 /obj/item/evidencebag/examine(mob/user)
 	. = ..()
 	if(stored_item)
-		. += stored_item.examine(arglist(args))
+		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(examinate), user, stored_item), 0.1 SECONDS)

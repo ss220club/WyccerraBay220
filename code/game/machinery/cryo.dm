@@ -64,7 +64,7 @@
 		if(beaker)
 			. += SPAN_NOTICE("It is loaded with a beaker.")
 		if(occupant)
-			. += occupant.examine(arglist(args))
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(examinate), user, occupant), 0.1 SECONDS)
 
 /obj/machinery/atmospherics/unary/cryo_cell/Process()
 	..()

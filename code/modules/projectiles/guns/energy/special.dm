@@ -183,7 +183,7 @@
 
 /obj/item/gun/energy/plasmacutter/tool_use_check(mob/living/user, amount)
 	if(safety())
-		balloon_alert(user, "уберите предохранитель!")
+		balloon_alert(user, "снимите с предохранителя!")
 		return FALSE
 	if(QDELETED(power_supply))
 		balloon_alert(user, "нет батареи!")

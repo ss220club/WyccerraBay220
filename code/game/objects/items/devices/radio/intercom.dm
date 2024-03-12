@@ -343,7 +343,7 @@
 /obj/item/device/radio/intercom/proc/find_and_set_linked_area()
 	var/area/target_area = get_area(src)
 	if(!target_area)
-		stack_trace("No area found for [log_info_line(src)]. Qdeleted: [QDELETED(src)]")
+		stack_trace("No area found for [log_info_line(src)]. Qdeling: [QDESTROYING(src) ? "TRUE" : "FALSE"]|Qdeleted: [QDELETED(src) ? "TRUE" : "FALSE"]")
 
 	if(!target_area.apc)
 		RegisterSignal(target_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))

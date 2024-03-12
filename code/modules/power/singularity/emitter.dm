@@ -211,7 +211,7 @@
 		if(EMITTER_LOOSE)
 			to_chat(user, SPAN_WARNING("[src] needs to be wrenched to the floor."))
 		if(EMITTER_WRENCHED)
-			if(!tool.tool_use_check(user, 1))
+			if(!tool.tool_start_check(user, 1))
 				return
 			user.visible_message(
 				SPAN_NOTICE("[user] starts to weld [src] to the floor."),
@@ -228,7 +228,7 @@
 			)
 			connect_to_network()
 		if(EMITTER_WELDED)
-			if(!tool.tool_use_check(user, 1))
+			if(!tool.tool_start_check(user, 1))
 				return
 			user.visible_message(
 				SPAN_NOTICE("[user] starts to cut [src] free from the floor."),

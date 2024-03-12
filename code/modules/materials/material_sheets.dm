@@ -156,7 +156,7 @@
 	if(!reinf_material || !reinf_material.stack_type)
 		return
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.tool_use_check(user, 2) || !can_use(2))
+	if(!tool.tool_start_check(user, 2) || !can_use(2))
 		return
 	if(!tool.use_as_tool(src, user, amount = 2, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return

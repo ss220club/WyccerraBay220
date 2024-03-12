@@ -220,7 +220,7 @@
 	if(broken_state != GRAV_NEEDS_WELDING)
 		return
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] begins to weld the damaged parts."),

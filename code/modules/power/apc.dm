@@ -534,7 +534,7 @@
 		to_chat(user, SPAN_WARNING("The wire connection is in the way."))
 		return
 
-	if(!tool.tool_use_check(user, 3))
+	if(!tool.tool_start_check(user, 3))
 		return
 	user.visible_message(SPAN_WARNING("[user] begins to weld [src]."), \
 						"You start welding the APC frame...", \

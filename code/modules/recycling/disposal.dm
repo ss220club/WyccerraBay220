@@ -112,7 +112,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if(length(contents) > LAZYLEN(component_parts))
 		to_chat(user, "Eject the items first!")
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	to_chat(user, "You start slicing the floorweld off the disposal unit.")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
@@ -616,7 +616,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if(!mode)
 		USE_FEEDBACK_FAILURE("[src]'s power connection needs to be disconnected before you can remove [src] from the floor.")
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts slicing [src]'s floorweld with  [tool]."),

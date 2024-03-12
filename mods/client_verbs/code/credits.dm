@@ -2,7 +2,72 @@
 	set name = "Credits"
 	set category = "OOC"
 
-	var/datum/asset/credits_asset = get_asset_datum(/datum/asset/simple/credits)
-	credits_asset.send(src)
+	var/static/credits_users = list()
+	var/datum/tgui_module/credits/credits = credits_users[usr]
+	if(!credits)
+		credits = new(src)
+		credits_users[usr] = credits
+	credits.tgui_interact(usr)
 
-	show_browser(src, 'mods/client_verbs/html/credits.html', "window=credits;size=675x650")
+/datum/tgui_module/credits
+	name = "Авторы"
+
+/datum/tgui_module/credits/tgui_state(mob/user)
+	return GLOB.tgui_always_state
+
+/datum/tgui_module/credits/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "Credits", name)
+		ui.set_autoupdate(FALSE)
+		ui.open()
+
+/datum/tgui_module/credits/tgui_static_data(mob/user)
+	var/list/data = list()
+
+	var/list/credits = list()
+	var/credit_singletons = GET_SINGLETON_SUBTYPE_MAP(/singleton/credits)
+	for(var/singleton_type in credit_singletons)
+		var/singleton/credits/build = credit_singletons[singleton_type]
+		credits += list(list(
+			"name" = build.name,
+			"coders" = build.coders,
+			"mappers" = build.mappers,
+			"spriters" = build.spriters,
+			"ui_designers" = build.ui_designers,
+			"special" = build.special,
+			"linkContributors" = build.contributors,
+		))
+	data["credits"] = credits
+
+	return data
+
+/datum/tgui_module/credits/tgui_act(action, list/params)
+	if(..())
+		return
+	. = FALSE
+
+	switch(action)
+		if("openContributors")
+			var/buildPage = params["buildPage"]
+			var/buildName = params["buildName"]
+			if(tgui_alert(usr, "Это откроет страницу с контрибьюторами проекта [buildName]. Вы уверены?", "Контрибьютеры", list("Да", "Нет")) != "Да")
+				return
+			var/url = "[buildPage]"
+			to_target(usr, link(url))
+			return TRUE
+		if("openGitHub")
+			if(tgui_alert(usr, "Это откроет страницу нашего GitHub. Вы уверены?", "GitHub", list("Да", "Нет")) != "Да")
+				return
+			to_target(usr, link("https://github.com/ss220club/WyccerraBay220"))
+			return TRUE
+		if("openWiki")
+			if(tgui_alert(usr, "Это откроет страницу с нашей вики. Вы уверены?", "Wiki", list("Да", "Нет")) != "Да")
+				return
+			to_target(usr, link("https://sierra.ss220.club"))
+			return TRUE
+		if("openDiscord")
+			if(tgui_alert(usr, "Это откроет страницу с ссылкой на приглашение в наш дискорд. Вы уверены?", "Discord", list("Да", "Нет")) != "Да")
+				return
+			to_target(usr, link("https://discord.gg/ss220"))
+			return TRUE

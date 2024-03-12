@@ -161,7 +161,7 @@
 	if(!anchored)
 		USE_FEEDBACK_FAILURE("[src] needs to be anchored to the floor before you can weld it.")
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts welding [src] down with [tool]."),

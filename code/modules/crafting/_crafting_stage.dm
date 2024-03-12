@@ -194,8 +194,7 @@
 	consume_completion_trigger = FALSE
 
 /singleton/crafting_stage/welding/is_appropriate_tool(obj/item/thing, mob/user)
-	var/obj/item/weldingtool/T = thing
-	. = istype(T) && T.remove_fuel(1, user) && T.isOn()
+	. = thing.tool_behaviour == TOOL_WELDER && thing.use_as_tool(user, user, amount = 1)
 
 /singleton/crafting_stage/welding/on_progress(mob/user)
 	..()
@@ -206,7 +205,7 @@
 /singleton/crafting_stage/screwdriver
 	consume_completion_trigger = FALSE
 
-/singleton/crafting_stage/screwdriver/is_appropriate_tool(obj/item/thing)
+/singleton/crafting_stage/screwdriver/is_appropriate_tool(obj/item/thing, mob/user)
 	. = (thing.tool_behaviour == TOOL_SCREWDRIVER)
 
 /singleton/crafting_stage/screwdriver/on_progress(mob/user)
@@ -219,7 +218,7 @@
 	consume_completion_trigger = FALSE
 	completion_trigger_type = /obj/item
 
-/singleton/crafting_stage/tape/is_appropriate_tool(obj/item/thing)
+/singleton/crafting_stage/tape/is_appropriate_tool(obj/item/thing, mob/user)
 	. = istype(thing, /obj/item/tape_roll) || istype(thing, /obj/item/taperoll) || istype(thing, /obj/item/stack/cable_coil)
 
 
@@ -227,7 +226,7 @@
 /singleton/crafting_stage/pipe
 	completion_trigger_type = /obj/item
 
-/singleton/crafting_stage/pipe/is_appropriate_tool(obj/item/thing)
+/singleton/crafting_stage/pipe/is_appropriate_tool(obj/item/thing, mob/user)
 	. = istype(thing, /obj/item/pipe) || istype(thing, /obj/item/makeshift_barrel)
 
 
@@ -246,7 +245,7 @@
 	progress_message = "You add the robotic arm to the assembly."
 	completion_trigger_type = /obj/item/robot_parts
 
-/singleton/crafting_stage/robot_arms/is_appropriate_tool(obj/item/thing)
+/singleton/crafting_stage/robot_arms/is_appropriate_tool(obj/item/thing, mob/user)
 	. = istype(thing, /obj/item/robot_parts/l_arm) || istype(thing, /obj/item/robot_parts/r_arm)
 
 /singleton/crafting_stage/empty_storage/can_begin_with(obj/item/thing)

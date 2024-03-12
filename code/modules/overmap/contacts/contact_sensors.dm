@@ -213,7 +213,7 @@
 	if(!damage)
 		to_chat(user, SPAN_WARNING("[src] doesn't need any repairs."))
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
 	to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
 	if(!tool.use_as_tool(src, user, (max(0.5, damage / 50)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))

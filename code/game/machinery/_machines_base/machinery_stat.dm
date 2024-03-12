@@ -91,8 +91,8 @@
 
 
 /// Inverse of `inoperable()`.
-/obj/machinery/proc/operable()
-	return !inoperable()
+/obj/machinery/proc/operable(additional_flags = EMPTY_BITFIELD)
+	return !inoperable(additional_flags)
 
 
 /// Checks whether or not the machine's state variable has the `MACHINE_STAT_BROKEN` or `MACHINE_STAT_NOPOWER` flags, or any of the provided `additional_flags`. Returns `TRUE` if any of the flags match.

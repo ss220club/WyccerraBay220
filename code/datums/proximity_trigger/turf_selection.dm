@@ -13,5 +13,7 @@
 		. += center
 
 /singleton/turf_selection/square/get_turfs(atom/origin, range)
+	if(isnull(origin.loc))
+		return list()
 	var/turf/center = get_turf(origin)
 	return RANGE_TURFS(center, range)

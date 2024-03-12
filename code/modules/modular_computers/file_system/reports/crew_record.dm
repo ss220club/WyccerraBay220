@@ -49,12 +49,7 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 	set_name(H ? H.real_name : "Unset")
 	set_formal_name(formal_name)
 	set_job(H ? GetAssignment(H) : "Unset")
-	var/pronouns = "Unset"
-	if(H)
-		var/datum/pronouns/P = H.choose_from_pronouns()
-		if(P)
-			pronouns = P.formal_term
-	set_sex(pronouns)
+	set_sex(H.p_They())
 	set_age(H ? H.age : 30)
 	set_status(GLOB.default_physical_status)
 	set_species(H ? H.get_species() : SPECIES_HUMAN)
@@ -253,9 +248,7 @@ FIELD_LONG("Exploitable Information", antagRecord, access_syndicate, access_synd
 /datum/report_field/options/crew_record/sex/proc/record_pronouns()
 	. = list()
 	. |= "Unset"
-	for(var/entry in GLOB.pronouns.by_key)
-		var/datum/pronouns/P = GLOB.pronouns.by_key[entry]
-		. |= P.formal_term
+	. |= list(FEMALE, MALE, NEUTER, PLURAL)
 
 /datum/report_field/options/crew_record/branch/proc/record_branches()
 	. = list()

@@ -107,13 +107,13 @@
 /obj/machinery/self_destruct/examine(mob/user)
 	. = ..()
 	if(damaged)
-		to_chat(user, SPAN_WARNING("[src] is damaged, it needs repairs."))
+		. += SPAN_WARNING("[src] is damaged, it needs repairs.")
 		return
 	if(armed)
-		to_chat(user, "[src] is armed and ready.")
+		. += SPAN_NOTICE("[src] is armed and ready.")
 		return
 	if(cylinder)
-		to_chat(user, "[src] is loaded and ready to be armed.")
+		. += SPAN_NOTICE("[src] is loaded and ready to be armed.")
 
 /obj/machinery/self_destruct/on_update_icon()
 	if(armed)

@@ -133,11 +133,11 @@
 	if (bitecount==0)
 		return
 	else if (bitecount==1)
-		to_chat(user, SPAN_NOTICE("\The [src] was bitten by someone!"))
+		. += SPAN_NOTICE("[src] was bitten by someone!")
 	else if (bitecount<=3)
-		to_chat(user, SPAN_NOTICE("\The [src] was bitten [bitecount] time\s!"))
+		. += SPAN_NOTICE("[src] was bitten [bitecount] time\s!")
 	else
-		to_chat(user, SPAN_NOTICE("\The [src] was bitten multiple times!"))
+		. += SPAN_NOTICE("[src] was bitten multiple times!")
 
 /obj/item/reagent_containers/food/snacks/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/storage))
@@ -1517,8 +1517,6 @@
 		H.real_name = source_name
 		H.SetName(source_name)
 		H.dna.real_name = source_name
-		H.pronouns = source_pronouns
-		H.change_pronouns(source_pronouns)
 		H.change_species(source_species)
 		H.flavor_texts = source_flavor
 		src.visible_message(SPAN_WARNING("[src] transforms, the dummy body's features twisting and cracking as it imitates the provided blood!"))
@@ -3255,7 +3253,7 @@
 
 /obj/item/reagent_containers/food/snacks/canned/examine(mob/user)
 	. = ..()
-	to_chat(user, "It is [sealed ? "" : "un"]sealed.")
+	. += SPAN_NOTICE("It is [sealed ? "" : "un"]sealed.")
 
 /obj/item/reagent_containers/food/snacks/canned/proc/unseal()
 	atom_flags |= ATOM_FLAG_OPEN_CONTAINER

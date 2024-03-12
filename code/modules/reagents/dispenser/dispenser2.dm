@@ -32,7 +32,7 @@
 
 /obj/machinery/chemical_dispenser/examine(mob/user)
 	. = ..()
-	to_chat(user, "It has [length(cartridges)] cartridges installed, and has space for [DISPENSER_MAX_CARTRIDGES - length(cartridges)] more.")
+	. += SPAN_NOTICE("It has [length(cartridges)] cartridges installed, and has space for [DISPENSER_MAX_CARTRIDGES - length(cartridges)] more.")
 
 /obj/machinery/chemical_dispenser/proc/add_cartridge(obj/item/reagent_containers/chem_disp_cartridge/C, mob/user)
 	if(!istype(C))

@@ -132,15 +132,15 @@ var/global/const/STASISCAGE_WIRE_LOCK      = 4
 
 /obj/machinery/stasis_cage/examine(mob/user)
 	. = ..()
-	if (contained)
+	if(contained)
 		if (HAS_FLAGS(stat, MACHINE_STAT_NOSCREEN))
-			to_chat(user, "[src] seems to be occupied.")
+			. += SPAN_NOTICE("[src] seems to be occupied.")
 		else
-			to_chat(user, "[contained] is kept inside.")
-	if (broken)
-		to_chat(user, SPAN_WARNING("[src]'s lid is broken. It probably can not be used."))
-	if (cell)
-		to_chat(user, "[src]'s power gauge shows [cell.percent()]% remaining.")
+			. += SPAN_NOTICE("[contained] is kept inside.")
+	if(broken)
+		. += SPAN_WARNING("[src]'s lid is broken. It probably can not be used.")
+	if(cell)
+		. += SPAN_NOTICE("[src]'s power gauge shows [cell.percent()]% remaining.")
 
 /obj/machinery/stasis_cage/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

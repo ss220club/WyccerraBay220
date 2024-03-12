@@ -20,11 +20,11 @@
 /obj/machinery/external_cooling_device/examine(mob/user)
 	. = ..()
 
-	to_chat(user, "The external cooling device is [active ? "on" : "off"] and the hatch is [!closed ? "open" : "closed"].")
+	. += SPAN_NOTICE("The external cooling device is [active ? "on" : "off"] and the hatch is [!closed ? "open" : "closed"].")
 	if(!closed)
-		to_chat(user, "The power cell is [cell ? "installed" : "missing"].")
+		. += SPAN_NOTICE("The power cell is [cell ? "installed" : "missing"].")
 	else
-		to_chat(user, "The charge meter reads [cell ? round(cell.percent(),1) : 0]%")
+		. += SPAN_NOTICE("The charge meter reads [cell ? round(cell.percent(),1) : 0]%")
 
 
 /obj/machinery/external_cooling_device/Topic(href, href_list, state = GLOB.physical_state)

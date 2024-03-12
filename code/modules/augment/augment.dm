@@ -196,7 +196,7 @@
 			message += " It can be discovered by [english_list(discovery)]."
 		else
 			message += " It is undetectable."
-	to_chat(user, message)
+	. += SPAN_NOTICE("[message]")
 
 
 /datum/codex_entry/augment

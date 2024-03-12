@@ -66,13 +66,13 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 
 /obj/machinery/hologram/holopad/examine(mob/user)
 	. = ..()
-	if (incoming_connection && sourcepad)
-		to_chat(user, SPAN_NOTICE("There is currently an incoming call from [get_area(sourcepad)]!"))
+	if(incoming_connection && sourcepad)
+		. += SPAN_NOTICE("There is currently an incoming call from [get_area(sourcepad)]!")
 	var/callstring = "Recent incoming calls:"
-	for (var/id in recent_calls)
+	for(var/id in recent_calls)
 		callstring += "\n[id]"
 	callstring = SPAN_NOTICE(callstring)
-	to_chat(user, callstring)
+	. += callstring
 
 /obj/machinery/hologram/holopad/interface_interact(mob/living/carbon/human/user) //Carn: Hologram requests.
 	if(!CanInteract(user, DefaultTopicState()))

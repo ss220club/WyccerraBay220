@@ -130,12 +130,12 @@
 	. = ..()
 	if (distance > 2)
 		return
-	to_chat(user, "The valve is dialed to [pressure_setting]%.")
+	. += SPAN_NOTICE("The valve is dialed to [pressure_setting]%.")
 	if (tank)
-		to_chat(user, "\A [tank] is fitted in \the [src]'s tank valve.")
-		to_chat(user, "The tank dial reads [tank.air_contents.return_pressure()] kPa.")
+		. += SPAN_NOTICE("[tank] is fitted in [src]'s tank valve.")
+		. += SPAN_NOTICE("The tank dial reads [tank.air_contents.return_pressure()] kPa.")
 	else
-		to_chat(user, "Nothing is attached to the tank valve!")
+		. += SPAN_NOTICE("Nothing is attached to the tank valve!")
 
 
 /obj/item/powerfist/proc/gas_loss()

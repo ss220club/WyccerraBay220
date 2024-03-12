@@ -69,8 +69,8 @@
 
 /obj/structure/sign/memorial/examine(mob/user, distance)
 	. = ..()
-	if (distance <= 2 && length(fallen))
-		to_chat(user, "<b>The fallen:</b> [jointext(fallen, "<br>")]")
+	if(distance <= 2 && length(fallen))
+		. += SPAN_NOTICE("<b>The fallen:</b> [jointext(fallen, "<br>")]")
 
 // Disallow trader to sell unique memorial
 /datum/trader/trading_beacon/manufacturing/New()

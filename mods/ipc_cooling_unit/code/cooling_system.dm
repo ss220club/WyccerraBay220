@@ -108,7 +108,7 @@
 /obj/item/organ/internal/cooling_system/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 0)
-		to_chat(user, text("[icon2html(src, viewers(get_turf(src)))] [] contains [] units of liquid left!", src, src.reagents.total_volume))
+		. += SPAN_NOTICE(text("[icon2html(src, viewers(get_turf(src)))] [] contains [] units of liquid left!", src, src.reagents.total_volume))
 
 /obj/item/organ/internal/cooling_system/attack_self(mob/user as mob)
 	safety = !safety

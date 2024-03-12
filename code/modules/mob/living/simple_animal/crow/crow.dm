@@ -128,11 +128,11 @@
 	if(Adjacent(src))
 		if(messenger_bag)
 			if(length(messenger_bag.contents))
-				to_chat(user, "It's wearing a little messenger bag with a Corvid Couriers logo on it. There's something stuffed inside.")
+				. += SPAN_NOTICE("It's wearing a little messenger bag with a Corvid Couriers logo on it. There's something stuffed inside.")
 			else
-				to_chat(user, "It's wearing a little messenger bag with a Corvid Couriers logo on it. It seems to be empty.")
+				. += SPAN_NOTICE("It's wearing a little messenger bag with a Corvid Couriers logo on it. It seems to be empty.")
 		if(access_card)
-			to_chat(user, "It has an access cuff with \the [access_card] inserted.")
+			. += SPAN_NOTICE("It has an access cuff with \the [access_card] inserted.")
 
 /mob/living/simple_animal/crow/on_update_icon()
 	..()

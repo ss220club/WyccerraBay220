@@ -63,7 +63,7 @@
 		return
 	if (!initial(can_self_heat))
 		return
-	to_chat(user, "This one can self-heat[can_self_heat ? "." : " but the heaters are used up."]")
+	. += SPAN_NOTICE("This one can self-heat[can_self_heat ? "." : " but the heaters are used up."]")
 
 
 /obj/item/reagent_containers/food/snacks/donkpocket/attack_self(mob/living/user)

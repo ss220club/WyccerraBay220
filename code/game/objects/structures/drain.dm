@@ -47,7 +47,7 @@
 /obj/structure/hygiene/drain/examine(mob/user)
 	. = ..()
 	if(welded)
-		to_chat(user, "It is welded shut.")
+		. += SPAN_NOTICE("It is welded shut.")
 
 //for construction.
 /obj/item/drain
@@ -89,7 +89,7 @@
 
 /obj/structure/hygiene/drain/bath/examine(mob/user)
 	. = ..()
-	to_chat(user, "It is [closed ? "closed" : "open"]")
+	. += SPAN_NOTICE("It is [closed ? "closed" : "open"]")
 
 /obj/structure/hygiene/drain/bath/Process()
 	if(closed)

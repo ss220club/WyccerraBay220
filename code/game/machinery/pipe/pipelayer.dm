@@ -92,7 +92,7 @@
 
 /obj/machinery/pipelayer/examine(mob/user)
 	. = ..()
-	to_chat(user, "[src] has [metal] sheet\s, is set to produce [P_type_t], and auto-dismantling is [!a_dis?"de":""]activated.")
+	. += SPAN_NOTICE("[src] has [metal] sheet\s, is set to produce [P_type_t], and auto-dismantling is [!a_dis?"de":""]activated.")
 
 /obj/machinery/pipelayer/proc/reset()
 	on=0

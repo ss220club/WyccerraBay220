@@ -64,7 +64,7 @@
 /obj/structure/hygiene/examine(mob/user)
 	. = ..()
 	if(clogged > 0)
-		to_chat(user, SPAN_WARNING("It seems to be badly clogged."))
+		. += SPAN_WARNING("It seems to be badly clogged.")
 
 /obj/structure/hygiene/Process()
 	if(clogged <= 0)
@@ -750,4 +750,4 @@
 
 /obj/structure/hygiene/faucet/examine(mob/user)
 	. = ..()
-	to_chat(user, "It is turned [open ? "on" : "off"]")
+	. += SPAN_NOTICE("It is turned [open ? "on" : "off"]")

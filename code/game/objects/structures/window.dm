@@ -102,29 +102,27 @@
 
 /obj/structure/window/examine(mob/user)
 	. = ..(user)
-	to_chat(user, SPAN_NOTICE("It is fitted with [material.display_name] pane."))
+	. += SPAN_NOTICE("It is fitted with [material.display_name] pane.")
 	if(reinf_material)
-		to_chat(user, SPAN_NOTICE("It is reinforced with [reinf_material.display_name] lattice."))
+		. += SPAN_NOTICE("It is reinforced with [reinf_material.display_name] lattice.")
 
 	if (reinf_material)
 		switch (construction_state)
 			if (CONSTRUCT_STATE_UNANCHORED)
-				to_chat(user, SPAN_WARNING("The window is not in the frame."))
+				. += SPAN_WARNING("The window is not in the frame.")
 			if (CONSTRUCT_STATE_ANCHORED)
-				to_chat(user, SPAN_WARNING("The window is pried into the frame but not yet fastened."))
+				. += SPAN_WARNING("The window is pried into the frame but not yet fastened.")
 			if (CONSTRUCT_STATE_COMPLETE)
-				to_chat(user, SPAN_NOTICE("The window is fastened to the frame."))
+				. += SPAN_NOTICE("The window is fastened to the frame.")
 
 	if (anchored)
-		to_chat(user, SPAN_NOTICE("It is fastened to [get_turf(src)]."))
+		. += SPAN_NOTICE("It is fastened to [get_turf(src)].")
 	else
-		to_chat(user, SPAN_WARNING("It is not fastened to anything."))
-
+		. += SPAN_NOTICE("It is not fastened to anything.")
 	if (paint_color)
-		to_chat(user, SPAN_NOTICE("[material] pane is stained with paint."))
-
+		. += SPAN_NOTICE("[material] pane is stained with paint.")
 	if (polarized)
-		to_chat(user, SPAN_NOTICE("It appears to be wired."))
+		. += SPAN_NOTICE("It appears to be wired.")
 
 /obj/structure/window/examine_damage_state(mob/user)
 	var/damage_percentage = get_damage_percentage()

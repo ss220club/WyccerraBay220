@@ -79,9 +79,9 @@
 	if(distance > 1)
 		return
 	if(active)
-		to_chat(usr, SPAN_NOTICE("The generator is on."))
+		. += SPAN_NOTICE("The generator is on.")
 	else
-		to_chat(usr, SPAN_NOTICE("The generator is off."))
+		. += SPAN_NOTICE("The generator is off.")
 /obj/machinery/power/port_gen/emp_act(severity)
 	SHOULD_CALL_PARENT(FALSE)
 	if(!active)
@@ -168,10 +168,12 @@
 
 /obj/machinery/power/port_gen/pacman/examine(mob/user)
 	. = ..(user)
-	to_chat(user, "[src] appears to be producing [power_gen*power_output] W.")
-	to_chat(user, "There [sheets == 1 ? "is" : "are"] [sheets] sheet\s left in the hopper.")
-	if(IsBroken()) to_chat(user, SPAN_WARNING("[src] seems to have broken down."))
-	if(overheating) to_chat(user, SPAN_DANGER("[src] is overheating!"))
+	. += SPAN_NOTICE("[src] appears to be producing [power_gen*power_output] W.")
+	. += SPAN_NOTICE("There [sheets == 1 ? "is" : "are"] [sheets] sheet\s left in the hopper.")
+	if(IsBroken())
+		. += SPAN_WARNING("[src] seems to have broken down.")
+	if(overheating)
+		. += SPAN_DANGER("[src] is overheating!")
 
 /obj/machinery/power/port_gen/pacman/proc/process_exhaust()
 	var/datum/gas_mixture/environment = loc?.return_air()
@@ -484,7 +486,7 @@
 
 /obj/machinery/power/port_gen/pacman/super/potato/examine(mob/user)
 	. = ..()
-	to_chat(user, "Auxilary tank shows [reagents.total_volume]u of liquid in it.")
+	. += SPAN_NOTICE("Auxilary tank shows [reagents.total_volume]u of liquid in it.")
 
 /obj/machinery/power/port_gen/pacman/super/potato/UseFuel()
 	if(reagents.has_reagent(coolant_reagent))

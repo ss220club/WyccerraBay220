@@ -397,4 +397,4 @@
 
 /obj/item/gun/launcher/crossbow/rapidcrossbowdevice/examine(mob/user)
 	. = ..()
-	to_chat(user, "It currently holds [stored_matter]/[max_stored_matter] matter-units.")
+	. += SPAN_NOTICE("It currently holds [stored_matter]/[max_stored_matter] matter-units.")

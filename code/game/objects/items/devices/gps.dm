@@ -43,7 +43,7 @@ GLOBAL_LIST_EMPTY(gps_list)
 /obj/item/device/gps/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, SPAN_NOTICE("\The [src]'s screen shows: <i>[fetch_coordinates()]</i>."))
+		. += SPAN_NOTICE("[src]'s screen shows: <i>[fetch_coordinates()]</i>.")
 
 /obj/item/device/gps/proc/fetch_coordinates()
 	var/turf/T = get_turf(src)

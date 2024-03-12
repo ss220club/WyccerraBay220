@@ -11,7 +11,7 @@
 /obj/structure/closet/coffin/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1 && !opened)
-		to_chat(user, "The lid is [locked ? "tightly secured with screws." : "unsecured and can be opened."]")
+		. += SPAN_NOTICE("The lid is [locked ? "tightly secured with screws." : "unsecured and can be opened."]")
 
 /obj/structure/closet/coffin/can_open()
 	. =  ..()

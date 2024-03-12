@@ -143,16 +143,16 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 	. = ..(user)
 	if(.)
 		if(tape)
-			to_chat(user, SPAN_NOTICE("You can see [tape] inside it."))
+			. += SPAN_NOTICE("You can see [tape] inside it.")
 
 		switch(panel)
 			if(PANEL_OPENED)
-				to_chat(user, "The front panel is unhinged.")
+				. += SPAN_NOTICE("The front panel is unhinged.")
 			if(PANEL_UNSCREWED)
-				to_chat(user, "The front panel is unscrewed.")
+				. += SPAN_NOTICE("The front panel is unscrewed.")
 
 		if(broken)
-			USE_FEEDBACK_FAILURE("It's broken.")
+			. += SPAN_WARNING("It's broken.")
 
 /obj/item/music_player/on_update_icon()
 	ClearOverlays()

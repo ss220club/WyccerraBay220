@@ -231,7 +231,7 @@
 
 /obj/structure/totem/examine(mob/user)
 	. = ..()
-	to_chat(user, "It's been engraved with the symbols '𒊏𒁲𒌋 𒊑𒉿𒌉 [number]'.") //for the sake of the reader, "RADIU RIPITUR"
+	. += SPAN_NOTICE("It's been engraved with the symbols '𒊏𒁲𒌋 𒊑𒉿𒌉 [number]'.") //for the sake of the reader, "RADIU RIPITUR"
 
 /obj/item/stool/stone/New(newloc)
 	..(newloc,"sandstone")

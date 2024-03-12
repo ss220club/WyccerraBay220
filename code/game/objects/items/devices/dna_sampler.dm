@@ -18,9 +18,9 @@
 /obj/item/device/dna_sampler/examine(mob/user)
 	. = ..()
 	if(loaded == TRUE)
-		to_chat(user, SPAN_WARNING("\The [src] is currently loaded with a DNA sample of [src_name]"))
+		. += SPAN_WARNING("[src] is currently loaded with a DNA sample of [src_name]")
 	else
-		to_chat(user, SPAN_WARNING("\The [src] is currently empty"))
+		. += SPAN_WARNING("[src] is currently empty")
 
 /obj/item/device/dna_sampler/attack_self(mob/user)
 	if(loaded == TRUE && alert("Are you sure you wish to flush the current DNA sequence?",,"Yes","No") == "Yes")
@@ -45,7 +45,6 @@
 		loaded = TRUE
 		src_name = L.real_name
 		src_dna = L.dna
-		src_pronouns = L.pronouns
 		src_faction = L.faction
 		src_species = L.species.name
 		src_flavor = L.flavor_texts

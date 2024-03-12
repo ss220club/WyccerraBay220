@@ -109,9 +109,9 @@ else if(##equipment_var) {\
 	var/list/part_list = new
 	for(var/obj/item/I in list(helmet,boots,tank))
 		part_list += "[I]"
-	to_chat(user, "[src] has [english_list(part_list)] installed.")
+	. += SPAN_NOTICE("[src] has [english_list(part_list)] installed.")
 	if(tank && distance <= 1)
-		to_chat(user, SPAN_NOTICE("The wrist-mounted pressure gauge reads [max(round(tank.air_contents.return_pressure()),0)] kPa remaining in [tank]."))
+		. += SPAN_NOTICE("The wrist-mounted pressure gauge reads [max(round(tank.air_contents.return_pressure()),0)] kPa remaining in [tank].")
 
 /obj/item/clothing/suit/space/void/refit_for_species(target_species)
 	..()

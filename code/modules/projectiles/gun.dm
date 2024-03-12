@@ -623,9 +623,9 @@
 	if(user.skill_check(SKILL_WEAPONS, SKILL_BASIC))
 		if(length(firemodes) > 1)
 			var/datum/firemode/current_mode = firemodes[sel_mode]
-			to_chat(user, "The fire selector is set to [current_mode.name].")
+			. += SPAN_NOTICE("The fire selector is set to [current_mode.name].")
 	if(has_safety)
-		to_chat(user, "The safety is [safety() ? "on" : "off"].")
+		. += SPAN_NOTICE("The safety is [safety() ? "on" : "off"].")
 	last_safety_check = world.time
 
 /obj/item/gun/proc/switch_firemodes()

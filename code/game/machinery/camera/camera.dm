@@ -41,10 +41,10 @@
 
 /obj/machinery/camera/examine(mob/user)
 	. = ..()
-	if (MACHINE_IS_BROKEN(src))
-		to_chat(user, SPAN_WARNING("It is completely demolished."))
-	else if (inoperable(MACHINE_STAT_EMPED))
-		to_chat(user, SPAN_WARNING("It's unpowered."))
+	if(MACHINE_IS_BROKEN(src))
+		. += SPAN_WARNING("It is completely demolished.")
+	else if(inoperable(MACHINE_STAT_EMPED))
+		. += SPAN_WARNING("It's unpowered.")
 
 /obj/machinery/camera/malf_upgrade(mob/living/silicon/ai/user)
 	..()

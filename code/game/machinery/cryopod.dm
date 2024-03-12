@@ -290,7 +290,7 @@
 /obj/machinery/cryopod/examine(mob/user, distance, is_adjacent)
 	. = ..()
 	if (occupant && is_adjacent)
-		occupant.examine(arglist(args))
+		. += occupant.examine(arglist(args))
 
 //Lifted from Unity stasis.dm and refactored.
 /obj/machinery/cryopod/Process()

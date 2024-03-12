@@ -34,7 +34,7 @@
 /obj/item/clothing/accessory/storage/holster/examine(mob/user)
 	. = ..(user)
 	var/datum/extension/holster/H = get_extension(src, /datum/extension/holster)
-	H.examine_holster(user)
+	. += H.examine_holster(user)
 
 /obj/item/clothing/accessory/storage/holster/armpit
 	name = "armpit holster"

@@ -160,16 +160,16 @@
 
 /obj/item/gun/launcher/money/examine(mob/user)
 	. = ..(user)
-	to_chat(user, "It is configured to dispense [dispensing] [GLOB.using_map.local_currency_name_singular] at a time.")
+	. += SPAN_NOTICE("It is configured to dispense [dispensing] [GLOB.using_map.local_currency_name_singular] at a time.")
 
 	if(receptacle_value >= 1)
-		to_chat(user, "The receptacle is loaded with [receptacle_value] [GLOB.using_map.local_currency_name_singular].")
+		. += SPAN_NOTICE("The receptacle is loaded with [receptacle_value] [GLOB.using_map.local_currency_name_singular].")
 
 	else
-		to_chat(user, "The receptacle is empty.")
+		. += SPAN_NOTICE("The receptacle is empty.")
 
 	if(emagged)
-		to_chat(user, SPAN_NOTICE("Its motors are severely overloaded."))
+		. += SPAN_NOTICE("Its motors are severely overloaded.")
 
 /obj/item/gun/launcher/money/handle_suicide(mob/living/user)
 	if(!ishuman(user))

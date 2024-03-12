@@ -39,7 +39,7 @@
 	. = ..()
 
 	if(forehead_graffiti && graffiti_style)
-		to_chat(user, SPAN_NOTICE("It has \"[forehead_graffiti]\" written on it in [graffiti_style]!"))
+		. += SPAN_NOTICE("It has \"[forehead_graffiti]\" written on it in [graffiti_style]!")
 
 /obj/item/organ/external/head/proc/write_on(mob/penman, style)
 	var/head_name = name

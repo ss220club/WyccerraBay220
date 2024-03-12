@@ -97,5 +97,5 @@
 
 /obj/item/evidencebag/examine(mob/user)
 	. = ..()
-	if (stored_item)
-		examinate(user, stored_item)
+	if(stored_item)
+		. += stored_item.examine(arglist(args))

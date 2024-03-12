@@ -211,7 +211,7 @@ var/global/list/image/splatter_cache=list()
 
 /obj/decal/cleanable/blood/writing/examine(mob/user)
 	. = ..()
-	to_chat(user, "It reads: [SPAN_COLOR(basecolor, "\"[message]\"")]")
+	. += SPAN_NOTICE("It reads: [SPAN_COLOR(basecolor, "\"[message]\"")]")
 
 /obj/decal/cleanable/blood/gibs
 	name = "gibs"

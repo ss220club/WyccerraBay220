@@ -54,10 +54,10 @@
 /obj/item/bodybag/rescue/examine(mob/user)
 	. = ..()
 	if(airtank)
-		to_chat(user,"The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
-		to_chat(user,"The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
+		. += SPAN_NOTICE("The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
+		. += SPAN_NOTICE("The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
 	else
-		to_chat(user, SPAN_WARNING("The air tank is missing."))
+		. += SPAN_WARNING("The air tank is missing.")
 
 /obj/structure/closet/body_bag/rescue
 	name = "rescue bag"
@@ -152,12 +152,12 @@
 /obj/structure/closet/body_bag/rescue/examine(mob/user)
 	. = ..()
 	if(airtank)
-		to_chat(user,"The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
-		to_chat(user,"The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
+		. += SPAN_NOTICE("The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
+		. += SPAN_NOTICE("The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
 	else
-		to_chat(user, SPAN_WARNING("The air tank is missing."))
-	to_chat(user,"The pressure meter on [src] shows '[atmo.return_pressure()] kPa'.")
+		. += SPAN_WARNING("The air tank is missing.")
+	. += SPAN_NOTICE("The pressure meter on [src] shows '[atmo.return_pressure()] kPa'.")
 	if(Adjacent(user)) //The bag's rather thick and opaque from a distance.
-		to_chat(user, SPAN_INFO("You peer into [src]."))
+		. += SPAN_INFO("You peer into [src].")
 		for(var/mob/living/L in contents)
-			L.examine(arglist(args))
+			. += L.examine(arglist(args))

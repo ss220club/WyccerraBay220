@@ -234,7 +234,7 @@
 
 /obj/machinery/atmospherics/valve/examine(mob/user)
 	. = ..()
-	to_chat(user, "It is [open ? "open" : "closed"].")
+	. += SPAN_NOTICE("It is [open ? "open" : "closed"].")
 
 /singleton/public_access/public_variable/valve_open
 	expected_type = /obj/machinery/atmospherics/valve

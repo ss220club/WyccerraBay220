@@ -41,11 +41,11 @@
 	. = ..()
 	if (distance <= 1)
 		if (beaker)
-			to_chat(user, "It is loaded with a beaker.")
+			. += SPAN_NOTICE("It is loaded with a beaker.")
 		if(occupant)
-			occupant.examine(arglist(args))
+			. += occupant.examine(arglist(args))
 		if (emagged && user.skill_check(SKILL_MEDICAL, SKILL_EXPERIENCED))
-			to_chat(user, SPAN_WARNING("The sleeper chemical synthesis controls look tampered with."))
+			. += SPAN_WARNING("The sleeper chemical synthesis controls look tampered with.")
 
 
 /obj/machinery/sleeper/Process()

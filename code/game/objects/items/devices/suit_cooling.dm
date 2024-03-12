@@ -177,12 +177,12 @@
 		return
 
 	if (on)
-		to_chat(user, "It's switched on and running.")
+		. += SPAN_NOTICE("It's switched on and running.")
 	else
-		to_chat(user, "It is switched off.")
+		. += SPAN_NOTICE("It is switched off.")
 
 	if (cover_open)
-		to_chat(user, "The panel is open.")
+		. += SPAN_NOTICE("The panel is open.")
 
 	if (cell)
-		to_chat(user, "The charge meter reads [round(cell.percent())]%.")
+		. += SPAN_NOTICE("The charge meter reads [round(cell.percent())]%.")

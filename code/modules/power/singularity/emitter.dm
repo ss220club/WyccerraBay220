@@ -66,9 +66,9 @@
 				state_message = "It is bolted to the floor, but lacks securing welds."
 			if (EMITTER_WELDED)
 				state_message = "It is firmly secured in place."
-		to_chat(user, SPAN_NOTICE(state_message))
+		. += SPAN_NOTICE(state_message)
 		if (emagged && (user.skill_check(core_skill, SKILL_TRAINED) || is_observer))
-			to_chat(user, SPAN_WARNING("Its control locks have been fried."))
+			. += SPAN_WARNING("Its control locks have been fried.")
 
 /obj/machinery/power/emitter/on_update_icon()
 	ClearOverlays()

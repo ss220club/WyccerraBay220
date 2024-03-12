@@ -147,9 +147,9 @@
 	. = ..()
 	if(distance <= 1 || loc == user)
 		if(secured)
-			to_chat(user, "[src] is ready!")
+			. += SPAN_NOTICE("[src] is ready!")
 		else
-			to_chat(user, "[src] can be attached!")
+			. += SPAN_NOTICE("[src] can be attached!")
 
 
 /obj/item/device/assembly/attack_self(mob/user as mob)

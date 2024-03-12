@@ -65,7 +65,7 @@
 /obj/machinery/door/blast/examine(mob/user)
 	. = ..()
 	if(MACHINE_IS_BROKEN(src))
-		to_chat(user, "It's broken.")
+		. += SPAN_WARNING("It's broken.")
 
 // Proc: Bumped()
 // Parameters: 1 (AM - Atom that tried to walk through this object)

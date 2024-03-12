@@ -1,40 +1,32 @@
 /mob/living/silicon/ai/examine(mob/user)
 	. = ..()
-
-	var/msg = ""
-	if (src.stat == DEAD)
-		msg += "[SPAN_CLASS("deadsay", "It appears to be powered-down.")]\n"
+	if (stat == DEAD)
+		. += "[SPAN_CLASS("deadsay", "It appears to be powered-down.")]"
 	else
-		var/damage_msg = ""
-		if (src.getBruteLoss())
-			if (src.getBruteLoss() < 30)
-				damage_msg += "It looks slightly dented.\n"
+		if (getBruteLoss())
+			if (getBruteLoss() < 30)
+				. += SPAN_WARNING("It looks slightly dented.")
 			else
-				damage_msg += "<B>It looks severely dented!</B>\n"
-		if (src.getFireLoss())
-			if (src.getFireLoss() < 30)
-				damage_msg += "It looks slightly charred.\n"
+				. += SPAN_WARNING("<B>It looks severely dented!</B>")
+		if (getFireLoss())
+			if (getFireLoss() < 30)
+				. += SPAN_WARNING("It looks slightly charred.")
 			else
-				damage_msg += "<B>Its casing is melted and heat-warped!</B>\n"
+				. += SPAN_WARNING("<B>Its casing is melted and heat-warped!</B>")
 		if (!has_power())
-			if (src.getOxyLoss() > 175)
-				damage_msg += "<B>It seems to be running on backup power. Its display is blinking a \"BACKUP POWER CRITICAL\" warning.</B>\n"
-			else if(src.getOxyLoss() > 100)
-				damage_msg += "<B>It seems to be running on backup power. Its display is blinking a \"BACKUP POWER LOW\" warning.</B>\n"
+			if (getOxyLoss() > 175)
+				. += SPAN_WARNING("<B>It seems to be running on backup power. Its display is blinking a \"BACKUP POWER CRITICAL\" warning.</B>")
+			else if(getOxyLoss() > 100)
+				. += SPAN_WARNING("<B>It seems to be running on backup power. Its display is blinking a \"BACKUP POWER LOW\" warning.</B>")
 			else
-				damage_msg += "It seems to be running on backup power.\n"
+				. += SPAN_WARNING("It seems to be running on backup power.")
 
-		if (src.stat == UNCONSCIOUS)
-			damage_msg += "It is non-responsive and displaying the text: \"RUNTIME: Sensory Overload, stack 26/3\".\n"
-		if (damage_msg)
-			msg += SPAN_WARNING(damage_msg)
-	msg += "*---------*"
+		if (stat == UNCONSCIOUS)
+			. += SPAN_WARNING("It is non-responsive and displaying the text: \"RUNTIME: Sensory Overload, stack 26/3\".")
+	. += SPAN_NOTICE("*---------*")
 	if(hardware && (hardware.owner == src))
-		msg += "<br>"
-		msg += hardware.get_examine_desc()
-	to_chat(user, msg)
+		. += SPAN_NOTICE(hardware.get_examine_desc())
 	user.showLaws(src)
-	return
 
 /mob/proc/showLaws(mob/living/silicon/S)
 	return

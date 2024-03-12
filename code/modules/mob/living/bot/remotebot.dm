@@ -22,7 +22,7 @@
 /mob/living/bot/remotebot/examine(mob/user)
 	. = ..()
 	if(holding)
-		to_chat(user, SPAN_NOTICE("It is holding \the [icon2html(holding, user)] [holding]."))
+		. += SPAN_NOTICE("It is holding [icon2html(holding, user)] [holding].")
 
 /mob/living/bot/remotebot/explode()
 	on = 0

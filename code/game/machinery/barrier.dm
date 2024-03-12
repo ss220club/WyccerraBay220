@@ -19,7 +19,7 @@
 		var/message = "The lights show it is locked onto [get_turf(src)]."
 		if (emagged && distance < 3)
 			message += SPAN_WARNING(" The locking clamps have other ideas.")
-		to_chat(user, message)
+		. += message
 
 /obj/machinery/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -37,13 +37,13 @@
 	if (distance > 2)
 		return
 	if (sealed)
-		to_chat(user, "It is sealed and brand new.")
+		. += SPAN_NOTICE("It is sealed and brand new.")
 		return
 	if (!opened)
-		to_chat(user, "It is closed.")
+		. += SPAN_NOTICE("It is closed.")
 		return
 	if (!length(contents))
-		to_chat(user, "\The [src] is empty.")
+		. += SPAN_NOTICE("[src] is empty.")
 		return
 
 	var/display_message

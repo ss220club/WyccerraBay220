@@ -19,9 +19,9 @@
 /obj/item/weldingtool/electric/examine(mob/user, distance)
 	. = ..()
 	if (!cell)
-		to_chat(user, "There is no [welding_resource] source attached.")
+		. += SPAN_NOTICE("There is no [welding_resource] source attached.")
 	else
-		to_chat(user, (distance == 0 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[cell] is attached.")
+		. += SPAN_NOTICE((distance == 0 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[cell] is attached.")
 
 /obj/item/weldingtool/electric/use_after(obj/O, mob/living/user)
 	if(istype(O, /obj/structure/reagent_dispensers/fueltank))

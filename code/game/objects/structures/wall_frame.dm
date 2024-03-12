@@ -48,9 +48,8 @@
 
 /obj/structure/wall_frame/examine(mob/user)
 	. = ..()
-
 	if(paint_color)
-		to_chat(user, SPAN_NOTICE("It has a smooth coat of paint applied."))
+		. += SPAN_NOTICE("It has a smooth coat of paint applied.")
 
 
 /obj/structure/wall_frame/can_use_item(obj/item/tool, mob/user, click_params)

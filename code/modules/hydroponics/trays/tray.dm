@@ -581,21 +581,21 @@
 /obj/machinery/portable_atmospherics/hydroponics/examine(mob/user)
 	. = ..(user)
 	if(!seed)
-		to_chat(user, "[src] is empty.")
+		. += SPAN_NOTICE("[src] is empty.")
 		return
 
-	to_chat(user, SPAN_NOTICE("\An [seed.display_name] is growing here."))
+	. += SPAN_NOTICE("\An [seed.display_name] is growing here.")
 
 	if(user.skill_check(SKILL_BOTANY, SKILL_BASIC))
 		if(weedlevel >= 5)
-			to_chat(user, "[src] is [SPAN_DANGER("infested with weeds")]!")
+			. += SPAN_NOTICE("[src] is [SPAN_DANGER("infested with weeds")]!")
 		if(pestlevel >= 5)
-			to_chat(user, "[src] is [SPAN_DANGER("infested with tiny worms")]!")
+			. += SPAN_NOTICE("[src] is [SPAN_DANGER("infested with tiny worms")]!")
 
 		if(dead)
-			to_chat(user, SPAN_DANGER("The [seed.display_name] is dead."))
+			. += SPAN_DANGER("The [seed.display_name] is dead.")
 		else if(health <= (seed.get_trait(TRAIT_ENDURANCE)/ 2))
-			to_chat(user, "The [seed.display_name] looks [SPAN_DANGER("unhealthy")].")
+			. += SPAN_NOTICE("The [seed.display_name] looks [SPAN_DANGER("unhealthy")].")
 
 	if(mechanical && Adjacent(user))
 		var/turf/T = loc
@@ -618,9 +618,9 @@
 			var/light_available = T.get_lumcount() * 5
 			light_string = "a light level of [light_available] lumens"
 
-		to_chat(user, "Water: [round(waterlevel,0.1)]/100")
-		to_chat(user, "Nutrient: [round(nutrilevel,0.1)]/10")
-		to_chat(user, "The tray's sensor suite is reporting [light_string] and a temperature of [environment.temperature]K.")
+		. += SPAN_NOTICE("Water: [round(waterlevel,0.1)]/100")
+		. += SPAN_NOTICE("Nutrient: [round(nutrilevel,0.1)]/10")
+		. += SPAN_NOTICE("The tray's sensor suite is reporting [light_string] and a temperature of [environment.temperature]K.")
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid_verb()
 	set name = "Toggle Tray Lid"

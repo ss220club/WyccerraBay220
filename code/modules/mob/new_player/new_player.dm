@@ -570,11 +570,6 @@
 
 	return chosen_species.name
 
-/mob/new_player/choose_from_pronouns()
-	if (!client?.prefs)
-		return ..()
-	return client.prefs.pronouns
-
 /mob/new_player/is_ready()
 	return ready && ..()
 

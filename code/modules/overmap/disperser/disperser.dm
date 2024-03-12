@@ -10,7 +10,7 @@
 /obj/machinery/disperser/examine(mob/user)
 	. = ..()
 	if(panel_open)
-		to_chat(user, "The maintenance panel is open.")
+		. += SPAN_NOTICE("The maintenance panel is open.")
 
 /obj/machinery/disperser/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

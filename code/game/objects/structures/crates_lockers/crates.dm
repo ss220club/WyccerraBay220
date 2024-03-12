@@ -29,7 +29,7 @@
 			devices += H
 		for(var/obj/item/device/assembly/A in src)
 			devices += A
-		to_chat(user,"There are some wires attached to the lid, connected to [english_list(devices)].")
+		. += SPAN_NOTICE("There are some wires attached to the lid, connected to [english_list(devices)].")
 
 /obj/structure/closet/crate/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

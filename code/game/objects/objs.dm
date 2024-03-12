@@ -287,9 +287,9 @@
 /obj/examine(mob/user)
 	. = ..()
 	if((obj_flags & OBJ_FLAG_ROTATABLE))
-		to_chat(user, SPAN_SUBTLE("Can be rotated with alt-click."))
+		. += SPAN_SUBTLE("Can be rotated with alt-click.")
 	if((obj_flags & OBJ_FLAG_ANCHORABLE))
-		to_chat(user, SPAN_SUBTLE("Can be [anchored? "unsecured from the floor" : "secured to the floor"] using a wrench."))
+		. += SPAN_SUBTLE("Can be [anchored? "unsecured from the floor" : "secured to the floor"] using a wrench.")
 
 /obj/proc/rotate(mob/user)
 	if(!CanPhysicallyInteract(user))

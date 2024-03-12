@@ -22,4 +22,4 @@
 
 /obj/item/clothing/gloves/wristwatch/examine(mob/user)
 	. = ..()
-	to_chat(user, "It displays " + stationtime2text())
+	. += SPAN_NOTICE("It displays [stationtime2text()]")

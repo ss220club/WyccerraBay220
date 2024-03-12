@@ -79,11 +79,10 @@
 	. = ..()
 	if(distance > 0)
 		return
-
 	if(length(reagents?.reagent_list))
-		to_chat(user, SPAN_NOTICE("It contains [round(reagents.total_volume)] units of liquid."))
+		. += SPAN_NOTICE("It contains [round(reagents.total_volume)] units of liquid.")
 	else
-		to_chat(user, SPAN_NOTICE("It is empty."))
+		. += SPAN_NOTICE("It is empty.")
 
 /obj/item/reagent_containers/spray/verb/empty()
 
@@ -141,7 +140,7 @@
 /obj/item/reagent_containers/spray/pepper/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "The safety is [safety ? "on" : "off"].")
+		. += SPAN_NOTICE("The safety is [safety ? "on" : "off"].")
 
 /obj/item/reagent_containers/spray/pepper/attack_self(mob/user)
 	safety = !safety

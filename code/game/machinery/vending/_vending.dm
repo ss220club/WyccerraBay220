@@ -126,7 +126,7 @@
 /obj/machinery/vending/examine(mob/user)
 	. = ..()
 	if(IsShowingAntag())
-		to_chat(user, SPAN_WARNING("A secret panel is open, revealing a small compartment that is dimly lit with red lighting."))
+		. += SPAN_WARNING("A secret panel is open, revealing a small compartment that is dimly lit with red lighting.")
 
 /obj/machinery/vending/Process()
 	if(inoperable())

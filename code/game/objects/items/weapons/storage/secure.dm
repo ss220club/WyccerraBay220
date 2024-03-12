@@ -115,7 +115,7 @@
 /obj/item/storage/secure/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, text("The service panel is [src.open ? "open" : "closed"]."))
+		. += SPAN_NOTICE("The service panel is [src.open ? "open" : "closed"].")
 
 
 /obj/item/storage/secure/emag_act(remaining_charges, mob/user, feedback)

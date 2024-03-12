@@ -68,11 +68,11 @@
 	if(distance <= 1)
 		switch(state)
 			if(AWAITING_ACTIVATION)
-				to_chat(user, "It is labeled '[service_label]' and appears to be awaiting activation.")
+				. += SPAN_NOTICE("It is labeled '[service_label]' and appears to be awaiting activation.")
 			if(CURRENTLY_ACTIVE)
-				to_chat(user, "It is labeled '[service_label]' and appears to be active.")
+				. += SPAN_NOTICE("It is labeled '[service_label]' and appears to be active.")
 			if(HAS_BEEN_ACTIVATED)
-				to_chat(user, "It is labeled '[service_label]' and appears to be permanently disabled.")
+				. += SPAN_NOTICE("It is labeled '[service_label]' and appears to be permanently disabled.")
 
 /obj/item/device/uplink_service/attack_self(mob/user)
 	if(state != AWAITING_ACTIVATION)
@@ -177,8 +177,8 @@
 /obj/item/device/uplink_service/fake_command_report/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "The message title is set to '<b>[title]</b>'. The message will be [public_announce ? "broadcast to the public" : "sent only to command consoles"].")
-		to_chat(user, "The message contents are set to:<br />[SPAN_NOTICE(message)]")
+		. += SPAN_NOTICE("The message title is set to '<b>[title]</b>'. The message will be [public_announce ? "broadcast to the public" : "sent only to command consoles"].")
+		. += SPAN_NOTICE("The message contents are set to:<br />[SPAN_NOTICE(message)]")
 
 
 /obj/item/device/uplink_service/fake_command_report/attack_self(mob/user)

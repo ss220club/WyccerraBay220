@@ -89,4 +89,4 @@
 	var/state = "disabled"
 	if(item_flags & ITEM_FLAG_NOSLIP)
 		state = "enabled"
-	to_chat(user, "Its mag-pulse traction system appears to be [state].")
+	. += SPAN_NOTICE("Its mag-pulse traction system appears to be [state].")

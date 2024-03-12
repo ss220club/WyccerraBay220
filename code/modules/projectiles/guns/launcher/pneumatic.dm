@@ -122,11 +122,11 @@
 	. = ..()
 	if(distance > 2)
 		return
-	to_chat(user, "The valve is dialed to [pressure_setting]%.")
+	. += SPAN_NOTICE("The valve is dialed to [pressure_setting]%.")
 	if(tank)
-		to_chat(user, "The tank dial reads [tank.air_contents.return_pressure()] kPa.")
+		. += SPAN_NOTICE("The tank dial reads [tank.air_contents.return_pressure()] kPa.")
 	else
-		to_chat(user, "Nothing is attached to the tank valve!")
+		. += SPAN_NOTICE("Nothing is attached to the tank valve!")
 
 /obj/item/gun/launcher/pneumatic/update_release_force(obj/item/projectile)
 	if(tank)

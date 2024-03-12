@@ -98,11 +98,11 @@
 
 /obj/structure/closet/body_bag/cryobag/examine(mob/user, distance, is_adjacent)
 	. = ..()
-	to_chat(user,"The stasis meter shows '[stasis_power]x'.")
+	. += SPAN_NOTICE("The stasis meter shows '[stasis_power]x'.")
 	if (is_adjacent) //The bag's rather thick and opaque from a distance.
-		to_chat(user, SPAN_INFO("You peer into \the [src]."))
+		. += SPAN_INFO("You peer into [src].")
 		for(var/mob/living/L in contents)
-			L.examine(arglist(args))
+			. += L.examine(arglist(args))
 
 /obj/item/usedcryobag
 	name = "used stasis bag"

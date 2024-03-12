@@ -142,45 +142,40 @@
 	. = ..()
 	if (distance > 3)
 		return
-	var/msg = ""
 	if (isghost(user) || user.skill_check(SKILL_DEVICES, SKILL_TRAINED))
 		if ((status & ORGAN_DEAD) || damage)
 			if ((status & ORGAN_DEAD))
-				msg += SPAN_ITALIC("It is ruined and lifeless, damaged beyond hope of recovery.")
+				. += SPAN_NOTICE(SPAN_ITALIC("It is ruined and lifeless, damaged beyond hope of recovery."))
 			else if (damage > min_broken_damage)
-				msg += SPAN_ITALIC("It is seriously damaged and requires repair to work properly.")
+				. += SPAN_NOTICE(SPAN_ITALIC("It is seriously damaged and requires repair to work properly."))
 			else if (damage > min_bruised_damage)
-				msg += SPAN_ITALIC("It has taken some damage and is in need of repair.")
+				. += SPAN_NOTICE(SPAN_ITALIC("It has taken some damage and is in need of repair."))
 			else
-				msg += SPAN_ITALIC("It has superficial wear and should work normally.")
+				. += SPAN_NOTICE(SPAN_ITALIC("It has superficial wear and should work normally."))
 		if (!(status & ORGAN_DEAD))
-			if (msg)
-				msg += "\n"
 			if (brainmob && brainmob.key)
+				var/msg
 				msg += SPAN_ITALIC("It blinks with activity.")
 				if (brainmob.stat || !brainmob.client)
 					msg += SPAN_ITALIC(" The responsiveness fault indicator is lit.")
+				. += SPAN_NOTICE(msg)
 			else if (damage)
-				msg += SPAN_ITALIC("The red integrity fault indicator pulses slowly.")
+				. += SPAN_NOTICE(SPAN_ITALIC("The red integrity fault indicator pulses slowly."))
 			else
-				msg += SPAN_ITALIC("The golden ready indicator [searching ? "flickers quickly as it tries to generate a personality" : "pulses lazily"].")
+				. += SPAN_NOTICE(SPAN_ITALIC("The golden ready indicator [searching ? "flickers quickly as it tries to generate a personality" : "pulses lazily"]."))
 	else
 		if ((status & ORGAN_DEAD) || damage > min_broken_damage)
-			msg += SPAN_ITALIC("It looks wrecked.")
+			. += SPAN_NOTICE(SPAN_ITALIC("It looks wrecked."))
 		else if (damage > min_bruised_damage)
-			msg += SPAN_ITALIC("It looks damaged.")
+			. += SPAN_NOTICE(SPAN_ITALIC("It looks damaged."))
 		if (!(status & ORGAN_DEAD))
-			if (msg)
-				msg += "\n"
 			if (brainmob && brainmob.key)
-				msg += SPAN_ITALIC("Little lights flicker on its surface.")
+				. += SPAN_NOTICE(SPAN_ITALIC("Little lights flicker on its surface."))
 			else
 				if (damage)
-					msg += SPAN_ITALIC("A lone red light pulses malevolently on its surface.")
+					. += SPAN_NOTICE(SPAN_ITALIC("A lone red light pulses malevolently on its surface."))
 				else
-					msg += SPAN_ITALIC("A lone golden light [searching ? "flickers quickly" : "pulses lazily"].")
-	if (msg)
-		to_chat(user, msg)
+					. += SPAN_NOTICE(SPAN_ITALIC("A lone golden light [searching ? "flickers quickly" : "pulses lazily"]."))
 
 /obj/item/organ/internal/posibrain/emp_act(severity)
 	damage += rand(15 - severity * 5, 20 - severity * 5)

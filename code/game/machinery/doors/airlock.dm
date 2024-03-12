@@ -1370,11 +1370,11 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/examine(mob/user)
 	. = ..()
 	if (lock_cut_state == BOLTS_EXPOSED)
-		to_chat(user, "The bolt cover has been cut open.")
+		. += SPAN_NOTICE("The bolt cover has been cut open.")
 	if (lock_cut_state == BOLTS_CUT)
-		to_chat(user, "The door bolts have been cut.")
+		. += SPAN_NOTICE("The door bolts have been cut.")
 	if(brace)
-		to_chat(user, "[brace] is installed on [src], preventing it from opening.")
+		. += SPAN_NOTICE("[brace] is installed on [src], preventing it from opening.")
 		brace.examine_damage_state(user)
 
 /obj/machinery/door/airlock/autoname

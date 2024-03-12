@@ -56,11 +56,6 @@
 			to_chat(user, SPAN_WARNING("\The [target] is too far away."))
 			return
 
-	var/datum/pronouns/user_pronouns = user.choose_from_pronouns()
-	var/datum/pronouns/target_pronouns
-	if(target)
-		target_pronouns = target.choose_from_pronouns()
-
 	var/use_3p
 	var/use_1p
 
@@ -69,9 +64,9 @@
 	if(emote_message_1p)
 		if(target && emote_message_1p_target)
 			use_1p = get_emote_message_1p(user, target, extra_params)
-			use_1p = replacetext(use_1p, "TARGET_THEM", target_pronouns.him)
-			use_1p = replacetext(use_1p, "TARGET_THEIR", target_pronouns.his)
-			use_1p = replacetext(use_1p, "TARGET_SELF", target_pronouns.self)
+			use_1p = replacetext(use_1p, "TARGET_THEM", target.p_them())
+			use_1p = replacetext(use_1p, "TARGET_THEIR", target.p_theirs())
+			use_1p = replacetext(use_1p, "TARGET_SELF", "[user.p_them()]self")
 			use_1p = replacetext(use_1p, "TARGET", "<b>\the [target]</b>")
 		else
 			use_1p = get_emote_message_1p(user, null, extra_params)
@@ -80,15 +75,15 @@
 	if(emote_message_3p)
 		if(target && emote_message_3p_target)
 			use_3p = get_emote_message_3p(user, target, extra_params)
-			use_3p = replacetext(use_3p, "TARGET_THEM", target_pronouns.him)
-			use_3p = replacetext(use_3p, "TARGET_THEIR", target_pronouns.his)
-			use_3p = replacetext(use_3p, "TARGET_SELF", target_pronouns.self)
+			use_3p = replacetext(use_3p, "TARGET_THEM", target.p_them())
+			use_3p = replacetext(use_3p, "TARGET_THEIR", target.p_their())
+			use_3p = replacetext(use_3p, "TARGET_SELF", "[user.p_them()]self")
 			use_3p = replacetext(use_3p, "TARGET", "<b>\the [target]</b>")
 		else
 			use_3p = get_emote_message_3p(user, null, extra_params)
-		use_3p = replacetext(use_3p, "USER_THEM", user_pronouns.him)
-		use_3p = replacetext(use_3p, "USER_THEIR", user_pronouns.his)
-		use_3p = replacetext(use_3p, "USER_SELF", user_pronouns.self)
+		use_3p = replacetext(use_3p, "USER_THEM", user.p_them())
+		use_3p = replacetext(use_3p, "USER_THEIR", user.p_their())
+		use_3p = replacetext(use_3p, "USER_SELF", "[user.p_them()]self")
 
 		runemessage = replacetext(use_3p, "USER", "")
 

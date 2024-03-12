@@ -136,9 +136,8 @@
 	set_dir(GLOB.reverse_dir[new_dir])
 
 
-/obj/bluegoast/examine()
+/obj/bluegoast/examine(mob/user)
 	return daddy?.examine(arglist(args))
-
 
 /obj/bluegoast/proc/blueswitch()
 	daddy.blueswitch(src)

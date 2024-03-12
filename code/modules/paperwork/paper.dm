@@ -100,11 +100,11 @@
 /obj/item/paper/examine(mob/user, distance)
 	. = ..()
 	if(!is_memo && name != "sheet of paper")
-		to_chat(user, "It's titled '[name]'.")
+		. += SPAN_NOTICE("It's titled '[name]'.")
 	if(distance <= 1)
 		show_content(usr)
 	else
-		to_chat(user, SPAN_NOTICE("You have to go closer if you want to read it."))
+		. += SPAN_NOTICE("You have to go closer if you want to read it.")
 
 /obj/item/paper/verb/user_set_language()
 	set name = "Set writing language"

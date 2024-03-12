@@ -153,10 +153,10 @@ var/global/list/organ_cache = list()
 /obj/item/organ/proc/show_decay_status(mob/user)
 	if(BP_IS_ROBOTIC(src))
 		if(status & ORGAN_DEAD)
-			to_chat(user, SPAN_NOTICE("\The [src] looks completely spent."))
+			. += SPAN_NOTICE("[src] looks completely spent.")
 	else
 		if(status & ORGAN_DEAD)
-			to_chat(user, SPAN_NOTICE("The decay has set into \the [src]."))
+			. += SPAN_NOTICE("The decay has set into [src].")
 
 /obj/item/organ/proc/handle_germ_effects()
 	//** Handle the effects of infections

@@ -48,9 +48,9 @@
 	. = ..()
 	if(distance <= 2)
 		var/grenade_count = length(grenades) + (chambered? 1 : 0)
-		to_chat(user, "Has [grenade_count] grenade\s remaining.")
+		. += SPAN_NOTICE("Has [grenade_count] grenade\s remaining.")
 		if(chambered)
-			to_chat(user, "\A [chambered] is chambered.")
+			. += SPAN_NOTICE("[chambered] is chambered.")
 
 /obj/item/gun/launcher/grenade/proc/load(obj/item/grenade/G, mob/user)
 	if(!can_load_grenade_type(G, user))

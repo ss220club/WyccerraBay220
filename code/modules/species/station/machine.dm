@@ -124,8 +124,7 @@
 	return "oil"
 
 /datum/species/machine/disfigure_msg(mob/living/carbon/human/H)
-	var/datum/pronouns/P = H.choose_from_pronouns()
-	return "[SPAN_DANGER("[P.His] monitor is completely busted!")]\n"
+	return "[SPAN_DANGER("[H.p_Their()] monitor is completely busted!")]\n"
 
 /datum/species/machine/can_float(mob/living/carbon/human/H)
 	return FALSE

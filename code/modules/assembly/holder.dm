@@ -170,7 +170,7 @@
 	. = ..()
 	if (distance > 1)
 		return
-	to_chat(user, "[src] is [secured ? "ready": "not secured"]!")
+	. += SPAN_NOTICE("[src] is [secured ? "ready": "not secured"]!")
 
 
 /obj/item/device/assembly_holder/timer_igniter

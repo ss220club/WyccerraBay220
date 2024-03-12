@@ -301,7 +301,7 @@
 
 /obj/item/device/paint_sprayer/examine(mob/user)
 	. = ..(user)
-	to_chat(user, "It is configured to produce the '[decal]' decal using <span style='color:[paint_color]'>[paint_color]</span> paint.")
+	. += SPAN_NOTICE("It is configured to produce the '[decal]' decal using <span style='color:[paint_color]'>[paint_color]</span> paint.")
 
 /obj/item/device/paint_sprayer/AltClick()
 	if (!isturf(loc))

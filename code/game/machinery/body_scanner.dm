@@ -18,8 +18,8 @@
 
 /obj/machinery/bodyscanner/examine(mob/user, distance, is_adjacent)
 	. = ..()
-	if (occupant && is_adjacent)
-		occupant.examine(arglist(args))
+	if(occupant && is_adjacent)
+		. += occupant.examine(arglist(args))
 
 /obj/machinery/bodyscanner/relaymove(mob/user)
 	..()

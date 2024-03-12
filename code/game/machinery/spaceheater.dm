@@ -44,11 +44,11 @@
 /obj/machinery/space_heater/examine(mob/user)
 	. = ..()
 
-	to_chat(user, "The heater is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].")
+	. += SPAN_NOTICE("The heater is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].")
 	if(panel_open)
-		to_chat(user, "The power cell is [cell ? "installed" : "missing"].")
+		. += SPAN_NOTICE("The power cell is [cell ? "installed" : "missing"].")
 	else
-		to_chat(user, "The charge meter reads [cell ? round(cell.percent(),1) : 0]%")
+		. += SPAN_NOTICE("The charge meter reads [cell ? round(cell.percent(),1) : 0]%")
 
 /obj/machinery/space_heater/emp_act(severity)
 	if(inoperable())

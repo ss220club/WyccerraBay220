@@ -154,11 +154,11 @@
 	. = ..()
 	var/obj/item/cell/MyC = get_cell()
 	if(MyC)
-		to_chat(M, SPAN_NOTICE("Its display shows: [MyC.percent()]%."))
+		. += SPAN_NOTICE("Its display shows: [MyC.percent()]%.")
 	else
-		to_chat(M,SPAN_NOTICE("Its display is dark."))
+		. += SPAN_NOTICE("Its display is dark.")
 	if(opened)
-		to_chat(M,SPAN_NOTICE("Its battery compartment is open."))
+		. += SPAN_NOTICE("Its battery compartment is open.")
 
 /obj/item/inducer/on_update_icon()
 	ClearOverlays()

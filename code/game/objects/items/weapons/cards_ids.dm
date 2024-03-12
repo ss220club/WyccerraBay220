@@ -28,9 +28,9 @@
 /obj/item/card/union/examine(mob/user)
 	. = ..()
 	if(signed_by)
-		to_chat(user, "It has been signed by [signed_by].")
+		. += SPAN_NOTICE("It has been signed by [signed_by].")
 	else
-		to_chat(user, "It has a blank space for a signature.")
+		. += SPAN_NOTICE("It has a blank space for a signature.")
 
 /obj/item/card/union/attackby(obj/item/thing, mob/user)
 	if(istype(thing, /obj/item/pen))
@@ -143,7 +143,7 @@
 /obj/item/card/emag_broken/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 0 && (user.skill_check(SKILL_DEVICES, SKILL_TRAINED) || player_is_antag(user.mind)))
-		to_chat(user, SPAN_WARNING("You can tell the components are completely fried; whatever use it may have had before is gone."))
+		. += SPAN_WARNING("You can tell the components are completely fried; whatever use it may have had before is gone.")
 
 /obj/item/card/emag_broken/get_antag_info()
 	. = ..()
@@ -261,7 +261,7 @@ var/global/const/NO_EMAG_ACT = -50
 
 /obj/item/card/id/examine(mob/user, distance)
 	. = ..()
-	to_chat(user, "It says '[get_display_name()]'.")
+	. += SPAN_NOTICE("It says '[get_display_name()]'.")
 	if(distance <= 1)
 		show(user)
 
@@ -328,12 +328,7 @@ var/global/const/NO_EMAG_ACT = -50
 				id_card.formal_name_suffix = "[id_card.formal_name_suffix][culture.get_formal_name_suffix()]"
 
 	id_card.registered_name = real_name
-
-	var/pronouns = "Unset"
-	var/datum/pronouns/P = choose_from_pronouns()
-	if(P)
-		pronouns = P.formal_term
-	id_card.sex = pronouns
+	id_card.sex = gender
 	id_card.set_id_photo(src)
 
 	if(dna)
@@ -540,9 +535,9 @@ var/global/const/NO_EMAG_ACT = -50
 	if(distance <= 1 && isliving(user))
 		var/mob/living/M = user
 		if(M.psi)
-			to_chat(user, SPAN_WARNING("There is a psionic compulsion surrounding \the [src], forcing anyone who reads it to perceive it as a legitimate document of authority. The actual text just reads 'I can do what I want.'"))
+			. += SPAN_WARNING("There is a psionic compulsion surrounding \the [src], forcing anyone who reads it to perceive it as a legitimate document of authority. The actual text just reads 'I can do what I want.'")
 		else
-			to_chat(user, SPAN_NOTICE("This is the real deal, stamped by [GLOB.using_map.boss_name]. It gives the holder the full authority to pursue their goals. You believe it implicitly."))
+			. += SPAN_NOTICE("This is the real deal, stamped by [GLOB.using_map.boss_name]. It gives the holder the full authority to pursue their goals. You believe it implicitly.")
 
 /obj/item/card/id/foundation/attack_self(mob/living/user)
 	. = ..()

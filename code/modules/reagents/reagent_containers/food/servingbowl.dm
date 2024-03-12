@@ -108,5 +108,5 @@
 
 /obj/item/reagent_containers/food/snacks/custombowl/examine(mob/user, distance)
 	. = ..(user)
-	if (distance < 2)
-		to_chat(user, SPAN_ITALIC("This one contains [fullname]."))
+	if(distance < 2)
+		. += SPAN_NOTICE("This one contains [fullname].")

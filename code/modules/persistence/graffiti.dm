@@ -36,7 +36,7 @@
 
 /obj/decal/writing/examine(mob/user)
 	. = ..(user)
-	to_chat(user,  "It reads \"[message]\".")
+	. += SPAN_NOTICE("It reads \"[message]\".")
 
 /obj/decal/writing/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -55,12 +55,12 @@
 /obj/item/device/electronic_assembly/examine(mob/user)
 	. = ..()
 	if(IC_FLAG_ANCHORABLE & circuit_flags)
-		to_chat(user, SPAN_NOTICE("The anchoring bolts [anchored ? "are" : "can be"] <b>wrenched</b> in place and the maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place."))
+		. += SPAN_NOTICE("The anchoring bolts [anchored ? "are" : "can be"] <b>wrenched</b> in place and the maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place.")
 	else
-		to_chat(user, SPAN_NOTICE("The maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place."))
+		. += SPAN_NOTICE("The maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place.")
 
 	if((isobserver(user) && ckeys_allowed_to_scan[user.ckey]) || check_rights(R_ADMIN, 0, user))
-		to_chat(user, "You can <a href='?src=\ref[src];ghostscan=1'>scan</a> this circuit.");
+		. += SPAN_NOTICE("You can <a href='?src=\ref[src];ghostscan=1'>scan</a> this circuit.");
 
 /obj/item/device/electronic_assembly/on_death()
 	visible_message(SPAN_WARNING("[src] falls to pieces!"))
@@ -330,9 +330,9 @@
 	. = ..()
 	for(var/I in assembly_components)
 		var/obj/item/integrated_circuit/IC = I
-		IC.external_examine(user)
+		. += IC.external_examine(user)
 		if(opened)
-			IC.internal_examine(user)
+			. += IC.internal_examine(user)
 	if(opened)
 		interact(user)
 

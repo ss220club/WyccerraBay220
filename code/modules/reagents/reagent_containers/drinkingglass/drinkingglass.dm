@@ -33,20 +33,19 @@ var/global/const/DRINK_ICON_NOISY = "noise"
 
 /obj/item/reagent_containers/food/drinks/glass2/examine(mob/M)
 	. = ..()
-
 	for(var/I in extras)
 		if(istype(I, /obj/item/glass_extra))
-			to_chat(M, "There is \a [I] in \the [src].")
+			. += SPAN_NOTICE("There is [I] in [src].")
 		else if(istype(I, /obj/item/reagent_containers/food/snacks/fruit_slice))
-			to_chat(M, "There is \a [I] on the rim.")
+			. += SPAN_NOTICE("There is [I] on the rim.")
 		else
-			to_chat(M, "There is \a [I] somewhere on the glass. Somehow.")
+			. += SPAN_NOTICE("There is [I] somewhere on the glass. Somehow.")
 
 	if(has_ice())
-		to_chat(M, "There is some ice floating in the drink.")
+		. += SPAN_NOTICE("There is some ice floating in the drink.")
 
 	if(has_fizz())
-		to_chat(M, "It is fizzing slightly.")
+		. += SPAN_NOTICE("It is fizzing slightly.")
 
 /obj/item/reagent_containers/food/drinks/glass2/proc/has_ice()
 	if(length(reagents?.reagent_list))

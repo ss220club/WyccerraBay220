@@ -65,16 +65,16 @@
 	add_fingerprint(user)
 
 	if(!length(contents))
-		to_chat(user, "It is empty.")
+		. += SPAN_NOTICE("It is empty.")
 		return
 
 	if(world.time > last_update + 10)
 		update_ore_count()
 		last_update = world.time
 
-	to_chat(user, "It holds:")
+	. += SPAN_NOTICE("It holds:")
 	for(var/ore in stored_ore)
-		to_chat(user, "- [stored_ore[ore]] [ore]")
+		. += SPAN_NOTICE("- [stored_ore[ore]] [ore]")
 	return
 
 

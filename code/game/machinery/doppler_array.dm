@@ -64,5 +64,5 @@ var/global/list/doppler_arrays = list()
 
 /obj/machinery/doppler_array/examine(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("The stabilizing bolts are currently [anchored ? "deployed" : "retracted"]."))
-	to_chat(user, SPAN_NOTICE("The sensor array is currently facing [currentlyfacing]."))
+	. += SPAN_NOTICE("The stabilizing bolts are currently [anchored ? "deployed" : "retracted"].")
+	. += SPAN_NOTICE("The sensor array is currently facing [currentlyfacing].")

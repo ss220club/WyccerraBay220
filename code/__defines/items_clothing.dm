@@ -35,6 +35,8 @@
 #define ACCESSORY_SLOT_ARMOR_M  "Misc armor"
 #define ACCESSORY_SLOT_HELM_C	"Helmet cover"
 #define ACCESSORY_SLOT_HELM_D   "Helmet decor"
+#define ACCESSORY_SLOT_OVER     "Over"
+
 
 
 #define ACCESSORY_REMOVABLE FLAG(0)

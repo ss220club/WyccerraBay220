@@ -1,5 +1,5 @@
 /mob/living/carbon/human/examine(mob/user, distance)
-	. = TRUE
+	. = list()
 	var/skipgloves = 0
 	var/skipsuitstorage = 0
 	var/skipjumpsuit = 0
@@ -31,7 +31,6 @@
 	if(distance > 3)
 		skipears = 1
 
-	. += SPAN_NOTICE("*---------*")
 	var/name_and_species = "This is "
 
 	if(icon)
@@ -62,86 +61,86 @@
 
 	//uniform
 	if(w_uniform && !skipjumpsuit)
-		. += SPAN_NOTICE("[p_they()] [p_are()] wearing [w_uniform.get_examine_line()].")
+		. += SPAN_NOTICE("[p_They()] [p_are()] wearing [w_uniform.get_examine_line()].")
 
 	//head
 	if(head)
-		. += SPAN_NOTICE("[p_they()] [p_are()] wearing [head.get_examine_line()] on [p_their()] head.")
+		. += SPAN_NOTICE("[p_They()] [p_are()] wearing [head.get_examine_line()] on [p_their()] head.")
 
 	//suit/armour
 	if(wear_suit)
-		. += SPAN_NOTICE("[p_they()] [p_are()] wearing [wear_suit.get_examine_line()].")
+		. += SPAN_NOTICE("[p_They()] [p_are()] wearing [wear_suit.get_examine_line()].")
 		//suit/armour storage
 		if(s_store && !skipsuitstorage)
-			. += SPAN_NOTICE("[p_they()] [p_are()] carrying [s_store.get_examine_line()] on [p_their()] [wear_suit.name].")
+			. += SPAN_NOTICE("[p_They()] [p_are()] carrying [s_store.get_examine_line()] on [p_their()] [wear_suit.name].")
 
 	//back
 	if(back)
-		. += SPAN_NOTICE("[p_they()] [p_have()] [back.get_examine_line()] on [p_their()] back.")
+		. += SPAN_NOTICE("[p_They()] [p_have()] [back.get_examine_line()] on [p_their()] back.")
 
 	//left hand
 	if(l_hand)
-		. += SPAN_NOTICE("[p_they()] [p_are()] holding [l_hand.get_examine_line()] in [p_their()] left hand.")
+		. += SPAN_NOTICE("[p_They()] [p_are()] holding [l_hand.get_examine_line()] in [p_their()] left hand.")
 
 	//right hand
 	if(r_hand)
-		. += SPAN_NOTICE("[p_they()] [p_are()] holding [r_hand.get_examine_line()] in [p_their()] right hand.")
+		. += SPAN_NOTICE("[p_They()] [p_are()] holding [r_hand.get_examine_line()] in [p_their()] right hand.")
 
 	//gloves
 	if(gloves && !skipgloves)
-		. += SPAN_NOTICE("[p_they()] [p_have()] [gloves.get_examine_line()] on [p_their()] hands.")
+		. += SPAN_NOTICE("[p_They()] [p_have()] [gloves.get_examine_line()] on [p_their()] hands.")
 	else if(blood_DNA)
-		. += SPAN_WARNING("[p_they()] [p_have()] [(hand_blood_color != SYNTH_BLOOD_COLOUR) ? "blood" : "oil"]-stained hands!")
+		. += SPAN_WARNING("[p_They()] [p_have()] [(hand_blood_color != SYNTH_BLOOD_COLOUR) ? "blood" : "oil"]-stained hands!")
 
 	//belt
 	if(belt)
-		. += SPAN_NOTICE("[p_they()] [p_have()] [belt.get_examine_line()] about [p_their()] waist.")
+		. += SPAN_NOTICE("[p_They()] [p_have()] [belt.get_examine_line()] about [p_their()] waist.")
 
 	//shoes
 	if(shoes && !skipshoes)
-		. += SPAN_NOTICE("[p_they()] [p_are()] wearing [shoes.get_examine_line()] on [p_their()] feet.")
+		. += SPAN_NOTICE("[p_They()] [p_are()] wearing [shoes.get_examine_line()] on [p_their()] feet.")
 	else if(feet_blood_color)
-		. += SPAN_WARNING("[p_they()] [p_have()] [(feet_blood_color != SYNTH_BLOOD_COLOUR) ? "blood" : "oil"]-stained feet!")
+		. += SPAN_WARNING("[p_They()] [p_have()] [(feet_blood_color != SYNTH_BLOOD_COLOUR) ? "blood" : "oil"]-stained feet!")
 
 	//mask
 	if(wear_mask && !skipmask)
-		. += SPAN_NOTICE("[p_they()] [p_have()] [wear_mask.get_examine_line()] on [p_their()] face.")
+		. += SPAN_NOTICE("[p_They()] [p_have()] [wear_mask.get_examine_line()] on [p_their()] face.")
 
 	//eyes
 	if(glasses && !skipeyes)
-		. += SPAN_NOTICE("[p_they()] [p_have()] [glasses.get_examine_line()] covering [p_their()] eyes.")
+		. += SPAN_NOTICE("[p_They()] [p_have()] [glasses.get_examine_line()] covering [p_their()] eyes.")
 
 	//left ear
 	if(l_ear && !skipears)
-		. += SPAN_NOTICE("[p_they()] [p_have()] [l_ear.get_examine_line()] on [p_their()] left ear.")
+		. += SPAN_NOTICE("[p_They()] [p_have()] [l_ear.get_examine_line()] on [p_their()] left ear.")
 
 	//right ear
 	if(r_ear && !skipears)
-		. += SPAN_NOTICE("[p_they()] [p_have()] [r_ear.get_examine_line()] on [p_their()] right ear.")
+		. += SPAN_NOTICE("[p_They()] [p_have()] [r_ear.get_examine_line()] on [p_their()] right ear.")
 
 	//ID
 	if(wear_id)
-		. += SPAN_NOTICE("[p_they()] [p_are()] wearing [wear_id.get_examine_line()].")
+		. += SPAN_NOTICE("[p_They()] [p_are()] wearing [wear_id.get_examine_line()].")
 
 	//handcuffed?
 	if(handcuffed)
 		if(istype(handcuffed, /obj/item/handcuffs/cable))
-			. += SPAN_WARNING("[p_they()] [p_are()] [icon2html(handcuffed, user)] restrained with cable!")
+			. += SPAN_WARNING("[p_They()] [p_are()] [icon2html(handcuffed, user)] restrained with cable!")
 		else
-			. += SPAN_WARNING("[p_they()] [p_are()] [icon2html(handcuffed, user)] handcuffed!")
+			. += SPAN_WARNING("[p_They()] [p_are()] [icon2html(handcuffed, user)] handcuffed!")
 
 	//buckled
 	if(buckled)
-		. += SPAN_WARNING("[p_they()] [p_are()] [icon2html(buckled, user)] buckled to [buckled]!")
+		. += SPAN_WARNING("[p_They()] [p_are()] [icon2html(buckled, user)] buckled to [buckled]!")
 
 	//Jitters
 	if(is_jittery)
 		if(jitteriness >= 300)
 			. += SPAN_WARNING("<B>[p_they()] [p_are()] convulsing violently!</B>")
 		else if(jitteriness >= 200)
-			. += SPAN_WARNING("[p_they()] [p_are()] extremely jittery.")
+			. += SPAN_WARNING("[p_They()] [p_are()] extremely jittery.")
 		else if(jitteriness >= 100)
-			. += SPAN_WARNING("[p_they()] [p_are()] twitching ever so slightly.")
+			. += SPAN_WARNING("[p_They()] [p_are()] twitching ever so slightly.")
 
 	//Disfigured face
 	if(!skipface) //Disfigurement only matters for the head currently.
@@ -159,35 +158,35 @@
 	for(var/organ in list(BP_L_LEG, BP_R_LEG, BP_L_ARM, BP_R_ARM))
 		var/obj/item/organ/external/o = get_organ(organ)
 		if(o && o.splinted && o.splinted.loc == o)
-			. += SPAN_WARNING("[p_they()] [p_have()] \a [o.splinted] on [p_their()] [o.name]!")
+			. += SPAN_WARNING("[p_They()] [p_have()] \a [o.splinted] on [p_their()] [o.name]!")
 
 	if(mSmallsize in mutations)
-		. += SPAN_NOTICE("[p_they()] [p_are()] small halfling!")
+		. += SPAN_NOTICE("[p_They()] [p_are()] small halfling!")
 
 	if (src.stat)
-		. += SPAN_WARNING("[p_they()] [p_are()]n't responding to anything around [p_them()] and seems to be unconscious.")
+		. += SPAN_WARNING("[p_They()] [p_are()]n't responding to anything around [p_them()] and seems to be unconscious.")
 		if((stat == DEAD || is_asystole() || losebreath || status_flags & FAKEDEATH) && distance <= 3)
-			. += SPAN_WARNING("[p_they()] [p_do()] not appear to be breathing.")
+			. += SPAN_WARNING("[p_They()] [p_do()] not appear to be breathing.")
 	if (fire_stacks > 0)
-		. += SPAN_NOTICE("[p_they()] looks flammable.")
+		. += SPAN_NOTICE("[p_They()] looks flammable.")
 	else if (fire_stacks < 0)
-		. += SPAN_NOTICE("[p_they()] looks wet.")
+		. += SPAN_NOTICE("[p_They()] looks wet.")
 	if(on_fire)
-		. += SPAN_WARNING("[p_they()] [p_are()] on fire!.")
+		. += SPAN_WARNING("[p_They()] [p_are()] on fire!.")
 
 	var/ssd_msg = species.get_ssd(src)
 	if(ssd_msg && (!should_have_organ(BP_BRAIN) || has_brain()) && stat != DEAD)
 		if(!key)
-			. += SPAN_DEBUG("[p_they()] [p_are()] [ssd_msg]. [p_they()] won't be recovering any time soon. (Ghosted)")
+			. += SPAN_DEBUG("[p_They()] [p_are()] [ssd_msg]. [p_they()] won't be recovering any time soon. (Ghosted)")
 		else if(!client)
-			. += SPAN_DEBUG("[p_they()] [p_are()] [ssd_msg]. (Disconnected)")
+			. += SPAN_DEBUG("[p_They()] [p_are()] [ssd_msg]. (Disconnected)")
 
 	if (admin_paralyzed)
 		. += SPAN_DEBUG("OOC: [p_they()] [p_have()] been paralyzed by staff. Please avoid interacting with [p_them()] unless cleared to do so by staff.")
 
 	var/obj/item/organ/external/head/H = organs_by_name[BP_HEAD]
 	if(istype(H) && H.forehead_graffiti && H.graffiti_style)
-		. += SPAN_NOTICE("[p_they()] [p_have()] \"[H.forehead_graffiti]\" written on [p_their()] [H.name] in [H.graffiti_style]!")
+		. += SPAN_NOTICE("[p_They()] [p_have()] \"[H.forehead_graffiti]\" written on [p_their()] [H.name] in [H.graffiti_style]!")
 
 	if (changed_age)
 		var/scale = abs(changed_age) / age
@@ -197,10 +196,10 @@
 			scale = ""
 		else
 			scale = "a little "
-		. += SPAN_NOTICE("[p_they()] looks [scale][changed_age > 0 ? "older" : "younger"] than you remember.")
+		. += SPAN_NOTICE("[p_They()] looks [scale][changed_age > 0 ? "older" : "younger"] than you remember.")
 
 	for (var/obj/aura/web/W in auras)
-		. += SPAN_WARNING("[p_they()] is covered in webs!")
+		. += SPAN_WARNING("[p_They()] is covered in webs!")
 		break
 
 	var/list/wound_flavor_text = list()
@@ -221,7 +220,7 @@
 		wound_flavor_text[E.name] = ""
 
 		if(E.applied_pressure == src)
-			applying_pressure = "[SPAN_INFO("[p_they()] [p_are()] applying pressure to [p_their()] [E.name].")]<br>"
+			applying_pressure = "[SPAN_INFO("[p_They()] [p_are()] applying pressure to [p_their()] [E.name].")]<br>"
 
 		var/obj/item/clothing/hidden
 		var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
@@ -270,7 +269,8 @@
 	var/wound_msg = ""
 	for(var/limb in wound_flavor_text)
 		wound_msg += wound_flavor_text[limb]
-	. += SPAN_WARNING(wound_msg)
+	if(wound_msg)
+		. += SPAN_WARNING(wound_msg)
 
 	for(var/obj/implant in get_visible_implants(0))
 		if(implant in shown_objects)
@@ -280,7 +280,7 @@
 		else
 			. += SPAN_DANGER("[src] [p_have()] \a [implant.name] sticking out of [p_their()] flesh!")
 	if(digitalcamo)
-		. += SPAN_NOTICE("[p_they()] [p_are()] repulsively uncanny!")
+		. += SPAN_NOTICE("[p_They()] [p_are()] repulsively uncanny!")
 
 	if(hasHUD(user, HUD_SECURITY))
 		var/perpname = "wot"
@@ -327,13 +327,13 @@
 	if(print_flavor_text())
 		. += SPAN_NOTICE("[print_flavor_text()]")
 
-	. += SPAN_NOTICE("*---------*")
-	. += applying_pressure
+	if(applying_pressure)
+		. += applying_pressure
 
-	if (pose)
-		if( findtext(pose,".",length(pose)) == 0 && findtext(pose,"!",length(pose)) == 0 && findtext(pose,"?",length(pose)) == 0 )
+	if(pose)
+		if(findtext(pose,".",length(pose)) == 0 && findtext(pose,"!",length(pose)) == 0 && findtext(pose,"?",length(pose)) == 0)
 			pose = addtext(pose,".") //Makes sure all emotes end with a period.
-		. += SPAN_NOTICE("[p_they()] [pose]")
+		. += SPAN_NOTICE("[p_They()] [pose]")
 
 //Helper procedure. Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic() to determine HUD access to security and medical records.
 /proc/hasHUD(mob/M as mob, hudtype)

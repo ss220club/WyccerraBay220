@@ -28,7 +28,6 @@
 			. += SPAN_WARNING("It doesn't seem to be responding.")
 		if(DEAD)
 			. += SPAN_CLASS("deadsay", "It looks completely unsalvageable.")
-	. += SPAN_NOTICE("*---------*")
 
 	if(print_flavor_text())
 		. += SPAN_NOTICE("[print_flavor_text()]")

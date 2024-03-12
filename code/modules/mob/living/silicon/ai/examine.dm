@@ -23,8 +23,8 @@
 
 		if (stat == UNCONSCIOUS)
 			. += SPAN_WARNING("It is non-responsive and displaying the text: \"RUNTIME: Sensory Overload, stack 26/3\".")
-	. += SPAN_NOTICE("*---------*")
 	if(hardware && (hardware.owner == src))
+		. += SPAN_NOTICE("Hardware:")
 		. += SPAN_NOTICE(hardware.get_examine_desc())
 	user.showLaws(src)
 

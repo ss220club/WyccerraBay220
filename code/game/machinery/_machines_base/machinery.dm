@@ -407,19 +407,20 @@
 
 /// Displays all components in the machine to the user.
 /obj/machinery/proc/display_parts(mob/user)
-	to_chat(user, SPAN_NOTICE("Following parts detected in the machine:"))
+	. = list()
+	. += SPAN_NOTICE("Following parts detected in the machine:")
 	for(var/obj/item/C in component_parts)
-		to_chat(user, SPAN_NOTICE("	[C.name]"))
+		. += SPAN_NOTICE("	[C.name]")
 	for(var/path in uncreated_component_parts)
 		var/obj/item/thing = path
-		to_chat(user, SPAN_NOTICE("	[initial(thing.name)] ([uncreated_component_parts[path] || 1])"))
+		. += SPAN_NOTICE("	[initial(thing.name)] ([uncreated_component_parts[path] || 1])")
 
 /obj/machinery/examine(mob/user)
 	. = ..()
 	if(panel_open)
 		. += SPAN_NOTICE("The service panel is open.")
 	if(component_parts && hasHUD(user, HUD_SCIENCE))
-		display_parts(user)
+		. += display_parts(user)
 	if(GET_FLAGS(stat, MACHINE_STAT_NOSCREEN))
 		. += SPAN_WARNING("It is missing a screen, making it hard to interact with.")
 	else if(GET_FLAGS(stat, MACHINE_STAT_NOINPUT))
@@ -436,7 +437,8 @@
 			parts += "[num2text(missing[type])] [initial(fake_thing.name)]"
 		. += SPAN_WARNING("[src] is missing [english_list(parts)], rendering it inoperable.")
 	if (user.skill_check(SKILL_CONSTRUCTION, SKILL_BASIC) || isobserver(user))
-		. += SPAN_NOTICE(machine_desc)
+		if(machine_desc)
+			. += SPAN_NOTICE(machine_desc)
 
 /obj/machinery/get_mechanics_info()
 	. = ..()

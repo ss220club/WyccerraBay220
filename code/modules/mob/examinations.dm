@@ -29,6 +29,8 @@
 	examine_info += forensic_info
 	if(length(examine_info))
 		for(var/i in 1 to (length(examine_info) - 1))
+			if(!examine_info[i])
+				continue
 			examine_info[i] += "\n"
 
 	to_chat(user, chat_box_examine(examine_info.Join()))

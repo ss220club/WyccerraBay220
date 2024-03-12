@@ -22,5 +22,3 @@
 
 			if(10)
 				. += SPAN_WARNING("<B>It is radiating with massive levels of electrical activity!</B>")
-
-	. += SPAN_NOTICE("*---------*")

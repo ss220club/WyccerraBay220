@@ -183,23 +183,21 @@
 /obj/item/examine(mob/user, distance, is_adjacent)
 	. = ..()
 	if(hasHUD(user, HUD_SCIENCE)) //Mob has a research scanner active.
-		. += SPAN_NOTICE("*--------*")
 
 		if(origin_tech)
 			. += SPAN_NOTICE("Testing potentials:")
 			//var/list/techlvls = params2list(origin_tech)
 			for(var/T in origin_tech)
-				. += SPAN_NOTICE("Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]]")
+				. += SPAN_NOTICE("	Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]]")
 		else
-			. += SPAN_NOTICE("No tech origins detected.<BR>")
+			. += SPAN_NOTICE("	No tech origins detected.")
 
 		if(LAZYLEN(matter))
 			. += SPAN_NOTICE("Extractable materials:")
 			for(var/mat in matter)
-				. += SPAN_NOTICE("[SSmaterials.get_material_by_name(mat)]")
+				. += SPAN_NOTICE("	[SSmaterials.get_material_by_name(mat)]")
 		else
-			. += SPAN_DANGER("No extractable materials detected.")
-		. += "*--------*"
+			. += SPAN_DANGER("	No extractable materials detected.")
 
 /obj/item/attack_hand(mob/user as mob)
 	if (!user) return

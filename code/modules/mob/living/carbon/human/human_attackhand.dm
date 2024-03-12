@@ -198,6 +198,29 @@
 				H.species.disarm_attackhand(H, src)
 	return
 
+/mob/living/carbon/human/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	//TODOSS220: refactor attack_hand to species
+	if(!ishuman(user))
+		return SECONDARY_ATTACK_CALL_NORMAL
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	var/mob/living/carbon/human/H = user
+	var/obj/item/organ/external/temp = H.organs_by_name[BP_R_HAND]
+	if(H.hand)
+		temp = H.organs_by_name[BP_L_HAND]
+	if(H.a_intent != I_HURT && (!temp || !temp.is_usable())) //Usability for harm is handled at the level of the attack datum's proc on get_attack_hand.
+		to_chat(H, SPAN_WARNING("You can't use your hand."))
+		return
+	remove_cloaking_source(species)
+	if(H.species)
+		if(H != src && check_shields(0, null, H, H.zone_sel.selecting, H.name))
+			H.do_attack_animation(src)
+			return
+		admin_attack_log(user, src, "Disarmed their victim.", "Was disarmed.", "disarmed")
+		H.species.disarm_attackhand(H, src)
+
 /mob/living/carbon/human/attack_generic(mob/user, damage, attack_message, environment_smash, damtype = DAMAGE_BRUTE, armorcheck = "melee", dam_flags = EMPTY_BITFIELD)
 
 	if(!damage || !istype(user))

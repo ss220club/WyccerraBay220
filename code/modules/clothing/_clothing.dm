@@ -318,7 +318,6 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/Initialize()
 	if(item_flags & ITEM_FLAG_PREMODIFIED)
 		cut_fingertops()
-
 	. = ..()
 
 /obj/item/clothing/gloves/update_clothing_icon()
@@ -335,9 +334,6 @@ BLIND     // can't see anything
 	..()
 
 
-// Called just before an attack_hand(), in mob/UnarmedAttack()
-/obj/item/clothing/gloves/proc/Touch(atom/A, proximity)
-	return 0 // return 1 to cancel attack_hand()
 
 /obj/item/clothing/gloves/attackby(obj/item/W, mob/user)
 	if(W.tool_behaviour == TOOL_WIRECUTTER || istype(W, /obj/item/scalpel))

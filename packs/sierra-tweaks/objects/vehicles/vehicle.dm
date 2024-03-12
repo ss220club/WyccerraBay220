@@ -80,7 +80,6 @@
 	healthcheck()
 
 /obj/vehicle/crowbar_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SKIP_TO_ATTACK
 	if(!cell || !open)
 		return
 	. = ITEM_INTERACT_SUCCESS
@@ -89,7 +88,6 @@
 	remove_cell(user)
 
 /obj/vehicle/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_SKIP_TO_ATTACK
 	if(locked)
 		return
 	. = ITEM_INTERACT_SUCCESS

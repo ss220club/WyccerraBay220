@@ -48,48 +48,63 @@ avoid code duplication. This includes items that may sometimes act as a standard
 /obj/item/proc/resolve_attackby(atom/atom, mob/living/user, click_params)
 	if(!atom.can_use_item(src, user, click_params))
 		return FALSE
-	atom.pre_use_item(src, user, click_params)
-	var/use_call
+	var/list/modifiers = params2list(click_params)
+	var/is_right_clicking = LAZYACCESS(modifiers, RIGHT_CLICK)
 
-	use_call = "use"
+	var/use_call = "use"
 	. = use_before(atom, user, click_params)
-	if(!.)
-		use_call = "tool"
-		. = atom.item_interaction(user, src, click_params)
-		if(. & ITEM_INTERACT_BLOCKING)
-			return
-	if((!. && user.a_intent == I_HURT) || (. & ITEM_INTERACT_SKIP_TO_ATTACK))
+	if(!. && user.a_intent == I_HURT)
 		use_call = "weapon"
-		. = atom.use_weapon(src, user, click_params)
+		if(is_right_clicking)
+			switch(atom.use_weapon_secondary(src, user, click_params))
+				if(SECONDARY_ATTACK_CALL_NORMAL)
+					. = atom.use_weapon(src, user, click_params)
+				if(SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+					. = TRUE
+				if(SECONDARY_ATTACK_CONTINUE_CHAIN)
+					. = FALSE // Normal behavior
+				else
+					CRASH("use_weapon_secondary must return an SECONDARY_ATTACK_* define")
+		else
+			. = atom.use_weapon(src, user, click_params)
 	if(!.)
 		use_call = "tool"
-		. = atom.use_tool(src, user, click_params)
+		. = atom.item_interaction(user, src, click_params, is_right_clicking)
+	if(!.)
+		use_call = "tool"
+		if(is_right_clicking)
+			switch(atom.use_tool_secondary(src, user, click_params))
+				if(SECONDARY_ATTACK_CALL_NORMAL)
+					. = atom.use_tool(src, user, click_params)
+				if(SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+					. = TRUE
+				if(SECONDARY_ATTACK_CONTINUE_CHAIN)
+					. = FALSE // Normal behavior
+				else
+					CRASH("use_tool_secondary must return an SECONDARY_ATTACK_* define")
+		else
+			. = atom.use_tool(src, user, click_params)
 	if(!.)
 		use_call = "attackby"
+		// Deprecated, don't dare to create attackby_secondary
 		. = atom.attackby(src, user, click_params)
 	if(!.)
 		use_call = "use"
-		. = use_after(atom, user, click_params)
+		if(is_right_clicking)
+			switch(use_after_secondary(atom, user, click_params))
+				if(SECONDARY_ATTACK_CALL_NORMAL)
+					. = use_after(atom, user, click_params)
+				if(SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+					. = TRUE
+				if(SECONDARY_ATTACK_CONTINUE_CHAIN)
+					. = FALSE// Normal behavior
+				else
+					CRASH("use_after_secondary must return an SECONDARY_ATTACK_* define")
+		else
+			. = use_after(atom, user, click_params)
 	if(!.)
 		use_call = null
 	atom.post_use_item(src, user, ., use_call, click_params)
-
-
-/**
- * Handler for operations to occur before running the chain of use_* procs. Always called.
- *
- * By default, this does nothing.
- *
- * **Parameters**:
- * - `tool` - The item being used.
- * - `user` - The mob performing the interaction.
- * - `click_params` - List of click parameters.
- *
- * Has no return value.
- */
-/atom/proc/pre_use_item(obj/item/tool, mob/living/user, click_params)
-	return
-
 
 /**
  * Handler for operations to occur after running the chain of use_* procs. Always called.
@@ -117,6 +132,8 @@ avoid code duplication. This includes items that may sometimes act as a standard
 	// No Tools flag check
 	if (HAS_FLAGS(atom_flags, ATOM_FLAG_NO_TOOLS))
 		USE_FEEDBACK_FAILURE("\The [src] can't be interacted with.")
+		return FALSE
+	if (SEND_SIGNAL(src, COMSIG_ATOM_CAN_USE_ITEM, tool, user, click_params) & COMPONENT_CANCEL_ATTACK_CHAIN)
 		return FALSE
 	return TRUE
 
@@ -259,6 +276,8 @@ avoid code duplication. This includes items that may sometimes act as a standard
  */
 /atom/proc/use_weapon(obj/item/weapon, mob/living/user, list/click_params)
 	SHOULD_CALL_PARENT(TRUE)
+	if(SEND_SIGNAL(src, COMSIG_ATOM_USE_WEAPON, weapon, user, click_params) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
 	if (weapon.force > 0 && get_max_health() && !HAS_FLAGS(weapon.item_flags, ITEM_FLAG_NO_BLUDGEON))
 		user.setClickCooldown(user.get_attack_speed(weapon))
 		user.do_attack_animation(src)
@@ -277,9 +296,15 @@ avoid code duplication. This includes items that may sometimes act as a standard
 		)
 		damage_health(weapon.force, weapon.damtype, damage_flags, skip_can_damage_check = TRUE)
 		return TRUE
-
 	return FALSE
 
+/atom/proc/use_weapon_secondary(obj/item/weapon, mob/living/user, list/click_params)
+	var/signal_result = SEND_SIGNAL(src, COMSIG_ATOM_USE_WEAPON_SECONDARY, weapon, user, click_params)
+	if(signal_result & COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(signal_result & COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CONTINUE_CHAIN
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /mob/living/use_weapon(obj/item/weapon, mob/living/user, list/click_params)
 	if (weapon.force > 0 && get_max_health() && !HAS_FLAGS(weapon.item_flags, ITEM_FLAG_NO_BLUDGEON))
@@ -358,8 +383,17 @@ avoid code duplication. This includes items that may sometimes act as a standard
  */
 /atom/proc/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	SHOULD_CALL_PARENT(TRUE)
+	if(SEND_SIGNAL(src, COMSIG_ATOM_USE_TOOL, tool, user, click_params) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
 	return FALSE
 
+/atom/proc/use_tool_secondary(obj/item/tool, mob/living/user, list/click_params)
+	var/signal_result = SEND_SIGNAL(src, COMSIG_ATOM_USE_TOOL_SECONDARY, tool, user, click_params)
+	if(signal_result & COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(signal_result & COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CONTINUE_CHAIN
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /mob/living/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	// Surgery is handled by the tool
@@ -399,6 +433,8 @@ avoid code duplication. This includes items that may sometimes act as a standard
  * Returns boolean to indicate whether the attack call was handled or not.
  */
 /atom/proc/attackby(obj/item/item, mob/living/user, click_params)
+	if(SEND_SIGNAL(src, COMSIG_ATOM_ATTACKBY, item, user, click_params) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
 	return FALSE
 
 /**
@@ -414,8 +450,16 @@ avoid code duplication. This includes items that may sometimes act as a standard
  * Should have no return value.
  */
 /obj/item/proc/afterattack(atom/target, mob/living/user, proximity_flag, click_parameters)
-	return
+	. |= SEND_SIGNAL(src, COMSIG_ITEM_AFTERATTACK, target, user, proximity_flag, click_parameters)
+	return .
 
+/obj/item/proc/afterattack_secondary(atom/target, mob/living/user, proximity_flag, click_parameters)
+	var/signal_result = SEND_SIGNAL(src, COMSIG_ITEM_AFTERATTACK_SECONDARY, target, user, click_parameters)
+	if(signal_result & COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(signal_result & COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CONTINUE_CHAIN
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /**
  * Called when the item is in the active hand and another atom is clicked. This is generally called by the target's
@@ -431,8 +475,17 @@ avoid code duplication. This includes items that may sometimes act as a standard
  * Returns boolean to indicate whether the use call was handled or not.
  */
 /obj/item/proc/use_after(atom/target, mob/living/user, click_parameters)
+	if(SEND_SIGNAL(src, COMSIG_ITEM_USE_AFTER, target, user, click_parameters) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
 	return FALSE
 
+/obj/item/proc/use_after_secondary(atom/target, mob/living/user, click_parameters)
+	var/signal_result = SEND_SIGNAL(src, COMSIG_ITEM_USE_AFTER_SECONDARY, target, user, click_parameters)
+	if(signal_result & COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(signal_result & COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN)
+		return SECONDARY_ATTACK_CONTINUE_CHAIN
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /**
  * Called when a mob is clicked while the item is in the active hand. This is usually called first by the mob's `resolve_attackby()` proc.
@@ -446,8 +499,9 @@ avoid code duplication. This includes items that may sometimes act as a standard
  * * - `click_parameters` - List of click parameters. See BYOND's `Click()` documentation.
  */
 /obj/item/proc/use_before(atom/target, mob/living/user, click_parameters)
+	if(SEND_SIGNAL(src, COMSIG_ITEM_USE_BEFORE, target, user, click_parameters) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
 	return FALSE
-
 
 /**
  * Called when a weapon is used to make a successful melee attack on a mob. Generally called by the target's `use_weapon()` proc.

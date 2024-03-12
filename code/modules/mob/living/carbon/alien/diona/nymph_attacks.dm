@@ -35,26 +35,26 @@
 	return ..()
 
 
-/mob/living/carbon/alien/diona/UnarmedAttack(atom/A)
+/mob/living/carbon/alien/diona/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 
 	setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
 
 	if(istype(loc, /obj/structure/diona_gestalt))
 		var/obj/structure/diona_gestalt/gestalt = loc
-		return gestalt.handle_member_click(src, A)
+		return gestalt.handle_member_click(src, target)
 	else
 
-		if(istype(A, /obj/machinery/portable_atmospherics/hydroponics))
-			return handle_tray_interaction(A)
+		if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
+			return handle_tray_interaction(target)
 
 		// This is super hacky. Not sure if I will leave this in for a final merge.
 		// Reporting back from the future: keeping this because trying to refactor
 		// seed storage to handle this cleanly would be a pain in the ass and I
 		// don't want to touch that pile.
 
-		if(istype(A, /obj/machinery/seed_storage))
-			visible_message(SPAN_DANGER("\The [src] headbutts \the [A]!"))
-			var/obj/machinery/seed_storage/G = A
+		if(istype(target, /obj/machinery/seed_storage))
+			visible_message(SPAN_DANGER("\The [src] headbutts \the [target]!"))
+			var/obj/machinery/seed_storage/G = target
 			if(LAZYLEN(G.piles))
 				var/datum/seed_pile/pile = pick(G.piles)
 				var/obj/item/seeds/S = pick(pile.seeds)
@@ -65,30 +65,30 @@
 						G.piles -= pile
 						qdel(pile)
 					S.forceMove(get_turf(G))
-					G.visible_message(SPAN_NOTICE("\A [S] falls out!"))
+					G.visible_message(SPAN_NOTICE("\target [S] falls out!"))
 			return
 		// End superhacky stuff.
 
 	if(a_intent == I_DISARM || a_intent == I_HELP)
-		if(!wear_hat(A) && can_collect(A))
-			collect(A)
+		if(!wear_hat(target) && can_collect(target))
+			collect(target)
 			return
 
-	if(istype(A, /mob))
-		if(src != A && !gestalt_with(A))
-			visible_message(SPAN_NOTICE("\The [src] butts its head into \the [A]."))
+	if(istype(target, /mob))
+		if(src != target && !gestalt_with(target))
+			visible_message(SPAN_NOTICE("\The [src] butts its head into \the [target]."))
 		return
 
 	. = ..()
 
-/mob/living/carbon/alien/diona/RangedAttack(atom/A, params)
+/mob/living/carbon/alien/diona/ranged_attack(atom/target, modifiers)
 	if((a_intent == I_HURT || a_intent == I_GRAB) && holding_item)
 		setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-		visible_message(SPAN_DANGER("\The [src] spits \a [holding_item] at \the [A]!"))
+		visible_message(SPAN_DANGER("\The [src] spits \a [holding_item] at \the [target]!"))
 		var/atom/movable/temp = holding_item
 		unEquip(holding_item)
 		if(temp)
-			temp.throw_at(A, 10, rand(3,5), src)
+			temp.throw_at(target, 10, rand(3,5), src)
 		return TRUE
 	. = ..()
 

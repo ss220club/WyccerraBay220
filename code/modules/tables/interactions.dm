@@ -79,19 +79,20 @@ closest to where the cursor has clicked on.
 Note: This proc can be overwritten to allow for different types of auto-alignment.
 */
 /obj/item/var/center_of_mass = "x=16;y=16" //can be null for no exact placement behaviour
-/obj/structure/table/proc/auto_align(obj/item/W, click_params)
+/obj/structure/table/proc/auto_align(obj/item/W, params)
 	if (!W.center_of_mass) // Clothing, material stacks, generally items with large sprites where exact placement would be unhandy.
 		W.pixel_x = rand(-W.randpixel, W.randpixel)
 		W.pixel_y = rand(-W.randpixel, W.randpixel)
 		W.pixel_z = 0
 		return
 
-	if (!length(click_params) || !click_params["icon-x"] || !click_params["icon-y"])
+	var/list/modifiers = params2list(params)
+	if (!length(modifiers) || !LAZYACCESS(modifiers, ICON_X) || !LAZYACCESS(modifiers, ICON_Y))
 		return
 
 	// Calculation to apply new pixelshift.
-	var/mouse_x = text2num(click_params["icon-x"])-1 // Ranging from 0 to 31
-	var/mouse_y = text2num(click_params["icon-y"])-1
+	var/mouse_x = text2num(LAZYACCESS(modifiers, ICON_X))-1 // Ranging from 0 to 31
+	var/mouse_y = text2num(LAZYACCESS(modifiers, ICON_Y))-1
 
 	var/cell_x = clamp(round(mouse_x/CELLSIZE), 0, CELLS-1) // Ranging from 0 to CELLS-1
 	var/cell_y = clamp(round(mouse_y/CELLSIZE), 0, CELLS-1)
@@ -102,7 +103,7 @@ Note: This proc can be overwritten to allow for different types of auto-alignmen
 	W.pixel_y = (CELLSIZE * (cell_y + 0.5)) - center["y"]
 	W.pixel_z = 0
 
-/obj/structure/table/rack/auto_align(obj/item/W, click_params)
+/obj/structure/table/rack/auto_align(obj/item/W, params)
 	if(W && !W.center_of_mass)
 		..(W)
 

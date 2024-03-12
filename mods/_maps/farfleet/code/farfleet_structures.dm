@@ -229,6 +229,30 @@
 	door_color = COLOR_DARK_BLUE_GRAY
 	stripe_color = COLOR_NT_RED
 
+/obj/machinery/vending/engivend/iccgn
+	name = "\improper Pioneer Engi-Vend"
+	req_access = list(access_away_iccgn)
+	products = list(
+		/obj/item/device/flashlight = 3,
+		/obj/item/device/multitool = 3,
+		/obj/item/device/multitool/multimeter = 3,
+		/obj/item/device/geiger = 3,
+		/obj/item/device/scanner/gas = 3,
+		/obj/item/device/t_scanner = 3,
+		/obj/item/rpd = 2,
+		/obj/item/clamp = 4,
+		/obj/item/tape_roll = 6,
+		/obj/item/device/paint_sprayer = 2,
+		/obj/item/grenade/chem_grenade/metalfoam = 5,
+		/obj/item/sealgen_case/iccgn = 2,
+		/obj/item/swapper/power_drill = 1,
+		/obj/item/swapper/jaws_of_life = 1
+	)
+	contraband = list(
+		/obj/item/cell/high =  5
+	)
+
+
 /* Voidsuit Storage Unit
  * ====
  */

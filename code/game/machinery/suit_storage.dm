@@ -20,7 +20,9 @@
 	name = "suit storage unit"
 	desc = "An industrial U-Stor-It Storage unit designed to accomodate all kinds of space suits. Its on-board equipment also allows the user to decontaminate the contents through a UV-ray purging cycle. There's a warning label dangling from the control pad, reading \"STRICTLY NO BIOLOGICALS IN THE CONFINES OF THE UNIT\"."
 	icon = 'icons/obj/machines/suitstorage.dmi'
-	icon_state = "close"
+	icon_state = "industrial"
+	var/base_icon_state = "industrial"
+	var/ssu_color = "color_overlay_colorable"
 	anchored = TRUE
 	density = TRUE
 	idle_power_usage = 50
@@ -61,28 +63,42 @@
 
 /obj/machinery/suit_storage_unit/on_update_icon()
 	ClearOverlays()
+	if(ssu_color)
+		var/image/I = image(icon = icon, icon_state = "[base_icon_state]_colorable")
+		I.appearance_flags |= RESET_COLOR
+		I.color = ssu_color
+		AddOverlays(I)
+	//if things arent powered, these show anyways
 	if(panelopen)
-		AddOverlays(("panel"))
-	if(isUV)
-		if(issuperUV)
-			AddOverlays(("super"))
-		else if(occupant)
-			AddOverlays(("uvhuman"))
+		AddOverlays(image(icon,"[base_icon_state]_panel"))
+
+	if(isopen)
+		AddOverlays(image(icon,"[base_icon_state]_open"))
+		if(suit)
+			AddOverlays(image(icon,"[base_icon_state]_suit"))
+		if(helmet)
+			AddOverlays(image(icon,"[base_icon_state]_helm"))
+		if(boots || tank || mask)
+			AddOverlays(image(icon,"[base_icon_state]_storage"))
+		if(isUV && issuperUV)
+			AddOverlays(image(icon,"[base_icon_state]_super"))
+
+	if(!MACHINE_IS_BROKEN(src))
+		if(isopen)
+			AddOverlays(image(icon,"[base_icon_state]_lights_open"))
 		else
-			AddOverlays(("uv"))
-	else if(isopen)
-		if(MACHINE_IS_BROKEN(src))
-			AddOverlays(("broken"))
+			if(isUV)
+				AddOverlays(image(icon,"[base_icon_state]_lights_red"))
+			else
+				AddOverlays(image(icon,"[base_icon_state]_lights_closed"))
+		//top lights
+		if(isUV)
+			if(issuperUV)
+				AddOverlays(overlay_image(icon,"[base_icon_state]_uvstrong", plane = EFFECTS_ABOVE_LIGHTING_PLANE, layer = ABOVE_LIGHTING_LAYER))
+			else
+				AddOverlays(overlay_image(icon,"[base_icon_state]_uv", plane = EFFECTS_ABOVE_LIGHTING_PLANE, layer = ABOVE_LIGHTING_LAYER))
 		else
-			AddOverlays(("open"))
-			if(suit)
-				AddOverlays(("suit"))
-			if(helmet)
-				AddOverlays(("helm"))
-			if(boots || tank || mask)
-				AddOverlays(("storage"))
-	else if(occupant)
-		AddOverlays(("human"))
+			AddOverlays(overlay_image(icon, "[base_icon_state]_ready", plane = EFFECTS_ABOVE_LIGHTING_PLANE, layer = ABOVE_LIGHTING_LAYER))
 
 /obj/machinery/suit_storage_unit/get_req_access()
 	if(!islocked)

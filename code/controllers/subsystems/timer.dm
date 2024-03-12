@@ -10,9 +10,11 @@ var/global/const/TIMER_UNIQUE = FLAG(2)
 /// Attempting to add a unique timer will re-queue the event instead of being ignored
 var/global/const/TIMER_OVERRIDE = FLAG(3)
 
-/// Skips adding the wait to the timer hash, allowing for uniques with variable wait times
-var/global/const/TIMER_NO_HASH_WAIT = FLAG(4)
+/// For use with `TIMER_UNIQUE` and `TIMER_OVERRIDE`. Replaces the existing timer only if new one procs later than original one.
+var/global/const/TIMER_PROLONG = FLAG(4)
 
+/// Skips adding the wait to the timer hash, allowing for uniques with variable wait times
+var/global/const/TIMER_NO_HASH_WAIT = FLAG(5)
 
 /datum/timer
 	var/datum/callback/callback
@@ -93,7 +95,7 @@ SUBSYSTEM_DEF(timer)
 			if (flags & TIMER_UNIQUE)
 				var/datum/timer/match = subsystem.timers_by_hash[hash]
 				if (match)
-					if (!(flags & TIMER_OVERRIDE))
+					if (!(flags & TIMER_OVERRIDE) && flags & TIMER_PROLONG && match.fire_time < timer.fire_time)
 						return
 					subsystem.timers_by_hash[hash] = timer
 					subsystem.queue -= match

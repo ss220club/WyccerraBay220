@@ -444,7 +444,7 @@
 			if(terminal())
 				to_chat(user, SPAN_WARNING("Disconnect the wires first."))
 				return
-			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
+			to_chat(user, "You are trying to remove the power control board...")
 			if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !opened || (has_electronics != ELECTRONICS_PLUGGED) || terminal())
 				return
 			has_electronics = ELECTRONICS_NONE
@@ -469,6 +469,9 @@
 			return
 	if(coverlocked && !(GET_FLAGS(stat, MACHINE_STAT_MAINT)))
 		to_chat(user, SPAN_WARNING("The cover is locked and cannot be opened."))
+		return
+	if(opened == COVER_REMOVED)
+		USE_FEEDBACK_FAILURE("There is no cover.")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -621,25 +624,24 @@
 			return TRUE
 
 		// Cover is the only thing broken, we do not need to remove elctronicks to replace cover
-		if(MACHINE_IS_BROKEN(src) && opened == COVER_REMOVED && has_electronics && terminal())
+		if(opened == COVER_REMOVED && has_electronics && terminal())
 			user.visible_message(SPAN_NOTICE("[user] replaces missing APC's cover."))
 			if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
 				qdel(W)
 				remove_broken_cover(COVER_CLOSED)
 
-		if(MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden))
+		if(MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden) || get_current_health() < get_max_health())
 			if (has_electronics)
 				to_chat(user, SPAN_WARNING("You cannot repair this APC until you remove the electronics still inside."))
 				return TRUE
 
 			user.visible_message(SPAN_WARNING("[user.name] replaces the damaged APC frame with a new one."),\
 								"You begin to replace the damaged APC frame...")
-			if(do_after(user, 5 SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && !has_electronics && (MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden)))
+			if(do_after(user, 5 SECONDS, src, DO_REPAIR_CONSTRUCT) && opened && !has_electronics && (MACHINE_IS_BROKEN(src) || (hacker && !hacker.hacked_apcs_hidden) || get_current_health() < get_max_health()))
 				user.visible_message(\
 					SPAN_NOTICE("[user.name] has replaced the damaged APC frame with new one."),\
 					"You replace the damaged APC frame with new one.")
 				qdel(W)
-				revive_health()
 				remove_broken_cover(COVER_CLOSED)
 			return TRUE
 
@@ -662,14 +664,15 @@
 	if ((damage_percentage >= 50 || (hacker && !hacker.hacked_apcs_hidden)) && opened != 2 && prob(20))
 		visible_message(SPAN_DANGER("The lid on [src] is knocked down"))
 		coverlocked = FALSE
-		opened = 2
-		queue_icon_update()
+		opened = COVER_REMOVED
+		update_icon()
 		return
 
 	if (!health_dead())
 		if (damage_percentage >= 25 && locked && prob(20))
 			locked = FALSE
-			visible_message(SPAN_DANGER("The interface lock on \the [src] malfunctions!"), range = 1)
+			visible_message(SPAN_DANGER("The interface lock on [src] malfunctions!"), range = 1)
+			update_icon()
 		if (damage_percentage >= 75 && prob(20))
 			kill_health()
 
@@ -678,7 +681,9 @@
 	if(hacker && hacker.hacked_apcs && (src in hacker.hacked_apcs))
 		hacker.hacked_apcs -= src
 		hacker = null
-	set_broken(new_opened == COVER_CLOSED ? FALSE : TRUE)
+	if(new_opened == COVER_CLOSED)
+		set_broken(FALSE)
+		revive_health()
 	opened = new_opened
 	update_icon()
 

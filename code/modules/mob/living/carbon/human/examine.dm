@@ -214,7 +214,7 @@
 		var/obj/item/organ/external/E = organs_by_name[organ_tag]
 
 		if(!E)
-			wound_flavor_text[organ_descriptor] = "<b>[p_they()] [p_are()] missing [p_their()] [organ_descriptor].</b>\n"
+			wound_flavor_text[organ_descriptor] = "<b>[p_They()] [p_are()] missing [p_their()] [organ_descriptor].</b>\n"
 			continue
 
 		wound_flavor_text[E.name] = ""
@@ -236,15 +236,15 @@
 				hidden_bleeders[hidden] += E.name
 		else
 			if(E.is_stump())
-				wound_flavor_text[E.name] += "<b>[p_they()] [p_have()] a stump where [p_their()] [organ_descriptor] should be.</b>\n"
+				wound_flavor_text[E.name] += "<b>[p_They()] [p_have()] a stump where [p_their()] [organ_descriptor] should be.</b>\n"
 				if(LAZYLEN(E.wounds) && E.parent)
-					wound_flavor_text[E.name] += "[p_they()] [p_have()] [E.get_wounds_desc()] on [p_their()] [E.parent.name].<br>"
+					wound_flavor_text[E.name] += "[p_They()] [p_have()] [E.get_wounds_desc()] on [p_their()] [E.parent.name].<br>"
 			else
 				if(!is_synth && BP_IS_ROBOTIC(E) && (E.parent && !BP_IS_ROBOTIC(E.parent) && !BP_IS_ASSISTED(E.parent)))
-					wound_flavor_text[E.name] = "[p_they()] [p_have()] a [E.name].\n"
+					wound_flavor_text[E.name] = "[p_They()] [p_have()] a [E.name].\n"
 				var/wounddesc = E.get_wounds_desc()
 				if(wounddesc != "nothing")
-					wound_flavor_text[E.name] += "[p_they()] [p_have()] [wounddesc] on [p_their()] [E.name].<br>"
+					wound_flavor_text[E.name] += "[p_They()] [p_have()] [wounddesc] on [p_their()] [E.name].<br>"
 		if(!hidden || distance <=1)
 			if(E.dislocated > 0)
 				wound_flavor_text[E.name] += "[p_Their()] [E.joint] is dislocated!<br>"
@@ -264,7 +264,7 @@
 						parsedembed.Add("multiple "+embedded.name)
 				wound_flavor_text["[E.name]"] += "The [wound.desc] on [p_their()] [E.name] has \a [english_list(parsedembed, and_text = " and a ", comma_text = ", a ")] sticking out of it!<br>"
 	for(var/hidden in hidden_bleeders)
-		wound_flavor_text[hidden] = "[p_they()] [p_have()] blood soaking through [hidden] around [p_their()] [english_list(hidden_bleeders[hidden])]!<br>"
+		wound_flavor_text[hidden] = "[p_They()] [p_have()] blood soaking through [hidden] around [p_their()] [english_list(hidden_bleeders[hidden])]!<br>"
 
 	var/wound_msg = ""
 	for(var/limb in wound_flavor_text)

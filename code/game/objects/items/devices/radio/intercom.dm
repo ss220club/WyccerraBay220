@@ -93,7 +93,7 @@
 
 /obj/item/device/radio/intercom/Initialize(loc, dir, atom/frame)
 	. = ..()
-	loop_area_check()
+	find_and_set_linked_area()
 
 	if (dir)
 		set_dir(dir)
@@ -318,26 +318,6 @@
 	.["Wirecutters"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
 	.["Wrench"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
 
-/obj/item/device/radio/intercom/proc/change_status()
-	on = linked_area.powered(EQUIP)
-	icon_state = on ? "intercom" : "intercom-p"
-
-/obj/item/device/radio/intercom/proc/loop_area_check()
-	var/area/target_area = get_area(src)
-	if(!target_area?.apc)
-		addtimer(CALLBACK(src, PROC_REF(loop_area_check)), 30 SECONDS, TIMER_STOPPABLE) // We don't proces if there is no APC , no point in doing so is there ?
-		return FALSE
-	linked_area = target_area
-	RegisterSignal(target_area, COMSIG_AREA_APC_DELETED, PROC_REF(on_apc_removal))
-	RegisterSignal(target_area, COMSIG_AREA_APC_POWER_CHANGE, PROC_REF(change_status))
-
-/obj/item/device/radio/intercom/proc/on_apc_removal()
-	UnregisterSignal(linked_area , COMSIG_AREA_APC_DELETED)
-	UnregisterSignal(linked_area, COMSIG_AREA_APC_POWER_CHANGE)
-	linked_area = null
-	on = FALSE
-	update_icon()
-	addtimer(CALLBACK(src, PROC_REF(loop_area_check)), 30 SECONDS)
 
 /obj/item/device/radio/intercom/on_update_icon()
 	if (buildstage == 2 && wiresexposed)
@@ -347,7 +327,10 @@
 	else if (buildstage == 0)
 		icon_state = "intercom-f"
 	else
-		icon_state = "intercom_[broadcasting][listening]"
+		if(on)
+			icon_state = "intercom_[broadcasting][listening]"
+		else
+			icon_state = "intercom-p"
 
 /obj/item/device/radio/intercom/ToggleBroadcast()
 	..()
@@ -355,6 +338,39 @@
 
 /obj/item/device/radio/intercom/ToggleReception()
 	..()
+	update_icon()
+
+/obj/item/device/radio/intercom/proc/find_and_set_linked_area()
+	var/area/target_area = get_area(src)
+	if(!target_area.apc)
+		RegisterSignal(target_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+		return
+
+	on_apc_add(target_area)
+
+/obj/item/device/radio/intercom/proc/on_apc_add(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_ADDED)
+	linked_area = apc_area
+	RegisterSignal(apc_area, COMSIG_AREA_APC_REMOVED, PROC_REF(on_apc_removal))
+	RegisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE, PROC_REF(change_status))
+
+/obj/item/device/radio/intercom/proc/on_apc_removal(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_REMOVED)
+	UnregisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE)
+	linked_area = null
+	on = FALSE
+	update_icon()
+
+	RegisterSignal(apc_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+
+/obj/item/device/radio/intercom/proc/change_status()
+	SIGNAL_HANDLER
+
+	on = linked_area.powered(EQUIP)
 	update_icon()
 
 /obj/item/device/radio/intercom/broadcasting

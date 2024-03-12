@@ -177,64 +177,100 @@
 
 	return canhear_range
 
+//TODO: cable act
+/obj/item/device/radio/intercom/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage > 1)
+		USE_FEEDBACK_FAILURE("[src]'s wiring needs to be removed before you can remove the circuit.")
+		return
+	if(buildstage < 1)
+		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts removing [src]'s circuit with [tool]."),
+		SPAN_NOTICE("You start removing [src]'s circuit with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || buildstage != 1)
+		return
+	var/obj/item/intercom_electronics/circuit = new(get_turf(src))
+	buildstage = 0
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [circuit] from [src] with [tool]."),
+		SPAN_NOTICE("You remove [circuit] from [src] with [tool].")
+	)
+
+/obj/item/device/radio/intercom/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (buildstage < 2)
+		USE_FEEDBACK_FAILURE("[src] has no wiring to expose.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	wiresexposed = !wiresexposed
+	b_stat = !b_stat
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] [wiresexposed ? "opens" : "closes"] [src]'s wiring panel with [tool]."),
+		SPAN_NOTICE("You [wiresexposed ? "open" : "close"] [src]'s wiring panel with [tool].")
+	)
+
+/obj/item/device/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/frame/intercom(get_turf(src))
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [src] from the wall with [tool]."),
+		SPAN_NOTICE("You remove [src] from the wall with [tool].")
+	)
+	qdel(src)
+
+/obj/item/device/radio/intercom/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (buildstage < 2)
+		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
+		return
+	if (!wiresexposed)
+		USE_FEEDBACK_FAILURE("[src]'s wire panel needs to be opened before you can cut the wiring.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/stack/cable_coil(get_turf(src), 5)
+	b_stat = FALSE
+	buildstage = 1
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),
+		SPAN_NOTICE("You cut [src]'s wiring with [tool].")
+	)
 
 /obj/item/device/radio/intercom/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
 	if (isCoil(tool))
 		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src] is already wired.")
+			USE_FEEDBACK_FAILURE("[src] is already wired.")
 			return TRUE
 		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuitry to wire.")
+			USE_FEEDBACK_FAILURE("[src] has no circuitry to wire.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.use(5))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to wire \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to wire [src].")
 			return TRUE
 		b_stat = TRUE
 		buildstage = 2
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] wires \a [src] with [cable.get_vague_name(TRUE)]."),
-			SPAN_NOTICE("You wire \the [src] with [cable.get_exact_name(5)].")
-		)
-		return TRUE
-
-	// Crowbar - Remove circuits
-	if (isCrowbar(tool))
-		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
-			return TRUE
-		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \a [src]'s circuit with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s circuit with \the [tool].")
-		)
-		if (!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
-			return TRUE
-		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		var/obj/item/intercom_electronics/circuit = new(get_turf(src))
-		buildstage = 0
-		update_icon()
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [circuit] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [circuit] from \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] wires [src] with [cable.get_vague_name(TRUE)]."),
+			SPAN_NOTICE("You wire [src] with [cable.get_exact_name(5)].")
 		)
 		return TRUE
 
 	// Intercom Electronics - Install circuit
 	if (istype(tool, /obj/item/intercom_electronics))
 		if (buildstage > 0)
-			USE_FEEDBACK_FAILURE("\The [src] already has a circuit installed.")
+			USE_FEEDBACK_FAILURE("[src] already has a circuit installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -242,57 +278,11 @@
 		buildstage = 1
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [tool] into \a [src]."),
-			SPAN_NOTICE("You insert \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] inserts [tool] into [src]."),
+			SPAN_NOTICE("You insert [tool] into [src].")
 		)
 		qdel(tool)
 		return TRUE
-
-	// Screwdriver - Toggle wire panel
-	if (isScrewdriver(tool))
-		if (buildstage < 2)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to expose.")
-			return TRUE
-		wiresexposed = !wiresexposed
-		b_stat = !b_stat
-		update_icon()
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [wiresexposed ? "opens" : "closes"] \a [src]'s wiring panel with \a [tool]."),
-			SPAN_NOTICE("You [wiresexposed ? "open" : "close"] \the [src]'s wiring panel with \the [tool].")
-		)
-		return TRUE
-
-	// Wirecutters - Cut wiring
-	if (isWirecutter(tool))
-		if (buildstage < 2)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (!wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wire panel needs to be opened before you can cut the wiring.")
-			return TRUE
-		new /obj/item/stack/cable_coil(get_turf(src), 5)
-		b_stat = FALSE
-		buildstage = 1
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \a [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
-		)
-		return TRUE
-
-	// Wrench - Remove from wall
-	if (isWrench(tool))
-		new /obj/item/frame/intercom(get_turf(src))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [src] from the wall with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src] from the wall with \the [tool].")
-		)
-		qdel(src)
-		return TRUE
-
 	return ..()
 
 

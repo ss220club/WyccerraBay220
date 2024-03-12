@@ -6,7 +6,7 @@ import {
   Icon,
   Section,
   Stack,
-  Tooltip,
+  ImageButton,
   Dimmer,
   NoticeBox,
   LabeledList,
@@ -38,12 +38,19 @@ type Product = {
   image: string;
 };
 
+const CATEGORY = {
+  Common: 1,
+  Contaraband: 2,
+  Antag: 3,
+  Premium: 4,
+};
+
 export const Vending = (props, context) => {
   const { act, data } = useBackend<VendingData>(context);
   return !data.panel ? <VendingMain /> : <VendingMaint />;
 };
 
-export const VendingMaint = (props, context) => {
+const VendingMaint = (props, context) => {
   const { act, data } = useBackend<VendingData>(context);
   const { speaker } = data;
   return (
@@ -75,7 +82,7 @@ export const VendingMaint = (props, context) => {
   );
 };
 
-export const VendingMain = (props, context) => {
+const VendingMain = (props, context) => {
   const { act, data } = useBackend<VendingData>(context);
   const { coin, vend_ready, products = [] } = data;
   const [searchText, setSearchText] = useLocalState(context, 'searchText', '');
@@ -83,7 +90,7 @@ export const VendingMain = (props, context) => {
     product.name.toLowerCase().includes(searchText.toLowerCase())
   );
   return (
-    <Window width={products.length > 25 ? '391' : '375'} height={550}>
+    <Window width={products.length > 25 ? '401' : '384'} height={535}>
       {!vend_ready || data.mode ? <Vend /> : ''}
       <Window.Content>
         <Section
@@ -111,9 +118,29 @@ export const VendingMain = (props, context) => {
           }
         >
           {filteredProducts.map((product) => (
-            <Tooltip
+            <ImageButton
               key={product.key}
+              vertical
+              m={0.5}
+              image={product.image}
+              imageSize={'64px'}
+              disabled={product.ammount <= 0}
+              color={
+                product.category === CATEGORY.Contaraband
+                  ? 'violet'
+                  : product.category === CATEGORY.Premium
+                    ? 'gold'
+                    : ''
+              }
               content={
+                product.price > 0
+                  ? `${product.price} ₸`
+                  : product.category === CATEGORY.Premium
+                    ? 'Coin'
+                    : 'Free'
+              }
+              disabledContent="Empty"
+              tooltip={
                 <>
                   {<b>{capitalizeAll(product.name)}</b>}
                   <br />
@@ -121,46 +148,8 @@ export const VendingMain = (props, context) => {
                   (В наличии: <b>{product.ammount}</b>)
                 </>
               }
-            >
-              <Stack.Item
-                inline
-                grow
-                className={classes([
-                  'Vending__Button',
-                  product.category === 2 && 'Vending__Button--contraband',
-                  product.category === 4 && 'Vending__Button--premium',
-                  product.ammount <= 0 && 'Vending__Button--disabled',
-                ])}
-                onClick={() =>
-                  product.ammount > 0 && act('vend', { vend: product.key })
-                }
-              >
-                <img
-                  src={`data:image/jpeg;base64,${product.image}`}
-                  style={{
-                    width: '64px',
-                    '-ms-interpolation-mode': 'nearest-neighbor',
-                  }}
-                />
-                <Stack.Item
-                  bold
-                  className={classes([
-                    'Vending__Price',
-                    product.category === 2 && 'Vending__Price--contraband',
-                    product.category === 4 && 'Vending__Price--premium',
-                    product.ammount <= 0 && 'Vending__Price--disabled',
-                  ])}
-                >
-                  {product.ammount > 0
-                    ? product.price > 0
-                      ? `${product.price} ₸`
-                      : product.category === 4
-                        ? 'Coin'
-                        : 'Free'
-                    : 'Empty'}
-                </Stack.Item>
-              </Stack.Item>
-            </Tooltip>
+              onClick={() => act('vend', { vend: product.key })}
+            />
           ))}
         </Section>
       </Window.Content>

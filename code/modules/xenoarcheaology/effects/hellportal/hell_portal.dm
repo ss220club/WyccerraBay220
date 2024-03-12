@@ -52,7 +52,7 @@
 
 /datum/artifact_effect/hellportal/proc/convert_turfs()
 	for (var/i = 0 to convert_count)
-		var/turf/T = pick(trange(effectrange, get_turf(holder)))
+		var/turf/T = pick(RANGE_TURFS(holder, effectrange))
 		var/turf/simulated/floor/F
 
 		if (T.is_wall())

@@ -1,6 +1,6 @@
 /datum/shuttle/autodock/overmap/reaper
 	name = "Reaper Gunboat"
-	warmup_time = 15
+	warmup_time = 15 SECONDS
 	dock_target = "albatross_shuttle"
 	current_location = "nav_hangar_reaper"
 	range = 2

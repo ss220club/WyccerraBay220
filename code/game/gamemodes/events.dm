@@ -13,14 +13,12 @@ var/global/hadevent    = 0
 			break
 
 /proc/high_radiation_event()
+	for(var/obj/machinery/light/L as anything in SSmachines.get_machinery_of_type(/obj/machinery/light))
+		if(isNotStationLevel(L.z))
+			continue
 
-/* // Haha, this is way too laggy. I'll keep the prison break though.
-	for(var/obj/machinery/light/L in world)
-		if(isNotStationLevel(L.z)) continue
 		L.flicker(50)
 
-	sleep(100)
-*/
 	for(var/mob/living/carbon/human/H in GLOB.alive_mobs)
 		var/turf/T = get_turf(H)
 		if(!T)

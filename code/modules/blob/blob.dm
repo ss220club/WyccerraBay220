@@ -93,7 +93,7 @@
 	var/damage_type = pick(DAMAGE_BRUTE, DAMAGE_BURN)
 
 	if (T.density && !T.health_dead())
-		visible_message(SPAN_DANGER("A tendril flies out from \the [src] and smashes into \the [T]!"))
+		visible_message(SPAN_DANGER("A tendril flies out from [src] and smashes into [T]!"))
 		playsound(loc, 'sound/effects/attackblob.ogg', 50, 1)
 		T.damage_health(damage)
 		return
@@ -122,7 +122,7 @@
 	var/density_check = FALSE
 	for (var/atom/A in T)
 		if (A.can_damage_health(damage, damage_type) && !(A.type in BLOB_BANNED_TARGET_TYPES))
-			visible_message(SPAN_DANGER("A tendril flies out from \the [src] and smashes into \the [A]!"))
+			visible_message(SPAN_DANGER("A tendril flies out from [src] and smashes into [A]!"))
 			if (!sound_played)
 				playsound(loc, 'sound/effects/attackblob.ogg', 50, 1)
 			A.damage_health(damage, damage_type, skip_can_damage_check = TRUE)
@@ -154,7 +154,7 @@
 	if(!L)
 		return
 	var/blob_damage = pick(DAMAGE_BRUTE, DAMAGE_BURN)
-	L.visible_message(SPAN_DANGER("A tendril flies out from \the [src] and smashes into \the [L]!"), SPAN_DANGER("A tendril flies out from \the [src] and smashes into you!"))
+	L.visible_message(SPAN_DANGER("A tendril flies out from [src] and smashes into [L]!"), SPAN_DANGER("A tendril flies out from [src] and smashes into you!"))
 	playsound(loc, 'sound/effects/attackblob.ogg', 50, 1)
 	L.apply_damage(rand(damage_min, damage_max), blob_damage, used_weapon = "blob tendril")
 
@@ -176,32 +176,23 @@
 	damage_health(damage, Proj.damage_type)
 	return 0
 
-
-/obj/blob/use_tool(obj/item/tool, mob/user, list/click_params)
-	if (isWirecutter(tool))
-		if (pruned)
-			USE_FEEDBACK_FAILURE("\The [src] has already been pruned.")
-			return TRUE
-		if (prob(user.skill_fail_chance(SKILL_SCIENCE, 90, SKILL_EXPERIENCED)))
-			USE_FEEDBACK_FAILURE("You fail to collect a sample from \the [src].")
-			return TRUE
-		var/obj/item/sample = new product(user.loc)
-		sample.add_fingerprint(user, tool = tool)
-		pruned = TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] collects \a [sample] from \the [src] with \a [tool]."),
-			SPAN_NOTICE("You collect \a [sample] from \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
-
-/obj/blob/post_use_item(obj/item/tool, mob/user, interaction_handled, use_call, click_params)
-	. = ..()
-	if (interaction_handled && use_call == "weapon" && isWelder(tool))
-		playsound(loc, 'sound/items/Welder.ogg', 100, TRUE)
-
+/obj/blob/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(pruned)
+		USE_FEEDBACK_FAILURE("[src] has already been pruned.")
+		return
+	if(prob(user.skill_fail_chance(SKILL_SCIENCE, 90, SKILL_EXPERIENCED)))
+		USE_FEEDBACK_FAILURE("You fail to collect a sample from [src].")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/sample = new product(user.loc)
+	sample.add_fingerprint(user, tool = tool)
+	pruned = TRUE
+	user.visible_message(
+		SPAN_NOTICE("[user] collects [sample] from [src] with [tool]."),
+		SPAN_NOTICE("You collect [sample] from [src] with [tool].")
+	)
 
 /obj/blob/core
 	name = "master nucleus"
@@ -429,7 +420,7 @@ regen() will cover update_icon() for this proc
 	if(is_tendril && prob(50))
 		force--
 		if(force <= 0)
-			visible_message(SPAN_NOTICE("\The [src] crumbles apart!"))
+			visible_message(SPAN_NOTICE("[src] crumbles apart!"))
 			user.drop_from_inventory(src)
 			new /obj/decal/cleanable/ash(src.loc)
 			qdel(src)

@@ -63,58 +63,91 @@
 	playsound(loc, "button", 30, 1)
 	if (cant_ignite())
 		user.visible_message(
-			SPAN_NOTICE("\The [user] tries to activate \the [src], but nothing happens."),
-			SPAN_NOTICE("You try to activate \the [src], but nothing happens.")
+			SPAN_NOTICE("[user] tries to activate [src], but nothing happens."),
+			SPAN_NOTICE("You try to activate [src], but nothing happens.")
 		)
 		return
 	user.visible_message(
-		SPAN_NOTICE("\The [user] activates \the [src]."),
-		SPAN_NOTICE("You activate \the [src].")
+		SPAN_NOTICE("[user] activates [src]."),
+		SPAN_NOTICE("You activate [src].")
 	)
 	ignite()
 
-/obj/machinery/atmospherics/pipe/cap/sparker/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isScrewdriver(W) && !signaler)
-		disabled = !disabled
-		user.visible_message(
-			SPAN_WARNING("\The [user] has [disabled ? "disabled" : "reconnected wiring on"] \the [src]."),
-			SPAN_WARNING("You [disabled ? "disable" : "fix"] the connection on \the [src].")
-		)
-		update_icon()
-		return TRUE
+/obj/machinery/atmospherics/pipe/cap/sparker/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(signaler || disabled)
+		to_chat(user, SPAN_NOTICE("Remove signalers and check the wiring before unwrenching [src]."))
+		return
+	var/turf/T = src.loc
+	if(level == ATOM_LEVEL_UNDER_TILE && isturf(T) && !T.is_plating())
+		to_chat(user, SPAN_WARNING("You must remove the plating first."))
+		return
+	if(clamp)
+		to_chat(user, SPAN_WARNING("You must remove [clamp] first."))
+		return
 
+	var/datum/gas_mixture/int_air = return_air()
+	var/datum/gas_mixture/env_air = loc.return_air()
+
+	if((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+		to_chat(user, SPAN_WARNING("You cannot unwrench [src], it is too exerted due to internal pressure."))
+		return
+
+	to_chat(user, SPAN_NOTICE("You begin to unfasten [src]..."))
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_REPAIR_CONSTRUCT) || clamp)
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] unfastens [src]."),
+		SPAN_NOTICE("You have unfastened [src]."),
+		"You hear a ratchet.")
+
+	new /obj/item/pipe(loc, src)
+	for(var/obj/machinery/meter/meter in T)
+		if(meter.target == src)
+			meter.dismantle()
+	qdel(src)
+
+/obj/machinery/atmospherics/pipe/cap/sparker/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(signaler)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		signaler.mholder = null
+		signaler.dropInto(loc)
+		user.visible_message(
+			SPAN_WARNING("[user] disconnects [signaler] from [src]."),
+			SPAN_WARNING("You disconnect [signaler] from [src].")
+		)
+		signaler = null
+		update_icon()
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	disabled = !disabled
+	user.visible_message(
+		SPAN_WARNING("[user] has [disabled ? "disabled" : "reconnected wiring on"] [src]."),
+		SPAN_WARNING("You [disabled ? "disable" : "fix"] the connection on [src].")
+	)
+	update_icon()
+
+/obj/machinery/atmospherics/pipe/cap/sparker/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (istype(W, /obj/item/device/assembly/signaler) && isnull(signaler))
 		if (disabled)
-			to_chat(user, SPAN_WARNING("\The [src] is disabled!"))
+			to_chat(user, SPAN_WARNING("[src] is disabled!"))
 			return TRUE
 		signaler = W
 		if (signaler.secured)
-			to_chat(user, SPAN_WARNING("\The [signaler] is secured!"))
+			to_chat(user, SPAN_WARNING("[signaler] is secured!"))
 			signaler = null
 			return TRUE
 		signaler.mholder = src
 		user.unEquip(signaler)
 		signaler.forceMove(src)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] connects \the [signaler] to \the [src]."),
-			SPAN_NOTICE("You connect \the [signaler] to \the [src].")
+			SPAN_NOTICE("[user] connects [signaler] to [src]."),
+			SPAN_NOTICE("You connect [signaler] to [src].")
 		)
 		update_icon()
-		return TRUE
-
-	if (isScrewdriver(W) && signaler)
-		signaler.mholder = null
-		signaler.dropInto(loc)
-		user.visible_message(
-			SPAN_WARNING("\The [user] disconnects \the [signaler] from \the [src]."),
-			SPAN_WARNING("You disconnect \the [signaler] from \the [src].")
-		)
-		signaler = null
-		update_icon()
-		return TRUE
-
-	if (isWrench(W) && (signaler || disabled))
-		to_chat(user, SPAN_NOTICE("Remove signalers and check the wiring before unwrenching \the [src]."))
 		return TRUE
 
 	return ..()

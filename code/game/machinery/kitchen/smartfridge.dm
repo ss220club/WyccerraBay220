@@ -108,28 +108,35 @@
 	I.layer = ABOVE_WINDOW_LAYER
 	AddOverlays(I)
 
+/obj/machinery/smartfridge/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
+/obj/machinery/smartfridge/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	panel_open = !panel_open
+	user.visible_message("[user] [panel_open ? "opens" : "closes"] the maintenance panel of [src].", "You [panel_open ? "open" : "close"] the maintenance panel of [src].")
+	update_icon()
+	SSnano.update_uis(src)
+
+/obj/machinery/smartfridge/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
 /obj/machinery/smartfridge/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(isScrewdriver(O))
-		panel_open = !panel_open
-		user.visible_message("[user] [panel_open ? "opens" : "closes"] the maintenance panel of \the [src].", "You [panel_open ? "open" : "close"] the maintenance panel of \the [src].")
-		update_icon()
-		SSnano.update_uis(src)
-		return TRUE
-
-	if(isMultitool(O) || isWirecutter(O))
-		if(panel_open)
-			attack_hand(user)
-		return TRUE
-
 	if(!is_powered())
-		to_chat(user, SPAN_NOTICE("\The [src] is unpowered and useless."))
+		to_chat(user, SPAN_NOTICE("[src] is unpowered and useless."))
 		return TRUE
 
 	if(accept_check(O))
 		if(!user.unEquip(O))
 			return TRUE
 		stock_item(O)
-		user.visible_message(SPAN_NOTICE("\The [user] has added \the [O] to \the [src]."), SPAN_NOTICE("You add \the [O] to \the [src]."))
+		user.visible_message(SPAN_NOTICE("[user] has added [O] to [src]."), SPAN_NOTICE("You add [O] to [src]."))
 		update_icon()
 		return TRUE
 
@@ -143,7 +150,7 @@
 		P.finish_bulk_removal()
 
 		if(plants_loaded)
-			user.visible_message(SPAN_NOTICE("\The [user] loads \the [src] with the contents of \the [P]."), SPAN_NOTICE("You load \the [src] with the contents of \the [P]."))
+			user.visible_message(SPAN_NOTICE("[user] loads [src] with the contents of [P]."), SPAN_NOTICE("You load [src] with the contents of [P]."))
 			if(length(P.contents) > 0)
 				to_chat(user, SPAN_NOTICE("Some items were refused."))
 		return TRUE
@@ -167,7 +174,7 @@
 /obj/machinery/smartfridge/tgui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "SmartFridge", name, 400, 500)
+		ui = new(user, src, "SmartFridge", name)
 		ui.set_autoupdate(FALSE)
 		ui.open()
 
@@ -184,7 +191,11 @@
 		var/datum/stored_items/I = item_records[i]
 		var/count = I.get_amount()
 		if(count > 0)
-			items.Add(list(list("display_name" = html_encode(capitalize(I.item_name)), "vend" = i, "quantity" = count)))
+			items += list(list(
+				"display_name" = I.item_name,
+				"vend" = i,
+				"quantity" = count
+				))
 
 	if(length(items) > 0)
 		data["contents"] = items

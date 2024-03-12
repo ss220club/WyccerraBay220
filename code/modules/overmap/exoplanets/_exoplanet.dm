@@ -114,8 +114,10 @@ GLOBAL_VAR(planet_repopulation_disabled)
 
 /obj/overmap/visitable/sector/exoplanet/proc/build_level()
 	generate_atmosphere()
-	for (var/datum/exoplanet_theme/T in themes)
+
+	for (var/datum/exoplanet_theme/T as anything in themes)
 		T.adjust_atmosphere(src)
+
 	if (atmosphere)
 		//Set up gases for living things
 		if (!length(breathgas))
@@ -129,11 +131,14 @@ GLOBAL_VAR(planet_repopulation_disabled)
 			var/list/badgases = gas_data.gases.Copy()
 			badgases -= atmosphere.gas
 			badgas = pick(badgases)
+
 	generate_flora()
 	generate_map()
 	generate_features()
-	for (var/datum/exoplanet_theme/T in themes)
+
+	for (var/datum/exoplanet_theme/T as anything in themes)
 		T.after_map_generation(src)
+		
 	generate_landing(2)
 	update_biome()
 	generate_daycycle()

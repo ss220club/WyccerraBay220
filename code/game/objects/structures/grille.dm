@@ -142,7 +142,7 @@
 	// Shock Check
 	var/shock_chance = 70
 	// 100% shock chance to remove or move
-	if (isWirecutter(tool) || isWrench(tool))
+	if (tool.tool_behaviour == TOOL_WIRECUTTER || tool.tool_behaviour == TOOL_WRENCH)
 		shock_chance = 100
 	// Plasmacutter shouldn't need to touch the grille
 	if (istype(tool, /obj/item/gun/energy/plasmacutter))
@@ -155,6 +155,15 @@
 	..()
 	update_connections(TRUE)
 
+/obj/structure/grille/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	dismantle()
+	user.visible_message(
+		SPAN_NOTICE("[user] cuts [src] apart with [tool]."),
+		SPAN_NOTICE("You cut [src] apart with [tool].")
+	)
 
 /obj/structure/grille/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Plasma Cutter - Cut grille
@@ -165,18 +174,8 @@
 		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
 		dismantle()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src] apart with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src] apart with \the [tool].")
-		)
-		return TRUE
-
-	// Wirecutter - Cut grille
-	if (isWirecutter(tool))
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		dismantle()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src] apart with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src] apart with \the [tool].")
+			SPAN_NOTICE("[user] cuts [src] apart with [tool]."),
+			SPAN_NOTICE("You cut [src] apart with [tool].")
 		)
 		return TRUE
 
@@ -184,7 +183,7 @@
 	if (istype(tool, /obj/item/stack/material))
 		var/obj/item/stack/material/stack = tool
 		if (stack.material.opacity > 0.7)
-			USE_FEEDBACK_FAILURE("\The [tool] cannot be used to make a window.")
+			USE_FEEDBACK_FAILURE("[tool] cannot be used to make a window.")
 			return TRUE
 		place_window(user, loc, tool)
 		return TRUE
@@ -197,13 +196,13 @@
 	qdel(src)
 
 /obj/structure/grille/on_death(new_death_state)
-	visible_message(SPAN_WARNING("\The [src] falls to pieces!"))
+	visible_message(SPAN_WARNING("[src] falls to pieces!"))
 	new /obj/item/stack/material/rods(get_turf(src), 1, material.name)
 	new /obj/structure/grille/broken(get_turf(src), material.name)
 	qdel(src)
 
 /obj/structure/grille/broken/on_death(new_death_state)
-	visible_message(SPAN_WARNING("The remains of \the [src] break apart!"))
+	visible_message(SPAN_WARNING("The remains of [src] break apart!"))
 	new /obj/item/stack/material/rods(get_turf(src), 1, material.name)
 	qdel(src)
 

@@ -3417,8 +3417,7 @@
 	dir = 8
 	},
 /obj/structure/cable{
-	d1 = 1;
-	d2 = 32;
+	d1 = 32;
 	icon_state = "32-1"
 	},
 /turf/simulated/open,

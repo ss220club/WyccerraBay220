@@ -1,45 +1,68 @@
-/datum/fabricator_recipe/medical
-	path = /obj/item/scalpel/basic
+/singleton/fabricator_recipe/medical
+	abstract_type = /singleton/fabricator_recipe/medical
 	category = "Medical"
 
-/datum/fabricator_recipe/medical/circularsaw
+/singleton/fabricator_recipe/medical/scalpel
+	id =  "scalpel"
+	path = /obj/item/scalpel/basic
+
+/singleton/fabricator_recipe/medical/circularsaw
+	id =  "circularsaw"
 	path = /obj/item/circular_saw
 
-/datum/fabricator_recipe/medical/surgicaldrill
+/singleton/fabricator_recipe/medical/surgicaldrill
+	id =  "surgicaldrill"
 	path = /obj/item/surgicaldrill
 
-/datum/fabricator_recipe/medical/retractor
+/singleton/fabricator_recipe/medical/retractor
+	id =  "retractor"
 	path = /obj/item/retractor
 
-/datum/fabricator_recipe/medical/cautery
+/singleton/fabricator_recipe/medical/cautery
+	id =  "cautery"
 	path = /obj/item/cautery
 
-/datum/fabricator_recipe/medical/hemostat
+/singleton/fabricator_recipe/medical/hemostat
+	id =  "hemostat"
 	path = /obj/item/hemostat
 
-/datum/fabricator_recipe/medical/beaker
-	path = /obj/item/reagent_containers/glass/beaker
-
-/datum/fabricator_recipe/medical/beaker_large
-	path = /obj/item/reagent_containers/glass/beaker/large
-
-/datum/fabricator_recipe/medical/beaker_insul
-	path = /obj/item/reagent_containers/glass/beaker/insulated
-
-/datum/fabricator_recipe/medical/beaker_insul_large
-	path = /obj/item/reagent_containers/glass/beaker/insulated/large
-
-/datum/fabricator_recipe/medical/vial
-	path = /obj/item/reagent_containers/glass/beaker/vial
-
-/datum/fabricator_recipe/medical/syringe
+/singleton/fabricator_recipe/medical/syringe
+	id =  "syringe"
 	path = /obj/item/reagent_containers/syringe
 
-/datum/fabricator_recipe/medical/implanter
+/singleton/fabricator_recipe/medical/implanter
+	id =  "implanter"
 	path = /obj/item/implanter
 
-/datum/fabricator_recipe/medical/pill_bottle
+/singleton/fabricator_recipe/medical/pill_bottle
+	id =  "pill_bottle"
 	path = /obj/item/storage/pill_bottle
 
-/datum/fabricator_recipe/medical/hypospray/autoinjector
+/singleton/fabricator_recipe/medical/autoinjector
+	id =  "autoinjector"
 	path = /obj/item/reagent_containers/hypospray/autoinjector
+
+/singleton/fabricator_recipe/medical/beaker
+	id =  "beaker"
+	path = /obj/item/reagent_containers/glass/beaker
+	fabricator_types = list(FABRICATOR_CLASS_MICRO,FABRICATOR_CLASS_GENERAL)
+
+/singleton/fabricator_recipe/medical/beaker_large
+	id =  "beaker_large"
+	path = /obj/item/reagent_containers/glass/beaker/large
+	fabricator_types = list(FABRICATOR_CLASS_MICRO,FABRICATOR_CLASS_GENERAL)
+
+/singleton/fabricator_recipe/medical/beaker_insul
+	id =  "beaker_insul"
+	path = /obj/item/reagent_containers/glass/beaker/insulated
+	fabricator_types = list(FABRICATOR_CLASS_MICRO,FABRICATOR_CLASS_GENERAL)
+
+/singleton/fabricator_recipe/medical/beaker_insul_large
+	id =  "beaker_insul_large"
+	path = /obj/item/reagent_containers/glass/beaker/insulated/large
+	fabricator_types = list(FABRICATOR_CLASS_MICRO,FABRICATOR_CLASS_GENERAL)
+
+/singleton/fabricator_recipe/medical/vial
+	id =  "vial"
+	path = /obj/item/reagent_containers/glass/beaker/vial
+	fabricator_types = list(FABRICATOR_CLASS_MICRO,FABRICATOR_CLASS_GENERAL)

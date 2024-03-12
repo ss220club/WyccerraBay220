@@ -160,7 +160,7 @@
 /datum/shuttle/autodock/ferry/rndmaint_lift
 	name = "RND Maintenance Lift"
 	shuttle_area = /area/turbolift/rndmaint_lift
-	warmup_time = 3
+	warmup_time = 3 SECONDS
 	waypoint_station = "nav_rndmaint_lift_top"
 	waypoint_offsite = "nav_rndmaint_lift_bottom"
 	sound_takeoff = 'sound/effects/lift_heavy_start.ogg'
@@ -171,7 +171,7 @@
 /datum/shuttle/autodock/ferry/medical_lift
 	name = "Medical Lift"
 	shuttle_area = /area/turbolift/medical_lift
-	warmup_time = 3
+	warmup_time = 3 SECONDS
 	waypoint_station = "nav_medical_lift_top"
 	waypoint_offsite = "nav_medical_lift_bottom"
 	sound_takeoff = 'sound/effects/lift_heavy_start.ogg'

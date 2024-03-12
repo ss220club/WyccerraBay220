@@ -203,6 +203,16 @@
 	to_chat(user, "You short out the product lock on \the [src].")
 	return TRUE
 
+/obj/machinery/vending/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
+/obj/machinery/vending/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
 /obj/machinery/vending/use_tool(obj/item/item, mob/living/user, list/click_params)
 	var/obj/item/card/id/id = item.GetIdCard()
 	var/static/list/simple_coins = subtypesof(/obj/item/material/coin) - typesof(/obj/item/material/coin/challenge)
@@ -228,10 +238,6 @@
 	if(id || istype(item, /obj/item/spacecash))
 		attack_hand(user)
 		return TRUE
-	if(isMultitool(item) || isWirecutter(item))
-		if(panel_open)
-			attack_hand(user)
-			return TRUE
 	if(is_type_in_list(item, simple_coins))
 		if(!length(premium))
 			to_chat(user, SPAN_WARNING("\The [src] does not accept the [item]."))

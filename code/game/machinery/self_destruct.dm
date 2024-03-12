@@ -9,26 +9,29 @@
 	var/armed = 0
 	var/damaged = 0
 
+/obj/machinery/self_destruct/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(damaged)
+		if(!tool.tool_start_check(user, 10))
+			return
+		user.visible_message(
+			SPAN_NOTICE("[user] begins to repair [src]."),
+			SPAN_NOTICE("You begin repairing [src].")
+		)
+		if(!tool.use_as_tool(src, user, 10 SECONDS, 10, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		damaged = 0
+		user.visible_message("[user] repairs [src].", "You repair [src].")
+
 /obj/machinery/self_destruct/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		if(damaged && WT.can_use(5, user))
-			user.visible_message(
-				SPAN_NOTICE("\The [user] begins to repair \the [src]."),
-				SPAN_NOTICE("You begin repairing [src].")
-			)
-			if(do_after(usr, (W.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(10, user))
-				damaged = 0
-				user.visible_message("[user] repairs [src].", "You repair [src].")
-			return TRUE
 	if(istype(W, /obj/item/nuclear_cylinder))
 		if(damaged)
-			to_chat(user, SPAN_WARNING("\The [src] is damaged, you cannot place the cylinder."))
+			to_chat(user, SPAN_WARNING("[src] is damaged, you cannot place the cylinder."))
 			return TRUE
 		if(cylinder)
 			to_chat(user, "There is already a cylinder here.")
 			return TRUE
-		user.visible_message("\The [user] begins to carefully place \the [W] onto the Inserter.", "You begin to carefully place \the [W] onto the Inserter.")
+		user.visible_message("[user] begins to carefully place [W] onto the Inserter.", "You begin to carefully place [W] onto the Inserter.")
 		if(do_after(user, 8 SECONDS, src, DO_PUBLIC_UNIQUE) && user.unEquip(W, src))
 			cylinder = W
 			set_density(TRUE)

@@ -20,8 +20,10 @@
 	var/static/tts_test_str = "Так звучит мой голос."
 
 	var/tts_seeds
-	var/tts_gender = get_converted_tts_seed_gender(gender)
-	var/list/tts_seeds_by_gender = SStts220.tts_seeds_by_gender[tts_gender]
+	var/list/tts_seeds_by_gender = SStts220.get_tts_by_gender(gender)
+	if(!length(tts_seeds_by_gender))
+		return null
+
 	if(user && (check_rights(R_ADMIN, FALSE, user) || override))
 		tts_seeds = tts_seeds_by_gender
 	else
@@ -39,10 +41,10 @@
 			return null
 
 	if(!silent_target && src != user && ismob(src))
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, src, tts_test_str, new_tts_seed, FALSE)
+		invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, src, tts_test_str, new_tts_seed, FALSE)
 
 	if(user)
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, user, tts_test_str, new_tts_seed, FALSE)
+		invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, user, tts_test_str, new_tts_seed, FALSE)
 
 	return new_tts_seed
 
@@ -63,21 +65,9 @@
 	set category = "Подсистемы"
 	change_voice(fancy_voice_input_tgui = TRUE)
 
-/atom/proc/get_converted_tts_seed_gender(gender_to_convert = gender)
-	switch(gender_to_convert)
-		if(MALE)
-			return TTS_GENDER_MALE
-		if(FEMALE)
-			return TTS_GENDER_FEMALE
-		else
-			return TTS_GENDER_ANY
-
-/atom/proc/pick_tts_seed_gender()
-	var/tts_gender = get_converted_tts_seed_gender()
-	return pick(SStts220.tts_seeds_by_gender[tts_gender])
 
 /atom/proc/get_random_tts_seed_gender()
-	var/tts_choice = pick_tts_seed_gender(gender)
+	var/tts_choice = SStts220.pick_tts_seed_by_gender(gender)
 	var/datum/tts_seed/seed = SStts220.tts_seeds[tts_choice]
 	if(!seed)
 		return null

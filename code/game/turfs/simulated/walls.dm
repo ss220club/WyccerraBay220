@@ -29,8 +29,8 @@
 	var/list/blend_objects = list(/obj/machinery/door, /obj/structure/wall_frame, /obj/structure/grille, /obj/structure/window/reinforced/full, /obj/structure/window/reinforced/polarized/full, /obj/structure/window/shuttle, ,/obj/structure/window/boron_basic/full, /obj/structure/window/boron_reinforced/full) // Objects which to blend with
 	var/list/noblend_objects = list(/obj/machinery/door/window) //Objects to avoid blending with (such as children of listed blend objects.)
 
-/turf/simulated/wall/New(newloc, materialtype, rmaterialtype)
-	..(newloc)
+/turf/simulated/wall/Initialize(mapload, added_to_area_cache, materialtype, rmaterialtype)
+	. = ..()
 	icon_state = "blank"
 	if(!materialtype)
 		materialtype = DEFAULT_WALL_MATERIAL
@@ -39,11 +39,8 @@
 		reinf_material = SSmaterials.get_material_by_name(rmaterialtype)
 	update_material()
 	hitsound = material.hitsound
-
-/turf/simulated/wall/Initialize()
 	set_extension(src, /datum/extension/penetration/proc_call, PROC_REF(CheckPenetration))
 	START_PROCESSING(SSturf, src) //Used for radiation.
-	. = ..()
 
 /turf/simulated/wall/Destroy()
 	STOP_PROCESSING(SSturf, src)

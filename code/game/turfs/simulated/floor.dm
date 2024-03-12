@@ -3,6 +3,11 @@
 	icon = 'icons/turf/flooring/plating.dmi'
 	icon_state = "plating"
 	permit_ao = TRUE
+	height = -FLUID_SHALLOW / 2
+	thermal_conductivity = 0.040
+	heat_capacity = 10000
+	decals_available = TRUE
+
 
 	// Damage to flooring.
 	var/broken
@@ -24,12 +29,8 @@
 	// Initialization modifiers for mapping
 	/// Boolean (Default `FALSE`) - If set, the tile will not have atmosphere on init.
 	var/map_airless = FALSE
-
-	thermal_conductivity = 0.040
-	heat_capacity = 10000
 	var/lava = 0
 
-	height = -FLUID_SHALLOW / 2
 
 /turf/simulated/floor/is_plating()
 	return !flooring
@@ -37,16 +38,23 @@
 /turf/simulated/floor/protects_atom(atom/A)
 	return (A.level == ATOM_LEVEL_UNDER_TILE && !is_plating()) || ..()
 
-/turf/simulated/floor/New(newloc, floortype)
+/turf/simulated/floor/Initialize(mapload, added_to_area_cache, floortype)
 	var/area/area = get_area(src)
 	if (map_airless || area?.turfs_airless)
 		initial_gas = null
 		temperature = TCMB
-	..(newloc)
+
+	. = ..()
+
 	if(!floortype && initial_flooring)
 		floortype = initial_flooring
+
 	if(floortype)
 		set_flooring(GET_SINGLETON(floortype))
+
+/turf/simulated/floor/post_change()
+	. = ..()
+	RemoveLattice()
 
 /turf/simulated/floor/proc/set_flooring(singleton/flooring/newflooring)
 	make_plating(defer_icon_update = 1)

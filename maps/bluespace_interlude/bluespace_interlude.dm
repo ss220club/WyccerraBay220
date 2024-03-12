@@ -14,7 +14,7 @@
 	initial_gas = list(GAS_OXYGEN = MOLES_O2STANDARD, GAS_NITROGEN = MOLES_N2STANDARD)
 	var/list/victims
 
-/turf/simulated/floor/bluespace/interlude/Initialize(mapload, ...)
+/turf/simulated/floor/bluespace/interlude/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	set_light(3, 1, l_color = "#0066ff")
 	desc = "Infinite, otherwordly energy swirling and morphing endlessly."

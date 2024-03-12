@@ -34,14 +34,11 @@
 	pixel_y = 0
 
 
-/obj/item/light/led_neon/use_tool(obj/item/tool, mob/user, list/click_params)
-	if(user)
-		if(isMultitool(tool))
-			var/c = input("You are changing diode frequency.", "Input", b_colour) as color|null
-			if(c)
-				set_color(c)
-			return TRUE
-	return ..()
+/obj/item/light/led_neon/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/c = input("You are changing diode frequency.", "Input", b_colour) as color|null
+	if(c)
+		set_color(c)
 
 /obj/item/light/led_neon/large
 	base_state = "big_tape"

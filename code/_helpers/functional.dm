@@ -1,14 +1,15 @@
 #define PREPARE_INPUT \
-	predicates = istype(predicates) ? predicates : list(predicates);\
-	input = istype(input) ? input : list(input);
+	predicates = islist(predicates) ? predicates : list(predicates);\
+	input = islist(input) ? input : list(input);
 
 #define PREPARE_ARGUMENTS \
 	var/extra_arguments = predicates[predicate];\
-	var/list/predicate_input = input;\
+	var/list/predicate_input = input.Copy();\
 	if(LAZYLEN(extra_arguments)) {\
-		predicate_input = predicate_input.Copy();\
 		predicate_input += list(extra_arguments);\
-	}
+	} else if(extra_arguments) {\
+		predicate_input += extra_arguments;\
+	}\
 
 /proc/all_predicates_true(list/input, list/predicates)
 	PREPARE_INPUT

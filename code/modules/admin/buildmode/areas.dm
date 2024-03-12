@@ -74,7 +74,7 @@ Shift + Right Click - Select point B
 
 
 
-		ChangeArea(T, selected_area)
+		T.change_area(selected_area)
 		to_chat(user, "Set area of turf [T.name] to [selected_area.name]")
 	else
 		to_chat(user, "Pick or create an area first")
@@ -84,7 +84,7 @@ Shift + Right Click - Select point B
 	if (mode == "Pick")
 		var/area/path = select_subpath((selected_area?.type || /area/space), /area)
 		if (path)
-			for (var/area/R in world)
+			for (var/area/R as anything in GLOB.areas)
 				if (R.type == path)
 					SelectArea(R)
 					to_chat(user, "Picked area [selected_area.name]")
@@ -127,4 +127,4 @@ Shift + Right Click - Select point B
 	for(var/i = low_bound_x, i <= high_bound_x, i++)
 		for(var/j = low_bound_y, j <= high_bound_y, j++)
 			var/turf/T = locate(i, j, z_level)
-			ChangeArea(T, selected_area)
+			T.change_area(selected_area)

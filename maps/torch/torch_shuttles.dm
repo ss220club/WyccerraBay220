@@ -3,7 +3,7 @@
 	category = /datum/shuttle/autodock/ferry/escape_pod/torchpod
 	sound_takeoff = 'sound/effects/rocket.ogg'
 	sound_landing = 'sound/effects/rocket_backwards.ogg'
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 
 /obj/shuttle_landmark/escape_pod/start
 	name = "Docked"
@@ -53,7 +53,7 @@ TORCH_ESCAPE_POD(17)
 
 /datum/shuttle/autodock/ferry/petrov
 	name = "Petrov"
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 	dock_target = "petrov_shuttle_airlock"
 	waypoint_station = "nav_petrov_start"
 	waypoint_offsite = "nav_petrov_out"
@@ -124,7 +124,7 @@ TORCH_ESCAPE_POD(17)
 
 /datum/shuttle/autodock/ferry/merchant
 	name = "Merchant"
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 	shuttle_area = /area/shuttle/merchant/home
 	waypoint_station = "nav_merchant_start"
 	waypoint_offsite = "nav_merchant_out"
@@ -144,7 +144,7 @@ TORCH_ESCAPE_POD(17)
 
 /datum/shuttle/autodock/ferry/administration
 	name = "Administration"
-	warmup_time = 10	//want some warmup time so people can cancel.
+	warmup_time = 10	//want some warmup time so people can cancel. SECONDS
 	shuttle_area = /area/shuttle/administration/centcom
 	dock_target = "admin_shuttle"
 	waypoint_station = "nav_admin_start"
@@ -167,7 +167,7 @@ TORCH_ESCAPE_POD(17)
 /datum/shuttle/autodock/ferry/centcom
 	name = "Centcom"
 	location = 1
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 	shuttle_area = /area/shuttle/transport1/centcom
 	dock_target = "centcom_shuttle"
 	waypoint_offsite = "nav_ferry_start"
@@ -310,7 +310,7 @@ TORCH_ESCAPE_POD(17)
 
 /datum/shuttle/autodock/ferry/specops/ert
 	name = "Special Operations"
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 	shuttle_area = /area/shuttle/specops/centcom
 	dock_target = "specops_shuttle_fore"
 	waypoint_station = "nav_specops_start"
@@ -331,7 +331,7 @@ TORCH_ESCAPE_POD(17)
 /datum/shuttle/autodock/ferry/supply/drone
 	name = "Supply Drone"
 	location = 1
-	warmup_time = 10
+	warmup_time = 10 SECONDS
 	shuttle_area = /area/supply/dock
 	waypoint_offsite = "nav_cargo_start"
 	waypoint_station = "nav_cargo_station"
@@ -348,7 +348,7 @@ TORCH_ESCAPE_POD(17)
 
 /datum/shuttle/autodock/overmap/exploration_shuttle
 	name = "Charon"
-	move_time = 60
+	move_time = 6 SECONDS
 	shuttle_area = list(/area/exploration_shuttle/cockpit, /area/exploration_shuttle/atmos, /area/exploration_shuttle/power, /area/exploration_shuttle/crew, /area/exploration_shuttle/cargo, /area/exploration_shuttle/airlock, /area/exploration_shuttle/medical, /area/exploration_shuttle/fuel)
 	dock_target = "charon_shuttle"
 	current_location = "nav_hangar_charon"
@@ -391,8 +391,8 @@ TORCH_ESCAPE_POD(17)
 
 /datum/shuttle/autodock/overmap/guppy
 	name = "Guppy"
-	warmup_time = 5
-	move_time = 20
+	warmup_time = 5 SECONDS
+	move_time = 2 SECONDS
 	shuttle_area = /area/guppy_hangar/start
 	dock_target ="guppy_shuttle"
 	current_location = "nav_hangar_guppy"
@@ -437,7 +437,7 @@ TORCH_ESCAPE_POD(17)
 
 /datum/shuttle/autodock/overmap/aquila
 	name = "Aquila"
-	move_time = 50
+	move_time = 5 SECONDS
 	shuttle_area = list(/area/aquila/cockpit, /area/aquila/power, /area/aquila/storage, /area/aquila/suits, /area/aquila/air, /area/aquila/crew, /area/aquila/medical, /area/aquila/airlock)
 	current_location = "nav_hangar_aquila"
 	landmark_transition = "nav_transit_aquila"

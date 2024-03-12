@@ -14,14 +14,11 @@
 	if(damaged)
 		if(!tool.tool_start_check(user, 10))
 			return
-		user.visible_message(
-			SPAN_NOTICE("[user] begins to repair [src]."),
-			SPAN_NOTICE("You begin repairing [src].")
-		)
+		balloon_alert(user, "начало ремонта")
 		if(!tool.use_as_tool(src, user, 10 SECONDS, 10, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
+		USE_FEEDBACK_REPAIR_GENERAL
 		damaged = 0
-		user.visible_message("[user] repairs [src].", "You repair [src].")
 
 /obj/machinery/self_destruct/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/nuclear_cylinder))

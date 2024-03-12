@@ -110,11 +110,11 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(length(contents) > LAZYLEN(component_parts))
-		to_chat(user, "Eject the items first!")
+		balloon_alert(user, "необходимо вытащить предметы!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	to_chat(user, "You start slicing the floorweld off the disposal unit.")
+	balloon_alert(user, "отваривание от пола")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	to_chat(user, "You sliced the floorweld off the disposal unit.")
@@ -614,15 +614,11 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Detach from floor
 	if(!mode)
-		USE_FEEDBACK_FAILURE("[src]'s power connection needs to be disconnected before you can remove [src] from the floor.")
+		balloon_alert(user, "необходимо отключить!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts slicing [src]'s floorweld with  [tool]."),
-		SPAN_NOTICE("You start slicing [src]'s floorweld with [tool]."),
-		SPAN_ITALIC("You hear the sound of welding.")
-	)
+	balloon_alert(user, "отваривание от пола")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.visible_message(

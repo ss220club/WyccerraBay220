@@ -44,14 +44,13 @@
 /obj/item/stack/material/rods/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(material.ignition_point)
-		to_chat(user, SPAN_WARNING("You can't weld this material into sheets."))
+		balloon_alert(user, "невозможно превратить в листы!")
 		return
 	if(!can_use(2))
-		to_chat(user, SPAN_WARNING("You need at least two rods to do this."))
+		balloon_alert(user, "нужно два стержня минимум!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-
 	var/obj/item/stack/material/new_item = material.place_sheet(usr.loc)
 	new_item.add_to_stacks(usr)
 	user.visible_message(

@@ -205,19 +205,15 @@
 /obj/machinery/power/emitter/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(active)
-		to_chat(user, SPAN_WARNING("Turn [src] off first."))
+		balloon_alert(user, "необходимо отключить!")
 		return TRUE
 	switch(state)
 		if(EMITTER_LOOSE)
-			to_chat(user, SPAN_WARNING("[src] needs to be wrenched to the floor."))
+			balloon_alert(user, "необходимо прикрутить к полу!")
 		if(EMITTER_WRENCHED)
 			if(!tool.tool_start_check(user, 1))
 				return
-			user.visible_message(
-				SPAN_NOTICE("[user] starts to weld [src] to the floor."),
-				SPAN_NOTICE("You start to weld [src] to the floor."),
-				SPAN_ITALIC("You hear welding.")
-			)
+			balloon_alert(user, "приваривание к полу")
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			state = EMITTER_WELDED
@@ -230,11 +226,7 @@
 		if(EMITTER_WELDED)
 			if(!tool.tool_start_check(user, 1))
 				return
-			user.visible_message(
-				SPAN_NOTICE("[user] starts to cut [src] free from the floor."),
-				SPAN_NOTICE("You start to cut [src] free from the floor."),
-				SPAN_ITALIC("You hear welding.")
-			)
+			balloon_alert(user, "отваривание от пола")
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			state = EMITTER_WRENCHED

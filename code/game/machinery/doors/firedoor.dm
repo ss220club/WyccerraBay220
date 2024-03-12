@@ -277,11 +277,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 2))
 		return
-	user.visible_message(
-		SPAN_WARNING("[user] starts [!blocked ? "welding [src] shut" : "cutting open [src]"]."),
-		SPAN_DANGER("You start [!blocked ? "welding [src] closed" : "cutting open [src]"]."),
-		SPAN_ITALIC("You hear welding.")
-	)
+	balloon_alert(user, "[blocked ? "отваривание" : "заваривание"]")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	blocked = !blocked

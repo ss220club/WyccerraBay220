@@ -17,3 +17,6 @@
 #define USE_FEEDBACK_GRAB_FAILURE(MSG) FEEDBACK_FAILURE(grab.assailant, MSG)
 /// Assailant must upgrade their grab to perform action.
 #define USE_FEEDBACK_GRAB_MUST_UPGRADE(ACTION) USE_FEEDBACK_GRAB_FAILURE("You need a better grip on \the [grab.affecting][ACTION].")
+
+/// Feedback messages for repairs done by welder_act()
+#define USE_FEEDBACK_REPAIR_GENERAL user.visible_message(SPAN_NOTICE("[user] finishes repairing the damage to [src]"), SPAN_NOTICE("You finish repairing the damage to [src]."))

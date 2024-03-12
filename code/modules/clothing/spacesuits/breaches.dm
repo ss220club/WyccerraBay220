@@ -187,13 +187,14 @@
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		if(H.wear_suit == src)
-			to_chat(user, SPAN_WARNING("You cannot repair [src] while it is being worn."))
+			balloon_alert(user, "необходимо снять с себя!")
 			return
 	if(brute_damage <= 0)
-		to_chat(user, "There is no structural damage on [src] to repair.")
+		balloon_alert(user, "нет повреждений!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 5, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
+	USE_FEEDBACK_REPAIR_GENERAL
 	repair_breaches(DAMAGE_BRUTE, 3, user)
 
 /obj/item/clothing/suit/space/attackby(obj/item/W as obj, mob/user as mob)

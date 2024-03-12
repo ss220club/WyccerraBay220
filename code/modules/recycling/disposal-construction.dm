@@ -159,15 +159,11 @@
 	var/obj/structure/disposalpipe/connected_pipe = locate() in get_turf(src)
 	// Welding Tool - Weld into place
 	if(!anchored)
-		USE_FEEDBACK_FAILURE("[src] needs to be anchored to the floor before you can weld it.")
+		balloon_alert(user, "необходимо прикрутить к полу!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts welding [src] down with [tool]."),
-		SPAN_NOTICE("You start welding [src] down with [tool]."),
-		SPAN_ITALIC("You hear welding.")
-	)
+	balloon_alert(user, "приваривание к полу")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.visible_message(

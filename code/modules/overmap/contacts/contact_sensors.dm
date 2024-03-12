@@ -211,14 +211,14 @@
 	. = ITEM_INTERACT_SUCCESS
 	var/damage = get_damage_value()
 	if(!damage)
-		to_chat(user, SPAN_WARNING("[src] doesn't need any repairs."))
+		balloon_alert(user, "нет повреждений!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
+	balloon_alert(user, "начало ремонта")
 	if(!tool.use_as_tool(src, user, (max(0.5, damage / 50)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	USE_FEEDBACK_REPAIR_GENERAL
 	revive_health()
 
 /obj/machinery/shipsensors/proc/remove_tracker(obj/item/ship_tracker/tracker)

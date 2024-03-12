@@ -149,17 +149,17 @@
 /obj/item/modular_computer/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!get_damage_value())
-		to_chat(user, "[src] does not require repairs.")
+		balloon_alert(user, "нет повреждений!")
 		return
 	var/damage = get_damage_value()
 	var/amount = round(damage/75)
 	if(!tool.tool_start_check(amount, 1))
 		return
-	to_chat(user, "You begin repairing damage to [src]...")
+	balloon_alert(user, "начало ремонта")
 	if(!tool.use_as_tool(src, user, damage / (1 SECONDS), amount, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
+	USE_FEEDBACK_REPAIR_GENERAL
 	revive_health()
-	to_chat(user, "You repair [src].")
 
 /obj/item/modular_computer/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/card/id)) // ID Card, try to insert it.

@@ -310,6 +310,7 @@
 
 /obj/structure/closet/welder_act_secondary(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	balloon_alert(user, "начало разбора")
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	slice_into_parts(tool, user)
@@ -319,10 +320,11 @@
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
-		USE_FEEDBACK_FAILURE("[src] can't be welded shut.")
+		balloon_alert(user, "неозможно заварить!")
 		return
 	if(user.loc == src)
 		return
+	balloon_alert(user, "[welded ? "отваривание" : "заваривание"]")
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded

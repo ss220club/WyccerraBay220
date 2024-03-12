@@ -68,7 +68,7 @@
 /obj/structure/mech_wreckage/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(prepared)
-		USE_FEEDBACK_FAILURE("[src] has already been weakened.")
+		balloon_alert(user, "уже ослаблено!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return

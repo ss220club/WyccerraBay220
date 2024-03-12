@@ -528,23 +528,19 @@
 /obj/machinery/power/apc/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!opened)
-		to_chat(user, SPAN_WARNING("You must first open the cover."))
+		balloon_alert(user, "необходимо открыть панель!")
 		return
 	if(has_electronics)
-		to_chat(user, SPAN_WARNING("You must first remove the power control board inside."))
+		balloon_alert(user, "необходимо убрать плату!")
 		return
 	if(terminal())
-		to_chat(user, SPAN_WARNING("The wire connection is in the way."))
+		balloon_alert(user, "необходимо убрать проводку!")
 		return
-
 	if(!tool.tool_start_check(user, 3))
 		return
-	user.visible_message(SPAN_WARNING("[user] begins to weld [src]."), \
-						"You start welding the APC frame...", \
-						"You hear welding.")
+	balloon_alert(user, "начало разбора")
 	if(!tool.use_as_tool(src, user, 5 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !opened || has_electronics || terminal())
 		return
-
 	if(emagged || MACHINE_IS_BROKEN(src) || opened == 2)
 		new /obj/item/stack/material/steel(loc)
 		user.visible_message(\

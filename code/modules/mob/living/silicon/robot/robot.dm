@@ -619,25 +619,19 @@
 /mob/living/silicon/robot/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(user == src)
-		USE_FEEDBACK_FAILURE("You lack the reach to be able to repair yourself.")
+		balloon_alert(user, "вы не можете ремонтировать себя!")
 		return
 	if(!getBruteLoss())
-		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
+		balloon_alert(user, "нет физических повреждений!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts repairing some of the dents on [src] with [tool]."),
-		SPAN_NOTICE("You start repairing some of the dents on [src] with [tool]."),
-	)
+	balloon_alert(user, "начало ремонта")
 	if(!tool.use_as_tool(src, user, 1 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE) || !getBruteLoss())
 		return
+	USE_FEEDBACK_REPAIR_GENERAL
 	adjustBruteLoss(-30)
 	updatehealth()
-	user.visible_message(
-		SPAN_NOTICE("[user] repairs some of the dents on [src] with [tool]."),
-		SPAN_NOTICE("You repair some of the dents on [src] with [tool]."),
-	)
 
 /mob/living/silicon/robot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Components - Attempt to install

@@ -30,15 +30,12 @@
 /obj/structure/firedoor_assembly/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(anchored)
-		USE_FEEDBACK_FAILURE("[src] needs to be unanchored before you can dismantle it.")
+		balloon_alert(user, "необходимо открутить от пола!")
 		return
 
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
-		SPAN_NOTICE("You start dismantling [src] with [tool].")
-	)
+	balloon_alert(user, "начало разбора")
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/item/stack/material/steel/stack = new (loc, 4)

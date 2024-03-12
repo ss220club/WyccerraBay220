@@ -230,10 +230,7 @@
 	// Welding Tool - Cut pipe
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts slicing [src] with [tool]."),
-		SPAN_NOTICE("You start slicing [src] with [tool].")
-	)
+	balloon_alert(user, "отваривание")
 	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded()

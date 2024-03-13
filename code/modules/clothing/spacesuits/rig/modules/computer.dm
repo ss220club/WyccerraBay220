@@ -96,7 +96,7 @@
 			return 0
 
 		// Since we've explicitly checked for three types, this should be safe.
-		input_device.attackby(card,user)
+		card.resolve_attackby(input_device,user)
 
 		// If the transfer failed we can delete the card.
 		if(locate(/mob/living/silicon/ai) in card)
@@ -281,7 +281,7 @@
 			var/obj/machinery/r_n_d/server/input_machine = input_device
 			incoming_files = input_machine.files
 
-		if(!incoming_files || !incoming_files.known_tech || !length(incoming_files.known_tech))
+		if(!incoming_files || !length(incoming_files.known_tech))
 			to_chat(user, SPAN_WARNING("Memory failure. There is nothing accessible stored on this terminal."))
 		else
 			// Maybe consider a way to drop all your data into a target repo in the future.

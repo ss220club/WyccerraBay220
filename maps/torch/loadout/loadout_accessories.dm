@@ -99,7 +99,7 @@
 	display_name = "pilot's qualification pin"
 	path = /obj/item/clothing/accessory/solgov/specialty/pilot
 	flags = GEAR_HAS_NO_CUSTOMIZATION
-	allowed_skills = list(
+	required_skills = list(
 		SKILL_PILOT = SKILL_TRAINED
 	)
 	allowed_branches = list(

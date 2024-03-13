@@ -3,7 +3,6 @@
 
 #include "_tajara.dm"
 
-#include "code/gears.dm"
 #include "code/language.dm"
 #include "code/misc.dm"
 #include "code/robolimbs.dm"

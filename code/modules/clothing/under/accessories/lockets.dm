@@ -14,7 +14,8 @@
 /obj/item/clothing/accessory/locket/attack_self(mob/user)
 	if (!base_icon)
 		base_icon = icon_state
-	if (!("[base_icon]_open" in icon_states(icon)))
+
+	if (!ICON_HAS_STATE(icon, "[base_icon]_open"))
 		to_chat(user, "\The [src] doesn't seem to open.")
 		return
 

@@ -49,7 +49,7 @@
 			desc = "A case containing an implant."
 	else if(istype(I, /obj/item/reagent_containers/syringe))
 		if(istype(imp,/obj/item/implant/chem))
-			imp.attackby(I,user)
+			I.resolve_attackby(imp, user)
 	else if (istype(I, /obj/item/implanter))
 		var/obj/item/implanter/M = I
 		if (M.imp && !imp && !M.imp.implanted)

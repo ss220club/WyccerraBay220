@@ -28,14 +28,12 @@
 	icon = 'icons/turf/flooring/alium.dmi'
 	icon_state = "jaggy"
 
-/turf/simulated/floor/fixed/alium/use_tool(obj/item/C, mob/living/user, list/click_params)
-	if(isCrowbar(C))
-		to_chat(user, SPAN_NOTICE("There aren't any openings big enough to pry it away..."))
-		return TRUE
-	return ..()
+/turf/simulated/floor/fixed/alium/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+	to_chat(user, SPAN_NOTICE("There aren't any openings big enough to pry it away..."))
 
-/turf/simulated/floor/fixed/alium/New()
-	..()
+/turf/simulated/floor/fixed/alium/Initialize(mapload, added_to_area_cache)
+	. = ..()
 	var/material/A = SSmaterials.get_material_by_name(MATERIAL_ALIENALLOY)
 	if(!A)
 		return

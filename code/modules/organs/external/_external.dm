@@ -126,8 +126,12 @@
 	splinted = null
 
 	if(owner)
-		if(limb_flags & ORGAN_FLAG_CAN_GRASP) owner.grasp_limbs -= src
-		if(limb_flags & ORGAN_FLAG_CAN_STAND) owner.stance_limbs -= src
+		if(limb_flags & ORGAN_FLAG_CAN_GRASP)
+			LAZYREMOVE(owner.grasp_limbs, src)
+
+		if(limb_flags & ORGAN_FLAG_CAN_STAND)
+			LAZYREMOVE(owner.stance_limbs, src)
+
 		owner.organs -= src
 		owner.organs_by_name[organ_tag] = null
 		owner.organs_by_name -= organ_tag
@@ -234,7 +238,7 @@
 				stage++
 				return
 		if(2)
-			if(W.sharp || istype(W,/obj/item/hemostat) || isWirecutter(W))
+			if(W.sharp || istype(W,/obj/item/hemostat) || W.tool_behaviour == TOOL_WIRECUTTER)
 				var/list/organs = get_contents_recursive()
 				if(length(organs))
 					var/obj/item/removing = pick(organs)
@@ -322,8 +326,12 @@
 
 	if(istype(owner))
 
-		if(limb_flags & ORGAN_FLAG_CAN_GRASP) owner.grasp_limbs[src] = TRUE
-		if(limb_flags & ORGAN_FLAG_CAN_STAND) owner.stance_limbs[src] = TRUE
+		if(limb_flags & ORGAN_FLAG_CAN_GRASP)
+			LAZYSET(owner.grasp_limbs, src, TRUE)
+
+		if(limb_flags & ORGAN_FLAG_CAN_STAND)
+			LAZYSET(owner.stance_limbs, src, TRUE)
+
 		owner.organs_by_name[organ_tag] = src
 		owner.organs |= src
 
@@ -1194,8 +1202,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(!owner)
 		return
 
-	if(limb_flags & ORGAN_FLAG_CAN_GRASP) owner.grasp_limbs -= src
-	if(limb_flags & ORGAN_FLAG_CAN_STAND) owner.stance_limbs -= src
+	if(limb_flags & ORGAN_FLAG_CAN_GRASP)
+		LAZYREMOVE(owner.grasp_limbs, src)
+
+	if(limb_flags & ORGAN_FLAG_CAN_STAND)
+		LAZYREMOVE(owner.stance_limbs, src)
 
 	switch(body_part)
 		if(FOOT_LEFT, FOOT_RIGHT)

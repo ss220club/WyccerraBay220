@@ -1,75 +1,86 @@
 /obj/machinery/floorlayer
-
 	name = "automatic floor layer"
 	icon = 'icons/obj/machines/pipe_dispenser.dmi'
 	icon_state = "pipe_d"
 	density = TRUE
 	var/turf/old_turf
 	var/on = 0
-	var/obj/item/stack/tile/T
+	var/obj/item/stack/tile/current_tile
 	var/list/mode = list("dismantle"=0,"laying"=0,"collect"=0)
 
-/obj/machinery/floorlayer/New()
-	T = new/obj/item/stack/tile/floor(src)
-	..()
+/obj/machinery/floorlayer/Initialize()
+	. = ..()
+	var/obj/item/stack/tile/floor/new_tile = new(get_turf(loc))
+	take_tile(new_tile)
 
 /obj/machinery/floorlayer/Move(new_turf,M_Dir)
-	..()
-
+	. = ..()
 	if(on)
 		if(mode["dismantle"])
-			dismantleFloor(old_turf)
-
+			dismantle_floor(old_turf)
 		if(mode["laying"])
-			layFloor(old_turf)
-
+			lay_floor(old_turf)
 		if(mode["collect"])
-			CollectTiles(old_turf)
-
-
+			collect_tiles(old_turf)
 	old_turf = new_turf
 
 /obj/machinery/floorlayer/physical_attack_hand(mob/user)
 	on=!on
 	user.visible_message(
-		SPAN_NOTICE("\The [user] has [!on?"de":""]activated \the [src]."),
-		SPAN_NOTICE("You [!on?"de":""]activate \the [src].")
+		SPAN_NOTICE("[user] has [!on?"de":""]activated [src]."),
+		SPAN_NOTICE("You [!on?"de":""]activate [src].")
 	)
 	return TRUE
 
+/obj/machinery/floorlayer/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/list/tiles = get_tiles()
+	if(!length(tiles))
+		to_chat(user, SPAN_NOTICE("[src] is empty."))
+		return
+	var/obj/item/stack/tile/tile_to_remove = input("Choose remove tile type.", "Tiles") as null|anything in tiles
+	if(!istype(tile_to_remove))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	tile_to_remove.forceMove(get_turf(loc))
+	current_tile = null
+	to_chat(user, SPAN_NOTICE("You remove the [tile_to_remove] from [src]."))
+
+/obj/machinery/floorlayer/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/list/tiles = get_tiles()
+	if(!length(tiles))
+		to_chat(user, SPAN_NOTICE("[src] is empty."))
+		return
+	var/obj/item/stack/tile/new_tile = input("Choose tile type.", "Tiles") as null|anything in tiles
+	if(!istype(new_tile))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	current_tile = new_tile
+
+/obj/machinery/floorlayer/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/m = input("Choose work mode", "Mode") as null|anything in mode
+	if(!m)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	mode[m] = !mode[m]
+	var/O = mode[m]
+	user.visible_message(
+		SPAN_NOTICE("[user] has set [src] [m] mode [!O?"off":"on"]."),
+		SPAN_NOTICE("You set [src] [m] mode [!O?"off":"on"].")
+	)
+
 /obj/machinery/floorlayer/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isWrench(W))
-		var/m = input("Choose work mode", "Mode") as null|anything in mode
-		mode[m] = !mode[m]
-		var/O = mode[m]
-		user.visible_message(
-			SPAN_NOTICE("\The [user] has set \the [src] [m] mode [!O?"off":"on"]."),
-			SPAN_NOTICE("You set \the [src] [m] mode [!O?"off":"on"].")
-		)
-		return TRUE
-
 	if(istype(W, /obj/item/stack/tile))
-		if(!user.unEquip(W, T))
+		if(!user.unEquip(W, get_turf(loc)))
 			return TRUE
-		to_chat(user, SPAN_NOTICE("\The [W] successfully loaded."))
-		TakeTile(T)
+		to_chat(user, SPAN_NOTICE("[W] successfully loaded."))
+		take_tile(W)
 		return TRUE
-
-	if(isCrowbar(W))
-		if(!length(contents))
-			to_chat(user, SPAN_NOTICE("\The [src] is empty."))
-		else
-			var/obj/item/stack/tile/E = input("Choose remove tile type.", "Tiles") as null|anything in contents
-			if(E)
-				to_chat(user, SPAN_NOTICE("You remove the [E] from /the [src]."))
-				E.dropInto(loc)
-				T = null
-		return TRUE
-
-	if(isScrewdriver(W))
-		T = input("Choose tile type.", "Tiles") as null|anything in contents
-		return TRUE
-
 	return ..()
 
 /obj/machinery/floorlayer/examine(mob/user)
@@ -77,43 +88,39 @@
 	var/dismantle = mode["dismantle"]
 	var/laying = mode["laying"]
 	var/collect = mode["collect"]
-	var/message = SPAN_NOTICE("\The [src] [!T?"don't ":""]has [!T?"":"[T.get_amount()] [T] "]tile\s, dismantle is [dismantle?"on":"off"], laying is [laying?"on":"off"], collect is [collect?"on":"off"].")
+	var/message = SPAN_NOTICE("[src] [!current_tile?"don't ":""]has [!current_tile?"":"[current_tile.get_amount()] [current_tile] "]tile\s, dismantle is [dismantle?"on":"off"], laying is [laying?"on":"off"], collect is [collect?"on":"off"].")
 	to_chat(user, message)
 
 /obj/machinery/floorlayer/proc/reset()
 	on = 0
 
-/obj/machinery/floorlayer/proc/dismantleFloor(turf/new_turf)
-	if(istype(new_turf, /turf/simulated/floor))
-		var/turf/simulated/floor/T = new_turf
-		if(!T.is_plating())
-			T.make_plating(!(T.broken || T.burnt))
-	return new_turf.is_plating()
-
-/obj/machinery/floorlayer/proc/TakeNewStack()
+/obj/machinery/floorlayer/proc/get_tiles()
+	var/list/tiles = list()
 	for(var/obj/item/stack/tile/tile in contents)
-		T = tile
-		return 1
-	return 0
+		tiles += tile
+	return tiles
 
-/obj/machinery/floorlayer/proc/SortStacks()
+/obj/machinery/floorlayer/proc/dismantle_floor(turf/new_turf)
+	if(istype(new_turf, /turf/simulated/floor))
+		var/turf/simulated/floor/to_dismantle = new_turf
+		if(!to_dismantle.is_plating())
+			to_dismantle.make_plating(!(to_dismantle.broken || to_dismantle.burnt))
+
+/obj/machinery/floorlayer/proc/lay_floor(turf/w_turf)
+	if(!current_tile || !current_tile.loc)
+		for(var/obj/item/stack/tile/tile in contents)
+			current_tile = tile
+			break
+	if(!current_tile)
+		return
+	w_turf.use_tool(current_tile, src)
+
+/obj/machinery/floorlayer/proc/take_tile(obj/item/stack/tile/tile)
 	for(var/obj/item/stack/tile/tile1 in contents)
-		for(var/obj/item/stack/tile/tile2 in contents)
-			tile2.transfer_to(tile1)
-
-/obj/machinery/floorlayer/proc/layFloor(turf/w_turf)
-	if(!T)
-		if(!TakeNewStack())
-			return 0
-	w_turf.use_tool(T , src)
-	return 1
-
-/obj/machinery/floorlayer/proc/TakeTile(obj/item/stack/tile/tile)
-	if(!T)	T = tile
+		if(tile.transfer_to(tile1))
+			return
 	tile.forceMove(src)
 
-	SortStacks()
-
-/obj/machinery/floorlayer/proc/CollectTiles(turf/w_turf)
+/obj/machinery/floorlayer/proc/collect_tiles(turf/w_turf)
 	for(var/obj/item/stack/tile/tile in w_turf)
-		TakeTile(tile)
+		take_tile(tile)

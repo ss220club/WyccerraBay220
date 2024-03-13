@@ -23,7 +23,7 @@
 /datum/gear/uniform/sierra_scg
 	display_name = "SCG uniform selection"
 	allowed_branches = list(/datum/mil_branch/contractor)
-	allowed_factions = list(FACTION_EXPEDITIONARY, FACTION_CORPORATE)
+	required_factions = list(FACTION_EXPEDITIONARY, FACTION_CORPORATE)
 	path = /obj/item/clothing/under
 
 /datum/gear/uniform/sierra_scg/New()

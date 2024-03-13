@@ -234,7 +234,7 @@ var/global/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return 0
 
 	if(spell_flags & CONSTRUCT_CHECK)
-		for(var/turf/T in range(holder, 1))
+		for(var/turf/T as anything in RANGE_TURFS(holder, 1))
 			if(findNullRod(T))
 				return 0
 

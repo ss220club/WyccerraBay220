@@ -9,7 +9,7 @@ SUBSYSTEM_DEF(tgui)
 	name = "TGUI"
 	wait = 9
 	flags = SS_NO_INIT
-	priority = SS_PRIORITY_TGUI
+	priority = FIRE_PRIORITY_TGUI
 	runlevels = RUNLEVEL_LOBBY | RUNLEVELS_DEFAULT
 
 	/// A list of UIs scheduled to process

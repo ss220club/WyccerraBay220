@@ -135,7 +135,6 @@
 	#include "loadout/loadout_suit.dm"
 	#include "loadout/loadout_tactical.dm"
 	#include "loadout/loadout_uniform.dm"
-	#include "loadout/loadout_xeno.dm"
 	#include "loadout/~defines.dm"
 
 	// --- MAP FILES --- //
@@ -178,21 +177,24 @@
 	#include "../../mods/_maps/liberia/_map_liberia.dme"
 	#include "../../mods/_maps/sentinel/_map_sentinel.dme"
 	#include "../../mods/_maps/farfleet/_map_farfleet.dme"
-
+	#include "../../mods/_maps/hand/_map_hand.dme"
 	#include "../../mods/antagonists/_antagonists.dme"
 	#include "../../mods/bluespace_kitty/_bluespace_kitty.dme"
 	#include "../../mods/fancy_sofas/_fancy_sofas.dme"
+	#include "../../mods/guns/_guns.dme"
 	#include "../../mods/jukebox_tapes/_jukebox_tapes.dme"
 	#include "../../mods/legalese_language/_legalese.dme"
 	#include "../../mods/petting_zoo/_petting_zoo.dme"
 	#include "../../mods/screentips/_screentips.dme"
 	#include "../../mods/tajara/_tajara.dme"
+	#include "../../mods/sauna_props/_sauna_props.dme"
 
 	// UNUSED MODS
 	// Keep them in ascending alphabetical order too, please
 
 	// #include "../../mods/atmos_ret_field/_atm_ret_field.dme"
 	// #include "../../mods/resomi/_resomi.dme"
+	// #include "../../mods/_maps/miningpirate/_map_miningpirate.dme"
 
 	// Почему UNUSED MODS стоит хранить?
 	// Потому что никто не проверяет использование тех или иных файлов
@@ -202,6 +204,7 @@
 
 	#include "../../packs/factions/iccgn/_pack.dm"
 	#include "../../packs/factions/scga/_pack.dm"
+	#include "../../packs/factions/fa/_pack.dm"
 	#include "../../packs/infinity/_pack.dm"
 	#include "../../packs/deepmaint/_pack.dm"
 

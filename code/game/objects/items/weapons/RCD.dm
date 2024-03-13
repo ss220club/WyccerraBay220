@@ -58,8 +58,18 @@
 	spark_system = null
 	return ..()
 
-/obj/item/rcd/attackby(obj/item/W, mob/user)
+/obj/item/rcd/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	crafting = !crafting
+	if(!crafting)
+		to_chat(user, SPAN_NOTICE("You reassemble the RCD"))
+	else
+		to_chat(user, SPAN_NOTICE("The RCD can now be modified."))
+	add_fingerprint(user)
 
+/obj/item/rcd/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/rcd_ammo))
 		var/obj/item/rcd_ammo/cartridge = W
 		if(stored_matter >= max_stored_matter)
@@ -75,16 +85,6 @@
 		to_chat(user, SPAN_NOTICE("The RCD now holds [stored_matter]/[max_stored_matter] matter-units."))
 		update_icon()
 		return
-
-	if(isScrewdriver(W))
-		crafting = !crafting
-		if(!crafting)
-			to_chat(user, SPAN_NOTICE("You reassemble the RCD"))
-		else
-			to_chat(user, SPAN_NOTICE("The RCD can now be modified."))
-		src.add_fingerprint(user)
-		return
-
 	..()
 
 /obj/item/rcd/attack_self(mob/user)

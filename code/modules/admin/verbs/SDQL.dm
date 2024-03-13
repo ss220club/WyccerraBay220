@@ -87,27 +87,27 @@
 							from_objs += m
 
 				else if(text_starts_with(f, "/turf/space"))
-					for(var/turf/space/m in world)
+					for(var/turf/space/m in ALL_TURFS())
 						if(istype(m, f2))
 							from_objs += m
 
 				else if(text_starts_with(f, "/turf/simulated"))
-					for(var/turf/simulated/m in world)
+					for(var/turf/simulated/m in ALL_TURFS())
 						if(istype(m, f2))
 							from_objs += m
 
 				else if(text_starts_with(f, "/turf/unsimulated"))
-					for(var/turf/unsimulated/m in world)
+					for(var/turf/unsimulated/m in ALL_TURFS())
 						if(istype(m, f2))
 							from_objs += m
 
 				else if(text_starts_with(f, "/turf"))
-					for(var/turf/m in world)
+					for(var/turf/m in ALL_TURFS())
 						if(istype(m, f2))
 							from_objs += m
 
 				else if(text_starts_with(f, "/area"))
-					for(var/area/m in world)
+					for(var/area/m as anything in GLOB.areas)
 						if(istype(m, f2))
 							from_objs += m
 
@@ -117,7 +117,7 @@
 							from_objs += m
 
 				else if(text_starts_with(f, "/obj/machinery"))
-					for(var/obj/machinery/m in world)
+					for(var/obj/machinery/m as anything in SSmachines.get_all_machinery())
 						if(istype(m, f2))
 							from_objs += m
 
@@ -130,12 +130,6 @@
 					for(var/atom/m in world)
 						if(istype(m, f2))
 							from_objs += m
-/*
-				else
-					for(var/datum/m in world)
-						if(istype(m, f2))
-							from_objs += m
-*/
 
 	var/list/objs = list()
 

@@ -30,7 +30,7 @@
 	var/obj/item/modular_computer/pda/item = spawn_item(H, H, metadata)
 	var/obj/item/card/id = H.GetIdCard()
 	if(id)
-		item.attackby(id, H)
+		id.resolve_attackby(item, H)
 	if(item.tesla_link && !istype(H, /mob/living/carbon/human/dummy))	//PDA in loadout shouldn't work
 		var/datum/extension/interactive/ntos/os = get_extension(item, /datum/extension/interactive/ntos)
 		if(os && os.active_program && os.active_program.NM && istype(os.active_program, /datum/computer_file/program/email_client))
@@ -50,7 +50,7 @@
 	..()
 	var/wcomp = list()
 	slot = slot_wear_id
-	wcomp["black"]                   = /obj/item/modular_computer/pda/wrist/
+	wcomp["black"]                   = /obj/item/modular_computer/pda/wrist
 	wcomp["lightgrey"]               = /obj/item/modular_computer/pda/wrist/grey
 	wcomp["black-red (sec)"]         = /obj/item/modular_computer/pda/wrist/security
 	wcomp["brown (sup)"]             = /obj/item/modular_computer/pda/wrist/cargo
@@ -75,7 +75,7 @@
 	var/obj/item/modular_computer/pda/wrist/item = spawn_item(H, H, metadata)
 	var/obj/item/card/id = H.GetIdCard()
 	if(id)
-		item.attackby(id, H)
+		id.resolve_attackby(item, H)
 	if(item.tesla_link && !istype(H, /mob/living/carbon/human/dummy))	//PDA in loadout shouldn't work
 		var/datum/extension/interactive/ntos/os = get_extension(item, /datum/extension/interactive/ntos)
 		if(os && os.active_program && os.active_program.NM && istype(os.active_program, /datum/computer_file/program/email_client))
@@ -86,7 +86,6 @@
 
 /datum/gear/utility/modular_scanner
 	display_name = "Scanner module, paper"
-	cost = 1
 	path = /obj/item/stock_parts/computer/scanner/paper
 
 /datum/gear/utility/modular_scanner/chemical

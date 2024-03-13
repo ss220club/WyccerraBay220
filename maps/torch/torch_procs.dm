@@ -1,19 +1,3 @@
-/datum/map/bolt_saferooms()
-	for(var/atype in typesof(/area/crew_quarters/safe_room))
-		var/area/A = locate(atype)
-		if(istype(A))
-			for(var/obj/machinery/door/airlock/vault/bolted/V in A.contents)
-				if(!V.locked)
-					V.lock()
-
-/datum/map/unbolt_saferooms()
-	for(var/atype in typesof(/area/crew_quarters/safe_room))
-		var/area/A = locate(atype)
-		if(istype(A))
-			for(var/obj/machinery/door/airlock/vault/bolted/V in A.contents)
-				if(V.locked)
-					V.unlock()
-
 /datum/map/make_maint_all_access(radstorm = 0)
 	maint_all_access = TRUE
 	if(radstorm)
@@ -92,6 +76,6 @@
 
 	if (isliving(target))
 		to_chat(target, FONT_LARGE(SPAN_WARNING("Your vision goes blurry and nausea strikes your stomach. Where are you...?")))
-		do_teleport(target, T, precision, type)
-		if (destination)
-			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(do_teleport), target, destination), duration)
+	do_teleport(target, T, precision, type)
+	if (destination)
+		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(do_teleport), target, destination), duration)

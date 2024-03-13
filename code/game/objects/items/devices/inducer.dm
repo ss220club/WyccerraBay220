@@ -54,12 +54,15 @@
 		return TRUE
 	return FALSE
 
+/obj/item/inducer/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	opened = !opened
+	to_chat(user, SPAN_NOTICE("You [opened ? "open" : "close"] the battery compartment."))
+	update_icon()
 
 /obj/item/inducer/attackby(obj/item/W, mob/user)
-	if(isScrewdriver(W))
-		opened = !opened
-		to_chat(user, SPAN_NOTICE("You [opened ? "open" : "close"] the battery compartment."))
-		update_icon()
 	if(istype(W, /obj/item/cell))
 		if (istype(W, /obj/item/cell/device))
 			to_chat(user, SPAN_WARNING("\The [src] only takes full-size power cells."))
@@ -77,7 +80,7 @@
 				return
 	if(CannotUse(user) || recharge(W, user))
 		return
-	return ..()
+	. = ..()
 
 /obj/item/inducer/proc/recharge(atom/A, mob/user)
 	if(!isturf(A) && user.loc == A)
@@ -178,10 +181,8 @@
 	failsafe = 0.2
 	cell = null
 
-/obj/item/inducer/borg/attackby(obj/item/W, mob/user)
-	if(isScrewdriver(W))
-		return
-	. = ..()
+/obj/item/inducer/borg/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
 
 /obj/item/inducer/borg/on_update_icon()
 	. = ..()

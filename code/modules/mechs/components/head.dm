@@ -107,18 +107,15 @@
 	. = ..()
 	to_chat(user, SPAN_NOTICE("It has [max_installed_software - LAZYLEN(installed_software)] empty slot\s remaining out of [max_installed_software]."))
 
-/obj/item/mech_component/control_module/attackby(obj/item/thing, mob/user)
+/obj/item/mech_component/control_module/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ..()
+	update_software()
 
+/obj/item/mech_component/control_module/attackby(obj/item/thing, mob/user)
 	if(istype(thing, /obj/item/circuitboard/exosystem))
 		install_software(thing, user)
 		return
-
-	if(isScrewdriver(thing))
-		var/result = ..()
-		update_software()
-		return result
-	else
-		return ..()
+	. = ..()
 
 /obj/item/mech_component/control_module/proc/install_software(obj/item/circuitboard/exosystem/software, mob/user)
 	if(length(installed_software) >= max_installed_software)

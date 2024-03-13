@@ -103,36 +103,37 @@
 	if (network)
 		network.update = 1
 
+/obj/machinery/portable_atmospherics/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(connected_port)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		disconnect()
+		to_chat(user, SPAN_NOTICE("You disconnect [src] from the port."))
+		update_icon()
+		return
+	var/obj/machinery/atmospherics/portables_connector/possible_port = locate(/obj/machinery/atmospherics/portables_connector) in loc
+	if(!possible_port)
+		to_chat(user, SPAN_NOTICE("Nothing happens."))
+		return
+	if(!connect(possible_port))
+		to_chat(user, SPAN_NOTICE("[src] failed to connect to the port."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You connect [src] to the port."))
+	update_icon()
+
 /obj/machinery/portable_atmospherics/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if ((istype(W, /obj/item/tank) && !destroyed))
 		if (holding)
-			to_chat(user, SPAN_WARNING("\The [src] already contains a tank!"))
+			to_chat(user, SPAN_WARNING("[src] already contains a tank!"))
 			return
 		if(!user.unEquip(W, src))
 			return TRUE
 		holding = W
 		update_icon()
 		return TRUE
-
-	if(isWrench(W))
-		if(connected_port)
-			disconnect()
-			to_chat(user, SPAN_NOTICE("You disconnect \the [src] from the port."))
-			update_icon()
-			return TRUE
-		else
-			var/obj/machinery/atmospherics/portables_connector/possible_port = locate(/obj/machinery/atmospherics/portables_connector) in loc
-			if(possible_port)
-				if(connect(possible_port))
-					to_chat(user, SPAN_NOTICE("You connect \the [src] to the port."))
-					update_icon()
-					return TRUE
-				else
-					to_chat(user, SPAN_NOTICE("\The [src] failed to connect to the port."))
-					return TRUE
-			else
-				to_chat(user, SPAN_NOTICE("Nothing happens."))
-				return TRUE
 
 	return ..()
 

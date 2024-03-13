@@ -137,8 +137,8 @@
 		to_chat(usr, SPAN_WARNING("Error: Hardpoint interface disabled while [owner.body.hatch_descriptor] is open."))
 		return
 
-	var/modifiers = params2list(params)
-	if(modifiers["ctrl"])
+	var/list/modifiers = params2list(params)
+	if(LAZYACCESS(modifiers, CTRL_CLICK))
 		if(owner.hardpoints_locked)
 			to_chat(usr, SPAN_WARNING("Hardpoint ejection system is locked."))
 			return
@@ -358,12 +358,12 @@
 
 /obj/screen/exosuit/heat/Click(location, control, params)
 	if(..())
-		var/modifiers = params2list(params)
-		if(modifiers["shift"])
+		var/list/modifiers = params2list(params)
+		if(LAZYACCESS(modifiers, SHIFT_CLICK))
 			if(owner && owner.material)
 				usr.show_message(SPAN_NOTICE("Your suit's safe operating limit ceiling is [(celsius ? "[owner.material.melting_point - T0C] °C" : "[owner.material.melting_point] K" )]."), VISIBLE_MESSAGE)
 			return
-		if(modifiers["ctrl"])
+		if(LAZYACCESS(modifiers, CTRL_CLICK))
 			celsius = !celsius
 			usr.show_message(SPAN_NOTICE("You switch the chassis probe display to use [celsius ? "celsius" : "kelvin"]."), VISIBLE_MESSAGE)
 			return

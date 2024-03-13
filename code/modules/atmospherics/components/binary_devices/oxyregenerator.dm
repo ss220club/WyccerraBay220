@@ -49,22 +49,19 @@
 	. = ..()
 	to_chat(user,"Its outlet port is to the [dir2text(dir)]")
 
-/obj/machinery/atmospherics/binary/oxyregenerator/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if (!isWrench(O))
-		return ..()
-
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+/obj/machinery/atmospherics/binary/oxyregenerator/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	anchored = !anchored
 	user.visible_message("[user.name] [anchored ? "secures" : "unsecures"] the bolts holding [src.name] to the floor.", \
 				"You [anchored ? "secure" : "unsecure"] the bolts holding [src] to the floor.", \
 				"You hear a ratchet")
-
 	if(anchored)
 		if(dir & (NORTH|SOUTH))
 			initialize_directions = NORTH|SOUTH
 		else if(dir & (EAST|WEST))
 			initialize_directions = EAST|WEST
-
 		atmos_init()
 		build_network()
 		if (node1)
@@ -80,10 +77,8 @@
 		if(node2)
 			node2.disconnect(src)
 			qdel(network2)
-
 		node1 = null
 		node2 = null
-	return TRUE
 
 /obj/machinery/atmospherics/binary/oxyregenerator/verb/rotate_clockwise()
 	set category = "Object"

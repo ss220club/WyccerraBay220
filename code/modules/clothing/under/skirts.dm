@@ -5,7 +5,7 @@
 	item_state = "bl_suit"
 	worn_state = "blackskirt"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-	rolled_sleeves = -1
+	rolled_sleeves = SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED
 
 // discreet skirts, dont cover upper/arms etc
 /obj/item/clothing/under/skirt/khaki

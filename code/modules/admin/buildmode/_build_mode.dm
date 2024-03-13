@@ -16,7 +16,7 @@
 	host = null
 	. = ..()
 
-/datum/build_mode/proc/OnClick(atom/A, list/parameters)
+/datum/build_mode/proc/OnClick(atom/A, params)
 	return
 
 /datum/build_mode/proc/Configurate()

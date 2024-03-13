@@ -75,7 +75,7 @@
 		insert_rag(W, user)
 		return
 	if (rag && W.IsFlameSource())
-		rag.attackby(W, user)
+		W.resolve_attackby(rag, user)
 		return
 	..()
 

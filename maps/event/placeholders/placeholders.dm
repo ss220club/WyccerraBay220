@@ -55,11 +55,11 @@ Middle-Click / Ctrl-Click - Jump a placeholder to a point and deselect it
 		option = input(user, "Placeholder Scan Description", null, scantext) as null | text
 		selected.add_scan_data("secondary_scan", option, "You detect an active sensor contact.", SKILL_SCIENCE, SKILL_TRAINED)
 
-/datum/build_mode/placeholders/OnClick(atom/atom, list/parameters)
+/datum/build_mode/placeholders/OnClick(atom/atom, params)
 	if (!atom)
 		return
-	var/modifier = parameters["ctrl"]
-	if (parameters["left"] && !modifier)
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, LEFT_CLICK) && !LAZYACCESS(modifiers, CTRL_CLICK))
 		if (istype(atom, /obj/overmap/visitable/placeholder))
 			selected = atom
 			to_chat(user, "Selected [selected].")
@@ -77,7 +77,7 @@ Middle-Click / Ctrl-Click - Jump a placeholder to a point and deselect it
 	if (!selected)
 		to_chat(user, "No placeholder selected.")
 		return
-	if (parameters["right"])
+	if (LAZYACCESS(modifiers, RIGHT_CLICK))
 		var/dx = atom.x - selected.x
 		var/dy = atom.y - selected.y
 		if (!dx && !dy)
@@ -113,7 +113,7 @@ Middle-Click / Ctrl-Click - Jump a placeholder to a point and deselect it
 				rotation = rotation
 			)
 		)
-	else if (parameters["middle"] || modifier)
+	else if (LAZYACCESS(modifiers, MIDDLE_CLICK) || LAZYACCESS(modifiers, CTRL_CLICK))
 		new /obj/ftl (get_turf(selected))
 		new /obj/ftl (get_turf(atom))
 		addtimer(CALLBACK(src, PROC_REF(RevealShip), selected, atom.x, atom.y), 2 SECONDS)

@@ -3,7 +3,7 @@ SUBSYSTEM_DEF(input)
 	wait = 1 //SS_TICKER means this runs every tick
 	init_order = SS_INIT_INPUT
 	flags = SS_TICKER
-	priority = SS_PRIORITY_INPUT
+	priority = FIRE_PRIORITY_INPUT
 	runlevels = RUNLEVELS_DEFAULT | RUNLEVEL_LOBBY
 
 	var/list/macro_set
@@ -28,10 +28,16 @@ SUBSYSTEM_DEF(input)
 
 // Badmins just wanna have fun ♪
 /datum/controller/subsystem/input/proc/refresh_client_macro_sets()
-	for(var/client/C in GLOB.clients)
+	for(var/client/C as anything in GLOB.clients)
+		if(!C)
+			continue
+
 		C.set_macros()
 
 
 /datum/controller/subsystem/input/fire()
-	for(var/client/C in GLOB.clients)
+	for(var/client/C as anything in GLOB.clients)
+		if(!C)
+			continue
+
 		C.keyLoop()

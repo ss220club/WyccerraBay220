@@ -12,16 +12,6 @@
 	canes["white guide cane"] = /obj/item/cane/white
 	gear_tweaks += new/datum/gear_tweak/path(canes)
 
-/datum/gear/union_card
-	display_name = "union membership"
-	path = /obj/item/card/union
-
-/datum/gear/union_card/spawn_on_mob(mob/living/carbon/human/H, metadata)
-	. = ..()
-	if(.)
-		var/obj/item/card/union/card = .
-		card.signed_by = H.real_name
-
 /datum/gear/dice
 	display_name = "dice pack"
 	path = /obj/item/storage/pill_bottle/dice
@@ -132,24 +122,6 @@
 	plushes["orange squid plush"] = /obj/item/toy/plushie/squid_orange
 	gear_tweaks += new /datum/gear_tweak/path(plushes)
 
-/datum/gear/workvisa
-	display_name = "work visa"
-	description = "A work visa issued by the Sol Central Government for the purpose of work."
-	path = /obj/item/paper/workvisa
-
-/datum/gear/travelvisa
-	display_name = "travel visa"
-	description = "A travel visa issued by the Sol Central Government for the purpose of recreation."
-	path = /obj/item/paper/travelvisa
-
-
-/datum/gear/passport
-	display_name = "passports selection"
-	description = "A selection of passports."
-	path = /obj/item/passport
-	flags = GEAR_HAS_SUBTYPE_SELECTION
-	custom_setup_proc = /obj/item/passport/proc/set_info
-
 /datum/gear/foundation_civilian
 	display_name = "operant registration card"
 	description = "A registration card in a faux-leather case. It marks the named individual as a registered, law-abiding psionic."
@@ -158,7 +130,7 @@
 
 /datum/gear/mirror
 	display_name = "handheld mirror"
-	sort_category = "Cosmetics"
+	category = GEAR_CATEGORY_COSMETICS
 	path = /obj/item/mirror
 
 /datum/gear/lipstick

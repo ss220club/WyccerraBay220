@@ -667,6 +667,7 @@
 		user.visible_message(SPAN_WARNING("[user] switches the safety of \the [src] [safety_state ? "on" : "off"]."), SPAN_NOTICE("You switch the safety of \the [src] [safety_state ? "on" : "off"]."), range = 3)
 		last_safety_check = world.time
 		playsound(src, 'sound/weapons/flipblade.ogg', 15, 1)
+	SEND_SIGNAL(src, COMSIG_GUN_TOGGLE_SAFETY, safety_state)
 
 /obj/item/gun/verb/toggle_safety_verb()
 	set src in usr
@@ -703,11 +704,15 @@
 		return 1
 
 /obj/item/gun/proc/check_accidents(mob/living/user, message = "[user] fumbles with \the [src] and it goes off!",skill_path = gun_skill, fail_chance = 20, no_more_fail = safety_skill, factor = 2)
-	if(istype(user))
-		if(!safety() && user.skill_fail_prob(skill_path, fail_chance, no_more_fail, factor) && special_check(user))
-			user.visible_message(SPAN_WARNING(message))
-			var/list/targets = list(user)
-			targets += trange(2, get_turf(src))
-			var/picked = pick(targets)
-			afterattack(picked, user)
-			return 1
+	if(!istype(user))
+		return FALSE
+
+	if(!safety() && user.skill_fail_prob(skill_path, fail_chance, no_more_fail, factor) && special_check(user))
+		user.visible_message(SPAN_WARNING(message))
+		var/list/targets = list(user)
+
+		var/turf/center = get_turf(src)
+		targets += RANGE_TURFS(center, 2)
+		var/picked = pick(targets)
+		afterattack(picked, user)
+		return TRUE

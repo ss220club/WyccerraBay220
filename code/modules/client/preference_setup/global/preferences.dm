@@ -154,20 +154,6 @@ var/global/list/_client_preferences_by_type
 	key = "CHAT_GHOSTRADIO"
 	options = list(GLOB.PREF_ALL_CHATTER, GLOB.PREF_NEARBY)
 
-/datum/client_preference/preview_scale
-	description = "Options Preview Scale"
-	key = "PREVIEW_SCALE"
-	options = list(GLOB.PREF_MEDIUM, GLOB.PREF_LARGE, GLOB.PREF_SMALL)
-
-/datum/client_preference/preview_scale/changed(mob/mob, val)
-	var/datum/preferences/prefs = mob.client?.prefs
-	if (!prefs)
-		return
-	prefs.update_preview_icon(TRUE)
-	if (!prefs.popup)
-		return
-	prefs.update_setup_window(usr)
-
 /datum/client_preference/language_display
 	description = "Show Language Names"
 	key = "LANGUAGE_DISPLAY"
@@ -380,6 +366,11 @@ var/global/list/_client_preferences_by_type
 /datum/client_preference/staff/show_rlooc
 	description = "Remote LOOC chat"
 	key = "CHAT_RLOOC"
+	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
+
+/datum/client_preference/ooc_donation_color
+	description = "OOC donator color"
+	key = "OOC_DONATION_COLOR"
 	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
 
 /********************

@@ -114,7 +114,7 @@
 
 /datum/shuttle/autodock/overmap/data_capsule
 	name = "Data Capsule"
-	move_time = 30
+	move_time = 3 SECONDS
 	shuttle_area = list(/area/shuttle/abadoned_data_capsule)
 	current_location = "nav_corporate_hiden"
 	landmark_transition = "nav_transit_blueriver"
@@ -124,7 +124,7 @@
 
 	range = 1
 	fuel_consumption = 2
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 	defer_initialisation = TRUE
 	skill_needed = SKILL_BASIC
 

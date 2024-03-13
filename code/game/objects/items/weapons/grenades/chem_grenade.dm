@@ -45,6 +45,34 @@
 			var/mob/living/carbon/C = user
 			C.throw_mode_on()
 
+/obj/item/grenade/chem_grenade/screwdriver_act(mob/living/user, obj/item/tool)
+	if(path == 2)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	switch(stage)
+		if(1)
+			path = 1
+			if(length(beakers))
+				to_chat(user, SPAN_NOTICE("You lock the assembly."))
+				SetName("grenade")
+			else
+				to_chat(user, SPAN_NOTICE("You lock the empty assembly."))
+				SetName("fake grenade")
+			icon_state = initial(icon_state) +"_locked"
+			stage = 2
+		if(2)
+			if(active && prob(95))
+				to_chat(user, SPAN_WARNING("You trigger the assembly!"))
+				detonate()
+				return
+			else
+				to_chat(user, SPAN_NOTICE("You unlock the assembly."))
+				SetName("unsecured grenade with [length(beakers)] containers[detonator?" and detonator":""]")
+				icon_state = initial(icon_state) + (detonator?"_ass":"")
+				stage = 1
+				active = 0
 
 /obj/item/grenade/chem_grenade/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
@@ -71,31 +99,6 @@
 		icon_state = initial(icon_state) +"_ass"
 		SetName("unsecured grenade with [length(beakers)] containers[detonator?" and detonator":""]")
 		stage = 1
-	else if(isScrewdriver(W) && path != 2)
-		if(stage == 1)
-			path = 1
-			if(length(beakers))
-				to_chat(user, SPAN_NOTICE("You lock the assembly."))
-				SetName("grenade")
-			else
-//					to_chat(user, SPAN_WARNING("You need to add at least one beaker before locking the assembly."))
-				to_chat(user, SPAN_NOTICE("You lock the empty assembly."))
-				SetName("fake grenade")
-			playsound(loc, 'sound/items/Screwdriver.ogg', 25, -3)
-			icon_state = initial(icon_state) +"_locked"
-			stage = 2
-		else if(stage == 2)
-			if(active && prob(95))
-				to_chat(user, SPAN_WARNING("You trigger the assembly!"))
-				detonate()
-				return
-			else
-				to_chat(user, SPAN_NOTICE("You unlock the assembly."))
-				playsound(loc, 'sound/items/Screwdriver.ogg', 25, -3)
-				SetName("unsecured grenade with [length(beakers)] containers[detonator?" and detonator":""]")
-				icon_state = initial(icon_state) + (detonator?"_ass":"")
-				stage = 1
-				active = 0
 	else if(is_type_in_list(W, allowed_containers) && (!stage || stage==1) && path != 2)
 		path = 1
 		if(length(beakers) == 2)

@@ -1,0 +1,6499 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/mob/living/carbon/human/dummy/mannequin,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"aA" = (
+/obj/structure/table/marble,
+/obj/item/material/chopping_board,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"aC" = (
+/obj/structure/table/marble,
+/obj/item/material/kitchen/rollingpin,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"aJ" = (
+/obj/structure/table/glass,
+/obj/item/rig/ert/fleet{
+	pixel_x = -4;
+	pixel_y = 2
+	},
+/obj/item/rig/zero{
+	pixel_y = 2;
+	pixel_x = 4
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"aK" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"aX" = (
+/obj/machinery/light_switch{
+	pixel_x = -22;
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"bo" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 5
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"bA" = (
+/obj/machinery/suit_storage_unit/standard_unit,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"bC" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"bK" = (
+/obj/structure/lattice,
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/turf/simulated/open,
+/area/medical/surgery)
+"bZ" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"cp" = (
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"dc" = (
+/obj/item/storage/belt/general/full,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"df" = (
+/obj/machinery/bodyscanner{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"di" = (
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"do" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"dK" = (
+/obj/machinery/r_n_d/destructive_analyzer,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"ex" = (
+/turf/simulated/open,
+/area/maintenance/fsmaint2)
+"eF" = (
+/obj/machinery/light/spot,
+/obj/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"eJ" = (
+/obj/structure/ladder,
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"fw" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/air,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"gk" = (
+/obj/structure/lattice,
+/turf/simulated/open,
+/area/medical/surgery)
+"hr" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/obj/machinery/embedded_controller/radio/simple_docking_controller{
+	id_tag = "example_shuttle_starboard";
+	pixel_x = 28
+	},
+/obj/machinery/embedded_controller/radio/simple_docking_controller{
+	id_tag = "example_shuttle_port";
+	pixel_x = -28
+	},
+/obj/shuttle_landmark/lower_level,
+/turf/simulated/floor/plating,
+/area/shuttle/escape)
+"hC" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"ic" = (
+/obj/structure/ladder/up,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"il" = (
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1379;
+	id_tag = "example_shuttle_starboard_hatch"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/escape)
+"ix" = (
+/obj/machinery/seed_storage/all,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"iT" = (
+/obj/structure/lattice,
+/obj/machinery/light/spot,
+/turf/simulated/open,
+/area/medical/surgery)
+"ja" = (
+/obj/landmark/map_data{
+	height = 3
+	},
+/turf/simulated/wall,
+/area/medical/surgery)
+"jj" = (
+/obj/item/modular_computer/laptop,
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"jo" = (
+/obj/item/mirror{
+	pixel_y = 4
+	},
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"jw" = (
+/obj/structure/table/glass,
+/obj/item/storage/box/latexgloves{
+	pixel_y = 2
+	},
+/obj/item/storage/box/masks{
+	pixel_y = 10
+	},
+/obj/item/storage/box/syringes{
+	pixel_y = 18
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"jD" = (
+/obj/machinery/atmospherics/pipe/simple/visible/blue{
+	dir = 9
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"jN" = (
+/obj/machinery/atmospherics/pipe/manifold/visible/blue,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"jR" = (
+/obj/machinery/computer/teleporter,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"km" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 6
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"kq" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/machinery/atmospherics/unary/freezer,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"kr" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"kw" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"kA" = (
+/obj/structure/table/marble,
+/obj/item/reagent_containers/glass/beaker/large{
+	pixel_x = 8;
+	pixel_y = 12
+	},
+/obj/item/reagent_containers/glass/beaker/large{
+	pixel_x = 8;
+	pixel_y = 2
+	},
+/obj/item/reagent_containers/food/condiment/small/peppermill{
+	pixel_x = -6;
+	pixel_y = 12
+	},
+/obj/item/reagent_containers/food/condiment/small/saltshaker{
+	pixel_x = -4;
+	pixel_y = 2
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"kJ" = (
+/obj/machinery/power/apc/high{
+	dir = 8;
+	name = "west bump";
+	pixel_x = -25
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"li" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"lk" = (
+/obj/machinery/r_n_d/circuit_imprinter,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"ll" = (
+/obj/machinery/organ_printer/robot/mapped,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"lL" = (
+/turf/simulated/wall/iron,
+/area/shuttle/escape)
+"lO" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"mC" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/machinery/vending/dinnerware,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"mO" = (
+/obj/machinery/vending/boozeomat,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"mR" = (
+/obj/machinery/embedded_controller/radio/simple_docking_controller{
+	id_tag = "upper_level_dock";
+	pixel_y = 18
+	},
+/turf/simulated/floor,
+/area/medical/surgery)
+"ni" = (
+/obj/structure/table/rack,
+/obj/item/storage/belt/utility/full,
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/obj/item/stack/material/steel/fifty{
+	pixel_y = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"nF" = (
+/obj/machinery/light/spot,
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"oi" = (
+/obj/machinery/reagentgrinder,
+/obj/item/reagent_containers/glass/beaker/large,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"oA" = (
+/obj/machinery/power/debug_items/infinite_generator,
+/obj/structure/cable,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"oE" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/obj/item/device/radio/intercom{
+	dir = 4;
+	pixel_x = -24
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"oM" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"pa" = (
+/turf/simulated/wall/prepainted,
+/area/constructionsite)
+"pd" = (
+/obj/landmark/test/space_turf,
+/turf/space,
+/area/space)
+"pH" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"pU" = (
+/obj/machinery/computer/operating,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"qB" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"rj" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -24
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"rn" = (
+/obj/machinery/light_switch{
+	pixel_x = 22;
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"rr" = (
+/obj/machinery/light,
+/turf/simulated/floor/plating,
+/area/shuttle/escape)
+"ru" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"rz" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"rD" = (
+/obj/structure/table/glass,
+/obj/item/storage/firstaid/surgery{
+	pixel_y = 2
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"rT" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/obj/machinery/cooker/cereal,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"rU" = (
+/obj/machinery/requests_console{
+	pixel_y = -32
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"sc" = (
+/obj/machinery/light/spot,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"sh" = (
+/obj/machinery/power/smes/buildable/preset/admin,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"sj" = (
+/obj/landmark/test/safe_turf,
+/turf/simulated/wall,
+/area/constructionsite)
+"sp" = (
+/obj/machinery/reagentgrinder/juicer{
+	pixel_y = 7
+	},
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"sL" = (
+/obj/machinery/r_n_d/server/core,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"sN" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/obj/item/device/radio/intercom{
+	dir = 4;
+	pixel_x = -24
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"sS" = (
+/obj/structure/table/glass,
+/obj/item/reagent_containers/glass/beaker/cryoxadone{
+	pixel_x = -6;
+	pixel_y = 12
+	},
+/obj/item/reagent_containers/glass/beaker/cryoxadone{
+	pixel_x = 6;
+	pixel_y = 12
+	},
+/obj/item/reagent_containers/glass/beaker/cryoxadone{
+	pixel_x = 6;
+	pixel_y = 2
+	},
+/obj/item/reagent_containers/glass/beaker/cryoxadone{
+	pixel_x = -6;
+	pixel_y = 2
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"tn" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"tu" = (
+/obj/structure/lattice,
+/turf/simulated/open,
+/area/maintenance/fsmaint2)
+"tN" = (
+/obj/machinery/cooker/oven,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"tV" = (
+/obj/structure/table/glass,
+/obj/item/device/scanner/health,
+/obj/item/device/robotanalyzer{
+	pixel_y = 10
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"us" = (
+/obj/machinery/door/airlock/atmos,
+/turf/simulated/floor,
+/area/constructionsite)
+"ut" = (
+/obj/machinery/power/debug_items/infinite_generator,
+/obj/structure/cable,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"uO" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"uT" = (
+/obj/machinery/computer/shuttle_control{
+	shuttle_tag = "Example"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/escape)
+"va" = (
+/turf/simulated/wall/prepainted,
+/area/maintenance/fsmaint2)
+"vk" = (
+/turf/simulated/wall/prepainted,
+/area/medical/surgery)
+"vs" = (
+/obj/machinery/reagent_temperature,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"vF" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/turf/simulated/open,
+/area/maintenance/fsmaint2)
+"vN" = (
+/obj/machinery/cooker/fryer,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"vT" = (
+/obj/machinery/vending/hydronutrients/generic,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"wv" = (
+/obj/machinery/atmospherics/unary/vent_pump/on,
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"wR" = (
+/obj/machinery/photocopier/faxmachine{
+	department = "Test Fax 1"
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"wU" = (
+/obj/structure/ladder/updown,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"xD" = (
+/turf/simulated/open,
+/area/medical/surgery)
+"xO" = (
+/obj/landmark{
+	name = "JoinLate"
+	},
+/obj/landmark/start,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"xR" = (
+/obj/machinery/jukebox/old,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"ya" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"yk" = (
+/obj/machinery/light_switch{
+	pixel_x = -22;
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"yW" = (
+/obj/landmark{
+	name = "JoinLate"
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"yX" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/turf/simulated/open,
+/area/maintenance/fsmaint2)
+"zi" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/obj/item/device/radio/intercom{
+	dir = 4;
+	pixel_x = -24
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"zk" = (
+/obj/item/storage/backpack/holding,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"zI" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Ax" = (
+/obj/machinery/r_n_d/protolathe,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"AD" = (
+/obj/machinery/tele_beacon,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"AP" = (
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1379;
+	id_tag = "example_shuttle_port_hatch"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/escape)
+"Br" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/empty,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"BG" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"BK" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"BZ" = (
+/obj/structure/table/glass,
+/obj/item/reagent_containers/chem_disp_cartridge/peridaxon{
+	pixel_y = 18
+	},
+/obj/item/stack/nanopaste{
+	pixel_y = 6
+	},
+/obj/item/reagent_containers/dropper{
+	pixel_y = -5
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Cf" = (
+/obj/machinery/computer/robotics,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"CH" = (
+/obj/machinery/light_switch{
+	pixel_x = 22;
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"CT" = (
+/obj/machinery/tele_pad,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"CX" = (
+/obj/machinery/embedded_controller/radio/simple_docking_controller{
+	id_tag = "lower_level_dock";
+	pixel_y = 18
+	},
+/turf/simulated/floor,
+/area/constructionsite)
+"Di" = (
+/obj/machinery/fabricator/micro,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Dn" = (
+/obj/structure/hygiene/sink{
+	pixel_y = -12
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"DI" = (
+/obj/machinery/tele_projector,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"DK" = (
+/obj/machinery/organ_printer/flesh/mapped,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"EB" = (
+/obj/machinery/vending/robotics,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"ET" = (
+/obj/machinery/smartfridge/seeds,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"EW" = (
+/obj/machinery/vending/cigarette,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Fd" = (
+/obj/machinery/light_switch{
+	pixel_x = -22;
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Fy" = (
+/obj/machinery/atmospherics/pipe/simple/visible/blue{
+	dir = 5
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"FL" = (
+/obj/machinery/atmospherics/unary/cryo_cell,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"FN" = (
+/obj/item/airlock_electronics,
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Gi" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"GK" = (
+/obj/structure/closet/fridge/meat,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"GN" = (
+/obj/machinery/light/spot,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"GQ" = (
+/obj/machinery/atmospherics/unary/vent_pump/on,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"GY" = (
+/obj/machinery/r_n_d/server/robotics,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Hl" = (
+/obj/machinery/body_scanconsole{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"HI" = (
+/obj/machinery/vending/dinnerware,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"HJ" = (
+/obj/machinery/atmospherics/unary/vent_pump/on,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"HQ" = (
+/obj/machinery/sleeper{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Ii" = (
+/obj/machinery/computer/rdconsole/core{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Im" = (
+/obj/machinery/power/debug_items/infinite_generator,
+/obj/structure/cable,
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"IB" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 5
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"ID" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/empty,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"IT" = (
+/obj/machinery/cooker/grill,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Jk" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"JE" = (
+/obj/wingrille_spawn/reinforced,
+/turf/simulated/floor/plating,
+/area/shuttle/escape)
+"JM" = (
+/turf/simulated/open,
+/area/space)
+"JR" = (
+/obj/machinery/light/spot,
+/turf/simulated/open,
+/area/maintenance/fsmaint2)
+"JY" = (
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1379;
+	id_tag = "lower_level_dock_hatch"
+	},
+/turf/simulated/floor,
+/area/constructionsite)
+"Kj" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"Ko" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Kr" = (
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Kt" = (
+/obj/structure/table/rack,
+/obj/item/reagent_containers/glass/beaker/noreact{
+	pixel_x = -6
+	},
+/obj/item/reagent_containers/glass/beaker/insulated/large{
+	pixel_x = 6
+	},
+/obj/item/reagent_containers/glass/beaker/large,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Lf" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/machinery/optable,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Ll" = (
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Lq" = (
+/obj/machinery/fabricator,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"LB" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/empty,
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"Mo" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"My" = (
+/obj/machinery/power/apc/high{
+	dir = 8;
+	name = "west bump";
+	pixel_x = -25
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"MH" = (
+/obj/machinery/smartfridge/chemistry,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"MW" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/machinery/chemical_dispenser/full,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Nw" = (
+/obj/machinery/computer/guestpass{
+	pixel_y = -24
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Nz" = (
+/obj/item/stack/material/steel/fifty,
+/obj/item/stack/material/plastic/fifty,
+/obj/item/stack/material/glass/fifty,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"NA" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/air,
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"NL" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/obj/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"NN" = (
+/obj/structure/table/glass,
+/obj/item/storage/box/freezer,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Oa" = (
+/obj/item/reagent_containers/syringe,
+/obj/item/reagent_containers/syringe,
+/obj/item/reagent_containers/syringe,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Od" = (
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1379
+	},
+/turf/simulated/floor,
+/area/medical/surgery)
+"OG" = (
+/obj/machinery/light_switch{
+	pixel_x = 22;
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"OV" = (
+/obj/machinery/photocopier/faxmachine{
+	department = "Test Fax 2"
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"OW" = (
+/obj/structure/table/glass,
+/obj/item/storage/firstaid/adv,
+/obj/item/scalpel/laser{
+	pixel_y = 10
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"OX" = (
+/obj/machinery/robotics_fabricator,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"OY" = (
+/turf/space,
+/area/space)
+"Ph" = (
+/obj/machinery/computer/guestpass{
+	pixel_y = -24
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"PL" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"PP" = (
+/obj/item/modular_computer/pda/captain,
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Qm" = (
+/obj/machinery/biogenerator,
+/obj/item/reagent_containers/glass/bucket,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Qu" = (
+/obj/shuttle_landmark/upper_level,
+/turf/simulated/open,
+/area/space)
+"QM" = (
+/obj/machinery/portable_atmospherics/hydroponics,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"QS" = (
+/obj/machinery/vending/medical,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Rf" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 6
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Ro" = (
+/obj/structure/lattice,
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/turf/simulated/open,
+/area/medical/surgery)
+"RQ" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 5
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Sd" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -24
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"Su" = (
+/mob/living/bot/farmbot,
+/obj/structure/hygiene/sink/kitchen{
+	pixel_y = 28
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Sz" = (
+/obj/machinery/light/spot,
+/obj/machinery/recharge_station,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"SV" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/floor_decal/industrial/hatch/yellow,
+/obj/item/device/suit_sensor_jammer,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Ti" = (
+/obj/machinery/light/spot,
+/obj/item/device/gps{
+	tracking = 1
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"Tk" = (
+/obj/landmark{
+	name = "tdome1"
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Tn" = (
+/obj/machinery/jukebox{
+	pixel_y = 18
+	},
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"To" = (
+/obj/machinery/requests_console{
+	pixel_y = -32
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"TG" = (
+/obj/machinery/microwave{
+	pixel_x = -1;
+	pixel_y = 6
+	},
+/obj/structure/table/glass,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Uh" = (
+/obj/machinery/mech_recharger,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Uq" = (
+/obj/machinery/vending/coffee,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Uv" = (
+/obj/machinery/power/apc/high{
+	dir = 8;
+	name = "west bump";
+	pixel_x = -25
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"Uz" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"UD" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/machinery/computer/modular,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"UZ" = (
+/obj/structure/closet/crate/plastic,
+/obj/item/clothing/head/welding{
+	pixel_x = -3;
+	pixel_y = 5
+	},
+/obj/item/clothing/glasses/welding,
+/obj/item/storage/belt/utility/full,
+/obj/item/storage/belt/utility/full,
+/obj/item/device/multitool{
+	pixel_x = 3
+	},
+/obj/item/device/multitool{
+	pixel_x = 3
+	},
+/obj/item/clothing/gloves/insulated,
+/obj/item/clothing/gloves/insulated,
+/obj/item/device/radio/headset/headset_eng,
+/obj/item/device/radio/headset/headset_eng,
+/obj/item/aicard,
+/obj/item/organ/internal/posibrain,
+/obj/item/organ/internal/posibrain,
+/obj/item/organ/internal/posibrain,
+/obj/item/device/robotanalyzer,
+/obj/random/powercell,
+/obj/random/powercell,
+/obj/random/powercell,
+/obj/random/powercell,
+/obj/item/stock_parts/scanning_module,
+/obj/item/reagent_containers/dropper{
+	pixel_y = -4
+	},
+/obj/item/stock_parts/manipulator,
+/obj/item/stock_parts/manipulator,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Vi" = (
+/obj/item/device/multitool{
+	pixel_x = 12;
+	pixel_y = 2
+	},
+/obj/item/device/multitool/hacktool{
+	pixel_x = 2;
+	pixel_y = 2
+	},
+/obj/item/device/multitool/uplink{
+	pixel_x = -8;
+	pixel_y = 2
+	},
+/obj/structure/table/glass,
+/obj/item/card/id/syndicate{
+	pixel_y = -2
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Vl" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/air,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"VE" = (
+/obj/item/reagent_containers/glass/bucket,
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"VK" = (
+/obj/machinery/requests_console{
+	pixel_y = -32
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"VP" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/turf/simulated/open,
+/area/maintenance/fsmaint2)
+"Wf" = (
+/obj/landmark/map_data{
+	height = 2
+	},
+/turf/simulated/wall,
+/area/maintenance/fsmaint2)
+"Wt" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -24
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Ww" = (
+/obj/machinery/chem_master,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"WE" = (
+/obj/machinery/smartfridge/foods,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Xa" = (
+/obj/machinery/atmospherics/pipe/simple/visible{
+	dir = 6
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Xk" = (
+/obj/machinery/computer/rdconsole/robotics,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"XV" = (
+/obj/machinery/door/airlock,
+/turf/simulated/floor,
+/area/medical/surgery)
+"Ya" = (
+/obj/structure/table/rack,
+/obj/item/stack/material/aluminium/fifty,
+/obj/item/stack/material/glass/fifty,
+/obj/item/stack/material/steel/fifty,
+/obj/item/stack/material/plastic/fifty,
+/obj/item/stack/material/phoron/fifty,
+/obj/item/stack/material/silver/ten,
+/obj/item/stack/material/gold/ten,
+/obj/item/stack/material/diamond/ten,
+/obj/item/stack/material/uranium/ten,
+/obj/item/research,
+/obj/item/reagent_containers/glass/beaker,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Yh" = (
+/obj/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Yj" = (
+/obj/machinery/portable_atmospherics/canister/oxygen/prechilled,
+/obj/machinery/atmospherics/portables_connector,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Ys" = (
+/obj/item/reagent_containers/ivbag/blood/human/oneg,
+/obj/structure/iv_stand,
+/obj/item/reagent_containers/ivbag/blood/human/oneg,
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+"Zk" = (
+/obj/structure/lattice,
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/turf/simulated/open,
+/area/medical/surgery)
+"ZJ" = (
+/turf/simulated/floor/tiled/steel_grid,
+/area/medical/surgery)
+"ZK" = (
+/obj/machinery/suit_storage_unit/security,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"ZX" = (
+/obj/structure/closet/fridge,
+/obj/item/reagent_containers/food/condiment/barbecue,
+/obj/item/reagent_containers/food/condiment/enzyme,
+/obj/machinery/computer/guestpass{
+	pixel_y = -24
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/maintenance/fsmaint2)
+
+(1,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(2,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(3,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(4,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(5,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(6,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(7,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(8,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(9,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(10,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+lL
+JE
+JE
+AP
+lL
+OY
+OY
+OY
+OY
+OY
+OY
+pd
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(11,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+lL
+uT
+hr
+rr
+lL
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(12,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+lL
+JE
+JE
+il
+lL
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(13,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+JY
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(14,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+CX
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(15,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+us
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(16,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+jR
+cp
+cp
+cp
+Mo
+aX
+cp
+cp
+cp
+cp
+kr
+cp
+Kr
+Kr
+Wt
+aX
+sN
+kJ
+qB
+qB
+ut
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(17,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+DI
+cp
+AD
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+Kr
+Kr
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(18,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+CT
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+Kr
+Kr
+cp
+cp
+cp
+cp
+cp
+cp
+sh
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(19,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+Kr
+Kr
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(20,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+ya
+cp
+cp
+cp
+cp
+cp
+cp
+bZ
+cp
+cp
+cp
+cp
+Kr
+Ko
+cp
+cp
+cp
+cp
+cp
+cp
+sc
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(21,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+To
+pa
+xR
+cp
+ic
+cp
+cp
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(22,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+Nw
+pa
+Tn
+cp
+cp
+cp
+HI
+pa
+Uq
+QS
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(23,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+sc
+pa
+pa
+pa
+pa
+cp
+cp
+cp
+pa
+pa
+pa
+pa
+ya
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(24,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+jo
+cp
+cp
+cp
+aJ
+pa
+EW
+mO
+cp
+cp
+cp
+cp
+wR
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(25,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+Tk
+Tk
+Tk
+cp
+cp
+cp
+cp
+cp
+Yh
+lO
+Yh
+cp
+cp
+cp
+cp
+zk
+yW
+yW
+yW
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(26,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+BG
+Tk
+Tk
+Tk
+cp
+ic
+cp
+cp
+cp
+eF
+sj
+SV
+cp
+cp
+cp
+ic
+di
+yW
+xO
+yW
+sc
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(27,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+Tk
+Tk
+Tk
+cp
+cp
+cp
+cp
+cp
+Yh
+NL
+Yh
+cp
+cp
+cp
+cp
+dc
+yW
+yW
+yW
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(28,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+Vi
+cp
+cp
+cp
+FN
+pa
+jj
+PP
+cp
+cp
+cp
+cp
+OV
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(29,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+sc
+pa
+pa
+pa
+pa
+cp
+cp
+cp
+pa
+pa
+pa
+pa
+UD
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(30,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+cp
+cp
+cp
+cp
+cp
+pa
+ZK
+bA
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(31,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+cp
+cp
+ic
+cp
+cp
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(32,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+ya
+cp
+cp
+cp
+cp
+cp
+cp
+Mo
+cp
+cp
+cp
+cp
+cp
+Mo
+cp
+cp
+cp
+cp
+cp
+cp
+sc
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(33,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(34,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+HJ
+bo
+cp
+Xa
+Gi
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(35,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+aK
+cp
+aK
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(36,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+cp
+cp
+cp
+cp
+bZ
+OG
+cp
+cp
+cp
+Vl
+oM
+ID
+cp
+cp
+cp
+OG
+bZ
+cp
+cp
+cp
+cp
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(37,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+pa
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(38,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(39,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(40,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(41,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(42,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(43,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+(44,1,1) = {"
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+OY
+"}
+
+(1,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(2,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(3,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(4,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(5,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(6,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(7,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(8,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(9,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(10,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(11,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(12,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(13,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(14,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(15,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(16,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+Su
+Ll
+Ll
+ix
+rT
+Fd
+aC
+Ll
+vN
+Ll
+uO
+Ll
+Ll
+Ll
+rj
+Fd
+oE
+My
+zI
+zI
+oA
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(17,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+QM
+Ll
+Ll
+vT
+tN
+Ll
+aA
+Ll
+IT
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(18,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+QM
+Oa
+Ll
+Qm
+TG
+Ll
+kA
+Ll
+sp
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(19,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+QM
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(20,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+kq
+Fy
+VE
+Ll
+ET
+Ll
+WE
+mC
+Ll
+Ll
+Ll
+Ll
+Ll
+Uz
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+GN
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(21,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+FL
+jN
+Ll
+Ll
+Ll
+Ll
+VK
+va
+aa
+Ll
+wU
+Ll
+aa
+va
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(22,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+Yj
+jD
+sS
+Ll
+Ll
+GK
+ZX
+va
+aa
+Ll
+Ll
+Ll
+aa
+va
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(23,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+rD
+Ll
+BZ
+Ll
+GN
+va
+va
+va
+va
+Ll
+Ll
+Ll
+va
+va
+va
+va
+ru
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(24,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+GK
+Dn
+tV
+Ll
+Ll
+aa
+aa
+va
+tu
+tu
+tu
+tu
+tu
+va
+aa
+aa
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(25,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+Ys
+Ll
+df
+Hl
+Ll
+Ll
+Ll
+Ll
+tu
+ex
+vF
+ex
+tu
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(26,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+Lf
+Ll
+Ll
+Ll
+Ll
+wU
+Ll
+Ll
+tu
+JR
+Wf
+yX
+tu
+Ll
+Ll
+wU
+Ll
+Ll
+Ll
+Ll
+GN
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(27,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+pU
+Ll
+HQ
+Ll
+Ll
+Ll
+Ll
+Ll
+tu
+ex
+VP
+ex
+tu
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(28,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+DK
+Ll
+OW
+Ll
+Ll
+aa
+aa
+va
+tu
+tu
+tu
+tu
+tu
+va
+aa
+aa
+Ll
+Ll
+lk
+Ll
+Ax
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(29,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+jw
+Ll
+NN
+Ll
+GN
+va
+va
+va
+va
+Ll
+Ll
+Ll
+va
+va
+va
+va
+ru
+Ll
+dK
+Ll
+Ii
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(30,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+OX
+Ll
+ni
+Ll
+Ll
+Ll
+Ll
+va
+aa
+Ll
+Ll
+Ll
+aa
+va
+Ll
+Ll
+Ll
+Ll
+Nz
+Ll
+Ya
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(31,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+ll
+Ll
+vs
+Ll
+Ll
+Ll
+Ll
+va
+aa
+Ll
+wU
+Ll
+aa
+va
+Ll
+Ll
+Ll
+Di
+Lq
+Ll
+sL
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(32,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+MW
+Ll
+Kt
+Ll
+Ll
+Ll
+Ll
+uO
+Ll
+Ll
+Ll
+Ll
+Ll
+uO
+Ll
+Ll
+Ll
+Ll
+UZ
+Ll
+Sz
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(33,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+Ww
+Ll
+oi
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+GY
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(34,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+MH
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+GQ
+RQ
+Ll
+Rf
+do
+Ll
+Ll
+Ll
+Ll
+Ll
+Xk
+Ll
+Uh
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(35,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+pH
+Ll
+pH
+Ll
+Ll
+Ll
+Ll
+Ll
+Ll
+lk
+Ll
+OX
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(36,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+Ll
+Ll
+Ll
+Ll
+Uz
+CH
+Ll
+Ll
+Ll
+fw
+rz
+Br
+Ll
+Ll
+Ll
+CH
+Uz
+Ll
+Cf
+Ll
+EB
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(37,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+va
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(38,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(39,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(40,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(41,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(42,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(43,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(44,1,2) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+
+(1,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(2,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(3,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(4,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(5,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(6,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(7,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(8,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(9,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(10,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(11,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+Qu
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(12,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(13,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+Od
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(14,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+mR
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(15,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+XV
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(16,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+tn
+yk
+ZJ
+ZJ
+ZJ
+ZJ
+BK
+ZJ
+ZJ
+ZJ
+Sd
+yk
+zi
+Uv
+bC
+bC
+Im
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(17,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(18,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(19,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(20,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+PL
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+Jk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+Jk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+nF
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(21,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+rU
+vk
+ZJ
+ZJ
+eJ
+ZJ
+ZJ
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(22,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+Ph
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(23,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+nF
+vk
+vk
+vk
+vk
+ZJ
+ZJ
+ZJ
+vk
+vk
+vk
+vk
+PL
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(24,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+xD
+xD
+gk
+xD
+xD
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(25,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+xD
+xD
+bK
+xD
+xD
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(26,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+kw
+ZJ
+ZJ
+ZJ
+ZJ
+eJ
+ZJ
+ZJ
+gk
+iT
+ja
+Zk
+gk
+ZJ
+ZJ
+eJ
+ZJ
+ZJ
+ZJ
+ZJ
+Ti
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(27,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+xD
+xD
+Ro
+xD
+xD
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(28,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+xD
+xD
+gk
+xD
+xD
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(29,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+nF
+vk
+vk
+vk
+vk
+ZJ
+ZJ
+ZJ
+vk
+vk
+vk
+vk
+PL
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(30,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(31,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+ZJ
+ZJ
+eJ
+ZJ
+ZJ
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(32,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+PL
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+tn
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+tn
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+nF
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(33,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(34,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+wv
+IB
+ZJ
+km
+li
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(35,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+Kj
+ZJ
+Kj
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(36,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+ZJ
+ZJ
+ZJ
+ZJ
+Jk
+rn
+ZJ
+ZJ
+ZJ
+NA
+hC
+LB
+ZJ
+ZJ
+ZJ
+rn
+Jk
+ZJ
+ZJ
+ZJ
+ZJ
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(37,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+vk
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(38,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(39,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(40,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(41,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(42,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(43,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}
+(44,1,3) = {"
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+JM
+"}

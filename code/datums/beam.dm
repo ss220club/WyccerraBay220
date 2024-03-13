@@ -138,7 +138,7 @@
 		CHECK_TICK
 
 /obj/ebeam
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	anchored = TRUE
 	var/datum/beam/owner
 

@@ -2,26 +2,30 @@
 * Category Collection *
 **********************/
 /datum/category_collection
-	var/category_group_type                          // Type of categories to initialize
-	var/list/datum/category_group/categories         // List of initialized categories
-	var/list/datum/category_group/categories_by_name // Associative list of initialized categories, keyed by name
+	/// Type of categories to initialize
+	var/category_group_type
+	/// Lazy list of initialized categories
+	var/list/datum/category_group/categories
+	/// Lazy associative list of initialized categories, keyed by name
+	var/list/datum/category_group/categories_by_name
 
 /datum/category_collection/New()
 	..()
-	categories = new()
-	categories_by_name = new()
-	for(var/category_type in typesof(category_group_type))
-		var/datum/category_group/category = category_type
-		if(initial(category.name))
-			category = new category(src)
-			categories += category
-			categories_by_name[category.name] = category
-	categories = dd_sortedObjectList(categories)
+
+	for(var/datum/category_group/category_type as anything in typesof(category_group_type))
+		if(!initial(category_type.name))
+			continue
+
+		var/datum/category_group/category = new category_type(src)
+		LAZYADD(categories, category)
+		LAZYADDASSOC(categories_by_name, category.name, category)
+
+	if(LAZYLEN(categories))
+		categories = dd_sortedObjectList(categories)
 
 /datum/category_collection/Destroy()
-	for(var/category in categories)
-		qdel(category)
-	categories.Cut()
+	QDEL_NULL_LIST(categories)
+	LAZYCLEARLIST(categories_by_name)
 	return ..()
 
 /******************
@@ -37,24 +41,21 @@
 /datum/category_group/New(datum/category_collection/cc)
 	..()
 	collection = cc
-	items = new()
-	items_by_name = new()
+	for(var/datum/category_item/item_type as anything in typesof(category_item_type))
+		if(!initial(item_type.name))
+			continue
 
-	for(var/item_type in typesof(category_item_type))
-		var/datum/category_item/item = item_type
-		if(initial(item.name))
-			item = new item(src)
-			items += item
-			items_by_name[item.name] = item
+		var/datum/category_item/item = new item_type(src)
+		LAZYADD(items, item)
+		LAZYSET(items_by_name, item.name, item)
 
 	// For whatever reason dd_insertObjectList(items, item) doesn't insert in the correct order
 	// If you change this, confirm that character setup doesn't become completely unordered.
-	items = dd_sortedObjectList(items)
+	if(LAZYLEN(items))
+		items = dd_sortedObjectList(items)
 
 /datum/category_group/Destroy()
-	for(var/item in items)
-		qdel(item)
-	items.Cut()
+	QDEL_NULL_LIST(items)
 	collection = null
 	return ..()
 

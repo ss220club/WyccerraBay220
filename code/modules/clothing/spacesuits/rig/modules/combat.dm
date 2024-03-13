@@ -343,7 +343,7 @@
 		laser.Fire(target,holder.wearer)
 		return 1
 	else
-		var/resolved = target.attackby(laser,holder.wearer)
+		var/resolved = laser.resolve_attackby(target, holder.wearer)
 		if(!resolved && laser && target)
 			laser.afterattack(target,holder.wearer,1)
 			return 1
@@ -597,7 +597,7 @@
 
 	name = "hand-mounted powerfists"
 	desc = "A pair of heavy powerfists to be installed into a hardsuit gauntlets."
-	icon_state = "module"
+	icon_state = "powerfist"
 
 	suit_overlay_active = null
 

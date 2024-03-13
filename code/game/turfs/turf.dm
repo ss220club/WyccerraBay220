@@ -4,6 +4,8 @@
 
 	layer = TURF_LAYER
 
+	simulated = FALSE
+
 	var/turf_flags
 
 	var/holy = 0
@@ -42,11 +44,41 @@
 	var/has_dense_atom
 	var/has_opaque_atom
 
+	/// Whether or not decals can be applied to turf
+	var/decals_available = FALSE
+
 	/// Reference to the turf fire on the turf
 	var/obj/turf_fire/turf_fire
 
-/turf/Initialize(mapload, ...)
+	/// Whether or not we calculate starlight on specific turf
+	var/permit_starlight = FALSE
+
+	/// If this turf is currently startlit or not
+	var/starlit = FALSE
+
+	/// Let me quote BYOND reference here (https://www.byond.com/docs/ref/#/turf):
+	///
+	/// ***
+	/// "Turfs cannot be moved. They can only be created or destroyed by changing world.maxx, world.maxy, or world.maxz.
+	/// When you create a new turf with new(), it always replaces the old one."
+	/// ***
+	///
+	/// I did testing of how turfs are replaced, and found out that they keep their `ref`,
+	/// so there is no need to recache turf in area on replacement. We only need it on turf area change.
+	/// To make turf cache consistent, we need to somehow keep a track if turf was already cached, or not.
+	/// So there is this variable - we will set it to `TRUE` the first time turf is added to area cache
+	/// and then provide it in `turf` constructor on `/turf/proc/ChangeTurf` to understand, the turf is cached or not.
+	/// The alternative decision is to cache turf only where it's needed, but it's too much work to do with it.
+	var/added_to_area_cache = FALSE
+
+/turf/Initialize(mapload, added_to_area_cache = FALSE)
 	. = ..()
+
+	src.added_to_area_cache = added_to_area_cache
+	if(!src.added_to_area_cache)
+		var/area/my_area = loc
+		my_area.add_turf_to_cache(src)
+
 	if(dynamic_lighting)
 		luminosity = 0
 	else
@@ -55,7 +87,7 @@
 	if (light_power && light_range)
 		update_light()
 
-	if (!mapload || (!istype(src, /turf/space) && is_outside()))
+	if (!mapload || (!isspaceturf(src) && is_outside()))
 		SSambient_lighting.queued += src
 
 	if (opacity)
@@ -66,6 +98,9 @@
 
 	if (z_flags & ZM_MIMIC_BELOW)
 		setup_zmimic(mapload)
+
+	if(mapload)
+		setup_local_ambient()
 
 /turf/on_update_icon()
 	update_flood_overlay()
@@ -100,6 +135,13 @@
 
 	..()
 	return QDEL_HINT_LETMELIVE
+
+/// WARNING WARNING
+/// Turfs DO NOT lose their signals when they get replaced, REMEMBER THIS
+/// It's possible because turfs are fucked, and if you have one in a list and it's replaced with another one, the list ref points to the new turf
+/// We do it because moving signals over was needlessly expensive, and bloated a very commonly used bit of code
+/turf/_clear_signal_refs()
+	return
 
 /turf/proc/is_solid_structure()
 	return 1
@@ -228,7 +270,7 @@ var/global/const/enterloopsanity = 100
 
 /turf/proc/AdjacentTurfs(check_blockage = TRUE)
 	. = list()
-	for(var/turf/t in (trange(1,src) - src))
+	for(var/turf/t as anything in ORANGE_TURFS(src, 1))
 		if(check_blockage)
 			if(!t.density)
 				if(!LinkBlocked(src, t) && !TurfBlockedNonWindow(t))
@@ -453,4 +495,48 @@ var/global/const/enterloopsanity = 100
 	if(A.area_flags & AREA_FLAG_EXTERNAL)
 		return TRUE
 
+/turf/proc/change_area(area/new_area)
+	if(!istype(new_area))
+		CRASH("Area change attempt failed: invalid area supplied.")
+
+	var/area/old_area = get_area(src)
+	if(old_area == new_area)
+		return
+
+	old_area.remove_turf_from_cache(src)
+	for(var/atom/movable/AM in src)
+		old_area.Exited(AM, new_area)  // Note: this _will_ raise exited events.
+
+	new_area.contents += src
+	new_area.add_turf_to_cache(src)
+
+	for(var/atom/movable/AM in src)
+		new_area.Entered(AM, old_area) // Note: this will _not_ raise moved or entered events. If you change this, you must also change everything which uses them.
+		if(istype(AM, /obj/machinery))
+			var/obj/machinery/machinery_to_update = AM
+			machinery_to_update.area_changed(old_area, new_area) // They usually get moved events, but this is the one way an area can change without triggering one.
+
 	//TODO: CitRP has some concept of outside based on turfs above. We don't really have any use cases right now, revisit this function if this changes
+
+/turf/proc/remove_starlight()
+	if(!starlit)
+		return
+
+	replace_ambient_light(SSskybox.background_color, null, config.starlight, 0)
+	starlit = FALSE
+
+/turf/proc/update_starlight()
+	if(!config.starlight || !permit_starlight)
+		return
+
+	//We only need starlight on turfs adjacent to dynamically lit turfs, for example space near bulkhead
+	for (var/turf/T as anything in RANGE_TURFS(src, 1))
+		if (!isloc(T.loc) || !TURF_IS_DYNAMICALLY_LIT_UNSAFE(T))
+			continue
+
+		add_ambient_light(SSskybox.background_color, config.starlight)
+		starlit = TRUE
+		return
+
+	if(TURF_IS_AMBIENT_LIT_UNSAFE(src))
+		remove_starlight()

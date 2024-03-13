@@ -8,48 +8,59 @@ var/global/list/floor_decals = list()
 	icon = 'icons/turf/flooring/decals.dmi'
 	layer = DECAL_LAYER
 	appearance_flags = DEFAULT_APPEARANCE_FLAGS | RESET_COLOR
-	var/supplied_dir
 	var/detail_overlay
 	var/detail_color
 
-/obj/floor_decal/New(newloc, newdir, newcolour, newappearance)
-	supplied_dir = newdir
-	if(newappearance) appearance = newappearance
-	if(newcolour) color = newcolour
-	..(newloc)
-
-/obj/floor_decal/Initialize()
+/obj/floor_decal/Initialize(mapload, newdir, newcolour, newappearance)
 	SHOULD_CALL_PARENT(FALSE)
-	if(supplied_dir) set_dir(supplied_dir)
-	var/turf/T = get_turf(src)
-	if(istype(T, /turf/simulated/floor) || istype(T, /turf/unsimulated/floor))
-		layer = T.is_plating() ? DECAL_PLATING_LAYER : DECAL_LAYER
-		var/cache_key = "[alpha]-[color]-[dir]-[icon_state]-[plane]-[layer]-[detail_overlay]-[detail_color]"
-		if(!floor_decals[cache_key])
-			var/image/I = image(icon = src.icon, icon_state = src.icon_state, dir = src.dir)
-			I.layer = layer
-			I.appearance_flags = DEFAULT_APPEARANCE_FLAGS | appearance_flags
-			I.color = src.color
-			I.alpha = src.alpha
-			if(detail_overlay)
-				var/image/B = overlay_image(icon, "[detail_overlay]", flags=RESET_COLOR)
-				B.color = detail_color
-				I.AddOverlays(B)
-			floor_decals[cache_key] = I
-		LAZYADD(T.decals, floor_decals[cache_key])
-		T.queue_icon_update()
-	atom_flags |= ATOM_FLAG_INITIALIZED
-	return INITIALIZE_HINT_QDEL
+	. = ..()
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/floor_decal/LateInitialize(mapload, newdir, newcolour, newappearance)
+	. = ..()
+
+	if(newappearance)
+		appearance = newappearance
+
+	if(newcolour)
+		color = newcolour
+
+	if(newdir)
+		set_dir(newdir)
+
+	modify_turf_appearance()
+	qdel(src)
+
+/obj/floor_decal/proc/modify_turf_appearance()
+	var/turf/turf_to_modify = get_turf(src)
+	if(!turf_to_modify?.decals_available)
+		return
+
+	layer = turf_to_modify.is_plating() ? DECAL_PLATING_LAYER : DECAL_LAYER
+	var/cache_key = "[alpha]-[color]-[dir]-[icon_state]-[plane]-[layer]-[detail_overlay]-[detail_color]"
+	if(!floor_decals[cache_key])
+		var/image/I = image(icon = src.icon, icon_state = src.icon_state, dir = src.dir)
+		I.layer = layer
+		I.appearance_flags = DEFAULT_APPEARANCE_FLAGS | appearance_flags
+		I.color = src.color
+		I.alpha = src.alpha
+		if(detail_overlay)
+			var/image/B = overlay_image(icon, "[detail_overlay]", flags=RESET_COLOR)
+			B.color = detail_color
+			I.AddOverlays(B)
+		floor_decals[cache_key] = I
+
+	LAZYADD(turf_to_modify.decals, floor_decals[cache_key])
+	turf_to_modify.queue_icon_update()
 
 /obj/floor_decal/reset
 	name = "reset marker"
 
-/obj/floor_decal/reset/Initialize()
+/obj/floor_decal/reset/Initialize(mapload, ...)
 	SHOULD_CALL_PARENT(FALSE)
 	var/turf/T = get_turf(src)
 	T.remove_decals()
 	T.update_icon()
-	atom_flags |= ATOM_FLAG_INITIALIZED
 	return INITIALIZE_HINT_QDEL
 
 /obj/floor_decal/carpet

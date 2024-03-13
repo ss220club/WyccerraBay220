@@ -124,7 +124,7 @@
 
 /obj/machinery/keycard_auth/proc/broadcast_request()
 	icon_state = "auth_on"
-	for(var/obj/machinery/keycard_auth/KA in world)
+	for(var/obj/machinery/keycard_auth/KA as anything in SSmachines.get_machinery_of_type(/obj/machinery/keycard_auth))
 		if(KA == src) continue
 		KA.reset()
 		spawn()
@@ -172,7 +172,7 @@
 
 			trigger_armed_response_team(1)
 		if("Grant Nuclear Authorization Code")
-			var/obj/machinery/nuclearbomb/nuke = locate(/obj/machinery/nuclearbomb/station) in world
+			var/obj/machinery/nuclearbomb/nuke = locate(/obj/machinery/nuclearbomb/station) in SSmachines.get_machinery_of_type(/obj/machinery/nuclearbomb/station)
 			if(nuke)
 				to_chat(usr, "The nuclear authorization code is [nuke.r_code]")
 			else

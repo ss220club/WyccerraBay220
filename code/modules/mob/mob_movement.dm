@@ -9,6 +9,8 @@
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
+		if(SEND_SIGNAL(src, COMSIG_MOB_CAN_PASS, mover, target, height, air_group) & COMPONENT_MOB_PASSABLE)
+			return TRUE
 		var/mob/moving_mob = mover
 		if ((other_mobs && moving_mob.other_mobs))
 			return 1
@@ -171,6 +173,8 @@
 		return
 	if(!mob)
 		return // Moved here to avoid nullrefs below
+	if(SEND_SIGNAL(mob, COMSIG_MOB_CLIENT_PRE_LIVING_MOVE, n, direction))
+		return
 	return mob.SelfMove(direction)
 
 
@@ -212,8 +216,7 @@
 /mob/proc/get_spacemove_backup()
 	var/shoegrip = Check_Shoegrip()
 
-	for(var/thing in trange(1,src))//checks for walls or grav turf first
-		var/turf/T = thing
+	for(var/turf/T as anything in RANGE_TURFS(src, 1))//checks for walls or grav turf first
 		if(T.density || T.is_wall() || (T.is_floor() && (shoegrip || T.has_gravity())))
 			return T
 
@@ -239,8 +242,7 @@
 		return 1
 
 	if(Check_Shoegrip())
-		for(var/thing in trange(1,src))	//checks for turfs that one can maglock to
-			var/turf/T = thing
+		for(var/turf/T as anything in RANGE_TURFS(src, 1))	//checks for turfs that one can maglock to
 			if(T.density || T.is_wall() || T.is_floor())
 				return 1
 

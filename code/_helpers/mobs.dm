@@ -83,10 +83,11 @@
 		else				return "unknown"
 
 /proc/RoundHealth(health)
-	var/list/icon_states = icon_states('icons/mob/hud_med.dmi')
+	var/list/icon_states = ICON_STATES('icons/mob/hud_med.dmi')
 	for(var/icon_state in icon_states)
 		if(health >= text2num(icon_state))
 			return icon_state
+
 	return icon_states[length(icon_states)] // If we had no match, return the last element
 
 //checks whether this item is a module of the robot it is located in.
@@ -109,10 +110,10 @@
 /// The mob currently interacting with the atom during a `do_after` timer. Used to validate `DO_TARGET_UNIQUE_ACT` flag checks.
 /atom/var/do_unique_target_user
 
-/proc/do_after(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT)
-	return !do_after_detailed(user, delay, target, do_flags, incapacitation_flags)
+/proc/do_after(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT, datum/callback/extra_checks)
+	return !do_after_detailed(user, delay, target, do_flags, incapacitation_flags, extra_checks)
 
-/proc/do_after_detailed(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT)
+/proc/do_after_detailed(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT, datum/callback/extra_checks)
 	if (!delay)
 		return FALSE
 
@@ -128,7 +129,7 @@
 
 	if (target?.do_unique_target_user)
 		if (do_feedback)
-			to_chat(user, SPAN_WARNING("\The [target.do_unique_target_user] is already interacting with \the [target]!"))
+			to_chat(user, SPAN_WARNING("[target.do_unique_target_user] is already interacting with [target]!"))
 		return DO_TARGET_UNIQUE_ACT
 
 	if ((do_flags & DO_TARGET_UNIQUE_ACT) && target)
@@ -203,25 +204,29 @@
 		if (target_zone && user.zone_sel.selecting != target_zone)
 			. = DO_USER_SAME_ZONE
 			break
+		if (extra_checks && !invoke(extra_checks))
+			. = FALSE
+			do_feedback = FALSE
+			break
 
 	if (. && do_feedback)
 		switch (.)
 			if (DO_MISSING_TARGET)
-				USE_FEEDBACK_FAILURE("\The [target] no longer exists!")
+				USE_FEEDBACK_FAILURE("[target] no longer exists!")
 			if (DO_INCAPACITATED)
 				USE_FEEDBACK_FAILURE("You're no longer able to act!")
 			if (DO_USER_CAN_MOVE)
 				USE_FEEDBACK_FAILURE("You must remain still to perform that action!")
 			if (DO_TARGET_CAN_MOVE)
-				USE_FEEDBACK_FAILURE("\The [target] must remain still to perform that action!")
+				USE_FEEDBACK_FAILURE("[target] must remain still to perform that action!")
 			if (DO_USER_CAN_TURN)
 				USE_FEEDBACK_FAILURE("You must face the same direction to perform that action!")
 			if (DO_TARGET_CAN_TURN)
-				USE_FEEDBACK_FAILURE("\The [target] must face the same direction to perform that action!")
+				USE_FEEDBACK_FAILURE("[target] must face the same direction to perform that action!")
 			if (DO_USER_SAME_HAND)
 				USE_FEEDBACK_FAILURE("You must remain on the same active hand to perform that action!")
 			if (DO_USER_UNIQUE_ACT)
-				USE_FEEDBACK_FAILURE("You stop what you're doing with \the [target].")
+				USE_FEEDBACK_FAILURE("You stop what you're doing with [target].")
 			if (DO_USER_SAME_ZONE)
 				USE_FEEDBACK_FAILURE("You must remain targeting the same zone to perform that action!")
 

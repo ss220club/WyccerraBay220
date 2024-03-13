@@ -197,10 +197,10 @@
 	floor = 1
 	return 1
 
-
-/obj/vine/pre_use_item(obj/item/tool, mob/user, click_params)
+/obj/vine/can_use_item(obj/item/tool, mob/living/user, click_params)
 	. = ..()
-	START_PROCESSING(SSvines, src)
+	if(.)
+		START_PROCESSING(SSvines, src)
 
 
 /obj/vine/use_weapon(obj/item/weapon, mob/user, list/click_params)

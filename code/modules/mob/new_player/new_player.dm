@@ -211,6 +211,11 @@
 		if(!check_species_allowed(S))
 			return 0
 
+		if(client.prefs.organ_data[BP_CHEST] == "cyborg")
+			if(!whitelist_lookup(SPECIES_FBP, client.ckey) && client.prefs.species != SPECIES_IPC)
+				to_chat(usr, "Нельзя зайти за ППТ без вайтлиста.")
+				return FALSE
+
 		AttemptLateSpawn(job, client.prefs.spawnpoint)
 		return
 
@@ -466,6 +471,11 @@
 
 /mob/new_player/proc/create_character(turf/spawn_turf)
 	spawning = 1
+	if(client.prefs.organ_data[BP_CHEST] == "cyborg")
+		if(!whitelist_lookup(SPECIES_FBP, client.ckey) && client.prefs.species != SPECIES_IPC)
+			to_chat(src, "Нельзя зайти за ППТ без вайтлиста.")
+			spawning = 0
+			return null
 	close_spawn_windows()
 
 	var/mob/living/carbon/human/new_character
@@ -535,16 +545,16 @@
 
 /mob/new_player/proc/close_spawn_windows()
 	close_browser(src, "window=latechoices") //closes late choices window
-	// [SIERRA-REMOVE] - LOBBYSCREEN
-	// panel.close()
-	// [/SIERRA-REMOVE]
+	close_browser(src, "window=preference_window")
+	if(panel)
+		panel.close()
 
 /mob/new_player/proc/check_species_allowed(datum/species/S, show_alert=1)
 	if(!S.is_available_for_join() && !has_admin_rights())
 		if(show_alert)
 			to_chat(src, alert("Your current species, [client.prefs.species], is not available for play."))
 		return 0
-	if(!is_alien_whitelisted(src, S))
+	if(!is_any_alien_whitelisted(src, S))
 		if(show_alert)
 			to_chat(src, alert("You are currently not whitelisted to play [client.prefs.species]."))
 		return 0

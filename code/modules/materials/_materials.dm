@@ -55,6 +55,7 @@
 
 // Material definition and procs follow.
 /material
+	abstract_type = /material
 	var/name	                          // Unique name for use in indexing the list.
 	var/display_name                      // Prettier name for display.
 	var/adjective_name
@@ -96,6 +97,9 @@
 	var/table_icon_base = "metal"
 	/// String. Table icon state for reinforcement overlays.
 	var/table_icon_reinf = "reinf_metal"
+	/// String. Base64 image of material. Generated when requested.
+	var/image
+
 	var/list/stack_origin_tech = list(TECH_MATERIAL = 1) // Research level for stacks.
 
 	// Attributes
@@ -232,6 +236,15 @@
 // Currently used for weapons and objects made of uranium to irradiate things.
 /material/proc/products_need_process()
 	return (radioactivity>0) //todo
+
+// Returns Base64 encoded image of material sheet.
+/material/proc/get_stack_image()
+	if(!image)
+		var/obj/item/stack/material/dummy = place_sheet(null, 1)
+		image = icon2base64(getFlatIcon(dummy))
+		qdel(dummy)
+
+	return image
 
 // Used by walls when qdel()ing to avoid neighbor merging.
 /material/placeholder

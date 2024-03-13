@@ -203,6 +203,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	prefs = SScharacter_setup.preferences_datums[ckey]
 	if(!prefs)
 		prefs = new /datum/preferences(src)
+
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
 	fps = prefs.clientfps
@@ -211,7 +212,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 	. = ..()	//calls mob.Login()
 
-	view = get_preference_value(/datum/client_preference/client_view) || GLOB.PREF_CLIENT_VIEW_LARGE
 	connection_time = world.time
 	connection_realtime = world.realtime
 	connection_timeofday = world.timeofday
@@ -263,6 +263,8 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 	// Initialize tgui panel
 	tgui_panel.initialize()
+
+	set_right_click_menu_mode(TRUE)
 
 	// This turns out to be a touch too much when a bunch of people are connecting at once from a restart during init.
 	if (GAME_STATE & RUNLEVELS_DEFAULT)
@@ -514,3 +516,13 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 		pct += delta
 		winset(src, "mainwindow.mainvsplit", "splitter=[pct]")
+
+/client/proc/set_right_click_menu_mode(shift_only)
+	if(shift_only)
+		winset(src, "mapwindow.map", "right-click=true")
+		winset(src, "ShiftUp", "is-disabled=false")
+		winset(src, "Shift", "is-disabled=false")
+	else
+		winset(src, "mapwindow.map", "right-click=false")
+		winset(src, "default.Shift", "is-disabled=true")
+		winset(src, "default.ShiftUp", "is-disabled=true")

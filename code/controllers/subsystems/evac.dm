@@ -1,6 +1,6 @@
 SUBSYSTEM_DEF(evac)
 	name = "Evacuation"
-	priority = SS_PRIORITY_EVAC
+	priority = FIRE_PRIORITY_EVAC
 	flags = SS_NO_TICK_CHECK | SS_BACKGROUND
 	wait = 2 SECONDS
 

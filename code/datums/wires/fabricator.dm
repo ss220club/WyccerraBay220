@@ -33,6 +33,8 @@
 				A.fab_status_flags &= ~FAB_HACKED
 			else
 				A.fab_status_flags |= FAB_HACKED
+
+			A.update_tgui_static_data_for_all_viewers()
 		if(AUTOLATHE_SHOCK_WIRE)
 			if(mended)
 				A.fab_status_flags &= ~FAB_SHOCKED
@@ -43,6 +45,9 @@
 				A.fab_status_flags &= ~FAB_DISABLED
 			else
 				A.fab_status_flags |= FAB_DISABLED
+				SStgui.close_uis(A)
+
+
 
 /datum/wires/fabricator/UpdatePulsed(index)
 	if(IsIndexCut(index))
@@ -54,9 +59,13 @@
 				A.fab_status_flags &= ~FAB_HACKED
 			else
 				A.fab_status_flags |= FAB_HACKED
+
+			A.update_tgui_static_data_for_all_viewers()
+
 			spawn(50)
 				if(A && !IsIndexCut(index))
 					A.fab_status_flags &= ~FAB_HACKED
+					A.update_tgui_static_data_for_all_viewers()
 					Interact(usr)
 		if(AUTOLATHE_SHOCK_WIRE)
 			if(A.fab_status_flags & FAB_SHOCKED)
@@ -72,6 +81,8 @@
 				A.fab_status_flags &= ~FAB_DISABLED
 			else
 				A.fab_status_flags |= FAB_DISABLED
+				SStgui.close_uis(A)
+
 			spawn(50)
 				if(A && !IsIndexCut(index))
 					A.fab_status_flags &= ~FAB_DISABLED

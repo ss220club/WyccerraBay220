@@ -282,6 +282,9 @@
 	if(digitalcamo)
 		. += SPAN_NOTICE("[p_They()] [p_are()] repulsively uncanny!")
 
+	if(applying_pressure)
+		. += applying_pressure
+
 	if(hasHUD(user, HUD_SECURITY))
 		var/perpname = "wot"
 		var/criminal = "None"
@@ -323,17 +326,15 @@
 		. += "[SPAN_CLASS("deptradio", "Physical status:")] <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>"
 		. += "[SPAN_CLASS("deptradio", "Medical records:")] <a href='?src=\ref[src];medrecord=`'>\[View\]</a>"
 
-
 	if(print_flavor_text())
 		. += SPAN_NOTICE("[print_flavor_text()]")
-
-	if(applying_pressure)
-		. += applying_pressure
 
 	if(pose)
 		if(findtext(pose,".",length(pose)) == 0 && findtext(pose,"!",length(pose)) == 0 && findtext(pose,"?",length(pose)) == 0)
 			pose = addtext(pose,".") //Makes sure all emotes end with a period.
 		. += SPAN_NOTICE("[p_They()] [pose]")
+
+	SEND_SIGNAL(src, COMSIG_ATOM_EXAMINE, user, .)
 
 //Helper procedure. Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic() to determine HUD access to security and medical records.
 /proc/hasHUD(mob/M as mob, hudtype)

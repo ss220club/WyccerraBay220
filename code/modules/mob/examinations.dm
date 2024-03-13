@@ -25,6 +25,7 @@
 			distance = get_dist(source_turf, target_turf)
 		is_adjacent = user.Adjacent(A)
 	var/list/examine_info = A.examine(user, distance, is_adjacent)
+	SEND_SIGNAL(user, COMSIG_MOB_EXAMINING, A, examine_info)
 	var/list/forensic_info = user.ForensicsExamination(A, distance, is_adjacent)
 	examine_info += forensic_info
 	if(length(examine_info))
@@ -34,6 +35,7 @@
 			examine_info[i] += "\n"
 
 	to_chat(user, chat_box_examine(examine_info.Join()))
+	SEND_SIGNAL(user, COMSIG_MOB_EXAMINATE, A)
 	var/datum/codex_entry/entry = SScodex.get_codex_entry(A.get_codex_value())
 	//This odd check v is done in case an item only has antag text but someone isn't an antag, in which case they shouldn't get the notice
 	if(entry && (entry.lore_text || entry.mechanics_text || (entry.antag_text && player_is_antag(user.mind))) && user.can_use_codex())

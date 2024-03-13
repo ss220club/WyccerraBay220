@@ -96,7 +96,8 @@
 	update_use_power(POWER_USE_OFF)
 
 /obj/machinery/shieldgen/proc/create_shields()
-	for(var/turf/target_tile as anything in RANGE_TURFS(src, 8))
+	var/turf/center = get_turf(src)
+	for(var/turf/target_tile as anything in RANGE_TURFS(center, 8))
 		if ((isspaceturf(target_tile) || isopenturf(target_tile)) && !(locate(/obj/machinery/shield) in target_tile))
 			if (malfunction && prob(33) || !malfunction)
 				var/obj/machinery/shield/S = new/obj/machinery/shield(target_tile)

@@ -166,10 +166,6 @@
 	balloon_alert(user, "приваривание к полу")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] welds [src] down with [tool]."),
-		SPAN_NOTICE("You weld [src] down with [tool].")
-	)
 	build(connected_pipe)
 	qdel(src)
 
@@ -216,6 +212,7 @@
 	P.sort_type = sort_type
 	P.set_dir(dir)
 	P.on_build()
+	P.balloon_alert_to_viewers("приварено к полу!")
 
 // Subtypes
 
@@ -232,6 +229,7 @@
 	transfer_fingerprints_to(P)
 	P.set_dir(dir)
 	P.mode = 0 // start with pump off
+	P.balloon_alert_to_viewers("приварено к полу!")
 
 /obj/structure/disposalconstruct/machine/on_update_icon()
 	if(anchored)
@@ -245,3 +243,4 @@
 	P.set_dir(dir)
 	var/obj/structure/disposalpipe/trunk/Trunk = CP
 	Trunk.linked = P
+	P.balloon_alert_to_viewers("приварено к полу!")

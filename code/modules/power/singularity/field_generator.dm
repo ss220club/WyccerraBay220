@@ -130,11 +130,7 @@ field_generator power level display
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			state = 2
-			user.visible_message(
-				SPAN_NOTICE("[user] welds [src] to the floor."),
-				SPAN_NOTICE("You weld the base of [src] to the floor, securing it in place."),
-				SPAN_ITALIC("You hear welding.")
-			)
+			balloon_alert_to_viewers("приварено к полу!")
 		if(2)
 			. = ITEM_INTERACT_SUCCESS
 			if(!tool.tool_start_check(user, 1))
@@ -143,11 +139,7 @@ field_generator power level display
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			state = 1
-			user.visible_message(
-				SPAN_NOTICE("[user] cuts [src] free from the floor."),
-				SPAN_NOTICE("You cut [src] free from the floor."),
-				SPAN_ITALIC("You hear welding.")
-			)
+			balloon_alert_to_viewers("отварено от пола!")
 
 /obj/machinery/field_generator/emp_act()
 	SHOULD_CALL_PARENT(FALSE)

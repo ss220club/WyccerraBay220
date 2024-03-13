@@ -206,11 +206,11 @@
 			assembly.dir = dir
 			if(MACHINE_IS_BROKEN(src))
 				assembly.state = 2
-				balloon_alert(user, "камера отремонтирована")
+				user.balloon_alert_to_viewers("камера отремонтирована")
 				cancelCameraAlarm()
 			else
 				assembly.state = 1
-				balloon_alert(user, "камера отварена от стены")
+				user.balloon_alert_to_viewers("камера отварена от стены")
 				new /obj/item/stack/cable_coil(loc, 2)
 			assembly = null //so qdel doesn't eat it.
 		qdel(src)

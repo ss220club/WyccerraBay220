@@ -232,10 +232,7 @@
 		return
 	is_reinforced = FRAME_REINFORCED_SECURE
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] unwelds [src]'s internal reinforcements with [tool]."),
-		SPAN_NOTICE("You unweld [src]'s internal reinforcements with [tool]."),
-	)
+	balloon_alert_to_viewers("укрепления отварены!")
 
 /obj/structure/heavy_vehicle_frame/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -256,10 +253,7 @@
 		return
 	is_reinforced = FRAME_REINFORCED_WELDED
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] welds [src]'s internal reinforcements with [tool]."),
-		SPAN_NOTICE("You weld [src]'s internal reinforcements with [tool]."),
-	)
+	balloon_alert_to_viewers("укрепления заварены!")
 
 /obj/structure/heavy_vehicle_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring

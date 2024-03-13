@@ -106,7 +106,7 @@
 			balloon_alert(user, "приваривание камеры")
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			balloon_alert(user, "камера приварена")
+			balloon_alert_to_viewers("камера приварена")
 			anchored = TRUE
 			state = ASSEMBLY_WELDED
 		if(ASSEMBLY_WELDED)
@@ -115,7 +115,7 @@
 			balloon_alert(user, "отваривание камеры")
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			balloon_alert(user, "камера отварена")
+			balloon_alert_to_viewers("камера отварена")
 			state = ASSEMBLY_WRENCHED
 			anchored = TRUE
 

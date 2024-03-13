@@ -24,7 +24,7 @@
 /obj/machinery/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!emagged)
-		balloon_alert(user, "фиксаторы не повреждены")
+		balloon_alert(user, "фиксаторы не повреждены!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
@@ -34,11 +34,7 @@
 	emagged = FALSE
 	USE_FEEDBACK_REPAIR_FINISH
 	if(locked)
-		visible_message(
-			"[src]'s clamps engage, locking onto [get_turf(src)].",
-			"You hear metal sliding and creaking.",
-			range = 5
-		)
+		playsound(src, 'sound/machines/bolts_down.ogg', 50, TRUE)
 		anchored = TRUE
 	update_icon()
 

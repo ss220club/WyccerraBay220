@@ -117,10 +117,10 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	USE_FEEDBACK_UNWELD_FROM_FLOOR
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, "You sliced the floorweld off the disposal unit.")
 	var/obj/structure/disposalconstruct/machine/C = new (loc, src)
 	transfer_fingerprints_to(C)
 	C.update()
+	C.balloon_alert_to_viewers("отварено от пола!")
 	qdel(src)
 
 /obj/machinery/disposal/use_tool(obj/item/I, mob/living/user, list/click_params)
@@ -621,15 +621,12 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	USE_FEEDBACK_UNWELD_FROM_FLOOR
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] slices [src]'s floorweld with [tool]."),
-		SPAN_NOTICE("You start slices [src]'s floorweld with [tool].")
-	)
 	var/obj/structure/disposalconstruct/machine/outlet/outlet = new(loc, src)
 	transfer_fingerprints_to(outlet)
 	outlet.anchored = TRUE
 	outlet.set_density(TRUE)
 	outlet.update()
+	outlet.balloon_alert_to_viewers("отварено от пола!")
 	qdel(src)
 
 

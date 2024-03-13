@@ -210,10 +210,6 @@
 	if(!tool.tool_start_check(user, 1))
 		return
 	USE_FEEDBACK_DECONSTRUCT_START
-	user.visible_message(
-		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
-		SPAN_NOTICE("You start dismantling [src] with [tool].")
-	)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || anchored)
 		return
 	var/obj/item/stack/material/steel/stack = new(loc, 4)

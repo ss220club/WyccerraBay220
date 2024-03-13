@@ -329,10 +329,7 @@
 		return
 	welded = !welded
 	update_icon()
-	user.visible_message(
-		SPAN_WARNING("[user] [welded ? "welds" : "unwelds"] [src] with [tool]."),
-		SPAN_WARNING("You [welded ? "weld" : "unweld"] [src] with [tool].")
-	)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(welded)
 
 /obj/structure/closet/use_tool(obj/item/tool, mob/user, list/click_params)
 	// General Action - Place item in closet, if open.

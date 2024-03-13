@@ -29,11 +29,7 @@
 	ClearOverlays()
 	bulletholes.Cut()
 	hp = initial(hp)
-	user.visible_message(
-		SPAN_NOTICE("[user] slices off uneven chunks of aluminium and scorch marks from [src]."),
-		SPAN_NOTICE("You slice off uneven chunks of aluminium and scorch marks from [src]."),
-		SPAN_NOTICE("You hear welding."),
-	)
+	USE_FEEDBACK_REPAIR_FINISH
 
 /obj/item/target/syndicate
 	icon_state = "target_s"

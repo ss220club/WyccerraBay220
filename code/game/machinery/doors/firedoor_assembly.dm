@@ -32,7 +32,6 @@
 	if(anchored)
 		USE_FEEDBACK_NEED_UNANCHOR
 		return
-
 	if(!tool.tool_start_check(user, 1))
 		return
 	USE_FEEDBACK_DECONSTRUCT_START

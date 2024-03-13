@@ -1037,8 +1037,7 @@ About the new airlock wires panel:
 	if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || repairing || operating == DOOR_OPERATING_YES || !density)
 		return
 	welded = !welded
-	user.visible_message(SPAN_NOTICE("[user] welds [src] [welded ? "closed" : "open"]!"),
-						SPAN_NOTICE("You weld [src] [welded ? "closed" : "open"]."))
+	USE_FEEDBACK_WELD_UNWELD_FINISH(welded)
 	update_icon()
 
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)

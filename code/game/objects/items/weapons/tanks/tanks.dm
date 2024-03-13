@@ -179,7 +179,7 @@ var/global/list/tank_gauge_cache = list()
 		return
 
 	add_fingerprint(user)
-	balloon_alert(user, "заваривание клапона")
+	balloon_alert(user, "заваривание клапана")
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_PUBLIC_UNIQUE))
 		GLOB.bombers += "[key_name(user)] attempted to weld a [src]. [air_contents.temperature-T0C]"
 		log_and_message_admins("attempted to weld a [src]. [air_contents.temperature-T0C]", user)

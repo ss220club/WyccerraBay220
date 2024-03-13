@@ -62,7 +62,7 @@
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	anchored = !anchored
-	user.visible_message("[user] [anchored ? null : "un"]secures [src] to the floor.")
+	balloon_alert_to_viewers("[anchored ? "приварено к полу!" : "отварено от пола!"]")
 
 /obj/machinery/fusion_fuel_injector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/fuel_assembly))

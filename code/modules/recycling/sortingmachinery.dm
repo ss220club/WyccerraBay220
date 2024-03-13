@@ -617,9 +617,9 @@
 	USE_FEEDBACK_UNWELD_FROM_FLOOR
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, "You sliced the floorweld off the delivery chute.")
 	var/obj/structure/disposalconstruct/C = new (loc, src)
 	C.update()
+	C.balloon_alert_to_viewers("отварено от пола!")
 	qdel(src)
 
 /obj/machinery/disposal/deliveryChute/Destroy()

@@ -140,7 +140,7 @@
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "начало ремонта")
+	balloon_alert(user, "ремонт")
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	USE_FEEDBACK_REPAIR_GENERAL
@@ -252,7 +252,7 @@
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "начало ремонта")
+	balloon_alert(user, "ремонт")
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	USE_FEEDBACK_REPAIR_GENERAL

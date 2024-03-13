@@ -209,7 +209,7 @@
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "начало разбора")
+	balloon_alert(user, "разбор")
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
 		SPAN_NOTICE("You start dismantling [src] with [tool].")

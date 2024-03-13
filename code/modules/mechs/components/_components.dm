@@ -140,7 +140,7 @@
 	var/amount = (SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION)
 	if(!tool.tool_start_check(user, amount))
 		return
-	balloon_alert(user, "начало ремонта")
+	balloon_alert(user, "ремонт")
 	if(!tool.use_as_tool(src, user, 1 SECONDS, amount, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !brute_damage)
 		return
 	var/repair_value = 10 * max(user.get_skill_value(SKILL_CONSTRUCTION), user.get_skill_value(SKILL_DEVICES))

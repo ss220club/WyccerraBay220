@@ -251,7 +251,7 @@
 		return
 	if(!tool.tool_start_check(user, 5))
 		return
-	balloon_alert(user, "начало ремонта")
+	balloon_alert(user, "ремонт")
 	if(!tool.use_as_tool(src, user, damage, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !damage)
 		return
 	USE_FEEDBACK_REPAIR_GENERAL

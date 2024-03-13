@@ -21,7 +21,7 @@
 	if(I.tool_behaviour == TOOL_WELDER)
 		if(!I.tool_start_check(user, 3))
 			return TRUE
-		machine.balloon_alert(user, "начало разбора")
+		machine.balloon_alert(user, "разбор")
 		if(!I.use_as_tool(machine, user, 2 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)

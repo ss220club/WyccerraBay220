@@ -190,7 +190,7 @@
 	if(damage && W.tool_behaviour == TOOL_WELDER)
 		if(!W.tool_start_check(user, 2))
 			return
-		balloon_alert(user, "начало ремонта")
+		balloon_alert(user, "ремонт")
 		to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
 		if(!W.use_as_tool(src, user, (max(5, damage / 5)) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
@@ -230,7 +230,7 @@
 			strict_timer_flags = TRUE
 
 		if(dismantle_verb)
-			balloon_alert(user, "начало разбора")
+			balloon_alert(user, "разбор")
 			if(dismantle_sound)
 				playsound(src, dismantle_sound, 100, 1)
 

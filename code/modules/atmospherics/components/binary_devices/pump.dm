@@ -149,11 +149,11 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/pump/tgui_act(action, params)
 	if(..())
 		return
-	. = TRUE
 
 	switch(action)
 		if("power")
 			update_use_power(!use_power)
+			update_icon()
 			return TRUE
 		if ("min")
 			target_pressure = 0
@@ -167,8 +167,6 @@ Thus, the two variables affect pump operation are set in New():
 				return FALSE
 			target_pressure = clamp(new_pressure, 0, max_pressure_setting)
 			return TRUE
-	if(.)
-		src.update_icon()
 
 /obj/machinery/atmospherics/binary/pump/cannot_transition_to(state_path, mob/user)
 	if(state_path == /singleton/machine_construction/default/deconstructed)

@@ -247,7 +247,7 @@
 			balloon_alert(user, "укрепление уже заварено!")
 			return
 		if(FRAME_REINFORCED)
-			balloon_alert(user, "необходимо прикрутить укрепления!")
+			balloon_alert(user, "нужно прикрутить укрепления!")
 			return
 	if(!tool.tool_start_check(user, 1))
 		return

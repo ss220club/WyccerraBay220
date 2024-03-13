@@ -136,14 +136,14 @@
 /obj/structure/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health == maxhealth)
-		balloon_alert(user, "нет повреждений!")
+		USE_FEEDBACK_NOTHING_TO_REPAIR
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "ремонт")
+	USE_FEEDBACK_REPAIR_START
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_GENERAL
+	USE_FEEDBACK_REPAIR_FINISH
 	health = maxhealth
 
 /obj/structure/barrier/bullet_act(obj/item/projectile/P)
@@ -248,12 +248,12 @@
 /obj/item/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health == initial(health))
-		balloon_alert(user, "нет повреждений!")
+		USE_FEEDBACK_NOTHING_TO_REPAIR
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "ремонт")
+	USE_FEEDBACK_REPAIR_START
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_GENERAL
+	USE_FEEDBACK_REPAIR_FINISH
 	health = initial(health)

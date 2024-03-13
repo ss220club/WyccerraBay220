@@ -244,17 +244,17 @@
 /obj/machinery/power/smes/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!panel_open)
-		balloon_alert(user, "необходимо открыть панель!")
+		balloon_alert(user, "нужно открыть панель!")
 		return
 	if(!damage)
-		balloon_alert(user, "нет повреждений!")
+		USE_FEEDBACK_NOTHING_TO_REPAIR
 		return
 	if(!tool.tool_start_check(user, 5))
 		return
-	balloon_alert(user, "ремонт")
+	USE_FEEDBACK_REPAIR_START
 	if(!tool.use_as_tool(src, user, damage, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !damage)
 		return
-	USE_FEEDBACK_REPAIR_GENERAL
+	USE_FEEDBACK_REPAIR_FINISH
 	damage = 0
 
 /obj/machinery/power/smes/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)

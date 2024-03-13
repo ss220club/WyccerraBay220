@@ -230,7 +230,7 @@
 	// Welding Tool - Cut pipe
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "отваривание")
+	USE_FEEDBACK_UNWELD_FROM_FLOOR
 	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded()

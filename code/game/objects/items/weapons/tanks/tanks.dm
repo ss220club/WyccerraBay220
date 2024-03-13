@@ -170,7 +170,7 @@ var/global/list/tank_gauge_cache = list()
 	. = ITEM_INTERACT_SUCCESS
 	var/obj/item/weldingtool/WT = tool
 	if(GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
-		balloon_alert(user, "необходимо закрыть клапан!")
+		balloon_alert(user, "нужно закрыть клапан!")
 		return
 	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
 		balloon_alert(user, "клапан уже заварен!")

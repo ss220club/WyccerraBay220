@@ -277,7 +277,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 2))
 		return
-	balloon_alert(user, "[blocked ? "отваривание" : "заваривание"]")
+	USE_FEEDBACK_WELD_UNWELD(blocked)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	blocked = !blocked

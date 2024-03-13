@@ -1033,13 +1033,12 @@ About the new airlock wires panel:
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "[welded ? "отваривание" : "заваривание"]")
-	user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),
-						SPAN_NOTICE("You begin welding [src] [welded ? "open" : "closed"]."))
+	USE_FEEDBACK_WELD_UNWELD(welded)
 	if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || repairing || operating == DOOR_OPERATING_YES || !density)
 		return
 	welded = !welded
-	balloon_alert(user, "[welded ? "заварено" : "отварено"]")
+	user.visible_message(SPAN_NOTICE("[user] welds [src] [welded ? "closed" : "open"]!"),
+						SPAN_NOTICE("You weld [src] [welded ? "closed" : "open"]."))
 	update_icon()
 
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)

@@ -159,7 +159,7 @@
 	var/obj/structure/disposalpipe/connected_pipe = locate() in get_turf(src)
 	// Welding Tool - Weld into place
 	if(!anchored)
-		balloon_alert(user, "необходимо прикрутить к полу!")
+		USE_FEEDBACK_NEED_ANCHOR
 		return
 	if(!tool.tool_start_check(user, 1))
 		return

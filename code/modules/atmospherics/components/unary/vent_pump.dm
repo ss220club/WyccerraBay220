@@ -305,7 +305,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "[welded ? "отваривание" : "заваривание"]")
+	USE_FEEDBACK_WELD_UNWELD(welded)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded

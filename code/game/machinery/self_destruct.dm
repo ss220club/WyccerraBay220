@@ -14,10 +14,10 @@
 	if(damaged)
 		if(!tool.tool_start_check(user, 10))
 			return
-		balloon_alert(user, "ремонт")
+		USE_FEEDBACK_REPAIR_START
 		if(!tool.use_as_tool(src, user, 10 SECONDS, 10, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		USE_FEEDBACK_REPAIR_GENERAL
+		USE_FEEDBACK_REPAIR_FINISH
 		damaged = 0
 
 /obj/machinery/self_destruct/use_tool(obj/item/W, mob/living/user, list/click_params)

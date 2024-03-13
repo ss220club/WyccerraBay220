@@ -205,11 +205,11 @@
 
 	// Dismantle assembly
 	if(anchored)
-		balloon_alert(user, "необходимо открепить от пола!")
+		USE_FEEDBACK_NEED_UNANCHOR
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "разбор")
+	USE_FEEDBACK_DECONSTRUCT_START
 	user.visible_message(
 		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
 		SPAN_NOTICE("You start dismantling [src] with [tool].")

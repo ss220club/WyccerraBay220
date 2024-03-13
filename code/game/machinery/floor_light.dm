@@ -55,10 +55,10 @@ var/global/list/floor_light_cache = list()
 /obj/machinery/floor_light/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health_damaged() || MACHINE_IS_BROKEN(src))
-		balloon_alert(user, "ремонт")
+		USE_FEEDBACK_REPAIR_START
 		if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		USE_FEEDBACK_REPAIR_GENERAL
+		USE_FEEDBACK_REPAIR_FINISH
 		set_broken(FALSE)
 		revive_health()
 

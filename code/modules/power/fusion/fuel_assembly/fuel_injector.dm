@@ -57,7 +57,7 @@
 /obj/machinery/fusion_fuel_injector/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(injecting)
-		balloon_alert(user, "необходимо отключить!")
+		balloon_alert(user, "нужно отключить!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
 		return

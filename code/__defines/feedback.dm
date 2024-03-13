@@ -18,5 +18,21 @@
 /// Assailant must upgrade their grab to perform action.
 #define USE_FEEDBACK_GRAB_MUST_UPGRADE(ACTION) USE_FEEDBACK_GRAB_FAILURE("You need a better grip on \the [grab.affecting][ACTION].")
 
-/// Feedback messages for repairs done by welder_act()
-#define USE_FEEDBACK_REPAIR_GENERAL user.visible_message(SPAN_NOTICE("[user] finishes repairing the damage to [src]"), SPAN_NOTICE("You finish repairing the damage to [src]."))
+
+/// Feedback message when user needs to unanchor the target
+#define USE_FEEDBACK_NEED_UNANCHOR balloon_alert(user, "нужно открутить от пола!")
+/// Feedback message when user needs to unanchor the target
+#define USE_FEEDBACK_NEED_ANCHOR balloon_alert(user, "нужно прикрутить к полу!")
+/// Feedback message when user starts deconstructing the target
+#define USE_FEEDBACK_DECONSTRUCT_START balloon_alert(user, "разбор")
+/// Feedback message when user starts welding/unwelding the target
+#define USE_FEEDBACK_WELD_UNWELD(welded) balloon_alert(user, "[welded ? "отваривание" : "заваривание"]")
+/// Feedback message when user starts unwelding target from the floor
+#define USE_FEEDBACK_UNWELD_FROM_FLOOR balloon_alert(user, "отваривание от пола")
+
+/// Feedback message when user starts repairing the target
+#define USE_FEEDBACK_REPAIR_START balloon_alert(user, "ремонт")
+/// Feedback message when user finishes the repairs
+#define USE_FEEDBACK_REPAIR_FINISH user.visible_message(SPAN_NOTICE("[user] finishes repairing the damage to [src]"), SPAN_NOTICE("You finish repairing the damage to [src]."))
+/// Feedback message when the target doesn't need repairs
+#define USE_FEEDBACK_NOTHING_TO_REPAIR balloon_alert(user, "нет повреждений!")

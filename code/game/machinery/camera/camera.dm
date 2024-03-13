@@ -194,7 +194,7 @@
 	if(camera_wires.CanDeconstruct() || (MACHINE_IS_BROKEN(src)))
 		if(!tool.tool_start_check(user, 1))
 			return
-		balloon_alert(user, "разбор")
+		USE_FEEDBACK_DECONSTRUCT_START
 		if(!tool.use_as_tool(src, user, 10 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		if(assembly)

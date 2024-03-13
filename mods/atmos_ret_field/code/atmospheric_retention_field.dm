@@ -97,7 +97,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 5))
 		return
-	balloon_alert(user, "разбор")
+	USE_FEEDBACK_DECONSTRUCT_START
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.visible_message("[user] disassembles [src].", "You disassemble [src].")

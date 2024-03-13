@@ -151,14 +151,14 @@
 /obj/structure/windoor_assembly/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(state != WINDOOR_STATE_FRAME)
-		balloon_alert(user, "необходимо убрать проводку!")
+		balloon_alert(user, "нужно убрать проводку!")
 		return
 	if(anchored)
-		balloon_alert(user, "необходимо открепить от пола!")
+		USE_FEEDBACK_NEED_UNANCHOR
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	balloon_alert(user, "разбор")
+	USE_FEEDBACK_DECONSTRUCT_START
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != WINDOOR_STATE_FRAME || anchored)
 		return
 	var/obj/item/stack/material/glass/reinforced/glass = new(loc, 5)

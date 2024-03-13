@@ -353,11 +353,11 @@ var/global/list/empty_playable_ai_cores = list()
 	if (tool.tool_behaviour == TOOL_WELDER)
 		if (state == STATE_FRAME)
 			if(anchored)
-				balloon_alert(user, "необходимо открутить от пола!")
+				USE_FEEDBACK_NEED_UNANCHOR
 				return TRUE
 			if(!tool.tool_start_check(user, 1))
 				return TRUE
-			balloon_alert(user, "разбор")
+			USE_FEEDBACK_DECONSTRUCT_START
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return TRUE
 			new /obj/item/stack/material/plasteel(loc, 4)

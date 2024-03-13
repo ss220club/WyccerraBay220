@@ -528,17 +528,17 @@
 /obj/machinery/power/apc/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!opened)
-		balloon_alert(user, "необходимо открыть панель!")
+		balloon_alert(user, "нужно открыть панель!")
 		return
 	if(has_electronics)
-		balloon_alert(user, "необходимо убрать плату!")
+		balloon_alert(user, "нужно убрать плату!")
 		return
 	if(terminal())
-		balloon_alert(user, "необходимо убрать проводку!")
+		balloon_alert(user, "нужно убрать проводку!")
 		return
 	if(!tool.tool_start_check(user, 3))
 		return
-	balloon_alert(user, "разбор")
+	USE_FEEDBACK_DECONSTRUCT_START
 	if(!tool.use_as_tool(src, user, 5 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !opened || has_electronics || terminal())
 		return
 	if(emagged || MACHINE_IS_BROKEN(src) || opened == 2)

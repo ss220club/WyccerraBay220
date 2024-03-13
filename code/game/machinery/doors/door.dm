@@ -203,14 +203,14 @@
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!density)
-		balloon_alert(user, "необходимо закрыть!")
+		balloon_alert(user, "нужно закрыть!")
 		return
 	if(!tool.tool_start_check(user, 2))
 		return
-	balloon_alert(user, "ремонт")
+	USE_FEEDBACK_REPAIR_START
 	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing || !density)
 		return
-	USE_FEEDBACK_REPAIR_GENERAL
+	USE_FEEDBACK_REPAIR_FINISH
 	restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
 	update_icon()
 	qdel(repairing)

@@ -187,14 +187,14 @@
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		if(H.wear_suit == src)
-			balloon_alert(user, "необходимо снять с себя!")
+			balloon_alert(user, "нужно снять с себя!")
 			return
 	if(brute_damage <= 0)
-		balloon_alert(user, "нет повреждений!")
+		USE_FEEDBACK_NOTHING_TO_REPAIR
 		return
 	if(!tool.use_as_tool(src, user, amount = 5, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_GENERAL
+	USE_FEEDBACK_REPAIR_FINISH
 	repair_breaches(DAMAGE_BRUTE, 3, user)
 
 /obj/item/clothing/suit/space/attackby(obj/item/W as obj, mob/user as mob)

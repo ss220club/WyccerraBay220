@@ -138,7 +138,7 @@
 	var/list/data = list()
 
 	data["amount"] = amount
-	data["isBeakerLoaded"] = container ? TRUE : FALSE
+	data["isBeakerLoaded"] = !!container
 	data["drinkingGlass"] = accept_drinking
 
 	var/list/beakerContents = list()

@@ -46,15 +46,16 @@
 
 /proc/get_random_turf_in_range(atom/origin, outer_range, inner_range)
 	RETURN_TYPE(/turf)
-	origin = get_turf(origin)
-	if(!origin)
+	var/turf/center = get_turf(origin)
+	if(!center)
 		return
+
 	var/list/turfs = list()
-	for(var/turf/T as anything in ORANGE_TURFS(origin, outer_range))
+	for(var/turf/T as anything in ORANGE_TURFS(center, outer_range))
 		if(!(T.z in GLOB.using_map.sealed_levels)) // Picking a turf outside the map edge isn't recommended
 			if(T.x >= world.maxx-TRANSITIONEDGE || T.x <= TRANSITIONEDGE)	continue
 			if(T.y >= world.maxy-TRANSITIONEDGE || T.y <= TRANSITIONEDGE)	continue
-		if(!inner_range || get_dist(origin, T) >= inner_range)
+		if(!inner_range || get_dist(center, T) >= inner_range)
 			turfs += T
 	if(length(turfs))
 		return pick(turfs)

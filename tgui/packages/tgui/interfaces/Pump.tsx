@@ -37,7 +37,7 @@ export const Pump = (props, context) => {
           <LabeledList>
             <LabeledList.Item label="Питание">
               <Button
-                icon={on ? 'power-off' : 'power-off'}
+                icon={'power-off'}
                 content={on ? 'Включено' : 'Отключено'}
                 color={on ? null : 'red'}
                 selected={on}

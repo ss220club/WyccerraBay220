@@ -158,18 +158,20 @@ const ChemBeaker = (props, context) => {
         title={'Ёмкость'}
         buttons={
           <Stack>
-            <Stack.Item>
-              <ProgressBar
-                width={10}
-                value={data.beakerCurrentVolume}
-                maxValue={data.beakerMaxVolume}
-                ranges={{
-                  bad: [data.beakerMaxVolume, Infinity],
-                }}
-              >
-                {data.beakerCurrentVolume || 0} / {data.beakerMaxVolume || 0}
-              </ProgressBar>
-            </Stack.Item>
+            {data.beakerMaxVolume && (
+              <Stack.Item>
+                <ProgressBar
+                  width={10}
+                  value={data.beakerCurrentVolume}
+                  maxValue={data.beakerMaxVolume}
+                  ranges={{
+                    bad: [data.beakerMaxVolume, Infinity],
+                  }}
+                >
+                  {data.beakerCurrentVolume || 0} / {data.beakerMaxVolume || 0}
+                </ProgressBar>
+              </Stack.Item>
+            )}
             <Stack.Item>
               <Button
                 content={'Вынуть ёмкость'}

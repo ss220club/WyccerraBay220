@@ -148,10 +148,7 @@
 		AddOverlays(emissive_appearance(icon, "[icon_state]_lights"))
 		AddOverlays("[icon_state]_lights")
 	if(container)
-		var/mutable_appearance/beaker_overlay
-		beaker_overlay = image('icons/obj/machines/dispensers.dmi', src, "lil_beaker")
-		beaker_overlay.pixel_x = rand(-10, 5)
-		AddOverlays(beaker_overlay)
+		AddOverlays(image('icons/obj/machines/dispensers.dmi', src, "lil_beaker", pixel_x = rand(-10, 5)))
 
 /obj/machinery/chemical_dispenser/proc/eject_beaker(mob/user)
 	if(!container)

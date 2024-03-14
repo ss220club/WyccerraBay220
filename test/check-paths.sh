@@ -47,7 +47,7 @@ exactly 25 "text2path uses" 'text2path'
 exactly 4 "update_icon() override" '/update_icon\((.*)\)'  -P
 exactly 4 "goto use" 'goto '
 exactly 1 "NOOP match" 'NOOP'
-exactly 337 "spawn uses" '^\s*spawn\s*\(\s*(-\s*)?\d*\s*\)' -P
+exactly 335 "spawn uses" '^\s*spawn\s*\(\s*(-\s*)?\d*\s*\)' -P
 exactly 0 "tag uses" '\stag = ' -P '**/*.dmm'
 exactly 0 "anchored = 0/1" 'anchored\s*=\s*\d' -P
 exactly 2 "density = 0/1" 'density\s*=\s*\d' -P

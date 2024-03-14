@@ -184,8 +184,11 @@ Class Procs:
 				var/atom/checking = check_atom
 				if(checking.simulated)
 					QUEUE_TEMPERATURE_ATOMS(checking)
-			SEND_SIGNAL(T, COMSIG_TURF_ZONE_TICK)
 			CHECK_TICK
+
+	// Send signals
+	for(var/turf/simulated/T in contents)
+		SEND_SIGNAL(T, COMSIG_TURF_ZONE_TICK)
 
 	SEND_SIGNAL(src, COMSIG_ZONE_TICK)
 

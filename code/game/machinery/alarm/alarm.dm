@@ -120,12 +120,10 @@
 	var/previous_environment_volume = null
 	var/list/previous_environment_gas = list()
 	var/turf/simulated/holder
-	var/zone/holder_zone
+	var/zone/zone
 
 	///Cooldown on sending warning messages
 	COOLDOWN_DECLARE(warning_cooldown)
-	///Cooldown on heating/cooling
-	COOLDOWN_DECLARE(heating_cooldown)
 
 /obj/machinery/alarm/Destroy()
 	unregister_radio(src, frequency)
@@ -176,12 +174,25 @@
 
 /obj/machinery/alarm/Process()
 	//Handle temperature adjustment here.
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = get_air()
 	handle_heating_cooling(environment)
 	if(!COOLDOWN_FINISHED(src, warning_cooldown))
 		return
-	check_environment(environment)
 	COOLDOWN_START(src, warning_cooldown, AIRALARM_WARNING_COOLDOWN)
+	if(!check_environment(environment) && !regulating_temperature)
+		on_sleep()
+
+/obj/machinery/alarm/proc/get_air()
+	if(!issimulatedturf(loc))
+		return
+	var/turf/simulated/simulated = loc
+	if(!simulated.zone.invalid)
+		if(zone != simulated.zone)
+			zone = simulated.zone
+		return zone.air
+	if(!isnull(zone))
+		zone = null
+	return simulated.return_air()
 
 /obj/machinery/alarm/proc/update_processing()
 	if(inoperable() || shorted || buildstage != 2)
@@ -190,14 +201,11 @@
 	if(!issimulatedturf(loc))
 		STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 		return
-	var/datum/gas_mixture/environment = loc.return_air()
-	handle_heating_cooling(environment)
-	if(!check_environment(environment))
-		return
 	if(holder)
-		UnregisterSignal(holder_zone, COMSIG_ZONE_TICK)
+		UnregisterSignal(zone, COMSIG_ZONE_TICK)
 		UnregisterSignal(holder, list(COMSIG_TURF_ZONE_ADD, COMSIG_TURF_ZONE_REMOVE))
 		holder = null
+		zone = null
 	START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 
 /obj/machinery/alarm/proc/on_sleep()
@@ -208,8 +216,8 @@
 	if(!location.zone)
 		CRASH("[src] put to sleep without zone!")
 	holder = location
-	holder_zone = holder.zone
-	RegisterSignal(holder_zone, COMSIG_ZONE_TICK, PROC_REF(on_zone_tick))
+	zone = holder.zone
+	RegisterSignal(zone, COMSIG_ZONE_TICK, PROC_REF(on_zone_tick))
 	RegisterSignal(holder, COMSIG_TURF_ZONE_ADD, PROC_REF(on_zone_change))
 	RegisterSignal(holder, COMSIG_TURF_ZONE_REMOVE, PROC_REF(on_zone_removal))
 
@@ -219,13 +227,14 @@
 
 /obj/machinery/alarm/proc/on_zone_change(turf/simulated/owner, zone/new_zone)
 	SIGNAL_HANDLER
-	UnregisterSignal(holder_zone, COMSIG_ZONE_TICK)
-	holder_zone = new_zone
-	RegisterSignal(holder_zone, COMSIG_ZONE_TICK, PROC_REF(on_zone_tick))
+	UnregisterSignal(zone, COMSIG_ZONE_TICK)
+	zone = new_zone
+	RegisterSignal(zone, COMSIG_ZONE_TICK, PROC_REF(on_zone_tick))
 
 /obj/machinery/alarm/proc/on_zone_removal(turf/simulated/owner, zone/removed_zone)
 	SIGNAL_HANDLER
-	UnregisterSignal(holder_zone, COMSIG_ZONE_TICK)
+	UnregisterSignal(zone, COMSIG_ZONE_TICK)
+	zone = null
 
 /// Returns TRUE if gas_mixture is different from the previous check
 /obj/machinery/alarm/proc/check_environment(datum/gas_mixture/environment)
@@ -247,8 +256,6 @@
 			previous_environment_total_moles = environment.total_moles
 			previous_environment_volume = environment.volume
 	if(is_same_environment)
-		if(isnull(holder))
-			on_sleep()
 		return FALSE
 
 	var/old_level = danger_level
@@ -320,12 +327,9 @@
 /obj/machinery/alarm/proc/handle_heating_cooling(datum/gas_mixture/environment)
 	if(environment.return_pressure() <= ONE_ATMOSPHERE*0.05)
 		return
-	if(!COOLDOWN_FINISHED(src, heating_cooldown))
-		return
-	COOLDOWN_START(src, heating_cooldown, SSmachines.wait)
 	var/danger_level = get_danger_level(target_temperature, TLV["temperature"])
 
-	if (!regulating_temperature)
+	if(!regulating_temperature)
 		//check for when we should start adjusting temperature
 		if(!danger_level && abs(environment.temperature - target_temperature) > 2.0)
 			update_use_power(POWER_USE_ACTIVE)
@@ -334,13 +338,15 @@
 			"You hear a click and a faint electronic hum.")
 	else
 		//check for when we should stop adjusting temperature
-		if (danger_level || abs(environment.temperature - target_temperature) <= 0.5)
+		if(danger_level || abs(environment.temperature - target_temperature) <= 0.5)
 			update_use_power(POWER_USE_IDLE)
 			regulating_temperature = 0
 			visible_message("[src] clicks quietly as it stops [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
 			"You hear a click as a faint electronic humming stops.")
+	update_processing()
 
-	if (regulating_temperature)
+	if(regulating_temperature)
+		SSair.mark_zone_update(zone)
 		if(target_temperature > T0C + MAX_TEMPERATURE)
 			target_temperature = T0C + MAX_TEMPERATURE
 

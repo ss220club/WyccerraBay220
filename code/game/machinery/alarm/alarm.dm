@@ -57,6 +57,7 @@
 /// List (`string (id_tag)` => `/datum/signal/data`). List of radio signal data received from scrubbers in the area, indexed by the scrubber's `id_tag`. Do not modify directly; See `./receive_signal()` and `./send_signal()`.
 /area/var/list/air_scrub_info = list()
 
+#define AIRALARM_WARNING_COOLDOWN (10 SECONDS)
 
 /obj/machinery/alarm
 	name = "alarm"
@@ -69,6 +70,7 @@
 	req_access = list(list(access_atmospherics, access_engine_equip))
 	clicksound = "button"
 	clickvol = 30
+	init_flags = EMPTY_BITFIELD
 
 	layer = ABOVE_WINDOW_LAYER
 
@@ -117,6 +119,12 @@
 	var/previous_environment_total_moles = null
 	var/previous_environment_volume = null
 	var/list/previous_environment_gas = list()
+	var/holder
+
+	///Cooldown on sending warning messages
+	COOLDOWN_DECLARE(warning_cooldown)
+	///Cooldown on heating/cooling
+	COOLDOWN_DECLARE(heating_cooldown)
 
 /obj/machinery/alarm/Destroy()
 	unregister_radio(src, frequency)
@@ -158,6 +166,7 @@
 
 	set_frequency(frequency)
 	update_icon()
+	update_processing()
 
 /obj/machinery/alarm/get_req_access()
 	if(!locked)
@@ -165,25 +174,56 @@
 	return ..()
 
 /obj/machinery/alarm/Process()
+	//Handle temperature adjustment here.
+	var/turf/simulated/location = loc
+	var/datum/gas_mixture/environment = location.return_air()
+	handle_heating_cooling(environment)
+	if(!COOLDOWN_FINISHED(src, warning_cooldown))
+		return
+	check_environment(environment)
+	COOLDOWN_START(src, warning_cooldown, AIRALARM_WARNING_COOLDOWN)
+
+/obj/machinery/alarm/proc/update_processing()
+	STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 	if(inoperable() || shorted || buildstage != 2)
 		return
-
 	var/turf/simulated/location = loc
-	if(!istype(location))	return//returns if loc is not simulated
-
+	if(!istype(location))
+		return
 	var/datum/gas_mixture/environment = location.return_air()
+	if(!check_environment(environment))
+		return
+	if(holder)
+		UnregisterSignal(holder, list(COMSIG_TURF_ZONE_TICK, COMSIG_GASMIX_MERGED, COMSIG_GASMIX_REACTED, COMSIG_GASMIX_REMOVED))
+		holder = null
+	START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 
-	//Handle temperature adjustment here.
-	if(environment.return_pressure() > ONE_ATMOSPHERE*0.05)
-		handle_heating_cooling(environment)
+/obj/machinery/alarm/proc/on_sleep()
+	STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+	var/turf/simulated/location = loc
+	if(!istype(location))
+		CRASH("[src] put to sleep with no simulated turf!")
 
+	if(location.zone)
+		holder = location
+		RegisterSignal(holder, COMSIG_TURF_ZONE_TICK, PROC_REF(on_awake))
+	else
+		holder = location.return_air()
+		RegisterSignals(holder, list(COMSIG_GASMIX_MERGED, COMSIG_GASMIX_REACTED, COMSIG_GASMIX_REMOVED), PROC_REF(on_awake))
+
+/obj/machinery/alarm/proc/on_awake()
+	SIGNAL_HANDLER
+	update_processing()
+
+/// Returns TRUE if gas_mixture is different from the previous check
+/obj/machinery/alarm/proc/check_environment(datum/gas_mixture/environment)
+	handle_heating_cooling(environment)
 	var/is_same_environment = TRUE
 	for(var/gas_id in environment.gas)
 		if(environment.gas[gas_id] != previous_environment_gas[gas_id])
 			is_same_environment = FALSE
 			previous_environment_gas = environment.gas.Copy()
 			break
-
 	if(is_same_environment)
 		if((environment.temperature != previous_environment_temperature) ||\
 			(environment.group_multiplier != previous_environment_group_multiplier) ||\
@@ -195,29 +235,33 @@
 			previous_environment_temperature = environment.temperature
 			previous_environment_total_moles = environment.total_moles
 			previous_environment_volume = environment.volume
-
 	if(is_same_environment)
-		return
+		if(isnull(holder))
+			on_sleep()
+		return FALSE
 
 	var/old_level = danger_level
 	danger_level = get_overall_danger_level(environment)
 
-	if (old_level != danger_level)
+	if(old_level != danger_level)
 		if(danger_level == 2)
 			playsound(src.loc, 'sound/machines/airalarm.ogg', 25, 0, 4)
 		apply_danger_level(danger_level)
 
-	if (pressure_dangerlevel != 0)
-		if (breach_detected())
+	if(pressure_dangerlevel != 0)
+		if(breach_detected())
 			mode = AALARM_MODE_OFF
 			apply_mode()
 
-	if (mode==AALARM_MODE_CYCLE && environment.return_pressure()<ONE_ATMOSPHERE*0.05)
+	if(mode==AALARM_MODE_CYCLE && environment.return_pressure()<ONE_ATMOSPHERE*0.05)
 		breach_start_cooldown()
 		mode=AALARM_MODE_FILL
 		apply_mode()
 
-	//atmos computer remote controll stuff
+	update_remote_control()
+	return TRUE
+
+/obj/machinery/alarm/proc/update_remote_control()
 	switch(rcon_setting)
 		if(RCON_NO)
 			remote_control = 0
@@ -228,6 +272,16 @@
 				remote_control = 0
 		if(RCON_YES)
 			remote_control = 1
+
+/obj/machinery/alarm/set_broken(new_state, cause)
+	. = ..()
+	if(.)
+		update_processing()
+
+/obj/machinery/alarm/power_change()
+	. = ..()
+	if(.)
+		update_processing()
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
 	if(!signal || signal.encryption)
@@ -253,6 +307,11 @@
 		alarm_area.air_vent_info[id_tag] = signal.data
 
 /obj/machinery/alarm/proc/handle_heating_cooling(datum/gas_mixture/environment)
+	if(environment.return_pressure() <= ONE_ATMOSPHERE*0.05)
+		return
+	if(!COOLDOWN_FINISHED(src, heating_cooldown))
+		return
+	COOLDOWN_START(src, heating_cooldown, SSmachines.wait)
 	var/danger_level = get_danger_level(target_temperature, TLV["temperature"])
 
 	if (!regulating_temperature)
@@ -561,6 +620,7 @@
 	return min(..(), .)
 
 /obj/machinery/alarm/OnTopic(user, href_list, datum/topic_state/state)
+	update_processing()
 	// hrefs that can always be called -walter0o
 	if(href_list["rcon"])
 		var/attempted_rcon_setting = text2num(href_list["rcon"])
@@ -572,6 +632,7 @@
 				rcon_setting = RCON_AUTO
 			if(RCON_YES)
 				rcon_setting = RCON_YES
+		update_remote_control()
 		return TOPIC_REFRESH
 
 	if(href_list["temperature"])
@@ -755,6 +816,7 @@
 	user.visible_message(SPAN_WARNING("[user] has cut the wires inside [src]!"), "You have cut the wires inside [src].")
 	new/obj/item/stack/cable_coil(get_turf(src), 5)
 	buildstage = 1
+	update_processing()
 	update_icon()
 
 /obj/machinery/alarm/use_tool(obj/item/W, mob/living/user, list/click_params)
@@ -771,6 +833,7 @@
 					to_chat(user, SPAN_NOTICE("You wire [src]."))
 					buildstage = 2
 					update_icon()
+					update_processing()
 					return TRUE
 				else
 					to_chat(user, SPAN_WARNING("You need 5 pieces of cable to do wire [src]."))
@@ -963,3 +1026,5 @@ Just a object used in constructing air alarms
 	desc = "Looks like a circuit. Probably is."
 	w_class = ITEM_SIZE_SMALL
 	matter = list(MATERIAL_STEEL = 50, MATERIAL_GLASS = 50)
+
+#undef AIRALARM_WARNING_COOLDOWN

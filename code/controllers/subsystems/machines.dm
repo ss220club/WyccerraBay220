@@ -63,28 +63,25 @@ SUBSYSTEM_DEF(machines)
 
 /datum/controller/subsystem/machines/fire(resumed, no_mc_tick)
 	var/timer
-	if (!resumed)
+	if (!resumed || current_step == SSMACHINES_STEP_DONE)
 		current_step = SSMACHINES_STEP_DEFAULT
 	timer = world.tick_usage
-	while(current_step < SSMACHINES_STEP_DONE)
+	while(current_step < SSMACHINES_STEP_DONE && state == SS_RUNNING)
 		switch(current_step)
 			if(SSMACHINES_STEP_PIPENETS)
 				process_pipenets(resumed, no_mc_tick)
 				cost_pipenets = MC_AVERAGE(cost_pipenets, (world.tick_usage - timer) * world.tick_lag)
-				resumed = FALSE
 			if(SSMACHINES_STEP_MACHINERY)
 				process_machinery(resumed, no_mc_tick)
 				cost_machinery = MC_AVERAGE(cost_machinery, (world.tick_usage - timer) * world.tick_lag)
-				resumed = FALSE
 			if(SSMACHINES_STEP_POWERNETS)
 				process_powernets(resumed, no_mc_tick)
 				cost_powernets = MC_AVERAGE(cost_powernets, (world.tick_usage - timer) * world.tick_lag)
-				resumed = FALSE
 			if(SSMACHINES_STEP_POWER_OBJECTS)
 				process_power_objects(resumed, no_mc_tick)
 				cost_power_objects = MC_AVERAGE(cost_power_objects, (world.tick_usage - timer) * world.tick_lag)
 		current_step++
-	current_step = SSMACHINES_STEP_DEFAULT
+		resumed = FALSE
 
 /datum/controller/subsystem/machines/proc/register_machinery(obj/machinery/machine)
 	if(!machine)

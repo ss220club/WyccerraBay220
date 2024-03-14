@@ -184,13 +184,14 @@
 	COOLDOWN_START(src, warning_cooldown, AIRALARM_WARNING_COOLDOWN)
 
 /obj/machinery/alarm/proc/update_processing()
-	STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 	if(inoperable() || shorted || buildstage != 2)
+		STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 		return
-	var/turf/simulated/location = loc
-	if(!istype(location))
+	if(!issimulatedturf(loc))
+		STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 		return
-	var/datum/gas_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
+	handle_heating_cooling(environment)
 	if(!check_environment(environment))
 		return
 	if(holder)
@@ -228,7 +229,6 @@
 
 /// Returns TRUE if gas_mixture is different from the previous check
 /obj/machinery/alarm/proc/check_environment(datum/gas_mixture/environment)
-	handle_heating_cooling(environment)
 	var/is_same_environment = TRUE
 	for(var/gas_id in environment.gas)
 		if(environment.gas[gas_id] != previous_environment_gas[gas_id])

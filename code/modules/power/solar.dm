@@ -60,23 +60,19 @@ var/global/solar_gen_rate = 1500
 		set_max_health(health_max * 2)
 	update_icon()
 
-
-
-/obj/machinery/power/solar/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isCrowbar(W))
-		playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
-		user.visible_message(SPAN_NOTICE("[user] begins to take the glass off the solar panel."))
-		if(do_after(user, (W.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			var/obj/item/solar_assembly/S = locate() in src
-			if(S)
-				S.dropInto(loc)
-				S.give_glass()
-			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			user.visible_message(SPAN_NOTICE("[user] takes the glass off the solar panel."))
-			qdel(src)
-		return TRUE
-
-	return ..()
+/obj/machinery/power/solar/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
+	user.visible_message(SPAN_NOTICE("[user] begins to take the glass off the solar panel."))
+	if(!tool.use_as_tool(src, user, 5 SECONDS, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/solar_assembly/S = locate() in src
+	if(S)
+		S.dropInto(loc)
+		S.give_glass()
+	playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+	user.visible_message(SPAN_NOTICE("[user] takes the glass off the solar panel."))
+	qdel(src)
 
 /obj/machinery/power/solar/on_update_icon()
 	..()
@@ -220,25 +216,34 @@ var/global/solar_gen_rate = 1500
 		S.amount = 2
 		glass_type = null
 
+/obj/item/solar_assembly/crowbar_act(mob/living/user, obj/item/tool)
+	if(!tracker)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/tracker_electronics(src.loc)
+	tracker = FALSE
+	user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))
+
+/obj/item/solar_assembly/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!anchored && isturf(loc))
+		if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		anchored = TRUE
+		pixel_x = 0
+		pixel_y = 0
+		pixel_z = 0
+		user.visible_message(SPAN_NOTICE("[user] wrenches the solar assembly into place."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = FALSE
+	user.visible_message(SPAN_NOTICE("[user] unwrenches the solar assembly from it's place."))
 
 /obj/item/solar_assembly/attackby(obj/item/W, mob/user)
-
-	if(!anchored && isturf(loc))
-		if(isWrench(W))
-			anchored = TRUE
-			pixel_x = 0
-			pixel_y = 0
-			pixel_z = 0
-			user.visible_message(SPAN_NOTICE("[user] wrenches the solar assembly into place."))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-			return 1
-	else
-		if(isWrench(W))
-			anchored = FALSE
-			user.visible_message(SPAN_NOTICE("[user] unwrenches the solar assembly from it's place."))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-			return 1
-
+	if(anchored || isturf(loc))
 		if(istype(W, /obj/item/stack/material) && W.get_material_name() == MATERIAL_GLASS)
 			var/obj/item/stack/material/S = W
 			if(S.use(2))
@@ -252,20 +257,14 @@ var/global/solar_gen_rate = 1500
 			else
 				to_chat(user, SPAN_WARNING("You need two sheets of glass to put them into a solar panel."))
 				return
-			return 1
+			return TRUE
 
 	if(!tracker)
 		if(istype(W, /obj/item/tracker_electronics))
 			tracker = 1
 			qdel(W)
 			user.visible_message(SPAN_NOTICE("[user] inserts the electronics into the solar assembly."))
-			return 1
-	else
-		if(isCrowbar(W))
-			new /obj/item/tracker_electronics(src.loc)
-			tracker = 0
-			user.visible_message(SPAN_NOTICE("[user] takes out the electronics from the solar assembly."))
-			return 1
+			return TRUE
 	..()
 
 //

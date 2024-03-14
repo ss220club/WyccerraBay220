@@ -19,7 +19,9 @@
 #define SMOOTH_WHITELIST 2	//Smooth with a whitelist of subtypes
 #define SMOOTH_BLACKLIST 3 //Smooth with all but a blacklist of subtypes
 
+/// Finds turfs block with desired center and radius. Make sure that `center` has valid x,y,z. If it's in loc of another non-turf atom, it's coordinates will be (0,0,0)
 #define RANGE_TURFS(CENTER, RADIUS) block(locate(max(CENTER.x-(RADIUS), 1), max(CENTER.y-(RADIUS),1), CENTER.z), locate(min(CENTER.x+(RADIUS), world.maxx), min(CENTER.y+(RADIUS), world.maxy), CENTER.z))
+/// The same as `RANGE_TURFS` but with center excluded
 #define ORANGE_TURFS(CENTER, RADIUS) RANGE_TURFS(CENTER, RADIUS) - CENTER
 
 ///Returns all currently loaded turfs

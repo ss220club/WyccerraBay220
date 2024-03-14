@@ -79,7 +79,7 @@
 	initial_flooring = /singleton/flooring/grass
 
 /turf/simulated/floor/grass/use_tool(obj/item/I, mob/user)
-	if(I.IsWirecutter())
+	if(I.tool_behaviour == TOOL_WIRECUTTER)
 		user.visible_message(SPAN_NOTICE("\The [user] trims \the [src] with \the [I]."), SPAN_NOTICE("You trim \the [src] with \the [I]."))
 		ChangeTurf(/turf/simulated/floor/grass/cut)
 		return TRUE
@@ -133,6 +133,11 @@
 	name = "red carpet"
 	icon_state = "red"
 	initial_flooring = /singleton/flooring/carpet/red
+
+/turf/simulated/floor/carpet/black
+	name = "black carpet"
+	icon_state = "black"
+	initial_flooring = /singleton/flooring/carpet/black
 
 /turf/simulated/floor/reinforced
 	name = "reinforced floor"

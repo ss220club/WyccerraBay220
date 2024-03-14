@@ -143,14 +143,14 @@
 	makeStep(target_path)
 	return
 
-/mob/living/bot/farmbot/UnarmedAttack(atom/A, proximity)
+/mob/living/bot/farmbot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	if(!..())
 		return
 	if(busy)
 		return
 
-	if(istype(A, /obj/machinery/portable_atmospherics/hydroponics))
-		var/obj/machinery/portable_atmospherics/hydroponics/T = A
+	if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
+		var/obj/machinery/portable_atmospherics/hydroponics/T = target
 		var/t = confirmTarget(T)
 		switch(t)
 			if(0)
@@ -158,46 +158,46 @@
 			if(FARMBOT_COLLECT)
 				action = "collect" // Needs a better one
 				update_icons()
-				visible_message(SPAN_NOTICE("[src] starts [T.dead? "removing the plant from" : "harvesting"] \the [A]."))
+				visible_message(SPAN_NOTICE("[src] starts [T.dead? "removing the plant from" : "harvesting"] \the [target]."))
 				busy = 1
-				if(do_after(src, 3 SECONDS, A, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
-					visible_message(SPAN_NOTICE("[src] [T.dead? "removes the plant from" : "harvests"] \the [A]."))
+				if(do_after(src, 3 SECONDS, target, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
+					visible_message(SPAN_NOTICE("[src] [T.dead? "removes the plant from" : "harvests"] \the [target]."))
 					T.physical_attack_hand(src)
 			if(FARMBOT_WATER)
 				action = "water"
 				update_icons()
-				visible_message(SPAN_NOTICE("[src] starts watering \the [A]."))
+				visible_message(SPAN_NOTICE("[src] starts watering \the [target]."))
 				busy = 1
-				if(do_after(src, 3 SECONDS, A, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
+				if(do_after(src, 3 SECONDS, target, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
 					playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
-					visible_message(SPAN_NOTICE("[src] waters \the [A]."))
+					visible_message(SPAN_NOTICE("[src] waters \the [target]."))
 					tank.reagents.trans_to(T, 100 - T.waterlevel)
 			if(FARMBOT_UPROOT)
 				action = "hoe"
 				update_icons()
-				visible_message(SPAN_NOTICE("[src] starts uprooting the weeds in \the [A]."))
+				visible_message(SPAN_NOTICE("[src] starts uprooting the weeds in \the [target]."))
 				busy = 1
-				if(do_after(src, 3 SECONDS, A, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
-					visible_message(SPAN_NOTICE("[src] uproots the weeds in \the [A]."))
+				if(do_after(src, 3 SECONDS, target, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
+					visible_message(SPAN_NOTICE("[src] uproots the weeds in \the [target]."))
 					T.weedlevel = 0
 			if(FARMBOT_NUTRIMENT)
 				action = "fertile"
 				update_icons()
-				visible_message(SPAN_NOTICE("[src] starts fertilizing \the [A]."))
+				visible_message(SPAN_NOTICE("[src] starts fertilizing \the [target]."))
 				busy = 1
-				if(do_after(src, 3 SECONDS, A, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
-					visible_message(SPAN_NOTICE("[src] fertilizes \the [A]."))
+				if(do_after(src, 3 SECONDS, target, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
+					visible_message(SPAN_NOTICE("[src] fertilizes \the [target]."))
 					T.reagents.add_reagent(/datum/reagent/ammonia, 10)
 		busy = 0
 		action = ""
 		update_icons()
 		T.update_icon()
-	else if(istype(A, /obj/structure/hygiene/sink))
+	else if(istype(target, /obj/structure/hygiene/sink))
 		if(!tank || tank.reagents.total_volume >= tank.reagents.maximum_volume)
 			return
 		action = "water"
 		update_icons()
-		visible_message(SPAN_NOTICE("[src] starts refilling its tank from \the [A]."))
+		visible_message(SPAN_NOTICE("[src] starts refilling its tank from \the [target]."))
 		busy = 1
 		while(do_after(src, 1 SECOND, src, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && tank.reagents.total_volume < tank.reagents.maximum_volume)
 			tank.reagents.add_reagent(/datum/reagent/water, 100)
@@ -207,7 +207,7 @@
 		action = ""
 		update_icons()
 		visible_message(SPAN_NOTICE("[src] finishes refilling its tank."))
-	else if(emagged && ishuman(A))
+	else if(emagged && ishuman(target))
 		var/action = pick("weed", "water")
 		busy = 1
 		spawn(50) // Some delay
@@ -215,16 +215,16 @@
 		switch(action)
 			if("weed")
 				flick("farmbot_hoe", src)
-				do_attack_animation(A)
+				do_attack_animation(target)
 				if(prob(50))
-					visible_message(SPAN_DANGER("[src] swings wildly at [A] with a minihoe, missing completely!"))
+					visible_message(SPAN_DANGER("[src] swings wildly at [target] with a minihoe, missing completely!"))
 					return
 				var/t = pick("slashed", "sliced", "cut", "clawed")
-				A.attack_generic(src, 5, t)
+				target.attack_generic(src, 5, t)
 			if("water")
 				flick("farmbot_water", src)
-				visible_message(SPAN_DANGER("[src] splashes [A] with water!"))
-				tank.reagents.splash(A, 100)
+				visible_message(SPAN_DANGER("[src] splashes [target] with water!"))
+				tank.reagents.splash(target, 100)
 
 /mob/living/bot/farmbot/explode()
 	visible_message(SPAN_DANGER("[src] blows apart!"))

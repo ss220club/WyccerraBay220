@@ -133,7 +133,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	group = RENDER_GROUP_SCENE
 	plane = BLACKNESS_PLANE
 	blend_mode = BLEND_MULTIPLY
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 /atom/movable/renderer/space
 	name = "Space"
@@ -193,7 +193,7 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	group = RENDER_GROUP_SCENE
 	plane = LIGHTING_PLANE
 	relay_blend_mode = BLEND_MULTIPLY
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 
 /atom/movable/renderer/lighting/Initialize()
@@ -216,7 +216,7 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	name = "Screen Effects"
 	group = RENDER_GROUP_SCENE
 	plane = FULLSCREEN_PLANE
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 
 /// Draws user interface elements.
@@ -229,6 +229,11 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	name = "Runechat"
 	group = RENDER_GROUP_SCREEN
 	plane = RUNECHAT_PLANE
+
+/atom/movable/renderer/balloon_chat
+	name = "Balloon chat"
+	group = RENDER_GROUP_SCREEN
+	plane = BALLOON_CHAT_PLANE
 
 /* *
 * Group renderers
@@ -276,7 +281,7 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	group = RENDER_GROUP_NONE
 	plane = WARP_EFFECT_PLANE
 	render_target_name = "*warp"
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 //Similar to warp but not as strong
 /atom/movable/renderer/heat
@@ -284,7 +289,7 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	group = RENDER_GROUP_NONE
 	plane = HEAT_EFFECT_PLANE
 	render_target_name = HEAT_COMPOSITE_TARGET
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 	var/obj/gas_heat_object = null
 	var/obj/gas_cold_object = null // Not strictly a heat effect but similar setup so may as well
@@ -351,7 +356,7 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 	name = "Emissive"
 	group = RENDER_GROUP_NONE
 	plane = EMISSIVE_PLANE
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	render_target_name = EMISSIVE_TARGET
 
 /atom/movable/renderer/emissive/Initialize()

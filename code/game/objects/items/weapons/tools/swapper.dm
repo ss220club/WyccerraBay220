@@ -25,24 +25,11 @@
 	var/list/tool_list = list(BOLT_HEAD, CUTTER_HEAD, PULSE_HEAD, PRY_HEAD, SCREW_HEAD)
 	var/active_tool = BOLT_HEAD
 	var/previous_tool = 1
+	tool_behaviour = TOOL_WRENCH
+	usesound = DEFAULT_WRENCH_SOUND
 
 /obj/item/swapper/istool()
 	return TRUE
-
-/obj/item/swapper/IsCrowbar()
-	return (active_tool == PRY_HEAD)
-
-/obj/item/swapper/IsMultitool()
-	return (active_tool == PULSE_HEAD)
-
-/obj/item/swapper/IsScrewdriver()
-	return (active_tool == SCREW_HEAD)
-
-/obj/item/swapper/IsWirecutter()
-	return (active_tool == CUTTER_HEAD)
-
-/obj/item/swapper/IsWrench()
-	return (active_tool == BOLT_HEAD)
 
 /obj/item/swapper/attack_self(mob/user)
 	var/tool_index = tool_list.Find(active_tool)
@@ -63,6 +50,18 @@
 		sharp = TRUE
 	else
 		edge = FALSE
+	switch(active_tool)
+		if(PRY_HEAD)
+			change_tool_behaviour(TOOL_CROWBAR)
+		if(PULSE_HEAD)
+			change_tool_behaviour(TOOL_MULTITOOL)
+		if(SCREW_HEAD)
+			change_tool_behaviour(TOOL_SCREWDRIVER)
+		if(CUTTER_HEAD)
+			change_tool_behaviour(TOOL_WIRECUTTER)
+		if(BOLT_HEAD)
+			change_tool_behaviour(TOOL_WRENCH)
+
 
 /obj/item/swapper/on_update_icon()
 	CutOverlays("[icon_state]_[replacetext_char((tool_list[previous_tool]), " ", "_")]")

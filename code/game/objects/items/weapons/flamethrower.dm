@@ -32,10 +32,10 @@
 		else
 			to_chat(user, SPAN_NOTICE("The loaded [beaker.name] is empty."))
 	else
-		to_chat(user, SPAN_NOTICE("\The [src] has no fuel container loaded!."))
+		to_chat(user, SPAN_NOTICE("[src] has no fuel container loaded!."))
 
 	if (lit)
-		to_chat(user, SPAN_WARNING("\The [src] is lit!"))
+		to_chat(user, SPAN_WARNING("[src] is lit!"))
 
 
 /obj/item/flamethrower/Destroy()
@@ -49,7 +49,7 @@
 		STOP_PROCESSING(SSobj, src)
 		return null
 	else if (!beaker || beaker.reagents.total_volume == 0)
-		visible_message(SPAN_WARNING("\The [src] sputters and goes out!"))
+		visible_message(SPAN_WARNING("[src] sputters and goes out!"))
 		playsound(loc, 'sound/items/welderdeactivate.ogg', 50, TRUE)
 		STOP_PROCESSING(SSobj,src)
 		set_light(0)
@@ -81,7 +81,7 @@
 /obj/item/flamethrower/afterattack(atom/target, mob/user, proximity)
 	// Make sure our user is still holding us
 	if(user.a_intent == I_HELP) //don't shoot if we're on help intent
-		to_chat(user, SPAN_WARNING("You refrain from firing \the [src] as your intent is set to help."))
+		to_chat(user, SPAN_WARNING("You refrain from firing [src] as your intent is set to help."))
 		return
 	var/turf/target_turf = get_turf(target)
 	if(target_turf)
@@ -98,32 +98,41 @@
 	else
 		return ..()
 
+/obj/item/flamethrower/screwdriver_act(mob/living/user, obj/item/tool)
+	if(!igniter || lit || complete)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	status = !status
+	to_chat(user, SPAN_NOTICE("[igniter] is now [status ? "secured" : "unsecured"]!"))
+	update_icon()
+
+/obj/item/flamethrower/wrench_act(mob/living/user, obj/item/tool)
+	if(status || complete)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(weldtool)
+		weldtool.dropInto(loc)
+		weldtool = null
+	if(igniter)
+		igniter.dropInto(loc)
+		igniter = null
+	if(beaker)
+		beaker.dropInto(loc)
+		beaker = null
+	new /obj/item/stack/material/rods(get_turf(src))
+	qdel(src)
+
 /obj/item/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
-	if(user.stat || user.restrained() || user.lying)	return
-	if(isWrench(W) && !status && !complete)//Taking this apart
-		if(weldtool)
-			weldtool.dropInto(loc)
-			weldtool = null
-		if(igniter)
-			igniter.dropInto(loc)
-			igniter = null
-		if(beaker)
-			beaker.dropInto(loc)
-			beaker = null
-		new /obj/item/stack/material/rods(get_turf(src))
-		qdel(src)
-		return
-
-	if(isScrewdriver(W) && igniter && !lit && !complete)
-		status = !status
-		to_chat(user, SPAN_NOTICE("\The [igniter] is now [status ? "secured" : "unsecured"]!"))
-		update_icon()
-		return
-
 	if(isigniter(W))
 		var/obj/item/device/assembly/igniter/I = W
-		if(I.secured)	return
-		if(igniter)		return
+		if(I.secured)
+			return
+		if(igniter)
+			return
 		if(!user.unEquip(I, src))
 			return
 		igniter = I
@@ -195,7 +204,7 @@
 			fire_colour = R.fire_colour
 
 	if(power < REQUIRED_POWER_TO_FIRE_FLAMETHROWER)
-		audible_message(SPAN_DANGER("\The [src] sputters."))
+		audible_message(SPAN_DANGER("[src] sputters."))
 		playsound(src, 'sound/weapons/guns/flamethrower_empty.ogg', 50, TRUE, -3)
 		return
 	playsound(src, pick('sound/weapons/guns/flamethrower1.ogg','sound/weapons/guns/flamethrower2.ogg','sound/weapons/guns/flamethrower3.ogg' ), 50, TRUE, -3)

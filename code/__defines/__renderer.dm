@@ -169,6 +169,7 @@
 	#define HUD_ABOVE_HUD_LAYER 6
 
 #define RUNECHAT_PLANE 11
+#define BALLOON_CHAT_PLANE 12
 
 //-------------------- Rendering ---------------------
 
@@ -183,17 +184,6 @@
 
 /// The final render group, for compositing
 #define RENDER_GROUP_FINAL 999
-
-
-/// Causes the atom to ignore clicks, hovers, etc.
-#define MOUSE_OPACITY_UNCLICKABLE 0
-
-/// Causes the atom to catch clicks, hovers, etc.
-#define MOUSE_OPACITY_NORMAL 1
-
-/// Causes the atom to catch clicks, hovers, etc, taking priority over NORMAL for a shared pointer target.
-#define MOUSE_OPACITY_PRIORITY 2
-
 
 /// Integer (One of `*_PLANE`). The atom's rendering plane. See `code\__defines\__renderer.dm` for a list of valid planes. Also see the DM Reference for `plane var (atom)`.
 /atom/plane = DEFAULT_PLANE

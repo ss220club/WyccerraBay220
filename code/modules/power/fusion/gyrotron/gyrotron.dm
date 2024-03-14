@@ -55,11 +55,9 @@
 		AddOverlays(emissive_appearance(icon, "[icon_state]_lights"))
 		AddOverlays("[icon_state]_lights")
 
-/obj/machinery/power/emitter/gyrotron/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isMultitool(W))
-		var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
-		fusion.get_new_tag(user)
-		return TRUE
-	return ..()
+/obj/machinery/power/emitter/gyrotron/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
+	fusion.get_new_tag(user)
 
 #undef GYRO_POWER

@@ -69,12 +69,14 @@
 	else
 		icon_state = "extinguisher_empty"
 
-/obj/structure/extinguisher_cabinet/AltClick(mob/user)
+/obj/structure/extinguisher_cabinet/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	if(CanPhysicallyInteract(user))
 		opened = !opened
 		update_icon()
-		return TRUE
-	return FALSE
 
 /obj/structure/extinguisher_cabinet/do_simple_ranged_interaction(mob/user)
 	if(has_extinguisher)

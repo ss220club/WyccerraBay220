@@ -108,45 +108,42 @@ field_generator power level display
 
 	..()
 
-/obj/machinery/field_generator/use_tool(obj/item/W, mob/living/user, list/click_params)
+/obj/machinery/field_generator/wrench_act(mob/living/user, obj/item/tool)
+	if(state == 2) //Anchoring code handled at level of obj/use_tool()
+		to_chat(user, SPAN_WARNING("[src] needs to be unwelded from the floor."))
+		return ITEM_INTERACT_SUCCESS
+
+/obj/machinery/field_generator/welder_act(mob/living/user, obj/item/tool)
 	if(active)
-		to_chat(user, "The [src] needs to be off.")
-		return TRUE
-
-	if (isWrench(W) && state == 2) //Anchoring code handled at level of obj/use_tool()
-		to_chat(user, SPAN_WARNING(" The [src.name] needs to be unwelded from the floor."))
-		return TRUE
-
-	if (isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		switch(state)
-			if(0)
-				to_chat(user, SPAN_WARNING("The [src.name] needs to be wrenched to the floor."))
-				return TRUE
-			if(1)
-				if (WT.can_use(1,user))
-					playsound(src.loc, 'sound/items/Welder2.ogg', 50, 1)
-					user.visible_message("[user.name] starts to weld the [src.name] to the floor.", \
-						"You start to weld the [src] to the floor.", \
-						"You hear welding")
-					if (do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if(!src || !WT.remove_fuel(1, user)) return TRUE
-						state = 2
-						to_chat(user, "You weld the field generator to the floor.")
-				return TRUE
-			if(2)
-				if (WT.can_use(1,user))
-					playsound(src.loc, 'sound/items/Welder2.ogg', 50, 1)
-					user.visible_message("[user.name] starts to cut the [src.name] free from the floor.", \
-						"You start to cut the [src] free from the floor.", \
-						"You hear welding")
-					if (do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if(!src || !WT.remove_fuel(1, user)) return TRUE
-						state = 1
-						to_chat(user, "You cut the [src] free from the floor.")
-				return TRUE
-	return ..()
-
+		to_chat(user, "[src] needs to be off.")
+		return
+	switch(state)
+		if(0)
+			. = ITEM_INTERACT_SUCCESS
+			to_chat(user, SPAN_WARNING("[src] needs to be wrenched to the floor."))
+			return
+		if(1)
+			. = ITEM_INTERACT_SUCCESS
+			if(!tool.tool_start_check(user, 1))
+				return
+			user.visible_message("[user] starts to weld the [src] to the floor.", \
+				"You start to weld [src] to the floor.", \
+				"You hear welding")
+			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			state = 2
+			to_chat(user, "You weld [src] to the floor.")
+		if(2)
+			. = ITEM_INTERACT_SUCCESS
+			if(!tool.tool_start_check(user, 1))
+				return
+			user.visible_message("[user] starts to cut the [src] free from the floor.", \
+				"You start to cut [src] free from the floor.", \
+				"You hear welding")
+			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			state = 1
+			to_chat(user, "You cut [src] free from the floor.")
 
 /obj/machinery/field_generator/emp_act()
 	SHOULD_CALL_PARENT(FALSE)
@@ -204,7 +201,7 @@ field_generator power level display
 		return 1
 	else
 		for(var/mob/M in viewers(src))
-			M.show_message(SPAN_WARNING("\The [src] shuts down!"))
+			M.show_message(SPAN_WARNING("[src] shuts down!"))
 		turn_off()
 		investigate_log("ran out of power and [SPAN_COLOR("red", "deactivated")]","singulo")
 		src.power = 0

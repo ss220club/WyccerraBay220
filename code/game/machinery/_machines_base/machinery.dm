@@ -95,11 +95,11 @@
 		var/initial_damage_percentage = Percent(get_max_health() - prior_health, get_max_health(), 0)
 		var/damage_percentage = get_damage_percentage()
 		if (damage_percentage >= 75 && initial_damage_percentage < 75)
-			visible_message("\The [src] looks like it's about to break!" )
+			visible_message(SPAN_DANGER("\The [src] looks like it's about to break!"))
 		else if (damage_percentage >= 50 && initial_damage_percentage < 50)
-			visible_message("\The [src] looks seriously damaged!" )
+			visible_message(SPAN_DANGER("\The [src] looks seriously damaged!" ))
 		else if (damage_percentage >= 25 && initial_damage_percentage < 25)
-			visible_message("\The [src] shows signs of damage!" )
+			visible_message(SPAN_DANGER("\The [src] shows signs of damage!" ))
 
 /obj/machinery/Destroy()
 	if(istype(wires))
@@ -162,6 +162,12 @@
 		if(EX_ACT_LIGHT)
 			if (prob(25))
 				qdel(src)
+
+/obj/machinery/tgui_status(mob/user, datum/tgui_state/state)
+	if(MACHINE_IS_BROKEN(src) || (!interact_offline && !is_powered()))
+		return STATUS_CLOSE
+
+	return ..()
 
 /obj/machinery/CanUseTopic(mob/user)
 	if(MACHINE_IS_BROKEN(src))
@@ -368,7 +374,6 @@
 
 /// Deconstructs the machine into its base frame and ejects all of its components. Returns boolean.
 /obj/machinery/proc/dismantle()
-	playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
 	var/obj/item/stock_parts/circuitboard/circuit = get_component_of_type(/obj/item/stock_parts/circuitboard)
 	if(circuit)
 		circuit.deconstruct(src)

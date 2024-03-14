@@ -244,7 +244,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 		return 1
 
 	. = IC_TOPIC_HANDLED
-	var/obj/held_item = usr.get_active_hand()
+	var/obj/item/held_item = usr.get_active_hand()
 	if(href_list["pin"] && assembly)
 		var/datum/integrated_io/pin = locate(href_list["pin"]) in inputs + outputs + activators
 		if(pin)
@@ -285,7 +285,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 		. = IC_TOPIC_REFRESH
 
 	else if(href_list["remove"] && assembly)
-		if (isScrewdriver(held_item))
+		if(held_item.tool_behaviour == TOOL_SCREWDRIVER)
 			disconnect_all()
 			dropInto(loc)
 			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)

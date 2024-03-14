@@ -236,7 +236,7 @@
 
 /mob/living/carbon/human/welding_eyecheck()
 	var/obj/item/organ/internal/eyes/E = src.internal_organs_by_name[species.vision_organ]
-	if(!E)
+	if(!E || prob(90))
 		return
 	var/safety = eyecheck()
 	switch(safety)

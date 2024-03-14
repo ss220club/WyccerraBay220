@@ -35,16 +35,20 @@
 	for(A, A && !istype(A, holder_type), A=A.loc);
 	return A
 
-/atom/movable/proc/throw_at_random(include_own_turf, maxrange, speed)
-	var/list/turfs = RANGE_TURFS(src, maxrange)
-	if(!maxrange)
+/atom/movable/proc/throw_at_random(include_own_turf = FALSE, maxrange = 1, speed)
+	if(maxrange < 0)
+		stack_trace("Negative `maxrange` passed")
 		maxrange = 1
 
-	if(!include_own_turf)
-		turfs -= get_turf(src)
+	var/turf/center = get_turf(src)
+	if(!center)
+		return
 
+	var/list/turfs = include_own_turf ? RANGE_TURFS(center, maxrange) : ORANGE_TURFS(center, maxrange)
 	if(length(turfs))
-		throw_at(pick(turfs), maxrange, speed)
+		return
+
+	throw_at(pick(turfs), maxrange, speed)
 
 /atom/movable/proc/do_simple_ranged_interaction(mob/user)
 	return FALSE

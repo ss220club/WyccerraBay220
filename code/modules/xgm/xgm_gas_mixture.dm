@@ -106,6 +106,7 @@
 			gas[g] += giver.gas[g]
 
 	update_values()
+	SEND_SIGNAL(src, COMSIG_GASMIX_MERGED)
 
 // Used to equalize the mixture between two zones before sleeping an edge.
 /datum/gas_mixture/proc/equalize(datum/gas_mixture/sharer)
@@ -235,6 +236,7 @@
 	update_values()
 	removed.update_values()
 
+	SEND_SIGNAL(src, COMSIG_GASMIX_REMOVED)
 	return removed
 
 

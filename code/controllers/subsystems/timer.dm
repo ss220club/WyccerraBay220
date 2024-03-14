@@ -95,7 +95,7 @@ SUBSYSTEM_DEF(timer)
 			if (flags & TIMER_UNIQUE)
 				var/datum/timer/match = subsystem.timers_by_hash[hash]
 				if (match)
-					if (!(flags & TIMER_OVERRIDE) && flags & TIMER_PROLONG && match.fire_time < timer.fire_time)
+					if (!(flags & TIMER_OVERRIDE) || (flags & TIMER_PROLONG && match.fire_time > timer.wait + world.time))
 						return
 					subsystem.timers_by_hash[hash] = timer
 					subsystem.queue -= match

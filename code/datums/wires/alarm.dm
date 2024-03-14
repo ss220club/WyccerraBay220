@@ -79,7 +79,7 @@ var/global/const/AALARM_WIRE_AALARM = 16
 //			log_debug("Power wire pulsed")
 
 			set_shorted(TRUE)
-			addtimer(CALLBACK(src, PROC_REF(set_shorted), FALSE), 20 MINUTES)
+			addtimer(CALLBACK(src, PROC_REF(set_shorted), FALSE), 20 MINUTES, TIMER_UNIQUE|TIMER_OVERRIDE)
 
 
 		if (AALARM_WIRE_AI_CONTROL)
@@ -87,7 +87,7 @@ var/global/const/AALARM_WIRE_AALARM = 16
 
 			set_aidisabled(TRUE)
 			A.updateDialog()
-			addtimer(CALLBACK(src, PROC_REF(set_aidisabled), FALSE), 10 SECONDS)
+			addtimer(CALLBACK(src, PROC_REF(set_aidisabled), FALSE), 10 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
 
 		if(AALARM_WIRE_SYPHON)
 //			log_debug("Syphon wire pulsed")

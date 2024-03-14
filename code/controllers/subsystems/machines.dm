@@ -2,6 +2,7 @@
 #define SSMACHINES_STEP_MACHINERY 2
 #define SSMACHINES_STEP_POWERNETS 3
 #define SSMACHINES_STEP_POWER_OBJECTS 4
+#define SSMACHINES_STEP_DONE 5
 #define SSMACHINES_STEP_DEFAULT SSMACHINES_STEP_PIPENETS
 
 #define START_PROCESSING_IN_LIST(Datum, List) \
@@ -65,25 +66,25 @@ SUBSYSTEM_DEF(machines)
 	if (!resumed)
 		current_step = SSMACHINES_STEP_DEFAULT
 	timer = world.tick_usage
-	if (current_step == SSMACHINES_STEP_PIPENETS)
-		process_pipenets(resumed, no_mc_tick)
-		cost_pipenets = MC_AVERAGE(cost_pipenets, (world.tick_usage - timer) * world.tick_lag)
+	while(current_step < SSMACHINES_STEP_DONE)
+		switch(current_step)
+			if(SSMACHINES_STEP_PIPENETS)
+				process_pipenets(resumed, no_mc_tick)
+				cost_pipenets = MC_AVERAGE(cost_pipenets, (world.tick_usage - timer) * world.tick_lag)
+				resumed = FALSE
+			if(SSMACHINES_STEP_MACHINERY)
+				process_machinery(resumed, no_mc_tick)
+				cost_machinery = MC_AVERAGE(cost_machinery, (world.tick_usage - timer) * world.tick_lag)
+				resumed = FALSE
+			if(SSMACHINES_STEP_POWERNETS)
+				process_powernets(resumed, no_mc_tick)
+				cost_powernets = MC_AVERAGE(cost_powernets, (world.tick_usage - timer) * world.tick_lag)
+				resumed = FALSE
+			if(SSMACHINES_STEP_POWER_OBJECTS)
+				process_power_objects(resumed, no_mc_tick)
+				cost_power_objects = MC_AVERAGE(cost_power_objects, (world.tick_usage - timer) * world.tick_lag)
 		current_step++
-		resumed = FALSE
-	if (current_step == SSMACHINES_STEP_MACHINERY)
-		process_machinery(resumed, no_mc_tick)
-		cost_machinery = MC_AVERAGE(cost_machinery, (world.tick_usage - timer) * world.tick_lag)
-		current_step++
-		resumed = FALSE
-	if (current_step == SSMACHINES_STEP_POWERNETS)
-		process_powernets(resumed, no_mc_tick)
-		cost_powernets = MC_AVERAGE(cost_powernets, (world.tick_usage - timer) * world.tick_lag)
-		current_step++
-		resumed = FALSE
-	if (current_step == SSMACHINES_STEP_POWER_OBJECTS)
-		process_power_objects(resumed, no_mc_tick)
-		cost_power_objects = MC_AVERAGE(cost_power_objects, (world.tick_usage - timer) * world.tick_lag)
-		current_step = SSMACHINES_STEP_DEFAULT
+	current_step = SSMACHINES_STEP_DEFAULT
 
 /datum/controller/subsystem/machines/proc/register_machinery(obj/machinery/machine)
 	if(!machine)

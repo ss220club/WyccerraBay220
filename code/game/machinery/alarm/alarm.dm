@@ -119,7 +119,8 @@
 	var/previous_environment_total_moles = null
 	var/previous_environment_volume = null
 	var/list/previous_environment_gas = list()
-	var/holder
+	var/turf/simulated/holder
+	var/zone/holder_zone
 
 	///Cooldown on sending warning messages
 	COOLDOWN_DECLARE(warning_cooldown)
@@ -194,7 +195,8 @@
 	if(!check_environment(environment))
 		return
 	if(holder)
-		UnregisterSignal(holder, list(COMSIG_TURF_ZONE_TICK, COMSIG_GASMIX_MERGED, COMSIG_GASMIX_REACTED, COMSIG_GASMIX_REMOVED))
+		UnregisterSignal(holder_zone, COMSIG_ZONE_TICK)
+		UnregisterSignal(holder, list(COMSIG_TURF_ZONE_ADD, COMSIG_TURF_ZONE_REMOVE))
 		holder = null
 	START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 
@@ -203,17 +205,27 @@
 	var/turf/simulated/location = loc
 	if(!istype(location))
 		CRASH("[src] put to sleep with no simulated turf!")
+	if(!location.zone)
+		CRASH("[src] put to sleep without zone!")
+	holder = location
+	holder_zone = holder.zone
+	RegisterSignal(holder_zone, COMSIG_ZONE_TICK, PROC_REF(on_zone_tick))
+	RegisterSignal(holder, COMSIG_TURF_ZONE_ADD, PROC_REF(on_zone_change))
+	RegisterSignal(holder, COMSIG_TURF_ZONE_REMOVE, PROC_REF(on_zone_removal))
 
-	if(location.zone)
-		holder = location
-		RegisterSignal(holder, COMSIG_TURF_ZONE_TICK, PROC_REF(on_awake))
-	else
-		holder = location.return_air()
-		RegisterSignals(holder, list(COMSIG_GASMIX_MERGED, COMSIG_GASMIX_REACTED, COMSIG_GASMIX_REMOVED), PROC_REF(on_awake))
-
-/obj/machinery/alarm/proc/on_awake()
+/obj/machinery/alarm/proc/on_zone_tick()
 	SIGNAL_HANDLER
 	update_processing()
+
+/obj/machinery/alarm/proc/on_zone_change(turf/simulated/owner, zone/new_zone)
+	SIGNAL_HANDLER
+	UnregisterSignal(holder_zone, COMSIG_ZONE_TICK)
+	holder_zone = new_zone
+	RegisterSignal(holder_zone, COMSIG_ZONE_TICK, PROC_REF(on_zone_tick))
+
+/obj/machinery/alarm/proc/on_zone_removal(turf/simulated/owner, zone/removed_zone)
+	SIGNAL_HANDLER
+	UnregisterSignal(holder_zone, COMSIG_ZONE_TICK)
 
 /// Returns TRUE if gas_mixture is different from the previous check
 /obj/machinery/alarm/proc/check_environment(datum/gas_mixture/environment)

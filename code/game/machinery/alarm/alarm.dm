@@ -176,8 +176,7 @@
 
 /obj/machinery/alarm/Process()
 	//Handle temperature adjustment here.
-	var/turf/simulated/location = loc
-	var/datum/gas_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	handle_heating_cooling(environment)
 	if(!COOLDOWN_FINISHED(src, warning_cooldown))
 		return
@@ -408,18 +407,13 @@
 
 // Returns whether this air alarm thinks there is a breach, given the sensors that are available to it.
 /obj/machinery/alarm/proc/breach_detected()
-	var/turf/simulated/location = loc
-
-	if(!istype(location))
-		return FALSE
-
 	if(breach_cooldown)
 		return FALSE
 
 	if(breach_pressure < 0)
 		return FALSE
 
-	var/datum/gas_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
 
 	if (environment_pressure <= breach_pressure)
@@ -430,14 +424,11 @@
 
 /obj/machinery/alarm/proc/breach_end_cooldown()
 	breach_cooldown = FALSE
-	return
 
 //disables breach detection temporarily
 /obj/machinery/alarm/proc/breach_start_cooldown()
 	breach_cooldown = TRUE
 	addtimer(CALLBACK(src, TYPE_PROC_REF(/obj/machinery/alarm, breach_end_cooldown)), 10 MINUTES, TIMER_UNIQUE | TIMER_OVERRIDE)
-	return
-
 
 /obj/machinery/alarm/on_update_icon()
 	ClearOverlays()
@@ -876,8 +867,7 @@
 		to_chat(user, "The circuit is missing.")
 
 /obj/machinery/alarm/proc/populate_status(data)
-	var/turf/location = get_turf(src)
-	var/datum/gas_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	var/total = environment.total_moles
 
 	var/list/environment_data = new

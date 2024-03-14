@@ -44,6 +44,7 @@ var/global/const/AALARM_WIRE_AALARM = 16
 		if(AALARM_WIRE_POWER)
 			A.shock(usr, 50)
 			A.shorted = !mended
+			A.update_processing()
 			A.update_icon()
 //			log_debug("Power wire cut")
 
@@ -77,25 +78,16 @@ var/global/const/AALARM_WIRE_AALARM = 16
 		if (AALARM_WIRE_POWER)
 //			log_debug("Power wire pulsed")
 
-			if(A.shorted == 0)
-				A.shorted = 1
-				A.update_icon()
-
-			spawn(12000)
-				if(A.shorted == 1)
-					A.shorted = 0
-					A.update_icon()
+			set_shorted(TRUE)
+			addtimer(CALLBACK(src, PROC_REF(set_shorted), FALSE), 20 MINUTES, TIMER_UNIQUE|TIMER_OVERRIDE)
 
 
 		if (AALARM_WIRE_AI_CONTROL)
 //			log_debug("AI Control wire pulsed")
 
-			if (A.aidisabled == 0)
-				A.aidisabled = 1
+			set_aidisabled(TRUE)
 			A.updateDialog()
-			spawn(100)
-				if (A.aidisabled == 1)
-					A.aidisabled = 0
+			addtimer(CALLBACK(src, PROC_REF(set_aidisabled), FALSE), 10 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
 
 		if(AALARM_WIRE_SYPHON)
 //			log_debug("Syphon wire pulsed")
@@ -112,3 +104,13 @@ var/global/const/AALARM_WIRE_AALARM = 16
 			if (A.alarm_area.atmosalert(0, A))
 				A.post_alert(0)
 			A.update_icon()
+
+/datum/wires/alarm/proc/set_shorted(new_shorted)
+	var/obj/machinery/alarm/alarm = holder
+	alarm.shorted = new_shorted
+	alarm.update_processing()
+	alarm.update_icon()
+
+/datum/wires/alarm/proc/set_aidisabled(new_aidisabled)
+	var/obj/machinery/alarm/alarm = holder
+	alarm.aidisabled = new_aidisabled

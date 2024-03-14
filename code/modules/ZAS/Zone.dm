@@ -75,6 +75,7 @@ Class Procs:
 		SSair.active_fire_zones |= src
 
 	turf_to_add.update_graphic(air.graphic)
+	SEND_SIGNAL(turf_to_add, COMSIG_TURF_ZONE_ADD, src)
 
 /zone/proc/remove(turf/simulated/turf_to_remove)
 #ifdef ZASDBG
@@ -91,6 +92,7 @@ Class Procs:
 		air.group_multiplier = length(contents)
 	else
 		c_invalidate()
+	SEND_SIGNAL(turf_to_remove, COMSIG_TURF_ZONE_REMOVE, src)
 
 /zone/proc/c_merge(zone/into)
 #ifdef ZASDBG
@@ -106,6 +108,7 @@ Class Procs:
 		#ifdef ZASDBG
 		inner_turf.dbg(merged)
 		#endif
+	SEND_SIGNAL(src, COMSIG_ZONE_MERGE_INTO, into)
 
 	//rebuild the old zone's edges so that they will be possessed by the new zone
 	for(var/connection_edge/edge in edges)
@@ -182,6 +185,8 @@ Class Procs:
 				if(checking.simulated)
 					QUEUE_TEMPERATURE_ATOMS(checking)
 			CHECK_TICK
+
+	SEND_SIGNAL(src, COMSIG_ZONE_TICK)
 
 /zone/proc/dbg_data(mob/M)
 	to_chat(M, name)

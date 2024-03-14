@@ -186,10 +186,6 @@ Class Procs:
 					QUEUE_TEMPERATURE_ATOMS(checking)
 			CHECK_TICK
 
-	// Send signals
-	for(var/turf/simulated/T in contents)
-		SEND_SIGNAL(T, COMSIG_TURF_ZONE_TICK)
-
 	SEND_SIGNAL(src, COMSIG_ZONE_TICK)
 
 /zone/proc/dbg_data(mob/M)

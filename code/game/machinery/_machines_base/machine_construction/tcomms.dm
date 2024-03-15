@@ -16,10 +16,10 @@
 		return
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
 		machine.panel_open = TRUE
-		to_chat(user, "You unfasten the bolts.")
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
 
 /singleton/machine_construction/tcomms/panel_closed/post_construct(obj/machinery/machine)
 	try_change_state(machine, /singleton/machine_construction/tcomms/panel_open/no_cable)
@@ -49,16 +49,17 @@
 /singleton/machine_construction/tcomms/panel_open/proc/state_interactions(obj/item/I, mob/user, obj/machinery/machine)
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_closed)
 		machine.panel_open = FALSE
-		to_chat(user, "You fasten the bolts.")
-		return
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
+		return TRUE
 	if(I.tool_behaviour == TOOL_WRENCH)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open/unwrenched)
 		to_chat(user, "You dislodge the external plating.")
+		return TRUE
 
 /singleton/machine_construction/tcomms/panel_open/mechanics_info()
 	. = list()

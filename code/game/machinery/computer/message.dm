@@ -27,7 +27,7 @@
 /obj/machinery/computer/message_monitor/screwdriver_act(mob/living/user, obj/item/tool)
 	if(emag)
 		//Stops people from just unscrewing the monitor and putting it back to get the console working again.
-		to_chat(user, SPAN_WARNING("It is too hot to mess with!"))
+		balloon_alert(user, "слишком горячо!")
 		. = ITEM_INTERACT_BLOCKING
 
 /obj/machinery/computer/message_monitor/emag_act(remaining_charges, mob/user)

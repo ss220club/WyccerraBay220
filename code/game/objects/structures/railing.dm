@@ -243,12 +243,12 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle Anchored
 	if(!density)
-		USE_FEEDBACK_FAILURE("[src] needs to be closed before you can unanchor it.")
+		balloon_alert(user, "нужно закрыть!")
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts [anchored ? "un" : null]fastening [src] [anchored ? "from" : "to"] the floor with [tool]."),
-		SPAN_NOTICE("You start [anchored ? "un" : null]fastening [src] [anchored ? "from" : "to"] the floor with [tool].")
-	)
+	if(anchored)
+		balloon_alert(user, "открепление от пола")
+	else
+		balloon_alert(user, "закрепление к полу")
 	if(!tool.use_as_tool(src, user, 1 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !density)
 		return
 	user.visible_message(
@@ -256,6 +256,7 @@
 		SPAN_NOTICE("You [anchored ? "un" : null]fasten [src] [anchored ? "from" : "to"] the floor with [tool].")
 	)
 	anchored = !anchored
+	USE_FEEDBACK_NEW_ANCHOR_FINISH(anchored)
 	update_icon()
 
 /obj/structure/railing/wrench_act(mob/living/user, obj/item/tool)

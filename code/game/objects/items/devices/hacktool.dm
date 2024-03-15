@@ -29,10 +29,7 @@
 		return
 	// Screwdriver - Toggle hack mode
 	in_hack_mode = !in_hack_mode
-	user.visible_message(
-		SPAN_NOTICE("[user] adjusts [src] with [tool]."),
-		SPAN_NOTICE("You adjust [src] with [tool]. It is now in [in_hack_mode ? "hacking" : "normal"] mode.")
-	)
+	balloon_alert(user, "режим [in_hack_mode ? "взлома" : "мультитула"]")
 
 /obj/item/device/multitool/hacktool/resolve_attackby(atom/A, mob/user)
 	sanity_check()

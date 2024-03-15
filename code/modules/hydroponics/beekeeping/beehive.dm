@@ -60,9 +60,9 @@
 /obj/machinery/beehive/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(bee_count)
-		to_chat(user, SPAN_NOTICE("You can't dismantle [src] with these bees inside."))
+		balloon_alert(user, "внутри пчёлы!")
 		return
-	to_chat(user, SPAN_NOTICE("You start dismantling [src]..."))
+	USE_FEEDBACK_DECONSTRUCT_START
 	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_PUBLIC_UNIQUE))
 		return
 	user.visible_message(SPAN_NOTICE("[user] dismantles [src]."), SPAN_NOTICE("You dismantle [src]."))

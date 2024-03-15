@@ -149,14 +149,14 @@
 /obj/item/clothing/mask/smokable/ecig/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!cigcell)
-		to_chat(user, SPAN_NOTICE("There's no battery in [src]."))
+		USE_FEEDBACK_CELL_MISSING
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	cigcell.update_icon()
 	cigcell.dropInto(loc)
 	cigcell = null
-	to_chat(user, SPAN_NOTICE("You remove [cigcell] from [src]."))
+	USE_FEEDBACK_CELL_REMOVED
 
 /obj/item/clothing/mask/smokable/ecig/attackby(obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/reagent_containers/ecig_cartridge))

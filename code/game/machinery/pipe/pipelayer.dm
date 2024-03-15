@@ -53,7 +53,7 @@
 /obj/machinery/pipelayer/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!metal)
-		to_chat(user, "[src] is empty.")
+		balloon_alert(user, "внутри пусто!")
 		return
 	var/m = round(input(usr,"Please specify the amount of metal to remove","Remove metal",min(round(metal),50)) as num, 1)
 	m = min(m, 50)

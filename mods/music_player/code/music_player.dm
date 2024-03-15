@@ -223,14 +223,14 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 			. = ITEM_INTERACT_SUCCESS
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			user.visible_message(SPAN_NOTICE("[user] screw [src]'s front panel with [tool]."), SPAN_NOTICE("You screw [src]'s front panel."))
 			panel = PANEL_CLOSED
+			USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
 		if(PANEL_CLOSED)
 			. = ITEM_INTERACT_SUCCESS
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			user.visible_message(SPAN_NOTICE("[user] unscrew [src]'s front panel with [tool]."), SPAN_NOTICE("You unscrew [src]'s front panel."))
 			panel = PANEL_UNSCREWED
+			balloon_alert(user, "панель откручена")
 		if(PANEL_OPENED)
 			. = ITEM_INTERACT_SUCCESS
 			var/choices = list()
@@ -244,13 +244,13 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 			switch(response)
 				if("Remove cell")
 					if(!cell)
-						USE_FEEDBACK_FAILURE("[src] doesn't have a cell installed.")
+						USE_FEEDBACK_CELL_MISSING
 						return
 					if(!MayAdjust(user))
 						return
 					if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 						return
-					to_chat(user, SPAN_NOTICE("You pulled out [cell] out of [src] with [tool]."))
+					USE_FEEDBACK_CELL_REMOVED
 					user.put_in_hands(cell)
 					cell = null
 					update_icon()
@@ -376,7 +376,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 
 /obj/item/music_player/proc/MayAdjust(mob/user)
 	if(mode)
-		USE_FEEDBACK_FAILURE("You can only adjust [src] when it's not playing.")
+		USE_FEEDBACK_NEED_DISABLED
 		return FALSE
 	return TRUE
 

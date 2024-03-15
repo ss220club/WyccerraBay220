@@ -80,7 +80,7 @@
 	if(C)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		to_chat(user, SPAN_NOTICE("You remove [C] from [src]."))
+		balloon_alert(user, "[C] снят")
 		C.dropInto(loc)
 
 /obj/machinery/chemical_dispenser/use_tool(obj/item/W, mob/living/user, list/click_params)

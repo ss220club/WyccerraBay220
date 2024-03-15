@@ -578,19 +578,19 @@
 /mob/living/silicon/robot/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!opened)
-		USE_FEEDBACK_FAILURE("[src]'s maintenance panel must be opened before you can access the wiring or radio.")
+		balloon_alert(user, "панель закрыта!")
 		return
 	var/input = input(user, "What would you like to access?", "[name] - Screwdriver Access") as null|anything in list("Wiring", "Radio")
 	if(!input)
 		return
 	if(!opened)
-		USE_FEEDBACK_FAILURE("[src]'s maintenance panel must be opened before you can access the wiring or radio.")
+		balloon_alert(user, "панель закрыта!")
 		return
-	switch (input)
+	switch(input)
 		// Passthrough to radio
 		if("Radio")
 			if(!silicon_radio)
-				USE_FEEDBACK_FAILURE("[src] doesn't have a radio to access.")
+				balloon_alert(user, "нет рации!")
 				return
 			var/result = tool.resolve_attackby(silicon_radio, user)
 			if(result)
@@ -598,16 +598,13 @@
 		// Toggle wire panel
 		if("Wiring")
 			if(cell)
-				USE_FEEDBACK_FAILURE("[src]'s power cell must be removed before you can access the wiring.")
+				balloon_alert(user, "нужно снять батарею!")
 				return
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			wiresexposed = !wiresexposed
 			update_icon()
-			user.visible_message(
-				SPAN_NOTICE("[user] [wiresexposed ? "exposes" : "unexposes"] [src]'s wiring with [tool]."),
-				SPAN_NOTICE("You [wiresexposed ? "expose" : "unexpose"] [src]'s wiring with [tool].")
-			)
+			USE_FEEDBACK_WIRING_EXPOSED(wiresexposed)
 
 /mob/living/silicon/robot/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

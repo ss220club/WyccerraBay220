@@ -110,10 +110,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	disable = !disable
-	if(disable)
-		user.visible_message(SPAN_WARNING("[user] has disabled the [src]!"), SPAN_WARNING("You disable the connection to the [src]."))
-	else if(!disable)
-		user.visible_message(SPAN_WARNING("[user] has reconnected the [src]!"), SPAN_WARNING("You fix the connection to the [src]."))
+	balloon_alert_to_viewers("[disable ? "отключено!" : "включено!"]")
 	update_icon()
 
 /obj/machinery/sparker/attack_ai()

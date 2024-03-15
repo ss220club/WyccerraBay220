@@ -720,7 +720,7 @@
 		for(var/obj/O in loc)
 			if((O != src) && O.density && !(O.atom_flags & ATOM_FLAG_CHECKS_BORDER) \
 			&& !(istype(O, /obj/structure/wall_frame) || istype(O, /obj/structure/grille)))
-				to_chat(user, SPAN_NOTICE("There isn't enough space to install [src]."))
+				balloon_alert(user, "недостаточно места!")
 				return FALSE
 	return TRUE
 

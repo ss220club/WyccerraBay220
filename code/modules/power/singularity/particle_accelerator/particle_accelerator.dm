@@ -125,8 +125,8 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 
 /obj/structure/particle_accelerator/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (construction_state < CONSTRUCT_STATE_WIRED)
-		USE_FEEDBACK_FAILURE("[src] needs to be wired before you can close the panel.")
+	if(construction_state < CONSTRUCT_STATE_WIRED)
+		balloon_alert(user, "нужно добавить проводку!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -135,10 +135,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	else
 		construction_state = CONSTRUCT_STATE_WIRED
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] [construction_state == CONSTRUCT_STATE_COMPLETE ? "closes" : "opens"] [src]'s maintenance panel with [tool]."),
-		SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_COMPLETE ? "close" : "open"] [src]'s maintenance panel with [tool].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(construction_state != CONSTRUCT_STATE_COMPLETE)
 
 /obj/structure/particle_accelerator/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -305,14 +302,12 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		if(2)
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			user.visible_message("[user.name] closes the [src.name]'s access panel.", \
-				"You close the access panel.")
+			USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
 			construct_state = 3
 		if(3)
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			user.visible_message("[user.name] opens the [src.name]'s access panel.", \
-				"You open the access panel.")
+			USE_FEEDBACK_NEW_PANEL_OPEN(TRUE)
 			construct_state = 2
 			active = FALSE
 	check_step()

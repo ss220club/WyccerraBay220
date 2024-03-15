@@ -96,7 +96,7 @@
 /obj/item/mech_component/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!length(contents))
-		to_chat(user, SPAN_WARNING("There is nothing to remove."))
+		balloon_alert(user, "внутри пусто!")
 		return
 	//Filter non movables
 	var/list/valid_contents = list()

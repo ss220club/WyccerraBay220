@@ -198,18 +198,15 @@
 
 /obj/item/device/radio/intercom/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (buildstage < 2)
-		USE_FEEDBACK_FAILURE("[src] has no wiring to expose.")
+	if(buildstage < 2)
+		balloon_alert(user, "нет проводки!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	wiresexposed = !wiresexposed
 	b_stat = !b_stat
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] [wiresexposed ? "opens" : "closes"] [src]'s wiring panel with [tool]."),
-		SPAN_NOTICE("You [wiresexposed ? "open" : "close"] [src]'s wiring panel with [tool].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(wiresexposed)
 
 /obj/item/device/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -109,7 +109,7 @@
 /obj/structure/table/screwdriver_act_secondary(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!reinforced)
-		USE_FEEDBACK_FAILURE("[src] has no reinforcements to remove.")
+		balloon_alert(user, "нет укреплений для снятия!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return

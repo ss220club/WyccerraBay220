@@ -42,10 +42,7 @@ var/global/list/navbeacons = list()
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	open = !open
-	user.visible_message(
-		SPAN_NOTICE("[user] [open ? "opens" : "closes"] cover of [src]."),
-		SPAN_NOTICE("You [open ? "open" : "close"] cover of [src].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(open)
 	update_icon()
 
 /obj/machinery/navbeacon/use_tool(obj/item/I, mob/living/user, list/click_params)

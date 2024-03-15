@@ -51,11 +51,8 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	open = !open
+	USE_FEEDBACK_NEW_PANEL_OPEN(open)
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
-		SPAN_NOTICE("You [open ? "open" : "close"] \the [src]'s panel with \the [tool].")
-	)
 
 /obj/item/device/personal_shield/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Power Cell - Install cell

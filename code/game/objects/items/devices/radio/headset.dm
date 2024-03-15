@@ -338,7 +338,7 @@
 /obj/item/device/radio/headset/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!length(encryption_keys))
-		USE_FEEDBACK_FAILURE("[src] has no encryption keys to remove.")
+		balloon_alert(user, "нет ключей шифрования!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -349,11 +349,6 @@
 		key.dropInto(get_turf(user))
 	encryption_keys.Cut()
 	recalculateChannels(TRUE)
-	user.visible_message(
-		SPAN_NOTICE("[user] pops [src]'s encryption keys out with [tool]."),
-		SPAN_NOTICE("You pop [src]'s encryption keys out with [tool]."),
-		range = 2
-	)
 
 /obj/item/device/radio/headset/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Encryption Key - Install key

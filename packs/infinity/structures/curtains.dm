@@ -12,7 +12,7 @@
 
 /obj/structure/curtain/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	user.visible_message(SPAN_NOTICE("[user] is uninstalling [src]."), SPAN_NOTICE("You are uninstalling [src]."))
+	USE_FEEDBACK_DECONSTRUCT_START
 	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/item/curtain/C = new /obj/item/curtain(loc)
@@ -30,9 +30,9 @@
 /obj/item/curtain/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(loc == user.loc)
-		to_chat(user, "You cannot install [src] from your hands.")
+		balloon_alert(user, "нужно устанавливать на полу!")
 		return
-	user.visible_message(SPAN_NOTICE("[user] is installing [src]."), SPAN_NOTICE("You are installing [src]."))
+	balloon_alert(user, "установка")
 	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/structure/curtain/C = new /obj/structure/curtain(loc)

@@ -704,9 +704,10 @@ var/global/list/turret_icons
 
 		if(5)
 			if(I.tool_behaviour == TOOL_SCREWDRIVER)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
+				if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
 				build_step = 6
-				to_chat(user, SPAN_NOTICE("You close the internal access hatch."))
+				USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
 				return TRUE
 
 		if(6)
@@ -720,9 +721,11 @@ var/global/list/turret_icons
 				return TRUE
 
 			else if(I.tool_behaviour == TOOL_SCREWDRIVER)
+				if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
 				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 5
-				to_chat(user, SPAN_NOTICE("You open the internal access hatch."))
+				USE_FEEDBACK_NEW_PANEL_OPEN(TRUE)
 				return TRUE
 
 		if(7)

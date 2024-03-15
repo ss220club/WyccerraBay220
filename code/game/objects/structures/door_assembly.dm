@@ -132,7 +132,7 @@
 /obj/structure/door_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(state != ASSEMBLY_STATE_CIRCUIT)
-		USE_FEEDBACK_FAILURE("[src] needs a circuit before you can finish it.")
+		balloon_alert(user, "нет платы!")
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] starts finishing [src] with [tool]."),

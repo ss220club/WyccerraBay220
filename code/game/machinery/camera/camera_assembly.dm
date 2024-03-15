@@ -35,36 +35,36 @@
 
 /obj/item/camera_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(state == ASSEMBLY_WIRED)
-		var/input = sanitize(input(user, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
-		if(!input)
-			to_chat(user, "No input found please hang up and try your call again.")
-			return
-		var/list/tempnetwork = splittext(input, ",")
-		if(length(tempnetwork) < 1)
-			to_chat(user, "No network found please hang up and try your call again.")
-			return
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		var/area/camera_area = get_area(src)
-		var/temptag = "[sanitize(camera_area.name)] ([rand(1, 999)])"
-		input = sanitizeSafe(input(user, "How would you like to name the camera?", "Set Camera Name", camera_name ? camera_name : temptag), MAX_LNAME_LEN)
-		state = ASSEMBLY_SCREWED
-		var/obj/machinery/camera/C = new(loc)
-		forceMove(C)
-		C.assembly = src
-		C.auto_turn()
-		C.replace_networks(uniquelist(tempnetwork))
-		C.c_tag = input
-		for(var/i = 5; i >= 0; i -= 1)
-			var/direct = input(user, "Direction?", "Assembling Camera", null) in list("LEAVE IT", "NORTH", "EAST", "SOUTH", "WEST" )
-			if(direct != "LEAVE IT")
-				C.dir = text2dir(direct)
-			if(i != 0)
-				var/confirm = alert(user, "Is this what you want? Chances Remaining: [i]", "Confirmation", "Yes", "No")
-				if(confirm == "Yes")
-					C.update_icon()
-					break
+	if(state != ASSEMBLY_WIRED)
+		return
+	var/input = sanitize(input(user, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
+	if(!input)
+		return
+	var/list/tempnetwork = splittext(input, ",")
+	if(length(tempnetwork) < 1)
+		balloon_alert(user, "не найдены сети!")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/area/camera_area = get_area(src)
+	var/temptag = "[sanitize(camera_area.name)] ([rand(1, 999)])"
+	input = sanitizeSafe(input(user, "How would you like to name the camera?", "Set Camera Name", camera_name ? camera_name : temptag), MAX_LNAME_LEN)
+	state = ASSEMBLY_SCREWED
+	var/obj/machinery/camera/C = new(loc)
+	forceMove(C)
+	C.assembly = src
+	C.auto_turn()
+	C.replace_networks(uniquelist(tempnetwork))
+	C.c_tag = input
+	for(var/i = 5; i >= 0; i -= 1)
+		var/direct = input(user, "Direction?", "Assembling Camera", null) in list("LEAVE IT", "NORTH", "EAST", "SOUTH", "WEST" )
+		if(direct != "LEAVE IT")
+			C.dir = text2dir(direct)
+		if(i != 0)
+			var/confirm = alert(user, "Is this what you want? Chances Remaining: [i]", "Confirmation", "Yes", "No")
+			if(confirm == "Yes")
+				C.update_icon()
+				break
 
 /obj/item/camera_assembly/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

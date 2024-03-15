@@ -117,7 +117,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	var/list/all_components = get_all_components()
 	if(!length(all_components))
-		to_chat(user, "This device doesn't have any components installed.")
+		balloon_alert(user, "нет компонентов!")
 		return
 	var/list/component_names = list()
 	for(var/obj/item/stock_parts/computer/H in all_components)

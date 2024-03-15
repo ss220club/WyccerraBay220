@@ -27,12 +27,12 @@
 		return TRUE
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		TRANSFER_STATE(down_state)
 		machine.panel_open = TRUE
-		to_chat(user, SPAN_NOTICE("You open the maintenance hatch of [machine]."))
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
 		machine.update_icon()
-		return
+		return TRUE
 	if(istype(I, /obj/item/storage/part_replacer))
 		machine.display_parts(user)
 		return TRUE
@@ -67,18 +67,18 @@
 		return
 	if(I.tool_behaviour == TOOL_CROWBAR)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		TRANSFER_STATE(down_state)
 		machine.dismantle()
 		return
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		TRANSFER_STATE(up_state)
 		machine.panel_open = FALSE
-		to_chat(user, SPAN_NOTICE("You close the maintenance hatch of [machine]."))
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
 		machine.update_icon()
-		return
+		return TRUE
 
 	if(istype(I, /obj/item/storage/part_replacer))
 		return machine.part_replacement(user, I)

@@ -115,28 +115,25 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Check for basic components.
 	if(!(arms && legs && head && body))
-		USE_FEEDBACK_FAILURE("[src] is still missing parts and cannot be completed.")
+		balloon_alert(user, "не хватает деталей!")
 		return
 	// Check for wiring.
 	if(is_wired < FRAME_WIRED_ADJUSTED)
-		if (is_wired == FRAME_WIRED)
-			USE_FEEDBACK_FAILURE("[src]'s wiring needs to be adjusted before you can complete it.")
+		if(is_wired == FRAME_WIRED)
+			balloon_alert(user, "нужно закрепить проводку!")
 		else
-			USE_FEEDBACK_FAILURE("[src] needs to be wired before you can complete it.")
+			balloon_alert(user, "нужна проводка!")
 		return
 	// Check for basing metal internal plating.
 	if(is_reinforced < FRAME_REINFORCED_WELDED)
-		if (is_reinforced == FRAME_REINFORCED)
-			USE_FEEDBACK_FAILURE("[src]'s internal reinforcement needs to be secured before you can complete it.")
-		else if (is_reinforced == FRAME_REINFORCED_SECURE)
-			USE_FEEDBACK_FAILURE("[src]'s internal reinforcement needs to be welded before you can complete it.")
+		if(is_reinforced == FRAME_REINFORCED)
+			balloon_alert(user, "укрепления не закреплены!")
+		else if(is_reinforced == FRAME_REINFORCED_SECURE)
+			balloon_alert(user, "укрепления не заварены!")
 		else
-			USE_FEEDBACK_FAILURE("[src] needs internal reinforcement before you can complete it.")
+			balloon_alert(user, "нужны укрепления!")
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts finishing [src] with [tool]."),
-		SPAN_NOTICE("You start finishing [src] with [tool].")
-	)
+	balloon_alert(user, "завершение сборки")
 	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !(arms && legs && head && body) || is_wired < FRAME_WIRED_ADJUSTED || is_reinforced < FRAME_REINFORCED_WELDED)
 		return
 	var/mob/living/exosuit/exosuit = new(get_turf(src), src)

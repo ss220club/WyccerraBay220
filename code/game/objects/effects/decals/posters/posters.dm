@@ -51,7 +51,7 @@
 
 /obj/structure/sign/poster/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_BLOCKING
-	USE_FEEDBACK_FAILURE("You must use wirecutters to remove [src].")
+	balloon_alert(user, "нужны кусачки!")
 
 /obj/structure/sign/poster/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

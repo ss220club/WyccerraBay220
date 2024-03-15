@@ -77,10 +77,10 @@
 /obj/item/scrubpack/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(enabled)
-		to_chat(user, SPAN_WARNING("Turn [src] off first!"))
+		USE_FEEDBACK_NEED_DISABLED
 		return
 	if(!cell && !tank)
-		to_chat(user, SPAN_WARNING("[src] doesn't have anything you can remove."))
+		balloon_alert(user, "нечего снимать!")
 		return
 	var/list/options = list()
 	if(cell)

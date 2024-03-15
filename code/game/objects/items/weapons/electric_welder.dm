@@ -48,13 +48,13 @@
 /obj/item/weldingtool/electric/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!cell)
-		to_chat(user, SPAN_WARNING("[src] has no cell installed."))
+		USE_FEEDBACK_CELL_MISSING
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	cell.dropInto(get_turf(src))
 	user.put_in_hands(cell)
-	to_chat(user, SPAN_NOTICE("You pop [cell] out of [src]."))
+	USE_FEEDBACK_CELL_REMOVED
 	welding = FALSE
 	cell = null
 	update_icon()

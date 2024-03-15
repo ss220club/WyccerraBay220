@@ -91,19 +91,19 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(length(contents) > LAZYLEN(component_parts))
-		to_chat(user, "Eject the items first!")
+		balloon_alert(user, "нужно очистить содержимое!")
 		return
 	if(mode == 0) // It's off but still not unscrewed
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		mode = -1 // Set it to doubleoff l0l
-		to_chat(user, "You remove the screws around the power connection.")
+		USE_FEEDBACK_NEW_PANEL_OPEN(TRUE)
 		return
 	if(mode == -1)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		mode = 0
-		to_chat(user, "You attach the screws around the power connection.")
+		USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
 
 /obj/machinery/disposal/welder_act(mob/living/user, obj/item/tool)
 	if(mode != -1)
@@ -605,10 +605,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	mode = !mode
-	user.visible_message(
-		SPAN_NOTICE("[user] [mode ? "removes" : "attaches"] the screws around [src]'s power connection with  [tool]."),
-		SPAN_NOTICE("You [mode ? "remove" : "attach"] the screws around [src]'s power connection with [tool].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(!mode)
 
 /obj/structure/disposaloutlet/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -50,19 +50,19 @@
 					SPAN_NOTICE("[user] begins unscrewing [flooring.descriptor] with [C]!"),
 					SPAN_NOTICE("You begin unscrewing [flooring.descriptor] with [C].")
 				)
-				playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
-				if (do_after(user, flooring.remove_timer, src, DO_REPAIR_CONSTRUCT))
-					user.visible_message(
-						SPAN_NOTICE("[user] unscrews [flooring.descriptor] with [C]!"),
-						SPAN_NOTICE("You unscrew [flooring.descriptor] with [C].")
-					)
-					make_plating(TRUE)
-					playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+				if(!C.use_as_tool(src, user, flooring.remove_timer, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
+				user.visible_message(
+					SPAN_NOTICE("[user] unscrews [flooring.descriptor] with [C]!"),
+					SPAN_NOTICE("You unscrew [flooring.descriptor] with [C].")
+				)
+				make_plating(TRUE)
 				return TRUE
 			else
+				if(!C.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
 				to_chat(user, SPAN_NOTICE("You unscrew and remove [flooring.descriptor]."))
 				make_plating(TRUE)
-				playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
 				return TRUE
 
 		else if(C.tool_behaviour == TOOL_WRENCH && (flooring.flags & TURF_REMOVE_WRENCH))

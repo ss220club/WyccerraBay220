@@ -60,7 +60,6 @@
 	name = "soft drink dispenser"
 	desc = "A soft drink machine." //Doesn't just serve soda --BlueNexus
 	icon_state = "soda_dispenser"
-	ui_title = "Soda Dispenser"
 	accept_drinking = 1
 	core_skill = SKILL_COOKING
 	can_contaminate = FALSE //It's not a complex panel, and I'm fairly sure that most people don't haymaker the control panel on a soft drinks machine. -- Chaoko99
@@ -93,7 +92,6 @@
 	name = "booze dispenser"
 	desc = "A beer machine. Like a soda machine, but more fun!"
 	icon_state = "booze_dispenser"
-	ui_title = "Booze Dispenser"
 	accept_drinking = 1
 	core_skill = SKILL_COOKING
 	can_contaminate = FALSE //See above.
@@ -127,7 +125,6 @@
 	name = "coffee dispenser"
 	desc = "Driving crack dealers out of employment since 2280."
 	icon_state = "coffee_dispenser"
-	ui_title = "Coffee Dispenser"
 	accept_drinking = 1
 	core_skill = SKILL_COOKING
 	can_contaminate = FALSE //See above.

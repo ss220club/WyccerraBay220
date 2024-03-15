@@ -211,10 +211,10 @@ SUBSYSTEM_DEF(ambient_lighting) //A simple SS that handles updating ambient ligh
 		var/turf/target = curr[length(curr)]
 		LIST_DEC(curr)
 
-		if(target && target.is_outside())
+		if(target?.is_outside())
 			needs_ambience = TURF_IS_DYNAMICALLY_LIT_UNSAFE(target)
 			if (!needs_ambience)
-				for (var/turf/T in RANGE_TURFS(target, 1))
+				for (var/turf/T as anything in RANGE_TURFS(target, 1))
 					if(TURF_IS_DYNAMICALLY_LIT_UNSAFE(T))
 						needs_ambience = TRUE
 						break

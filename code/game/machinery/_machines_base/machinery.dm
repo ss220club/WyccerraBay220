@@ -161,6 +161,12 @@
 			if (prob(25))
 				qdel(src)
 
+/obj/machinery/tgui_status(mob/user, datum/tgui_state/state)
+	if(MACHINE_IS_BROKEN(src) || (!interact_offline && !is_powered()))
+		return STATUS_CLOSE
+
+	return ..()
+
 /obj/machinery/CanUseTopic(mob/user)
 	if(MACHINE_IS_BROKEN(src))
 		return STATUS_CLOSE

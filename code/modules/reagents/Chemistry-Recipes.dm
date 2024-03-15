@@ -1335,7 +1335,8 @@
 
 /datum/chemical_reaction/slime/teleport/on_reaction(datum/reagents/holder)
 	var/list/possible_teleport_locations = list()
-	for(var/turf/possible_teleport_location as anything in ORANGE_TURFS(holder.my_atom, 6))
+	var/turf/holder_atom_turf = get_turf(holder.my_atom)
+	for(var/turf/possible_teleport_location as anything in ORANGE_TURFS(holder_atom_turf, 6))
 		possible_teleport_locations += possible_teleport_location
 
 	for(var/mob/viewer as anything in viewers(holder.my_atom, 2))

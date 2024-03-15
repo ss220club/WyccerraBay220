@@ -232,7 +232,7 @@
 
 	cartridge_to_remove.dropInto(loc)
 	cartridges -= cartridge_to_remove_label
-	to_chat(user, SPAN_NOTICE("You remove [cartridge_to_remove] from [src]."))
+	balloon_alert(user, "[cartridge_to_remove] снят")
 	SStgui.update_uis(src)
 
 /**

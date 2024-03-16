@@ -65,8 +65,6 @@ SUBSYSTEM_DEF(machines)
 	var/timer
 	if (!resumed || current_step == SSMACHINES_STEP_DONE)
 		current_step = SSMACHINES_STEP_DEFAULT
-	if(resumed)
-		var/a = null
 	timer = world.tick_usage
 	while(current_step < SSMACHINES_STEP_DONE)
 		switch(current_step)

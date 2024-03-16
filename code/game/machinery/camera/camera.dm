@@ -156,7 +156,7 @@
 		return
 
 	if (prob(100/severity))
-		if(!stat & MACHINE_STAT_EMPED)
+		if(~stat & MACHINE_STAT_EMPED)
 			deactivate(choice = FALSE)
 			set_stat(MACHINE_STAT_EMPED, TRUE)
 			set_light(0)

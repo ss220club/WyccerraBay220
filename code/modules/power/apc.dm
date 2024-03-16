@@ -111,12 +111,12 @@
 	var/lighting = POWERCHAN_ON_AUTO
 	var/equipment = POWERCHAN_ON_AUTO
 	var/environ = POWERCHAN_ON_AUTO
-	var/operating = 1       // Bool for main toggle.
+	var/operating = TRUE       // Bool for main toggle.
 	var/charging = 0        // Whether or not it's charging. 0 - not charging but not full, 1 - charging, 2 - full
-	var/chargemode = 1      // Whether charging is toggled on or off.
-	var/locked = 1
-	var/coverlocked = 1     // Whether you can crowbar off the cover or need to swipe ID first.
-	var/aidisabled = 0
+	var/chargemode = TRUE      // Whether charging is toggled on or off.
+	var/locked = TRUE
+	var/coverlocked = TRUE     // Whether you can crowbar off the cover or need to swipe ID first.
+	var/aidisabled = FALSE
 	var/lastused_light = 0    // Internal stuff for UI and bookkeeping; can read off values but don't modify.
 	var/lastused_equip = 0
 	var/lastused_environ = 0
@@ -126,7 +126,7 @@
 	var/mob/living/silicon/ai/hacker = null // Malfunction var. If set AI hacked the APC and has full control.
 	var/wiresexposed = FALSE // whether you can access the wires for hacking or not.
 	powernet = 0		 // set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
-	var/debug= 0         // Legacy debug toggle, left in for admin use.
+	var/debug= FALSE         // Legacy debug toggle, left in for admin use.
 	var/autoflag= 0		 // 0 = off, 1= eqp and lights off, 2 = eqp off, 3 = all on.
 	var/has_electronics = ELECTRONICS_NONE
 	var/beenhit = 0 // used for counting how many times it has been hit, used for Aliens at the moment
@@ -135,17 +135,17 @@
 	var/update_state = -1
 	var/update_overlay = -1
 	var/list/update_overlay_chan		// Used to determine if there is a change in channels
-	var/is_critical = 0
+	var/is_critical = FALSE
 	var/static/status_overlays = 0
 	var/failure_timer = 0               // Cooldown thing for apc outage event
-	var/force_update = 0
-	var/emp_hardened = 0
+	var/force_update = FALSE
+	var/emp_hardened = FALSE
 	var/static/list/status_overlays_lock
 	var/static/list/status_overlays_charging
 	var/static/list/status_overlays_equipment
 	var/static/list/status_overlays_lighting
 	var/static/list/status_overlays_environ
-	var/autoname = 1
+	var/autoname = TRUE
 
 /obj/machinery/power/apc/updateDialog()
 	if (MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
@@ -198,6 +198,10 @@
 		operating = 0
 		set_stat(MACHINE_STAT_MAINT, TRUE)
 		queue_icon_update()
+
+	if(!area.requires_power)
+		STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+		return
 
 	if(operating)
 		force_update_channels()
@@ -892,8 +896,25 @@
 	update()
 	queue_icon_update()
 
+/obj/machinery/power/apc/proc/set_operating(new_value)
+	if(new_value == operating)
+		return
+	. = operating
+	operating = new_value
+	on_set_operating(.)
+
+/obj/machinery/power/apc/proc/on_set_operating(old_value)
+	. = ..()
+	if(operating && !shorted && is_operational)
+		force_update_channels()
+		START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+	else
+		shutdown_all_channels()
+		STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+	update()
+
 /obj/machinery/power/apc/proc/toggle_breaker()
-	operating = !operating
+	set_operating(!operating)
 	force_update_channels()
 
 /obj/machinery/power/apc/get_power_usage()
@@ -908,12 +929,6 @@
 		. += area.usage(EQUIP)
 
 /obj/machinery/power/apc/Process()
-	if(!area.requires_power)
-		return PROCESS_KILL
-
-	if(MACHINE_IS_BROKEN(src) || GET_FLAGS(stat, MACHINE_STAT_MAINT))
-		return
-
 	if(failure_timer)
 		update()
 		queue_icon_update()
@@ -975,6 +990,32 @@
 	else if (last_ch != charging)
 		queue_icon_update()
 
+/obj/machinery/power/apc/proc/set_shorted(new_value)
+	if(new_value == shorted)
+		return
+	. = shorted
+	shorted = new_value
+	on_set_shorted(.)
+
+/obj/machinery/power/apc/proc/on_set_shorted(old_value)
+	if(shorted)
+		shutdown_all_channels()
+		update()
+		STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+	else if(is_operational && operating)
+		START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+
+
+/obj/machinery/power/apc/proc/shutdown_all_channels(suppress_alarms = FALSE)
+	if(autoflag == 0)
+		return
+	equipment = autoset(equipment, 0)
+	lighting = autoset(lighting, 0)
+	environ = autoset(environ, 0)
+	if(!suppress_alarms)
+		GLOB.power_alarm.triggerAlarm(loc, src)
+	autoflag = 0
+
 /obj/machinery/power/apc/proc/update_channels(suppress_alarms = FALSE)
 	// Allow the APC to operate as normal if the cell can charge
 	if(charging && longtermpower < 10)
@@ -984,14 +1025,8 @@
 	var/obj/item/cell/cell = get_cell()
 	var/percent = cell && cell.percent()
 
-	if(!cell || shorted || (!is_powered()) || !operating)
-		if(autoflag != 0)
-			equipment = autoset(equipment, 0)
-			lighting = autoset(lighting, 0)
-			environ = autoset(environ, 0)
-			if(!suppress_alarms)
-				GLOB.power_alarm.triggerAlarm(loc, src)
-			autoflag = 0
+	if(!cell)
+		shutdown_all_channels(suppress_alarms)
 	else if((percent > AUTO_THRESHOLD_LIGHTING) || longtermpower >= 0)              // Put most likely at the top so we don't check it last, effeciency 101
 		if(autoflag != 3)
 			equipment = autoset(equipment, 1)

@@ -52,7 +52,7 @@
 	update_is_operational()
 
 /obj/machinery/proc/update_is_operational()
-	if(!MACHINE_IS_BROKEN(src) && !(stat & (MACHINE_STAT_NOPOWER|MACHINE_STAT_MAINT)))
+	if(inoperable())
 		set_is_operational(TRUE)
 		return
 	set_is_operational(FALSE)
@@ -129,4 +129,4 @@
 
 /// Checks whether or not the machine's state variable has the `MACHINE_STAT_BROKEN` or `MACHINE_STAT_NOPOWER` flags, or any of the provided `additional_flags`. Returns `TRUE` if any of the flags match.
 /obj/machinery/proc/inoperable(additional_flags = EMPTY_BITFIELD)
-	return (GET_FLAGS(stat, MACHINE_STAT_NOPOWER | additional_flags) || reason_broken)
+	return (GET_FLAGS(stat, MACHINE_STAT_NOPOWER | MACHINE_STAT_MAINT | additional_flags) || reason_broken)

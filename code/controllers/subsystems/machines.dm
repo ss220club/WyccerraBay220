@@ -65,8 +65,10 @@ SUBSYSTEM_DEF(machines)
 	var/timer
 	if (!resumed || current_step == SSMACHINES_STEP_DONE)
 		current_step = SSMACHINES_STEP_DEFAULT
+	if(resumed)
+		var/a = null
 	timer = world.tick_usage
-	while(current_step < SSMACHINES_STEP_DONE && state == SS_RUNNING)
+	while(current_step < SSMACHINES_STEP_DONE)
 		switch(current_step)
 			if(SSMACHINES_STEP_PIPENETS)
 				process_pipenets(resumed, no_mc_tick)
@@ -80,6 +82,9 @@ SUBSYSTEM_DEF(machines)
 			if(SSMACHINES_STEP_POWER_OBJECTS)
 				process_power_objects(resumed, no_mc_tick)
 				cost_power_objects = MC_AVERAGE(cost_power_objects, (world.tick_usage - timer) * world.tick_lag)
+
+		if(state != SS_RUNNING)
+			return
 		current_step++
 		resumed = FALSE
 

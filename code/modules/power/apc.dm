@@ -904,7 +904,6 @@
 	on_set_operating(.)
 
 /obj/machinery/power/apc/proc/on_set_operating(old_value)
-	. = ..()
 	if(operating && !shorted && is_operational)
 		force_update_channels()
 		START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)

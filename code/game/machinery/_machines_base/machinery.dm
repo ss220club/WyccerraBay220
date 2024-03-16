@@ -75,6 +75,8 @@
 	var/machine_name = null
 	/// A simple description of what this machine does, shown on examine for circuit boards.
 	var/machine_desc = null
+	/// Is machine able to work.
+	var/is_operational = TRUE
 
 /obj/machinery/Initialize(mapload, d=0, populate_parts = TRUE)
 	. = ..()

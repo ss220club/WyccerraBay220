@@ -141,7 +141,7 @@
 	..(loc)
 
 	if(dir)
-		src.set_dir(dir)
+		set_dir(dir)
 
 	if(istype(frame))
 		buildstage = 0
@@ -966,11 +966,11 @@
 	report_danger_level = 0
 	breach_pressure = -1
 
-/obj/machinery/alarm/server/New()
-	..()
+/obj/machinery/alarm/server/Initialize()
+	. = ..()
 	req_access = list(access_rd, access_atmospherics, access_engine_equip)
-	TLV["temperature"] =	list(T0C-26, T0C, T0C+30, T0C+40) // K
-	target_temperature = T0C+10
+	TLV["temperature"] = list(T0C-26, T0C, T0C+30, T0C+40)
+	target_temperature = T0C + 10
 
 /*
 AIR ALARM CIRCUIT

@@ -134,6 +134,7 @@
 /obj/machinery/status_display/proc/change_status()
 	SIGNAL_HANDLER
 
+	power_channel = linked_area.powered(EQUIP)
 	update()
 
 

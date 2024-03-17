@@ -120,7 +120,7 @@ field_generator power level display
 		return
 	switch(state)
 		if(0)
-			USE_FEEDBACK_NEED_ANCHOR
+			USE_FEEDBACK_NEED_ANCHOR(user)
 			return
 		if(1)
 			. = ITEM_INTERACT_SUCCESS
@@ -135,7 +135,7 @@ field_generator power level display
 			. = ITEM_INTERACT_SUCCESS
 			if(!tool.tool_start_check(user, 1))
 				return
-			USE_FEEDBACK_UNWELD_FROM_FLOOR
+			USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			state = 1

@@ -409,7 +409,7 @@
 /mob/living/exosuit/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!getBruteLoss())
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	var/list/damaged_parts = list()
 	for(var/obj/item/mech_component/component in list(arms, legs, body, head))

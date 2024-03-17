@@ -140,12 +140,12 @@
 	var/amount = (SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION)
 	if(!tool.tool_start_check(user, amount))
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 1 SECONDS, amount, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !brute_damage)
 		return
 	var/repair_value = 10 * max(user.get_skill_value(SKILL_CONSTRUCTION), user.get_skill_value(SKILL_DEVICES))
 	repair_brute_damage(repair_value)
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/item/mech_component/proc/repair_burn_generic(obj/item/stack/cable_coil/CC, mob/user)
 	if(!istype(CC))

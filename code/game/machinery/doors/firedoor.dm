@@ -277,11 +277,11 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 2))
 		return
-	USE_FEEDBACK_WELD_UNWELD(blocked)
+	USE_FEEDBACK_WELD_UNWELD(user, blocked)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	blocked = !blocked
-	USE_FEEDBACK_WELD_UNWELD_FINISH(blocked)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, blocked)
 	update_icon()
 
 /obj/machinery/door/firedoor/use_tool(obj/item/C, mob/living/user, list/click_params)

@@ -190,11 +190,11 @@
 			balloon_alert(user, "нужно снять с себя!")
 			return
 	if(brute_damage <= 0)
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!tool.use_as_tool(src, user, amount = 5, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	repair_breaches(DAMAGE_BRUTE, 3, user)
 
 /obj/item/clothing/suit/space/attackby(obj/item/W as obj, mob/user as mob)

@@ -106,7 +106,7 @@
 /mob/living/bot/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health >= maxHealth)
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!open)
 		balloon_alert(user, "нужно открыть панель для ремонта!")
@@ -115,7 +115,7 @@
 		return
 	health = min(maxHealth, health + 10)
 	update_icon()
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /mob/living/bot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// ID Card - Toggle access panel lock

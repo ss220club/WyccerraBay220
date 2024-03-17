@@ -207,10 +207,10 @@
 		return
 	if(!tool.tool_start_check(user, 2))
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing || !density)
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
 	update_icon()
 	qdel(repairing)

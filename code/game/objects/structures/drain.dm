@@ -29,7 +29,7 @@
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded
-	USE_FEEDBACK_WELD_UNWELD_FINISH(welded)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded)
 	update_icon()
 
 

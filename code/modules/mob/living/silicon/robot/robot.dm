@@ -626,10 +626,10 @@
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 1 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE) || !getBruteLoss())
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	adjustBruteLoss(-30)
 	updatehealth()
 

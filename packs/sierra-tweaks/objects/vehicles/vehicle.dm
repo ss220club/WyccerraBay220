@@ -100,7 +100,7 @@
 /obj/vehicle/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health >= maxhealth)
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!open)
 		balloon_alert(user, "нужно открыть панель!")
@@ -108,7 +108,7 @@
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	adjust_health(10)
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/vehicle/use_tool(obj/item/tool, mob/user, list/click_params)
 	if(istype(tool, /obj/item/hand_labeler))

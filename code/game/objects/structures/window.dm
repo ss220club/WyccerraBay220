@@ -373,14 +373,14 @@
 /obj/structure/window/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!health_damaged())
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!repair_pending)
 		balloon_alert(user, "нужно установить [get_material_display_name()]!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	restore_health(repair_pending)
 	repair_pending = 0
 

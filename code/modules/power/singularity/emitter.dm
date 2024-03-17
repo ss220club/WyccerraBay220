@@ -209,7 +209,7 @@
 		return TRUE
 	switch(state)
 		if(EMITTER_LOOSE)
-			USE_FEEDBACK_NEED_ANCHOR
+			USE_FEEDBACK_NEED_ANCHOR(user)
 		if(EMITTER_WRENCHED)
 			if(!tool.tool_start_check(user, 1))
 				return
@@ -222,7 +222,7 @@
 		if(EMITTER_WELDED)
 			if(!tool.tool_start_check(user, 1))
 				return
-			USE_FEEDBACK_UNWELD_FROM_FLOOR
+			USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			state = EMITTER_WRENCHED

@@ -29,7 +29,7 @@
 	ClearOverlays()
 	bulletholes.Cut()
 	hp = initial(hp)
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/item/target/syndicate
 	icon_state = "target_s"

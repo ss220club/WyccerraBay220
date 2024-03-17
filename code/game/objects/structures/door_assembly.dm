@@ -205,11 +205,11 @@
 
 	// Dismantle assembly
 	if(anchored)
-		USE_FEEDBACK_NEED_UNANCHOR
+		USE_FEEDBACK_NEED_UNANCHOR(user)
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	USE_FEEDBACK_DECONSTRUCT_START
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || anchored)
 		return
 	var/obj/item/stack/material/steel/stack = new(loc, 4)

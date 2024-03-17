@@ -114,7 +114,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	USE_FEEDBACK_UNWELD_FROM_FLOOR
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/structure/disposalconstruct/machine/C = new (loc, src)
@@ -618,7 +618,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	USE_FEEDBACK_UNWELD_FROM_FLOOR
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/structure/disposalconstruct/machine/outlet/outlet = new(loc, src)

@@ -1033,11 +1033,11 @@ About the new airlock wires panel:
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 1))
 		return
-	USE_FEEDBACK_WELD_UNWELD(welded)
+	USE_FEEDBACK_WELD_UNWELD(user, welded)
 	if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || repairing || operating == DOOR_OPERATING_YES || !density)
 		return
 	welded = !welded
-	USE_FEEDBACK_WELD_UNWELD_FINISH(welded)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded)
 	update_icon()
 
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)

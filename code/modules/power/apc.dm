@@ -538,7 +538,7 @@
 		return
 	if(!tool.tool_start_check(user, 3))
 		return
-	USE_FEEDBACK_DECONSTRUCT_START
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 5 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !opened || has_electronics || terminal())
 		return
 	if(emagged || MACHINE_IS_BROKEN(src) || opened == 2)

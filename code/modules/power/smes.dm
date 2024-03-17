@@ -247,14 +247,14 @@
 		balloon_alert(user, "нужно открыть панель!")
 		return
 	if(!damage)
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!tool.tool_start_check(user, 5))
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, damage, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !damage)
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	damage = 0
 
 /obj/machinery/power/smes/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)

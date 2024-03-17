@@ -149,16 +149,16 @@
 /obj/item/modular_computer/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!get_damage_value())
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	var/damage = get_damage_value()
 	var/amount = round(damage/75)
 	if(!tool.tool_start_check(amount, 1))
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, damage / (1 SECONDS), amount, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	revive_health()
 
 /obj/item/modular_computer/attackby(obj/item/W as obj, mob/user as mob)

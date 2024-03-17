@@ -211,14 +211,14 @@
 	. = ITEM_INTERACT_SUCCESS
 	var/damage = get_damage_value()
 	if(!damage)
-		USE_FEEDBACK_NOTHING_TO_REPAIR
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, (max(0.5, damage / 50)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	revive_health()
 
 /obj/machinery/shipsensors/proc/remove_tracker(obj/item/ship_tracker/tracker)

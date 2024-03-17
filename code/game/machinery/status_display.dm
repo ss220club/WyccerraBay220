@@ -37,6 +37,8 @@
 	var/friendc = 0      // track if Friend Computer mode
 	var/ignore_friendc = 0
 
+	var/area/linked_area
+
 	maptext_height = 26
 	maptext_width = 32
 
@@ -89,6 +91,7 @@
 // register for radio system
 /obj/machinery/status_display/Initialize()
 	. = ..()
+	find_and_set_linked_area()
 	if(radio_controller)
 		radio_controller.add_object(src, frequency)
 
@@ -99,6 +102,40 @@
 		return
 	set_picture("ai_bsod")
 	..(severity)
+
+// Signals
+
+/obj/machinery/status_display/proc/find_and_set_linked_area()
+	var/area/target_area = get_area(src)
+	if(!target_area.apc)
+		RegisterSignal(target_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+		return
+
+	on_apc_add(target_area)
+
+/obj/machinery/status_display/proc/on_apc_add(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_ADDED)
+	linked_area = apc_area
+	RegisterSignal(apc_area, COMSIG_AREA_APC_REMOVED, PROC_REF(on_apc_removal))
+	RegisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE, PROC_REF(change_status))
+
+/obj/machinery/status_display/proc/on_apc_removal(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_REMOVED)
+	UnregisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE)
+	linked_area = null
+	update()
+
+	RegisterSignal(apc_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+
+/obj/machinery/status_display/proc/change_status()
+	SIGNAL_HANDLER
+
+	update()
+
 
 // set what is displayed
 /obj/machinery/status_display/proc/update()

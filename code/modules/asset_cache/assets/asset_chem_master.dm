@@ -1,5 +1,5 @@
-#define BOTTLE_SPRITES list("bottle-1", "bottle-2", "bottle-3", "bottle-4")
 #define MAX_PILL_SPRITE 25
+#define BOTTLE_SPRITES list("bottle-1", "bottle-2", "bottle-3", "bottle-4")
 
 /// Pill sprites for UIs
 /datum/asset/spritesheet/chem_master

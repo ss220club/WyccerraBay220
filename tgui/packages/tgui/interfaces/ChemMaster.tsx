@@ -47,7 +47,7 @@ type Buffer = {
 
 type PillSprite = {
   id: number;
-  sprite: number;
+  sprite: string;
 };
 
 type BottleSprite = {
@@ -214,35 +214,33 @@ const ChemMasterIcons = (props, context) => {
   return (
     <Stack fill vertical textAlign="center" height="350px">
       <Stack.Item basis="50%">
-        <Section fill scrollable title={data.pillSprite}>
-          {data.pillSprites.map((pillSprite) => (
+        <Section fill scrollable title="Стиль таблеток">
+          {data.pillSprites.map(({ id, sprite }) => (
             <ImageButton
-              key={pillSprite.id}
+              key={id}
               m={0.5}
               asset
               vertical
+              selected={data.pillSprite === id}
               imageAsset={'chem_master32x32'}
-              image={pillSprite.sprite}
-              onClick={() =>
-                act('changePillStyle', { pillStyle: pillSprite.id })
-              }
+              image={sprite}
+              onClick={() => act('changePillStyle', { style: id })}
             />
           ))}
         </Section>
       </Stack.Item>
       <Stack.Item basis="50%">
         <Section fill scrollable title="Стиль бутылок">
-          {data.bottleSprites.map((bottleSprite) => (
+          {data.bottleSprites.map(({ id, sprite }) => (
             <ImageButton
-              key={bottleSprite.id}
+              key={id}
               m={0.5}
               asset
               vertical
+              selected={data.bottleSprite === id}
               imageAsset={'chem_master32x32'}
-              image={bottleSprite.sprite}
-              onClick={() =>
-                act('changeBottleStyle', { bottleStyle: bottleSprite.id })
-              }
+              image={sprite}
+              onClick={() => act('changeBottleStyle', { style: id })}
             />
           ))}
         </Section>

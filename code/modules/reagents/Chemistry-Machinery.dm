@@ -26,8 +26,8 @@
 	var/bottle_dosage = 60
 	var/pill_dosage = 30
 
-	var/bottlesprite = "bottle-1" //yes, strings
-	var/pillsprite = "1"
+	var/bottlesprite = 1
+	var/pillsprite = 1
 	var/client/has_sprites = list()
 
 	var/sloppy = TRUE // Whether reagents will not be fully purified (sloppy = TRUE) or there will be reagent loss (sloppy = FALSE) on reagent transfer.
@@ -137,7 +137,7 @@
 		return
 	var/obj/item/reagent_containers/glass/bottle/P = new/obj/item/reagent_containers/glass/bottle(loc)
 	P.SetName("[name] bottle")
-	P.icon_state = bottlesprite
+	P.icon_state = "bottle-[bottlesprite]"
 	reagents.trans_to_obj(P, bottle_dosage)
 	P.update_icon()
 
@@ -212,9 +212,11 @@
 	static_data["pillSprites"] = pill_styles
 
 	var/bottle_styles = list()
+	var/bottle_style_index = 0
 	for(var/style in BOTTLE_SPRITES)
+		bottle_style_index++
 		bottle_styles += list(list(
-			"id" = style,
+			"id" = bottle_style_index,
 			"sprite" = "[style]",
 		))
 	static_data["bottleSprites"] = bottle_styles
@@ -302,7 +304,7 @@
 			var/count = 1
 			if(reagents.total_volume/count < 1)
 				return TRUE
-			if(action == "createpill_multiple")
+			if(params["createpill_multiple"])
 				count = tgui_input_number(usr, "Введите сколько таблеток сделать.", src.name, pillamount, max_pill_count, 1)
 				count = clamp(count, 1, max_pill_count)
 			if(reagents.total_volume / count < 1)
@@ -319,7 +321,7 @@
 				P.name = "[pill_name]"
 				P.pixel_x = rand(-7, 7)
 				P.pixel_y = rand(-7, 7)
-				P.icon_state = pillsprite
+				P.icon_state = "pill-[pillsprite]"
 				reagents.trans_to_obj(P,amount_per_pill)
 				if(!loaded_pill_bottle)
 					continue
@@ -330,10 +332,16 @@
 			create_bottle(usr)
 			return TRUE
 		if("changePillStyle")
-			pillsprite = params["pillStyle"]
+			var/new_style = params["style"]
+			if(isnull(new_style))
+				return FALSE
+			pillsprite = new_style
 			return TRUE
 		if("changeBottleStyle")
-			bottlesprite = params["bottleStyle"]
+			var/new_style = params["style"]
+			if(isnull(new_style))
+				return FALSE
+			bottlesprite = new_style
 			return TRUE
 
 /obj/machinery/chem_master/condimaster

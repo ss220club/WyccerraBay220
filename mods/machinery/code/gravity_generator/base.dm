@@ -222,17 +222,11 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] begins to weld the damaged parts."),
-		SPAN_NOTICE("You begin to weld the damaged parts.")
-	)
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 15 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || broken_state != GRAV_NEEDS_WELDING)
 		return
 	health += 250
-	user.visible_message(
-		SPAN_NOTICE("[user] fixed the damaged parts."),
-		SPAN_NOTICE("You fixed the damaged parts.")
-	)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	set_broken_state(GRAV_NEEDS_WRENCH)
 	update_icon()
 

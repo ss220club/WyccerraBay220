@@ -97,10 +97,10 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 5))
 		return
-	user.visible_message("[user] starts to disassemble [src].", "You start to disassemble [src].")
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, SPAN_NOTICE("You fully disassemble [src]. There were no salvageable parts."))
+	user.visible_message("[user] disassembles [src].", "You disassemble [src].")
 	qdel(src)
 
 /obj/machinery/atmospheric_field_generator/perma/Initialize()

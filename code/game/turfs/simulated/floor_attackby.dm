@@ -171,7 +171,7 @@
 			if(broken || burnt)
 				if(!C.use_as_tool(src, user, amount = 2, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 					return TRUE
-				to_chat(user, SPAN_NOTICE("You fix some dents on the broken plating."))
+				USE_FEEDBACK_REPAIR_FINISH(user)
 				playsound(src, 'sound/items/Welder.ogg', 80, 1)
 				icon_state = "plating"
 				burnt = null

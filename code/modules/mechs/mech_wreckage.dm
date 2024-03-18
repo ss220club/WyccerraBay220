@@ -68,15 +68,12 @@
 /obj/structure/mech_wreckage/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(prepared)
-		USE_FEEDBACK_FAILURE("[src] has already been weakened.")
+		balloon_alert(user, "структура уже ослаблена!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	prepared = TRUE
-	user.visible_message(
-		SPAN_NOTICE("[user] partially cuts through [src] with [tool]."),
-		SPAN_NOTICE("You partially cut through [src] with [tool].")
-	)
+	balloon_alert_to_viewers("структура ослаблена!")
 
 /obj/structure/mech_wreckage/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Welding Tool, Plasma Cutter - Cut through wreckage

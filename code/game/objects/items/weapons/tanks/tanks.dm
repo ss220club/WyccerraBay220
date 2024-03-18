@@ -170,16 +170,16 @@ var/global/list/tank_gauge_cache = list()
 	. = ITEM_INTERACT_SUCCESS
 	var/obj/item/weldingtool/WT = tool
 	if(GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
-		to_chat(user, SPAN_WARNING("[src]'s emergency relief valve must be closed before you can weld it shut!"))
+		balloon_alert(user, "нужно закрыть клапан!")
 		return
 	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-		to_chat(user, SPAN_NOTICE("The emergency pressure relief valve has already been welded."))
+		balloon_alert(user, "клапан уже заварен!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
 
 	add_fingerprint(user)
-	to_chat(user, SPAN_NOTICE("You begin welding the [src] emergency pressure relief valve."))
+	balloon_alert(user, "заваривание клапана")
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_PUBLIC_UNIQUE))
 		GLOB.bombers += "[key_name(user)] attempted to weld a [src]. [air_contents.temperature-T0C]"
 		log_and_message_admins("attempted to weld a [src]. [air_contents.temperature-T0C]", user)

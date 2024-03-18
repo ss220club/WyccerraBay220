@@ -106,19 +106,16 @@
 /mob/living/bot/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health >= maxHealth)
-		USE_FEEDBACK_FAILURE("[src] doesn't need any repairs.")
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!open)
-		USE_FEEDBACK_FAILURE("[src]'s access panel must be open to repair it.")
+		balloon_alert(user, "нужно открыть панель для ремонта!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 5, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	health = min(maxHealth, health + 10)
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] repairs some of [src]'s damage with [tool]."),
-		SPAN_NOTICE("You repair some of [src]'s damage with [tool].")
-	)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /mob/living/bot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// ID Card - Toggle access panel lock

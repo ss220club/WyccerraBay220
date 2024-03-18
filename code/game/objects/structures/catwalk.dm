@@ -63,8 +63,6 @@
 		attack_hand(user)
 
 /obj/structure/catwalk/proc/deconstruct(mob/user)
-	playsound(src, 'sound/items/Welder.ogg', 100, 1)
-	to_chat(user, SPAN_NOTICE("Slicing [src] joints ..."))
 	new /obj/item/stack/material/rods(src.loc)
 	new /obj/item/stack/material/rods(src.loc)
 	//Lattice would delete itself, but let's save ourselves a new obj

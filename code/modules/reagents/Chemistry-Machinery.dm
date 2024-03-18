@@ -161,6 +161,8 @@
 /obj/machinery/chem_master/tgui_data(mob/user)
 	var/list/data = list()
 
+	data["pillSprite"] = pillsprite
+	data["bottleSprite"] = bottlesprite
 	data["isSloppy"] = sloppy
 	data["loadedContainer"] = beaker
 	data["isTransferringToBeaker"] = to_beaker
@@ -226,46 +228,41 @@
 	var/datum/reagents/R = beaker.reagents
 	switch(action)
 		if("ejectPillBottle")
-			loaded_pill_bottle.dropInto(loc)
+			if(!loaded_pill_bottle)
+				return FALSE
+			if(Adjacent(usr))
+				usr.put_in_hands(loaded_pill_bottle)
+			else
+				loaded_pill_bottle.dropInto(loc)
 			loaded_pill_bottle = null
 			return TRUE
 		if("analyze")
-			var/datum/reagent/reagent = locate(params["analyze"]) in R.reagent_list
+			var/datum/reagent/reagent = locate(params["name"]) in R.reagent_list
 			if(!reagent)
-				reagent = locate(params["analyze"]) in reagents.reagent_list
+				reagent = locate(params["name"]) in reagents.reagent_list
 			if(reagent)
 				analyzed_reagent = reagent
 			return TRUE
-		if("addAmount")
+		if("add")
 			var/datum/reagent/their_reagent = locate(params["reagent"]) in R.reagent_list
 			if(!their_reagent)
 				return FALSE
 			var/mult = 1
 			var/amount = clamp((text2num(params["amount"])), 0, get_remaining_volume())
 			if(sloppy)
-				var/contaminants = fetch_contaminants(user, R, their_reagent)
+				var/contaminants = fetch_contaminants(usr, R, their_reagent)
 				for(var/datum/reagent/reagent in contaminants)
-					R.trans_type_to(src, reagent.type, round(rand()*amount/5, 0.1))
+					R.trans_type_to(src, reagent.type, round(rand() * amount / 5, 0.1))
 			else
-				mult -= 0.4 * (SKILL_MAX - user.get_skill_value(core_skill))/(SKILL_MAX-SKILL_MIN) //10% loss per skill level down from max
+				mult -= 0.4 * (SKILL_MAX - usr.get_skill_value(core_skill))/(SKILL_MAX-SKILL_MIN) //10% loss per skill level down from max
 			R.trans_type_to(src, their_reagent.type, amount, mult)
 			return TRUE
-		if("addCustom")
-			var/datum/reagent/their_reagent = locate(params["addCustom"]) in R.reagent_list
-			if(!their_reagent)
-				return FALSE
-			useramount = input("Select the amount of reagents to transfer.", 30, useramount) as null|num
-			if(!useramount)
-				return FALSE
-			useramount = clamp(useramount, 0, 200) // Блять... что за хуйня тут везде...
-			Topic(href, list("amount" = "[useramount]", "add" = params["addcustom"]), state)
-			return TRUE
 		if("remove")
-			var/datum/reagent/my_reagents = locate(params["remove"]) in reagents.reagent_list
+			var/datum/reagent/my_reagents = locate(params["reagent"]) in reagents.reagent_list
 			if(!my_reagents)
 				return FALSE
 			var/amount = clamp((text2num(params["amount"])), 0, 200)
-			var/contaminants = fetch_contaminants(user, reagents, my_reagents)
+			var/contaminants = fetch_contaminants(usr, reagents, my_reagents)
 			if(to_beaker)
 				reagents.trans_type_to(beaker, my_reagents.type, amount)
 				for(var/datum/reagent/reagent in contaminants)
@@ -276,15 +273,68 @@
 				for(var/datum/reagent/reagent in contaminants)
 					reagents.remove_reagent(reagent.type, round(rand()*amount, 0.1))
 					return TRUE
-		if("removeCustom")
-			var/datum/reagent/my_reagents = locate(href_list["removecustom"]) in reagents.reagent_list
-			if(!my_reagents)
+		if("eject")
+			eject_beaker(usr)
+			return TRUE
+		if("toggle")
+			to_beaker = !to_beaker
+			return TRUE
+		if("toggleSloppy")
+			sloppy = !sloppy
+			return TRUE
+		if("pillDosage")
+			var/initial_dosage = initial(pill_dosage)
+			var/new_dosage = params["newDosage"]
+			if(!new_dosage)
 				return FALSE
-			useramount = input("Select the amount to transfer.", 30, useramount) as null|num
-			if(!useramount)
+			new_dosage = clamp(new_dosage, 0, initial_dosage)
+			pill_dosage = new_dosage
+			return TRUE
+		if("bottleDosage")
+			var/initial_dosage = initial(bottle_dosage)
+			var/new_dosage = params["newDosage"]
+			if(!new_dosage)
 				return FALSE
-			useramount = clamp(useramount, 0, 200)
-			Topic(href, list("amount" = "[useramount]", "remove" = href_list["removecustom"]), state)
+			new_dosage = clamp(new_dosage, 0, initial_dosage)
+			bottle_dosage = new_dosage
+			return TRUE
+		if("createPill")
+			var/count = 1
+			if(reagents.total_volume/count < 1)
+				return TRUE
+			if(action == "createpill_multiple")
+				count = tgui_input_number(usr, "Введите сколько таблеток сделать.", src.name, pillamount, max_pill_count, 1)
+				count = clamp(count, 1, max_pill_count)
+			if(reagents.total_volume / count < 1)
+				return TRUE
+			var/amount_per_pill = reagents.total_volume/count
+			if(amount_per_pill > 60) amount_per_pill = 60
+			var/pill_name = tgui_input_text(usr, "Назовите таблетку.", src.name, "[reagents.get_master_reagent_name()] ([amount_per_pill] units)", MAX_NAME_LEN)
+			if(reagents.total_volume / count < 1)
+				return TRUE
+			while(count-- && count >= 0)
+				var/obj/item/reagent_containers/pill/P = new/obj/item/reagent_containers/pill(get_turf(src))
+				if(!pill_name)
+					pill_name = reagents.get_master_reagent_name()
+				P.name = "[pill_name]"
+				P.pixel_x = rand(-7, 7)
+				P.pixel_y = rand(-7, 7)
+				P.icon_state = pillsprite
+				reagents.trans_to_obj(P,amount_per_pill)
+				if(!loaded_pill_bottle)
+					continue
+				if(length(loaded_pill_bottle.contents) < loaded_pill_bottle.max_storage_space)
+					P.forceMove(loaded_pill_bottle)
+			return TRUE
+		if("createBottle")
+			create_bottle(usr)
+			return TRUE
+		if("changePillStyle")
+			pillsprite = params["pillStyle"]
+			return TRUE
+		if("changeBottleStyle")
+			bottlesprite = params["bottleStyle"]
+			return TRUE
 
 /obj/machinery/chem_master/condimaster
 	name = "\improper CondiMaster 3000"

@@ -2,25 +2,33 @@ import { BooleanLike } from 'common/react';
 import { useBackend } from '../backend';
 import {
   Button,
-  LabeledList,
   Section,
   ProgressBar,
   Stack,
   ImageButton,
   Icon,
   NumberInput,
+  LabeledList,
 } from '../components';
 import { Window } from '../layouts';
 
 type ChemMasterData = {
+  isAnalyzedBlood: BooleanLike;
   isSloppy: BooleanLike;
-  loadedContainer: BooleanLike;
-  loadedPillBottle: BooleanLike;
-  isTransferringToBeaker: BooleanLike;
+  container: BooleanLike;
+  toBeaker: BooleanLike;
   productionOptions: string;
-  pillBottleBlurb: string;
+
+  pillBottle: BooleanLike;
+  pillBottleContent: number;
+  pillBottleMaxContent: number;
+
   analyzedReagent: string;
-  analyzedData: string;
+  analyzedDesc: string;
+  analyzedBloodSpecies: string;
+  analyzedBloodType: string;
+  analyzedBloodDNA: string;
+
   pillDosage: number;
   bottleDosage: number;
   pillSprite: number;
@@ -67,10 +75,10 @@ export const ChemMaster = (props, context) => {
           <Stack.Item>
             <Stack>
               <Stack.Item basis={'50%'}>
-                <ChemMasterIcons />
+                <ChemMasterSprites />
               </Stack.Item>
               <Stack.Item basis={'50%'}>
-                <ChemMasterPillBottle />
+                <ChemMasterActions />
               </Stack.Item>
             </Stack>
           </Stack.Item>
@@ -84,15 +92,16 @@ const ChemMasterChemicals = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
     <Stack fill>
-      <Stack.Item basis="50%">
+      <Stack.Item basis={'50%'}>
         <Stack fill vertical>
           <Stack.Item grow>
             <Section fill scrollable title="Ёмкость" textAlign="center">
-              {data.loadedContainer ? (
-                <Stack fill vertical>
-                  <Stack.Item grow>
-                    <Stack vertical zebra textAlign="left">
-                      {data.containerChemicals.map((reagent) => (
+              {data.container ? (
+                <Stack.Item grow>
+                  <Stack vertical zebra textAlign="left">
+                    {data.containerChemicals.map((reagent) => {
+                      const analyzed = data.analyzedReagent === reagent.name;
+                      return (
                         <Stack.Item key={reagent.name} color="label">
                           <Stack fill>
                             <Stack.Item grow>
@@ -113,12 +122,47 @@ const ChemMasterChemicals = (props, context) => {
                                 }
                               />
                             </Stack.Item>
+                            <Stack.Item ml={0.25}>
+                              <Button
+                                selected={analyzed}
+                                icon={
+                                  analyzed
+                                    ? 'magnifying-glass-chart'
+                                    : 'magnifying-glass'
+                                }
+                                tooltip={
+                                  analyzed ? (
+                                    <>
+                                      <h4>Анализ - {reagent.name}</h4>
+                                      <br />
+                                      {data.analyzedDesc}
+                                      {data.isAnalyzedBlood && (
+                                        <>
+                                          <br />
+                                          <br />
+                                          {data.analyzedBloodSpecies}
+                                          <br />
+                                          {data.analyzedBloodType}
+                                          <br />
+                                          {data.analyzedBloodDNA}
+                                        </>
+                                      )}
+                                    </>
+                                  ) : (
+                                    'Анализировать'
+                                  )
+                                }
+                                onClick={() =>
+                                  act('analyze', { name: reagent.ref })
+                                }
+                              />
+                            </Stack.Item>
                           </Stack>
                         </Stack.Item>
-                      ))}
-                    </Stack>
-                  </Stack.Item>
-                </Stack>
+                      );
+                    })}
+                  </Stack>
+                </Stack.Item>
               ) : (
                 <Stack fill bold textAlign="center">
                   <Stack.Item grow fontSize={1.25} align="center" color="label">
@@ -133,14 +177,14 @@ const ChemMasterChemicals = (props, context) => {
               )}
             </Section>
           </Stack.Item>
-          {data.loadedContainer && (
+          {!!data.container && (
             <Stack.Item mt={0}>
               <Section textAlign="center">
                 <Button
                   fluid
                   color={data.bufferChemicals.length > 1 ? 'orange' : ''}
                   content={
-                    data.bufferChemicals.length > 1
+                    data.bufferChemicals.length > 0
                       ? 'Вынуть ёмкость и очистить буфер'
                       : 'Вынуть ёмкость'
                   }
@@ -151,9 +195,9 @@ const ChemMasterChemicals = (props, context) => {
           )}
         </Stack>
       </Stack.Item>
-      <Stack.Item basis="50%">
+      <Stack.Item basis={'50%'}>
         <Section fill title="Буфер" textAlign="center">
-          {data.bufferChemicals.length > 1 ? (
+          {data.bufferChemicals.length > 0 ? (
             <Stack fill vertical>
               <Stack.Item grow>
                 <Stack vertical zebra textAlign="left">
@@ -186,8 +230,11 @@ const ChemMasterChemicals = (props, context) => {
               <Stack.Item>
                 <Button
                   fluid
-                  content={data.productionOptions}
-                  onClick={() => act('eject')}
+                  color={data.toBeaker ? 'good' : 'bad'}
+                  content={
+                    data.toBeaker ? 'Переливать в ёмкость' : 'Уничтожать'
+                  }
+                  onClick={() => act('toggle')}
                 />
               </Stack.Item>
             </Stack>
@@ -209,11 +256,11 @@ const ChemMasterChemicals = (props, context) => {
   );
 };
 
-const ChemMasterIcons = (props, context) => {
+const ChemMasterSprites = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
     <Stack fill vertical textAlign="center" height="350px">
-      <Stack.Item basis="50%">
+      <Stack.Item grow>
         <Section fill scrollable title="Стиль таблеток">
           {data.pillSprites.map(({ id, sprite }) => (
             <ImageButton
@@ -229,7 +276,7 @@ const ChemMasterIcons = (props, context) => {
           ))}
         </Section>
       </Stack.Item>
-      <Stack.Item basis="50%">
+      <Stack.Item height="85px">
         <Section fill scrollable title="Стиль бутылок">
           {data.bottleSprites.map(({ id, sprite }) => (
             <ImageButton
@@ -245,11 +292,44 @@ const ChemMasterIcons = (props, context) => {
           ))}
         </Section>
       </Stack.Item>
+      {!!data.pillBottle && (
+        <Stack.Item textAlign="center">
+          <Section fill title="Таблетница">
+            <Stack fill>
+              <Stack.Item grow>
+                <ProgressBar
+                  minValue={0}
+                  maxValue={data.pillBottleMaxContent}
+                  value={data.pillBottleContent}
+                >
+                  {data.pillBottleContent} / {data.pillBottleMaxContent}
+                </ProgressBar>
+              </Stack.Item>
+              <Stack.Item>
+                <Button
+                  icon="eject"
+                  tooltip={'Вынуть таблетницу'}
+                  onClick={() => act('ejectPillBottle')}
+                />
+              </Stack.Item>
+            </Stack>
+          </Section>
+        </Stack.Item>
+      )}
     </Stack>
   );
 };
 
-const ChemMasterPillBottle = (props, context) => {
+const ChemMasterActions = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
-  return <Section fill title="Таблетница" textAlign="center" />;
+  return (
+    <Section fill title="Изготовление" textAlign="center">
+      <LabeledList>
+        <LabeledList.Item label={'1'} />
+        <LabeledList.Item label={'2'} />
+        <LabeledList.Item label={'3'} />
+        <LabeledList.Item label={'4'} />
+      </LabeledList>
+    </Section>
+  );
 };

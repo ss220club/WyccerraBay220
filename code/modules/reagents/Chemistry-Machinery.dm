@@ -1,7 +1,5 @@
 #define CHEMMASTER_OPTIONS_BASE "BASE"
 #define CHEMMASTER_OPTIONS_CONDIMENTS "CONDIMENTS"
-#define CHEMMASTER_SWITCH_SPRITE_PILL "PILL"
-#define CHEMMASTER_SWITCH_SPRITE_BOTTLE "BOTTLE"
 
 /obj/machinery/chem_master
 	name = "\improper ChemMaster 3000"
@@ -15,25 +13,25 @@
 	clicksound = "button"
 	clickvol = 20
 	core_skill = SKILL_CHEMISTRY
-	var/obj/item/reagent_containers/beaker = null
-	var/obj/item/storage/pill_bottle/loaded_pill_bottle = null
-
-	var/to_beaker = FALSE // If TRUE, reagents will move from buffer -> beaker. If FALSE, reagents will be destroyed when moved from the buffer.
-	var/useramount = 30 // Last used amount
+	var/obj/item/reagent_containers/beaker
+	var/obj/item/storage/pill_bottle/loaded_pill_bottle
+	// If TRUE, reagents will move from buffer -> beaker. If FALSE, reagents will be destroyed when moved from the buffer.
+	var/to_beaker = FALSE
+	// Last used amount
+	var/useramount = 30
 	var/pillamount = 10
 	var/max_pill_count = 20
-
 	var/bottle_dosage = 60
 	var/pill_dosage = 30
-
 	var/bottlesprite = 1
 	var/pillsprite = 1
-	var/client/has_sprites = list()
-
-	var/sloppy = TRUE // Whether reagents will not be fully purified (sloppy = TRUE) or there will be reagent loss (sloppy = FALSE) on reagent transfer.
-	var/production_options = CHEMMASTER_OPTIONS_BASE // Determines what the machine can make from its buffer. A condimaster can't make pills, and so on
+	// Whether reagents will not be fully purified (sloppy = TRUE) or there will be reagent loss (sloppy = FALSE) on reagent transfer.
+	var/sloppy = TRUE
+	// Determines what the machine can make from its buffer. A condimaster can't make pills, and so on
+	var/production_options = CHEMMASTER_OPTIONS_BASE
 	var/reagent_limit = 120
-	var/datum/reagent/analyzed_reagent = null // Datum housing the reagent we're currently trying to fetch data about
+	// Datum housing the reagent we're currently trying to fetch data about
+	var/datum/reagent/analyzed_reagent
 
 /obj/machinery/chem_master/New()
 	create_reagents(reagent_limit)
@@ -68,24 +66,26 @@
 	if(istype(B, /obj/item/reagent_containers/glass) || istype(B, /obj/item/reagent_containers/ivbag))
 		if(beaker)
 			to_chat(user, "A container is already loaded into the machine.")
-			return TRUE
+			return FALSE
 		if(!user.unEquip(B, src))
-			return TRUE
+			return FALSE
 		beaker = B
-		to_chat(user, SPAN_NOTICE("You add \the [B] to \the [src]!"))
 		atom_flags |= ATOM_FLAG_OPEN_CONTAINER
+		to_chat(user, SPAN_NOTICE("You add \the [B] to \the [src]!"))
 		update_icon()
+		SStgui.update_uis(src)
 		return TRUE
 
-	if (istype(B, /obj/item/storage/pill_bottle))
+	if(istype(B, /obj/item/storage/pill_bottle))
 		if(loaded_pill_bottle)
 			to_chat(user, "A pill bottle is already loaded into \the [src].")
-			return TRUE
+			return FALSE
 		if(!user.unEquip(B, src))
-			return TRUE
+			return FALSE
 		loaded_pill_bottle = B
 		to_chat(user, SPAN_NOTICE("You add \the [B] into \the [src]'s dispenser slot!"))
 		update_icon()
+		SStgui.update_uis(src)
 		return TRUE
 
 	return ..()
@@ -116,19 +116,6 @@
 			continue
 		if(prob(user.skill_fail_chance(core_skill, 100)))
 			. += reagent
-
-/obj/machinery/chem_master/proc/get_chem_info(datum/reagent/reagent, heading = "Chemical Analysis", detailed_blood = 1)
-	if(!beaker || !reagent)
-		return
-	. = list()
-	. += "<TITLE>[name]</TITLE>"
-	. += "<h2>[heading] - [reagent.name]</h2>"
-	if(detailed_blood && istype(reagent, /datum/reagent/blood))
-		var/datum/reagent/blood/B = reagent
-		. += "<br><b>Species of Origin:</b> [B.data["species"]]<br><b>Blood Type:</b> [B.data["blood_type"]]<br><b>DNA Hash:</b> [B.data["blood_DNA"]]"
-	else
-		. += "<br>[reagent.description]"
-	. = JOINTEXT(.)
 
 /obj/machinery/chem_master/proc/create_bottle(mob/user)
 	var/bottle_name = reagents.total_volume ? reagents.get_master_reagent_name() : "glass"
@@ -164,39 +151,48 @@
 	data["pillSprite"] = pillsprite
 	data["bottleSprite"] = bottlesprite
 	data["isSloppy"] = sloppy
-	data["loadedContainer"] = beaker
-	data["isTransferringToBeaker"] = to_beaker
+	data["container"] = !!beaker
+	data["pillBottle"] = !!loaded_pill_bottle
+	data["toBeaker"] = to_beaker
 	data["productionOptions"] = production_options
 	data["pillDosage"] = pill_dosage
 	data["bottleDosage"] = bottle_dosage
+	data["isAnalyzedBlood"] = FALSE
 
 	if(analyzed_reagent)
 		data["analyzedReagent"] = analyzed_reagent
-		data["analyzedData"] = get_chem_info(analyzed_reagent)
+		data["analyzedDesc"] = analyzed_reagent.description
+		if(istype(analyzed_reagent, /datum/reagent/blood))
+			data["isAnalyzedBlood"] = TRUE
+			data["analyzedBloodSpecies"] = "Кровь расы: [analyzed_reagent.data["species"]]"
+			data["analyzedBloodType"] = "Группа крови: [analyzed_reagent.data["blood_type"]]"
+			data["analyzedBloodDNA"] = "ДНК: [analyzed_reagent.data["blood_DNA"]]"
 
 	if(loaded_pill_bottle)
-		data["loadedPillBottle"] = loaded_pill_bottle
-		data["pillBottleBlurb"] = "Eject Pill Bottle \[[length(loaded_pill_bottle.contents)]/[loaded_pill_bottle.max_storage_space]\]"
+		data["pillBottleContent"] = length(loaded_pill_bottle.contents)
+		data["pillBottleMaxContent"] = loaded_pill_bottle.max_storage_space
 
-	data["containerChemicals"] = list()
+	var/container_data = list()
 	if(beaker && beaker.reagents && beaker.reagents.reagent_list)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
-			var/reagent_data = list()
-			reagent_data["name"] = R.name
-			reagent_data["desc"] = R.description
-			reagent_data["volume"] = R.volume
-			reagent_data["ref"] = "\ref[R]"
-			data["containerChemicals"] += list(reagent_data)
+		for(var/datum/reagent/reagent in beaker.reagents.reagent_list)
+			container_data += list(list(
+				"name" = reagent.name,
+				"desc" = reagent.description,
+				"volume" = reagent.volume,
+				"ref" = "[REF(reagent)]"
+			))
+		data["containerChemicals"] = container_data
 
-	data["bufferChemicals"] = list()
-	if (reagents && reagents.reagent_list)
-		for (var/datum/reagent/R in reagents.reagent_list)
-			var/reagent_data = list()
-			reagent_data["name"] = R.name
-			reagent_data["desc"] = R.description
-			reagent_data["volume"] = R.volume
-			reagent_data["ref"] = "\ref[R]"
-			data["bufferChemicals"] += list(reagent_data)
+	var/buffer_data = list()
+	if(reagents && reagents.reagent_list)
+		for(var/datum/reagent/reagent in reagents.reagent_list)
+			buffer_data += list(list(
+				"name" = reagent.name,
+				"desc" = reagent.description,
+				"volume" = reagent.volume,
+				"ref" = "[REF(reagent)]"
+			))
+		data["bufferChemicals"] = buffer_data
 
 	return data
 
@@ -227,10 +223,9 @@
 	if(..())
 		return
 
-	var/datum/reagents/R = beaker.reagents
 	switch(action)
 		if("ejectPillBottle")
-			if(!loaded_pill_bottle)
+			if(isnull(loaded_pill_bottle))
 				return FALSE
 			if(Adjacent(usr))
 				usr.put_in_hands(loaded_pill_bottle)
@@ -239,6 +234,7 @@
 			loaded_pill_bottle = null
 			return TRUE
 		if("analyze")
+			var/datum/reagents/R = beaker.reagents
 			var/datum/reagent/reagent = locate(params["name"]) in R.reagent_list
 			if(!reagent)
 				reagent = locate(params["name"]) in reagents.reagent_list
@@ -246,6 +242,7 @@
 				analyzed_reagent = reagent
 			return TRUE
 		if("add")
+			var/datum/reagents/R = beaker.reagents
 			var/datum/reagent/their_reagent = locate(params["reagent"]) in R.reagent_list
 			if(!their_reagent)
 				return FALSE
@@ -256,7 +253,7 @@
 				for(var/datum/reagent/reagent in contaminants)
 					R.trans_type_to(src, reagent.type, round(rand() * amount / 5, 0.1))
 			else
-				mult -= 0.4 * (SKILL_MAX - usr.get_skill_value(core_skill))/(SKILL_MAX-SKILL_MIN) //10% loss per skill level down from max
+				mult -= 0.4 * (SKILL_MAX - usr.get_skill_value(core_skill)) / (SKILL_MAX - SKILL_MIN) //10% loss per skill level down from max
 			R.trans_type_to(src, their_reagent.type, amount, mult)
 			return TRUE
 		if("remove")
@@ -269,12 +266,12 @@
 				reagents.trans_type_to(beaker, my_reagents.type, amount)
 				for(var/datum/reagent/reagent in contaminants)
 					reagents.trans_type_to(beaker, reagent.type, round(rand()*amount, 0.1))
-					return TRUE
+				return TRUE
 			else
 				reagents.remove_reagent(my_reagents.type, amount)
 				for(var/datum/reagent/reagent in contaminants)
 					reagents.remove_reagent(reagent.type, round(rand()*amount, 0.1))
-					return TRUE
+				return TRUE
 		if("eject")
 			eject_beaker(usr)
 			return TRUE
@@ -350,15 +347,9 @@
 	core_skill = SKILL_COOKING
 	production_options = CHEMMASTER_OPTIONS_CONDIMENTS
 
-/obj/machinery/chem_master/condimaster/get_chem_info(datum/reagent/reagent)
-	return ..(reagent, "Condiment Info", 0)
-
 /obj/machinery/chem_master/condimaster/create_bottle(mob/user)
 	var/obj/item/reagent_containers/food/condiment/P = new/obj/item/reagent_containers/food/condiment(loc)
 	reagents.trans_to_obj(P, 50)
 
 #undef CHEMMASTER_OPTIONS_BASE
 #undef CHEMMASTER_OPTIONS_CONDIMENTS
-
-#undef CHEMMASTER_SWITCH_SPRITE_PILL
-#undef CHEMMASTER_SWITCH_SPRITE_BOTTLE

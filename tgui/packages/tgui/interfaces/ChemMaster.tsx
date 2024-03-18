@@ -2,13 +2,14 @@ import { BooleanLike } from 'common/react';
 import { useBackend } from '../backend';
 import {
   Button,
-  Section,
-  ProgressBar,
-  Stack,
-  ImageButton,
   Icon,
-  NumberInput,
+  ImageButton,
   LabeledList,
+  NumberInput,
+  ProgressBar,
+  Section,
+  Slider,
+  Stack,
 } from '../components';
 import { Window } from '../layouts';
 
@@ -30,7 +31,11 @@ type ChemMasterData = {
   analyzedBloodDNA: string;
 
   pillDosage: number;
+  pillDosageMax: number;
+  pillCount: number;
+  pillCountMax: number;
   bottleDosage: number;
+  bottleDosageMax: number;
   pillSprite: number;
   bottleSprite: string;
   containerChemicals: Container[];
@@ -66,7 +71,7 @@ type BottleSprite = {
 export const ChemMaster = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
-    <Window width={555} height={700}>
+    <Window width={555} height={590}>
       <Window.Content>
         <Stack fill vertical>
           <Stack.Item grow>
@@ -136,7 +141,7 @@ const ChemMasterChemicals = (props, context) => {
                                       <h4>Анализ - {reagent.name}</h4>
                                       <br />
                                       {data.analyzedDesc}
-                                      {data.isAnalyzedBlood && (
+                                      {!!data.isAnalyzedBlood && (
                                         <>
                                           <br />
                                           <br />
@@ -259,7 +264,7 @@ const ChemMasterChemicals = (props, context) => {
 const ChemMasterSprites = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
-    <Stack fill vertical textAlign="center" height="350px">
+    <Stack fill vertical textAlign="center" height="260px">
       <Stack.Item grow>
         <Section fill scrollable title="Стиль таблеток">
           {data.pillSprites.map(({ id, sprite }) => (
@@ -292,6 +297,66 @@ const ChemMasterSprites = (props, context) => {
           ))}
         </Section>
       </Stack.Item>
+    </Stack>
+  );
+};
+
+const ChemMasterActions = (props, context) => {
+  const { act, data } = useBackend<ChemMasterData>(context);
+  return (
+    <Stack fill vertical>
+      <Stack.Item grow>
+        <Section fill title="Изготовление" textAlign="center">
+          <LabeledList>
+            <LabeledList.Item label={'Дозировка таблетки'}>
+              <Slider
+                value={data.pillDosage}
+                minValue={1}
+                maxValue={data.pillDosageMax}
+                onChange={(e, value) => act('pillDosage', { newDosage: value })}
+              />
+            </LabeledList.Item>
+            <LabeledList.Item label={'Количество таблеток'}>
+              <Slider
+                value={data.pillCount}
+                minValue={1}
+                maxValue={data.pillCountMax}
+                onChange={(e, value) => act('pillCount', { pillCount: value })}
+              />
+            </LabeledList.Item>
+            <LabeledList.Item label={'Дозировка бутылки'}>
+              <Slider
+                value={data.bottleDosage}
+                minValue={1}
+                maxValue={data.bottleDosageMax}
+                onChange={(e, value) =>
+                  act('bottleDosage', { newDosage: value })
+                }
+              />
+            </LabeledList.Item>
+          </LabeledList>
+        </Section>
+      </Stack.Item>
+      <Stack.Item mt={0}>
+        <Section textAlign={'center'}>
+          <Stack.Item grow mb={1}>
+            <Button
+              fluid
+              disabled={data.bufferChemicals.length === 0}
+              content={'Сделать таблетку'}
+              onClick={() => act('createPill')}
+            />
+          </Stack.Item>
+          <Stack.Item grow>
+            <Button
+              fluid
+              disabled={data.bufferChemicals.length === 0}
+              content={'Сделать бутылку'}
+              onClick={() => act('createBottle')}
+            />
+          </Stack.Item>
+        </Section>
+      </Stack.Item>
       {!!data.pillBottle && (
         <Stack.Item textAlign="center">
           <Section fill title="Таблетница">
@@ -317,19 +382,5 @@ const ChemMasterSprites = (props, context) => {
         </Stack.Item>
       )}
     </Stack>
-  );
-};
-
-const ChemMasterActions = (props, context) => {
-  const { act, data } = useBackend<ChemMasterData>(context);
-  return (
-    <Section fill title="Изготовление" textAlign="center">
-      <LabeledList>
-        <LabeledList.Item label={'1'} />
-        <LabeledList.Item label={'2'} />
-        <LabeledList.Item label={'3'} />
-        <LabeledList.Item label={'4'} />
-      </LabeledList>
-    </Section>
   );
 };

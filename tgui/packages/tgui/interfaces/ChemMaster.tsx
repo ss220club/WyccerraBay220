@@ -348,6 +348,16 @@ const ChemMasterActions = (props, context) => {
               />
             </Stack.Item>
           </Stack>
+          <Stack.Item grow mt={1}>
+            <Button
+              fluid
+              disabled={!data.container}
+              content={
+                'Режим очистки: ' + (data.isSloppy ? 'Быстрый' : 'Тщательный')
+              }
+              onClick={() => act('toggleSloppy')}
+            />
+          </Stack.Item>
         </Section>
       </Stack.Item>
       {!!data.pillBottle && (

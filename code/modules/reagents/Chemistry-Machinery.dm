@@ -119,7 +119,7 @@
 			. += reagent
 
 /obj/machinery/chem_master/proc/create_bottle(mob/user)
-	var/bottle_name = reagents.total_volume ? reagents.get_master_reagent_name() : "glass"
+	var/bottle_name = reagents.total_volume ? "[reagents.get_master_reagent_name()] ([bottle_dosage] units)" : "glass"
 	var/name = sanitizeSafe(tgui_input_text(user, "Name:", "Name your bottle!", bottle_name, max_length = MAX_NAME_LEN))
 	if (!name)
 		return
@@ -295,7 +295,7 @@
 			var/new_dosage = params["newDosage"]
 			if(!new_dosage)
 				return FALSE
-			new_dosage = clamp(new_dosage, 1, initial_dosage)
+			new_dosage = clamp(new_dosage, 0, initial_dosage)
 			pill_dosage = new_dosage
 			return TRUE
 		if("bottleDosage")
@@ -307,27 +307,29 @@
 			bottle_dosage = new_dosage
 			return TRUE
 		if("createPill")
-			if(reagents.total_volume / pill_count < 1)
+			var/count = pill_count
+			if(reagents.total_volume / count < 1)
 				return TRUE
-			var/amount_per_pill = reagents.total_volume / pill_count
-			if(amount_per_pill > 60)
-				amount_per_pill = 60
+			var/amount_per_pill = reagents.total_volume / count
+			if(amount_per_pill > pill_dosage)
+				amount_per_pill = pill_dosage
 			var/pill_name = tgui_input_text(usr, "Назовите таблетку.", src.name, "[reagents.get_master_reagent_name()] ([amount_per_pill] units)", MAX_NAME_LEN)
 			if(isnull(pill_name))
 				return FALSE
-			while(pill_count-- && pill_count >= 0)
+			while(count-- && count >= 0)
 				var/obj/item/reagent_containers/pill/P = new /obj/item/reagent_containers/pill(get_turf(src))
 				if(!pill_name)
 					pill_name = reagents.get_master_reagent_name()
-				P.name = "[pill_name]"
+				P.SetName("[pill_name]")
 				P.pixel_x = rand(-7, 7)
 				P.pixel_y = rand(-7, 7)
 				P.icon_state = "pill[pillsprite]"
+				if(P.icon_state in list("pill1", "pill2", "pill3", "pill4", "pill5")) // if using greyscale, take colour from reagent
+					P.color = reagents.get_color()
 				reagents.trans_to_obj(P,amount_per_pill)
-				if(!loaded_pill_bottle)
-					continue
-				if(length(loaded_pill_bottle.contents) < loaded_pill_bottle.max_storage_space)
-					P.forceMove(loaded_pill_bottle)
+				if(loaded_pill_bottle)
+					if(length(loaded_pill_bottle.contents) < loaded_pill_bottle.max_storage_space)
+						P.forceMove(loaded_pill_bottle)
 			return TRUE
 		if("createBottle")
 			create_bottle(usr)

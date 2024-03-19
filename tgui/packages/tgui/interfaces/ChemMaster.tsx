@@ -102,9 +102,9 @@ const ChemMasterChemicals = (props, context) => {
           <Stack.Item grow>
             <Section fill scrollable title="Ёмкость" textAlign="center">
               {data.container ? (
-                <Stack.Item grow>
-                  <Stack vertical zebra textAlign="left">
-                    {data.containerChemicals.map((reagent) => {
+                <Stack fill vertical zebra textAlign="left">
+                  {data.containerChemicals.length > 0 ? (
+                    data.containerChemicals.map((reagent) => {
                       const analyzed = data.analyzedReagent === reagent.name;
                       return (
                         <Stack.Item key={reagent.name} color="label">
@@ -118,7 +118,7 @@ const ChemMasterChemicals = (props, context) => {
                                 value={0}
                                 minValue={1}
                                 maxValue={reagent.volume}
-                                stepPixelSize={5}
+                                stepPixelSize={2}
                                 onChange={(e, value) =>
                                   act('add', {
                                     reagent: reagent.ref,
@@ -165,15 +165,24 @@ const ChemMasterChemicals = (props, context) => {
                           </Stack>
                         </Stack.Item>
                       );
-                    })}
-                  </Stack>
-                </Stack.Item>
+                    })
+                  ) : (
+                    <Stack.Item
+                      color="red"
+                      fontSize={2}
+                      bold
+                      textAlign="center"
+                    >
+                      Ёмкость пуста
+                    </Stack.Item>
+                  )}
+                </Stack>
               ) : (
                 <Stack fill bold textAlign="center">
                   <Stack.Item grow fontSize={1.25} align="center" color="label">
                     <Icon.Stack>
                       <Icon size={5} name="flask" color="blue" />
-                      <Icon size={5} name={'slash'} color="red" />
+                      <Icon size={5} name="slash" color="red" />
                     </Icon.Stack>
                     <br />
                     Отсутствует ёмкость
@@ -188,6 +197,7 @@ const ChemMasterChemicals = (props, context) => {
                 <Button
                   fluid
                   color={data.bufferChemicals.length > 1 ? 'orange' : ''}
+                  icon={'eject'}
                   content={
                     data.bufferChemicals.length > 0
                       ? 'Вынуть ёмкость и очистить буфер'
@@ -218,7 +228,7 @@ const ChemMasterChemicals = (props, context) => {
                             value={0}
                             minValue={1}
                             maxValue={reagent.volume}
-                            stepPixelSize={5}
+                            stepPixelSize={2}
                             onChange={(e, value) =>
                               act('remove', {
                                 reagent: reagent.ref,
@@ -236,6 +246,7 @@ const ChemMasterChemicals = (props, context) => {
                 <Button
                   fluid
                   color={data.toBeaker ? 'good' : 'bad'}
+                  icon={data.toBeaker ? 'flask' : 'trash'}
                   content={
                     data.toBeaker ? 'Переливать в ёмкость' : 'Уничтожать'
                   }
@@ -308,10 +319,20 @@ const ChemMasterActions = (props, context) => {
       <Stack.Item grow>
         <Section fill title="Изготовление" textAlign="center">
           <LabeledList>
+            <LabeledList.Item label={'Дозировка бутылки'}>
+              <Slider
+                value={data.bottleDosage}
+                minValue={1}
+                maxValue={data.bottleDosageMax}
+                onChange={(e, value) =>
+                  act('bottleDosage', { newDosage: value })
+                }
+              />
+            </LabeledList.Item>
             <LabeledList.Item label={'Дозировка таблетки'}>
               <Slider
                 value={data.pillDosage}
-                minValue={1}
+                minValue={0}
                 maxValue={data.pillDosageMax}
                 onChange={(e, value) => act('pillDosage', { newDosage: value })}
               />
@@ -324,37 +345,31 @@ const ChemMasterActions = (props, context) => {
                 onChange={(e, value) => act('pillCount', { pillCount: value })}
               />
             </LabeledList.Item>
-            <LabeledList.Item label={'Дозировка бутылки'}>
-              <Slider
-                value={data.bottleDosage}
-                minValue={1}
-                maxValue={data.bottleDosageMax}
-                onChange={(e, value) =>
-                  act('bottleDosage', { newDosage: value })
-                }
-              />
-            </LabeledList.Item>
           </LabeledList>
         </Section>
       </Stack.Item>
       <Stack.Item mt={0}>
         <Section textAlign={'center'}>
-          <Stack.Item grow mb={1}>
-            <Button
-              fluid
-              disabled={data.bufferChemicals.length === 0}
-              content={'Сделать таблетку'}
-              onClick={() => act('createPill')}
-            />
-          </Stack.Item>
-          <Stack.Item grow>
-            <Button
-              fluid
-              disabled={data.bufferChemicals.length === 0}
-              content={'Сделать бутылку'}
-              onClick={() => act('createBottle')}
-            />
-          </Stack.Item>
+          <Stack>
+            <Stack.Item grow>
+              <Button
+                fluid
+                disabled={data.bufferChemicals.length === 0}
+                content={
+                  data.pillCount > 1 ? 'Сделать таблетки' : 'Сделать таблетку'
+                }
+                onClick={() => act('createPill')}
+              />
+            </Stack.Item>
+            <Stack.Item grow>
+              <Button
+                fluid
+                disabled={data.bufferChemicals.length === 0}
+                content={'Сделать бутылку'}
+                onClick={() => act('createBottle')}
+              />
+            </Stack.Item>
+          </Stack>
         </Section>
       </Stack.Item>
       {!!data.pillBottle && (

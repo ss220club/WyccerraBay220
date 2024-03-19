@@ -268,12 +268,12 @@
 			if(to_beaker)
 				reagents.trans_type_to(beaker, my_reagents.type, amount)
 				for(var/datum/reagent/reagent in contaminants)
-					reagents.trans_type_to(beaker, reagent.type, round(rand()*amount, 0.1))
+					reagents.trans_type_to(beaker, reagent.type, round(rand() * amount, 0.1))
 				return TRUE
 			else
 				reagents.remove_reagent(my_reagents.type, amount)
 				for(var/datum/reagent/reagent in contaminants)
-					reagents.remove_reagent(reagent.type, round(rand()*amount, 0.1))
+					reagents.remove_reagent(reagent.type, round(rand() * amount, 0.1))
 				return TRUE
 		if("eject")
 			eject_beaker(usr)

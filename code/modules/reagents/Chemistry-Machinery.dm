@@ -257,7 +257,7 @@
 					R.trans_type_to(src, reagent.type, round(rand() * amount / 5, 0.1))
 			else
 				mult -= 0.4 * (SKILL_MAX - usr.get_skill_value(core_skill)) / (SKILL_MAX - SKILL_MIN) //10% loss per skill level down from max
-			R.trans_type_to(src, their_reagent.type, amount, mult)
+			R.trans_type_to(src, their_reagent.type, round(amount, 0.1), mult)
 			return TRUE
 		if("remove")
 			var/datum/reagent/my_reagents = locate(params["reagent"]) in reagents.reagent_list

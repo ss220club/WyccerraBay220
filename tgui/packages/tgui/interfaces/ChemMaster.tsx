@@ -17,19 +17,16 @@ type ChemMasterData = {
   isAnalyzedBlood: BooleanLike;
   isSloppy: BooleanLike;
   container: BooleanLike;
+  pillBottle: BooleanLike;
   toBeaker: BooleanLike;
   productionOptions: string;
-
-  pillBottle: BooleanLike;
   pillBottleContent: number;
   pillBottleMaxContent: number;
-
   analyzedReagent: string;
   analyzedDesc: string;
   analyzedBloodSpecies: string;
   analyzedBloodType: string;
   analyzedBloodDNA: string;
-
   pillDosage: number;
   pillDosageMax: number;
   pillCount: number;
@@ -75,7 +72,14 @@ export const ChemMaster = (props, context) => {
       <Window.Content>
         <Stack fill vertical>
           <Stack.Item grow>
-            <ChemMasterChemicals />
+            <Stack fill>
+              <Stack.Item basis={'50%'}>
+                <ChemMasterBeaker />
+              </Stack.Item>
+              <Stack.Item basis={'50%'}>
+                <ChemMasterInternal />
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
           <Stack.Item>
             <Stack>
@@ -93,130 +97,18 @@ export const ChemMaster = (props, context) => {
   );
 };
 
-const ChemMasterChemicals = (props, context) => {
+const ChemMasterBeaker = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
-    <Stack fill>
-      <Stack.Item basis={'50%'}>
-        <Stack fill vertical>
-          <Stack.Item grow>
-            <Section fill scrollable title="Ёмкость" textAlign="center">
-              {data.container ? (
-                <Stack fill vertical zebra textAlign="left">
-                  {data.containerChemicals.length > 0 ? (
-                    data.containerChemicals.map((reagent) => {
-                      const analyzed = data.analyzedReagent === reagent.name;
-                      return (
-                        <Stack.Item key={reagent.name} color="label">
-                          <Stack fill>
-                            <Stack.Item grow>
-                              {reagent.volume} units of {reagent.name}
-                            </Stack.Item>
-                            <Stack.Item>
-                              <NumberInput
-                                animated
-                                value={0}
-                                minValue={1}
-                                maxValue={reagent.volume}
-                                stepPixelSize={2}
-                                onChange={(e, value) =>
-                                  act('add', {
-                                    reagent: reagent.ref,
-                                    amount: value,
-                                  })
-                                }
-                              />
-                            </Stack.Item>
-                            <Stack.Item ml={0.25}>
-                              <Button
-                                selected={analyzed}
-                                icon={
-                                  analyzed
-                                    ? 'magnifying-glass-chart'
-                                    : 'magnifying-glass'
-                                }
-                                tooltip={
-                                  analyzed ? (
-                                    <>
-                                      <h4>Анализ - {reagent.name}</h4>
-                                      <br />
-                                      {data.analyzedDesc}
-                                      {!!data.isAnalyzedBlood && (
-                                        <>
-                                          <br />
-                                          <br />
-                                          {data.analyzedBloodSpecies}
-                                          <br />
-                                          {data.analyzedBloodType}
-                                          <br />
-                                          {data.analyzedBloodDNA}
-                                        </>
-                                      )}
-                                    </>
-                                  ) : (
-                                    'Анализировать'
-                                  )
-                                }
-                                onClick={() =>
-                                  act('analyze', { name: reagent.ref })
-                                }
-                              />
-                            </Stack.Item>
-                          </Stack>
-                        </Stack.Item>
-                      );
-                    })
-                  ) : (
-                    <Stack.Item
-                      color="red"
-                      fontSize={2}
-                      bold
-                      textAlign="center"
-                    >
-                      Ёмкость пуста
-                    </Stack.Item>
-                  )}
-                </Stack>
-              ) : (
-                <Stack fill bold textAlign="center">
-                  <Stack.Item grow fontSize={1.25} align="center" color="label">
-                    <Icon.Stack>
-                      <Icon size={5} name="flask" color="blue" />
-                      <Icon size={5} name="slash" color="red" />
-                    </Icon.Stack>
-                    <br />
-                    Отсутствует ёмкость
-                  </Stack.Item>
-                </Stack>
-              )}
-            </Section>
-          </Stack.Item>
-          {!!data.container && (
-            <Stack.Item mt={0}>
-              <Section textAlign="center">
-                <Button
-                  fluid
-                  color={data.bufferChemicals.length > 1 ? 'orange' : ''}
-                  icon={'eject'}
-                  content={
-                    data.bufferChemicals.length > 0
-                      ? 'Вынуть ёмкость и очистить буфер'
-                      : 'Вынуть ёмкость'
-                  }
-                  onClick={() => act('eject')}
-                />
-              </Section>
-            </Stack.Item>
-          )}
-        </Stack>
-      </Stack.Item>
-      <Stack.Item basis={'50%'}>
-        <Section fill title="Буфер" textAlign="center">
-          {data.bufferChemicals.length > 0 ? (
-            <Stack fill vertical>
-              <Stack.Item grow>
-                <Stack vertical zebra textAlign="left">
-                  {data.bufferChemicals.map((reagent) => (
+    <Stack fill vertical>
+      <Stack.Item grow>
+        <Section fill scrollable title="Ёмкость" textAlign="center">
+          {data.container ? (
+            <Stack fill vertical zebra textAlign="left">
+              {data.containerChemicals.length > 0 ? (
+                data.containerChemicals.map((reagent) => {
+                  const analyzed = data.analyzedReagent === reagent.name;
+                  return (
                     <Stack.Item key={reagent.name} color="label">
                       <Stack fill>
                         <Stack.Item grow>
@@ -230,48 +122,134 @@ const ChemMasterChemicals = (props, context) => {
                             maxValue={reagent.volume}
                             stepPixelSize={2}
                             onChange={(e, value) =>
-                              act('remove', {
+                              act('add', {
                                 reagent: reagent.ref,
                                 amount: value,
                               })
                             }
                           />
                         </Stack.Item>
+                        <Stack.Item ml={0.25}>
+                          <Button
+                            selected={analyzed}
+                            icon={
+                              analyzed
+                                ? 'magnifying-glass-chart'
+                                : 'magnifying-glass'
+                            }
+                            tooltip={
+                              analyzed ? (
+                                <>
+                                  <h4>Анализ - {reagent.name}</h4>
+                                  <br />
+                                  {data.analyzedDesc}
+                                  {!!data.isAnalyzedBlood && (
+                                    <>
+                                      <br />
+                                      <br />
+                                      {data.analyzedBloodSpecies}
+                                      <br />
+                                      {data.analyzedBloodType}
+                                      <br />
+                                      {data.analyzedBloodDNA}
+                                    </>
+                                  )}
+                                </>
+                              ) : (
+                                'Анализировать'
+                              )
+                            }
+                            onClick={() =>
+                              act('analyze', { name: reagent.ref })
+                            }
+                          />
+                        </Stack.Item>
                       </Stack>
                     </Stack.Item>
-                  ))}
-                </Stack>
-              </Stack.Item>
-              <Stack.Item>
-                <Button
-                  fluid
-                  color={data.toBeaker ? 'good' : 'bad'}
-                  icon={data.toBeaker ? 'flask' : 'trash'}
-                  content={
-                    data.toBeaker ? 'Переливать в ёмкость' : 'Уничтожать'
-                  }
-                  onClick={() => act('toggle')}
-                />
-              </Stack.Item>
+                  );
+                })
+              ) : (
+                <Stack.Item color="red" fontSize={2} bold textAlign="center">
+                  Ёмкость пуста
+                </Stack.Item>
+              )}
             </Stack>
           ) : (
-            <Stack fill bold textAlign="center">
-              <Stack.Item grow fontSize={1.25} align="center" color="label">
-                <Icon.Stack>
-                  <Icon size={5} name="droplet" />
-                  <Icon size={5} name="slash" color="red" />
-                </Icon.Stack>
-                <br />
-                Буфер пуст
-              </Stack.Item>
-            </Stack>
+            <Empty icon="flask" color="blue" content="Ёмкость отсутствует" />
           )}
         </Section>
       </Stack.Item>
+      {!!data.container && (
+        <Stack.Item mt={0}>
+          <Section textAlign="center">
+            <Button
+              fluid
+              color={data.bufferChemicals.length > 1 ? 'orange' : ''}
+              icon={'eject'}
+              content={
+                data.bufferChemicals.length > 0
+                  ? 'Вынуть ёмкость и очистить буфер'
+                  : 'Вынуть ёмкость'
+              }
+              onClick={() => act('eject')}
+            />
+          </Section>
+        </Stack.Item>
+      )}
     </Stack>
   );
 };
 
+const ChemMasterInternal = (props, context) => {
+  const { act, data } = useBackend<ChemMasterData>(context);
+  return (
+    <Section fill title="Буфер" textAlign="center">
+      {data.bufferChemicals.length > 0 ? (
+        <Stack fill vertical>
+          <Stack.Item grow>
+            <Stack vertical zebra textAlign="left">
+              {data.bufferChemicals.map((reagent) => (
+                <Stack.Item key={reagent.name} color="label">
+                  <Stack fill>
+                    <Stack.Item grow>
+                      {reagent.volume} units of {reagent.name}
+                    </Stack.Item>
+                    <Stack.Item>
+                      <NumberInput
+                        animated
+                        value={0}
+                        minValue={1}
+                        maxValue={reagent.volume}
+                        stepPixelSize={2}
+                        onChange={(e, value) =>
+                          act('remove', {
+                            reagent: reagent.ref,
+                            amount: value,
+                          })
+                        }
+                      />
+                    </Stack.Item>
+                  </Stack>
+                </Stack.Item>
+              ))}
+            </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <Button
+              fluid
+              color={data.toBeaker ? 'good' : 'bad'}
+              icon={data.toBeaker ? 'flask' : 'trash'}
+              content={data.toBeaker ? 'Переливать в ёмкость' : 'Уничтожать'}
+              onClick={() => act('toggle')}
+            />
+          </Stack.Item>
+        </Stack>
+      ) : (
+        <Empty icon={'droplet'} content="Буфер пуст" />
+      )}
+    </Section>
+  );
+};
 const ChemMasterSprites = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
@@ -396,6 +374,21 @@ const ChemMasterActions = (props, context) => {
           </Section>
         </Stack.Item>
       )}
+    </Stack>
+  );
+};
+
+const Empty = ({ icon, color = '', content = '' }) => {
+  return (
+    <Stack fill bold textAlign="center">
+      <Stack.Item grow fontSize={1.25} align="center" color="label">
+        <Icon.Stack>
+          <Icon size={5} name={icon} color={color} />
+          <Icon size={5} name="slash" color="red" />
+        </Icon.Stack>
+        <br />
+        {content}
+      </Stack.Item>
     </Stack>
   );
 };

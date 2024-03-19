@@ -290,15 +290,15 @@
 			return TRUE
 		if("pillDosage")
 			var/initial_dosage = initial(pill_dosage)
-			var/new_dosage = params["newDosage"]
+			var/new_dosage = text2num(params["newDosage"])
 			if(!new_dosage)
 				return FALSE
-			new_dosage = clamp(new_dosage, 0, initial_dosage)
+			new_dosage = clamp(new_dosage, 0.1, initial_dosage)
 			pill_dosage = new_dosage
 			return TRUE
 		if("bottleDosage")
 			var/initial_dosage = initial(bottle_dosage)
-			var/new_dosage = params["newDosage"]
+			var/new_dosage =text2num(params["newDosage"])
 			if(!new_dosage)
 				return FALSE
 			new_dosage = clamp(new_dosage, 1, initial_dosage)
@@ -306,8 +306,8 @@
 			return TRUE
 		if("createPill")
 			var/count = pill_count
-			if(reagents.total_volume / count < 1)
-				return TRUE
+			if(reagents.total_volume / count < 0.1)
+				return FALSE
 			var/amount_per_pill = reagents.total_volume / count
 			if(amount_per_pill > pill_dosage)
 				amount_per_pill = pill_dosage

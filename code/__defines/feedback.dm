@@ -20,24 +20,24 @@
 
 
 /// Feedback message when user needs to unanchor the target
-#define USE_FEEDBACK_NEED_UNANCHOR balloon_alert(user, "нужно открутить от пола!")
+#define USE_FEEDBACK_NEED_UNANCHOR(user) balloon_alert(user, "нужно открутить от пола!")
 /// Feedback message when user needs to unanchor the target
-#define USE_FEEDBACK_NEED_ANCHOR balloon_alert(user, "нужно прикрутить к полу!")
+#define USE_FEEDBACK_NEED_ANCHOR(user) balloon_alert(user, "нужно прикрутить к полу!")
 /// Feedback message when user starts deconstructing the target
-#define USE_FEEDBACK_DECONSTRUCT_START balloon_alert(user, "разбор")
+#define USE_FEEDBACK_DECONSTRUCT_START(user) balloon_alert(user, "разбор")
 /// Feedback message when user starts welding/unwelding the target
-#define USE_FEEDBACK_WELD_UNWELD(welded) balloon_alert(user, "[welded ? "отваривание" : "заваривание"]")
+#define USE_FEEDBACK_WELD_UNWELD(user, welded) balloon_alert(user, "[welded ? "отваривание" : "заваривание"]")
 /// Feedback message when user finishes welding/unwelding the target
-#define USE_FEEDBACK_WELD_UNWELD_FINISH(welded) balloon_alert_to_viewers("[welded ? "заварено!" : "отварено!"]")
+#define USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded) balloon_alert_to_viewers("[welded ? "заварено!" : "отварено!"]")
 /// Feedback message when user starts unwelding target from the floor
-#define USE_FEEDBACK_UNWELD_FROM_FLOOR balloon_alert(user, "отваривание от пола")
+#define USE_FEEDBACK_UNWELD_FROM_FLOOR(user) balloon_alert(user, "отваривание от пола")
 
 /// Feedback message when user starts repairing the target
-#define USE_FEEDBACK_REPAIR_START balloon_alert(user, "ремонт")
+#define USE_FEEDBACK_REPAIR_START(user) balloon_alert(user, "ремонт")
 /// Feedback message when user finishes the repairs
-#define USE_FEEDBACK_REPAIR_FINISH balloon_alert_to_viewers("ремонт завершен!")
+#define USE_FEEDBACK_REPAIR_FINISH(user) balloon_alert_to_viewers("ремонт завершен!")
 /// Feedback message when the target doesn't need repairs
-#define USE_FEEDBACK_NOTHING_TO_REPAIR balloon_alert(user, "нет повреждений!")
+#define USE_FEEDBACK_NOTHING_TO_REPAIR(user) balloon_alert(user, "нет повреждений!")
 
 /// Feedback message when the wiring gets exposed/unexposed by the user
 #define USE_FEEDBACK_WIRING_EXPOSED(exposed) balloon_alert(user, "проводка [exposed ? "открыта" : "закрыта"]!")

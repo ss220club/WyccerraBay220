@@ -373,19 +373,16 @@
 /obj/structure/window/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!health_damaged())
-		USE_FEEDBACK_FAILURE("[src] does not need repairs.")
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!repair_pending)
-		USE_FEEDBACK_FAILURE("[src] needs some [get_material_display_name()] applied before you can weld it.")
+		balloon_alert(user, "нужно установить [get_material_display_name()]!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	restore_health(repair_pending)
 	repair_pending = 0
-	user.visible_message(
-		SPAN_NOTICE("[user] welds [src]'s [material] into place with [tool]."),
-		SPAN_NOTICE("You weld [src]'s [material] into place with [tool].")
-	)
 
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window

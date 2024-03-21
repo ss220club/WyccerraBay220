@@ -35,7 +35,7 @@
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	open = !open
-	USE_FEEDBACK_NEW_PANEL_OPEN(open)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
 
 /obj/item/storage/secure/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (!locked)

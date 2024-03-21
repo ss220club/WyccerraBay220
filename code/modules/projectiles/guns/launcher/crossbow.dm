@@ -199,12 +199,12 @@
 /obj/item/gun/launcher/crossbow/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!cell)
-		USE_FEEDBACK_CELL_MISSING
+		USE_FEEDBACK_CELL_MISSING(user)
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.put_in_hands(cell)
-	USE_FEEDBACK_CELL_REMOVED
+	USE_FEEDBACK_CELL_REMOVED(user)
 	cell = null
 	update_icon()
 

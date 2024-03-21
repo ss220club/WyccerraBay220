@@ -59,7 +59,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!GET_FLAGS(boombox_flags, BOOMBOX_PANEL) && !GET_FLAGS(boombox_flags, BOOMBOX_BROKEN))
 		if(jukebox.playing)
-			USE_FEEDBACK_NEED_DISABLED
+			USE_FEEDBACK_NEED_DISABLED(user)
 			return
 		var/old_frequency = jukebox.frequency
 		jukebox.frequency = min(jukebox.frequency + 0.1, 1.5)
@@ -75,12 +75,12 @@
 	if(GET_FLAGS(boombox_flags, BOOMBOX_PANEL))
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, FALSE)
 		CLEAR_FLAGS(boombox_flags, BOOMBOX_PANEL)
 		return
 	if(!GET_FLAGS(boombox_flags, BOOMBOX_BROKEN))
 		if(jukebox.playing)
-			USE_FEEDBACK_NEED_DISABLED
+			USE_FEEDBACK_NEED_DISABLED(user)
 			return
 		var/old_frequency = jukebox.frequency
 		jukebox.frequency = max(jukebox.frequency - 0.1, 0.5)
@@ -94,7 +94,7 @@
 	if(!GET_FLAGS(boombox_flags, BOOMBOX_PANEL))
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		USE_FEEDBACK_NEW_PANEL_OPEN(TRUE)
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, TRUE)
 		SET_FLAGS(boombox_flags, BOOMBOX_PANEL)
 
 /obj/item/boombox/attackby(obj/item/item, mob/user)

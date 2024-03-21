@@ -201,7 +201,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	is_open = !is_open
-	USE_FEEDBACK_NEW_PANEL_OPEN(is_open)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, is_open)
 
 /obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isCoil(W) && malfunction && is_open)

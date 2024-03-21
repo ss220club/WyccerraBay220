@@ -20,7 +20,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	p_open = !p_open
-	USE_FEEDBACK_NEW_PANEL_OPEN(p_open)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, p_open)
 
 /obj/item/rig/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

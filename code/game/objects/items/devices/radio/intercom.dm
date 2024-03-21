@@ -206,7 +206,7 @@
 	wiresexposed = !wiresexposed
 	b_stat = !b_stat
 	update_icon()
-	USE_FEEDBACK_NEW_PANEL_OPEN(wiresexposed)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, wiresexposed)
 
 /obj/item/device/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

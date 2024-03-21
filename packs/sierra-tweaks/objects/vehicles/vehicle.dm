@@ -95,7 +95,7 @@
 		return
 	open = !open
 	update_icon()
-	USE_FEEDBACK_NEW_PANEL_OPEN(open)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
 
 /obj/vehicle/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

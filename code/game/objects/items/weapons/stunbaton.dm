@@ -87,7 +87,7 @@
 	bcell.update_icon()
 	bcell.dropInto(loc)
 	bcell = null
-	USE_FEEDBACK_CELL_REMOVED
+	USE_FEEDBACK_CELL_REMOVED(user)
 	status = 0
 	update_icon()
 

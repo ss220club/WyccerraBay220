@@ -598,7 +598,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	c_mode = !c_mode
-	USE_FEEDBACK_NEW_PANEL_OPEN(c_mode)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, c_mode)
 
 /obj/machinery/disposal/deliveryChute/welder_act(mob/living/user, obj/item/tool)
 	if(!c_mode)

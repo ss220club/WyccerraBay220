@@ -604,7 +604,7 @@
 				return
 			wiresexposed = !wiresexposed
 			update_icon()
-			USE_FEEDBACK_WIRING_EXPOSED(wiresexposed)
+			USE_FEEDBACK_WIRING_EXPOSED(user, wiresexposed)
 
 /mob/living/silicon/robot/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

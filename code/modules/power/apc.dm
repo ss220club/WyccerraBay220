@@ -517,7 +517,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	wiresexposed = !wiresexposed
-	USE_FEEDBACK_WIRING_EXPOSED(wiresexposed)
+	USE_FEEDBACK_WIRING_EXPOSED(user, wiresexposed)
 	update_icon()
 
 /obj/machinery/power/apc/wirecutter_act(mob/living/user, obj/item/tool)

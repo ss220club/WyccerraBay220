@@ -62,7 +62,7 @@
 	if(bee_count)
 		balloon_alert(user, "внутри пчёлы!")
 		return
-	USE_FEEDBACK_DECONSTRUCT_START
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_PUBLIC_UNIQUE))
 		return
 	user.visible_message(SPAN_NOTICE("[user] dismantles [src]."), SPAN_NOTICE("You dismantle [src]."))

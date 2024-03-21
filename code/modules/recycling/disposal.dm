@@ -97,13 +97,13 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		mode = -1 // Set it to doubleoff l0l
-		USE_FEEDBACK_NEW_PANEL_OPEN(TRUE)
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, TRUE)
 		return
 	if(mode == -1)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		mode = 0
-		USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, FALSE)
 
 /obj/machinery/disposal/welder_act(mob/living/user, obj/item/tool)
 	if(mode != -1)
@@ -605,7 +605,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	mode = !mode
-	USE_FEEDBACK_NEW_PANEL_OPEN(!mode)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, !mode)
 
 /obj/structure/disposaloutlet/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

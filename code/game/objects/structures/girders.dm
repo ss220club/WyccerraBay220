@@ -81,7 +81,7 @@
 		if(GIRDER_STATE_NORMAL)
 			. = ITEM_INTERACT_SUCCESS
 			if(!anchored)
-				USE_FEEDBACK_NEED_UNANCHOR
+				USE_FEEDBACK_NEED_UNANCHOR(user)
 				return
 			if(reinf_material)
 				balloon_alert(user, "уже имеются укрепления!")

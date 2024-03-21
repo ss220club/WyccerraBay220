@@ -19,7 +19,7 @@
 			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_open)
 		machine.panel_open = TRUE
-		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(user, machine.panel_open)
 
 /singleton/machine_construction/tcomms/panel_closed/post_construct(obj/machinery/machine)
 	try_change_state(machine, /singleton/machine_construction/tcomms/panel_open/no_cable)
@@ -52,7 +52,7 @@
 			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/tcomms/panel_closed)
 		machine.panel_open = FALSE
-		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(user, machine.panel_open)
 		return TRUE
 	if(I.tool_behaviour == TOOL_WRENCH)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

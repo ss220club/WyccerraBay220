@@ -97,7 +97,7 @@
 		return
 	open = !open
 	update_icon()
-	USE_FEEDBACK_NEW_PANEL_OPEN(open)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
 	Interact(user)
 
 /mob/living/bot/welder_act(mob/living/user, obj/item/tool)

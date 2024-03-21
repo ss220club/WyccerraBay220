@@ -59,7 +59,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	opened = !opened
-	USE_FEEDBACK_NEW_PANEL_OPEN(opened)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, opened)
 	update_icon()
 
 /obj/item/inducer/attackby(obj/item/W, mob/user)

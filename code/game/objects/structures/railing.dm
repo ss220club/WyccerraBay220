@@ -256,7 +256,7 @@
 		SPAN_NOTICE("You [anchored ? "un" : null]fasten [src] [anchored ? "from" : "to"] the floor with [tool].")
 	)
 	anchored = !anchored
-	USE_FEEDBACK_NEW_ANCHOR_FINISH(anchored)
+	USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
 	update_icon()
 
 /obj/structure/railing/wrench_act(mob/living/user, obj/item/tool)

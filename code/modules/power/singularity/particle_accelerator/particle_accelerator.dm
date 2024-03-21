@@ -135,7 +135,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	else
 		construction_state = CONSTRUCT_STATE_WIRED
 	update_icon()
-	USE_FEEDBACK_NEW_PANEL_OPEN(construction_state != CONSTRUCT_STATE_COMPLETE)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, construction_state != CONSTRUCT_STATE_COMPLETE)
 
 /obj/structure/particle_accelerator/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -302,12 +302,12 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		if(2)
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
+			USE_FEEDBACK_NEW_PANEL_OPEN(user, FALSE)
 			construct_state = 3
 		if(3)
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
-			USE_FEEDBACK_NEW_PANEL_OPEN(TRUE)
+			USE_FEEDBACK_NEW_PANEL_OPEN(user, TRUE)
 			construct_state = 2
 			active = FALSE
 	check_step()

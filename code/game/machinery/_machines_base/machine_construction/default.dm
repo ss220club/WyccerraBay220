@@ -30,7 +30,7 @@
 			return TRUE
 		TRANSFER_STATE(down_state)
 		machine.panel_open = TRUE
-		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(user, machine.panel_open)
 		machine.update_icon()
 		return TRUE
 	if(istype(I, /obj/item/storage/part_replacer))
@@ -76,7 +76,7 @@
 			return TRUE
 		TRANSFER_STATE(up_state)
 		machine.panel_open = FALSE
-		machine.USE_FEEDBACK_NEW_PANEL_OPEN(machine.panel_open)
+		machine.USE_FEEDBACK_NEW_PANEL_OPEN(user, machine.panel_open)
 		machine.update_icon()
 		return TRUE
 

@@ -707,7 +707,7 @@ var/global/list/turret_icons
 				if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 					return TRUE
 				build_step = 6
-				USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
+				USE_FEEDBACK_NEW_PANEL_OPEN(user, FALSE)
 				return TRUE
 
 		if(6)
@@ -725,7 +725,7 @@ var/global/list/turret_icons
 					return TRUE
 				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 5
-				USE_FEEDBACK_NEW_PANEL_OPEN(TRUE)
+				USE_FEEDBACK_NEW_PANEL_OPEN(user, TRUE)
 				return TRUE
 
 		if(7)

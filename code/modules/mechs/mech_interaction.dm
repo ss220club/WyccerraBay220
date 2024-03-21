@@ -372,7 +372,7 @@
 		balloon_alert(user, "протоколы техобслуживания отключены!")
 		return
 	if(!body?.cell)
-		USE_FEEDBACK_CELL_MISSING
+		USE_FEEDBACK_CELL_MISSING(user)
 		return
 	balloon_alert(user, "снятие батареи")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !maintenance_protocols || !body?.cell)
@@ -381,7 +381,7 @@
 	power = MECH_POWER_OFF
 	hud_power_control.update_icon()
 	body.cell = null
-	USE_FEEDBACK_CELL_REMOVED
+	USE_FEEDBACK_CELL_REMOVED(user)
 
 /mob/living/exosuit/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

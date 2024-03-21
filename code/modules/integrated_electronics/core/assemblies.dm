@@ -454,7 +454,7 @@
 		return
 	opened = !opened
 	update_icon()
-	USE_FEEDBACK_NEW_PANEL_OPEN(opened)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, opened)
 
 /obj/item/device/electronic_assembly/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

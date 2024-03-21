@@ -224,7 +224,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			panel = PANEL_CLOSED
-			USE_FEEDBACK_NEW_PANEL_OPEN(FALSE)
+			USE_FEEDBACK_NEW_PANEL_OPEN(user, FALSE)
 		if(PANEL_CLOSED)
 			. = ITEM_INTERACT_SUCCESS
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
@@ -244,13 +244,13 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 			switch(response)
 				if("Remove cell")
 					if(!cell)
-						USE_FEEDBACK_CELL_MISSING
+						USE_FEEDBACK_CELL_MISSING(user)
 						return
 					if(!MayAdjust(user))
 						return
 					if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 						return
-					USE_FEEDBACK_CELL_REMOVED
+					USE_FEEDBACK_CELL_REMOVED(user)
 					user.put_in_hands(cell)
 					cell = null
 					update_icon()
@@ -376,7 +376,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 
 /obj/item/music_player/proc/MayAdjust(mob/user)
 	if(mode)
-		USE_FEEDBACK_NEED_DISABLED
+		USE_FEEDBACK_NEED_DISABLED(user)
 		return FALSE
 	return TRUE
 

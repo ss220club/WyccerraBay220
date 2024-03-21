@@ -47,7 +47,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	maintenance = !maintenance
-	USE_FEEDBACK_NEW_PANEL_OPEN(maintenance)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, maintenance)
 
 /obj/item/device/taperecorder/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Tape - Insert tape
@@ -461,11 +461,11 @@
 	if(!ruined)
 		balloon_alert(user, "касета не повреждена!")
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 12 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT) || !max_capacity || !ruined)
 		return
 	fix()
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/item/device/tape/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -131,13 +131,13 @@
 /obj/machinery/power/singularity_beacon/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(active)
-		USE_FEEDBACK_NEED_DISABLED
+		USE_FEEDBACK_NEED_DISABLED(user)
 		return
 	if(anchored)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		anchored = FALSE
-		USE_FEEDBACK_NEW_ANCHOR_FINISH(anchored)
+		USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
 		disconnect_from_network()
 		return
 	if(!connect_to_network())
@@ -146,7 +146,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	anchored = TRUE
-	USE_FEEDBACK_NEW_ANCHOR_FINISH(anchored)
+	USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
 
 /obj/machinery/power/singularity_beacon/Destroy()
 	if(active)

@@ -78,10 +78,10 @@
 	. = ..()
 	if(broken != 2)
 		return
-	USE_FEEDBACK_REPAIR_START
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	USE_FEEDBACK_REPAIR_FINISH
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	broken = 1 // Fix it a bit
 
 /obj/machinery/microwave/use_tool(obj/item/O, mob/living/user, list/click_params)

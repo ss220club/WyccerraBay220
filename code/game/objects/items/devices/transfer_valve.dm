@@ -38,7 +38,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panel_open = !panel_open
-	USE_FEEDBACK_NEW_PANEL_OPEN(panel_open)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
 
 /obj/item/device/transfer_valve/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

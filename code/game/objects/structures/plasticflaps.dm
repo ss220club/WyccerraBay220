@@ -61,7 +61,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle airflow
 	if(anchored)
-		USE_FEEDBACK_NEED_UNANCHOR
+		USE_FEEDBACK_NEED_UNANCHOR(user)
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return

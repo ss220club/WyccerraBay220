@@ -121,7 +121,7 @@
 	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panelopen = !panelopen
-	USE_FEEDBACK_NEW_PANEL_OPEN(panelopen)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panelopen)
 	SStgui.update_uis(src)
 	update_icon()
 

@@ -77,7 +77,7 @@
 /obj/item/scrubpack/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(enabled)
-		USE_FEEDBACK_NEED_DISABLED
+		USE_FEEDBACK_NEED_DISABLED(user)
 		return
 	if(!cell && !tank)
 		balloon_alert(user, "нечего снимать!")

@@ -12,7 +12,7 @@
 
 /obj/structure/curtain/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	USE_FEEDBACK_DECONSTRUCT_START
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	var/obj/item/curtain/C = new /obj/item/curtain(loc)

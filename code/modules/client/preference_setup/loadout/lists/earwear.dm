@@ -15,9 +15,8 @@
 /datum/gear/ears/earrings
 	display_name = "earrings"
 	path = /obj/item/clothing/ears/earring
-	flags = GEAR_HAS_SUBTYPE_SELECTION
 
-/datum/gear/earrings/New()
+/datum/gear/ears/earrings/New()
 	..()
 	var/earrings = list()
 	earrings["stud, pearl"] = /obj/item/clothing/ears/earring/stud
@@ -43,10 +42,6 @@
 	category = GEAR_CATEGORY_EARWEAR
 	abstract_type = /datum/gear/ears/skrell
 	whitelisted = list(SPECIES_SKRELL)
-
-/datum/gear/ears/skrell/earmuffs
-	display_name = "earmuffs (Skrell)"
-	path = /obj/item/clothing/ears/skrell
 
 /datum/gear/ears/skrell/chains
 	display_name = "headtail chain selection (Skrell)"

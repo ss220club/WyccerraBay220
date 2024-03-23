@@ -1,19 +1,21 @@
 // Stuff worn on the ears. Items here go in the "ears" category but they must not use
 // the slot_r_ear or slot_l_ear as the slot, or else players will spawn with no headset.
 /datum/gear/ears
+	category = GEAR_CATEGORY_EARWEAR
+	abstract_type = /datum/gear/ears
+
+/datum/gear/ears/earmuffs
 	display_name = "earmuffs"
 	path = /obj/item/clothing/ears/earmuffs
-	category = GEAR_CATEGORY_EARWEAR
 
-/datum/gear/headphones
+/datum/gear/ears/headphones
 	display_name = "headphones"
 	path = /obj/item/clothing/ears/headphones
-	category = GEAR_CATEGORY_EARWEAR
 
-/datum/gear/earrings
+/datum/gear/ears/earrings
 	display_name = "earrings"
 	path = /obj/item/clothing/ears/earring
-	category = GEAR_CATEGORY_EARWEAR
+	flags = GEAR_HAS_SUBTYPE_SELECTION
 
 /datum/gear/earrings/New()
 	..()
@@ -42,6 +44,10 @@
 	abstract_type = /datum/gear/ears/skrell
 	whitelisted = list(SPECIES_SKRELL)
 
+/datum/gear/ears/skrell/earmuffs
+	display_name = "earmuffs (Skrell)"
+	path = /obj/item/clothing/ears/skrell
+
 /datum/gear/ears/skrell/chains
 	display_name = "headtail chain selection (Skrell)"
 	path = /obj/item/clothing/ears/skrell/chain
@@ -66,7 +72,6 @@
 	display_name = "male headtail cloth (Skrell)"
 	path = /obj/item/clothing/ears/skrell/cloth_male
 	flags = GEAR_HAS_COLOR_SELECTION
-
 
 /datum/gear/ears/skrell/cloth/female
 	display_name = "female headtail cloth (Skrell)"

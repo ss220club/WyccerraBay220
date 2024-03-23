@@ -407,7 +407,7 @@ Passports
 /obj/item/device/remote_device/afterattack(obj/machinery/door/airlock/D, mob/user)
 	if(!istype(D) || safety || disabled || user.client.eye != user.client.mob)
 		return
-	if(!(D.arePowerSystemsOn()))
+	if(!(D.operable()))
 		to_chat(user, "<span class='danger'>[D] has no power!</span>")
 		return
 	if(!D.requiresID())

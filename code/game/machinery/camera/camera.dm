@@ -35,8 +35,6 @@
 
 	var/on_open_network = 0
 
-	var/affected_by_emp_until = 0
-
 	var/is_helmet_cam = FALSE
 
 /obj/machinery/camera/examine(mob/user)
@@ -123,34 +121,52 @@
 	return ..()
 
 /obj/machinery/camera/Process()
-	if(GET_FLAGS(stat, MACHINE_STAT_EMPED) && world.time >= affected_by_emp_until)
-		set_stat(MACHINE_STAT_EMPED, FALSE)
-		cancelCameraAlarm()
-		update_icon()
-		update_coverage()
-	return internal_process()
-
+	// motion camera event loop
+	if (inoperable(MACHINE_STAT_EMPED))
+		return
+	if(!isMotion())
+		. = PROCESS_KILL
+		return
+	if (detectTime > 0)
+		var/elapsed = world.time - detectTime
+		if (elapsed > alarm_delay)
+			triggerAlarm()
+	else if (detectTime == -1)
+		for (var/mob/target in motionTargets)
+			if (target.stat == DEAD)
+				lostTarget(target)
+			// See if the camera is still in range
+			if(!in_range(src, target))
+				// If they aren't in range, lose the target.
+				lostTarget(target)
 
 /obj/machinery/camera/proc/camera_moved(atom/movable/moved_atom, atom/old_loc, atom/new_loc)
 	if (AreConnectedZLevels(get_z(old_loc), get_z(new_loc)))
 		return
 	disconnect_viewers()
 
+/obj/machinery/camera/proc/recover()
+	set_stat(MACHINE_STAT_EMPED, FALSE)
+	cancelCameraAlarm()
+	update_icon()
+	update_coverage()
 
 /obj/machinery/camera/emp_act(severity)
-	if (!isEmpProof())
-		if (prob(100/severity))
-			if (!affected_by_emp_until || (world.time < affected_by_emp_until))
-				affected_by_emp_until = max(affected_by_emp_until, world.time + (90 SECONDS / severity))
-			else
-				deactivate(choice = FALSE)
-				set_stat(MACHINE_STAT_EMPED, TRUE)
-				set_light(0)
-				triggerCameraAlarm()
-				update_icon()
-				update_coverage()
-				START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
-		..()
+	if (isEmpProof())
+		return
+
+	if (prob(100/severity))
+		if(~stat & MACHINE_STAT_EMPED)
+			deactivate(choice = FALSE)
+			set_stat(MACHINE_STAT_EMPED, TRUE)
+			set_light(0)
+			triggerCameraAlarm()
+			update_icon()
+			update_coverage()
+			START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+
+		addtimer(CALLBACK(src, PROC_REF(recover)), 90 SECONDS / severity, TIMER_UNIQUE | TIMER_OVERRIDE | TIMER_PROLONG)
+	..()
 
 /obj/machinery/camera/proc/setViewRange(num = 7)
 	src.view_range = num

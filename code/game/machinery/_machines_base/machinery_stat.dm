@@ -22,9 +22,12 @@
 /obj/machinery/proc/set_broken(new_state, cause = MACHINE_BROKEN_GENERIC)
 	if(!new_state == !(reason_broken & cause))
 		return FALSE
+	var/old_reason = stat
 	reason_broken ^= cause
-	return TRUE
+	on_set_broken(cause, old_reason)
 
+/obj/machinery/proc/on_set_broken(cause, old_reason)
+	update_is_operational()
 
 /**
  * Allows setting or unsetting a stat flag.
@@ -37,11 +40,40 @@
  */
 /obj/machinery/proc/set_stat(statflag, new_state)
 	if (stat_immune & statflag)
-		return FALSE
-	if (!new_state != !(stat & statflag))
-		stat ^= statflag
-		return TRUE
-	return FALSE
+		return
+	if (new_state == !!HAS_FLAGS(stat, statflag))
+		return
+	var/old_stat = stat
+	stat ^= statflag
+	on_set_stat(statflag, old_stat)
+
+
+/obj/machinery/proc/on_set_stat(statflag, old_stat)
+	update_is_operational()
+
+/obj/machinery/proc/update_is_operational()
+	if(inoperable())
+		set_is_operational(TRUE)
+		return
+	set_is_operational(FALSE)
+
+///Called when we want to change the value of the `is_operational` variable. Boolean.
+/obj/machinery/proc/set_is_operational(new_value)
+	if(new_value == is_operational)
+		return
+	. = is_operational
+	is_operational = new_value
+	on_set_is_operational(.)
+
+
+///Called when the value of `is_operational` changes, so we can react to it.
+/obj/machinery/proc/on_set_is_operational(old_value)
+	//From off to on.
+	if(!old_value && is_operational)
+		START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+		return
+	//From on to off.
+	STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 
 
 /**
@@ -91,10 +123,10 @@
 
 
 /// Inverse of `inoperable()`.
-/obj/machinery/proc/operable()
-	return !inoperable()
+/obj/machinery/proc/operable(additional_flags = EMPTY_BITFIELD)
+	return !inoperable(additional_flags)
 
 
 /// Checks whether or not the machine's state variable has the `MACHINE_STAT_BROKEN` or `MACHINE_STAT_NOPOWER` flags, or any of the provided `additional_flags`. Returns `TRUE` if any of the flags match.
 /obj/machinery/proc/inoperable(additional_flags = EMPTY_BITFIELD)
-	return (GET_FLAGS(stat, MACHINE_STAT_NOPOWER | additional_flags) || reason_broken)
+	return (GET_FLAGS(stat, MACHINE_STAT_NOPOWER | MACHINE_STAT_MAINT | additional_flags) || reason_broken)

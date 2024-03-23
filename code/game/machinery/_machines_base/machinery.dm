@@ -75,6 +75,8 @@
 	var/machine_name = null
 	/// A simple description of what this machine does, shown on examine for circuit boards.
 	var/machine_desc = null
+	/// Is machine able to work.
+	var/is_operational = TRUE
 
 /obj/machinery/Initialize(mapload, d=0, populate_parts = TRUE)
 	. = ..()
@@ -123,29 +125,31 @@
 	return PROCESS_KILL // Only process if you need to.
 
 /obj/machinery/emp_act(severity)
-	if(use_power && operable())
-		use_power_oneoff(7500/severity)
+	if(!use_power || !operable())
+		return
 
-		var/obj/overlay/pulse2 = new /obj/overlay(loc)
-		pulse2.icon = 'icons/effects/effects.dmi'
-		pulse2.icon_state = "empdisable"
-		pulse2.SetName("emp sparks")
-		pulse2.anchored = TRUE
-		pulse2.set_dir(pick(GLOB.cardinal))
+	use_power_oneoff(7500/severity)
 
-		QDEL_IN(pulse2, 1 SECOND)
+	var/obj/overlay/pulse2 = new /obj/overlay(loc)
+	pulse2.icon = 'icons/effects/effects.dmi'
+	pulse2.icon_state = "empdisable"
+	pulse2.SetName("emp sparks")
+	pulse2.anchored = TRUE
+	pulse2.set_dir(pick(GLOB.cardinal))
 
-		if (prob(100 / severity) && istype(wires))
-			if (prob(20))
-				wires.RandomCut()
-				visible_message(SPAN_DANGER("A shower of sparks sprays out of \the [src]'s wiring panel!"))
-				sparks(3, 0, get_turf(src))
-			else
-				wires.RandomPulse()
-				visible_message(SPAN_WARNING("Something sparks inside \the [src]'s wiring panel!"))
-				new /obj/sparks(get_turf(src))
+	QDEL_IN(pulse2, 1 SECOND)
 
-		..()
+	if (prob(100 / severity) && istype(wires))
+		if (prob(20))
+			wires.RandomCut()
+			visible_message(SPAN_DANGER("A shower of sparks sprays out of \the [src]'s wiring panel!"))
+			sparks(3, 0, get_turf(src))
+		else
+			wires.RandomPulse()
+			visible_message(SPAN_WARNING("Something sparks inside \the [src]'s wiring panel!"))
+			new /obj/sparks(get_turf(src))
+
+	..()
 
 /obj/machinery/ex_act(severity)
 	..()

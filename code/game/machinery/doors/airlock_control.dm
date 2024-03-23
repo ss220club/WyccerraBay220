@@ -7,11 +7,6 @@
 	var/datum/radio_frequency/radio_connection
 	var/cur_command = null	//the command the door is currently attempting to complete
 
-/obj/machinery/door/airlock/Process()
-	if (arePowerSystemsOn())
-		execute_current_command()
-	return ..()
-
 /obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 	if(!signal || signal.encryption) return
 
@@ -23,9 +18,9 @@
 	cur_command = new_command
 
 	//if there's no power, recieve the signal but just don't do anything. This allows airlocks to continue to work normally once power is restored
-	if(arePowerSystemsOn())
-		spawn()
-			execute_current_command()
+	if(!operable())
+		return
+	invoke_async(src, PROC_REF(execute_current_command))
 
 /obj/machinery/door/airlock/proc/execute_current_command()
 	if(operating)

@@ -1,8 +1,9 @@
-#define SSMACHINES_PIPENETS 1
-#define SSMACHINES_MACHINERY 2
-#define SSMACHINES_POWERNETS 3
-#define SSMACHINES_POWER_OBJECTS 4
-
+#define SSMACHINES_STEP_PIPENETS 1
+#define SSMACHINES_STEP_MACHINERY 2
+#define SSMACHINES_STEP_POWERNETS 3
+#define SSMACHINES_STEP_POWER_OBJECTS 4
+#define SSMACHINES_STEP_DONE 5
+#define SSMACHINES_STEP_DEFAULT SSMACHINES_STEP_PIPENETS
 
 #define START_PROCESSING_IN_LIST(Datum, List) \
 if (Datum.is_processing) {\
@@ -39,7 +40,7 @@ SUBSYSTEM_DEF(machines)
 	init_order = SS_INIT_MACHINES
 	priority = FIRE_PRIORITY_MACHINERY
 	flags = SS_KEEP_TIMING
-	var/static/current_step = SSMACHINES_PIPENETS
+	var/static/current_step = SSMACHINES_STEP_DEFAULT
 	var/static/cost_pipenets = 0
 	var/static/cost_machinery = 0
 	var/static/cost_powernets = 0
@@ -53,50 +54,37 @@ SUBSYSTEM_DEF(machines)
 	var/static/list/machinery_by_type = list()
 
 /datum/controller/subsystem/machines/Recover()
-	current_step = SSMACHINES_PIPENETS
+	current_step = SSMACHINES_STEP_DEFAULT
 	queue.Cut()
 
 /datum/controller/subsystem/machines/Initialize(start_uptime)
-	makepowernets()
+	make_powernets()
 	setup_atmos_machinery(machinery)
-	fire(FALSE, TRUE)
-
 
 /datum/controller/subsystem/machines/fire(resumed, no_mc_tick)
 	var/timer
-	if (!resumed)
-		current_step = SSMACHINES_PIPENETS
-	if (current_step == SSMACHINES_PIPENETS)
-		timer = world.tick_usage
-		process_pipenets(resumed, no_mc_tick)
-		cost_pipenets = MC_AVERAGE(cost_pipenets, (world.tick_usage - timer) * world.tick_lag)
-		if (state != SS_RUNNING)
-			return
-		current_step = SSMACHINES_MACHINERY
-		resumed = FALSE
-	if (current_step == SSMACHINES_MACHINERY)
-		timer = world.tick_usage
-		process_machinery(resumed, no_mc_tick)
-		cost_machinery = MC_AVERAGE(cost_machinery, (world.tick_usage - timer) * world.tick_lag)
+	if (!resumed || current_step == SSMACHINES_STEP_DONE)
+		current_step = SSMACHINES_STEP_DEFAULT
+	timer = world.tick_usage
+	while(current_step < SSMACHINES_STEP_DONE)
+		switch(current_step)
+			if(SSMACHINES_STEP_PIPENETS)
+				process_pipenets(resumed, no_mc_tick)
+				cost_pipenets = MC_AVERAGE(cost_pipenets, (world.tick_usage - timer) * world.tick_lag)
+			if(SSMACHINES_STEP_MACHINERY)
+				process_machinery(resumed, no_mc_tick)
+				cost_machinery = MC_AVERAGE(cost_machinery, (world.tick_usage - timer) * world.tick_lag)
+			if(SSMACHINES_STEP_POWERNETS)
+				process_powernets(resumed, no_mc_tick)
+				cost_powernets = MC_AVERAGE(cost_powernets, (world.tick_usage - timer) * world.tick_lag)
+			if(SSMACHINES_STEP_POWER_OBJECTS)
+				process_power_objects(resumed, no_mc_tick)
+				cost_power_objects = MC_AVERAGE(cost_power_objects, (world.tick_usage - timer) * world.tick_lag)
+
 		if(state != SS_RUNNING)
 			return
-		current_step = SSMACHINES_POWERNETS
+		current_step++
 		resumed = FALSE
-	if (current_step == SSMACHINES_POWERNETS)
-		timer = world.tick_usage
-		process_powernets(resumed, no_mc_tick)
-		cost_powernets = MC_AVERAGE(cost_powernets, (world.tick_usage - timer) * world.tick_lag)
-		if(state != SS_RUNNING)
-			return
-		current_step = SSMACHINES_POWER_OBJECTS
-		resumed = FALSE
-	if (current_step == SSMACHINES_POWER_OBJECTS)
-		timer = world.tick_usage
-		process_power_objects(resumed, no_mc_tick)
-		cost_power_objects = MC_AVERAGE(cost_power_objects, (world.tick_usage - timer) * world.tick_lag)
-		if (state != SS_RUNNING)
-			return
-		current_step = SSMACHINES_PIPENETS
 
 /datum/controller/subsystem/machines/proc/register_machinery(obj/machinery/machine)
 	if(!machine)
@@ -145,7 +133,7 @@ SUBSYSTEM_DEF(machines)
 	return machinery.Copy()
 
 /// Rebuilds power networks from scratch. Called by world initialization and elevators.
-/datum/controller/subsystem/machines/proc/makepowernets()
+/datum/controller/subsystem/machines/proc/make_powernets()
 	for(var/datum/powernet/powernet as anything in powernets)
 		qdel(powernet)
 	powernets.Cut()
@@ -279,7 +267,7 @@ SUBSYSTEM_DEF(machines)
 			return
 
 
-#undef SSMACHINES_PIPENETS
-#undef SSMACHINES_MACHINERY
-#undef SSMACHINES_POWERNETS
-#undef SSMACHINES_POWER_OBJECTS
+#undef SSMACHINES_STEP_PIPENETS
+#undef SSMACHINES_STEP_MACHINERY
+#undef SSMACHINES_STEP_POWERNETS
+#undef SSMACHINES_STEP_POWER_OBJECTS

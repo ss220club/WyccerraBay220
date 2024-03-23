@@ -40,11 +40,11 @@
 
 		if (APC_WIRE_MAIN_POWER1, APC_WIRE_MAIN_POWER2)
 			if(A.shorted == 0)
-				A.shorted = 1
+				A.set_shorted(TRUE)
 
 				spawn(1200)
 					if(A && !IsIndexCut(APC_WIRE_MAIN_POWER1) && !IsIndexCut(APC_WIRE_MAIN_POWER2))
-						A.shorted = 0
+						A.set_shorted(FALSE)
 
 		if (APC_WIRE_AI_CONTROL)
 			if (A.aidisabled == 0)
@@ -63,10 +63,10 @@
 			if(!mended)
 				if (usr)
 					A.shock(usr, 50)
-				A.shorted = 1
+				A.set_shorted(TRUE)
 
 			else if(!IsIndexCut(APC_WIRE_MAIN_POWER1) && !IsIndexCut(APC_WIRE_MAIN_POWER2))
-				A.shorted = 0
+				A.set_shorted(FALSE)
 				if (usr)
 					A.shock(usr, 50)
 

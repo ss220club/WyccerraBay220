@@ -166,24 +166,18 @@
 	update_underlays()
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/can_pump()
-	if(inoperable())
-		return 0
-	if(!use_power)
-		return 0
-	if(welded)
-		return 0
-	return 1
+	return operable() && use_power && !welded
 
 /obj/machinery/atmospherics/unary/vent_pump/Process()
 	..()
 
-	if (hibernate > world.time)
-		return 1
+	if(hibernate > world.time)
+		return TRUE
 
-	if (!node)
+	if(!node)
 		update_use_power(POWER_USE_OFF)
 	if(!can_pump())
-		return 0
+		return FALSE
 
 	var/datum/gas_mixture/environment = loc.return_air()
 
@@ -216,7 +210,7 @@
 		if(network)
 			network.update = 1
 
-	return 1
+	return TRUE
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/get_pressure_delta(datum/gas_mixture/environment)
 	var/pressure_delta = DEFAULT_PRESSURE_DELTA

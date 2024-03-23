@@ -267,7 +267,7 @@
 
 /obj/machinery/door/airlock/external/escapepod/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!p_open || arePowerSystemsOn())
+	if(!p_open || operable())
 		return
 	user.visible_message(SPAN_WARNING("[user.name] starts frantically pumping the bolt override mechanism!"), SPAN_WARNING("You start frantically pumping the bolt override mechanism!"))
 	if(!tool.use_as_tool(src, user, 16 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
@@ -479,10 +479,9 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/proc/canAIControl()
 	return ((!ai_control_disabled || ai_control_bypassed) && !isAllPowerLoss())
 
-/obj/machinery/door/airlock/proc/arePowerSystemsOn()
-	if (inoperable())
-		return 0
-	return (src.main_power_lost_until==0 || src.backup_power_lost_until==0)
+/obj/machinery/door/airlock/operable(additional_flags)
+	. = ..()
+	return . && !main_power_lost_until && !backup_power_lost_until
 
 /obj/machinery/door/airlock/requiresID()
 	return !(src.isWireCut(AIRLOCK_WIRE_IDSCAN) || aiDisabledIdScanner)
@@ -546,11 +545,11 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/proc/electrify(duration, feedback = 0)
 	var/message = ""
-	if(src.isWireCut(AIRLOCK_WIRE_ELECTRIFY) && arePowerSystemsOn())
+	if(src.isWireCut(AIRLOCK_WIRE_ELECTRIFY) && operable())
 		message = text("The electrification wire is cut - Door permanently electrified.")
 		src.electrified_until = -1
 		. = 1
-	else if(duration && !arePowerSystemsOn())
+	else if(duration && !operable())
 		message = text("The door is unpowered - Cannot electrify the door.")
 		src.electrified_until = 0
 	else if(!duration && electrified_until != 0)
@@ -604,7 +603,7 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/shock(mob/user, prb)
 	if (!user)
 		return FALSE
-	if(!arePowerSystemsOn())
+	if(!operable())
 		return 0
 	if(hasShocked)
 		return 0	//Already shocked someone recently?
@@ -699,7 +698,7 @@ About the new airlock wires panel:
 				airlock_icon_cache["[ikey2]"] = stripe_filling_overlay
 			if (stripe_filling_overlay)
 				new_overlays += stripe_filling_overlay
-	if(arePowerSystemsOn())
+	if(operable())
 		switch(state)
 			if(AIRLOCK_CLOSED)
 				if(lights && locked)
@@ -746,7 +745,7 @@ About the new airlock wires panel:
 			update_icon(AIRLOCK_CLOSED)
 		if("deny")
 			set_airlock_overlays(AIRLOCK_DENY)
-			if(density && arePowerSystemsOn())
+			if(density && operable())
 				flick("deny", src)
 				if(secured_wires && world.time > next_clicksound)
 					next_clicksound = world.time + CLICKSOUND_INTERVAL
@@ -754,7 +753,7 @@ About the new airlock wires panel:
 			update_icon(AIRLOCK_CLOSED)
 		if("emag")
 			set_airlock_overlays(AIRLOCK_EMAG)
-			if(density && arePowerSystemsOn())
+			if(density && operable())
 				flick("deny", src)
 		else
 			update_icon()
@@ -973,14 +972,14 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !arePowerSystemsOn() && density && !locked)) && !brace)
+	if(p_open && (operating == DOOR_OPERATING_BROKEN || (!operating && welded && !operable() && density && !locked)) && !brace)
 		user.visible_message("[user] starts removing the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 		if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		to_chat(user, SPAN_NOTICE("You've removed the airlock electronics!"))
 		deconstruct(user)
 		return
-	if(arePowerSystemsOn())
+	if(operable())
 		to_chat(user, SPAN_NOTICE("The airlock's motors resist your efforts to force it."))
 		return
 	if(locked)
@@ -1089,7 +1088,7 @@ About the new airlock wires panel:
 				user.visible_message(SPAN_DANGER("[user] smashes [C] into the airlock's control panel!"))
 			return TRUE
 
-	if (istype(C, /obj/item/material/twohanded/fireaxe) && !arePowerSystemsOn())
+	if (istype(C, /obj/item/material/twohanded/fireaxe) && !operable())
 		if(locked)
 			to_chat(user, SPAN_NOTICE("The airlock's bolts prevent it from being forced."))
 			return TRUE
@@ -1170,7 +1169,7 @@ About the new airlock wires panel:
 	use_power_oneoff(360)	//360 W seems much more appropriate for an actuator moving an industrial door capable of crushing people
 
 	//if the door is unpowered then it doesn't make sense to hear the woosh of a pneumatic actuator
-	if(arePowerSystemsOn())
+	if(operable())
 		playsound(src.loc, open_sound_powered, 100, 1)
 	else
 		playsound(src.loc, open_sound_unpowered, 100, 1)
@@ -1182,7 +1181,7 @@ About the new airlock wires panel:
 		return 0
 
 	if(!forced)
-		if(!arePowerSystemsOn() || isWireCut(AIRLOCK_WIRE_OPEN_DOOR))
+		if(!operable() || isWireCut(AIRLOCK_WIRE_OPEN_DOOR))
 			return 0
 
 	if(locked || welded)
@@ -1195,7 +1194,7 @@ About the new airlock wires panel:
 
 	if(!forced)
 		//despite the name, this wire is for general door control.
-		if(!arePowerSystemsOn() || isWireCut(AIRLOCK_WIRE_OPEN_DOOR))
+		if(!operable() || isWireCut(AIRLOCK_WIRE_OPEN_DOOR))
 			return	0
 
 	return ..()
@@ -1222,7 +1221,7 @@ About the new airlock wires panel:
 		use_power_oneoff(door_crush_damage * 100)		// Uses bunch extra power for crushing the target.
 
 	use_power_oneoff(360)	//360 W seems much more appropriate for an actuator moving an industrial door capable of crushing people
-	if(arePowerSystemsOn())
+	if(operable())
 		playsound(src.loc, close_sound_powered, 100, 1)
 	else
 		playsound(src.loc, close_sound_unpowered, 100, 1)
@@ -1248,7 +1247,7 @@ About the new airlock wires panel:
 		return
 
 	if (!forced)
-		if(operating || !src.arePowerSystemsOn() || isWireCut(AIRLOCK_WIRE_DOOR_BOLTS))
+		if(operating || !src.operable() || isWireCut(AIRLOCK_WIRE_DOOR_BOLTS))
 			return
 
 	locked = FALSE
@@ -1349,7 +1348,7 @@ About the new airlock wires panel:
 		electrified_until = 0
 
 /obj/machinery/door/airlock/proc/prison_open()
-	if (!arePowerSystemsOn())
+	if (!operable())
 		return
 	unlock(TRUE)
 	open(TRUE)

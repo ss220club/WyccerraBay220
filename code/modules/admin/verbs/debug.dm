@@ -113,9 +113,9 @@
 /client/proc/cmd_debug_make_powernets()
 	set category = "Debug"
 	set name = "Make Powernets"
-	SSmachines.makepowernets()
-	log_admin("[key_name(src)] has remade the powernet. makepowernets() called.")
-	message_admins("[key_name_admin(src)] has remade the powernets. makepowernets() called.", 0)
+	SSmachines.make_powernets()
+	log_admin("[key_name(src)] has remade the powernet. make_powernets() called.")
+	message_admins("[key_name_admin(src)] has remade the powernets. make_powernets() called.", 0)
 
 /client/proc/cmd_admin_grantfullaccess(mob/M in SSmobs.mob_list)
 	set category = "Admin"

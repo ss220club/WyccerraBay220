@@ -43,12 +43,12 @@
 	whitelisted = list(SPECIES_SKRELL)
 
 /datum/gear/ears/skrell/bands
-	display_name = "headtail band selection (Skrell)"
+	display_name = "headtail band (Skrell)"
 	path = /obj/item/clothing/ears/skrell/band
 	flags = GEAR_HAS_SUBTYPE_SELECTION
 
 /datum/gear/ears/skrell/chains
-	display_name = "headtail chain selection (Skrell)"
+	display_name = "headtail chain (Skrell)"
 	path = /obj/item/clothing/ears/skrell/chain
 	flags = GEAR_HAS_SUBTYPE_SELECTION
 
@@ -57,11 +57,11 @@
 	flags = GEAR_HAS_COLOR_SELECTION
 
 /datum/gear/ears/skrell/colored/chain
-	display_name = "colored headtail chain, colour select (Skrell)"
+	display_name = "headtail chain, colored (Skrell)"
 	path = /obj/item/clothing/ears/skrell/colored/chain
 
 /datum/gear/ears/skrell/colored/band
-	display_name = "headtail bands, colour select (Skrell)"
+	display_name = "headtail band, colored (Skrell)"
 	path = /obj/item/clothing/ears/skrell/colored/band
 
 /datum/gear/ears/skrell/cloth
@@ -69,9 +69,9 @@
 	flags = GEAR_HAS_COLOR_SELECTION
 
 /datum/gear/ears/skrell/cloth/male
-	display_name = "male headtail cloth (Skrell)"
+	display_name = "headtail cloth, male (Skrell)"
 	path = /obj/item/clothing/ears/skrell/cloth_male
 
 /datum/gear/ears/skrell/cloth/female
-	display_name = "female headtail cloth (Skrell)"
+	display_name = "headtail cloth, female (Skrell)"
 	path = /obj/item/clothing/ears/skrell/cloth_female

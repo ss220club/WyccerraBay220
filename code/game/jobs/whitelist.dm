@@ -102,8 +102,6 @@ var/global/list/alien_whitelist = list()
 	return FALSE
 
 /proc/whitelist_lookup(item, ckey)
-	if(!config.usealienwhitelist)
-		return TRUE
 	return alien_whitelist?[ckey]?[lowertext(item)]
 
 #undef WHITELISTFILE

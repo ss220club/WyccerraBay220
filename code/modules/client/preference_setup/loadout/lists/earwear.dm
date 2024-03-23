@@ -63,6 +63,9 @@
 	path = /obj/item/clothing/ears/skrell/colored/band
 	flags = GEAR_HAS_COLOR_SELECTION
 
+/datum/gear/ears/skrell/cloth
+	abstract_type = /datum/gear/ears/skrell/cloth
+
 /datum/gear/ears/skrell/cloth/male
 	display_name = "male headtail cloth (Skrell)"
 	path = /obj/item/clothing/ears/skrell/cloth_male

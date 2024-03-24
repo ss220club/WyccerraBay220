@@ -185,10 +185,7 @@
 		var/glass_noun = istext(glass) ? "[glass] plating" : "glass panel"
 		if(!tool.tool_start_check(user, 1))
 			return
-		user.visible_message(
-			SPAN_NOTICE("[user] starts welding [src]'s [glass_noun] off with [tool]."),
-			SPAN_NOTICE("You start welding [src]'s [glass_noun] off with [tool].")
-		)
+		balloon_alert(user, "отваривание [glass_noun]")
 		if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !glass)
 			return
 		var/obj/item/stack/material/stack
@@ -208,14 +205,11 @@
 
 	// Dismantle assembly
 	if(anchored)
-		USE_FEEDBACK_FAILURE("[src] must be unanchored before you can dismantle it.")
+		USE_FEEDBACK_NEED_UNANCHOR(user)
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
-		SPAN_NOTICE("You start dismantling [src] with [tool].")
-	)
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || anchored)
 		return
 	var/obj/item/stack/material/steel/stack = new(loc, 4)

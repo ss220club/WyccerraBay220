@@ -51,8 +51,8 @@
 
 /obj/structure/lattice/proc/deconstruct(mob/user, obj/item/tool)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] slices \the [src] apart with \a [tool]."),
-		SPAN_NOTICE("You \the [src] apart with \a [tool].")
+		SPAN_NOTICE("[user] slices [src] apart with [tool]."),
+		SPAN_NOTICE("You [src] apart with [tool].")
 	)
 	var/obj/item/stack/material/rods/rods = new(loc, 1, material.name)
 	transfer_fingerprints_to(rods)

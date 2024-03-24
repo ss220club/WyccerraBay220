@@ -190,10 +190,11 @@
 	if(damage && W.tool_behaviour == TOOL_WELDER)
 		if(!W.tool_start_check(user, 2))
 			return
+		USE_FEEDBACK_REPAIR_START(user)
 		to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
 		if(!W.use_as_tool(src, user, (max(5, damage / 5)) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+		USE_FEEDBACK_REPAIR_FINISH(user)
 		restore_health(damage)
 		return TRUE
 
@@ -229,7 +230,7 @@
 			strict_timer_flags = TRUE
 
 		if(dismantle_verb)
-			to_chat(user, SPAN_NOTICE("You begin [dismantle_verb] through the outer plating."))
+			USE_FEEDBACK_DECONSTRUCT_START(user)
 			if(dismantle_sound)
 				playsound(src, dismantle_sound, 100, 1)
 

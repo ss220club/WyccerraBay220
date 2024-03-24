@@ -68,7 +68,10 @@ type BottleSprite = {
 export const ChemMaster = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
-    <Window width={555} height={590}>
+    <Window
+      width={555}
+      height={data.productionOptions !== 'CONDIMENTS' ? 590 : 500}
+    >
       <Window.Content>
         <Stack fill vertical>
           <Stack.Item grow>
@@ -224,24 +227,33 @@ const ChemMasterInternal = (props, context) => {
 const ChemMasterSprites = (props, context) => {
   const { act, data } = useBackend<ChemMasterData>(context);
   return (
-    <Stack fill vertical textAlign="center" height="260px">
-      <Stack.Item grow>
-        <Section fill scrollable title="Стиль таблеток">
-          {data.pillSprites.map(({ id, sprite }) => (
-            <ImageButton
-              key={id}
-              m={0.5}
-              asset
-              vertical
-              selected={data.pillSprite === id}
-              imageAsset={'chem_master32x32'}
-              image={sprite}
-              onClick={() => act('changePillStyle', { style: id })}
-            />
-          ))}
-        </Section>
-      </Stack.Item>
-      <Stack.Item height="85px">
+    <Stack
+      fill
+      vertical
+      textAlign="center"
+      height={data.productionOptions !== 'CONDIMENTS' ? '260px' : '170px'}
+    >
+      {data.productionOptions !== 'CONDIMENTS' && (
+        <Stack.Item grow>
+          <Section fill scrollable title="Стиль таблеток">
+            {data.pillSprites.map(({ id, sprite }) => (
+              <ImageButton
+                key={id}
+                m={0.5}
+                asset
+                vertical
+                selected={data.pillSprite === id}
+                imageAsset={'chem_master32x32'}
+                image={sprite}
+                onClick={() => act('changePillStyle', { style: id })}
+              />
+            ))}
+          </Section>
+        </Stack.Item>
+      )}
+      <Stack.Item
+        height={data.productionOptions !== 'CONDIMENTS' ? '85px' : '100%'}
+      >
         <Section fill scrollable title="Стиль бутылок">
           {data.bottleSprites.map(({ id, sprite }) => (
             <ImageButton
@@ -257,6 +269,30 @@ const ChemMasterSprites = (props, context) => {
           ))}
         </Section>
       </Stack.Item>
+      {!!data.pillBottle && data.productionOptions === 'CONDIMENTS' && (
+        <Stack.Item textAlign="center">
+          <Section fill title="Таблетница">
+            <Stack fill>
+              <Stack.Item grow>
+                <ProgressBar
+                  minValue={0}
+                  maxValue={data.pillBottleMaxContent}
+                  value={data.pillBottleContent}
+                >
+                  {data.pillBottleContent} / {data.pillBottleMaxContent}
+                </ProgressBar>
+              </Stack.Item>
+              <Stack.Item>
+                <Button
+                  icon="eject"
+                  tooltip={'Вынуть таблетницу'}
+                  onClick={() => act('ejectPillBottle')}
+                />
+              </Stack.Item>
+            </Stack>
+          </Section>
+        </Stack.Item>
+      )}
     </Stack>
   );
 };
@@ -278,38 +314,48 @@ const ChemMasterActions = (props, context) => {
                 }
               />
             </LabeledList.Item>
-            <LabeledList.Item label={'Дозировка таблетки'}>
-              <Slider
-                value={data.pillDosage}
-                minValue={0.1}
-                maxValue={data.pillDosageMax}
-                onChange={(e, value) => act('pillDosage', { newDosage: value })}
-              />
-            </LabeledList.Item>
-            <LabeledList.Item label={'Количество таблеток'}>
-              <Slider
-                value={data.pillCount}
-                minValue={1}
-                maxValue={data.pillCountMax}
-                onChange={(e, value) => act('pillCount', { pillCount: value })}
-              />
-            </LabeledList.Item>
+            {data.productionOptions !== 'CONDIMENTS' && (
+              <>
+                <LabeledList.Item label={'Дозировка таблетки'}>
+                  <Slider
+                    value={data.pillDosage}
+                    minValue={0.1}
+                    maxValue={data.pillDosageMax}
+                    onChange={(e, value) =>
+                      act('pillDosage', { newDosage: value })
+                    }
+                  />
+                </LabeledList.Item>
+                <LabeledList.Item label={'Количество таблеток'}>
+                  <Slider
+                    value={data.pillCount}
+                    minValue={1}
+                    maxValue={data.pillCountMax}
+                    onChange={(e, value) =>
+                      act('pillCount', { pillCount: value })
+                    }
+                  />
+                </LabeledList.Item>
+              </>
+            )}
           </LabeledList>
         </Section>
       </Stack.Item>
       <Stack.Item mt={0}>
         <Section textAlign={'center'}>
           <Stack>
-            <Stack.Item grow>
-              <Button
-                fluid
-                disabled={data.bufferChemicals.length === 0}
-                content={
-                  data.pillCount > 1 ? 'Сделать таблетки' : 'Сделать таблетку'
-                }
-                onClick={() => act('createPill')}
-              />
-            </Stack.Item>
+            {data.productionOptions !== 'CONDIMENTS' && (
+              <Stack.Item grow>
+                <Button
+                  fluid
+                  disabled={data.bufferChemicals.length === 0}
+                  content={
+                    data.pillCount > 1 ? 'Сделать таблетки' : 'Сделать таблетку'
+                  }
+                  onClick={() => act('createPill')}
+                />
+              </Stack.Item>
+            )}
             <Stack.Item grow>
               <Button
                 fluid
@@ -330,7 +376,7 @@ const ChemMasterActions = (props, context) => {
           </Stack.Item>
         </Section>
       </Stack.Item>
-      {!!data.pillBottle && (
+      {!!data.pillBottle && data.productionOptions !== 'CONDIMENTS' && (
         <Stack.Item textAlign="center">
           <Section fill title="Таблетница">
             <Stack fill>

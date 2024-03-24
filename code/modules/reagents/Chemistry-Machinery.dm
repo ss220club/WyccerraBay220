@@ -13,23 +13,31 @@
 	clicksound = "button"
 	clickvol = 20
 	core_skill = SKILL_CHEMISTRY
+	/// Beaker inside Chem Master.
 	var/obj/item/reagent_containers/beaker
+	/// Pill Bottle inside Chem Master.
 	var/obj/item/storage/pill_bottle/loaded_pill_bottle
 	// If TRUE, reagents will move from buffer -> beaker. If FALSE, reagents will be destroyed when moved from the buffer.
 	var/to_beaker = FALSE
-	var/pillamount = 10
+	/// Number of pills produced at one time.
 	var/pill_count = 1
+	/// Maximum pills count available to produce at once.
 	var/max_pill_count = 20
-	var/bottle_dosage = 60
+	/// Pill dosage if produced one at a time.
 	var/pill_dosage = 30
+	/// Produced bottle dosage.
+	var/bottle_dosage = 60
+	/// Selected bottle sprite.
 	var/bottlesprite = 1
+	/// Selected pill sprite.
 	var/pillsprite = 1
 	// Whether reagents will not be fully purified (sloppy = TRUE) or there will be reagent loss (sloppy = FALSE) on reagent transfer.
 	var/sloppy = TRUE
-	// Determines what the machine can make from its buffer. A condimaster can't make pills, and so on
+	// Determines what the machine can make from its buffer. A condimaster can't make pills, and so on.
 	var/production_options = CHEMMASTER_OPTIONS_BASE
+	/// Limit of reagents inside Chem Master.
 	var/reagent_limit = 120
-	// Datum housing the reagent we're currently trying to fetch data about
+	// Datum housing the reagent we're currently trying to fetch data about.
 	var/datum/reagent/analyzed_reagent
 
 /obj/machinery/chem_master/New()

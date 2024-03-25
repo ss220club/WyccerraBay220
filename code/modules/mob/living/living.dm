@@ -608,13 +608,13 @@ default behaviour is:
 	if(lying && prob(getBruteLoss() / 6))
 		location.add_blood(src)
 		if(prob(25))
-			src.adjustBruteLoss(1)
-			visible_message(SPAN_CLASS("danger", "\The [src]'s [src.isSynthetic() ? "state worsens": "wounds open more"] from being dragged!"))
+			adjustBruteLoss(1)
+			balloon_alert_to_viewers("[isSynthetic() ? "повреждения ухудшаются!" : "раны открываются!"]")
 			. = TRUE
-	if(src.pull_damage())
+	if(pull_damage())
 		if(prob(25))
-			src.adjustBruteLoss(2)
-			visible_message(SPAN_CLASS("danger", "\The [src]'s [src.isSynthetic() ? "state" : "wounds"] worsen terribly from being dragged!"))
+			adjustBruteLoss(2)
+			balloon_alert_to_viewers("[isSynthetic() ? "повреждения значительно ухудшаются!" : "раны сильно открываются!"]")
 			location.add_blood(src)
 			. = TRUE
 

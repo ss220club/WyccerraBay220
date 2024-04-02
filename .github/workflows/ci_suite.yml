@@ -74,12 +74,14 @@ jobs:
       - name: Run Grep Checks
         if: steps.linter-setup.conclusion == 'success' && !cancelled()
         run: bash tools/ci/check_grep.sh
-      - name: Check Define Sanity
-        if: steps.linter-setup.conclusion == 'success' && !cancelled()
-        run: tools/bootstrap/python -m define_sanity.check
-      - name: Check Trait Validity
-        if: steps.linter-setup.conclusion == 'success' && !cancelled()
-        run: tools/bootstrap/python -m trait_validity.check
+      # Enable if we decide to undef everything(we wont)
+      # - name: Check Define Sanity
+      #   if: steps.linter-setup.conclusion == 'success' && !cancelled()
+      #   run: tools/bootstrap/python -m define_sanity.check
+      # Enable when we have traits
+      # - name: Check Trait Validity
+      #   if: steps.linter-setup.conclusion == 'success' && !cancelled()
+      #   run: tools/bootstrap/python -m trait_validity.check
       - name: Run DreamChecker
         if: steps.linter-setup.conclusion == 'success' && !cancelled()
         shell: bash
@@ -152,11 +154,6 @@ jobs:
           sed -i -e s+_maps/+\"+g -e s+.json+\"+g maps_output.txt
           echo "Maps: $(cat maps_output.txt)"
           echo "maps={\"paths\":[$(cat maps_output.txt)]}" >> $GITHUB_OUTPUT
-      - name: Find Alternate Tests
-        id: alternate_test_finder
-        run: |
-          ALTERNATE_TESTS_JSON=$(jq -nRc '[inputs | capture("^(?<major>[0-9]+)\\.(?<minor>[0-9]+): (?<map>.+)$")]' .github/alternate_byond_versions.txt)
-          echo "alternate_tests=$ALTERNATE_TESTS_JSON" >> $GITHUB_OUTPUT
       - name: Collect byond client version configuration
         id: max_required_byond_client
         #the regex here does not filter out non-numbers because error messages about no input are less helpful then error messages about bad input (which includes the bad input)

@@ -243,17 +243,18 @@
 
 /obj/machinery/power/smes/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!panel_open)
-		to_chat(user, SPAN_WARNING("You need to open the access hatch on [src] first!"))
+	if(!panel_open)
+		balloon_alert(user, "нужно открыть панель!")
 		return
 	if(!damage)
-		to_chat(user, "[src] is already fully repaired.")
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
-	if(!tool.tool_use_check(user, 5))
+	if(!tool.tool_start_check(user, 5))
 		return
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, damage, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !damage)
 		return
-	to_chat(user, "You repair all structural damage to [src]")
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	damage = 0
 
 /obj/machinery/power/smes/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)

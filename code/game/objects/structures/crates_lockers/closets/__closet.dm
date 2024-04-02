@@ -308,30 +308,28 @@
 
 	return ..()
 
+/obj/structure/closet/welder_act_secondary(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	USE_FEEDBACK_DECONSTRUCT_START(user)
+	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	slice_into_parts(tool, user)
+
 /obj/structure/closet/welder_act(mob/living/user, obj/item/tool)
 	if(opened)
 		return
 	. = ITEM_INTERACT_SUCCESS
-
-	if(user.a_intent == I_HURT)
-		if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		slice_into_parts(tool, user)
-		return
-
 	if(!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
-		USE_FEEDBACK_FAILURE("[src] can't be welded shut.")
+		balloon_alert(user, "невозможно заварить!")
 		return
 	if(user.loc == src)
 		return
+	USE_FEEDBACK_WELD_UNWELD(user, welded)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded
 	update_icon()
-	user.visible_message(
-		SPAN_WARNING("[user] [welded ? "welds" : "unwelds"] [src] with [tool]."),
-		SPAN_WARNING("You [welded ? "weld" : "unweld"] [src] with [tool].")
-	)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded)
 
 /obj/structure/closet/use_tool(obj/item/tool, mob/user, list/click_params)
 	// General Action - Place item in closet, if open.
@@ -561,11 +559,13 @@
 /obj/structure/closet/proc/CanToggleLock(mob/user, obj/item/card/id/id_card)
 	return allowed(user) || (istype(id_card) && check_access_list(id_card.GetAccess()))
 
-/obj/structure/closet/AltClick(mob/user)
-	if(!src.opened)
+/obj/structure/closet/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(!opened)
 		togglelock(user)
-		return TRUE
-	return ..()
 
 /obj/structure/closet/emp_act(severity)
 	for (var/atom/A as anything in src)

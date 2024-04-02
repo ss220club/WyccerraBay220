@@ -221,21 +221,22 @@ SUBSYSTEM_DEF(tts220)
 	LAZYADD(tts_requests_queue, list(list(text, seed, proc_callback)))
 	return TRUE
 
-/datum/controller/subsystem/tts220/proc/get_tts(atom/speaker, mob/listener, message, seed_name, is_local = TRUE, singleton/sound_effect/effect = null, traits = TTS_TRAIT_RATE_FASTER, preSFX = null, postSFX = null)
+/datum/controller/subsystem/tts220/proc/get_tts(atom/speaker, mob/listener, message, datum/tts_seed/tts_seed, is_local = TRUE, singleton/sound_effect/effect = null, traits = TTS_TRAIT_RATE_FASTER, preSFX = null, postSFX = null)
 	if(!is_enabled)
 		return
 	if(!message)
 		return
 	if(isnull(listener) || !listener.client)
 		return
-	if(isnull(seed_name) || !(seed_name in tts_seeds))
+	if(ispath(tts_seed) && SStts220.tts_seeds[initial(tts_seed.name)])
+		tts_seed = SStts220.tts_seeds[initial(tts_seed.name)]
+	if(!istype(tts_seed))
 		return
-	var/datum/tts_seed/seed = tts_seeds[seed_name]
 
 	tts_wanted++
 	tts_trps_counter++
 
-	var/datum/tts_provider/provider = seed.provider
+	var/datum/tts_provider/provider = tts_seed.provider
 	if(!provider.is_enabled)
 		return
 	if(provider.throttle_check())
@@ -257,7 +258,8 @@ SUBSYSTEM_DEF(tts220)
 		text = provider.pitch_whisper(text)
 
 	var/hash = md5(lowertext(text))
-	var/filename = "data/tts_cache/[seed.name]/[hash]"
+
+	var/filename = "data/tts_cache/[tts_seed.name]/[hash]"
 	var/singleton/sound_effect/effect_singleton = GET_SINGLETON(effect)
 
 	if(fexists("[filename].ogg"))
@@ -274,7 +276,8 @@ SUBSYSTEM_DEF(tts220)
 		LAZYADD(tts_queue[filename], play_tts_cb)
 		return
 
-	queue_request(text, seed, CALLBACK(src, PROC_REF(get_tts_callback), speaker, listener, filename, seed, is_local, effect_singleton, preSFX, postSFX))
+	queue_request(text, tts_seed, CALLBACK(src, PROC_REF(get_tts_callback), speaker, listener, filename, tts_seed, is_local, effect_singleton, preSFX, postSFX))
+
 	LAZYADD(tts_queue[filename], play_tts_cb)
 
 /datum/controller/subsystem/tts220/proc/get_tts_callback(atom/speaker, mob/listener, filename, datum/tts_seed/seed, is_local, effect, preSFX, postSFX, datum/http_response/response)

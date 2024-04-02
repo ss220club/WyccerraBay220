@@ -1056,7 +1056,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 /// Used in a callback that is passed by use_tool into do_after call. Do not override, do not call manually.
 /obj/item/proc/tool_check_callback(mob/living/user, amount, datum/callback/extra_checks)
 	SHOULD_NOT_OVERRIDE(TRUE)
-	. = tool_use_check(user, amount) && (!extra_checks || invoke(extra_checks))
+	. = tool_start_check(user, amount) && (!extra_checks || invoke(extra_checks))
 	if(.)
 		SEND_SIGNAL(src, COMSIG_TOOL_IN_USE, user)
 

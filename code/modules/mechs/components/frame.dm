@@ -217,30 +217,43 @@
 		SPAN_NOTICE("You [input == "Adjust Wiring" ? "adjust" : "remove"] the wiring in [src] with [tool].")
 	)
 
+/obj/structure/heavy_vehicle_frame/welder_act_secondary(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!is_reinforced)
+		balloon_alert(user, "нет укреплений для отваривания!")
+		return
+	if(is_reinforced != FRAME_REINFORCED_WELDED)
+		balloon_alert(user, "укрепление уже отварено!")
+		return
+	if(!tool.tool_start_check(user, 1))
+		return
+	balloon_alert(user, "отваривание укреплений")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !is_reinforced || is_reinforced != FRAME_REINFORCED_WELDED)
+		return
+	is_reinforced = FRAME_REINFORCED_SECURE
+	update_icon()
+	balloon_alert_to_viewers("укрепления отварены!")
+
 /obj/structure/heavy_vehicle_frame/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!is_reinforced)
-		USE_FEEDBACK_FAILURE("[src] has no reinforcements to weld.")
+		balloon_alert(user, "нет укреплений для приваривания!")
 		return
-	if(is_reinforced == FRAME_REINFORCED)
-		USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be secured before you can weld them.")
+	switch(is_reinforced)
+		if(FRAME_REINFORCED_WELDED)
+			balloon_alert(user, "укрепление уже заварено!")
+			return
+		if(FRAME_REINFORCED)
+			balloon_alert(user, "нужно прикрутить укрепления!")
+			return
+	if(!tool.tool_start_check(user, 1))
 		return
-	if(!tool.tool_use_check(user, 1))
+	balloon_alert(user, "заваривание укреплений")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !is_reinforced || is_reinforced != FRAME_REINFORCED_SECURE)
 		return
-	var/current_state = is_reinforced
-	user.visible_message(
-		SPAN_NOTICE("[user] starts [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding [src]'s internal reinforcements with [tool]."),
-		SPAN_NOTICE("You start [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welding [src]'s internal reinforcements with [tool]."),
-		SPAN_ITALIC("You hear welding.")
-	)
-	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !is_reinforced || is_reinforced == FRAME_REINFORCED || current_state != is_reinforced)
-		return
-	is_reinforced = is_reinforced == FRAME_REINFORCED_WELDED ? FRAME_REINFORCED_SECURE : FRAME_REINFORCED_WELDED
+	is_reinforced = FRAME_REINFORCED_WELDED
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]welds [src]'s internal reinforcements with [tool]."),
-		SPAN_NOTICE("You [is_reinforced == FRAME_REINFORCED_WELDED ? "un" : null]weld [src]'s internal reinforcements with [tool]."),
-	)
+	balloon_alert_to_viewers("укрепления заварены!")
 
 /obj/structure/heavy_vehicle_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring

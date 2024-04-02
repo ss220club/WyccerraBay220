@@ -41,7 +41,7 @@
 	radar = image(loc = effect.loc, icon = 'icons/obj/overmap.dmi', icon_state = "sensor_range", pixel_x = effect.pixel_x, pixel_y = effect.pixel_y)
 	radar.tag = "radar"
 	radar.filters = filter(type="blur", size = 1)
-	radar.mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	radar.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 
 /datum/overmap_contact/proc/update_marker_icon(range = 0)

@@ -199,7 +199,10 @@
 		return
 	..()
 
-/mob/living/bot/mulebot/UnarmedAttack(turf/T)
+/mob/living/bot/mulebot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
+	if(!isturf(target))
+		return
+	var/turf/T = target
 	if(T == src.loc)
 		unload(dir)
 

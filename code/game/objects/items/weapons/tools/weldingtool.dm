@@ -117,7 +117,7 @@
 
 /obj/item/weldingtool/Process()
 	if(welding)
-		if((!waterproof && submerged()) || !remove_fuel(0.05))
+		if((!waterproof && submerged()))
 			setWelding(0)
 
 /obj/item/weldingtool/use_after(obj/O, mob/living/user)
@@ -165,7 +165,7 @@
 		return FALSE
 
 	if(get_fuel() >= used)
-		tank.reagents.remove_reagent(/datum/reagent/fuel, used)
+		burn_fuel(used)
 		check_fuel()
 		return TRUE
 	else
@@ -174,25 +174,18 @@
 /// If welding tool ran out of fuel during a construction task, construction fails.
 /obj/item/weldingtool/tool_use_check(mob/living/user, amount)
 	if(!isOn() || !check_fuel())
-		to_chat(user, SPAN_WARNING("[src] has to be on to complete this task!"))
+		balloon_alert(user, "нужен включенный аппарат!")
 		return FALSE
 
 	if(get_fuel() >= amount)
+		if(user)
+			user.welding_eyecheck()//located in mob_helpers.dm
+			set_light(5, 0.7, COLOR_LIGHT_CYAN)
+			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
 		return TRUE
 	else
-		to_chat(user, SPAN_WARNING("You need more welding fuel to complete this task!"))
+		balloon_alert(user, "нужно больше топлива!")
 		return FALSE
-
-//Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
-/obj/item/weldingtool/proc/remove_fuel(amount = 1, mob/M = null)
-	if(!tool_use_check(M, amount))
-		return FALSE
-	burn_fuel(amount)
-	if(M)
-		M.welding_eyecheck()//located in mob_helpers.dm
-		set_light(5, 0.7, COLOR_LIGHT_CYAN)
-		addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
-	return TRUE
 
 /obj/item/weldingtool/proc/burn_fuel(amount)
 	if(!tank)
@@ -312,11 +305,11 @@
 		to_chat(user, SPAN_WARNING("[target]'s [S.name] is hard and brittle - [src] cannot repair it."))
 		return TRUE
 
-	if (!tool_use_check(user, 2)) //The surgery check above already returns can_use's feedback.
+	if (!tool_start_check(user, 2)) //The surgery check above already returns can_use's feedback.
 		return TRUE
 
 	if (S.robo_repair(15, DAMAGE_BRUTE, "some dents", src, user))
-		remove_fuel(2, user)
+		use(2)
 		return TRUE
 
 	else return FALSE

@@ -14,7 +14,7 @@
 	host = null
 	. = ..()
 
-/obj/bmode/proc/OnClick(list/params)
+/obj/bmode/proc/OnClick(params)
 	return
 
 /obj/bmode/dir
@@ -25,7 +25,7 @@
 	..()
 	set_dir(host.dir)
 
-/obj/bmode/dir/OnClick(list/parameters)
+/obj/bmode/dir/OnClick(params)
 	switch(dir)
 		if(SOUTH)
 			set_dir(WEST)
@@ -43,7 +43,7 @@
 	icon_state = "buildhelp"
 	screen_loc = "NORTH,WEST+1"
 
-/obj/bmode/help/OnClick()
+/obj/bmode/help/OnClick(params)
 	host.current_build_mode.Help()
 
 /obj/bmode/mode
@@ -53,8 +53,9 @@
 	..()
 	icon_state = host.current_build_mode.icon_state
 
-/obj/bmode/mode/OnClick(list/parameters)
-	if(parameters["left"])
+/obj/bmode/mode/OnClick(params)
+	var/list/modifiers = params2list(params)
+	if(LAZYACCESS(modifiers, LEFT_CLICK))
 		var/datum/build_mode/build_mode = input("Select build mode", "Select build mode", host.current_build_mode) as null|anything in host.build_modes
 		if(build_mode && host && (build_mode in host.build_modes))
 			host.current_build_mode.Unselected()
@@ -62,12 +63,12 @@
 			host.current_build_mode = build_mode
 			icon_state = build_mode.icon_state
 			to_chat(usr, SPAN_NOTICE("Build mode '[host.current_build_mode]' selected."))
-	else if(parameters["right"])
+	else if(LAZYACCESS(modifiers, RIGHT_CLICK))
 		host.current_build_mode.Configurate()
 
 /obj/bmode/quit
 	icon_state = "buildquit"
 	screen_loc = "NORTH,WEST+3"
 
-/obj/bmode/quit/OnClick()
+/obj/bmode/quit/OnClick(params)
 	usr.RemoveClickHandler(/datum/click_handler/build_mode)

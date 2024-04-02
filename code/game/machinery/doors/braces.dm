@@ -65,20 +65,14 @@
 /obj/item/airlock_brace/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!health_damaged())
-		to_chat(user, SPAN_NOTICE("[src] does not require repairs."))
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_ITALIC("[user] begins repairing damage on [src]."),
-		SPAN_ITALIC("You begin repairing damage on the [src].")
-	)
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	user.visible_message(
-		SPAN_ITALIC("[user] repairs damage on [src]."),
-		SPAN_ITALIC("You repair damage on the [src].")
-	)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	restore_health(rand(75, 150))
 
 /obj/item/airlock_brace/attackby(obj/item/item, mob/living/user)

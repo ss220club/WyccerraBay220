@@ -142,18 +142,18 @@
 		else
 			return (amount && (T.broken || T.burnt || (improvefloors && !T.flooring)))
 
-/mob/living/bot/floorbot/UnarmedAttack(atom/A, proximity)
+/mob/living/bot/floorbot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	if(!..())
 		return
 
 	if(busy)
 		return
 
-	if(get_turf(A) != loc)
+	if(get_turf(target) != loc)
 		return
 
-	if(emagged && istype(A, /turf/simulated/floor))
-		var/turf/simulated/floor/F = A
+	if(emagged && istype(target, /turf/simulated/floor))
+		var/turf/simulated/floor/F = target
 		busy = 1
 		update_icons()
 		if(F.flooring)
@@ -168,8 +168,8 @@
 				addTiles(1)
 		target = null
 		update_icons()
-	else if(istype(A, /turf/simulated/floor))
-		var/turf/simulated/floor/F = A
+	else if(istype(target, /turf/simulated/floor))
+		var/turf/simulated/floor/F = target
 		if(F.broken || F.burnt)
 			busy = 1
 			update_icons()
@@ -194,8 +194,8 @@
 			anchored = FALSE
 			target = null
 			update_icons()
-	else if(istype(A, /obj/item/stack/tile/floor) && amount < maxAmount)
-		var/obj/item/stack/tile/floor/T = A
+	else if(istype(target, /obj/item/stack/tile/floor) && amount < maxAmount)
+		var/obj/item/stack/tile/floor/T = target
 		visible_message(SPAN_NOTICE("\The [src] begins to collect tiles."))
 		busy = 1
 		update_icons()
@@ -208,8 +208,8 @@
 		anchored = FALSE
 		target = null
 		update_icons()
-	else if(istype(A, /obj/item/stack/material) && amount + 4 <= maxAmount)
-		var/obj/item/stack/material/M = A
+	else if(istype(target, /obj/item/stack/material) && amount + 4 <= maxAmount)
+		var/obj/item/stack/material/M = target
 		if(M.get_material_name() == MATERIAL_STEEL)
 			visible_message(SPAN_NOTICE("\The [src] begins to make tiles."))
 			busy = 1

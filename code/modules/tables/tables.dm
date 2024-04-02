@@ -91,9 +91,7 @@
 		T.update_icon()
 	. = ..()
 
-/obj/structure/table/crowbar_act(mob/living/user, obj/item/tool)
-	if(user.a_intent != I_HURT)
-		return
+/obj/structure/table/crowbar_act_secondary(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!carpeted)
 		USE_FEEDBACK_FAILURE("[src] has no carpeting to remove.")
@@ -108,9 +106,7 @@
 		SPAN_NOTICE("You remove the carpeting from [src] with [tool].")
 	)
 
-/obj/structure/table/screwdriver_act(mob/living/user, obj/item/tool)
-	if(user.a_intent != I_HURT)
-		return
+/obj/structure/table/screwdriver_act_secondary(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!reinforced)
 		USE_FEEDBACK_FAILURE("[src] has no reinforcements to remove.")
@@ -123,57 +119,45 @@
 		update_icon()
 		update_material()
 
-/obj/structure/table/wrench_act(mob/living/user, obj/item/tool)
-	if(user.a_intent == I_HURT)
-		. = ITEM_INTERACT_SUCCESS
-		if(!material)
-			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-				return
-			dismantle(tool, user)
-			return
-		if(reinforced)
-			USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be removed before you can remove the plating.")
-			return
-		if(carpeted)
-			USE_FEEDBACK_FAILURE("[src]'s carpeting needs to be removed before you can remove the plating.")
-			return
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		remove_material(tool, user)
-		if(!material)
-			update_connections(TRUE)
-			update_icon()
-			for (var/obj/structure/table/table in oview(src, 1))
-				table.update_icon()
-			update_desc()
-			update_material()
+/obj/structure/table/wrench_act_secondary(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!material)
+		dismantle(tool, user)
+		return
+	if(reinforced)
+		USE_FEEDBACK_FAILURE("[src]'s reinforcements need to be removed before you can remove the plating.")
+		return
+	if(carpeted)
+		USE_FEEDBACK_FAILURE("[src]'s carpeting needs to be removed before you can remove the plating.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	remove_material(tool, user)
+	if(!material)
+		update_connections(TRUE)
+		update_icon()
+		for (var/obj/structure/table/table in oview(src, 1))
+			table.update_icon()
+		update_desc()
+		update_material()
 
+/obj/structure/table/wrench_act(mob/living/user, obj/item/tool)
 	if(can_plate && !material)
 		. = ITEM_INTERACT_SUCCESS
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
 		dismantle(tool, user)
 
-/obj/structure/table/welder_act(mob/living/user, obj/item/tool)
-	if(user.a_intent != I_HURT)
-		return
+/obj/structure/table/welder_act_secondary(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!health_damaged())
-		USE_FEEDBACK_FAILURE("[src] isn't damaged.")
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts repairing [src] with [tool]."),
-		SPAN_NOTICE("You start repairing [src] with [tool].")
-	)
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	restore_health(get_max_health() / 5) // 20% repair per application
-	user.visible_message(
-		SPAN_NOTICE("[user] repairs some of [src]'s damage with [tool]."),
-		SPAN_NOTICE("You repair some of [src]'s damage with [tool].")
-	)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/structure/table/use_weapon(obj/item/weapon, mob/user, list/click_params)
 	// Carpet - Add carpeting
@@ -339,8 +323,7 @@
 	manipulating = 1
 	user.visible_message(SPAN_NOTICE("[user] begins dismantling [src]."),
 								SPAN_NOTICE("You begin dismantling [src]."))
-	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-	if(!do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
+	if(!W.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		manipulating = 0
 		return
 	user.visible_message(SPAN_NOTICE("[user] dismantles [src]."),

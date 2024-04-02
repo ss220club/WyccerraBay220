@@ -137,25 +137,33 @@
 		to_chat(user, SPAN_NOTICE("You feel [src] constrict about your [E.name], supporting it."))
 		supporting_limbs |= E
 
+/obj/item/clothing/gloves/rig/equipped(mob/user)
+	. = ..()
+	RegisterSignal(user, COMSIG_LIVING_UNARMED_ATTACK, PROC_REF(touch))
 
-/obj/item/clothing/gloves/rig/Touch(atom/A, proximity)
+/obj/item/clothing/gloves/rig/dropped(user)
+	. = ..()
+	UnregisterSignal(user, COMSIG_LIVING_UNARMED_ATTACK, PROC_REF(touch))
 
-	if(!A || !proximity)
-		return 0
+/obj/item/clothing/gloves/rig/proc/touch(mob/living/source, atom/target, proximity, modifiers)
+	//SIGNAL_HANDLER TODOSS220: make it better
+
+	if(!target || !proximity)
+		return
 
 	var/mob/living/carbon/human/H = loc
 	if(!istype(H) || !H.back)
-		return 0
+		return
 
 	var/obj/item/rig/suit = H.back
 	if(!suit || !istype(suit) || !length(suit.installed_modules))
-		return 0
+		return
 
 	for(var/obj/item/rig_module/module in suit.installed_modules)
 		if(module.active && module.activates_on_touch)
-			if(module.engage(A))
-				return 1
-	return 0
+			if(module.engage(target))
+				return COMPONENT_CANCEL_ATTACK_CHAIN
+	return
 
 //Rig pieces for non-spacesuit based rigs
 

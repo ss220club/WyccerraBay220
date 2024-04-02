@@ -221,24 +221,25 @@
 		handcuffs.place_handcuffs(C, src)
 	resetTarget() //we're done, failed or not. Don't want to get stuck if C is not
 
-/mob/living/bot/secbot/UnarmedAttack(mob/M, proximity)
+/mob/living/bot/secbot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	if(!..())
 		return
 
-	if(!istype(M))
+	if(!ismob(target))
 		return
 
-	var/mob/living/carbon/human/H = M
-	if(istype(H) && H.lying)
-		cuff_target(H)
-		return
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if(istype(H) && H.lying)
+			cuff_target(H)
+			return
 
-	if(istype(M, /mob/living/simple_animal))
+	if(isanimal(target))
 		a_intent = I_HURT
 	else
 		a_intent = I_GRAB
 
-	stun_baton.resolve_attackby(M, src)
+	stun_baton.resolve_attackby(target, src)
 	flick(attack_state, src)
 
 /mob/living/bot/secbot/explode()

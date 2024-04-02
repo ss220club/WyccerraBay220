@@ -19,12 +19,12 @@
 		to_chat(user, SPAN_NOTICE("You wrench [machine] into place."))
 		machine.anchored = TRUE
 	if(I.tool_behaviour == TOOL_WELDER)
-		if(!I.tool_use_check(user, 3))
+		if(!I.tool_start_check(user, 3))
 			return TRUE
+		machine.USE_FEEDBACK_DECONSTRUCT_START(user)
 		if(!I.use_as_tool(machine, user, 2 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/default/deconstructed)
-		to_chat(user, SPAN_NOTICE("You deconstruct [machine]."))
 		machine.dismantle()
 
 

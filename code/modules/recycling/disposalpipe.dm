@@ -228,28 +228,17 @@
 /obj/structure/disposalpipe/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Cut pipe
-	if(!tool.tool_use_check(user, 1))
+	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts slicing [src] with [tool]."),
-		SPAN_NOTICE("You start slicing [src] with [tool].")
-	)
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
 	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	welded()
-	user.visible_message(
-		SPAN_NOTICE("[user] slices [src] with [tool]."),
-		SPAN_NOTICE("You slice [src] with [tool].")
-	)
-
-	// called when pipe is cut with welder
-/obj/structure/disposalpipe/proc/welded()
 	var/obj/structure/disposalconstruct/C = new (src.loc, src)
-	src.transfer_fingerprints_to(C)
+	transfer_fingerprints_to(C)
 	C.set_density(0)
 	C.anchored = TRUE
 	C.update()
-
+	C.balloon_alert_to_viewers("отверено от пола!")
 	qdel(src)
 
 // pipe is deleted
@@ -837,8 +826,13 @@
 	update()
 	return
 
-	// called when welded
-	// for broken pipe, remove and turn into scrap
-
-/obj/structure/disposalpipe/broken/welded()
+// for broken pipe, remove and turn into scrap
+/obj/structure/disposalpipe/broken/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Welding Tool - Cut pipe
+	if(!tool.tool_start_check(user, 1))
+		return
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
+	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	qdel(src)

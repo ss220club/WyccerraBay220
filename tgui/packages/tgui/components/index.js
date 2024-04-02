@@ -38,6 +38,7 @@ export { Section } from './Section';
 export { Slider } from './Slider';
 export { ImageButton } from './ImageButton';
 export { Stack } from './Stack';
+export { StyleableSection } from './StyleableSection';
 export { Table } from './Table';
 export { Tabs } from './Tabs';
 export { TextArea } from './TextArea';

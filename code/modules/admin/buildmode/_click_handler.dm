@@ -61,7 +61,6 @@
 	OnClick(A, params) // We treat double-clicks as normal clicks
 
 /datum/click_handler/build_mode/OnClick(atom/A, params)
-	params = params2list(params)
 	if(A in build_buttons)
 		var/obj/bmode/build_button = A
 		build_button.OnClick(params)

@@ -66,12 +66,12 @@
 	if(!loc) return
 	var/adj = A.Adjacent(src) // Why in the fuck isn't Adjacent() commutative.
 
-	var/modifiers = params2list(params)
-	if(modifiers["shift"])
+	var/list/modifiers = params2list(params)
+	if(LAZYACCESS(modifiers, SHIFT_CLICK))
 		examinate(user, A)
 		return
 
-	if(modifiers["ctrl"])
+	if(LAZYACCESS(modifiers, CTRL_CLICK))
 		if(istype(A, /obj/item/mech_equipment))
 			for(var/hardpoint in hardpoints)
 				if(A == hardpoints[hardpoint])
@@ -408,18 +408,18 @@
 
 /mob/living/exosuit/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!getBruteLoss())
-		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
+	if(!getBruteLoss())
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	var/list/damaged_parts = list()
-	for (var/obj/item/mech_component/component in list(arms, legs, body, head))
-		if (component?.brute_damage)
+	for(var/obj/item/mech_component/component in list(arms, legs, body, head))
+		if(component?.brute_damage)
 			damaged_parts += component
 	var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "[src] - Fix Component") as null|anything in damaged_parts
-	if (!input_fix || !user.use_sanity_check(src, tool))
+	if(!input_fix || !user.use_sanity_check(src, tool))
 		return
-	if (!input_fix.brute_damage)
-		USE_FEEDBACK_FAILURE("[src]'s [input_fix.name] no longer needs repair.")
+	if(!input_fix.brute_damage)
+		balloon_alert(user, "больше не нуждается в ремонте!")
 		return
 	input_fix.repair_brute_generic(tool, user)
 

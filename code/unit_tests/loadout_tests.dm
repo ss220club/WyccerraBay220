@@ -46,7 +46,7 @@
 				var/obj/O = G.path
 				if(ispath(G.path, /obj))
 					O = new G.path()
-					if(!(O.icon_state in icon_states(O.icon)))
+					if(!ICON_HAS_STATE(O.icon, O.icon_state))
 						log_unit_test("[G] - [G.path]: Did not find the icon state '[O.icon_state]' in the icon '[O.icon]'.")
 						failed = TRUE
 					qdel(O)
@@ -101,8 +101,7 @@
 
 /proc/type_has_valid_icon_state(atom/type)
 	var/atom/A = type
-	return (initial(A.icon_state) in icon_states(initial(A.icon)))
-
+	return ICON_HAS_STATE(initial(A.icon), initial(A.icon_state))
 
 /datum/unit_test/loadout_custom_setup_tweaks_shall_have_valid_procs
 	name = "LOADOUT: Custom setup tweaks shall have valid procs"

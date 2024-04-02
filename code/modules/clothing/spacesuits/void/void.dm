@@ -108,10 +108,10 @@ else if(##equipment_var) {\
 	. = ..()
 	var/list/part_list = new
 	for(var/obj/item/I in list(helmet,boots,tank))
-		part_list += "\a [I]"
-	to_chat(user, "\The [src] has [english_list(part_list)] installed.")
+		part_list += "[I]"
+	to_chat(user, "[src] has [english_list(part_list)] installed.")
 	if(tank && distance <= 1)
-		to_chat(user, SPAN_NOTICE("The wrist-mounted pressure gauge reads [max(round(tank.air_contents.return_pressure()),0)] kPa remaining in \the [tank]."))
+		to_chat(user, SPAN_NOTICE("The wrist-mounted pressure gauge reads [max(round(tank.air_contents.return_pressure()),0)] kPa remaining in [tank]."))
 
 /obj/item/clothing/suit/space/void/refit_for_species(target_species)
 	..()
@@ -136,7 +136,7 @@ else if(##equipment_var) {\
 
 	if(helmet)
 		if(H.head)
-			to_chat(M, "You are unable to deploy your suit's helmet as \the [H.head] is in the way.")
+			to_chat(M, "You are unable to deploy your suit's helmet as [H.head] is in the way.")
 		else if (H.equip_to_slot_if_possible(helmet, slot_head))
 			to_chat(M, "Your suit's helmet deploys with a hiss.")
 			playsound(loc, helmet_deploy_sound, 30)
@@ -198,7 +198,7 @@ else if(##equipment_var) {\
 		H.drop_from_inventory(helmet, src)
 	else
 		if(H.head)
-			to_chat(H, SPAN_DANGER("You cannot deploy your helmet while wearing \the [H.head]."))
+			to_chat(H, SPAN_DANGER("You cannot deploy your helmet while wearing [H.head]."))
 			return
 		if(H.equip_to_slot_if_possible(helmet, slot_head))
 			helmet.pickup(H)
@@ -227,85 +227,86 @@ else if(##equipment_var) {\
 	if(slot != slot_wear_suit && slot != slot_l_hand && slot != slot_r_hand) return// let them eject those tanks when they're in hand or stuff for ease of use
 
 
-	to_chat(H, SPAN_INFO("You press the emergency release, ejecting \the [tank] from your suit."))
+	to_chat(H, SPAN_INFO("You press the emergency release, ejecting [tank] from your suit."))
 	tank.canremove = 1
 	H.drop_from_inventory(tank, src)
 	H.put_in_hands(tank)
 	src.tank = null
 	playsound(loc, 'sound/effects/spray3.ogg', 50)
 
+/obj/item/clothing/suit/space/void/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(user.get_inventory_slot(src) == slot_wear_suit)//maybe I should make this into a proc?
+		to_chat(user, SPAN_WARNING("You cannot modify [src] while it is being worn."))
+		return
+
+	if(helmet || boots || tank)
+		var/choice = input("What component would you like to remove?") as null|anything in list(helmet,boots,tank)
+		if(!choice)
+			return
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		if(choice == tank)	//No, a switch doesn't work here. Sorry. ~Techhead
+			to_chat(user, "You pop [tank] out of [src]'s storage compartment.")
+			user.put_in_hands(tank)
+			src.tank = null
+		else if(choice == helmet)
+			to_chat(user, "You detatch [helmet] from [src]'s helmet mount.")
+			user.put_in_hands(helmet)
+			src.helmet = null
+		else if(choice == boots)
+			to_chat(user, "You detatch [boots] from [src]'s boot mounts.")
+			user.put_in_hands(boots)
+			src.boots = null
+	else
+		to_chat(user, "[src] does not have anything installed.")
+
 /obj/item/clothing/suit/space/void/attackby(obj/item/W as obj, mob/user as mob)
-
-	if(!istype(user,/mob/living)) return
-
+	if(!istype(user,/mob/living))
+		return
 	if(istype(W,/obj/item/clothing/accessory) || istype(W, /obj/item/hand_labeler))
 		return ..()
 
-	if (isScrewdriver(W))
-		if(user.get_inventory_slot(src) == slot_wear_suit)//maybe I should make this into a proc?
-			to_chat(user, SPAN_WARNING("You cannot modify \the [src] while it is being worn."))
-			return
-
-		if(helmet || boots || tank)
-			var/choice = input("What component would you like to remove?") as null|anything in list(helmet,boots,tank)
-			if(!choice) return
-
-			playsound(loc, 'sound/items/Screwdriver.ogg', 50)
-			if(choice == tank)	//No, a switch doesn't work here. Sorry. ~Techhead
-				to_chat(user, "You pop \the [tank] out of \the [src]'s storage compartment.")
-				user.put_in_hands(tank)
-				src.tank = null
-			else if(choice == helmet)
-				to_chat(user, "You detatch \the [helmet] from \the [src]'s helmet mount.")
-				user.put_in_hands(helmet)
-				src.helmet = null
-			else if(choice == boots)
-				to_chat(user, "You detatch \the [boots] from \the [src]'s boot mounts.")
-				user.put_in_hands(boots)
-				src.boots = null
-		else
-			to_chat(user, "\The [src] does not have anything installed.")
-		return
-	else if(istype(W,/obj/item/clothing/head/helmet/space))
+	if(istype(W,/obj/item/clothing/head/helmet/space))
 		if(user.get_inventory_slot(src) == slot_wear_suit)
-			to_chat(user, SPAN_WARNING("You cannot modify \the [src] while it is being worn."))
+			to_chat(user, SPAN_WARNING("You cannot modify [src] while it is being worn."))
 			return
 		if(helmet)
-			to_chat(user, "\The [src] already has a helmet installed.")
+			to_chat(user, "[src] already has a helmet installed.")
 		else
 			if(!user.unEquip(W, src))
 				return
-			to_chat(user, "You attach \the [W] to \the [src]'s helmet mount.")
+			to_chat(user, "You attach [W] to [src]'s helmet mount.")
 			src.helmet = W
 			playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		return
 	else if(istype(W,/obj/item/clothing/shoes/magboots))
 		if(user.get_inventory_slot(src) == slot_wear_suit)
-			to_chat(user, SPAN_WARNING("You cannot modify \the [src] while it is being worn."))
+			to_chat(user, SPAN_WARNING("You cannot modify [src] while it is being worn."))
 			return
 		if(boots)
-			to_chat(user, "\The [src] already has magboots installed.")
+			to_chat(user, "[src] already has magboots installed.")
 		else
 			if(!user.unEquip(W, src))
 				return
-			to_chat(user, "You attach \the [W] to \the [src]'s boot mounts.")
+			to_chat(user, "You attach [W] to [src]'s boot mounts.")
 			boots = W
 			playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		return
 	else if(istype(W,/obj/item/tank))
 		if(user.get_inventory_slot(src) == slot_wear_suit)
-			to_chat(user, SPAN_WARNING("You cannot modify \the [src] while it is being worn."))
+			to_chat(user, SPAN_WARNING("You cannot modify [src] while it is being worn."))
 			return
 		if(tank)
-			to_chat(user, "\The [src] already has an airtank installed.")
+			to_chat(user, "[src] already has an airtank installed.")
 			return
 		if (istype(W, /obj/item/tank/scrubber))
-			to_chat(user, SPAN_WARNING("\The [W] is far too large to attach to \the [src]."))
+			to_chat(user, SPAN_WARNING("[W] is far too large to attach to [src]."))
 			return
 		else
 			if(!user.unEquip(W, src))
 				return
-			to_chat(user, "You insert \the [W] into \the [src]'s storage compartment.")
+			to_chat(user, "You insert [W] into [src]'s storage compartment.")
 			tank = W
 			playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		return

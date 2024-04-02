@@ -3,7 +3,7 @@
 
 /singleton/turf_selection/line/get_turfs(atom/origin, range)
 	. = list()
-	var/center = get_turf(origin)
+	var/turf/center = get_turf(origin)
 	if(!center)
 		return
 	for(var/i = 0 to range)
@@ -13,9 +13,8 @@
 		. += center
 
 /singleton/turf_selection/square/get_turfs(atom/origin, range)
-	. = list()
-	var/center = get_turf(origin)
+	var/turf/center = get_turf(origin)
 	if(!center)
-		return
-	for(var/turf/T in trange(range, center))
-		. += T
+		return list()
+
+	return RANGE_TURFS(center, range)

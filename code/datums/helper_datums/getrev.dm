@@ -11,26 +11,8 @@ var/global/datum/getrev/revdata = new()
 	if(length(head_branch))
 		branch = copytext(head_branch[1], 17)
 
-	// [SIERRA-REMOVE] - RUST_G
-	/*
-	var/list/head_log = file2list(".git/logs/HEAD", "\n")
-	for(var/line=length(head_log), line>=1, line--)
-		if(head_log[line])
-			var/list/last_entry = splittext(head_log[line], " ")
-			if(length(last_entry) < 2)	continue
-			revision = last_entry[2]
-			// Get date/time
-			if(length(last_entry) >= 5)
-				var/unix_time = text2num(last_entry[5])
-				if(unix_time)
-					date = unix2date(unix_time)
-			break
-	*/
-	// [/SIERRA-REMOVE]
-	// [SIERRA-ADD] - RUST_G
 	revision = rustg_git_revparse("HEAD")
 	date = rustg_git_commit_date("HEAD")
-	// [/SIERRA-ADD]
 
 	to_world_log("Running revision:")
 	to_world_log(branch)

@@ -77,14 +77,15 @@ $bg-map: colors.$bg-map !default;
   }
 }
 
-.Button--hasContent.Button--iconRight {
+.Button--hasContent.Button--iconPosition--right {
   .fa,
   .fas,
   .far {
-    margin-right: 0;
-    margin-left: 0.25em;
+    margin-right: 0px;
+    margin-left: 3px;
   }
 }
+
 .Button--ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;

@@ -51,11 +51,12 @@
 	if(charge > max_charge)
 		charge = max_charge
 
-/obj/item/stock_parts/capacitor/proc/use(amount)
+/obj/item/stock_parts/capacitor/use(amount)
 	if(charge)
 		charge -= amount
 		if(charge < 0)
 			charge = 0
+		return TRUE
 
 //Rank 2
 

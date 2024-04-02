@@ -46,6 +46,16 @@
 			to_chat(user, "There is no cell in \the [src].")
 	to_chat(user, "The internal capacitor currently has [round(currently_stored_power/max_stored_power * 100)]% charge.")
 
+/obj/item/device/personal_shield/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
+		SPAN_NOTICE("You [open ? "open" : "close"] \the [src]'s panel with \the [tool].")
+	)
 
 /obj/item/device/personal_shield/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Power Cell - Install cell
@@ -68,19 +78,7 @@
 		)
 		return TRUE
 
-	// Screwdriver - Toggle panel
-	if (isScrewdriver(tool))
-		open = !open
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
-			SPAN_NOTICE("You [open ? "open" : "close"] \the [src]'s panel with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
+	. = ..()
 
 /obj/item/device/personal_shield/attack_self(mob/living/user)
 	if (open && power_cell)

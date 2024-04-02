@@ -120,9 +120,8 @@
 /singleton/surgery_step/hardsuit/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
 		return FALSE
-	if(isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if(!welder.remove_fuel(1,user))
+	if(tool.tool_behaviour == TOOL_WELDER)
+		if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return FALSE
 	return (target_zone == BP_CHEST) && istype(target.back, /obj/item/rig) && !(target.back.canremove)
 

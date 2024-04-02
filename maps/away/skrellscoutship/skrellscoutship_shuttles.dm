@@ -37,7 +37,7 @@
 
 /datum/shuttle/autodock/overmap/skrellscoutship
 	name = "Skrellian Scout"
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 	range = 1
 	current_location = "nav_skrellscout_start"
 	shuttle_area = list(
@@ -61,7 +61,7 @@
 
 /datum/shuttle/autodock/overmap/skrellscoutshuttle
 	name = "Skrellian Shuttle"
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 	current_location = "nav_skrellscoutsh_dock"
 	range = 2
 	shuttle_area = /area/ship/skrellscoutshuttle

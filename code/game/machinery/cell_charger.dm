@@ -34,6 +34,15 @@
 	..()
 	set_power()
 
+/obj/machinery/cell_charger/wrench_act(mob/living/user, obj/item/tool)
+	if(MACHINE_IS_BROKEN(src))
+		USE_FEEDBACK_FAILURE("[src] is broken!")
+		return ITEM_INTERACT_BLOCKING
+	if(charging)
+		USE_FEEDBACK_FAILURE("Remove the cell first!")
+		to_chat(user, SPAN_WARNING("Remove the cell first!"))
+		return ITEM_INTERACT_SUCCESS
+
 /obj/machinery/cell_charger/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(MACHINE_IS_BROKEN(src))
 		return TRUE
@@ -56,12 +65,6 @@
 		chargelevel = -1
 		queue_icon_update()
 		return TRUE
-
-	//Anchoring is handled by obj/use_tool() if OBJ_ANCHORABLE flag is set.
-	if (isWrench(W))
-		if(charging)
-			to_chat(user, SPAN_WARNING("Remove the cell first!"))
-			return TRUE
 
 	return ..()
 

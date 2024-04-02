@@ -18,13 +18,10 @@
 	var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
 	return fusion.get_local_network()
 
-/obj/machinery/computer/fusion/use_tool(obj/item/thing, mob/living/user, list/click_params)
-	if(isMultitool(thing))
-		var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
-		fusion.get_new_tag(user)
-		return TRUE
-
-	return ..()
+/obj/machinery/computer/fusion/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
+	fusion.get_new_tag(user)
 
 /obj/machinery/computer/fusion/interface_interact(mob/user)
 	ui_interact(user)

@@ -31,29 +31,30 @@
 			return FALSE
 	return TRUE
 
+/obj/item/robot_parts/robot_suit/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!length(parts))
+		to_chat(user, SPAN_WARNING("[src] has no parts to remove."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/removing = pick(parts)
+	var/obj/item/robot_parts/part = parts[removing]
+	part.forceMove(get_turf(src))
+	user.put_in_hands(part)
+	parts -= removing
+	to_chat(user, SPAN_WARNING("You lever [part] off [src]."))
+	update_icon()
+
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
-
-	// Uninstall a robotic part.
-	if(isCrowbar(W))
-		if(!length(parts))
-			to_chat(user, SPAN_WARNING("\The [src] has no parts to remove."))
-			return
-		var/removing = pick(parts)
-		var/obj/item/robot_parts/part = parts[removing]
-		part.forceMove(get_turf(src))
-		user.put_in_hands(part)
-		parts -= removing
-		to_chat(user, SPAN_WARNING("You lever \the [part] off \the [src]."))
-		update_icon()
-
 	// Install a robotic part.
-	else if (istype(W, /obj/item/robot_parts))
+	if (istype(W, /obj/item/robot_parts))
 		var/obj/item/robot_parts/part = W
 		if(!required_parts[part.bp_tag] || !istype(W, required_parts[part.bp_tag]))
-			to_chat(user, SPAN_WARNING("\The [src] is not compatible with \the [W]."))
+			to_chat(user, SPAN_WARNING("[src] is not compatible with [W]."))
 			return
 		if(parts[part.bp_tag])
-			to_chat(user, SPAN_WARNING("\The [src] already has \a [W] installed."))
+			to_chat(user, SPAN_WARNING("[src] already has [W] installed."))
 			return
 		if(part.can_install(user) && user.unEquip(W, src))
 			parts[part.bp_tag] = part
@@ -63,7 +64,7 @@
 	else if(istype(W, /obj/item/device/mmi) || istype(W, /obj/item/organ/internal/posibrain))
 
 		if(!istype(loc,/turf))
-			to_chat(user, SPAN_WARNING("You can't put \the [W] in without the frame being on the ground."))
+			to_chat(user, SPAN_WARNING("You can't put [W] in without the frame being on the ground."))
 			return
 
 		if(!check_completion())
@@ -83,7 +84,7 @@
 			return
 
 		if(jobban_isbanned(B, "Robot"))
-			to_chat(user, SPAN_WARNING("\The [W] does not seem to fit."))
+			to_chat(user, SPAN_WARNING("[W] does not seem to fit."))
 			return
 
 		if(B.stat == DEAD)
@@ -100,7 +101,7 @@
 			else
 				ghost_can_reenter = 1
 		if(!ghost_can_reenter)
-			to_chat(user, SPAN_WARNING("\The [W] is completely unresponsive; there's no point."))
+			to_chat(user, SPAN_WARNING("[W] is completely unresponsive; there's no point."))
 			return
 
 		if(!user.unEquip(W))

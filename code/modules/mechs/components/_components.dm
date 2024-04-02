@@ -48,7 +48,7 @@
 
 /obj/item/mech_component/proc/install_component(obj/item/thing, mob/user)
 	if(user.unEquip(thing, src))
-		user.visible_message(SPAN_NOTICE("\The [user] installs \the [thing] in \the [src]."))
+		user.visible_message(SPAN_NOTICE("[user] installs [thing] in [src]."))
 		return 1
 
 /obj/item/mech_component/proc/update_health()
@@ -93,34 +93,38 @@
 		qdel(RC)
 		update_components()
 
+/obj/item/mech_component/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!length(contents))
+		to_chat(user, SPAN_WARNING("There is nothing to remove."))
+		return
+	//Filter non movables
+	var/list/valid_contents = list()
+	for(var/atom/movable/A in contents)
+		if(!A.anchored)
+			valid_contents += A
+	if(!length(valid_contents))
+		return
+	var/obj/item/removed = pick(valid_contents)
+	if(!(removed in contents))
+		return
+	if(!tool.use_as_tool(src, user, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(SPAN_NOTICE("[user] removes [removed] from [src]."))
+	removed.forceMove(user.loc)
+	playsound(user.loc, 'sound/effects/pop.ogg', 50, 0)
+	update_components()
+
+/obj/item/mech_component/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	repair_brute_generic(tool, user)
+
 /obj/item/mech_component/attackby(obj/item/thing, mob/user)
-	if(isScrewdriver(thing))
-		if(length(contents))
-			//Filter non movables
-			var/list/valid_contents = list()
-			for(var/atom/movable/A in contents)
-				if(!A.anchored)
-					valid_contents += A
-			if(!length(valid_contents))
-				return
-			var/obj/item/removed = pick(valid_contents)
-			if(!(removed in contents))
-				return
-			user.visible_message(SPAN_NOTICE("\The [user] removes \the [removed] from \the [src]."))
-			removed.forceMove(user.loc)
-			playsound(user.loc, 'sound/effects/pop.ogg', 50, 0)
-			update_components()
-		else
-			to_chat(user, SPAN_WARNING("There is nothing to remove."))
-		return
-	if(isWelder(thing))
-		repair_brute_generic(thing, user)
-		return
 	if(isCoil(thing))
 		repair_burn_generic(thing, user)
 		return
 	if(istype(thing, /obj/item/device/robotanalyzer))
-		to_chat(user, SPAN_NOTICE("Diagnostic Report for \the [src]:"))
+		to_chat(user, SPAN_NOTICE("Diagnostic Report for [src]:"))
 		return_diagnostics(user)
 		return
 
@@ -129,31 +133,25 @@
 /obj/item/mech_component/proc/update_components()
 	return
 
-/obj/item/mech_component/proc/repair_brute_generic(obj/item/weldingtool/WT, mob/user)
-	if(!istype(WT))
-		return
+/obj/item/mech_component/proc/repair_brute_generic(obj/item/tool, mob/user)
 	if(!brute_damage)
-		to_chat(user, SPAN_NOTICE("You inspect \the [src] but find nothing to weld."))
+		balloon_alert(user, "нет физических повреждений!")
 		return
-	if(!WT.isOn())
-		to_chat(user, SPAN_WARNING("Turn \the [WT] on, first."))
+	var/amount = (SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION)
+	if(!tool.tool_start_check(user, amount))
 		return
-	if(WT.can_use((SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION), user))
-		user.visible_message(
-			SPAN_NOTICE("\The [user] begins welding the damage on \the [src]..."),
-			SPAN_NOTICE("You begin welding the damage on \the [src]...")
-		)
-		var/repair_value = 10 * max(user.get_skill_value(SKILL_CONSTRUCTION), user.get_skill_value(SKILL_DEVICES))
-		if(user.do_skilled(1 SECOND, SKILL_DEVICES , src, 0.6) && brute_damage && WT.remove_fuel((SKILL_MAX + 1) - user.get_skill_value(SKILL_CONSTRUCTION), user))
-			repair_brute_damage(repair_value)
-			to_chat(user, SPAN_NOTICE("You mend the damage to \the [src]."))
-			playsound(user.loc, 'sound/items/Welder.ogg', 25, 1)
+	USE_FEEDBACK_REPAIR_START(user)
+	if(!tool.use_as_tool(src, user, 1 SECONDS, amount, 50, SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !brute_damage)
+		return
+	var/repair_value = 10 * max(user.get_skill_value(SKILL_CONSTRUCTION), user.get_skill_value(SKILL_DEVICES))
+	repair_brute_damage(repair_value)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/item/mech_component/proc/repair_burn_generic(obj/item/stack/cable_coil/CC, mob/user)
 	if(!istype(CC))
 		return
 	if(!burn_damage)
-		to_chat(user, SPAN_NOTICE("\The [src]'s wiring doesn't need replacing."))
+		to_chat(user, SPAN_NOTICE("[src]'s wiring doesn't need replacing."))
 		return
 
 	var/needed_amount = 6 - user.get_skill_value(SKILL_ELECTRICAL)
@@ -161,14 +159,14 @@
 		to_chat(user, SPAN_WARNING("You need at least [needed_amount] unit\s of cable to repair this section."))
 		return
 
-	user.visible_message("\The [user] begins replacing the wiring of \the [src]...")
+	user.visible_message("[user] begins replacing the wiring of [src]...")
 
 	if(user.do_skilled(1 SECOND, SKILL_DEVICES , src, 0.6) && burn_damage)
 		if(QDELETED(CC) || QDELETED(src) || !CC.use(needed_amount))
 			return
 
 		repair_burn_damage(25)
-		to_chat(user, SPAN_NOTICE("You mend the damage to \the [src]'s wiring."))
+		to_chat(user, SPAN_NOTICE("You mend the damage to [src]'s wiring."))
 		playsound(user.loc, 'sound/items/Deconstruct.ogg', 25, 1)
 	return
 

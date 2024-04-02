@@ -12,7 +12,7 @@
 
 /obj/structure/mech_wreckage/New(newloc, mob/living/exosuit/exosuit, gibbed)
 	if(exosuit)
-		name = "wreckage of \the [exosuit.name]"
+		name = "wreckage of [exosuit.name]"
 		if(!gibbed)
 			for(var/obj/item/thing in list(exosuit.arms, exosuit.legs, exosuit.head, exosuit.body))
 				if(thing && prob(40))
@@ -40,50 +40,56 @@
 		if(istype(thing))
 			thing.forceMove(get_turf(user))
 			user.put_in_hands(thing)
-			to_chat(user, "You retrieve \the [thing] from \the [src].")
+			to_chat(user, "You retrieve [thing] from [src].")
 			return
 	return ..()
 
 
 /obj/structure/mech_wreckage/on_death()
 	. = ..()
-	visible_message(SPAN_WARNING("\The [src] breaks apart!"))
+	visible_message(SPAN_WARNING("[src] breaks apart!"))
 	new /obj/item/stack/material/steel(loc, rand(1, 3))
 	qdel_self()
 
+/obj/structure/mech_wreckage/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!prepared)
+		USE_FEEDBACK_FAILURE("[src] is too solid to dismantle. Try cutting through it first.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/stack/material/steel(loc, rand(5, 10))
+	user.visible_message(
+		SPAN_NOTICE("[user] finishes dismantling [src] with [tool]."),
+		SPAN_NOTICE("You finish dismantling [src] with [tool].")
+	)
+	qdel(src)
+
+/obj/structure/mech_wreckage/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(prepared)
+		balloon_alert(user, "структура уже ослаблена!")
+		return
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	prepared = TRUE
+	balloon_alert_to_viewers("структура ослаблена!")
 
 /obj/structure/mech_wreckage/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Welding Tool, Plasma Cutter - Cut through wreckage
-	if (istype(tool, /obj/item/gun/energy/plasmacutter) || isWelder(tool))
-		if (prepared)
-			USE_FEEDBACK_FAILURE("\The [src] has already been weakened.")
+	if(istype(tool, /obj/item/gun/energy/plasmacutter))
+		if(prepared)
+			USE_FEEDBACK_FAILURE("[src] has already been weakened.")
 			return TRUE
-		if (isWelder(tool))
-			var/obj/item/weldingtool/welder = tool
-			if (!welder.remove_fuel(1, user))
-				return TRUE
-		else if (istype(tool, /obj/item/gun/energy/plasmacutter))
+		if(istype(tool, /obj/item/gun/energy/plasmacutter))
 			var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-			if (!plasmacutter.slice(user))
+			if(!plasmacutter.slice(user))
 				return TRUE
 		prepared = TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] partially cuts through \the [src] with \a [tool]."),
-			SPAN_NOTICE("You partially cut through \the [src] with \a [tool].")
+			SPAN_NOTICE("[user] partially cuts through [src] with [tool]."),
+			SPAN_NOTICE("You partially cut through [src] with [tool].")
 		)
-		return TRUE
-
-	// Wrench - Finish dismantling
-	if (isWrench(tool))
-		if (!prepared)
-			USE_FEEDBACK_FAILURE("\The [src] is too solid to dismantle. Try cutting through it first.")
-			return TRUE
-		new /obj/item/stack/material/steel(loc, rand(5, 10))
-		user.visible_message(
-			SPAN_NOTICE("\The [user] finishes dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You finish dismantling \the [src] with \a [tool].")
-		)
-		qdel_self()
 		return TRUE
 
 	return ..()

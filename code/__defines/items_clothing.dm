@@ -35,6 +35,8 @@
 #define ACCESSORY_SLOT_ARMOR_M  "Misc armor"
 #define ACCESSORY_SLOT_HELM_C	"Helmet cover"
 #define ACCESSORY_SLOT_HELM_D   "Helmet decor"
+#define ACCESSORY_SLOT_OVER     "Over"
+
 
 
 #define ACCESSORY_REMOVABLE FLAG(0)
@@ -277,3 +279,13 @@ GLOBAL_LIST_INIT(default_onmob_icons, list(
 	slot_s_store_str = 'icons/mob/onmob/onmob_belt_mirror.dmi',\
 	slot_tie_str = 'icons/mob/onmob/onmob_accessories.dmi'\
 ))
+
+// Rolldown status defines for `/obj/item/clothing/under`
+
+#define UNDER_ROLLDOWN_STATUS_CANT_BE_ROLLED -1
+#define UNDER_ROLLDOWN_STATUS_UNROLLED 0
+#define UNDER_ROLLDOWN_STATUS_ROLLED 1
+
+#define SLEEVES_ROLLDOWN_STATUS_CANT_BE_ROLLED -1
+#define SLEEVES_ROLLDOWN_STATUS_UNROLLED 0
+#define SLEEVES_ROLLDOWN_STATUS_ROLLED 1

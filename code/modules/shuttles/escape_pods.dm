@@ -4,15 +4,15 @@ var/global/list/escape_pods_by_name = list()
 /datum/shuttle/autodock/ferry/escape_pod
 	var/datum/computer/file/embedded_program/docking/simple/escape_pod_berth/arming_controller
 	category = /datum/shuttle/autodock/ferry/escape_pod
-	move_time = 100
+	move_time = 10 SECONDS
 
 /datum/shuttle/autodock/ferry/escape_pod/New()
 	if(name in escape_pods_by_name)
 		CRASH("An escape pod with the name '[name]' has already been defined.")
-	move_time = evacuation_controller.evac_transit_delay + rand(-30, 60)
+	move_time = evacuation_controller.evac_transit_delay + rand(-30, 60) SECONDS
 	escape_pods_by_name[name] = src
 	escape_pods += src
-	move_time = round(evacuation_controller.evac_transit_delay/10)
+	move_time = round(evacuation_controller.evac_transit_delay / 10) SECONDS
 
 	..()
 

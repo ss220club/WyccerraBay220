@@ -27,6 +27,8 @@
 	var/operating = DOOR_OPERATING_NO
 	/// Boolean. Whether or not the door will automatically close.
 	var/autoclose = FALSE
+	/// Hash of autoclosing timer. Gets written by close_with_delay() proc. Bloody murderer of close_door_at
+	var/autoclose_timer_hash
 	/// Boolean. Whether or not the door is considered a glass door.
 	var/glass = FALSE
 	/// Boolean. Whether or not the door waits before closing. Generally tied to the timing wire.
@@ -39,8 +41,6 @@
 	var/obj/item/stack/material/repairing
 	/// Boolean. If set, air zones cannot merge across the door even when it is opened.
 	var/block_air_zones = TRUE
-	/// Integer. The world.time to automatically close the door, if possible. TODO: Replace with timers.
-	var/close_door_at = 0
 	/// List. Directions the door has wall connections in.
 	var/list/connections = list("0", "0", "0", "0")
 	/// List. Objects to blend sprite connections with.
@@ -83,6 +83,9 @@
 
 	update_nearby_tiles(need_rebuild=1)
 
+	RegisterSignal(src, COMSIG_ATOM_TOOL_ACT(TOOL_WELDER), PROC_REF(weld_to_fix))
+	RegisterSignal(src, COMSIG_ATOM_TOOL_ACT(TOOL_CROWBAR), PROC_REF(remove_repairing))
+
 	if(autoset_access)
 #ifdef UNIT_TEST
 		if(length(req_access))
@@ -98,14 +101,6 @@
 	set_density(0)
 	update_nearby_tiles()
 	. = ..()
-
-/obj/machinery/door/Process()
-	if(close_door_at && world.time >= close_door_at)
-		if(autoclose)
-			close_door_at = next_close_time()
-			close()
-		else
-			close_door_at = 0
 
 /obj/machinery/door/proc/can_open()
 	if(!density || operating)
@@ -168,7 +163,7 @@
 /obj/machinery/door/attack_hand(mob/user)
 	if (MUTATION_FERAL in user.mutations)
 		if ((!is_powered() || MACHINE_IS_BROKEN(src)) && density)
-			visible_message(SPAN_DANGER("\The [user] manages to pry \the [src] open!"))
+			visible_message(SPAN_DANGER("[user] manages to pry [src] open!"))
 			return open(TRUE)
 
 	if ((. = ..()))
@@ -187,16 +182,50 @@
 		update_icon()
 		return TRUE
 
+/obj/machinery/door/crowbar_act(mob/living/user, obj/item/tool)
+	. = ..() // see COMSIG_ATOM_TOOL_ACT signal //TODO220: make it a component
+
+/obj/machinery/door/proc/remove_repairing(obj/machinery/door/door, mob/living/user, obj/item/tool)
+	if(!repairing)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT) || !repairing)
+		return
+	to_chat(user, SPAN_NOTICE("You remove [repairing]."))
+	repairing.dropInto(user.loc)
+	repairing = null
+
+/obj/machinery/door/welder_act(mob/living/user, obj/item/tool)
+	. = ..() // see COMSIG_ATOM_TOOL_ACT signal //TODO220: make it a component
+
+/obj/machinery/door/proc/weld_to_fix(obj/machinery/door/door, mob/living/user, obj/item/tool)
+	if(!repairing)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!density)
+		balloon_alert(user, "нужно закрыть!")
+		return
+	if(!tool.tool_start_check(user, 2))
+		return
+	USE_FEEDBACK_REPAIR_START(user)
+	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing || !density)
+		return
+	USE_FEEDBACK_REPAIR_FINISH(user)
+	restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
+	update_icon()
+	qdel(repairing)
+	repairing = null
+
 /obj/machinery/door/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(istype(I, /obj/item/stack/material) && I.get_material_name() == get_material_name())
 		if(MACHINE_IS_BROKEN(src))
-			to_chat(user, SPAN_NOTICE("It looks like \the [src] is pretty busted. It's going to need more than just patching up now."))
+			to_chat(user, SPAN_NOTICE("It looks like [src] is pretty busted. It's going to need more than just patching up now."))
 			return TRUE
 		if (!get_damage_value())
 			to_chat(user, SPAN_NOTICE("Nothing to fix!"))
 			return TRUE
 		if(!density)
-			to_chat(user, SPAN_WARNING("\The [src] must be closed before you can repair it."))
+			to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
 			return TRUE
 
 		//figure out how much metal we need
@@ -208,7 +237,7 @@
 		if (repairing)
 			transfer = stack.transfer_to(repairing, amount_needed - repairing.amount)
 			if (!transfer)
-				to_chat(user, SPAN_WARNING("You must weld or remove \the [repairing] from \the [src] before you can add anything else."))
+				to_chat(user, SPAN_WARNING("You must weld or remove [repairing] from [src] before you can add anything else."))
 				return TRUE
 		else
 			repairing = stack.split(amount_needed)
@@ -217,35 +246,8 @@
 				transfer = repairing.amount
 
 		if (transfer)
-			to_chat(user, SPAN_NOTICE("You fit [stack.get_exact_name(transfer)] to damaged and broken parts on \the [src]."))
+			to_chat(user, SPAN_NOTICE("You fit [stack.get_exact_name(transfer)] to damaged and broken parts on [src]."))
 
-		return TRUE
-
-	if(repairing && isWelder(I))
-		if(!density)
-			to_chat(user, SPAN_WARNING("\The [src] must be closed before you can repair it."))
-			return TRUE
-
-		var/obj/item/weldingtool/welder = I
-		if(welder.can_use(2, user))
-			to_chat(user, SPAN_NOTICE("You start to fix dents and weld \the [repairing] into place."))
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			if(do_after(user, (0.5 * repairing.amount) SECONDS, src, DO_REPAIR_CONSTRUCT) && welder.remove_fuel(2, user))
-				if (!repairing)
-					return TRUE//the materials in the door have been removed before welding was finished.
-
-				to_chat(user, SPAN_NOTICE("You finish repairing the damage to \the [src]."))
-				restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
-				update_icon()
-				qdel(repairing)
-				repairing = null
-		return TRUE
-
-	if(repairing && isCrowbar(I))
-		to_chat(user, SPAN_NOTICE("You remove \the [repairing]."))
-		playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
-		repairing.dropInto(user.loc)
-		repairing = null
 		return TRUE
 
 	if (!operating)
@@ -284,13 +286,13 @@
 /obj/machinery/door/examine(mob/user)
 	. = ..()
 	if (emagged && ishuman(user) && user.skill_check(SKILL_COMPUTER, SKILL_TRAINED))
-		to_chat(user, SPAN_WARNING("\The [src]'s control panel looks fried."))
+		to_chat(user, SPAN_WARNING("[src]'s control panel looks fried."))
 
 
 /obj/machinery/door/set_broken(new_state)
 	. = ..()
 	if(. && new_state)
-		visible_message(SPAN_WARNING("\The [src.name] breaks!"))
+		visible_message(SPAN_WARNING("[src.name] breaks!"))
 
 
 /obj/machinery/door/on_update_icon()
@@ -358,13 +360,18 @@
 		set_fillers_opacity(0)
 	operating = DOOR_OPERATING_NO
 
+
 	if(autoclose)
-		close_door_at = next_close_time()
+		close_with_delay(close_delay())
 
 	return 1
 
-/obj/machinery/door/proc/next_close_time()
-	return world.time + (normalspeed ? 150 : 5)
+/obj/machinery/door/proc/close_with_delay(delay)
+	deltimer(autoclose_timer_hash)
+	autoclose_timer_hash = addtimer(CALLBACK(src, PROC_REF(close)), delay, TIMER_OVERRIDE | TIMER_UNIQUE)
+
+/obj/machinery/door/proc/close_delay()
+	return normalspeed ? 15 SECONDS : 0.5 SECONDS
 
 /obj/machinery/door/proc/close(forced = 0)
 	set waitfor = FALSE
@@ -372,7 +379,6 @@
 		return
 	operating = DOOR_OPERATING_YES
 
-	close_door_at = 0
 	do_animate("closing")
 	src.set_density(1)
 	if(width > 1)

@@ -58,7 +58,7 @@ module.exports = (env = {}, argv) => {
     module: {
       rules: [
         {
-          test: /\.(js|cjs|ts|tsx)$/,
+          test: /\.(js(x)?|cjs|ts(x)?)$/,
           use: [
             {
               loader: require.resolve('babel-loader'),

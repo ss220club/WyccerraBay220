@@ -23,13 +23,14 @@
 	to_chat(user, SPAN_NOTICE("Color set to <span style='color:[selected_color]'>[selected_color]</span>."))
 
 
-/datum/build_mode/paint/OnClick(atom/A, list/parameters)
+/datum/build_mode/paint/OnClick(atom/A, params)
 	var/result
-	if (parameters["left"])
-		if (parameters["shift"])
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, LEFT_CLICK))
+		if (LAZYACCESS(modifiers, SHIFT_CLICK))
 			result = clear_color(A)
 
-		else if (parameters["ctrl"])
+		else if (LAZYACCESS(modifiers, CTRL_CLICK))
 			result = clone_color(A)
 			if (!result)
 				to_chat(user, SPAN_NOTICE("Selected paint mode color is now <span style='color:[selected_color]'>[selected_color]</span>."))
@@ -38,7 +39,7 @@
 		else
 			result = set_color(A)
 
-	else if (parameters["right"])
+	else if (LAZYACCESS(modifiers, RIGHT_CLICK))
 		result = clear_color(A)
 
 	if (result)

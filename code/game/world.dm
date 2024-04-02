@@ -138,17 +138,10 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 	* * * * * * * */
 
 	if (T == "ping")
-		var/x = 1
-		for (var/client/C)
-			x++
-		return x
+		return length(GLOB.clients)
 
 	else if(T == "players")
-		var/n = 0
-		for(var/mob/M in GLOB.player_list)
-			if(M.client)
-				n++
-		return n
+		return length(GLOB.player_list)
 
 	else if (copytext(T,1,7) == "status")
 		var/input[] = params2list(T)

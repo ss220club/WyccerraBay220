@@ -99,15 +99,19 @@ var/global/const/FALLOFF_SOUNDS = 0.5
 
 	S.volume *= get_sound_volume_multiplier()
 
-	var/turf/T = get_turf(src)
+	var/turf/mob_turf = get_turf(src)
+	if(!mob_turf)
+		stack_trace("Mob is in null space, it seems")
+		return
+
 	// 3D sounds, the technology is here!
 	if(isturf(turf_source))
 		//sound volume falloff with distance
-		var/distance = get_dist(T, turf_source)
+		var/distance = get_dist(mob_turf, turf_source)
 
 		S.volume -= max(distance - (world.view + extrarange), 0) * 2 //multiplicative falloff to add on top of natural audio falloff.
 
-		var/datum/gas_mixture/hearer_env = T.return_air()
+		var/datum/gas_mixture/hearer_env = mob_turf.return_air()
 		var/datum/gas_mixture/source_env = turf_source.return_air()
 
 		if (hearer_env && source_env)
@@ -126,9 +130,9 @@ var/global/const/FALLOFF_SOUNDS = 0.5
 		if (S.volume <= 0)
 			return	//no volume means no sound
 
-		var/dx = turf_source.x - T.x // Hearing from the right/left
+		var/dx = turf_source.x - mob_turf.x // Hearing from the right/left
 		S.x = dx
-		var/dz = turf_source.y - T.y // Hearing from infront/behind
+		var/dz = turf_source.y - mob_turf.y // Hearing from infront/behind
 		S.z = dz
 		// The y value is for above your head, but there is no ceiling in 2d spessmens.
 		S.y = 1
@@ -148,7 +152,7 @@ var/global/const/FALLOFF_SOUNDS = 0.5
 				S.environment = DIZZY
 			else if (M.stat == UNCONSCIOUS)
 				S.environment = UNDERWATER
-			else if (T?.is_flooded(M.lying))
+			else if (mob_turf?.is_flooded(M.lying))
 				S.environment = UNDERWATER
 			else if (pressure_factor < 0.5)
 				S.environment = SPACE

@@ -30,10 +30,11 @@
 			if(input)
 				light_color = input
 
-/datum/build_mode/light_maker/OnClick(atom/A, list/parameters)
-	if(parameters["left"])
+/datum/build_mode/light_maker/OnClick(atom/A, params)
+	var/list/modifiers = params2list(params)
+	if(LAZYACCESS(modifiers, LEFT_CLICK))
 		if(A)
 			A.set_light(light_range, light_power, l_color = light_color)
-	if(parameters["right"])
+	if(LAZYACCESS(modifiers, RIGHT_CLICK))
 		if(A)
 			A.set_light(0, 0, 0, l_color = COLOR_WHITE)

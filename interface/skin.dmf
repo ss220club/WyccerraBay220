@@ -1,5 +1,12 @@
 macro "default"
-
+	elem ".winset :map.right-click=false"
+		name = "SHIFT+Shift"
+	elem "Shift"
+		name = "SHIFT"
+		command = ".winset :map.right-click=false"
+	elem "ShiftUp"
+		name = "SHIFT+UP"
+		command = ".winset :map.right-click=true"
 
 menu "menu"
 	elem
@@ -179,6 +186,7 @@ window "mapwindow"
 		zoom-mode = distort
 		on-show = ".winset\"mainwindow.mainvsplit.left=mapwindow\""
 		on-hide = ".winset\"mainwindow.mainvsplit.left=\""
+		right-click = true
 		style = ".center { text-align: center; } .maptext { font-family: 'MS Serif'; font-size: 7px; -dm-text-outline: 1px black; color: white; line-height: 1.1; } .small { font-size: 6px; } .big { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .yell { font-weight: bold; } .emote { font-size: 6px; } .italics { font-size: 6px; font-style: italic; }"
 	elem "lobbybrowser"
 		type = BROWSER
@@ -450,5 +458,34 @@ window "preference_window"
 		size = 200x800
 		anchor1 = 90,0
 		anchor2 = 100,100
-		right-click = false
+		right-click = true
+		saved-params = "zoom;letterbox;zoom-mode"
+
+window "id_card_window"
+	elem "id_card_window"
+		type = MAIN
+		pos = 291,0
+		size = 600x200
+		anchor1 = none
+		anchor2 = none
+		background-color = none
+		saved-params = "pos;size;is-minimized;is-maximized"
+		is-visible = false
+		statusbar = false
+	elem "id_card_browser"
+		type = BROWSER
+		pos = 0,0
+		size = 600x200
+		anchor1 = 0,0
+		anchor2 = 100,100
+		background-color = none
+		saved-params = ""
+	elem "id_card_map"
+		type = MAP
+		pos = 330,48
+		size = 252x128
+		anchor1 = 0,0
+		anchor2 = 100,100
+		background-color = #262626
+		right-click = true
 		saved-params = "zoom;letterbox;zoom-mode"

@@ -27,7 +27,7 @@ GLOBAL_LIST_INIT(recomended_holoplants_colors, list(COLOR_PALE_RED_GRAY,COLOR_BL
 /obj/structure/holoplant/proc/parse_icon()
 	possible_states = list()
 	emagged_states = list()
-	var/list/states = icon_states(icon)
+	var/list/states = ICON_STATES(icon)
 	for(var/i in states)
 		var/list/state_splittext = splittext(i, "-")
 		if(length(state_splittext) > 1)
@@ -87,18 +87,21 @@ GLOBAL_LIST_INIT(recomended_holoplants_colors, list(COLOR_PALE_RED_GRAY,COLOR_BL
 				change_plant(input("Select Hologram", "Hologram") in (emagged ? emagged_states : possible_states))
 		update_icon()
 
+/obj/structure/holoplant/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	enabled = !enabled
+	brightness_on = brightness_on ? 0 : initial(brightness_on)
+	to_chat(usr, SPAN_NOTICE("You switch [enabled ? "on" : "off"] the [src]"))
+	update_icon()
+
 /obj/structure/holoplant/use_tool(obj/item/tool, mob/user, list/click_params)
 	if(istype(tool, /obj/item/card/id))
 		if(!emagged)
 			emag_act()
 		else
 			rollback()
-		return TRUE
-	if(isScrewdriver(tool))
-		enabled = !enabled
-		brightness_on = brightness_on ? 0 : initial(brightness_on)
-		to_chat(usr, SPAN_NOTICE("You switch [enabled ? "on" : "off"] the [src]"))
-		update_icon()
 		return TRUE
 	return ..()
 

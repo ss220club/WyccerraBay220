@@ -63,23 +63,24 @@
 	if(T)
 		T.hotspot_expose(700,125)
 
-/obj/item/grenade/attackby(obj/item/W as obj, mob/user as mob)
-	if(isScrewdriver(W))
-		switch(det_time)
-			if (1)
-				det_time = 10
-				to_chat(user, SPAN_NOTICE("You set the [name] for 1 second detonation time."))
-			if (10)
-				det_time = 30
-				to_chat(user, SPAN_NOTICE("You set the [name] for 3 second detonation time."))
-			if (30)
-				det_time = 50
-				to_chat(user, SPAN_NOTICE("You set the [name] for 5 second detonation time."))
-			if (50)
-				det_time = 1
-				to_chat(user, SPAN_NOTICE("You set the [name] for instant detonation."))
-		add_fingerprint(user)
-	..()
+/obj/item/grenade/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	switch(det_time)
+		if(1)
+			det_time = 1 SECONDS
+			to_chat(user, SPAN_NOTICE("You set the [name] for 1 second detonation time."))
+		if(1 SECONDS)
+			det_time = 3 SECONDS
+			to_chat(user, SPAN_NOTICE("You set the [name] for 3 second detonation time."))
+		if(3 SECONDS)
+			det_time = 5 SECONDS
+			to_chat(user, SPAN_NOTICE("You set the [name] for 5 second detonation time."))
+		if(5 SECONDS)
+			det_time = 1
+			to_chat(user, SPAN_NOTICE("You set the [name] for instant detonation."))
+	add_fingerprint(user)
 
 /obj/item/grenade/attack_hand()
 	walk(src, null, null)

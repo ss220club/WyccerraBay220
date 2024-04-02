@@ -92,17 +92,17 @@ GLOBAL_LIST_INIT(cable_default_colors, list(
 		return FALSE
 	var/obj/item/organ/external/organ = target.organs_by_name[user.zone_sel.selecting]
 	if (!organ)
-		to_chat(user, SPAN_WARNING("\The [target] is missing that organ."))
+		to_chat(user, SPAN_WARNING("[target] is missing that organ."))
 		return TRUE
 	if (!BP_IS_ROBOTIC(organ))
-		to_chat(user, SPAN_WARNING("\The [target]'s [organ.name] is not robotic. \The [src] is useless."))
+		to_chat(user, SPAN_WARNING("[target]'s [organ.name] is not robotic. [src] is useless."))
 		return TRUE
 	if (BP_IS_BRITTLE(organ))
-		to_chat(user, SPAN_WARNING("\The [target]'s [organ.name] is hard and brittle - \the [src] cannot repair it."))
+		to_chat(user, SPAN_WARNING("[target]'s [organ.name] is hard and brittle - [src] cannot repair it."))
 		return TRUE
 	var/use_amount = min(amount, ceil(organ.burn_dam / 3), 5)
 	if (!can_use(use_amount))
-		to_chat(user, SPAN_WARNING("You don't have enough of \the [src] left to repair \the [target]'s [organ.name]."))
+		to_chat(user, SPAN_WARNING("You don't have enough of [src] left to repair [target]'s [organ.name]."))
 		return TRUE
 
 	if (organ.robo_repair(3 * use_amount, DAMAGE_BURN, "some damaged wiring", src, user))
@@ -120,23 +120,20 @@ GLOBAL_LIST_INIT(cable_default_colors, list(
 	UpdateItemSize()
 
 
-/obj/item/stack/cable_coil/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/item/stack/cable_coil/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Multitool - Recolor cable coil
-	if (isMultitool(tool))
-		var/new_color = input(user, "Select a color to change to:", "\The [src] - Color Change", null) as null|anything in GLOB.cable_default_colors
-		if (!new_color || !user.use_sanity_check(src, tool))
-			return TRUE
-		var/new_color_code = GLOB.cable_default_colors["[new_color]"]
-		if (get_color() == new_color_code)
-			return TRUE
-		set_color(new_color_code)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] changes \the [src]'s color with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s color to '[new_color]' with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
+	var/new_color = input(user, "Select a color to change to:", "[src] - Color Change", null) as null|anything in GLOB.cable_default_colors
+	if (!new_color || !user.use_sanity_check(src, tool))
+		return
+	var/new_color_code = GLOB.cable_default_colors["[new_color]"]
+	if (get_color() == new_color_code)
+		return
+	set_color(new_color_code)
+	user.visible_message(
+		SPAN_NOTICE("[user] changes [src]'s color with [tool]."),
+		SPAN_NOTICE("You set [src]'s color to '[new_color]' with [tool].")
+	)
 
 
 /obj/item/stack/cable_coil/proc/can_merge(obj/item/stack/cable_coil/coil)
@@ -291,13 +288,13 @@ GLOBAL_LIST_INIT(cable_default_colors, list(
 		to_chat(user, SPAN_WARNING("You need at least 15 cable to make restraints."))
 		return
 	user.visible_message(
-		SPAN_ITALIC("\The [user] begins winding some cable together."),
+		SPAN_ITALIC("[user] begins winding some cable together."),
 		SPAN_ITALIC("You begin to wind the cable into crude restraints.")
 	)
 	if (!do_after(user, 10 SECONDS, null, DO_DEFAULT | DO_PUBLIC_PROGRESS))
 		return
 	user.visible_message(
-		SPAN_ITALIC("\The [user] makes some crude cable restraints."),
+		SPAN_ITALIC("[user] makes some crude cable restraints."),
 		SPAN_NOTICE("You finish making the restraints.")
 	)
 	use(15)
@@ -363,7 +360,7 @@ GLOBAL_LIST_INIT(cable_default_colors, list(
 	if (isnull(response) || color == response)
 		return
 	set_color(response)
-	to_chat(usr, SPAN_NOTICE("You change \the [src]'s color to [lowertext(color)]."))
+	to_chat(usr, SPAN_NOTICE("You change [src]'s color to [lowertext(color)]."))
 
 
 /obj/item/stack/cable_coil/fabricator

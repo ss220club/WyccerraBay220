@@ -55,55 +55,57 @@
 *   Item Adding
 ********************/
 
+/obj/machinery/microwave/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(broken != 1)
+		return
+	user.visible_message( \
+		SPAN_NOTICE("[user] starts to fix part of the microwave."), \
+		SPAN_NOTICE("You start to fix part of the microwave.") \
+	)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message( \
+		SPAN_NOTICE("[user] fixes the microwave."), \
+		SPAN_NOTICE("You have fixed the microwave.") \
+	)
+	broken = 0 // Fix it!
+	dirtiness = 0 // just to be sure
+	update_icon()
+	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER
+
+/obj/machinery/microwave/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(broken != 2)
+		return
+	user.visible_message( \
+		SPAN_NOTICE("[user] starts to fix part of the microwave."), \
+		SPAN_NOTICE("You start to fix part of the microwave.") \
+	)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message( \
+		SPAN_NOTICE("[user] fixes part of the microwave."), \
+		SPAN_NOTICE("You have fixed part of the microwave.") \
+	)
+	broken = 1 // Fix it a bit
+
 /obj/machinery/microwave/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (broken > 0)
-		// Start repairs by using a screwdriver
-		if(broken == 2 && isScrewdriver(O))
-			user.visible_message( \
-				SPAN_NOTICE("\The [user] starts to fix part of the microwave."), \
-				SPAN_NOTICE("You start to fix part of the microwave.") \
-			)
-			if (do_after(user, (O.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				user.visible_message( \
-					SPAN_NOTICE("\The [user] fixes part of the microwave."), \
-					SPAN_NOTICE("You have fixed part of the microwave.") \
-				)
-				broken = 1 // Fix it a bit
-			return TRUE
-
-		// Finish repairs using a wrench
-		if (broken == 1 && isWrench(O))
-			user.visible_message( \
-				SPAN_NOTICE("\The [user] starts to fix part of the microwave."), \
-				SPAN_NOTICE("You start to fix part of the microwave.") \
-			)
-			if (do_after(user, (O.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-				user.visible_message( \
-					SPAN_NOTICE("\The [user] fixes the microwave."), \
-					SPAN_NOTICE("You have fixed the microwave.") \
-				)
-				broken = 0 // Fix it!
-				dirtiness = 0 // just to be sure
-				update_icon()
-				atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_OPEN_CONTAINER
-			return TRUE
-
-		// Otherwise, we can't add anything to the micrwoave
-		else
-			to_chat(user, SPAN_WARNING("It's broken, and this isn't the right way to fix it!"))
-			return TRUE
+		to_chat(user, SPAN_WARNING("It's broken, and this isn't the right way to fix it!"))
+		return TRUE
 
 	if(dirtiness == 100) // The microwave is all dirty, so it can't be used!
 		var/has_rag = istype(O, /obj/item/reagent_containers/glass/rag)
 		var/has_cleaner = O.reagents != null && O.reagents.has_reagent(/datum/reagent/space_cleaner, 5)
 		if (has_rag || has_cleaner)
 			user.visible_message( \
-				SPAN_NOTICE("\The [user] starts to clean the microwave."), \
+				SPAN_NOTICE("[user] starts to clean the microwave."), \
 				SPAN_NOTICE("You start to clean the microwave.") \
 			)
 			if (do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
 				user.visible_message( \
-					SPAN_NOTICE("\The [user] has cleaned the microwave."), \
+					SPAN_NOTICE("[user] has cleaned the microwave."), \
 					SPAN_NOTICE("You clean out the microwave.") \
 				)
 
@@ -120,7 +122,7 @@
 
 		// Otherwise, bad luck!
 		else
-			to_chat(user, SPAN_WARNING("You need to clean \the [src] before you use it!"))
+			to_chat(user, SPAN_WARNING("You need to clean [src] before you use it!"))
 			return TRUE
 
 	if (is_type_in_list(O, GLOB.microwave_accepts_items))
@@ -134,8 +136,8 @@
 				var/stack_item = new O.type (src)
 				LAZYADD(ingredients, stack_item)
 				user.visible_message( \
-					SPAN_NOTICE("\The [user] has added one of [O] to \the [src]."), \
-					SPAN_NOTICE("You add one of [O] to \the [src]."))
+					SPAN_NOTICE("[user] has added one of [O] to [src]."), \
+					SPAN_NOTICE("You add one of [O] to [src]."))
 			return TRUE
 
 		else
@@ -143,8 +145,8 @@
 				return TRUE
 			LAZYADD(ingredients, O)
 			user.visible_message( \
-				SPAN_NOTICE("\The [user] has added \the [O] to \the [src]."), \
-				SPAN_NOTICE("You add \the [O] to \the [src]."))
+				SPAN_NOTICE("[user] has added [O] to [src]."), \
+				SPAN_NOTICE("You add [O] to [src]."))
 			return TRUE
 
 	if (istype(O,/obj/item/reagent_containers/glass) || \
@@ -152,17 +154,17 @@
 	        istype(O,/obj/item/reagent_containers/food/condiment) \
 		)
 		if (!O.reagents)
-			to_chat(user, SPAN_WARNING("\The [O] is empty!"))
+			to_chat(user, SPAN_WARNING("[O] is empty!"))
 			return TRUE
 		for (var/datum/reagent/R in O.reagents.reagent_list)
 			if (!(R.type in GLOB.microwave_accepts_reagents))
-				to_chat(user, SPAN_WARNING("\The [O] contains \the [R] which is unsuitable for cookery."))
+				to_chat(user, SPAN_WARNING("[O] contains [R] which is unsuitable for cookery."))
 				return TRUE
 		return FALSE //This will call reagent_container's use_after which handles transferring reagents.
 
 	if (istype(O, /obj/item/storage))
 		if (length(ingredients) >= GLOB.microwave_maximum_item_storage)
-			to_chat(user, SPAN_WARNING("\The [src] is completely full!"))
+			to_chat(user, SPAN_WARNING("[src] is completely full!"))
 			return TRUE
 
 		var/obj/item/storage/bag/P = O
@@ -175,15 +177,15 @@
 
 		if (objects_loaded)
 			if (!length(P.contents))
-				user.visible_message(SPAN_NOTICE("\The [user] empties \the [P] into \the [src]."),
-				SPAN_NOTICE("You empty \the [P] into \the [src]."))
+				user.visible_message(SPAN_NOTICE("[user] empties [P] into [src]."),
+				SPAN_NOTICE("You empty [P] into [src]."))
 			else
-				user.visible_message(SPAN_NOTICE("\The [user] empties \the [P] into \the [src]."),
-				SPAN_NOTICE("You empty what you can from \the [P] into \the [src]."))
+				user.visible_message(SPAN_NOTICE("[user] empties [P] into [src]."),
+				SPAN_NOTICE("You empty what you can from [P] into [src]."))
 			return TRUE
 
 		else
-			to_chat(user, SPAN_WARNING("\The [P] doesn't contain any compatible items to put into \the [src]!"))
+			to_chat(user, SPAN_WARNING("[P] doesn't contain any compatible items to put into [src]!"))
 
 		return TRUE
 
@@ -191,7 +193,7 @@
 	return ..()
 
 /obj/machinery/microwave/use_grab(obj/item/grab/grab, list/click_params)
-	to_chat(grab.assailant, SPAN_WARNING("This is ridiculous. You can't fit \the [grab.affecting] in \the [src]."))
+	to_chat(grab.assailant, SPAN_WARNING("This is ridiculous. You can't fit [grab.affecting] in [src]."))
 	return TRUE
 
 /obj/machinery/microwave/components_are_accessible(path)
@@ -199,7 +201,7 @@
 
 /obj/machinery/microwave/cannot_transition_to(state_path, mob/user)
 	if(broken)
-		return SPAN_NOTICE("\The [src] is too broken to do this!")
+		return SPAN_NOTICE("[src] is too broken to do this!")
 	. = ..()
 
 /obj/machinery/microwave/state_transition(singleton/machine_construction/new_state)
@@ -409,7 +411,7 @@
 
 /obj/machinery/microwave/proc/muck_finish()
 	playsound(loc, 'sound/machines/ding.ogg', 50, 1)
-	visible_message(SPAN_WARNING("Muck splatters over the inside of \the [src]!"))
+	visible_message(SPAN_WARNING("Muck splatters over the inside of [src]!"))
 	dirtiness = 100 // Make it dirty so it can't be used util cleaned
 	obj_flags = null //So you can't add condiments
 	operating = FALSE // Turn it off again aferwards
@@ -421,12 +423,12 @@
 	s.set_up(2, 1, src)
 	s.start()
 	if (prob(100 * break_multiplier))
-		visible_message(SPAN_WARNING("\The [src] breaks!")) //Let them know they're stupid
+		visible_message(SPAN_WARNING("[src] breaks!")) //Let them know they're stupid
 		broken = 2 // Make it broken so it can't be used util fixed
 		obj_flags = null //So you can't add condiments
 		updateUsrDialog()
 	else
-		visible_message(SPAN_WARNING("\The [src] sputters and grinds to a halt!"))
+		visible_message(SPAN_WARNING("[src] sputters and grinds to a halt!"))
 	operating = FALSE // Turn it off again aferwards
 	update_icon()
 

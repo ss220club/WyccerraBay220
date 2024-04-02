@@ -91,7 +91,7 @@ var/global/list/flooring_cache = list()
 
 	queue_ao(FALSE)
 	if(update_neighbors)
-		for(var/turf/simulated/floor/F in orange(src, 1))
+		for(var/turf/simulated/floor/F in ORANGE_TURFS(src, 1))
 			F.queue_ao(FALSE)
 			F.update_icon()
 

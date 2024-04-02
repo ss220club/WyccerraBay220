@@ -323,7 +323,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					continue
 			species_to_pick += species
 
-		var/choice = tgui_input_list(user, "Select a species to play as", CHARACTER_PREFERENCE_INPUT_TITLE, species_to_pick)
+		var/choice = tgui_input_list(user, "Select a species to play as", CHARACTER_PREFERENCE_INPUT_TITLE, species_to_pick, pref.species)
 		if(!choice || !(choice in all_species))
 			return
 
@@ -536,7 +536,10 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				third_limb =  BP_GROIN
 				choice_options = list("Normal","Prosthesis")
 
-		var/new_state = tgui_input_list(user, "What state do you wish the limb to be in?", "Limb", choice_options)
+				if((!is_any_alien_whitelisted(user, SPECIES_FBP) && current_species.name != SPECIES_IPC) && !user.client.holder)
+					choice_options -= "Prosthesis"
+
+		var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in choice_options
 		if(!new_state || !CanUseTopic(user)) return TOPIC_NOACTION
 
 		switch(new_state)

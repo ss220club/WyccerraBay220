@@ -16,7 +16,11 @@ SUBSYSTEM_DEF(event)
 	var/row_options3 = " width='150px'"
 	var/datum/event_container/selected_event_container = null
 
+	/// List of all currently active events
 	var/list/datum/event/active_events = list()
+	/// Assoc list of active events by type as: event_type => list(active_events). Used for faster lookup.
+	var/list/datum/event/active_events_by_type
+
 	var/list/datum/event/finished_events = list()
 
 	var/list/datum/event/all_events
@@ -78,18 +82,40 @@ SUBSYSTEM_DEF(event)
 	..("Active Events: [length(active_events)]")
 
 
-//Actual event handling
-/datum/controller/subsystem/event/proc/event_complete(datum/event/E)
-	active_events -= E
+/// Checks if event of specific type is currently active
+/datum/controller/subsystem/event/proc/is_event_of_type_active(datum/event/event_type)
+	if(istype(event_type))
+		event_type = event_type.type
 
-	if(!E.event_meta || !E.severity)	// datum/event is used here and there for random reasons, maintaining "backwards compatibility"
-		log_debug("Event of '[E.type]' with missing meta-data has completed.")
+	if(!ispath(event_type))
+		CRASH("Invalid event type passed: [event_type]")
+
+	return !!LAZYACCESS(active_events_by_type, event_type)
+
+
+/datum/controller/subsystem/event/proc/register_event(datum/event/event_to_register)
+	if(!istype(event_to_register))
+		CRASH("Datum of not `/datum/event` being registered: `[event_to_register]:[event_to_register?.type]`")
+
+	active_events += event_to_register
+	LAZYADDASSOCLIST(active_events_by_type, event_to_register.type, event_to_register)
+
+//Actual event handling
+/datum/controller/subsystem/event/proc/event_complete(datum/event/completed_event)
+	if(!istype(completed_event))
+		CRASH("Datum of not `/datum/event` being unregistered: `[completed_event]:[completed_event?.type]`")
+
+	active_events -= completed_event
+	LAZYREMOVEASSOC(active_events_by_type, completed_event.type, completed_event)
+
+	if(!completed_event.event_meta || !completed_event.severity)	// datum/event is used here and there for random reasons, maintaining "backwards compatibility"
+		log_debug("Event of '[completed_event.type]' with missing meta-data has completed.")
 		return
-	finished_events += E
+	finished_events += completed_event
 
 	// Add the event back to the list of available events
-	var/datum/event_container/EC = event_containers[E.severity]
-	var/datum/event_meta/EM = E.event_meta
+	var/datum/event_container/EC = event_containers[completed_event.severity]
+	var/datum/event_meta/EM = completed_event.event_meta
 	if(EM.add_to_queue)
 		EC.available_events += EM
 

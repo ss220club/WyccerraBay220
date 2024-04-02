@@ -199,13 +199,13 @@ SUBSYSTEM_DEF(garbage)
 
 
 /// Queue datum D for garbage collection / deletion. Calls the datum's Destroy() and sets its gc_destroyed value.
-/// If not datum passed, `del` will be called
+/// If not datum passed, proc will crash
 /proc/qdel(datum/datum)
-	if (!datum)
+	if(!datum)
 		return
 
 	if(!istype(datum))
-		del(datum)
+		crash_with("qdel() can only handle /datum (sub)types, was passed: [log_info_line(datum)]")
 		return
 
 	var/static/list/details_by_path = SSgarbage.details_by_path
@@ -219,9 +219,13 @@ SUBSYSTEM_DEF(garbage)
 	++details.qdels
 	switch (datum.gc_destroyed)
 		if (null)
+			if(SEND_SIGNAL(datum, COMSIG_PREQDELETED)) // Gives any signal listener a chance to prevent atom qdel
+				return
+
 			datum.gc_destroyed = GC_CURRENTLY_BEING_QDELETED
 			var/start_time = world.time
 			var/start_tick = world.tick_usage
+			SEND_SIGNAL(datum, COMSIG_QDELETING) // Leting signal listeners know, that datum is being qdeleted
 			var/hint = datum.Destroy()
 			if (world.time != start_time)
 				++details.slept_destroy

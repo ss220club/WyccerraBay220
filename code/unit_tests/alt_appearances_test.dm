@@ -16,13 +16,11 @@
 	name = "ALT APPEARANCE: Cardborg shall have base backpack variant"
 
 /datum/unit_test/alt_appearance_cardborg_all_icon_states_shall_exist/start_test()
-	var/list/existing_icon_states = icon_states('icons/mob/robots.dmi')
 	var/failed = FALSE
-
 	for(var/ca_type in subtypesof(/singleton/cardborg_appearance))
 		var/singleton/cardborg_appearance/ca = ca_type
 		var/icon_state = initial(ca.icon_state)
-		if(!(icon_state in existing_icon_states))
+		if(!ICON_HAS_STATE('icons/mob/robots.dmi', icon_state))
 			log_unit_test("Icon state [icon_state] is missing.")
 			failed = TRUE
 

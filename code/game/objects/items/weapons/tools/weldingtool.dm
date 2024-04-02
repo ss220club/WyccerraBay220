@@ -15,6 +15,8 @@
 	w_class = ITEM_SIZE_SMALL
 	matter = list(MATERIAL_STEEL = 70, MATERIAL_GLASS = 30)
 	origin_tech = list(TECH_ENGINEERING = 1)
+	tool_behaviour = TOOL_WELDER
+	usesound = DEFAULT_WELDER_SOUND
 
 	var/welding = 0 	//Whether or not the welding tool is off(0), on(1) or currently welding(2)
 	var/status = 1 		//Whether the welder is secured or unsecured (able to attach rods to it to make a flamethrower)
@@ -47,19 +49,20 @@
 	else
 		to_chat(user, (distance <= 1 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[tank] is attached.")
 
+/obj/item/weldingtool/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 10, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	status = !status
+	if(status)
+		to_chat(user, SPAN_NOTICE("You secure the welder."))
+	else
+		to_chat(user, SPAN_NOTICE("The welder can now be attached and modified."))
+	add_fingerprint(user)
+
 /obj/item/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(welding)
 		to_chat(user, SPAN_DANGER("Stop welding first!"))
-		return
-
-	if(isScrewdriver(W))
-		status = !status
-		if(status)
-			to_chat(user, SPAN_NOTICE("You secure the welder."))
-		else
-			to_chat(user, SPAN_NOTICE("The welder can now be attached and modified."))
-		playsound(src, 'sound/items/Screwdriver.ogg', 10, 1)
-		src.add_fingerprint(user)
 		return
 
 	if((!status) && (istype(W,/obj/item/stack/material/rods)))
@@ -74,7 +77,7 @@
 
 	if (istype(W, /obj/item/welder_tank))
 		if (tank)
-			to_chat(user, SPAN_WARNING("\The [src] already has a tank attached - remove it first."))
+			to_chat(user, SPAN_WARNING("[src] already has a tank attached - remove it first."))
 			return
 		if (user.get_active_hand() != src && user.get_inactive_hand() != src)
 			to_chat(user, SPAN_WARNING("You must hold the welder in your hands to attach a tank."))
@@ -82,7 +85,7 @@
 		if (!user.unEquip(W, src))
 			return
 		tank = W
-		user.visible_message("[user] slots \a [W] into \the [src].", "You slot \a [W] into \the [src].")
+		user.visible_message("[user] slots [W] into [src].", "You slot [W] into [src].")
 		w_class = tank.size_in_use
 		force = tank.unlit_force
 		playsound(src, 'sound/items/cap_close.ogg', 10, 1)
@@ -95,7 +98,7 @@
 /obj/item/weldingtool/attack_hand(mob/user as mob)
 	if (tank && user.get_inactive_hand() == src)
 		if (!welding)
-			user.visible_message("[user] removes \the [tank] from \the [src].", "You remove \the [tank] from \the [src].")
+			user.visible_message("[user] removes [tank] from [src].", "You remove [tank] from [src].")
 			user.put_in_hands(tank)
 			tank = null
 			w_class = initial(w_class)
@@ -114,19 +117,19 @@
 
 /obj/item/weldingtool/Process()
 	if(welding)
-		if((!waterproof && submerged()) || !remove_fuel(0.05))
+		if((!waterproof && submerged()))
 			setWelding(0)
 
 /obj/item/weldingtool/use_after(obj/O, mob/living/user)
 	if(istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !welding)
 		if(!tank)
-			to_chat(user, SPAN_WARNING("\The [src] has no tank attached!"))
+			to_chat(user, SPAN_WARNING("[src] has no tank attached!"))
 			return TRUE
 		if (!tank.can_refuel)
-			to_chat(user, SPAN_WARNING("\The [tank] does not have a refuelling port."))
+			to_chat(user, SPAN_WARNING("[tank] does not have a refuelling port."))
 			return TRUE
 		O.reagents.trans_to_obj(tank, tank.max_fuel)
-		to_chat(user, SPAN_NOTICE("You refuel \the [tank]."))
+		to_chat(user, SPAN_NOTICE("You refuel [tank]."))
 		playsound(src.loc, 'sound/effects/refill.ogg', 50, 1, -6)
 		return TRUE
 
@@ -141,42 +144,48 @@
 			location.hotspot_expose(700, 50, 1)
 	return
 
-/obj/item/weldingtool/attack_self(mob/user as mob)
-	setWelding(!welding, usr)
+/obj/item/weldingtool/attack_self(mob/user)
+	setWelding(!welding, user)
 	return
 
 //Returns the amount of fuel in the welder
 /obj/item/weldingtool/proc/get_fuel()
 	return tank ? tank.reagents.get_reagent_amount(/datum/reagent/fuel) : 0
 
-
-/**
- * Checks if the tool can be used for the given amount of fuel without actually using it.
- *
- * Returns boolean.
- */
-/obj/item/weldingtool/proc/can_use(amount = 1, mob/user = null, interaction_message = "to complete this task.", silent = FALSE)
-	if (!isOn())
-		if (!silent && user)
-			to_chat(user, SPAN_WARNING("\The [src] must be turned on [interaction_message]"))
-		return FALSE
-	if (get_fuel() < amount)
-		if (!silent && user)
-			to_chat(user, SPAN_WARNING("You need at least [amount] unit\s of [welding_resource] [interaction_message]"))
+/// Turns off the welder if there is no more fuel (does this really need to be its own proc?)
+/obj/item/weldingtool/proc/check_fuel(mob/user)
+	if(get_fuel() <= 0 && welding)
+		setWelding(FALSE, user)
 		return FALSE
 	return TRUE
 
+/// Uses fuel from the welding tool.
+/obj/item/weldingtool/use(used = 0)
+	if(!isOn() || !check_fuel())
+		return FALSE
 
-//Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
-/obj/item/weldingtool/proc/remove_fuel(amount = 1, mob/M = null)
-	if(!can_use(amount, M))
-		return 0
-	burn_fuel(amount)
-	if(M)
-		M.welding_eyecheck()//located in mob_helpers.dm
-		set_light(5, 0.7, COLOR_LIGHT_CYAN)
-		addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
-	return 1
+	if(get_fuel() >= used)
+		burn_fuel(used)
+		check_fuel()
+		return TRUE
+	else
+		return FALSE
+
+/// If welding tool ran out of fuel during a construction task, construction fails.
+/obj/item/weldingtool/tool_use_check(mob/living/user, amount)
+	if(!isOn() || !check_fuel())
+		balloon_alert(user, "нужен включенный аппарат!")
+		return FALSE
+
+	if(get_fuel() >= amount)
+		if(user)
+			user.welding_eyecheck()//located in mob_helpers.dm
+			set_light(5, 0.7, COLOR_LIGHT_CYAN)
+			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
+		return TRUE
+	else
+		balloon_alert(user, "нужно больше топлива!")
+		return FALSE
 
 /obj/item/weldingtool/proc/burn_fuel(amount)
 	if(!tank)
@@ -203,7 +212,7 @@
 
 //Returns whether or not the welding tool is currently on.
 /obj/item/weldingtool/proc/isOn()
-	return src.welding
+	return welding
 
 /obj/item/weldingtool/get_storage_cost()
 	if(isOn())
@@ -234,7 +243,7 @@
 
 	if(!welding && !waterproof && submerged())
 		if(M)
-			to_chat(M, SPAN_WARNING("You cannot light \the [src] underwater."))
+			to_chat(M, SPAN_WARNING("You cannot light [src] underwater."))
 		return
 
 	var/turf/T = get_turf(src)
@@ -244,7 +253,7 @@
 			if(M)
 				to_chat(M, SPAN_NOTICE("You switch the [src] on."))
 			else if(T)
-				T.visible_message(SPAN_WARNING("\The [src] turns on."))
+				T.visible_message(SPAN_WARNING("[src] turns on."))
 			if (istype(src, /obj/item/weldingtool/electric))
 				src.force = 11
 				src.damtype = DAMAGE_SHOCK
@@ -263,9 +272,9 @@
 	else if(!set_welding && welding)
 		STOP_PROCESSING(SSobj, src)
 		if(M)
-			to_chat(M, SPAN_NOTICE("You switch \the [src] off."))
+			to_chat(M, SPAN_NOTICE("You switch [src] off."))
 		else if(T)
-			T.visible_message(SPAN_WARNING("\The [src] turns off."))
+			T.visible_message(SPAN_WARNING("[src] turns off."))
 		if (istype(src, /obj/item/weldingtool/electric))
 			src.force = initial(force)
 		else
@@ -293,14 +302,14 @@
 			return FALSE
 
 	if (BP_IS_BRITTLE(S))
-		to_chat(user, SPAN_WARNING("\The [target]'s [S.name] is hard and brittle - \the [src] cannot repair it."))
+		to_chat(user, SPAN_WARNING("[target]'s [S.name] is hard and brittle - [src] cannot repair it."))
 		return TRUE
 
-	if (!can_use(2, user, silent = TRUE)) //The surgery check above already returns can_use's feedback.
+	if (!tool_start_check(user, 2)) //The surgery check above already returns can_use's feedback.
 		return TRUE
 
 	if (S.robo_repair(15, DAMAGE_BRUTE, "some dents", src, user))
-		remove_fuel(2, user)
+		use(2)
 		return TRUE
 
 	else return FALSE
@@ -350,10 +359,10 @@
 /obj/item/welder_tank/use_after(obj/O, mob/living/user, click_parameters)
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src, O) <= 1)
 		if (!can_refuel)
-			to_chat(user, SPAN_DANGER("\The [src] does not have a refuelling port."))
+			to_chat(user, SPAN_DANGER("[src] does not have a refuelling port."))
 			return TRUE
 		O.reagents.trans_to_obj(src, max_fuel)
-		to_chat(user, SPAN_NOTICE("You refuel \the [src]."))
+		to_chat(user, SPAN_NOTICE("You refuel [src]."))
 		playsound(src.loc, 'sound/effects/refill.ogg', 50, 1, -6)
 		return TRUE
 

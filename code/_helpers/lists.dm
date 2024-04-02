@@ -237,14 +237,19 @@ Checks if a list has the same entries and values as an element of big.
 		return len
 	return null
 
-//Pick a random element from the list and remove it from the list.
-/proc/pick_n_take(list/listfrom)
-	if (length(listfrom) > 0)
-		var/picked = pick(listfrom)
-		listfrom -= picked
-		return picked
-	return null
+/// Pick a random element from the list and remove it from the list.
+/proc/pick_n_take(list/list_to_pick)
+	RETURN_TYPE(list_to_pick[_].type)
 
+	var/list_length = length(list_to_pick)
+	if(!list_length)
+		return null
+
+	var/picked_index = rand(1, list_length)
+	var/picked = list_to_pick[picked_index]
+	list_to_pick.Cut(picked_index, picked_index + 1)
+
+	return picked
 
 /// Remove and return the last element of the list, or null.
 /proc/pop(list/list)
@@ -842,6 +847,11 @@ Checks if a list has the same entries and values as an element of big.
 						L[T] = TRUE
 		return L
 
+/proc/is_type_in_typecache(atom/A, list/L)
+	if(!A || !length(L))
+		return FALSE
+
+	return L[A.type]
 
 /// Convert list to a map by calling handler per entry. Map may be supplied as a reference. Handlers should implement a no-params clear.
 /proc/list_to_map(list/list, handler, list/map)

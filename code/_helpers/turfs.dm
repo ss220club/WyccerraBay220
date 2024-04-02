@@ -46,15 +46,16 @@
 
 /proc/get_random_turf_in_range(atom/origin, outer_range, inner_range)
 	RETURN_TYPE(/turf)
-	origin = get_turf(origin)
-	if(!origin)
+	var/turf/center = get_turf(origin)
+	if(!center)
 		return
+
 	var/list/turfs = list()
-	for(var/turf/T in orange(origin, outer_range))
+	for(var/turf/T as anything in ORANGE_TURFS(center, outer_range))
 		if(!(T.z in GLOB.using_map.sealed_levels)) // Picking a turf outside the map edge isn't recommended
 			if(T.x >= world.maxx-TRANSITIONEDGE || T.x <= TRANSITIONEDGE)	continue
 			if(T.y >= world.maxy-TRANSITIONEDGE || T.y <= TRANSITIONEDGE)	continue
-		if(!inner_range || get_dist(origin, T) >= inner_range)
+		if(!inner_range || get_dist(center, T) >= inner_range)
 			turfs += T
 	if(length(turfs))
 		return pick(turfs)
@@ -144,48 +145,53 @@
 
 		var/turf/target = locate(dst_origin.x + x_pos, dst_origin.y + y_pos, dst_origin.z + z_pos)
 		if(!target)
-			error("Null turf in translation @ ([dst_origin.x + x_pos], [dst_origin.y + y_pos], [dst_origin.z + z_pos])")
+			crash_with("Null turf in translation @ ([dst_origin.x + x_pos], [dst_origin.y + y_pos], [dst_origin.z + z_pos])")
+
 		turf_map[source] = target //if target is null, preserve that information in the turf map
 
 	return turf_map
 
 
 /proc/translate_turfs(list/translation, area/base_area = null, turf/base_turf)
-	for(var/turf/source in translation)
-
+	for(var/turf/source as anything in translation)
 		var/turf/target = translation[source]
-
 		if(target)
 			if(base_area)
-				ChangeArea(target, get_area(source))
-				ChangeArea(source, base_area)
+				target.change_area(get_area(source))
+				source.change_area(base_area)
+
 			transport_turf_contents(source, target)
 
 	//change the old turfs
-	for(var/turf/source in translation)
-		source.ChangeTurf(base_turf ? base_turf : get_base_turf_by_area(source), 1, 1)
+	for(var/turf/source as anything in translation)
+		source.ChangeTurf(base_turf ? base_turf : get_base_turf_by_area(source), TRUE, TRUE)
 
 //Transports a turf from a source turf to a target turf, moving all of the turf's contents and making the target a copy of the source.
 /proc/transport_turf_contents(turf/source, turf/target)
 	RETURN_TYPE(/turf)
 
-	var/turf/new_turf = target.ChangeTurf(source.type, 1, 1)
+	var/turf/new_turf = target.ChangeTurf(source.type, TRUE, TRUE)
 	new_turf.transport_properties_from(source)
 
-	for(var/obj/O in source)
-		if (QDELETED(O))
-			testing("Failed to translate [O] to new turf as it was qdel'd.")
-			continue
-		if(O.simulated || HAS_FLAGS(O.movable_flags, MOVABLE_FLAG_EFFECTMOVE))
-			O.forceMove(new_turf)
-		else if(istype(O,/obj/effect))
-			var/obj/E = O
-			if(E.movable_flags & MOVABLE_FLAG_EFFECTMOVE)
-				E.forceMove(new_turf)
+	for(var/atom/movable/content as anything in source)
+		if(isobj(content))
+			var/obj/O = content
+			if (QDELETED(O))
+				testing("Failed to translate [O] to new turf as it was qdel'd.")
+				continue
+			if(O.simulated || HAS_FLAGS(O.movable_flags, MOVABLE_FLAG_EFFECTMOVE))
+				O.forceMove(new_turf)
+			else if(istype(O,/obj/effect))
+				var/obj/E = O
+				if(E.movable_flags & MOVABLE_FLAG_EFFECTMOVE)
+					E.forceMove(new_turf)
 
-	for(var/mob/M in source)
-		if(isEye(M)) continue // If we need to check for more mobs, I'll add a variable
-		M.forceMove(new_turf)
+		else if(ismob(content))
+			var/mob/M = content
+			if(isEye(M))
+				continue // If we need to check for more mobs, I'll add a variable
+
+			M.forceMove(new_turf)
 
 	if (GLOB.mob_spawners[source])
 		var/datum/mob_spawner/source_spawner = GLOB.mob_spawners[source]
@@ -208,7 +214,7 @@
 	if (!istype(center))
 		return
 
-	for (var/turf/T in trange(range, center))
+	for (var/turf/T as anything in RANGE_TURFS(center, range))
 		if (!predicates || all_predicates_true(list(T), predicates))
 			. += T
 

@@ -93,7 +93,7 @@
 	set_dir(turn(dir, 180))
 
 /obj/structure/disposalconstruct/on_update_icon()
-	if("con[built_icon_state]" in icon_states(icon))
+	if(ICON_HAS_STATE(icon, "con[built_icon_state]"))
 		icon_state = "con[built_icon_state]"
 	else
 		icon_state = built_icon_state
@@ -127,7 +127,7 @@
 		var/turf/turf = get_turf(src)
 		if (!turf.is_plating())
 			if (!silent)
-				USE_FEEDBACK_FAILURE("You must remove the plating before you can secure \the [src].")
+				USE_FEEDBACK_FAILURE("You must remove the plating before you can secure [src].")
 			return FALSE
 
 		// Catwalks
@@ -135,11 +135,11 @@
 		if (catwalk)
 			if (catwalk.plated_tile && !catwalk.hatch_open)
 				if (!silent)
-					USE_FEEDBACK_FAILURE("\The [catwalk]'s hatch needs to be opened before you can secure \the [src].")
+					USE_FEEDBACK_FAILURE("[catwalk]'s hatch needs to be opened before you can secure [src].")
 				return FALSE
 			else if (!catwalk.plated_tile)
 				if (!silent)
-					USE_FEEDBACK_FAILURE("\The [catwalk] is blocking access to the floor.")
+					USE_FEEDBACK_FAILURE("[catwalk] is blocking access to the floor.")
 				return FALSE
 
 		var/obj/structure/disposalpipe/connected_pipe = locate() in get_turf(src)
@@ -154,36 +154,20 @@
 	..()
 
 
-/obj/structure/disposalconstruct/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/disposalconstruct/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	var/obj/structure/disposalpipe/connected_pipe = locate() in get_turf(src)
-
 	// Welding Tool - Weld into place
-	if (isWelder(tool))
-		if (!anchored)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be anchored to the floor before you can weld it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to weld \the [src] down."))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts welding \the [src] down with \a [tool]."),
-			SPAN_NOTICE("You start welding \the [src] down with \the [tool]."),
-			SPAN_ITALIC("You hear welding.")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] welds \the [src] down with \a [tool]."),
-			SPAN_NOTICE("You weld \the [src] down with \the [tool].")
-		)
-		build(connected_pipe)
-		qdel_self()
-		return TRUE
-
-	return ..()
-
+	if(!anchored)
+		USE_FEEDBACK_NEED_ANCHOR(user)
+		return
+	if(!tool.tool_start_check(user, 1))
+		return
+	balloon_alert(user, "приваривание к полу")
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	build(connected_pipe)
+	qdel(src)
 
 /obj/structure/disposalconstruct/hides_under_flooring()
 	return anchored
@@ -212,11 +196,11 @@
 /obj/structure/disposalconstruct/machine/check_buildability(obj/structure/disposalpipe/CP, mob/user)
 	if(CP) // There's something there
 		if(!istype(CP,/obj/structure/disposalpipe/trunk))
-			to_chat(user, "\The [src] requires a trunk underneath it in order to work.")
+			to_chat(user, "[src] requires a trunk underneath it in order to work.")
 			return FALSE
 		return TRUE
 	// Nothing under, fuck.
-	to_chat(user, "\The [src] requires a trunk underneath it in order to work.")
+	to_chat(user, "[src] requires a trunk underneath it in order to work.")
 	return FALSE
 
 /obj/structure/disposalconstruct/proc/build()
@@ -228,6 +212,7 @@
 	P.sort_type = sort_type
 	P.set_dir(dir)
 	P.on_build()
+	P.balloon_alert_to_viewers("приварено к полу!")
 
 // Subtypes
 
@@ -244,6 +229,7 @@
 	transfer_fingerprints_to(P)
 	P.set_dir(dir)
 	P.mode = 0 // start with pump off
+	P.balloon_alert_to_viewers("приварено к полу!")
 
 /obj/structure/disposalconstruct/machine/on_update_icon()
 	if(anchored)
@@ -257,3 +243,4 @@
 	P.set_dir(dir)
 	var/obj/structure/disposalpipe/trunk/Trunk = CP
 	Trunk.linked = P
+	P.balloon_alert_to_viewers("приварено к полу!")

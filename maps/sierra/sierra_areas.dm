@@ -3,6 +3,10 @@
 	base_floor_type = /turf/simulated/floor/reinforced
 	base_floor_area = /area/maintenance/exterior
 
+	saferoom_area_types = list(
+		/area/crew_quarters/safe_room
+	)
+
 	post_round_safe_areas = list (
 		/area/centcom,
 		/area/shuttle/escape/centcom,

@@ -1,6 +1,6 @@
 /datum/shuttle/autodock/overmap/icgnv_hound
 	name = "ICGNV Hound"
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 	shuttle_area = list(/area/map_template/icgnv_hound)
 	current_location = "nav_icgnv_hound_start"
 	dock_target = "icgnv_hound_shuttle"

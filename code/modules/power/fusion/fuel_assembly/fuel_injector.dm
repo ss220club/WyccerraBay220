@@ -49,55 +49,53 @@
 		else
 			Inject()
 
-/obj/machinery/fusion_fuel_injector/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isMultitool(W))
-		var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
-		fusion.get_new_tag(user)
-		return TRUE
+/obj/machinery/fusion_fuel_injector/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
+	fusion.get_new_tag(user)
 
+/obj/machinery/fusion_fuel_injector/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(injecting)
+		balloon_alert(user, "нужно отключить!")
+		return
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = !anchored
+	balloon_alert_to_viewers("[anchored ? "приварено к полу!" : "отварено от пола!"]")
+
+/obj/machinery/fusion_fuel_injector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/fuel_assembly))
 		if(injecting)
-			to_chat(user, SPAN_WARNING("Shut \the [src] off before playing with the fuel rod!"))
+			to_chat(user, SPAN_WARNING("Shut [src] off before playing with the fuel rod!"))
 			return TRUE
 		if(!user.unEquip(W, src))
 			return TRUE
 		if(cur_assembly)
-			visible_message(SPAN_NOTICE("\The [user] swaps \the [src]'s [cur_assembly] for \a [W]."))
+			visible_message(SPAN_NOTICE("[user] swaps [src]'s [cur_assembly] for \a [W]."))
 		else
-			visible_message(SPAN_NOTICE("\The [user] inserts \a [W] into \the [src]."))
+			visible_message(SPAN_NOTICE("[user] inserts \a [W] into [src]."))
 		if(cur_assembly)
 			cur_assembly.dropInto(loc)
 			user.put_in_hands(cur_assembly)
 		cur_assembly = W
 		return TRUE
 
-	if(isWelder(W))
-		if(injecting)
-			to_chat(user, SPAN_WARNING("Shut \the [src] off first!"))
-			return TRUE
-		anchored = !anchored
-		playsound(src.loc, 'sound/items/Welder.ogg', 75, 1)
-		if(anchored)
-			user.visible_message("\The [user] secures \the [src] to the floor.")
-		else
-			user.visible_message("\The [user] unsecures \the [src] from the floor.")
-		return TRUE
-
 	return ..()
 
 /obj/machinery/fusion_fuel_injector/physical_attack_hand(mob/user)
 	if(injecting)
-		to_chat(user, SPAN_WARNING("Shut \the [src] off before playing with the fuel rod!"))
+		to_chat(user, SPAN_WARNING("Shut [src] off before playing with the fuel rod!"))
 		return TRUE
 
 	if(cur_assembly)
 		cur_assembly.dropInto(loc)
 		user.put_in_hands(cur_assembly)
-		visible_message(SPAN_NOTICE("\The [user] removes \the [cur_assembly] from \the [src]."))
+		visible_message(SPAN_NOTICE("[user] removes [cur_assembly] from [src]."))
 		cur_assembly = null
 		return TRUE
 	else
-		to_chat(user, SPAN_WARNING("There is no fuel rod in \the [src]."))
+		to_chat(user, SPAN_WARNING("There is no fuel rod in [src]."))
 		return TRUE
 
 /obj/machinery/fusion_fuel_injector/proc/BeginInjecting()

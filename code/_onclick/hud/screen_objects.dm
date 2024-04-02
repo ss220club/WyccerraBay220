@@ -69,16 +69,31 @@
 /obj/screen/storage
 	name = "storage"
 
-/obj/screen/storage/Click()
+/obj/screen/storage/Click(location, control, params)
 	if(!usr.canClick())
-		return 1
+		return TRUE
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
-		return 1
+		return TRUE
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
 		if(I)
-			usr.ClickOn(master)
-	return 1
+			usr.ClickOn(master, params)
+	return TRUE
+
+/obj/screen/container
+	name = "you shouldn't see this, report coders"
+	icon_state = "blank"
+	layer = HUD_CLICKABLE_LAYER
+	mouse_opacity = MOUSE_OPACITY_OPAQUE
+
+/obj/screen/container/Click(location, control, params)
+	if(!usr.canClick())
+		return TRUE
+	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
+		return TRUE
+	if(master)
+		usr.ClickOn(master, params)
+	return TRUE
 
 /obj/screen/zone_sel
 	name = "damage zone"
@@ -86,10 +101,10 @@
 	screen_loc = ui_zonesel
 	var/selecting = BP_CHEST
 
-/obj/screen/zone_sel/Click(location, control,params)
-	var/list/PL = params2list(params)
-	var/icon_x = text2num(PL["icon-x"])
-	var/icon_y = text2num(PL["icon-y"])
+/obj/screen/zone_sel/Click(location, control, params)
+	var/list/modifiers = params2list(params)
+	var/icon_x = text2num(LAZYACCESS(modifiers, ICON_X))
+	var/icon_y = text2num(LAZYACCESS(modifiers, ICON_Y))
 	var/new_selecting
 
 	switch(icon_y)
@@ -169,9 +184,9 @@
 	var/intent = I_HELP
 
 /obj/screen/intent/Click(location, control, params)
-	var/list/P = params2list(params)
-	var/icon_x = text2num(P["icon-x"])
-	var/icon_y = text2num(P["icon-y"])
+	var/list/modifiers = params2list(params)
+	var/icon_x = text2num(LAZYACCESS(modifiers, ICON_Y))
+	var/icon_y = text2num(LAZYACCESS(modifiers, ICON_Y))
 	intent = I_DISARM
 	if(icon_x <= world.icon_size/2)
 		if(icon_y <= world.icon_size/2)

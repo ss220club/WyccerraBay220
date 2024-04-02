@@ -19,7 +19,7 @@ var/global/list/landmarks_list = list()				//list of all landmarks created
 var/global/list/all_species[0]
 var/global/list/datum/language/all_languages = list()
 var/global/list/language_keys[0]					// Table of say codes for all languages
-var/global/list/playable_species = list(SPECIES_HUMAN)    // A list of ALL playable species, whitelisted, latejoin or otherwise.
+var/global/list/playable_species = list()    // A list of ALL playable species, whitelisted, latejoin or otherwise.
 
 
 GLOBAL_LIST_EMPTY(all_particles)
@@ -170,6 +170,9 @@ var/global/list/string_slot_flags = list(
 	for (var/path in paths)
 		var/particles/P = new path()
 		GLOB.all_particles[P.name] = P
+
+	for(var/datum/tech/tech_type as anything in subtypesof(/datum/tech))
+		GLOB.tech_id_to_name[initial(tech_type.id)] = initial(tech_type.name)
 
 	return TRUE
 

@@ -59,7 +59,7 @@ var/global/list/rad_collectors = list()
 			if(last_rads > max_rads)
 				if(world.time > end_time)
 					end_time = world.time + alert_delay
-					visible_message("[icon2html(src, viewers(get_turf(src)))] \the [src] beeps loudly as the radiation reaches dangerous levels, indicating imminent damage.")
+					visible_message("[icon2html(src, viewers(get_turf(src)))] [src] beeps loudly as the radiation reaches dangerous levels, indicating imminent damage.")
 					playsound(src, 'sound/effects/screech.ogg', 100, 1, 1)
 			receive_pulse(12.5*(last_rads/max_rads)/(0.3+(last_rads/max_rads)))
 
@@ -89,6 +89,22 @@ var/global/list/rad_collectors = list()
 	else
 		to_chat(user, SPAN_WARNING("The controls are locked!"))
 
+/obj/machinery/power/rad_collector/crowbar_act(mob/living/user, obj/item/tool)
+	if(P && !locked)
+		. = ITEM_INTERACT_SUCCESS
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		eject()
+
+/obj/machinery/power/rad_collector/wrench_act(mob/living/user, obj/item/tool)
+	if(P)
+		to_chat(user, SPAN_NOTICE("Remove the phoron tank first."))
+		return ITEM_INTERACT_SUCCESS
+	for(var/obj/machinery/power/rad_collector/R in get_turf(src))
+		if(R != src)
+			to_chat(user, SPAN_WARNING("You cannot install more than one collector on the same spot."))
+			return ITEM_INTERACT_SUCCESS
+
 /obj/machinery/power/rad_collector/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(istype(W, /obj/item/tank/phoron))
 		if(!anchored)
@@ -102,20 +118,6 @@ var/global/list/rad_collectors = list()
 		P = W
 		update_icon()
 		return TRUE
-
-	if (isCrowbar(W))
-		if(P && !locked)
-			eject()
-			return TRUE
-
-	if (isWrench(W))
-		if(P)
-			to_chat(user, SPAN_NOTICE("Remove the phoron tank first."))
-			return TRUE
-		for(var/obj/machinery/power/rad_collector/R in get_turf(src))
-			if(R != src)
-				to_chat(user, SPAN_WARNING("You cannot install more than one collector on the same spot."))
-				return TRUE
 
 	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/modular_computer))
 		if (allowed(user))
@@ -134,7 +136,7 @@ var/global/list/rad_collectors = list()
 /obj/machinery/power/rad_collector/examine(mob/user, distance)
 	. = ..()
 	if (distance <= 3 && !MACHINE_IS_BROKEN(src))
-		to_chat(user, "The meter indicates that \the [src] is collecting [last_power] W.")
+		to_chat(user, "The meter indicates that [src] is collecting [last_power] W.")
 		return 1
 
 /obj/machinery/power/rad_collector/ex_act(severity)
@@ -148,7 +150,7 @@ var/global/list/rad_collectors = list()
 		var/turf/T = get_turf(src)
 		if(T)
 			T.assume_air(P.air_contents)
-			audible_message(SPAN_DANGER("\The [P] detonates, sending shrapnel flying!"))
+			audible_message(SPAN_DANGER("[P] detonates, sending shrapnel flying!"))
 			fragmentate(T, 2, 4, list(/obj/item/projectile/bullet/pellet/fragment/tank/small = 3, /obj/item/projectile/bullet/pellet/fragment/tank = 1))
 			explosion(T, 1, EX_ACT_LIGHT)
 			QDEL_NULL(P)

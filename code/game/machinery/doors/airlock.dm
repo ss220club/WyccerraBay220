@@ -1007,16 +1007,16 @@ About the new airlock wires panel:
 		if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		p_open = TRUE
-		user.visible_message(SPAN_NOTICE("[user.name] opens the maintenance panel on [src]."), SPAN_NOTICE("You open the maintenance panel on [src]."))
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, p_open)
 		update_icon()
 		return
 	if(MACHINE_IS_BROKEN(src))
-		to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
+		balloon_alert(user, "панель сломана!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	p_open = FALSE
-	user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on [src]."), SPAN_NOTICE("You close the maintenance panel on [src]."))
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, p_open)
 	update_icon()
 
 /obj/machinery/door/airlock/wirecutter_act(mob/living/user, obj/item/tool)

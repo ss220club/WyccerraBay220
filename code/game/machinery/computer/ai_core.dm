@@ -300,17 +300,18 @@ var/global/list/empty_playable_ai_cores = list()
 	// - State 5 - Finish core
 	if (tool.tool_behaviour == TOOL_SCREWDRIVER)
 		if (state < STATE_CIRCUIT)
-			USE_FEEDBACK_FAILURE("[src] has no circuit to fasten.")
+			balloon_alert(user, "нет платы!")
 			return TRUE
 		if (state > STATE_CIRCUIT_SECURE && state < STATE_PANEL)
-			USE_FEEDBACK_FAILURE("[src]'s wiring blocks access to [circuit].")
+			balloon_alert(user, "нужно снять проводку!")
 			return TRUE
 		// Finish core
 		if (state == STATE_PANEL)
 			if (!authorized)
-				USE_FEEDBACK_FAILURE("[src] is not authorized and cannot be finished.")
+				balloon_alert(user, "не авторизовано!")
 				return TRUE
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return TRUE
 			user.visible_message(
 				SPAN_NOTICE("[user] finishes [src] with [tool]."),
 				SPAN_NOTICE("You finish [src] with [tool]."),

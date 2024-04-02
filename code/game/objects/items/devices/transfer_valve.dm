@@ -32,16 +32,13 @@
 
 /obj/item/device/transfer_valve/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!tank_one || !tank_two || !attached_device)
-		USE_FEEDBACK_FAILURE("[src] isn't assembled.")
+	if(!tank_one || !tank_two || !attached_device)
+		balloon_alert(user, "не собрано!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panel_open = !panel_open
-	user.visible_message(
-		SPAN_NOTICE("[user] [panel_open ? "opens" : "closes"] [src]'s control panel with [tool]."),
-		SPAN_NOTICE("You [panel_open ? "open" : "close"] [src]'s control panel with [tool].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
 
 /obj/item/device/transfer_valve/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

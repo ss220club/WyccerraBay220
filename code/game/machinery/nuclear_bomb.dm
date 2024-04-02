@@ -61,15 +61,16 @@ var/global/bomb_set
 					return
 				panel_open = TRUE
 				AddOverlays("panel_open")
-				to_chat(user, "You unscrew the control panel of [src].")
+				balloon_alert_to_viewers("панель открыта!")
 			else
-				to_chat(user, "[src] emits a buzzing noise, the panel staying locked in.")
+				balloon_alert(user, "отказано!")
+				playsound(src, 'sound/machines/buzz-sigh.ogg')
 				flick("lock", src)
 		if(TRUE)
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
 			panel_open = FALSE
-			to_chat(user, "You screw the control panel of [src] back on.")
+			balloon_alert_to_viewers("панель закрыта!")
 
 
 /obj/machinery/nuclearbomb/wirecutter_act(mob/living/user, obj/item/tool)

@@ -110,8 +110,6 @@ var/global/list/tank_gauge_cache = list()
 
 /obj/item/tank/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-		return
 	add_fingerprint(user)
 	user.visible_message(
 		SPAN_ITALIC("[user] starts to use [tool] on [src]."),
@@ -120,7 +118,7 @@ var/global/list/tank_gauge_cache = list()
 		range = 5
 	)
 	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-		to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
+		balloon_alert(user, "клапан заварен!")
 		return
 	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_REPAIR_CONSTRUCT) || GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
 		return

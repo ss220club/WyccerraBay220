@@ -66,6 +66,7 @@
 /obj/machinery/light_construct/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(stage != LIGHT_STAGE_WIRED)
+		balloon_alert(user, "нужно добавить проводку!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -445,6 +446,7 @@
 /obj/machinery/light/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(lightbulb)
+		balloon_alert(user, "нужно убрать лампочку!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return

@@ -81,10 +81,10 @@
 		if(GIRDER_STATE_NORMAL)
 			. = ITEM_INTERACT_SUCCESS
 			if(!anchored)
-				USE_FEEDBACK_FAILURE("[src] needs to be anchored before you can add reinforcements.")
+				USE_FEEDBACK_NEED_UNANCHOR(user)
 				return
 			if(reinf_material)
-				USE_FEEDBACK_FAILURE("[src] already has [reinf_material.adjective_name] reinforcement.")
+				balloon_alert(user, "уже имеются укрепления!")
 				return
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return

@@ -122,11 +122,11 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!density)
 		return
-	visible_message(SPAN_DANGER("[user] begins to [deployed ? "un" : ""]deploy [src]..."))
+	balloon_alert(user, "[deployed ? "деактивация креплений" : "активация креплений"]")
 	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	visible_message(SPAN_NOTICE("[user] has [deployed ? "un" : ""]deployed [src]."))
 	deployed = !deployed
+	balloon_alert_to_viewers("[deployed ? "крепления активны!" : "крепления деактивированы!"]")
 	if(deployed)
 		basic_chance = 70
 	else

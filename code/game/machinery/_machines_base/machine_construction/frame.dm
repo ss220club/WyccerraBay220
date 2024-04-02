@@ -122,15 +122,15 @@
 /singleton/machine_construction/frame/awaiting_parts/attackby(obj/item/I, mob/user, obj/machinery/constructable_frame/machine)
 	if(I.tool_behaviour == TOOL_CROWBAR)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		TRANSFER_STATE(/singleton/machine_construction/frame/awaiting_circuit)
 		machine.circuit.dropInto(machine.loc)
 		machine.circuit = null
 		to_chat(user, SPAN_NOTICE("You remove the circuit board."))
-		return
+		return TRUE
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
+			return TRUE
 		var/obj/machinery/new_machine = new machine.circuit.build_path(machine.loc, machine.dir, FALSE)
 		machine.circuit.construct(new_machine)
 		new_machine.install_component(machine.circuit, refresh_parts = FALSE)

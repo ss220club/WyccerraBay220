@@ -133,7 +133,7 @@
 
 /obj/item/grenade/frag/makeshift/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_BLOCKING
-	to_chat(user, SPAN_WARNING("You can't adjust the timer on [src]!"))
+	balloon_alert(user, "нельзя изменить таймер!")
 
 /obj/item/grenade/frag/makeshift/attackby(obj/item/W, mob/user)
 	if (is_type_in_list(W, possible_reinforcements))

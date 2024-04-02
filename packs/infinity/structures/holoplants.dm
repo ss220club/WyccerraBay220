@@ -93,7 +93,7 @@ GLOBAL_LIST_INIT(recomended_holoplants_colors, list(COLOR_PALE_RED_GRAY,COLOR_BL
 		return
 	enabled = !enabled
 	brightness_on = brightness_on ? 0 : initial(brightness_on)
-	to_chat(usr, SPAN_NOTICE("You switch [enabled ? "on" : "off"] the [src]"))
+	balloon_alert(user, "[enabled ? "включено" : "выключено"]")
 	update_icon()
 
 /obj/structure/holoplant/use_tool(obj/item/tool, mob/user, list/click_params)

@@ -488,7 +488,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(opened)
 		if(get_cell())
-			to_chat(user, SPAN_WARNING("Either close the cover or remove the cell first."))
+			balloon_alert(user, "нужно снять батарею!")
 			return
 
 		switch(has_electronics)
@@ -500,24 +500,24 @@
 					return
 				has_electronics = ELECTRONICS_SECURED
 				set_stat(MACHINE_STAT_MAINT, FALSE)
-				to_chat(user, "You screw the circuit electronics into place.")
+				balloon_alert(user, "плата закручена")
 				update_icon()
 			if(ELECTRONICS_SECURED)
 				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 					return
 				has_electronics = ELECTRONICS_PLUGGED
 				set_stat(MACHINE_STAT_MAINT, TRUE)
-				to_chat(user, "You unfasten the electronics.")
+				balloon_alert(user, "плата откручена")
 				update_icon()
 			if(ELECTRONICS_NONE)
-				to_chat(user, SPAN_WARNING("There is no power control board to secure!"))
+				balloon_alert(user, "нет платы!")
 		return
 
 	// Otherwise, if not opened, expose the wires.
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	wiresexposed = !wiresexposed
-	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+	USE_FEEDBACK_WIRING_EXPOSED(user, wiresexposed)
 	update_icon()
 
 /obj/machinery/power/apc/wirecutter_act(mob/living/user, obj/item/tool)

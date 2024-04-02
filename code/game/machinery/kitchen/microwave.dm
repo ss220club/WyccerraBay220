@@ -78,16 +78,10 @@
 	. = ..()
 	if(broken != 2)
 		return
-	user.visible_message( \
-		SPAN_NOTICE("[user] starts to fix part of the microwave."), \
-		SPAN_NOTICE("You start to fix part of the microwave.") \
-	)
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	user.visible_message( \
-		SPAN_NOTICE("[user] fixes part of the microwave."), \
-		SPAN_NOTICE("You have fixed part of the microwave.") \
-	)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	broken = 1 // Fix it a bit
 
 /obj/machinery/microwave/use_tool(obj/item/O, mob/living/user, list/click_params)

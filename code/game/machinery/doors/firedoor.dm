@@ -257,18 +257,13 @@
 
 /obj/machinery/door/firedoor/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(operating)
-		return
-	if(!density)
+	if(operating || !density)
+		balloon_alert(user, "нужно закрыть!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 25, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	hatch_open = !hatch_open
-	user.visible_message(
-		SPAN_NOTICE("[user] [hatch_open ? "opens" : "closes"] [src]'s maintenance hatch."),
-		SPAN_NOTICE("You [hatch_open ? "open" : "close"] [src]'s maintenance hatch."),
-		SPAN_ITALIC("You hear screws being adjusted.")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, hatch_open)
 	update_icon()
 
 /obj/machinery/door/firedoor/welder_act(mob/living/user, obj/item/tool)

@@ -108,18 +108,15 @@
 /obj/item/gun/magnetic/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!removable_components)
-		USE_FEEDBACK_FAILURE("[src]'s components can't be swapped out.")
+		balloon_alert(user, "нельзя снять компоненты!")
 		return
 	if(!capacitor)
-		USE_FEEDBACK_FAILURE("[src] has no capacitor to remove.")
+		balloon_alert(user, "нет конденсатора!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.put_in_hands(capacitor)
-	user.visible_message(
-		SPAN_NOTICE("[user] detaches [capacitor] from [src] with [tool]."),
-		SPAN_NOTICE("You detach [capacitor] from [src] with [tool].")
-	)
+	balloon_alert(user, "конденсатор снят")
 	capacitor = null
 	power_per_tick = 0
 	update_icon()

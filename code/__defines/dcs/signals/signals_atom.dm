@@ -12,7 +12,7 @@
 /// Sent from the atom that just Entered src. From base of atom/Entered(): (/atom/destination, atom/old_loc, list/atom/old_locs)
 #define COMSIG_ATOM_ENTERING "atom_entering"
 
-///from base of atom/change_tts_seed(): (mob/chooser, override, fancy_voice_input_tgui, new_traits)
+///from base of atom/change_tts_seed(): (mob/chooser, override, new_traits)
 #define COMSIG_ATOM_TTS_SEED_CHANGE "atom_tts_seed_change"
 ///from base of atom/cast_tts: (mob/listener, message, atom/location, is_local, effect, traits, preSFX, postSFX)
 #define COMSIG_ATOM_TTS_CAST "atom_tts_cast"

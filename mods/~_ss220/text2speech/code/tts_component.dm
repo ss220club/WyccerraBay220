@@ -36,7 +36,7 @@
 	SIGNAL_HANDLER
 	return tts_seed
 
-/datum/component/tts_component/proc/select_tts_seed(mob/chooser, silent_target = FALSE, override = FALSE, fancy_voice_input_tgui = FALSE, list/new_traits = null)
+/datum/component/tts_component/proc/select_tts_seed(mob/chooser, silent_target = FALSE, override = FALSE, list/new_traits = null)
 	if(!chooser)
 		if(ismob(parent))
 			chooser = parent
@@ -61,18 +61,17 @@
 				return new_tts_seed
 
 	var/tts_seeds
-	var/tts_gender = get_converted_tts_seed_gender()
-	var/list/tts_seeds_by_gender = SStts220.get_tts_by_gender(tts_gender)
+	var/list/tts_seeds_by_gender = SStts220.get_tts_by_gender(being_changed.gender)
+	if(!length(tts_seeds_by_gender))
+		to_chat(chooser, SPAN_WARNING("Не удалось найти пол для голоса! Текущий голос - [tts_seed.name]"))
+		return null
 	if(check_rights(R_ADMIN, FALSE, chooser) || override || !ismob(being_changed))
 		tts_seeds = tts_seeds_by_gender
 	else
 		tts_seeds = tts_seeds_by_gender && SStts220.get_available_seeds(being_changed) // && for lists means intersection
 
 	var/new_tts_seed_key
-	if(fancy_voice_input_tgui)
-		new_tts_seed_key = tgui_input_list(chooser, "Выберите голос персонажа", "Преобразуем голос", tts_seeds, tts_seed.name)
-	else
-		new_tts_seed_key = input(chooser, "Выберите голос персонажа", "Преобразуем голос") as null|anything in tts_seed
+	new_tts_seed_key = tgui_input_list(chooser, "Выберите голос персонажа", "Преобразуем голос", tts_seeds, tts_seed.name)
 	if(!new_tts_seed_key || !SStts220.tts_seeds[new_tts_seed_key])
 		to_chat(chooser, SPAN_WARNING("Что-то пошло не так с выбором голоса. Текущий голос - [tts_seed.name]"))
 		return null
@@ -89,30 +88,20 @@
 
 	return new_tts_seed
 
-/datum/component/tts_component/proc/tts_seed_change(atom/being_changed, mob/chooser, override = FALSE, fancy_voice_input_tgui = FALSE, list/new_traits = null)
+/datum/component/tts_component/proc/tts_seed_change(atom/being_changed, mob/chooser, override = FALSE, list/new_traits = null)
 	set waitfor = FALSE
-	var/datum/tts_seed/new_tts_seed = select_tts_seed(chooser = chooser, override = override, fancy_voice_input_tgui = fancy_voice_input_tgui, new_traits = new_traits)
+	var/datum/tts_seed/new_tts_seed = select_tts_seed(chooser = chooser, override = override, new_traits = new_traits)
 	if(!new_tts_seed)
 		return null
 	tts_seed = new_tts_seed
 
 /datum/component/tts_component/proc/get_random_tts_seed_by_gender()
-	var/tts_gender = get_converted_tts_seed_gender()
-	var/tts_random = pick(SStts220.get_tts_by_gender(tts_gender))
-	var/datum/tts_seed/seed = SStts220.tts_seeds[tts_random]
+	var/atom/being_changed = parent
+	var/tts_choice = SStts220.pick_tts_seed_by_gender(being_changed.gender)
+	var/datum/tts_seed/seed = SStts220.tts_seeds[tts_choice]
 	if(!seed)
 		return null
 	return seed
-
-/datum/component/tts_component/proc/get_converted_tts_seed_gender()
-	var/atom/being_changed = parent
-	switch(being_changed.gender)
-		if(MALE)
-			return TTS_GENDER_MALE
-		if(FEMALE)
-			return TTS_GENDER_FEMALE
-		else
-			return TTS_GENDER_ANY
 
 /datum/component/tts_component/proc/get_effect(effect)
 	. = effect
@@ -165,4 +154,4 @@
 	set name = "Смена голоса"
 	set desc = "Express yourself!"
 	set category = "Silicon Commands"
-	change_tts_seed(src, fancy_voice_input_tgui = TRUE, new_traits = list(TTS_TRAIT_ROBOTIZE))
+	change_tts_seed(src, new_traits = list(TTS_TRAIT_ROBOTIZE))

@@ -13,7 +13,6 @@ mkdir -p \
     $1/maps \
     $1/icons \
     $1/sound \
-    $1/strings \
     $1/tgui/public \
     $1/tgui/packages/tgfont/static
 
@@ -25,9 +24,8 @@ fi
 cp baystation12.dmb baystation12.rsc $1/
 cp -r maps/* $1/maps/
 cp -r icons/* $1/icons/
-cp -r strings/* $1/strings/
 cp -r tgui/public/* $1/tgui/public/
-cp -r tgui/packages/tgfont/static/* $1tgui/packages/tgfont/static/
+cp -r tgui/packages/tgfont/static/* $1/tgui/packages/tgfont/static/
 
 #remove .dm files from _maps
 

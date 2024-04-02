@@ -13,7 +13,7 @@ mkdir ci_test/data
 cp tools/ci/ci_config.txt ci_test/config/config.txt
 
 #set the map
-cp _maps/$MAP.json ci_test/data/next_map.json
+cp maps/$MAP.json ci_test/data/next_map.json
 
 cd ci_test
 DreamDaemon baystation12.dmb -close -trusted -verbose -params "log-directory=ci"

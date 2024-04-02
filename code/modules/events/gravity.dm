@@ -9,7 +9,7 @@
 	command_announcement.Announce("Feedback surge detected in mass-distributions systems. Artificial gravity has been disabled to avoid system overload.", "[location_name()] Gravity Subsystem", zlevels = affecting_z)
 
 /datum/event/gravity/start()
-	for (var/area/A in world)
+	for (var/area/A as anything in GLOB.areas)
 		if (A.has_gravity() && (A.z in affecting_z))
 			gravity_status += A
 			A.gravitychange(FALSE)

@@ -88,13 +88,38 @@
 	.[CODEX_INTERACTION_SCREWDRIVER] = "<p>Opens and closes the access panel. The panel must be unlocked.</p>"
 	.[CODEX_INTERACTION_WELDER] = "<p>Repairs 10 points of damage. The access panel must be open. Uses 5 units of fuel.</p>"
 
+/mob/living/bot/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(locked)
+		balloon_alert(user, "заперто!")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	update_icon()
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
+	Interact(user)
+
+/mob/living/bot/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(health >= maxHealth)
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
+		return
+	if(!open)
+		balloon_alert(user, "нужно открыть панель для ремонта!")
+		return
+	if(!tool.use_as_tool(src, user, amount = 5, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	health = min(maxHealth, health + 10)
+	update_icon()
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /mob/living/bot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// ID Card - Toggle access panel lock
 	var/obj/item/card/id/id = tool.GetIdCard()
 	if (istype(id))
 		if (open)
-			USE_FEEDBACK_FAILURE("\The [src]'s access panel must be closed before you can lock it.")
+			USE_FEEDBACK_FAILURE("[src]'s access panel must be closed before you can lock it.")
 			return TRUE
 		var/id_name = GET_ID_NAME(id, tool)
 		if (!access_scanner.check_access(id))
@@ -103,47 +128,13 @@
 		locked = !locked
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] [locked ? "locks" : "unlocks"] \the [src]'s access panel lock with \a [tool]."),
-			SPAN_NOTICE("You [locked ? "lock" : "unlock"] \the [src]'s access panel lock with \the [tool].")
+			SPAN_NOTICE("[user] [locked ? "locks" : "unlocks"] [src]'s access panel lock with [tool]."),
+			SPAN_NOTICE("You [locked ? "lock" : "unlock"] [src]'s access panel lock with [tool].")
 		)
 		Interact(user)
 		return TRUE
 
-	// Screwdriver - Toggle access panel open/closed
-	if (isScrewdriver(tool))
-		if (locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s access panel must be unlocked before you can open it.")
-			return TRUE
-		open = !open
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \the [src]'s access panel with \a [tool]."),
-			SPAN_NOTICE("You [open ? "open" : "close"] \the [src]'s access panel with \the [tool].")
-		)
-		Interact(user)
-		return TRUE
-
-	// Welder - Repairs damage
-	if (isWelder(tool))
-		if (health >= maxHealth)
-			USE_FEEDBACK_FAILURE("\The [src] doesn't need any repairs.")
-			return TRUE
-		if (!open)
-			USE_FEEDBACK_FAILURE("\The [src]'s access panel must be open to repair it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(5, user, "to repair \the [src]."))
-			return TRUE
-		welder.remove_fuel(5, user)
-		health = min(maxHealth, health + 10)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs some of \the [src]'s damage with \a [tool]."),
-			SPAN_NOTICE("You repair some of \the [src]'s damage with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
+	. = ..()
 
 
 /mob/living/bot/attack_ai(mob/user)

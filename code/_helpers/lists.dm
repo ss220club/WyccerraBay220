@@ -847,6 +847,11 @@ Checks if a list has the same entries and values as an element of big.
 						L[T] = TRUE
 		return L
 
+/proc/is_type_in_typecache(atom/A, list/L)
+	if(!A || !length(L))
+		return FALSE
+
+	return L[A.type]
 
 /// Convert list to a map by calling handler per entry. Map may be supplied as a reference. Handlers should implement a no-params clear.
 /proc/list_to_map(list/list, handler, list/map)

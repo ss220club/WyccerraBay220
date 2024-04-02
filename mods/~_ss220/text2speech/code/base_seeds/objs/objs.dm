@@ -1,5 +1,5 @@
-/obj/machinery
-	tts_seed = null
+/obj/machinery/add_tts_component()
+	return
 
-/obj/machinery/computer
-	tts_seed = null
+/obj/machinery/computer/add_tts_component()
+	return

@@ -127,7 +127,7 @@
 	var/turf/center = get_turf(src.loc)
 	if(!center) return
 
-	for(var/turf/T in range(scan_range, center))
+	for(var/turf/T as anything in RANGE_TURFS(center, scan_range))
 		for(var/mob/M in T.contents)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M

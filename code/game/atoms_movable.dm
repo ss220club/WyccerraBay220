@@ -376,8 +376,8 @@
 	return FALSE
 
 /atom/movable/fake_overlay/attackby(obj/item/I, mob/user)
-	if (master)
-		return master.attackby(I, user)
+	if(master)
+		return I.resolve_attackby(master, user)
 
 /atom/movable/fake_overlay/attack_hand(mob/user)
 	if (master)

@@ -102,6 +102,9 @@
 			return
 
 		src.add_fingerprint(usr)
+		if(istype(src.loc, /obj/item/storage))
+			var/obj/item/storage/parent_storage = src.loc
+			parent_storage.remove_from_storage(src)
 		if(usr.unEquip(src))
 			switch(over_object.name)
 				if(BP_R_HAND)

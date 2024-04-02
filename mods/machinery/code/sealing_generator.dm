@@ -61,10 +61,10 @@
 
 /obj/machinery/sealgen/proc/activate()
 	if(stat & MACHINE_STAT_NOPOWER)
-		visible_message("\The [src] flicks the lights and goes dark.")
+		visible_message("[src] flicks the lights and goes dark.")
 		return
 	if(!anchored)
-		visible_message("\The [src] awakes and shakes uncontrolable, then goes silent. Maybe anchoring bolts need more attention?")
+		visible_message("[src] awakes and shakes uncontrolable, then goes silent. Maybe anchoring bolts need more attention?")
 		return
 	current_field = new(get_step(src,dir))
 	current_field.dir = dir
@@ -98,41 +98,45 @@
 
 	update_icon()
 
-/obj/machinery/sealgen/use_tool(obj/item/W, mob/living/user, list/click_params)
-
-	if(isMultitool(W) && !locked)
-		field_color = input(usr, "Choose field colour.", "Field color", initial(field_color)) as color|null
-		to_chat(usr, SPAN_NOTICE("You change \the [src] field <font color='[field_color]'>color.</font>"))
-		colorize()
+/obj/machinery/sealgen/multitool_act(mob/living/user, obj/item/tool)
+	if(locked)
 		return
+	. = ITEM_INTERACT_SUCCESS
+	field_color = input(usr, "Choose field colour.", "Field color", initial(field_color)) as color|null
+	to_chat(usr, SPAN_NOTICE("You change [src] field <font color='[field_color]'>color.</font>"))
+	colorize()
 
-	if(isWirecutter(W) && hatch_open)
+/obj/machinery/sealgen/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	hatch_open = !hatch_open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, hatch_open)
+	update_icon()
+
+/obj/machinery/sealgen/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!anchored && (!isturf(src.loc) || is_space_turf(src.loc)))
+		to_chat(user, SPAN_WARNING("[src] can't be anchored here."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = !anchored
+	to_chat(user, "You [anchored ? "wrench [src] to" : "unwrench [src] from"] [get_turf(src)]")
+	if(!anchored)
+		off()
+
+/obj/machinery/sealgen/wirecutter_act(mob/living/user, obj/item/tool)
+	if(hatch_open)
+		. = ITEM_INTERACT_SUCCESS
 		wires.Interact(user)
-		return
 
-	if(isScrewdriver(W))
-		hatch_open = !hatch_open
-		to_chat(user, "You [hatch_open ? "open" : "close"] \the [src] panel.")
-		playsound(src.loc, "[GLOB.machinery_exposed_sound[2]]", 20)
-		update_icon()
-		return
-
+/obj/machinery/sealgen/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isid(W) && allowed(usr))
 		locked = !locked
-		to_chat(user, "You [locked ? "lock" : "unlock"] \the [src].")
+		to_chat(user, "You [locked ? "lock" : "unlock"] [src].")
 		return
-
-	if(isWrench(W))
-		if(!anchored && (!isturf(src.loc) || is_space_turf(src.loc)))
-			to_chat(user, SPAN_WARNING("\The [src] can't be anchored here."))
-			return
-		anchored = !anchored
-		to_chat(user, "You [anchored ? "wrench \the [src] to" : "unwrench \the [src] from"] \the [get_turf(src)]")
-		if(!anchored)
-			off()
-		return
-
-	..()
+	. = ..()
 
 //Actual field
 
@@ -230,12 +234,12 @@
 
 /obj/item/sealgen_case/attack_self(mob/user)
 	. = ..()
-	to_chat(user,SPAN_NOTICE("You start deploying \the [src]."))
-	user.visible_message(SPAN_NOTICE("[user] starts deploying \the [src]."))
+	to_chat(user,SPAN_NOTICE("You start deploying [src]."))
+	user.visible_message(SPAN_NOTICE("[user] starts deploying [src]."))
 	if(do_after(user, deploy_time, src))
 		qdel(src)
 		var/obj/machinery/sealgen/G  = new(get_turf(user))
-		user.visible_message(SPAN_NOTICE("[user] deploys \the [G]."),SPAN_INFO("You deploy \the [G]."))
+		user.visible_message(SPAN_NOTICE("[user] deploys [G]."),SPAN_INFO("You deploy [G]."))
 		G.dir = user.dir
 
 /obj/machinery/sealgen/MouseDrop(over_object, src_location, over_location)
@@ -249,10 +253,10 @@
 			to_chat(user,SPAN_WARNING("You can't fold [src], it's anchor bolts doesn't fit."))
 			return
 		if(over_object == user)
-			to_chat(user,SPAN_NOTICE("You start folding \the [src]."))
-			user.visible_message(SPAN_NOTICE("[user] starts folding \the [src]."))
+			to_chat(user,SPAN_NOTICE("You start folding [src]."))
+			user.visible_message(SPAN_NOTICE("[user] starts folding [src]."))
 			if(do_after(user, fold_time, src))
-				user.visible_message(SPAN_NOTICE("[user] folds \the [src]."),SPAN_INFO("You fold \the [src]."))
+				user.visible_message(SPAN_NOTICE("[user] folds [src]."),SPAN_INFO("You fold [src]."))
 				fold(user)
 
 /obj/machinery/sealgen/proc/fold(mob/user)

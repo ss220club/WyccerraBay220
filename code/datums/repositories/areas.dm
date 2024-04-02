@@ -6,9 +6,9 @@ var/global/repository/area/area_repository = new()
 	var/list/by_z_level_cache_data
 
 /repository/area/New()
-	by_name_coords_cache_data = list()
-	by_name_cache_data        = list()
-	by_z_level_cache_data     = list()
+	LAZYINITLIST(by_name_coords_cache_data)
+	LAZYINITLIST(by_name_cache_data)
+	LAZYINITLIST(by_z_level_cache_data)
 	..()
 
 /repository/area/proc/get_areas_by_name(list/area_predicates = GLOBAL_PROC_REF(is_not_space_area))

@@ -45,14 +45,15 @@
 		SetValue(new_value)
 
 
-/datum/build_mode/edit/OnClick(atom/A, list/parameters)
+/datum/build_mode/edit/OnClick(atom/A, params)
 	if (A.may_not_edit_var(usr, var_to_edit))
 		return
+	var/list/modifiers = params2list(params)
 	var/old_value = A.vars[var_to_edit]
 	var/new_value
-	if (parameters["left"])
+	if (LAZYACCESS(modifiers, LEFT_CLICK))
 		new_value = value_to_set
-	if (parameters["right"])
+	if (LAZYACCESS(modifiers, RIGHT_CLICK))
 		new_value = initial(A.vars[var_to_edit])
 	if (old_value == new_value)
 		return

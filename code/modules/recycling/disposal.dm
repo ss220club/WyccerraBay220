@@ -23,7 +23,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	/// Item mode 0=off 1=charging 2=charged
 	var/mode = 1
 	// True if flush handle is pulled
-	var/flush = TRUE
+	var/flush = FALSE
 	/// The attached pipe trunk
 	var/obj/structure/disposalpipe/trunk/trunk
 	/// True if flushing in progress
@@ -73,18 +73,55 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if (ismob(G.affecting))
 		var/mob/GM = G.affecting
 		var/mob/user = G.assailant
-		user.visible_message(SPAN_DANGER("\The [user] starts putting \the [GM.name] into the disposal."))
+		user.visible_message(SPAN_DANGER("[user] starts putting [GM.name] into the disposal."))
 		if (do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
 			if (GM.client)
 				GM.client.perspective = EYE_PERSPECTIVE
 				GM.client.eye = src
 			GM.forceMove(src)
-			user.visible_message(SPAN_DANGER("\The [GM] has been placed in \the [src] by \the [user]."))
+			user.visible_message(SPAN_DANGER("[GM] has been placed in [src] by [user]."))
 			GM.remove_grabs_and_pulls()
-			admin_attack_log(user, GM, "Placed the victim into \the [src].", "Was placed into \the [src] by the attacker.", "stuffed \the [src] with")
+			admin_attack_log(user, GM, "Placed the victim into [src].", "Was placed into [src] by the attacker.", "stuffed [src] with")
 		return TRUE
 
 	return ..()
+
+/obj/machinery/disposal/screwdriver_act(mob/living/user, obj/item/tool)
+	if(mode > 0)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(length(contents) > LAZYLEN(component_parts))
+		balloon_alert(user, "нужно очистить содержимое!")
+		return
+	if(mode == 0) // It's off but still not unscrewed
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		mode = -1 // Set it to doubleoff l0l
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, TRUE)
+		return
+	if(mode == -1)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		mode = 0
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, FALSE)
+
+/obj/machinery/disposal/welder_act(mob/living/user, obj/item/tool)
+	if(mode != -1)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(length(contents) > LAZYLEN(component_parts))
+		balloon_alert(user, "нужно вытащить предметы!")
+		return
+	if(!tool.tool_start_check(user, 1))
+		return
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/structure/disposalconstruct/machine/C = new (loc, src)
+	transfer_fingerprints_to(C)
+	C.update()
+	C.balloon_alert_to_viewers("отварено от пола!")
+	qdel(src)
 
 /obj/machinery/disposal/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(MACHINE_IS_BROKEN(src))
@@ -92,42 +129,6 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 
 	if ((. = ..()))
 		return
-
-	if(mode<=0) // It's off
-		if (isScrewdriver(I))
-			if(length(contents) > LAZYLEN(component_parts))
-				to_chat(user, "Eject the items first!")
-				return TRUE
-			if(mode==0) // It's off but still not unscrewed
-				mode=-1 // Set it to doubleoff l0l
-				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "You remove the screws around the power connection.")
-				return TRUE
-			else if(mode==-1)
-				mode=0
-				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "You attach the screws around the power connection.")
-				return TRUE
-		if (isWelder(I) && mode==-1)
-			if(length(contents) > LAZYLEN(component_parts))
-				to_chat(user, "Eject the items first!")
-				return TRUE
-			var/obj/item/weldingtool/W = I
-			if(W.can_use(1,user))
-				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-				to_chat(user, "You start slicing the floorweld off the disposal unit.")
-
-				if(do_after(user, (I.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-					if(!src || !W.remove_fuel(1, user)) return
-					to_chat(user, "You sliced the floorweld off the disposal unit.")
-					var/obj/structure/disposalconstruct/machine/C = new (loc, src)
-					src.transfer_fingerprints_to(C)
-					C.update()
-					qdel(src)
-				return TRUE
-			else
-				to_chat(user, "You need more welding fuel to complete this task.")
-				return TRUE
 
 	if (istype(I, /obj/item/storage/bag/trash))
 		var/obj/item/storage/bag/trash/T = I
@@ -145,8 +146,8 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		return TRUE
 
 	user.visible_message(
-		SPAN_NOTICE("\The [user] places \the [I] into \the [src]."),
-		SPAN_NOTICE("You place \the [I] into \the [src].")
+		SPAN_NOTICE("[user] places [I] into [src]."),
+		SPAN_NOTICE("You place [I] into [src].")
 	)
 	update_icon()
 	return TRUE
@@ -176,7 +177,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 		use_tool(AM, user)
 		return
 	else if(!is_type_in_list(AM, allowed_objects))
-		USE_FEEDBACK_FAILURE("\The [AM] doesn't fit in \the [src].")
+		USE_FEEDBACK_FAILURE("[AM] doesn't fit in [src].")
 		return
 
 	// Checks completed, start inserting
@@ -204,12 +205,12 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if(AM == user)
 		user.visible_message(SPAN_DANGER("[user] climbs into [src]."), \
 							 SPAN_NOTICE("You climb into [src]."))
-		admin_attack_log(user, null, "Stuffed themselves into \the [src].", null, "stuffed themselves into \the [src].")
+		admin_attack_log(user, null, "Stuffed themselves into [src].", null, "stuffed themselves into [src].")
 	else
 		user.visible_message(SPAN_CLASS("[is_dangerous ? "danger" : "notice"]", "[user] stuffs [AM] into [src][is_dangerous ? "!" : "."]"), \
 							 SPAN_NOTICE("You stuff [AM] into [src]."))
 		if(ismob(M))
-			admin_attack_log(user, M, "Placed the victim into \the [src].", "Was placed into \the [src] by the attacker.", "stuffed \the [src] with")
+			admin_attack_log(user, M, "Placed the victim into [src].", "Was placed into [src] by the attacker.", "stuffed [src] with")
 			if (M.client)
 				M.client.perspective = EYE_PERSPECTIVE
 				M.client.eye = src
@@ -294,8 +295,8 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	if (!isliving(usr) || usr.incapacitated())
 		return
 	usr.visible_message(
-		SPAN_NOTICE("\The [usr] ejects \the [src]'s contents'."),
-		SPAN_NOTICE("You eject \the [initial(name)]'s contents."),
+		SPAN_NOTICE("[usr] ejects [src]'s contents'."),
+		SPAN_NOTICE("You eject [initial(name)]'s contents."),
 	)
 	eject()
 	add_fingerprint(usr)
@@ -460,9 +461,9 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 			return
 		if(prob(75))
 			I.forceMove(src)
-			visible_message("\The [I] lands in \the [src].")
+			visible_message("[I] lands in [src].")
 		else
-			visible_message("\The [I] bounces off of \the [src]'s rim!")
+			visible_message("[I] bounces off of [src]'s rim!")
 		return 0
 	else
 		return ..(mover, target, height, air_group)
@@ -470,7 +471,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 /obj/machinery/disposal/slam_into(mob/living/L)
 	L.forceMove(src)
 	L.Weaken(5)
-	L.visible_message(SPAN_WARNING("\The [L] falls into \the [src]!"))
+	L.visible_message(SPAN_WARNING("[L] falls into [src]!"))
 	playsound(L, "punch", 25, 1, FALSE)
 
 /obj/machinery/disposal_switch
@@ -495,15 +496,14 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	junctions.Cut()
 	return ..()
 
-/obj/machinery/disposal_switch/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isCrowbar(I))
-		var/obj/item/disposal_switch_construct/C = new/obj/item/disposal_switch_construct(src.loc, id_tag)
-		transfer_fingerprints_to(C)
-		user.visible_message(SPAN_NOTICE("\The [user] deattaches \the [src]."))
-		qdel(src)
-		return TRUE
-
-	return ..()
+/obj/machinery/disposal_switch/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/disposal_switch_construct/C = new/obj/item/disposal_switch_construct(src.loc, id_tag)
+	transfer_fingerprints_to(C)
+	user.visible_message(SPAN_NOTICE("[user] deattaches [src]."))
+	qdel(src)
 
 /obj/machinery/disposal_switch/interface_interact(mob/user)
 	if(!CanInteract(user, DefaultTopicState()))
@@ -541,7 +541,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 			found = 1
 			break
 	if(!found)
-		to_chat(user, "[icon2html(src, user)][SPAN_NOTICE("\The [src] is not linked to any junctions!")]")
+		to_chat(user, "[icon2html(src, user)][SPAN_NOTICE("[src] is not linked to any junctions!")]")
 		return TRUE
 	var/obj/machinery/disposal_switch/NC = new/obj/machinery/disposal_switch(A, id_tag)
 	transfer_fingerprints_to(NC)
@@ -600,48 +600,31 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	sleep(20)	//wait until correct animation frame
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 
+/obj/structure/disposaloutlet/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	mode = !mode
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, !mode)
 
-/obj/structure/disposaloutlet/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Toggle mode/power
-	if (isScrewdriver(tool))
-		mode = !mode
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [mode ? "removes" : "attaches"] the screws around \the [src]'s power connection with \a [tool]."),
-			SPAN_NOTICE("You [mode ? "remove" : "attach"] the screws around \the [src]'s power connection with \the [tool].")
-		)
-		return TRUE
-
+/obj/structure/disposaloutlet/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Detach from floor
-	if (isWelder(tool))
-		if (!mode)
-			USE_FEEDBACK_FAILURE("\The [src]'s power connection needs to be disconnected before you can remove \the [src] from the floor.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to slice \the [src]'s floorweld."))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts slicing \the [src]'s floorweld with \a [tool]."),
-			SPAN_NOTICE("You start slicing \the [src]'s floorweld with \the [tool]."),
-			SPAN_ITALIC("You hear the sound of welding.")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] slices \the [src]'s floorweld with \a [tool]."),
-			SPAN_NOTICE("You start slices \the [src]'s floorweld with \the [tool].")
-		)
-		var/obj/structure/disposalconstruct/machine/outlet/outlet = new(loc, src)
-		transfer_fingerprints_to(outlet)
-		outlet.anchored = TRUE
-		outlet.set_density(TRUE)
-		outlet.update()
-		qdel_self()
-		return TRUE
-
-	return ..()
+	if(!mode)
+		balloon_alert(user, "нужно отключить!")
+		return
+	if(!tool.tool_start_check(user, 1))
+		return
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/structure/disposalconstruct/machine/outlet/outlet = new(loc, src)
+	transfer_fingerprints_to(outlet)
+	outlet.anchored = TRUE
+	outlet.set_density(TRUE)
+	outlet.update()
+	outlet.balloon_alert_to_viewers("отварено от пола!")
+	qdel(src)
 
 
 /obj/structure/disposaloutlet/forceMove()//updates this when shuttle moves. So you can YEET things out the airlock

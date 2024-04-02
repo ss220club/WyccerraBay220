@@ -53,7 +53,7 @@
 	upgradeEmpProof()
 	upgradeXRay()
 
-	to_chat(user, "\The [src] has been upgraded. It now has X-Ray capability and EMP resistance.")
+	to_chat(user, "[src] has been upgraded. It now has X-Ray capability and EMP resistance.")
 	return 1
 
 /obj/machinery/camera/apply_visual(mob/living/carbon/human/M)
@@ -101,12 +101,16 @@
 		number = 1
 		var/area/A = get_area(src)
 		if(A)
-			for(var/obj/machinery/camera/C in A)
-				if(C == src) continue
+			for(var/obj/machinery/camera/C in A.machinery_list)
+				if(C == src)
+					continue
+
 				if(C.number)
-					number = max(number, C.number+1)
+					number = max(number, C.number + 1)
+
 			c_tag = "[A.name][number == 1 ? "" : " #[number]"]"
 		invalidateCameraCache()
+
 	GLOB.moved_event.register(src, src, PROC_REF(camera_moved))
 
 
@@ -158,49 +162,58 @@
 	if(user.species.can_shred(user))
 		set_status(0)
 		user.do_attack_animation(src)
-		visible_message(SPAN_WARNING("\The [user] slashes at [src]!"))
+		visible_message(SPAN_WARNING("[user] slashes at [src]!"))
 		playsound(src.loc, 'sound/weapons/slash.ogg', 100, 1)
 		add_hiddenprint(user)
 		kill_health()
 		return TRUE
 
+/obj/machinery/camera/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		wires.Interact(user)
+
+/obj/machinery/camera/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	panel_open = !panel_open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
+
+/obj/machinery/camera/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		wires.Interact(user)
+
+/obj/machinery/camera/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/wires/camera/camera_wires = wires
+	if(camera_wires.CanDeconstruct() || (MACHINE_IS_BROKEN(src)))
+		if(!tool.tool_start_check(user, 1))
+			return
+		USE_FEEDBACK_DECONSTRUCT_START(user)
+		if(!tool.use_as_tool(src, user, 10 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		if(assembly)
+			assembly.dropInto(loc)
+			assembly.anchored = TRUE
+			assembly.camera_name = c_tag
+			assembly.camera_network = english_list(network, "Exodus", ",", ",")
+			assembly.update_icon()
+			assembly.dir = dir
+			if(MACHINE_IS_BROKEN(src))
+				assembly.state = 2
+				user.balloon_alert_to_viewers("камера отремонтирована")
+				cancelCameraAlarm()
+			else
+				assembly.state = 1
+				user.balloon_alert_to_viewers("камера отварена от стены")
+				new /obj/item/stack/cable_coil(loc, 2)
+			assembly = null //so qdel doesn't eat it.
+		qdel(src)
+
 /obj/machinery/camera/use_tool(obj/item/W, mob/living/user, list/click_params)
 	update_coverage()
-	var/datum/wires/camera/camera_wires = wires
-
-	if(isScrewdriver(W))
-		panel_open = !panel_open
-		user.visible_message(
-			SPAN_WARNING("\The [user] screws \the [src]'s panel [panel_open ? "open" : "closed"]!"),
-			SPAN_NOTICE("You screw \the [src]'s panel [panel_open ? "open" : "closed"].")
-		)
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		return TRUE
-
-	if ((isWirecutter(W) || isMultitool(W)) && panel_open)
-		wires.Interact(user)
-		return TRUE
-
-	if (isWelder(W) && (camera_wires.CanDeconstruct() || (MACHINE_IS_BROKEN(src))))
-		if(weld(W, user))
-			if(assembly)
-				assembly.dropInto(loc)
-				assembly.anchored = TRUE
-				assembly.camera_name = c_tag
-				assembly.camera_network = english_list(network, "Exodus", ",", ",")
-				assembly.update_icon()
-				assembly.dir = dir
-				if(MACHINE_IS_BROKEN(src))
-					assembly.state = 2
-					to_chat(user, SPAN_NOTICE("You repaired \the [src] frame."))
-					cancelCameraAlarm()
-				else
-					assembly.state = 1
-					to_chat(user, SPAN_NOTICE("You cut \the [src] free from the wall."))
-					new /obj/item/stack/cable_coil(loc, 2)
-				assembly = null //so qdel doesn't eat it.
-			qdel(src)
-			return TRUE
 
 	if (can_use() && istype(W, /obj/item/paper) && isliving(user))
 		var/mob/living/U = user
@@ -377,23 +390,6 @@
 			return C
 
 	return null
-
-/obj/machinery/camera/proc/weld(obj/item/weldingtool/WT, mob/user)
-
-	if(busy)
-		return 0
-
-	if(WT.can_use(1, user))
-		to_chat(user, SPAN_NOTICE("You start to weld \the [src].."))
-		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-		busy = 1
-		if(do_after(user, 10 SECONDS, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(1, user))
-			playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-			busy = 0
-			return 1
-
-	busy = 0
-	return 0
 
 /obj/machinery/camera/proc/add_network(network_name)
 	add_networks(list(network_name))

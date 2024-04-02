@@ -128,7 +128,7 @@
 	icon_state = "3"
 	appearance_flags = PIXEL_SCALE | NO_CLIENT_COLOR
 	render_target = HEAT_EFFECT_TARGET
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 /// Example of a warp filter
 /obj/effect/warp

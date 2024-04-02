@@ -44,34 +44,34 @@
 /obj/item/device/suit_sensor_jammer/get_cell()
 	return bcell
 
+/obj/item/device/suit_sensor_jammer/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!bcell)
+		USE_FEEDBACK_FAILURE("[src] has no cell to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	disable()
+	user.put_in_hands(bcell)
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [bcell] from [src] with [tool]."),
+		SPAN_NOTICE("You remove [bcell] from [src] with [tool].")
+	)
+	bcell = null
 
 /obj/item/device/suit_sensor_jammer/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Remove cell
-	if (isCrowbar(tool))
-		if (!bcell)
-			USE_FEEDBACK_FAILURE("\The [src] has no cell to remove.")
-			return TRUE
-		disable()
-		user.put_in_hands(bcell)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [bcell] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [bcell] from \the [src] with \the [tool].")
-		)
-		bcell = null
-		return TRUE
-
 	// Power Cell - Install cell
 	if (istype(tool, /obj/item/cell))
 		if (bcell)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [bcell] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [bcell] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		bcell = tool
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \a [src]."),
-			SPAN_NOTICE("you install \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("you install [tool] into [src].")
 		)
 		return TRUE
 

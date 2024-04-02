@@ -52,6 +52,9 @@ WARN_IF_STAFF_SAME_IP
 ## log game actions (start of round, results, etc.)
 LOG_GAME
 
+## log tool actions
+LOG_TOOL
+
 ## log player votes
 LOG_VOTE
 

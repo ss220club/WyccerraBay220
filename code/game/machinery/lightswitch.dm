@@ -63,14 +63,13 @@
 		set_state(!on)
 		return TRUE
 
-/obj/machinery/light_switch/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	if (isScrewdriver(tool))
-		var/obj/item/frame/light_switch/frame = new /obj/item/frame/light_switch(user.loc, 1)
-		transfer_fingerprints_to(frame)
-		qdel(src)
-		return TRUE
-	return ..()
-
+/obj/machinery/light_switch/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/frame/light_switch/frame = new /obj/item/frame/light_switch(user.loc, 1)
+	transfer_fingerprints_to(frame)
+	qdel(src)
 
 /obj/machinery/light_switch/powered()
 	. = ..(power_channel, connected_area) //tie our powered status to the connected area

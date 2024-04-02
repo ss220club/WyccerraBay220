@@ -116,6 +116,9 @@ SUBSYSTEM_DEF(atoms)
 		deleted = TRUE
 	else if (!(atom.atom_flags & ATOM_FLAG_INITIALIZED))
 		bad_inits[atom_type] |= BAD_INIT_DIDNT_INIT
+
+	SEND_SIGNAL(atom, COMSIG_ATOM_AFTER_SUCCESSFUL_INITIALIZE)
+
 	return deleted || QDELING(atom)
 
 

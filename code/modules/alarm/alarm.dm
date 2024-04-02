@@ -91,7 +91,8 @@
 
 	// The list of cameras is also reset by /proc/invalidateCameraCache()
 	if(!cameras)
-		cameras = origin ? origin.get_alarm_cameras() : last_area.get_alarm_cameras()
+		var/area/target_area = origin ? get_area(origin) : last_area
+		cameras = target_area.get_cameras()
 
 	last_camera_area = last_area
 	return cameras
@@ -143,19 +144,5 @@
 
 /obj/machinery/camera/get_source_name()
 	return c_tag
-
-/**
- * Retrieves a list of cameras from the atom's area.
- *
- * TODO: Redundant. Replace with `get_area()` and `get_cameras()`.
- *
- * Returns list (Instances of `/obj/machinery/camera`). All cameras in the atom's area.
- */
-/atom/proc/get_alarm_cameras()
-	var/area/A = get_area(src)
-	return A.get_cameras()
-
-/area/get_alarm_cameras()
-	return get_cameras()
 
 #undef ALARM_RESET_DELAY

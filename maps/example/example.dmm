@@ -355,6 +355,12 @@
 /obj/machinery/light/spot,
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
+"nL" = (
+/obj/machinery/atmospherics/binary/pump{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "oi" = (
 /obj/machinery/reagentgrinder,
 /obj/item/reagent_containers/glass/beaker/large,
@@ -587,6 +593,12 @@
 /obj/machinery/atmospherics/unary/vent_pump/on,
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
+"wM" = (
+/obj/machinery/atmospherics/binary/pump/high_power{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "wR" = (
 /obj/machinery/photocopier/faxmachine{
 	department = "Test Fax 1"
@@ -786,6 +798,8 @@
 "FN" = (
 /obj/item/airlock_electronics,
 /obj/structure/table/glass,
+/obj/item/device/radio,
+/obj/item/device/radio,
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
 "Gi" = (
@@ -816,6 +830,13 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/maintenance/fsmaint2)
+"HC" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 4
+	},
+/obj/machinery/portable_atmospherics/canister,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "HI" = (
 /obj/machinery/vending/dinnerware,
 /turf/simulated/floor/tiled/techfloor,
@@ -888,6 +909,17 @@
 	},
 /turf/simulated/floor/tiled/steel_grid,
 /area/medical/surgery)
+"Ko" = (
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
+"Kr" = (
+/obj/floor_decal/carpet,
+/turf/simulated/floor/tiled/techfloor,
+/area/constructionsite)
 "Kt" = (
 /obj/structure/table/rack,
 /obj/item/reagent_containers/glass/beaker/noreact{
@@ -1942,8 +1974,8 @@ cp
 cp
 kr
 cp
-cp
-cp
+Kr
+Kr
 Wt
 aX
 sN
@@ -1981,8 +2013,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2020,8 +2052,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2059,8 +2091,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Kr
+Kr
 cp
 cp
 cp
@@ -2098,8 +2130,8 @@ cp
 cp
 cp
 cp
-cp
-bZ
+Kr
+Ko
 cp
 cp
 cp
@@ -2610,8 +2642,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+HC
+HC
 cp
 cp
 pa
@@ -2649,8 +2681,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+nL
+wM
 cp
 cp
 pa
@@ -2688,8 +2720,8 @@ cp
 cp
 cp
 cp
-cp
-cp
+Vl
+Vl
 cp
 cp
 pa

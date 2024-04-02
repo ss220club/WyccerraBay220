@@ -102,9 +102,9 @@
 
 /obj/structure/window/examine(mob/user)
 	. = ..(user)
-	to_chat(user, SPAN_NOTICE("It is fitted with \a [material.display_name] pane."))
+	to_chat(user, SPAN_NOTICE("It is fitted with [material.display_name] pane."))
 	if(reinf_material)
-		to_chat(user, SPAN_NOTICE("It is reinforced with \a [reinf_material.display_name] lattice."))
+		to_chat(user, SPAN_NOTICE("It is reinforced with [reinf_material.display_name] lattice."))
 
 	if (reinf_material)
 		switch (construction_state)
@@ -116,12 +116,12 @@
 				to_chat(user, SPAN_NOTICE("The window is fastened to the frame."))
 
 	if (anchored)
-		to_chat(user, SPAN_NOTICE("It is fastened to \the [get_turf(src)]."))
+		to_chat(user, SPAN_NOTICE("It is fastened to [get_turf(src)]."))
 	else
 		to_chat(user, SPAN_WARNING("It is not fastened to anything."))
 
 	if (paint_color)
-		to_chat(user, SPAN_NOTICE("\The [material] pane is stained with paint."))
+		to_chat(user, SPAN_NOTICE("[material] pane is stained with paint."))
 
 	if (polarized)
 		to_chat(user, SPAN_NOTICE("It appears to be wired."))
@@ -132,13 +132,13 @@
 		if (0)
 			to_chat(user, SPAN_NOTICE("It looks fully intact."))
 		if (1 to 24)
-			to_chat(user, SPAN_WARNING("\The [material] pane has a few cracks."))
+			to_chat(user, SPAN_WARNING("[material] pane has a few cracks."))
 		if (25 to 49)
-			to_chat(user, SPAN_WARNING("\The [material] pane looks slightly damaged."))
+			to_chat(user, SPAN_WARNING("[material] pane looks slightly damaged."))
 		if (50 to 74)
-			to_chat(user, SPAN_WARNING("\The [material] pane looks moderately damaged."))
+			to_chat(user, SPAN_WARNING("[material] pane looks moderately damaged."))
 		else
-			to_chat(user, SPAN_WARNING("\The [material] pane looks severely damaged."))
+			to_chat(user, SPAN_WARNING("[material] pane looks severely damaged."))
 
 /obj/structure/window/get_color()
 	if (paint_color)
@@ -164,13 +164,13 @@
 		var/initial_damage_percentage = round((prior_health / get_max_health()) * 100)
 		var/damage_percentage = get_damage_percentage()
 		if (damage_percentage >= 75 && initial_damage_percentage < 75)
-			visible_message(SPAN_DANGER("\The [src] looks like it's about to shatter!"))
+			visible_message(SPAN_DANGER("[src] looks like it's about to shatter!"))
 			playsound(loc, "glasscrack", 100, 1)
 		else if (damage_percentage >= 50 && initial_damage_percentage < 50)
-			visible_message(SPAN_WARNING("\The [src] looks seriously damaged!"))
+			visible_message(SPAN_WARNING("[src] looks seriously damaged!"))
 			playsound(loc, "glasscrack", 100, 1)
 		else if (damage_percentage >= 25 && initial_damage_percentage < 25)
-			visible_message(SPAN_WARNING("Cracks begin to appear in \the [src]!"))
+			visible_message(SPAN_WARNING("Cracks begin to appear in [src]!"))
 			playsound(loc, "glasscrack", 100, 1)
 
 /obj/structure/window/proc/get_glass_cost()
@@ -185,7 +185,7 @@
 /obj/structure/window/proc/shatter(display_message = 1)
 	playsound(src, "shatter", 70, 1)
 	if(display_message)
-		visible_message(SPAN_WARNING("\The [src] shatters!"))
+		visible_message(SPAN_WARNING("[src] shatters!"))
 
 	var/debris_count = round(get_glass_cost() / rand(1, 4))
 	for(var/i = 1 to debris_count)
@@ -229,7 +229,7 @@
 	return TRUE
 
 /obj/structure/window/do_simple_ranged_interaction(mob/user)
-	visible_message(SPAN_NOTICE("Something knocks on \the [src]."))
+	visible_message(SPAN_NOTICE("Something knocks on [src]."))
 	playsound(loc, 'sound/effects/Glasshit.ogg', 50, 1)
 	return TRUE
 
@@ -245,210 +245,185 @@
 		USE_FEEDBACK_FAILURE("This area does not allow structural modifications.")
 		return FALSE
 
+/obj/structure/window/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!reinf_material)
+		USE_FEEDBACK_FAILURE("[src] doesn't have a reinforced frame to pry out.")
+		return
+	if(construction_state == CONSTRUCT_STATE_COMPLETE)
+		USE_FEEDBACK_FAILURE("[src] needs to be unfastened from the frame before you can pry it out.")
+		return
+	if(!anchored)
+		USE_FEEDBACK_FAILURE("[src] isn't anchored and doesn't need to be pried.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(construction_state == CONSTRUCT_STATE_ANCHORED)
+		construction_state = CONSTRUCT_STATE_UNANCHORED
+	else
+		construction_state = CONSTRUCT_STATE_ANCHORED
+	user.visible_message(
+		SPAN_NOTICE("[user] pries [src] [construction_state ? "into" : "out of"] its frame with [tool]."),
+		SPAN_NOTICE("You pry [src] [construction_state ? "into" : "out of"] its frame with [tool].")
+	)
+
+/obj/structure/window/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!polarized)
+		USE_FEEDBACK_FAILURE("[src] is not wired and cannot be toggled.")
+		return
+	// Toggle Tinting
+	if(anchored)
+		toggle()
+		playsound(src, 'sound/effects/pop.ogg', 50, TRUE)
+		user.visible_message(
+			SPAN_NOTICE("[user] toggles [src]'s tinting with [tool]."),
+			SPAN_NOTICE("You toggle [src]'s tinting with [tool].")
+		)
+		return
+	// Set ID
+	var/input = input(user, "What ID would you like to set this window to?", "[src] - Polarization ID", id) as null|text
+	input = sanitizeSafe(input, MAX_NAME_LEN)
+	if (!input || input == id || !user.use_sanity_check(src, tool))
+		return
+	id = input
+	user.visible_message(
+		SPAN_NOTICE("[user] configures [src] with [tool]."),
+		SPAN_NOTICE("You set [src]'s polarization ID to '[id]' with [tool].")
+	)
+
+/obj/structure/window/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Reinforced Window
+	if(reinf_material)
+		switch(construction_state)
+			if(CONSTRUCT_STATE_UNANCHORED)
+				if(!can_install_here(user))
+					return
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
+				set_anchored(!anchored)
+				user.visible_message(
+					SPAN_NOTICE("[user] [!anchored ? "un" : null]fastens [src] [!anchored ? "from" : "to"] the floor with [tool]."),
+					SPAN_NOTICE("You [!anchored ? "un" : null]fasten [src] [!anchored ? "from" : "to"] the floor with [tool].")
+				)
+				return
+			if(CONSTRUCT_STATE_ANCHORED)
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
+				construction_state = CONSTRUCT_STATE_COMPLETE
+			if(CONSTRUCT_STATE_COMPLETE)
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
+				construction_state = CONSTRUCT_STATE_ANCHORED
+		update_nearby_icons()
+		user.visible_message(
+			SPAN_NOTICE("[user] [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fastens [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with [tool]."),
+			SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fasten [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with [tool].")
+		)
+		return
+	// Regular Windows
+	if(!anchored && !can_install_here(user))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(anchored)
+		construction_state = CONSTRUCT_STATE_UNANCHORED
+	else
+		construction_state = CONSTRUCT_STATE_ANCHORED
+	set_anchored(!anchored)
+	user.visible_message(
+		SPAN_NOTICE("[user] [!anchored ? "un" : null]fastens [src] [!anchored ? "from" : "to"] the floor with [tool]."),
+		SPAN_NOTICE("You [!anchored ? "un" : null]fasten [src] [!anchored ? "from" : "to"] the floor with [tool].")
+	)
+
+/obj/structure/window/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(anchored || construction_state)
+		USE_FEEDBACK_FAILURE("[src] must be detached from the floor[reinf_material ? " and its frame" : null] before you can dismantle it.")
+		return
+	if(polarized)
+		USE_FEEDBACK_FAILURE("[src]'s wiring must be removed before you can dismantle it.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
+		SPAN_NOTICE("You dismantle [src] with [tool].")
+	)
+	dismantle()
+
+/obj/structure/window/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!polarized)
+		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(opacity)
+		toggle()
+	new /obj/item/stack/cable_coil(user.loc, 1)
+	polarized = FALSE
+	id = null
+	user.visible_message(
+		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),
+		SPAN_NOTICE("You cut [src]'s wiring with [tool].")
+	)
+
+/obj/structure/window/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!health_damaged())
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
+		return
+	if(!repair_pending)
+		balloon_alert(user, "нужно установить [get_material_display_name()]!")
+		return
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	USE_FEEDBACK_REPAIR_FINISH(user)
+	restore_health(repair_pending)
+	repair_pending = 0
 
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window
-	if (isCoil(tool))
-		if (polarized)
-			USE_FEEDBACK_FAILURE("\The [src] is already polarized.")
+	if(isCoil(tool))
+		if(polarized)
+			USE_FEEDBACK_FAILURE("[src] is already polarized.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
-		if (!cable.use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire and polarize \the [src].")
+		if(!cable.use(1))
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire and polarize [src].")
 			return TRUE
 		playsound(src, 'sound/effects/sparks1.ogg', 50, TRUE)
 		polarized = TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] wires and polarizes \the [src] with \a [tool]."),
-			SPAN_NOTICE("You wire and polarize \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	// Crowbar - Remove reinforced window from frame
-	if (isCrowbar(tool))
-		if (!reinf_material)
-			USE_FEEDBACK_FAILURE("\The [src] doesn't have a reinforced frame to pry out.")
-			return TRUE
-		if (construction_state == CONSTRUCT_STATE_COMPLETE)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be unfastened from the frame before you can pry it out.")
-			return TRUE
-		if (!anchored)
-			USE_FEEDBACK_FAILURE("\The [src] isn't anchored and doesn't need to be pried.")
-			return TRUE
-		if (construction_state == CONSTRUCT_STATE_ANCHORED)
-			construction_state = CONSTRUCT_STATE_UNANCHORED
-		else
-			construction_state = CONSTRUCT_STATE_ANCHORED
-		playsound(src, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pries \the [src] [construction_state ? "into" : "out of"] its frame with \a [tool]."),
-			SPAN_NOTICE("You pry \the [src] [construction_state ? "into" : "out of"] its frame with \the [tool].")
+			SPAN_NOTICE("[user] wires and polarizes [src] with [tool]."),
+			SPAN_NOTICE("You wire and polarize [src] with [tool].")
 		)
 		return TRUE
 
 	// Material Stack - Repair window
-	if (istype(tool, /obj/item/stack/material))
-		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] doesn't need repairs.")
+	if(istype(tool, /obj/item/stack/material))
+		if(!health_damaged())
+			USE_FEEDBACK_FAILURE("[src] doesn't need repairs.")
 			return TRUE
-		if ((repair_pending + get_current_health()) >= get_max_health())
-			USE_FEEDBACK_FAILURE("\The [src] already has enough new [material] applied.")
+		if((repair_pending + get_current_health()) >= get_max_health())
+			USE_FEEDBACK_FAILURE("[src] already has enough new [material] applied.")
 			return TRUE
 		var/obj/item/stack/material/stack = tool
-		if (material != stack.material || reinf_material != stack.reinf_material)
-			USE_FEEDBACK_FAILURE("\The [src] must be repaired with the same type of [get_material_display_name()] it was made of.")
+		if(material != stack.material || reinf_material != stack.reinf_material)
+			USE_FEEDBACK_FAILURE("[src] must be repaired with the same type of [get_material_display_name()] it was made of.")
 			return TRUE
-		if (!stack.use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to repair \the [src].")
+		if(!stack.use(1))
+			USE_FEEDBACK_STACK_NOT_ENOUGH(stack, 1, "to repair [src].")
 			return TRUE
 		repair_pending += get_repaired_per_unit()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] replaces some of \the [src]'s damaged [material] with \a [tool]."),
-			SPAN_NOTICE("You replace some of \the [src]'s damaged [material] with \a [tool].")
+			SPAN_NOTICE("[user] replaces some of [src]'s damaged [material] with [tool]."),
+			SPAN_NOTICE("You replace some of [src]'s damaged [material] with [tool].")
 		)
-		if (repair_pending < get_damage_value())
+		if(repair_pending < get_damage_value())
 			user.show_message(SPAN_WARNING("It looks like it could use more sheets"), VISIBLE_MESSAGE)
-		return TRUE
-
-	// Multitool
-	// - Toggle tinting (Anchored)
-	// - Set ID (Unanchored)
-	if (isMultitool(tool))
-		if (!polarized)
-			USE_FEEDBACK_FAILURE("\The [src] is not wired and cannot be toggled.")
-			return TRUE
-		// Toggle Tinting
-		if (anchored)
-			toggle()
-			playsound(src, 'sound/effects/pop.ogg', 50, TRUE)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] toggles \the [src]'s tinting with \a [tool]."),
-				SPAN_NOTICE("You toggle \the [src]'s tinting with \the [tool].")
-			)
-			return TRUE
-		// Set ID
-		var/input = input(user, "What ID would you like to set this window to?", "[src] - Polarization ID", id) as null|text
-		input = sanitizeSafe(input, MAX_NAME_LEN)
-		if (!input || input == id || !user.use_sanity_check(src, tool))
-			return TRUE
-		id = input
-		user.visible_message(
-			SPAN_NOTICE("\The [user] configures \the [src] with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s polarization ID to '[id]' with \the [tool].")
-		)
-		return TRUE
-
-	// Plasmacutter - Dismantle window
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if (!plasmacutter.slice(user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts slicing \the [src] apart with \a [tool]."),
-			SPAN_NOTICE("You start slicing \the [src] apart with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] slices \the [src] apart with \a [tool]."),
-			SPAN_NOTICE("You slice \the [src] apart with \the [tool].")
-		)
-		dismantle()
-		return TRUE
-
-	// Screwdriver - Fasten window
-	if (isScrewdriver(tool))
-		// Reinforced Window
-		if (reinf_material)
-			switch(construction_state)
-				if (CONSTRUCT_STATE_UNANCHORED)
-					if (!can_install_here(user))
-						return TRUE
-					set_anchored(!anchored)
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-					user.visible_message(
-						SPAN_NOTICE("\The [user] [!anchored ? "un" : null]fastens \the [src] [!anchored ? "from" : "to"] the floor with \a [tool]."),
-						SPAN_NOTICE("You [!anchored ? "un" : null]fasten \the [src] [!anchored ? "from" : "to"] the floor with \the [tool].")
-					)
-					return TRUE
-				if (CONSTRUCT_STATE_ANCHORED)
-					construction_state = CONSTRUCT_STATE_COMPLETE
-				if (CONSTRUCT_STATE_COMPLETE)
-					construction_state = CONSTRUCT_STATE_ANCHORED
-			update_nearby_icons()
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fastens \the [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with \a [tool]."),
-				SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_ANCHORED ? "un" : null]fasten \the [src] [construction_state == CONSTRUCT_STATE_ANCHORED ? "from" : "to"] its frame with \the [tool].")
-			)
-			return TRUE
-		// Regular Windows
-		if (!anchored && !can_install_here(user))
-			return TRUE
-		if (anchored)
-			construction_state = CONSTRUCT_STATE_UNANCHORED
-		else
-			construction_state = CONSTRUCT_STATE_ANCHORED
-		set_anchored(!anchored)
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [!anchored ? "un" : null]fastens \the [src] [!anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You [!anchored ? "un" : null]fasten \the [src] [!anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		return TRUE
-
-	// Wirecutters - Remove wiring
-	if (isWirecutter(tool))
-		if (!polarized)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (opacity)
-			toggle()
-		new /obj/item/stack/cable_coil(user.loc, 1)
-		polarized = FALSE
-		id = null
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
-		)
-		return TRUE
-
-	// Wrench - Dismantle
-	if (isWrench(tool))
-		if (anchored || construction_state)
-			USE_FEEDBACK_FAILURE("\The [src] must be detached from the floor[reinf_material ? " and its frame" : null] before you can dismantle it.")
-			return TRUE
-		if (polarized)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring must be removed before you can dismantle it.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		dismantle()
-		return TRUE
-
-	// Welding Tool - Finalize repairs
-	if (isWelder(tool))
-		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] does not need repairs.")
-			return TRUE
-		if (!repair_pending)
-			USE_FEEDBACK_FAILURE("\The [src] needs some [get_material_display_name()] applied before you can weld it.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		restore_health(repair_pending)
-		repair_pending = 0
-		user.visible_message(
-			SPAN_NOTICE("\The [user] welds \the [src]'s [material] into place with \a [tool]."),
-			SPAN_NOTICE("You weld \the [src]'s [material] into place with \the [tool].")
-		)
 		return TRUE
 
 	return ..()
@@ -466,13 +441,13 @@
 	// Harm intent - Bash against the window
 	if (grab.assailant.a_intent == I_HURT)
 		if (!grab.force_danger())
-			USE_FEEDBACK_GRAB_MUST_UPGRADE("to smash them against \the [src]")
+			USE_FEEDBACK_GRAB_MUST_UPGRADE("to smash them against [src]")
 			return TRUE
 		var/def_zone = ran_zone(BP_HEAD, 20)
 		if (grab.damage_stage() < 2)
 			grab.assailant.visible_message(
-				SPAN_DANGER("\The [grab.assailant] bashes \the [grab.affecting] against \the [src]!"),
-				SPAN_DANGER("You bash \the [grab.affecting] against \the [src]!")
+				SPAN_DANGER("[grab.assailant] bashes [grab.affecting] against [src]!"),
+				SPAN_DANGER("You bash [grab.affecting] against [src]!")
 			)
 			if (prob(50))
 				grab.affecting.Weaken(1)
@@ -480,8 +455,8 @@
 			hit(25, grab.assailant, grab.affecting)
 		else
 			grab.assailant.visible_message(
-				SPAN_DANGER("\The [grab.assailant] crushes \the [grab.affecting] against \the [src]!"),
-				SPAN_DANGER("You crush \the [grab.affecting] against \the [src]!")
+				SPAN_DANGER("[grab.assailant] crushes [grab.affecting] against [src]!"),
+				SPAN_DANGER("You crush [grab.affecting] against [src]!")
 			)
 			grab.affecting.Weaken(5)
 			grab.affecting.apply_damage(20, DAMAGE_BRUTE, def_zone, used_weapon = src)
@@ -493,21 +468,21 @@
 
 /obj/structure/window/proc/hit(damage, mob/user, atom/weapon = null, damage_type = DAMAGE_BRUTE)
 	if (can_damage_health(damage, damage_type))
-		var/weapon_text = weapon ? " with \the [weapon]" : null
+		var/weapon_text = weapon ? " with [weapon]" : null
 		user.visible_message(
-			SPAN_DANGER("\The [user] attacks \the [src][weapon_text]!"),
-			SPAN_WARNING("You attack \the [src][weapon_text]!"),
+			SPAN_DANGER("[user] attacks [src][weapon_text]!"),
+			SPAN_WARNING("You attack [src][weapon_text]!"),
 			SPAN_WARNING("You hear the sound of something hitting a window.")
 		)
 		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 		damage_health(damage, damage_type, skip_can_damage_check = TRUE)
 		deanchor(user)
 	else
-		var/weapon_text = weapon ? " with \the [weapon]" : null
+		var/weapon_text = weapon ? " with [weapon]" : null
 		playsound(loc, 'sound/effects/Glasshit.ogg', 50, 1)
 		user.visible_message(
-			SPAN_WARNING("\The [user] attacks \the [src][weapon_text], but it bounces off!"),
-			SPAN_WARNING("You attack \the [src][weapon_text], but it bounces off! You need something stronger."),
+			SPAN_WARNING("[user] attacks [src][weapon_text], but it bounces off!"),
+			SPAN_WARNING("You attack [src][weapon_text], but it bounces off! You need something stronger."),
 			SPAN_WARNING("You hear the sound of something hitting a window.")
 		)
 
@@ -518,11 +493,11 @@
 
 /obj/structure/window/rotate(mob/user)
 	if(!CanPhysicallyInteract(user))
-		to_chat(user, SPAN_NOTICE("You can't interact with \the [src] right now!"))
+		to_chat(user, SPAN_NOTICE("You can't interact with [src] right now!"))
 		return
 
 	if (anchored)
-		to_chat(user, SPAN_NOTICE("\The [src] is secured to the floor!"))
+		to_chat(user, SPAN_NOTICE("[src] is secured to the floor!"))
 		return
 
 	var/newdir=turn(dir, 90)
@@ -722,7 +697,7 @@
 		for(var/obj/O in loc)
 			if((O != src) && O.density && !(O.atom_flags & ATOM_FLAG_CHECKS_BORDER) \
 			&& !(istype(O, /obj/structure/wall_frame) || istype(O, /obj/structure/grille)))
-				to_chat(user, SPAN_NOTICE("There isn't enough space to install \the [src]."))
+				balloon_alert(user, "недостаточно места!")
 				return FALSE
 	return TRUE
 
@@ -738,29 +713,28 @@
 		/obj/item/stock_parts/power/apc
 	)
 
-/obj/machinery/button/windowtint/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isMultitool(W))
-		var/t = sanitizeSafe(input(user, "Enter the ID for the button.", name, id), MAX_NAME_LEN)
-		if(user.incapacitated() && !user.Adjacent(src))
-			return TRUE
-		if (user.get_active_hand() != W)
-			to_chat(SPAN_WARNING("\The [W] needs to be in your active hand."))
-			return TRUE
-		if (!in_range(src, user) && src.loc != user)
-			return TRUE
-		t = sanitizeSafe(t, MAX_NAME_LEN)
-		if (t)
-			src.id = t
-			to_chat(user, SPAN_NOTICE("The new ID of the button is [id]"))
-		return TRUE
+/obj/machinery/button/windowtint/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/t = sanitizeSafe(input(user, "Enter the ID for the button.", name, id), MAX_NAME_LEN)
+	if(user.incapacitated() && !user.Adjacent(src))
+		return
+	if(user.get_active_hand() != tool)
+		to_chat(SPAN_WARNING("[tool] needs to be in your active hand."))
+		return
+	if(!in_range(src, user) && src.loc != user)
+		return
+	t = sanitizeSafe(t, MAX_NAME_LEN)
+	if(t)
+		src.id = t
+		to_chat(user, SPAN_NOTICE("The new ID of the button is [id]"))
 
-	if(isScrewdriver(W))
-		var/obj/item/frame/light_switch/windowtint/frame = new /obj/item/frame/light_switch/windowtint(user.loc, 1)
-		transfer_fingerprints_to(frame)
-		qdel(src)
-		return TRUE
-
-	return ..()
+/obj/machinery/button/windowtint/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/item/frame/light_switch/windowtint/frame = new /obj/item/frame/light_switch/windowtint(user.loc, 1)
+	transfer_fingerprints_to(frame)
+	qdel(src)
 
 /obj/machinery/button/windowtint/activate()
 	if(operating)

@@ -61,15 +61,44 @@
 	// Windows
 	for (var/obj/structure/window/window in loc)
 		if (window.dir == get_dir(src, user))
-			USE_FEEDBACK_FAILURE("\The [window] blocks access to \the [src].")
+			USE_FEEDBACK_FAILURE("[window] blocks access to [src].")
 			return FALSE
 
 	// Grilles
 	var/obj/structure/grille/grille = locate() in loc
 	if (grille?.density)
-		USE_FEEDBACK_FAILURE("\The [grille] blocks access to \the [src].")
+		USE_FEEDBACK_FAILURE("[grille] blocks access to [src].")
 		return FALSE
 
+/obj/structure/wall_frame/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
+		SPAN_NOTICE("You start dismantling [src] with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] dismantles [src] with [tool]."),
+		SPAN_NOTICE("You dismantle [src] with [tool].")
+	)
+	dismantle()
+
+/obj/structure/wall_frame/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_start_check(user, 1))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts slicing [src] apart with [tool]."),
+		SPAN_NOTICE("You start slicing [src] apart with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] slices [src] apart with [tool]."),
+		SPAN_NOTICE("You slice [src] apart with [tool].")
+	)
+	dismantle()
 
 /obj/structure/wall_frame/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Rods - Place Grille
@@ -81,46 +110,9 @@
 	if (istype(tool, /obj/item/stack/material))
 		var/obj/item/stack/material/stack = tool
 		if (stack.material.opacity > 0.7)
-			USE_FEEDBACK_FAILURE("\The [stack] cannot be used to make a window.")
+			USE_FEEDBACK_FAILURE("[stack] cannot be used to make a window.")
 			return TRUE
 		place_window(user, loc, tool)
-		return TRUE
-
-	// Wrench - Dismantle
-	if (isWrench(tool))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts dismantling \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start dismantling \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] dismantles \the [src] with \a [tool]."),
-			SPAN_NOTICE("You dismantle \the [src] with \the [tool].")
-		)
-		dismantle()
-		return TRUE
-
-	// Plasmacutter - Dismantle
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if (!plasmacutter.slice(user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts slicing \the [src] apart with \a [tool]."),
-			SPAN_NOTICE("You start slicing \the [src] apart with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] slices \the [src] apart with \a [tool]."),
-			SPAN_NOTICE("You slice \the [src] apart with \the [tool].")
-		)
-		dismantle()
 		return TRUE
 
 	return ..()

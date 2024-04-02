@@ -127,10 +127,10 @@ var/global/list/mob_hat_cache = list()
 	if(!(istype(possessor) && possessor.ckey))
 		return 0
 	if(src.ckey || src.client)
-		to_chat(possessor, SPAN_WARNING("\The [src] already has a player."))
+		to_chat(possessor, SPAN_WARNING("[src] already has a player."))
 		return 0
-	message_admins(SPAN_CLASS("adminnotice", "[key_name_admin(possessor)] has taken control of \the [src]."))
-	log_admin("[key_name(possessor)] took control of \the [src].")
+	message_admins(SPAN_CLASS("adminnotice", "[key_name_admin(possessor)] has taken control of [src]."))
+	log_admin("[key_name(possessor)] took control of [src].")
 	transfer_personality(possessor.client)
 	qdel(possessor)
 	return 1
@@ -190,28 +190,26 @@ var/global/list/mob_hat_cache = list()
 	new_hat.forceMove(src)
 	update_icon()
 
+/mob/living/silicon/robot/drone/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+	USE_FEEDBACK_FAILURE("[src] is hermetically sealed. You can't open the case.")
 
 /mob/living/silicon/robot/drone/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Block interaction
-	if (isCrowbar(tool))
-		USE_FEEDBACK_FAILURE("\The [src] is hermetically sealed. You can't open the case.")
-		return TRUE
-
 	// Hat - Equip hat
 	if (istype(tool, /obj/item/clothing/head))
 		if (hat)
-			USE_FEEDBACK_FAILURE("\The [src] is already wearing \a [hat].")
+			USE_FEEDBACK_FAILURE("[src] is already wearing [hat].")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		wear_hat(tool)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] puts \a [tool] on \the [src]."),
-			SPAN_NOTICE("You put \the [tool] on \the [src]."),
+			SPAN_NOTICE("[user] puts [tool] on [src]."),
+			SPAN_NOTICE("You put [tool] on [src]."),
 			exclude_mobs = list(src)
 		)
-		to_chat(src, SPAN_NOTICE("\The [user] puts \a [tool] on you."))
+		to_chat(src, SPAN_NOTICE("[user] puts [tool] on you."))
 		return TRUE
 
 	// ID Card - Reboot or shutdown the drone
@@ -221,24 +219,24 @@ var/global/list/mob_hat_cache = list()
 		// Reboot
 		if (stat == DEAD)
 			if (!config.allow_drone_spawn || emagged || health < -35)
-				USE_FEEDBACK_FAILURE("\The [src] interface is fried, and a distressing burned smell wafts from \his interior. You're not rebooting this one.")
+				USE_FEEDBACK_FAILURE("[src] interface is fried, and a distressing burned smell wafts from \his interior. You're not rebooting this one.")
 				return TRUE
 			if (!check_access(id))
 				USE_FEEDBACK_ID_CARD_DENIED(src, id_name)
 				return TRUE
 			request_player()
 			user.visible_message(
-				SPAN_NOTICE("\The [user] swipes \a [tool] over \the [src], attempting to reboot it."),
-				SPAN_NOTICE("You swipe [id_name] over \the [src], attempting to reboot it.")
+				SPAN_NOTICE("[user] swipes [tool] over [src], attempting to reboot it."),
+				SPAN_NOTICE("You swipe [id_name] over [src], attempting to reboot it.")
 			)
 		// Shutdown
 		else
 			user.visible_message(
-				SPAN_WARNING("\The [user] swipes \a [tool] over \the [src], attempting to shut it down."),
-				SPAN_WARNING("You swipe [id_name] over \the [src], attempting to shut it down."),
+				SPAN_WARNING("[user] swipes [tool] over [src], attempting to shut it down."),
+				SPAN_WARNING("You swipe [id_name] over [src], attempting to shut it down."),
 				exclude_mobs = list(src)
 			)
-			to_chat(src, SPAN_DANGER("\The [user] swipes \a [tool] over you, attempting to shut you down!"))
+			to_chat(src, SPAN_DANGER("[user] swipes [tool] over you, attempting to shut you down!"))
 			if (emagged || !check_access(id))
 				USE_FEEDBACK_ID_CARD_DENIED(src, id_name)
 				return TRUE
@@ -247,7 +245,7 @@ var/global/list/mob_hat_cache = list()
 
 	// Robot Upgrade Module - Block interaction
 	if (istype(tool, /obj/item/borg/upgrade))
-		USE_FEEDBACK_FAILURE("\The [src] is not compatible with \the [tool].")
+		USE_FEEDBACK_FAILURE("[src] is not compatible with [tool].")
 		return TRUE
 
 	return ..()
@@ -259,7 +257,7 @@ var/global/list/mob_hat_cache = list()
 		return
 
 	if(emagged)
-		to_chat(src, SPAN_DANGER("\The [user] attempts to load subversive software into you, but your hacked subroutines ignore the attempt."))
+		to_chat(src, SPAN_DANGER("[user] attempts to load subversive software into you, but your hacked subroutines ignore the attempt."))
 		to_chat(user, SPAN_DANGER("You attempt to subvert [src], but the sequencer has no effect."))
 		return
 

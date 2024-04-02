@@ -241,25 +241,21 @@
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/power/smes/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if((.= ..()))
+/obj/machinery/power/smes/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!panel_open)
+		balloon_alert(user, "нужно открыть панель!")
 		return
-
-	if (!panel_open)
-		to_chat(user, SPAN_WARNING("You need to open the access hatch on \the [src] first!"))
-		return TRUE
-
-	if(isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		if(!WT.can_use(5, user))
-			return TRUE
-		if(!damage)
-			to_chat(user, "\The [src] is already fully repaired.")
-			return TRUE
-		if(do_after(user, damage, src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(5 ,user))
-			to_chat(user, "You repair all structural damage to \the [src]")
-			damage = 0
-		return TRUE
+	if(!damage)
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
+		return
+	if(!tool.tool_start_check(user, 5))
+		return
+	USE_FEEDBACK_REPAIR_START(user)
+	if(!tool.use_as_tool(src, user, damage, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !damage)
+		return
+	USE_FEEDBACK_REPAIR_FINISH(user)
+	damage = 0
 
 /obj/machinery/power/smes/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	// this is the data which will be sent to the ui
@@ -354,7 +350,7 @@
 	amount = max(0, round(amount))
 	damage += amount
 	if(damage > maxdamage)
-		visible_message(SPAN_DANGER("\The [src] explodes in large rain of sparks and smoke!"))
+		visible_message(SPAN_DANGER("[src] explodes in large rain of sparks and smoke!"))
 		// Depending on stored charge percentage cause damage.
 		switch(Percentage())
 			if(75 to INFINITY)

@@ -7,11 +7,12 @@
 	icon_state = "apc_frame"
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
 
-/obj/item/frame/apc/attackby(obj/item/W as obj, mob/user as mob)
-	..()
-	if(isWrench(W))
-		new /obj/item/stack/material/steel( get_turf(src.loc), 2 )
-		qdel(src)
+/obj/item/frame/apc/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/stack/material/steel(get_turf(src.loc), 2)
+	qdel(src)
 
 /obj/item/frame/apc/try_build(turf/on_wall)
 	if (get_dist(on_wall,usr)>1)

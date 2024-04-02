@@ -56,8 +56,9 @@
 		if (M.ai_status_image)
 			user.add_client_image(M.ai_status_image)
 
-/datum/build_mode/ai/OnClick(atom/A, list/pa)
-	if (pa["left"])
+/datum/build_mode/ai/OnClick(atom/A, params)
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, LEFT_CLICK))
 		if (isliving(A))
 			var/mob/living/L = A
 			var/datum/ai_holder/AI = L.ai_holder
@@ -66,14 +67,14 @@
 				return
 
 			// Select multiple units
-			if (pa["ctrl"])
+			if (LAZYACCESS(modifiers, CTRL_CLICK))
 				if (!isnull(L.get_AI_stance()))
 					select_AI_mob(A)
 				return
 
 
 			// Pause/unpause AI
-			if (pa["shift"])
+			if (LAZYACCESS(modifiers, SHIFT_CLICK))
 				var/stance = L.get_AI_stance()
 				if (!isnull(stance)) // Null means there's no AI datum or it has one but is player controlled w/o autopilot on.
 					if (stance == STANCE_SLEEP)
@@ -90,7 +91,7 @@
 				return
 
 			// Toggle hostility
-			if (pa["alt"])
+			if (LAZYACCESS(modifiers, ALT_CLICK))
 				if (!isnull(L.get_AI_stance()))
 					AI.hostile = !AI.hostile
 					AI.lose_target()
@@ -113,13 +114,13 @@
 			deselect_all()
 
 
-	if (pa["right"])
+	if (LAZYACCESS(modifiers, RIGHT_CLICK))
 
 		if (isliving(A))
 			var/mob/living/L = A
 
 			// Change/Set AI Holder
-			if (pa["alt"] && pa["shift"])
+			if (LAZYACCESS(modifiers, ALT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 				if (!ai_type)
 					to_chat(user, SPAN_WARNING("No AI type selected."))
 					return
@@ -131,13 +132,13 @@
 				return
 
 			// Copy faction
-			if (pa["shift"])
+			if (LAZYACCESS(modifiers, SHIFT_CLICK))
 				copied_faction = L.faction
 				to_chat(user, SPAN_NOTICE("Copied faction '[copied_faction]'."))
 				return
 
 			// Paste faction
-			if (pa["ctrl"])
+			if (LAZYACCESS(modifiers, CTRL_CLICK))
 				if (!copied_faction)
 					to_chat(user, SPAN_WARNING("LMB+Shift a mob to copy their faction before pasting."))
 					return
@@ -148,7 +149,7 @@
 
 
 		if (istype(A, /atom)) // Force attack.
-			if (pa["alt"])
+			if (LAZYACCESS(modifiers, ALT_CLICK))
 				var/i = 0
 				for(var/mob/living/unit in selected_mobs)
 					var/datum/ai_holder/AI = unit.ai_holder
@@ -173,14 +174,14 @@
 					unit.forceMove(T)
 					forced++
 				else
-					AI.give_destination(T, 0, pa["shift"]) // If shift is held, the mobs will not stop moving to attack a visible enemy.
+					AI.give_destination(T, 0, LAZYACCESS(modifiers, SHIFT_CLICK)) // If shift is held, the mobs will not stop moving to attack a visible enemy.
 					told++
 			to_chat(user, SPAN_NOTICE("Commanded [told] mob\s to move to \the [T], and manually placed [forced] of them."))
 			var/image/orderimage = image(buildmode_hud,T,"ai_turforder")
 			flick_overlay(orderimage, list(user.client), 8, TRUE)
 			return
 
-	if (pa["middle"])
+	if (LAZYACCESS(modifiers, MIDDLE_CLICK))
 		if(isliving(A)) // Follow or attack.
 			var/mob/living/L = A
 			var/i = 0 // Attacking mobs.
@@ -189,7 +190,7 @@
 				var/datum/ai_holder/AI = unit.ai_holder
 				if (!AI)
 					return
-				if(L.IIsAlly(unit) || !AI.hostile || pa["shift"])
+				if(L.IIsAlly(unit) || !AI.hostile || LAZYACCESS(modifiers, SHIFT_CLICK))
 					AI.set_follow(L)
 					j++
 				else
@@ -256,10 +257,10 @@
 			holder = H
 			break
 	if(!holder) return
-	var/list/pa = params2list(params)
-	if (pa["ctrl"])
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, CTRL_CLICK))
 		//Holding shift prevents the deselection of existing
-		if(!pa["shift"])
+		if(!LAZYACCESS(modifiers, SHIFT_CLICK))
 			for(var/mob/living/unit in holder.selected_mobs)
 				holder.deselect_AI_mob(unit)
 

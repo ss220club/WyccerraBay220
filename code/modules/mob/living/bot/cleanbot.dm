@@ -57,13 +57,14 @@
 	if(get_turf(target) == src.loc)
 		UnarmedAttack(target)
 
-/mob/living/bot/cleanbot/UnarmedAttack(obj/decal/cleanable/D, proximity)
+/mob/living/bot/cleanbot/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	if(!..())
 		return
 
-	if(!istype(D))
+	if(!istype(target, /obj/decal/cleanable))
 		return
 
+	var/obj/decal/cleanable/D = target
 	if(D.loc != loc)
 		return
 

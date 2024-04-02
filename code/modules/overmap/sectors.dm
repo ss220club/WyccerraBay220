@@ -186,7 +186,8 @@ GLOBAL_LIST_EMPTY(known_overmap_sectors)
 			T = T.ChangeTurf(/turf/unsimulated/map/edge)
 		else
 			T = T.ChangeTurf(/turf/unsimulated/map)
-		ChangeArea(T, A)
+
+		T.change_area(A)
 
 	GLOB.using_map.sealed_levels |= GLOB.using_map.overmap_z
 

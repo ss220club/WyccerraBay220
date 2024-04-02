@@ -24,13 +24,13 @@
 	/// Whether attackby will be passed on it even with a closed panel
 	var/external_slot
 
+/obj/item/stock_parts/computer/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	to_chat(user, "***** DIAGNOSTICS REPORT *****")
+	to_chat(user, jointext(diagnostics(), "\n"))
+	to_chat(user, "******************************")
+
 /obj/item/stock_parts/computer/attackby(obj/item/W as obj, mob/living/user as mob)
-	// Multitool. Runs diagnostics
-	if(isMultitool(W))
-		to_chat(user, "***** DIAGNOSTICS REPORT *****")
-		to_chat(user, jointext(diagnostics(), "\n"))
-		to_chat(user, "******************************")
-		return TRUE
 	// Nanopaste. Repair all damage if present for a single unit.
 	var/obj/item/stack/S = W
 	if(istype(S, /obj/item/stack/nanopaste))
@@ -51,7 +51,6 @@
 			restore_health(10)
 		return TRUE
 	return ..()
-
 
 /// Returns a list of lines containing diagnostic information for display.
 /obj/item/stock_parts/computer/proc/diagnostics()

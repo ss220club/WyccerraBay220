@@ -468,6 +468,167 @@
 	if (use_call == "weapon")
 		spark_system.start()
 
+/mob/living/silicon/robot/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(opened)
+		// Close cover
+		if(cell)
+			user.visible_message(
+				SPAN_NOTICE("[user] starts closing [src]'s maintenance hatch with [tool]."),
+				SPAN_NOTICE("You start closing [src]'s maintenance hatch with [tool]."),
+			)
+			if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			if(!opened)
+				USE_FEEDBACK_FAILURE("[src]'s maintenance hatch is already closed.")
+				return
+			if(!cell)
+				USE_FEEDBACK_FAILURE("[src]'s cell needs to remain in place to close \his maintenance hatch.")
+				return
+			opened = FALSE
+			update_icon()
+			user.visible_message(
+				SPAN_NOTICE("[user] closes [src]'s maintenance hatch with [tool]."),
+				SPAN_NOTICE("You close [src]'s maintenance hatch with [tool]."),
+			)
+			return
+
+		// Remove MMI
+		if(wiresexposed && wires.IsAllCut())
+			if(!mmi)
+				USE_FEEDBACK_FAILURE("[src] has no brain to remove.")
+				return
+			user.visible_message(
+				SPAN_NOTICE("[user] starts removing [src]'s [mmi.name] with [tool]."),
+				SPAN_NOTICE("You start removing [src]'s [mmi.name] with [tool]."),
+			)
+			if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE))
+				return
+			if(!mmi)
+				USE_FEEDBACK_FAILURE("[src] has no longer has a brain to remove.")
+				return
+			user.visible_message(
+				SPAN_NOTICE("[user] removes [src]'s [mmi.name] with [tool]."),
+				SPAN_NOTICE("You remove [src]'s [mmi.name] with [tool]."),
+			)
+			dismantle(user)
+			return
+
+		// Remove component
+		var/list/removable_components = list()
+		for(var/key in components)
+			if (key == "power cell")
+				continue
+			var/datum/robot_component/component = components[key]
+			if (component.installed != 0)
+				removable_components += key
+		if(!length(removable_components))
+			USE_FEEDBACK_FAILURE("[src] has no components to remove.")
+			return
+		var/input = input(user, "Whick component do you want to pry out?", "[name] - Remove Component") as null|anything in removable_components
+		if(!input || !user.use_sanity_check(src, tool))
+			return
+		var/datum/robot_component/component = components[input]
+		if(component.installed == 0)
+			USE_FEEDBACK_FAILURE("[src] no longer has [input] to remove.")
+			return
+		var/obj/item/robot_parts/robot_component/removed_component = component.wrapped
+		if(istype(removed_component))
+			removed_component.brute = component.brute_damage
+			removed_component.burn = component.electronics_damage
+		removed_component.forceMove(loc)
+		if(component.installed == 1)
+			component.uninstall()
+		component.installed = 0
+		component.wrapped = null
+		user.visible_message(
+			SPAN_NOTICE("[user] removes [removed_component] from [src]'s [component.name] slot with [tool]."),
+			SPAN_NOTICE("You remove [removed_component] from [src]'s [component.name] slot with [tool].")
+		)
+		return
+
+	// Open the panel
+	if(locked)
+		USE_FEEDBACK_FAILURE("[src]'s maintenance hatch is locked and cannot be opened.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts prying open [src]'s maintenance hatch with [tool]."),
+		SPAN_NOTICE("You start prying open [src]'s maintenance hatch with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE))
+		return
+	if(locked)
+		USE_FEEDBACK_FAILURE("[src]'s maintenance hatch is locked and cannot be opened.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] pries open [src]'s maintenance hatch with [tool]."),
+		SPAN_NOTICE("You pry open [src]'s maintenance hatch with [tool].")
+	)
+	opened = TRUE
+	update_icon()
+	return
+
+/mob/living/silicon/robot/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!wiresexposed)
+		USE_FEEDBACK_FAILURE("[src]'s wiring must be exposed before you can access them.")
+		return
+	wires.Interact(user)
+
+/mob/living/silicon/robot/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!opened)
+		balloon_alert(user, "панель закрыта!")
+		return
+	var/input = input(user, "What would you like to access?", "[name] - Screwdriver Access") as null|anything in list("Wiring", "Radio")
+	if(!input)
+		return
+	if(!opened)
+		balloon_alert(user, "панель закрыта!")
+		return
+	switch(input)
+		// Passthrough to radio
+		if("Radio")
+			if(!silicon_radio)
+				balloon_alert(user, "нет рации!")
+				return
+			var/result = tool.resolve_attackby(silicon_radio, user)
+			if(result)
+				update_icon()
+		// Toggle wire panel
+		if("Wiring")
+			if(cell)
+				balloon_alert(user, "нужно снять батарею!")
+				return
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			wiresexposed = !wiresexposed
+			update_icon()
+			USE_FEEDBACK_WIRING_EXPOSED(user, wiresexposed)
+
+/mob/living/silicon/robot/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!wiresexposed)
+		USE_FEEDBACK_FAILURE("[src]'s wiring must be exposed before you can access them.")
+		return
+	wires.Interact(user)
+
+/mob/living/silicon/robot/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(user == src)
+		balloon_alert(user, "вы не можете ремонтировать себя!")
+		return
+	if(!getBruteLoss())
+		balloon_alert(user, "нет физических повреждений!")
+		return
+	if(!tool.tool_start_check(user, 1))
+		return
+	USE_FEEDBACK_REPAIR_START(user)
+	if(!tool.use_as_tool(src, user, 1 SECONDS, 1, 50, SKILL_DEVICES, do_flags = DO_PUBLIC_UNIQUE) || !getBruteLoss())
+		return
+	USE_FEEDBACK_REPAIR_FINISH(user)
+	adjustBruteLoss(-30)
+	updatehealth()
 
 /mob/living/silicon/robot/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Components - Attempt to install
@@ -475,10 +636,10 @@
 		var/datum/robot_component/component = components[key]
 		if (component.accepts_component(tool))
 			if (!opened)
-				USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch must be open before you can install \the [tool].")
+				USE_FEEDBACK_FAILURE("[src]'s maintenance hatch must be open before you can install [tool].")
 				return TRUE
 			if (component.installed)
-				USE_FEEDBACK_FAILURE("\The [src] already has \a [component.wrapped] installed in \the [component] slot.")
+				USE_FEEDBACK_FAILURE("[src] already has [component.wrapped] installed in [component] slot.")
 				return TRUE
 			if (!user.unEquip(tool, src))
 				FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -491,8 +652,8 @@
 				component.brute_damage = component_tool.brute
 				component.electronics_damage = component_tool.burn
 			user.visible_message(
-				SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
-				SPAN_NOTICE("You install \the [tool] into \the [src].")
+				SPAN_NOTICE("[user] installs [tool] into [src]."),
+				SPAN_NOTICE("You install [tool] into [src].")
 			)
 			return TRUE
 		// Intentionally allows other interactions here, if there was no valid component
@@ -500,146 +661,43 @@
 	// Cable Coil - Repair burn damage
 	if (isCoil(tool))
 		if (!wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wires must be exposed to repair electronics damage.")
+			USE_FEEDBACK_FAILURE("[src]'s wires must be exposed to repair electronics damage.")
 			return TRUE
 		if (!getFireLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no electronics damage to repair.")
+			USE_FEEDBACK_FAILURE("[src] has no electronics damage to repair.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.can_use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to repair \the [src]'s electronics damage.")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to repair [src]'s electronics damage.")
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts repairing some of the electronics in \the [src] with [cable.get_vague_name(FALSE)]."),
-			SPAN_NOTICE("You start repairing some of the electronics in \the [src] with [cable.get_exact_name(1)]."),
+			SPAN_NOTICE("[user] starts repairing some of the electronics in [src] with [cable.get_vague_name(FALSE)]."),
+			SPAN_NOTICE("You start repairing some of the electronics in [src] with [cable.get_exact_name(1)]."),
 		)
 		if (!do_after(user, 1 SECOND, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
 			return TRUE
 		if (!wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wires must be exposed to repair electronics damage.")
+			USE_FEEDBACK_FAILURE("[src]'s wires must be exposed to repair electronics damage.")
 			return TRUE
 		if (!getFireLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no electronics damage to repair.")
+			USE_FEEDBACK_FAILURE("[src] has no electronics damage to repair.")
 			return TRUE
 		if (!cable.can_use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to repair \the [src]'s electronics damage.")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to repair [src]'s electronics damage.")
 			return TRUE
 		cable.use(1)
 		adjustFireLoss(-30)
 		updatehealth()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs some of the electronics in \the [src] with [cable.get_vague_name(FALSE)]."),
-			SPAN_NOTICE("You repair some of the electronics in \the [src] with some [cable.get_exact_name(1)]."),
+			SPAN_NOTICE("[user] repairs some of the electronics in [src] with [cable.get_vague_name(FALSE)]."),
+			SPAN_NOTICE("You repair some of the electronics in [src] with some [cable.get_exact_name(1)]."),
 		)
-		return TRUE
-
-	// Crowbar
-	// - Toggle cover
-	// - Remove MMI
-	// - Remove components
-	if (isCrowbar(tool))
-		if (opened)
-			// Close cover
-			if (cell)
-				user.visible_message(
-					SPAN_NOTICE("\The [user] starts closing \the [src]'s maintenance hatch with \a [tool]."),
-					SPAN_NOTICE("You start closing \the [src]'s maintenance hatch with \a [tool]."),
-				)
-				if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-					return TRUE
-				if (!opened)
-					USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is already closed.")
-					return TRUE
-				if (!cell)
-					USE_FEEDBACK_FAILURE("\The [src]'s cell needs to remain in place to close \his maintenance hatch.")
-					return TRUE
-				opened = FALSE
-				update_icon()
-				user.visible_message(
-					SPAN_NOTICE("\The [user] closes \the [src]'s maintenance hatch with \a [tool]."),
-					SPAN_NOTICE("You close \the [src]'s maintenance hatch with \a [tool]."),
-				)
-				return TRUE
-
-			// Remove MMI
-			if (wiresexposed && wires.IsAllCut())
-				if (!mmi)
-					USE_FEEDBACK_FAILURE("\The [src] has no brain to remove.")
-					return TRUE
-				user.visible_message(
-					SPAN_NOTICE("\The [user] starts removing \the [src]'s [mmi.name] with \a [tool]."),
-					SPAN_NOTICE("You start removing \the [src]'s [mmi.name] with \a [tool]."),
-				)
-				if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-					return TRUE
-				if (!mmi)
-					USE_FEEDBACK_FAILURE("\The [src] has no longer has a brain to remove.")
-					return TRUE
-				user.visible_message(
-					SPAN_NOTICE("\The [user] removes \the [src]'s [mmi.name] with \a [tool]."),
-					SPAN_NOTICE("You remove \the [src]'s [mmi.name] with \a [tool]."),
-				)
-				dismantle(user)
-				return TRUE
-
-			// Remove component
-			var/list/removable_components = list()
-			for (var/key in components)
-				if (key == "power cell")
-					continue
-				var/datum/robot_component/component = components[key]
-				if (component.installed != 0)
-					removable_components += key
-			if (!length(removable_components))
-				USE_FEEDBACK_FAILURE("\The [src] has no components to remove.")
-				return TRUE
-			var/input = input(user, "Whick component do you want to pry out?", "[name] - Remove Component") as null|anything in removable_components
-			if (!input || !user.use_sanity_check(src, tool))
-				return TRUE
-			var/datum/robot_component/component = components[input]
-			if (component.installed == 0)
-				USE_FEEDBACK_FAILURE("\The [src] no longer has \a [input] to remove.")
-				return TRUE
-			var/obj/item/robot_parts/robot_component/removed_component = component.wrapped
-			if (istype(removed_component))
-				removed_component.brute = component.brute_damage
-				removed_component.burn = component.electronics_damage
-			removed_component.forceMove(loc)
-			if (component.installed == 1)
-				component.uninstall()
-			component.installed = 0
-			component.wrapped = null
-			user.visible_message(
-				SPAN_NOTICE("\The [user] removes \a [removed_component] from \the [src]'s [component.name] slot with \a [tool]."),
-				SPAN_NOTICE("You remove \a [removed_component] from \the [src]'s [component.name] slot with \the [tool].")
-			)
-			return TRUE
-
-		// Open the panel
-		if (locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is locked and cannot be opened.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts prying open \the [src]'s maintenance hatch with \a [tool]."),
-			SPAN_NOTICE("You start prying open \the [src]'s maintenance hatch with \a [tool].")
-		)
-		if (!do_after(user, (tool.toolspeed * 5) SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (locked)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch is locked and cannot be opened.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] pries open \the [src]'s maintenance hatch with \a [tool]."),
-			SPAN_NOTICE("You pry open \the [src]'s maintenance hatch with \a [tool].")
-		)
-		opened = TRUE
-		update_icon()
 		return TRUE
 
 	// Encryption key - Passthrough to radio
 	if (istype(tool, /obj/item/device/encryptionkey))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance panel must be opened before you can access the radio.")
+			USE_FEEDBACK_FAILURE("[src]'s maintenance panel must be opened before you can access the radio.")
 			return TRUE
 		if (tool.resolve_attackby(src, user, click_params))
 			return TRUE
@@ -649,9 +707,9 @@
 	if (istype(id))
 		var/id_name = GET_ID_NAME(id, tool)
 		if (emagged)
-			to_chat(user, SPAN_WARNING("\The [src]'s panel lock seems slightly damaged."))
+			to_chat(user, SPAN_WARNING("[src]'s panel lock seems slightly damaged."))
 		if (opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s cover must be closed before you can lock it.")
+			USE_FEEDBACK_FAILURE("[src]'s cover must be closed before you can lock it.")
 			return TRUE
 		if (!check_access(id))
 			USE_FEEDBACK_ID_CARD_DENIED(src, id_name)
@@ -659,8 +717,8 @@
 		locked = !locked
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] scans \a [tool] over \the [src]'s maintenance hatch, toggling it [locked ? "locked" : "unlocked"]."),
-			SPAN_NOTICE("You scan [id_name] over \the [src]'s maintenance hatch, toggling it [locked ? "locked" : "unlocked"]."),
+			SPAN_NOTICE("[user] scans [tool] over [src]'s maintenance hatch, toggling it [locked ? "locked" : "unlocked"]."),
+			SPAN_NOTICE("You scan [id_name] over [src]'s maintenance hatch, toggling it [locked ? "locked" : "unlocked"]."),
 			range = 1
 		)
 		return TRUE
@@ -668,48 +726,40 @@
 	// Matter Bin - Install/swap matter bin
 	if (istype(tool, /obj/item/stock_parts/matter_bin))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch must be opened before you can install \the [tool].")
+			USE_FEEDBACK_FAILURE("[src]'s maintenance hatch must be opened before you can install [tool].")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		if (storage)
 			user.visible_message(
-				SPAN_NOTICE("\The [user] replaces \the [src]'s [storage.name] with \a [tool]."),
-				SPAN_NOTICE("You replace \the [src]'s [storage.name] with \the [tool].")
+				SPAN_NOTICE("[user] replaces [src]'s [storage.name] with [tool]."),
+				SPAN_NOTICE("You replace [src]'s [storage.name] with [tool].")
 			)
 			storage.dropInto(loc)
 		else
 			user.visible_message(
-				SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
-				SPAN_NOTICE("You install \a [tool] into \the [src].")
+				SPAN_NOTICE("[user] installs [tool] into [src]."),
+				SPAN_NOTICE("You install [tool] into [src].")
 			)
 		storage = tool
 		handle_selfinsert(tool, user)
 		recalculate_synth_capacities()
 		return TRUE
 
-	// Multitool, Wirecutters - Wire panel
-	if (isMultitool(tool) || isWirecutter(tool))
-		if (!wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring must be exposed before you can access them.")
-			return TRUE
-		wires.Interact(user)
-		return TRUE
-
 	// Power Cell - Install cell
 	if (istype(tool, /obj/item/cell))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch must be opened before you can install \the [tool].")
+			USE_FEEDBACK_FAILURE("[src]'s maintenance hatch must be opened before you can install [tool].")
 			return TRUE
 		if (cell)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [cell] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [cell] installed.")
 			return TRUE
 		if (wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring panel must be closed before you can install \the [tool].")
+			USE_FEEDBACK_FAILURE("[src]'s wiring panel must be closed before you can install [tool].")
 			return TRUE
 		if (tool.w_class != ITEM_SIZE_NORMAL)
-			USE_FEEDBACK_FAILURE("\The [tool] is too [tool.w_class < ITEM_SIZE_NORMAL ? "small" : "large"] to fit in \the [src].")
+			USE_FEEDBACK_FAILURE("[tool] is too [tool.w_class < ITEM_SIZE_NORMAL ? "small" : "large"] to fit in [src].")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -723,22 +773,22 @@
 		component.brute_damage = 0
 		component.electronics_damage = 0
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
-			SPAN_NOTICE("You install \a [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
 		return TRUE
 
 	// Robot Upgrade Module - Apply upgrade
 	if (istype(tool, /obj/item/borg/upgrade))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance hatch must be opened before you can install \the [tool].")
+			USE_FEEDBACK_FAILURE("[src]'s maintenance hatch must be opened before you can install [tool].")
 			return TRUE
 		var/obj/item/borg/upgrade/upgrade = tool
 		if (!module && upgrade.require_module)
-			USE_FEEDBACK_FAILURE("\The [src] must choose a module before \the [tool] can be installed.")
+			USE_FEEDBACK_FAILURE("[src] must choose a module before [tool] can be installed.")
 			return TRUE
 		if (upgrade.locked)
-			USE_FEEDBACK_FAILURE("\The [tool] is locked and cannot be used.")
+			USE_FEEDBACK_FAILURE("[tool] is locked and cannot be used.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -747,76 +797,8 @@
 			return TRUE
 		handle_selfinsert(tool, user)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \the [src]."),
-			SPAN_NOTICE("You install \a [tool] into \the [src].")
-		)
-		return TRUE
-
-	// Screwdriver
-	// - Toggle wire panel
-	// - Passthrough to radio
-	if (isScrewdriver(tool))
-		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance panel must be opened before you can access the wiring or radio.")
-			return TRUE
-		var/input = input(user, "What would you like to access?", "[name] - Screwdriver Access") as null|anything in list("Wiring", "Radio")
-		if (!input || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s maintenance panel must be opened before you can access the wiring or radio.")
-			return TRUE
-		switch (input)
-			// Passthrough to radio
-			if ("Radio")
-				if (!silicon_radio)
-					USE_FEEDBACK_FAILURE("\The [src] doesn't have a radio to access.")
-					return TRUE
-				var/result = tool.resolve_attackby(silicon_radio, user, click_params)
-				if (result)
-					update_icon()
-			// Toggle wire panel
-			if ("Wiring")
-				if (cell)
-					USE_FEEDBACK_FAILURE("\The [src]'s power cell must be removed before you can access the wiring.")
-					return TRUE
-				wiresexposed = !wiresexposed
-				update_icon()
-				user.visible_message(
-					SPAN_NOTICE("\The [user] [wiresexposed ? "exposes" : "unexposes"] \the [src]'s wiring with \a [tool]."),
-					SPAN_NOTICE("You [wiresexposed ? "expose" : "unexpose"] \the [src]'s wiring with \the [tool].")
-				)
-		return TRUE
-
-	// Welding Tool - Repair brute damage
-	if (isWelder(tool))
-		if (user == src)
-			USE_FEEDBACK_FAILURE("You lack the reach to be able to repair yourself.")
-			return TRUE
-		if (!getBruteLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
-			return TRUE
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to repair \the [src]'s physical damage."))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts repairing some of the dents on \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start repairing some of the dents on \the [src] with \the [tool]."),
-		)
-		if (!do_after(user, (tool.toolspeed * 1) SECOND, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!getBruteLoss())
-			USE_FEEDBACK_FAILURE("\The [src] has no physical damage to repair.")
-			return TRUE
-		if (!welder.can_use(1, user, "to repair \the [src]'s physical damage."))
-			return TRUE
-		welder.remove_fuel(1, user)
-		adjustBruteLoss(-30)
-		updatehealth()
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs some of the dents on \the [src] with \a [tool]."),
-			SPAN_NOTICE("You repair some of the dents on \the [src] with \the [tool]."),
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
 		return TRUE
 
@@ -851,7 +833,7 @@
 			cell.update_icon()
 			cell.add_fingerprint(user)
 			user.put_in_active_hand(cell)
-			to_chat(user, "You remove \the [cell].")
+			to_chat(user, "You remove [cell].")
 			cell = null
 			cell_component.wrapped = null
 			cell_component.installed = 0
@@ -859,7 +841,7 @@
 		else if(cell_component.installed == -1)
 			cell_component.installed = 0
 			var/obj/item/broken_device = cell_component.wrapped
-			to_chat(user, "You remove \the [broken_device].")
+			to_chat(user, "You remove [broken_device].")
 			user.put_in_active_hand(broken_device)
 
 //Robots take half damage from basic attacks.

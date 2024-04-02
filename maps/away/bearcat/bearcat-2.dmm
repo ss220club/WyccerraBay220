@@ -2798,7 +2798,7 @@
 /obj/machinery/atmospherics/pipe/zpipe/down/scrubbers,
 /obj/machinery/atmospherics/pipe/zpipe/down/supply,
 /obj/structure/cable/green{
-	d1 = 31;
+	d1 = 32;
 	icon_state = "32-1"
 	},
 /turf/simulated/open,

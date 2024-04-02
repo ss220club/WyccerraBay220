@@ -121,57 +121,52 @@ Thus, the two variables affect pump operation are set in New():
 	else
 		return air2
 
-/obj/machinery/atmospherics/binary/pump/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
-	if(inoperable())
-		return
+/obj/machinery/atmospherics/binary/pump/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "Pump", name)
+		ui.open()
 
-	// this is the data which will be sent to the ui
-	var/data[0]
+/obj/machinery/atmospherics/binary/pump/tgui_data(mob/user)
+	var/list/data = list()
 
-	data = list(
-		"on" = use_power,
-		"pressure_set" = round(target_pressure*100),	//Nano UI can't handle rounded non-integers, apparently.
-		"max_pressure" = max_pressure_setting,
-		"last_flow_rate" = round(last_flow_rate*10),
-		"last_power_draw" = round(last_power_draw),
-		"max_power_draw" = power_rating,
-	)
+	data["on"] = use_power
+	data["pressure_set"] = round(target_pressure)
+	data["max_pressure"] = max_pressure_setting
+	data["last_flow_rate"] = round(last_flow_rate)
+	data["last_power_draw"] = round(last_power_draw)
+	data["max_power_draw"] = power_rating
 
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if (!ui)
-		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "gas_pump.tmpl", name, 470, 290)
-		ui.set_initial_data(data)	// when the ui is first opened this is the data it will use
-		ui.open()					// open the new ui window
-		ui.set_auto_update(1)		// auto update every Master Controller tick
+	return data
 
 /obj/machinery/atmospherics/binary/pump/interface_interact(mob/user)
-	ui_interact(user)
+	tgui_interact(user)
 	return TRUE
 
-/obj/machinery/atmospherics/binary/pump/Topic(href,href_list)
-	if((. = ..())) return
+/obj/machinery/atmospherics/binary/pump/tgui_state(mob/user)
+	return GLOB.default_state
 
-	if(href_list["power"])
-		update_use_power(!use_power)
-		. = 1
+/obj/machinery/atmospherics/binary/pump/tgui_act(action, params)
+	if(..())
+		return
 
-	switch(href_list["set_press"])
+	switch(action)
+		if("power")
+			update_use_power(!use_power)
+			update_icon()
+			return TRUE
 		if ("min")
 			target_pressure = 0
-			. = 1
+			return TRUE
 		if ("max")
 			target_pressure = max_pressure_setting
-			. = 1
+			return TRUE
 		if ("set")
-			var/new_pressure = input(usr,"Enter new output pressure (0-[max_pressure_setting]kPa)","Pressure control",src.target_pressure) as num
-			src.target_pressure = clamp(new_pressure, 0, max_pressure_setting)
-			. = 1
-
-	if(.)
-		src.update_icon()
+			var/new_pressure = text2num(params["rate"])
+			if(isnull(new_pressure))
+				return FALSE
+			target_pressure = clamp(new_pressure, 0, max_pressure_setting)
+			return TRUE
 
 /obj/machinery/atmospherics/binary/pump/cannot_transition_to(state_path, mob/user)
 	if(state_path == /singleton/machine_construction/default/deconstructed)

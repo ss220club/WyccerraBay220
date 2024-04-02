@@ -132,8 +132,14 @@
 	var/area/A = get_area(src)
 	if (!A)
 		return
-	for (var/obj/machinery/portable_atmospherics/powered/scrubber/huge/scrubber in A)
+
+	for(var/obj/machinery/portable_atmospherics/powered/scrubber/huge/scrubber as anything in SSmachines.get_machinery_of_type(/obj/machinery/portable_atmospherics/powered/scrubber/huge))
+		if(get_area(scrubber) != A)
+			continue
+
 		connectedscrubbers += scrubber
+
 	if (!length(connectedscrubbers))
 		status = "ERROR: No scrubber found!"
+
 	updateUsrDialog()

@@ -4,8 +4,10 @@
  * @license MIT
  */
 
+import { resolveAsset } from '../assets';
 import { classes, pureComponentHooks } from 'common/react';
 import { computeBoxClassName, computeBoxProps } from './Box';
+import { Icon } from './Icon';
 import { Tooltip } from './Tooltip';
 
 export const ImageButton = (props) => {
@@ -20,6 +22,7 @@ export const ImageButton = (props) => {
     disabled,
     disabledContent,
     image,
+    imageUrl,
     imageAsset,
     imageSize,
     tooltip,
@@ -41,8 +44,12 @@ export const ImageButton = (props) => {
         selected && 'ImageButton--selected',
         disabled && 'ImageButton--disabled',
         color && typeof color === 'string'
-          ? 'ImageButton--color--' + color
-          : 'ImageButton--color--default',
+          ? onClick
+            ? 'ImageButton--color--clickable--' + color
+            : 'ImageButton--color--' + color
+          : onClick
+            ? 'ImageButton--color--default--clickable'
+            : 'ImageButton--color--default',
         className,
         computeBoxClassName(rest),
       ])}
@@ -54,9 +61,14 @@ export const ImageButton = (props) => {
           <div className={classes([imageAsset, image])} />
         ) : (
           <img
-            src={`data:image/jpeg;base64,${image}`}
+            src={
+              imageUrl
+                ? resolveAsset(imageUrl)
+                : `data:image/jpeg;base64,${image}`
+            }
             style={{
               width: imageSize,
+              height: imageSize,
               '-ms-interpolation-mode': 'nearest-neighbor',
             }}
           />
@@ -78,7 +90,6 @@ export const ImageButton = (props) => {
             ])}
           >
             {disabled ? disabledContent : content}
-            {children}
           </div>
         ) : (
           <div className={classes(['ImageButton__content__horizontal'])}>
@@ -98,7 +109,6 @@ export const ImageButton = (props) => {
               className={classes(['ImageButton__content__horizontal--content'])}
             >
               {content}
-              {children}
             </div>
           </div>
         ))}
@@ -113,7 +123,104 @@ export const ImageButton = (props) => {
     );
   }
 
-  return buttonContent;
+  return (
+    <div
+      className={classes([
+        vertical ? 'ImageButton--vertical' : 'ImageButton--horizontal',
+      ])}
+    >
+      {buttonContent}
+      {children}
+    </div>
+  );
 };
 
 ImageButton.defaultHooks = pureComponentHooks;
+
+/**
+ * That's VERY fucking expensive thing!
+ * Use it only in places, where it really needed.
+ * Otherwise, the window opening time may increase by a third!
+ * Most of the blame is on Icon.
+ * Maybe it's also because I'm a bit crooked.
+ * (с) Aylong
+ */
+export const ImageButtonItem = (props) => {
+  const {
+    className,
+    color,
+    content,
+    selected,
+    disabled,
+    disabledContent,
+    tooltip,
+    tooltipPosition,
+    icon,
+    iconColor,
+    iconPosition,
+    iconRotation,
+    iconSize,
+    onClick,
+    children,
+    ...rest
+  } = props;
+  rest.onClick = (e) => {
+    if (!disabled && onClick) {
+      onClick(e);
+    }
+  };
+  let itemContent = (
+    <div>
+      <div
+        className={classes([
+          'ImageButton__item',
+          selected && 'ImageButton__item--selected',
+          disabled && 'ImageButton__item--disabled',
+          color && typeof color === 'string'
+            ? 'ImageButton__item--color--' + color
+            : 'ImageButton__item--color--default',
+          className,
+          computeBoxClassName(rest),
+        ])}
+        tabIndex={!disabled && '0'}
+        {...computeBoxProps(rest)}
+      >
+        <div>
+          {icon && iconPosition === 'top' && (
+            <Icon
+              mb={0.5}
+              name={icon}
+              color={iconColor}
+              rotation={iconRotation}
+              size={iconSize}
+            />
+          )}
+          <div>
+            {disabled ? disabledContent : content}
+            {children}
+          </div>
+          {icon && iconPosition !== 'top' && (
+            <Icon
+              mt={0.5}
+              name={icon}
+              color={iconColor}
+              rotation={iconRotation}
+              size={iconSize}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+  if (tooltip) {
+    itemContent = (
+      <Tooltip content={tooltip} position={tooltipPosition}>
+        {itemContent}
+      </Tooltip>
+    );
+  }
+
+  return itemContent;
+};
+
+ImageButton.Item = ImageButtonItem;

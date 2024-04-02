@@ -621,6 +621,7 @@
 		//CONSCIOUS
 		else
 			set_stat(CONSCIOUS)
+			UpdateLyingBuckledAndVerbStatus()
 
 		// Check everything else.
 

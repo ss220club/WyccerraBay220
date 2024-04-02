@@ -58,6 +58,17 @@
 		cell.emp_act(severity)
 	..(severity)
 
+/obj/machinery/space_heater/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	panel_open = !panel_open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
+	update_icon(1)
+	if(!panel_open && user.machine == src)
+		show_browser(user, null, "window=spaceheater")
+		user.unset_machine()
+
 /obj/machinery/space_heater/use_tool(obj/item/I, mob/living/user, list/click_params)
 	if(istype(I, /obj/item/cell))
 		if(panel_open)
@@ -75,20 +86,7 @@
 		else
 			to_chat(user, "The hatch must be open to insert a power cell.")
 			return TRUE
-
-	if (isScrewdriver(I))
-		panel_open = !panel_open
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [panel_open ? "opens" : "closes"] the hatch on \the [src]."),
-			SPAN_NOTICE("You [panel_open ? "open" : "close"] the hatch on \the [src].")
-		)
-		update_icon(1)
-		if(!panel_open && user.machine == src)
-			show_browser(user, null, "window=spaceheater")
-			user.unset_machine()
-		return TRUE
-
-	return ..()
+	. = ..()
 
 /obj/machinery/space_heater/interface_interact(mob/user)
 	if(panel_open)
@@ -145,7 +143,7 @@
 
 		if("cellremove")
 			if(panel_open && cell && !usr.get_active_hand())
-				usr.visible_message(SPAN_NOTICE("\The [usr] removes \the [cell] from \the [src]."), SPAN_NOTICE("You remove \the [cell] from \the [src]."))
+				usr.visible_message(SPAN_NOTICE("[usr] removes [cell] from [src]."), SPAN_NOTICE("You remove [cell] from [src]."))
 				cell.update_icon()
 				usr.put_in_hands(cell)
 				cell.add_fingerprint(usr)
@@ -161,7 +159,7 @@
 					cell = C
 					C.add_fingerprint(usr)
 					power_change()
-					usr.visible_message(SPAN_NOTICE("[usr] inserts \the [C] into \the [src]."), SPAN_NOTICE("You insert \the [C] into \the [src]."))
+					usr.visible_message(SPAN_NOTICE("[usr] inserts [C] into [src]."), SPAN_NOTICE("You insert [C] into [src]."))
 
 	updateDialog()
 

@@ -11,9 +11,8 @@
 	turf_flags = TURF_DISALLOW_BLOB
 
 	z_eventually_space = TRUE
-	var/starlit = FALSE
 
-/turf/space/Initialize()
+/turf/space/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	update_starlight()
 
@@ -44,7 +43,8 @@
 /turf/space/LateInitialize(mapload)
 	if(GLOB.using_map.base_floor_area)
 		var/area/new_area = locate(GLOB.using_map.base_floor_area) || new GLOB.using_map.base_floor_area
-		ChangeArea(src, new_area)
+		change_area(new_area)
+
 	ChangeTurf(GLOB.using_map.base_floor_type)
 
 // override for space turfs, since they should never hide anything
@@ -54,27 +54,6 @@
 
 /turf/space/is_solid_structure()
 	return locate(/obj/structure/lattice, src) || locate(/obj/structure/catwalk, src) //counts as solid structure if it has a lattice or catwalk
-
-/turf/space/proc/remove_starlight()
-	if(starlit)
-		replace_ambient_light(SSskybox.background_color, null, config.starlight, 0)
-		starlit = FALSE
-
-/turf/space/proc/update_starlight()
-	if(!config.starlight)
-		return
-
-	//We only need starlight on turfs adjacent to dynamically lit turfs, for example space near bulkhead
-	for (var/turf/T in RANGE_TURFS(src, 1))
-		if (!isloc(T.loc) || !TURF_IS_DYNAMICALLY_LIT_UNSAFE(T))
-			continue
-
-		add_ambient_light(SSskybox.background_color, config.starlight)
-		starlit = TRUE
-		return
-
-	if(TURF_IS_AMBIENT_LIT_UNSAFE(src))
-		remove_starlight()
 
 /turf/space/use_tool(obj/item/C, mob/living/user, list/click_params)
 	if (istype(C, /obj/item/stack/material/rods))

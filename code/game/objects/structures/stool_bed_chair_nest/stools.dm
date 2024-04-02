@@ -117,14 +117,17 @@ var/global/list/stool_cache = list() //haha stool
 		padding_material.place_sheet(get_turf(src))
 	qdel(src)
 
+/obj/item/stool/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	dismantle()
+	qdel(src)
+
 /obj/item/stool/attackby(obj/item/W as obj, mob/user as mob)
-	if(isWrench(W))
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		dismantle()
-		qdel(src)
-	else if(istype(W,/obj/item/stack))
+	if(istype(W,/obj/item/stack))
 		if(padding_material)
-			to_chat(user, "\The [src] is already padded.")
+			to_chat(user, "[src] is already padded.")
 			return
 		var/obj/item/stack/C = W
 		if(C.get_amount() < 1) // How??
@@ -138,20 +141,20 @@ var/global/list/stool_cache = list() //haha stool
 			if(M.material && (M.material.flags & MATERIAL_PADDING))
 				padding_type = "[M.material.name]"
 		if(!padding_type)
-			to_chat(user, "You cannot pad \the [src] with that.")
+			to_chat(user, "You cannot pad [src] with that.")
 			return
 		C.use(1)
 		if(!istype(src.loc, /turf))
 			user.drop_from_inventory(src)
 			src.dropInto(loc)
-		to_chat(user, "You add padding to \the [src].")
+		to_chat(user, "You add padding to [src].")
 		add_padding(padding_type)
 		return
 	else if (is_sharp(W))
 		if(!padding_material)
-			to_chat(user, "\The [src] has no padding to remove.")
+			to_chat(user, "[src] has no padding to remove.")
 			return
-		to_chat(user, "You remove the padding from \the [src].")
+		to_chat(user, "You remove the padding from [src].")
 		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 		remove_padding()
 	else

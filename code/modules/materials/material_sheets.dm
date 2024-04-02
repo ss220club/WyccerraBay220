@@ -152,6 +152,19 @@
 		reinf_material = other.reinf_material
 		update_materials()
 
+/obj/item/stack/material/welder_act(mob/living/user, obj/item/tool)
+	if(!reinf_material || !reinf_material.stack_type)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_start_check(user, 2) || !can_use(2))
+		return
+	if(!tool.use_as_tool(src, user, amount = 2, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(!use(2))
+		return
+	to_chat(user,SPAN_NOTICE("You recover some [reinf_material.use_name] from [src]."))
+	reinf_material.place_sheet(get_turf(user), 1)
+
 /obj/item/stack/material/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(isCoil(W))
 		material.build_wired_product(user, W, src)
@@ -163,13 +176,6 @@
 		else if(!reinf_material)
 			material.reinforce(user, W, src)
 			return TRUE
-
-	if(reinf_material && reinf_material.stack_type && isWelder(W))
-		var/obj/item/weldingtool/WT = W
-		if(WT.remove_fuel(2, user) && use(2))
-			to_chat(user,SPAN_NOTICE("You recover some [reinf_material.use_name] from \the [src]."))
-			reinf_material.place_sheet(get_turf(user), 1)
-		return TRUE
 
 	return ..()
 

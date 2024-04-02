@@ -81,7 +81,7 @@
 	update_icon()
 
 /obj/item/device/suit_cooling_unit/proc/turn_off(failed)
-	if(failed) visible_message("\The [src] clicks and whines as it powers down.")
+	if(failed) visible_message("[src] clicks and whines as it powers down.")
 	on = 0
 	update_icon()
 
@@ -95,7 +95,7 @@
 		cell.add_fingerprint(user)
 		cell.update_icon()
 
-		to_chat(user, "You remove \the [src.cell].")
+		to_chat(user, "You remove [src.cell].")
 		src.cell = null
 		update_icon()
 		return
@@ -107,28 +107,24 @@
 		turn_off()
 	else
 		turn_on()
-	to_chat(user, SPAN_NOTICE("You switch \the [src] [on ? "on" : "off"]."))
+	to_chat(user, SPAN_NOTICE("You switch [src] [on ? "on" : "off"]."))
 
+/obj/item/device/suit_cooling_unit/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	cover_open = !cover_open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, cover_open)
+	update_icon()
 
 /obj/item/device/suit_cooling_unit/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Toggle cover
-	if (isScrewdriver(tool))
-		cover_open = !cover_open
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [cover_open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
-			SPAN_NOTICE("You [cover_open ? "open" : "close"] \the [src]'s panel with \the [tool].")
-		)
-		return TRUE
-
 	// Power Cell - Install cell
 	if (istype(tool, /obj/item/cell))
 		if (!cover_open)
-			USE_FEEDBACK_FAILURE("\The [src]'s panel is closed.")
+			USE_FEEDBACK_FAILURE("[src]'s panel is closed.")
 			return TRUE
 		if (cell)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [cell] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [cell] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -136,8 +132,8 @@
 		cell = tool
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \a [src]."),
-			SPAN_NOTICE("You install \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
 
 	return ..()

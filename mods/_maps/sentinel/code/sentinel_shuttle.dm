@@ -1,6 +1,6 @@
 /datum/shuttle/autodock/overmap/reaper
 	name = "Reaper Gunboat"
-	warmup_time = 15
+	warmup_time = 15 SECONDS
 	dock_target = "albatross_shuttle"
 	current_location = "nav_hangar_reaper"
 	range = 2
@@ -21,7 +21,7 @@
 	shuttle = "Reaper Gunboat"
 	fore_dir = WEST
 	color = "#000000"
-	vessel_mass = 250
+	vessel_mass = 500
 	vessel_size = SHIP_SIZE_TINY
 
 /area/ship/reaper

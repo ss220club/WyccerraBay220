@@ -6,47 +6,25 @@
 	layer = ABOVE_WINDOW_LAYER
 	w_class = ITEM_SIZE_NORMAL
 
-/obj/structure/sign/double/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Screwdriver - Block interaction
-	if (isScrewdriver(tool))
-		USE_FEEDBACK_FAILURE("\The [src] cannot be removed.")
-		return TRUE
-
-	return ..()
-
 /obj/structure/sign/ex_act(severity)
-	switch(severity)
-		if(EX_ACT_DEVASTATING)
-			qdel(src)
-			return
-		if(EX_ACT_HEAVY)
-			qdel(src)
-			return
-		if(EX_ACT_LIGHT)
-			qdel(src)
-			return
-		else
-	return
+	qdel(src)
 
-
-/obj/structure/sign/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/sign/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Scrwedriver - Unfasten sign
-	if (isScrewdriver(tool))
-		var/obj/item/sign/S = new(loc)
-		S.SetName(name)
-		S.desc = desc
-		S.icon_state = icon_state
-		S.sign_state = icon_state
-		transfer_fingerprints_to(S)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] unfastens \the [src] with \a [tool]."),
-			SPAN_NOTICE("You unfasten \the [src] with \the [tool].")
-		)
-		qdel_self()
-		return TRUE
-
-	return ..()
-
+	var/obj/item/sign/S = new(loc)
+	S.SetName(name)
+	S.desc = desc
+	S.icon_state = icon_state
+	S.sign_state = icon_state
+	transfer_fingerprints_to(S)
+	user.visible_message(
+		SPAN_NOTICE("[user] unfastens [src] with [tool]."),
+		SPAN_NOTICE("You unfasten [src] with [tool].")
+	)
+	qdel(src)
 
 /obj/item/sign
 	name = "sign"
@@ -55,27 +33,35 @@
 	w_class = ITEM_SIZE_NORMAL		//big
 	var/sign_state = ""
 
-/obj/item/sign/attackby(obj/item/tool as obj, mob/user as mob)	//construction
-	if (isScrewdriver(tool) && isturf(user.loc))
-		var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
-		if(direction == "Cancel") return
-		var/obj/structure/sign/S = new(user.loc)
-		switch(direction)
-			if("North")
-				S.pixel_y = 32
-			if("East")
-				S.pixel_x = 32
-			if("South")
-				S.pixel_y = -32
-			if("West")
-				S.pixel_x = -32
-			else return
-		S.SetName(name)
-		S.desc = desc
-		S.icon_state = sign_state
-		to_chat(user, "You fasten \the [S] with your [tool].")
-		qdel(src)
-	else ..()
+/obj/item/sign/screwdriver_act(mob/living/user, obj/item/tool)
+	if(!isturf(user.loc))
+		return
+	. = ITEM_INTERACT_SUCCESS
+	var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
+	if(direction == "Cancel")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	var/obj/structure/sign/S = new(user.loc)
+	switch(direction)
+		if("North")
+			S.pixel_y = 32
+		if("East")
+			S.pixel_x = 32
+		if("South")
+			S.pixel_y = -32
+		if("West")
+			S.pixel_x = -32
+	S.SetName(name)
+	S.desc = desc
+	S.icon_state = sign_state
+	to_chat(user, "You fasten [S] with your [tool].")
+	qdel(src)
+
+/obj/structure/sign/double/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+	// Screwdriver - Block interaction
+	balloon_alert(user, "нельзя снять!")
 
 /obj/structure/sign/double/map
 	name = "map"
@@ -385,7 +371,7 @@
 
 /obj/structure/sign/directions/New()
 	..()
-	desc = "A direction sign, pointing out which way \the [src] is."
+	desc = "A direction sign, pointing out which way [src] is."
 
 /obj/structure/sign/directions/science
 	name = "\improper Research Division"

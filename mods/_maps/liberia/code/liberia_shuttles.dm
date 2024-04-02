@@ -23,7 +23,7 @@
 
 /datum/shuttle/autodock/overmap/mule
 	name = "Mule"
-	warmup_time = 5
+	warmup_time = 5 SECONDS
 	current_location = "nav_mule_start"
 	range = 2
 	dock_target = "mule_port_shuttle_dock"

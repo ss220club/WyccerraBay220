@@ -62,7 +62,7 @@
 
 
 
-/proc/apply_sound_effect(effect, filename_input, filename_output)
+/proc/apply_sound_effect(singleton/sound_effect/effect, filename_input, filename_output)
 	if(!effect)
 		CRASH("Invalid sound effect chosen.")
 
@@ -70,29 +70,42 @@
 	if(config.ffmpeg_cpuaffinity)
 		taskset = "taskset -ac [config.ffmpeg_cpuaffinity]"
 
-	var/list/output
-	switch(effect)
-		if(SOUND_EFFECT_RADIO)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log" [filename_output]"})
-		if(SOUND_EFFECT_ROBOT)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5" [filename_output]"})
-		if(SOUND_EFFECT_RADIO_ROBOT)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5, highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log" [filename_output]"})
-		if(SOUND_EFFECT_MEGAPHONE)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log" [filename_output]"})
-		if(SOUND_EFFECT_MEGAPHONE_ROBOT)
-			output = world.shelleo({"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log" [filename_output]"})
-		else
-			CRASH("Invalid sound effect chosen.")
+	var/command = {"[taskset] ffmpeg -y -hide_banner -loglevel error -i [filename_input] -filter:a "[effect.ffmpeg_arguments]" [filename_output]"}
+	var/list/output = world.shelleo(command)
+
 	var/errorlevel = output[SHELLEO_ERRORLEVEL]
 	var/stdout = output[SHELLEO_STDOUT]
 	var/stderr = output[SHELLEO_STDERR]
 	if(errorlevel)
-		error("Error: apply_sound_effect([effect], [filename_input], [filename_output]) - See debug logs.")
-		log_debug("apply_sound_effect([effect], [filename_input], [filename_output]) STDOUT: [stdout]")
-		log_debug("apply_sound_effect([effect], [filename_input], [filename_output]) STDERR: [stderr]")
+		error("Error: apply_sound_effect([effect.suffix], [filename_input], [filename_output]) - See debug logs.")
+		log_debug("apply_sound_effect([effect.suffix], [filename_input], [filename_output]) STDOUT: [stdout]")
+		log_debug("apply_sound_effect([effect.suffix], [filename_input], [filename_output]) STDERR: [stderr]")
 		return FALSE
 	return TRUE
+
+/singleton/sound_effect
+	var/suffix
+	var/ffmpeg_arguments
+
+/singleton/sound_effect/radio
+	suffix = "_radio"
+	ffmpeg_arguments = "highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log"
+
+/singleton/sound_effect/robot
+	suffix = "_robot"
+	ffmpeg_arguments = "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5"
+
+/singleton/sound_effect/radio_robot
+	suffix = "_radio_robot"
+	ffmpeg_arguments = "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, volume=volume=1.5, highpass=f=1000, lowpass=f=3000, acrusher=1:1:50:0:log"
+
+/singleton/sound_effect/megaphone
+	suffix = "_megaphone"
+	ffmpeg_arguments = "highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log"
+
+/singleton/sound_effect/megaphone_robot
+	suffix = "_megaphone_robot"
+	ffmpeg_arguments = "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.5, deesser=i=0.4, highpass=f=500, lowpass=f=4000, volume=volume=10, acrusher=1:1:45:0:log"
 
 #undef SHELLEO_ERRORLEVEL
 #undef SHELLEO_STDOUT

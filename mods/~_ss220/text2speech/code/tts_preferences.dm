@@ -72,8 +72,7 @@
 				return
 			if(!(seed_name in SStts220.tts_seeds))
 				return
-
-			invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, usr, phrase, seed_name, FALSE)
+			invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, usr, phrase, SStts220.tts_seeds[seed_name], FALSE)
 		if("select")
 			var/seed_name = params["seed"]
 

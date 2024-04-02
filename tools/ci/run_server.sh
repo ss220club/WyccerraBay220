@@ -6,8 +6,6 @@ MAP=$1
 echo Testing $MAP
 
 tools/deploy.sh ci_test
-mkdir ci_test/config
-mkdir ci_test/data
 
 #test config
 cp tools/ci/ci_config.txt ci_test/config/config.txt

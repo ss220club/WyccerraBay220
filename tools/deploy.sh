@@ -11,6 +11,7 @@ fi
 
 mkdir -p \
     $1/config \
+    $1/data \
     $1/maps \
     $1/icons \
     $1/sound \

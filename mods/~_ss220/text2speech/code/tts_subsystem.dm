@@ -376,8 +376,8 @@ SUBSYSTEM_DEF(tts220)
 	play_sfx_if_exists(listener, postSFX, output)
 
 /datum/controller/subsystem/tts220/proc/play_sfx_if_exists(mob/listener, sfx, sound/output)
-    if(sfx)
-        play_sfx(listener, sfx, output.channel, output.volume, output.environment)
+	if(sfx)
+		play_sfx(listener, sfx, output.channel, output.volume, output.environment)
 
 /datum/controller/subsystem/tts220/proc/play_sfx(mob/listener, sfx, channel, volume, environment)
 	var/sound/output = sound(sfx)

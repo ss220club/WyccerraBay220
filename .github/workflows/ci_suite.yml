@@ -85,7 +85,8 @@ jobs:
         if: steps.linter-setup.conclusion == 'success' && !cancelled()
         run: |
           tools/bootstrap/python -m mapmerge2.dmm_test
-          tools/bootstrap/python -m tools.maplint.source
+        # Enable when our mappers define the rules(in a hour)
+        # tools/bootstrap/python -m tools.maplint.source
       - name: Run DMI Tests
         if: steps.linter-setup.conclusion == 'success' && !cancelled()
         run: tools/bootstrap/python -m dmi.test

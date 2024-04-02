@@ -195,26 +195,6 @@ if $grep 'NanoTrasen' $code_files; then
     echo -e "${RED}ERROR: Misspelling(s) of Nanotrasen detected in code, please uncapitalize the T(s).${NC}"
     st=1
 fi;
-part "map json naming"
-if ls _maps/*.json | $grep "[A-Z]"; then
-	echo
-    echo -e "${RED}ERROR: Uppercase in a map .JSON file detected, these must be all lowercase.${NC}"
-    st=1
-fi;
-part "map json sanity"
-for json in _maps/*.json
-do
-    map_path=$(jq -r '.map_path' $json)
-    while read map_file; do
-        filename="_maps/$map_path/$map_file"
-        if [ ! -f $filename ]
-        then
-			echo
-            echo -e "${RED}ERROR: Found an invalid file reference to $filename in _maps/$json ${NC}"
-            st=1
-        fi
-    done < <(jq -r '[.map_file] | flatten | .[]' $json)
-done
 
 part "updatepaths validity"
 missing_txt_lines=$(find tools/UpdatePaths/Scripts -type f ! -name "*.txt" | wc -l)

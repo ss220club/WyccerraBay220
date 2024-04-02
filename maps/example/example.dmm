@@ -798,6 +798,8 @@
 "FN" = (
 /obj/item/airlock_electronics,
 /obj/structure/table/glass,
+/obj/item/device/radio,
+/obj/item/device/radio,
 /turf/simulated/floor/tiled/techfloor,
 /area/constructionsite)
 "Gi" = (

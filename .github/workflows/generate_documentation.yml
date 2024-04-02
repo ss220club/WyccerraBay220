@@ -6,7 +6,7 @@ permissions:
 on:
   push:
     branches:
-    - dev
+    - master
   workflow_dispatch: # allows this workflow to be manually triggered
 
 env:

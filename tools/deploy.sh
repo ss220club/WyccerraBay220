@@ -25,6 +25,7 @@ fi
 
 cp baystation12.dmb baystation12.rsc $1/
 cp -r config/* $1/config/
+cp -r config/example/* $1/config/
 cp -r maps/* $1/maps/
 cp -r icons/* $1/icons/
 cp -r tgui/public/* $1/tgui/public/

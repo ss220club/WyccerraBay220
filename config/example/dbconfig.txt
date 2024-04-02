@@ -11,13 +11,13 @@ ADDRESS localhost
 PORT 3306
 
 # Database the population, death, karma, etc. tables may be found in
-DATABASE tgstation
+DATABASE test
 
 # Username/Login used to access the database
-LOGIN mylogin
+LOGIN root
 
 # Password used to access the database
-PASSWORD mypassword
+PASSWORD root
 
 # The following information is for feedback tracking via the blackbox server
 FEEDBACK_DATABASE test

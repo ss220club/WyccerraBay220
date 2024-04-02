@@ -57,12 +57,12 @@
 				new_tts_seed = SStts220.tts_seeds[prefs.tts_seed]
 				if(new_traits)
 					traits = new_traits
-				invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, chooser, tts_test_str, new_tts_seed, FALSE, get_effect())
+				invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, chooser, tts_test_str, new_tts_seed, FALSE, get_effect())
 				return new_tts_seed
 
 	var/tts_seeds
 	var/tts_gender = get_converted_tts_seed_gender()
-	var/list/tts_seeds_by_gender = SStts220.tts_seeds_by_gender[tts_gender]
+	var/list/tts_seeds_by_gender = SStts220.get_tts_by_gender(tts_gender)
 	if(check_rights(R_ADMIN, FALSE, chooser) || override || !ismob(being_changed))
 		tts_seeds = tts_seeds_by_gender
 	else
@@ -82,10 +82,10 @@
 		traits = new_traits
 
 	if(!silent_target && being_changed != chooser && ismob(being_changed))
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, being_changed, tts_test_str, new_tts_seed, FALSE, get_effect())
+		invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, being_changed, tts_test_str, new_tts_seed, FALSE, get_effect())
 
 	if(chooser)
-		invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), null, chooser, tts_test_str, new_tts_seed, FALSE, get_effect())
+		invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), null, chooser, tts_test_str, new_tts_seed, FALSE, get_effect())
 
 	return new_tts_seed
 
@@ -98,7 +98,7 @@
 
 /datum/component/tts_component/proc/get_random_tts_seed_by_gender()
 	var/tts_gender = get_converted_tts_seed_gender()
-	var/tts_random = pick(SStts220.tts_seeds_by_gender[tts_gender])
+	var/tts_random = pick(SStts220.get_tts_by_gender(tts_gender))
 	var/datum/tts_seed/seed = SStts220.tts_seeds[tts_random]
 	if(!seed)
 		return null
@@ -145,7 +145,7 @@
 
 	effect = get_effect(effect)
 
-	invoke_async(GLOBAL_PROC, GLOBAL_PROC_REF(tts_cast), location, listener, message, tts_seed, is_local, effect, traits, preSFX, postSFX)
+	invoke_async(SStts220, TYPE_PROC_REF(/datum/controller/subsystem/tts220, get_tts), location, listener, message, tts_seed, is_local, effect, traits, preSFX, postSFX)
 
 /datum/component/tts_component/proc/tts_trait_add(atom/user, trait)
 	SIGNAL_HANDLER

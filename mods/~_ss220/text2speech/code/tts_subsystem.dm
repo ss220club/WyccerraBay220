@@ -244,7 +244,7 @@ SUBSYSTEM_DEF(tts220)
 		LAZYADD(tts_queue[filename], play_tts_cb)
 		return
 
-	queue_request(text, tts_seed, CALLBACK(src, PROC_REF(get_tts_callback), speaker, listener, filename, seed, is_local, effect, preSFX, postSFX))
+	queue_request(text, tts_seed, CALLBACK(src, PROC_REF(get_tts_callback), speaker, listener, filename, tts_seed, is_local, effect, preSFX, postSFX))
 	LAZYADD(tts_queue[filename], play_tts_cb)
 
 /datum/controller/subsystem/tts220/proc/get_tts_callback(atom/speaker, mob/listener, filename, datum/tts_seed/seed, is_local, effect, preSFX, postSFX, datum/http_response/response)

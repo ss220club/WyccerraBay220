@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS `ban` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bantime` datetime NOT NULL,
@@ -27,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `ban` (
   KEY `ckey` (`ckey`),
   KEY `computerid` (`computerid`),
   KEY `ip` (`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `budget` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -40,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `budget` (
   `is_valid` tinyint(1) NOT NULL DEFAULT 1,
   `discord_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `ckey_whitelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -52,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `ckey_whitelist` (
   `date_end` datetime DEFAULT NULL,
   `is_valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `erro_admin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -62,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `erro_admin` (
   `flags` int(16) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `ckey` (`ckey`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `erro_admin_tickets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -106,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `erro_player` (
   KEY `ckey_2` (`ckey`(768)),
   KEY `ip` (`ip`(768)),
   KEY `computerid` (`computerid`(768))
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `erro_playtime_history` (
   `ckey` varchar(32) NOT NULL,
@@ -126,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `library` (
   KEY `title` (`title`(768)),
   KEY `author` (`author`(768)),
   KEY `category` (`category`(768))
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `whitelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

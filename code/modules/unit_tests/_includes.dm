@@ -1,7 +1,3 @@
-#ifdef CIBUILDING
-	#define UNIT_TEST 1
-#endif
-
 #ifdef UNIT_TEST
 	#include "extension_tests.dm"
 	#include "trait_tests.dm"

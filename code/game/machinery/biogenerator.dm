@@ -1,12 +1,9 @@
-#define BG_READY 0
-#define BG_PROCESSING 1
-#define BG_NO_BEAKER 2
-#define BG_COMPLETE 3
-#define BG_EMPTY 4
+/// The base amount of plants that can be stored before taking our matter bin into account.
+#define BASE_MAX_STORABLE_PLANTS 40
 
 /obj/machinery/biogenerator
 	name = "biogenerator"
-	desc = ""
+	desc = "Converts plants into biomass, which can be used to construct useful items."
 	icon = 'icons/obj/machines/biogenerator.dmi'
 	icon_state = "biogen"
 	density = TRUE
@@ -18,15 +15,21 @@
 	stat_immune = 0
 	machine_name = "biogenerator"
 	machine_desc = "Processes fruits, veggies, and other produce into raw biomatter that can be converted into food products and leather items."
-	var/processing = 0
-	var/obj/item/reagent_containers/glass/beaker = null
-	var/points = 0
-	var/state = BG_READY
-	var/denied = 0
-	var/build_eff = 1
-	var/eat_eff = 1
-	var/ingredients = 0 //How many processable ingredients are stored inside.
-	var/capacity = 10   //How many ingredients can we store?
+	/// Is the biogenerator curretly grinding up plants?
+	var/processing = FALSE
+	/// Container inside biogenerator
+	var/obj/item/reagent_containers/glass/beaker
+	/// The amount of biomass stored in the machine.
+	var/biomass = 0
+	/// Used to modify the cost of producing items. A higher number means cheaper costs.
+	var/efficiency = 1
+	/// Used to modify how much biomass is produced by grinding plants. A higher number means more biomass.
+	var/productivity = 1
+	/// A list of plants currently stored plants in the biogenerator.
+	var/list/stored_plants = list()
+	/// The maximum amount of plants the biogenerator can store.
+	var/max_storable_plants = BASE_MAX_STORABLE_PLANTS
+	/// List of categories, and items with cost inside it, available to produce.
 	var/list/products = list(
 		"Food" = list(
 			/obj/item/reagent_containers/food/drinks/small_milk = 30,
@@ -53,12 +56,14 @@
 			/obj/item/clothing/suit/storage/hooded/wintercoat = 500))
 
 /obj/machinery/biogenerator/New()
-	..()
+	. = ..()
 	create_reagents(1000)
 	beaker = new /obj/item/reagent_containers/glass/bottle(src)
 
-/obj/machinery/biogenerator/on_reagent_change()			//When the reagents change, change the icon as well.
-	update_icon()
+/obj/machinery/biogenerator/Destroy()
+	. = ..()
+	QDEL_NULL(beaker)
+	QDEL_NULL_LIST(stored_plants)
 
 /obj/machinery/biogenerator/on_update_icon()
 	ClearOverlays()
@@ -67,11 +72,11 @@
 	if(is_powered())
 		AddOverlays(emissive_appearance(icon, "[icon_state]_lights"))
 		AddOverlays("[icon_state]_lights")
-	if(state == BG_READY || state == BG_COMPLETE)
-		AddOverlays("biogen_stand")
-	else if (state == BG_PROCESSING)
+	else if(processing)
 		AddOverlays(emissive_appearance(icon, "[icon_state]_lights_working"))
 		AddOverlays("[icon_state]_lights_working")
+		AddOverlays("biogen_stand")
+	else
 		AddOverlays("biogen_stand")
 	return
 
@@ -85,162 +90,194 @@
 
 /obj/machinery/biogenerator/examine(mob/user)
 	. = ..()
-	if (processing)
+	if(processing)
 		to_chat(user, SPAN_NOTICE("\The [src] is currently processing."))
-	if (ingredients >= capacity)
+	if(stored_plants >= max_storable_plants)
 		to_chat(user, SPAN_NOTICE("\The [src] is full!"))
 
 /obj/machinery/biogenerator/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if((. = ..()))
+	. = ..()
+	if(processing)
+		to_chat(user, "<span class='warning'>[src] is currently processing.</span>")
 		return
-	if (istype(O, /obj/item/reagent_containers/glass))
-		if(beaker)
-			to_chat(user, SPAN_NOTICE("The [src] is already loaded."))
-			return TRUE
-		else if(user.unEquip(O, src))
+
+	else if(istype(O, /obj/item/reagent_containers/glass))
+		if(!beaker && user.unEquip(O, src))
 			beaker = O
-			state = BG_READY
-			updateUsrDialog()
+			update_icon()
+			SStgui.update_uis(src)
 			return TRUE
 
-	if (istype(O, /obj/item/storage/plants))
-		var/obj/item/storage/plants/P = O
-		var/hadPlants = 0
-		for(var/obj/item/reagent_containers/food/snacks/grown/G in P.contents)
-			hadPlants = 1
-			P.remove_from_storage(G, src, 1) //No UI updates until we are all done.
-			ingredients++
-			if(ingredients >= capacity)
-				to_chat(user, SPAN_NOTICE("You fill \the [src] to its capacity."))
+	else if(istype(O, /obj/item/storage/plants))
+		if(length(stored_plants) >= max_storable_plants)
+			to_chat(user, "<span class='warning'>[src] can't hold any more plants!</span>")
+			return
+
+		var/obj/item/storage/plants/PB = O
+		for(var/obj/item/reagent_containers/food/snacks/grown/G in PB.contents)
+			if(length(stored_plants) >= max_storable_plants)
 				break
-		P.finish_bulk_removal() //Now do the UI stuff once.
-		if(!hadPlants)
-			to_chat(user, SPAN_NOTICE("\The [P] has no produce inside."))
-		if (ingredients < capacity)
-			to_chat(user, SPAN_NOTICE("You empty \the [P] into \the [src]."))
+			PB.remove_from_storage(G, src)
+			stored_plants += G
+
+		if(length(stored_plants) < max_storable_plants)
+			to_chat(user, "<span class='info'>You empty [PB] into [src].</span>")
+		else
+			to_chat(user, "<span class='info'>You fill [src] to its capacity.</span>")
+
+		SStgui.update_uis(src)
 		return TRUE
 
-	if (!istype(O, /obj/item/reagent_containers/food/snacks/grown))
+	else if(istype(O, /obj/item/reagent_containers/food/snacks/grown))
+		if(length(stored_plants) >= max_storable_plants)
+			to_chat(user, "<span class='warning'>[src] can't hold any more plants!</span>")
+			return
+		if(!user.unEquip(O))
+			return
+
+		O.forceMove(src)
+		stored_plants += O
+		to_chat(user, "<span class='info'>You put [O] in [src].</span>")
+		SStgui.update_uis(src)
+		return TRUE
+	else
 		to_chat(user, SPAN_NOTICE("You cannot put this in \the [src]."))
-		return TRUE
-
-	if(user.unEquip(O, src))
-		ingredients++
-		to_chat(user, SPAN_NOTICE("You put \the [O] in \the [src]"))
-	update_icon()
-	return TRUE
-
-/**
- *  Display the NanoUI window for the vending machine.
- *
- *  See NanoUI documentation for details.
- */
-/obj/machinery/biogenerator/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
-	user.set_machine(src)
-	var/list/data = list()
-	data["state"] = state
-	var/name
-	var/cost
-	var/type_name
-	var/path
-	if (state == BG_READY)
-		data["points"] = points
-		var/list/listed_types = list()
-		for(var/c_type =1 to length(products))
-			type_name = products[c_type]
-			var/list/current_content = products[type_name]
-			var/list/listed_products = list()
-			for(var/c_product =1 to length(current_content))
-				path = current_content[c_product]
-				var/atom/A = path
-				name = initial(A.name)
-				cost = current_content[path]
-				listed_products.Add(list(list(
-					"product_index" = c_product,
-					"name" = name,
-					"cost" = cost)))
-			listed_types.Add(list(list(
-				"type_name" = type_name,
-				"products" = listed_products)))
-		data["types"] = listed_types
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if (!ui)
-		ui = new(user, src, ui_key, "biogenerator.tmpl", "Biogenerator", 440, 600)
-		ui.set_initial_data(data)
-		ui.open()
-
-/obj/machinery/biogenerator/OnTopic(user, href_list)
-	switch (href_list["action"])
-		if("activate")
-			activate()
-		if("detach")
-			if(beaker)
-				beaker.dropInto(src.loc)
-				beaker = null
-				state = BG_NO_BEAKER
-				update_icon()
-		if("create")
-			if (state == BG_PROCESSING)
-				return TOPIC_REFRESH
-			var/type = href_list["type"]
-			var/product_index = text2num(href_list["product_index"])
-			if (isnull(products[type]))
-				return TOPIC_REFRESH
-			var/list/sub_products = products[type]
-			if (product_index < 1 || product_index > length(sub_products))
-				return TOPIC_REFRESH
-			create_product(type, sub_products[product_index])
-		if("return")
-			state = BG_READY
-	return TOPIC_REFRESH
 
 /obj/machinery/biogenerator/interface_interact(mob/user)
-	ui_interact(user)
+	tgui_interact(user)
 	return TRUE
 
-/obj/machinery/biogenerator/proc/activate()
-	if (usr.stat)
-		return
-	if (stat) //MACHINE_STAT_NOPOWER etc
-		return
+/obj/machinery/biogenerator/tgui_state(mob/user)
+	return GLOB.default_state
 
-	var/S = 0
-	for(var/obj/item/reagent_containers/food/snacks/grown/I in contents)
-		S += 5
-		ingredients--
-		if(I.reagents.get_reagent_amount(/datum/reagent/nutriment) < 0.1)
-			points += 1
-		else points += I.reagents.get_reagent_amount(/datum/reagent/nutriment) * 10 * eat_eff
-		qdel(I)
-	if(S)
-		state = BG_PROCESSING
-		SSnano.update_uis(src)
-		update_icon()
-		playsound(src.loc, 'sound/machines/blender.ogg', 50, 1)
-		use_power_oneoff(S * 30)
-		sleep((S + 15) / eat_eff)
-		state = BG_READY
-		update_icon()
+/obj/machinery/biogenerator/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "Biogenerator")
+		ui.set_autoupdate(FALSE)
+		ui.open()
+
+/obj/machinery/biogenerator/tgui_data(mob/user)
+	var/list/data = list()
+
+	data["processing"] = processing
+	data["biomass"] = biomass
+	data["storedPlants"] = length(stored_plants) ? TRUE : FALSE
+
+	if(beaker)
+		data["container"] = TRUE
+		data["containerContent"] = beaker.reagents.total_volume
+		data["containerMaxContent"] = beaker.reagents.maximum_volume
 	else
-		state = BG_EMPTY
-	return
+		data["container"] = FALSE
 
-/obj/machinery/biogenerator/proc/create_product(type, path)
-	state = BG_PROCESSING
+	return data
+
+/obj/machinery/biogenerator/tgui_static_data(mob/user)
+	var/list/static_data = list()
+
+	var/list/listed_types = list()
+	for(var/c_type = 1 to length(products))
+		var/list/current_content = products[products[c_type]]
+		var/list/listed_products = list()
+		for(var/c_product = 1 to length(current_content))
+			var/atom/thing = current_content[c_product]
+			listed_products += list(list(
+				"product_index" = c_product,
+				"name" = initial(thing.name),
+				"cost" = current_content[current_content[c_product]]
+				))
+		listed_types += list(list(
+			"type_name" = products[c_type],
+			"products" = listed_products
+			))
+	static_data["types"] = listed_types
+
+	return static_data
+
+/obj/machinery/biogenerator/tgui_act(action, params)
+	if(..())
+		return
+	. = TRUE
+
+	switch(action)
+		if("activate")
+			activate()
+			return TRUE
+		if("detach")
+			detach_container()
+			return TRUE
+		if("eject_plants")
+			eject_plants()
+			return TRUE
+		if("create")
+			var/type = params["type"]
+			var/product_index = text2num(params["product_index"])
+			var/amount = text2num(params["amount"])
+			if(isnull(products[type]))
+				return FALSE
+			var/list/sub_products = products[type]
+			if(product_index < 1 || product_index > length(sub_products))
+				return TRUE
+			create_product(type, sub_products[product_index], amount)
+			return TRUE
+
+/obj/machinery/biogenerator/proc/activate()
+	processing = TRUE
+	SStgui.update_uis(src)
+	update_icon()
+
+	var/plants_processed = length(stored_plants)
+	for(var/obj/item/reagent_containers/food/snacks/grown/plant as anything in stored_plants)
+		var/plant_biomass = plant.reagents.get_reagent_amount(/datum/reagent/nutriment)
+		biomass += max(plant_biomass, 0.1) * 10 * productivity
+		qdel(plant)
+
+	stored_plants.Cut()
+	playsound(loc, 'sound/machines/blender.ogg', 50, 1)
+	use_power_oneoff(plants_processed * 50)
+	addtimer(CALLBACK(src, PROC_REF(end_processing)), (plants_processed * 5) / productivity)
+
+/obj/machinery/biogenerator/proc/end_processing()
+	processing = FALSE
+	SStgui.update_uis(src)
+	update_icon()
+
+/obj/machinery/biogenerator/proc/eject_plants()
+	for(var/obj/item/reagent_containers/food/snacks/grown/plant as anything in stored_plants)
+		plant.forceMove(get_turf(src))
+	stored_plants.Cut()
+	SStgui.update_uis(src)
+
+/obj/machinery/biogenerator/proc/detach_container()
+	if(!beaker)
+		return
+	beaker.forceMove(get_turf(src))
+	beaker = null
+	update_icon()
+
+/obj/machinery/biogenerator/proc/create_product(type, path, amount)
+	processing = TRUE
+	SStgui.update_uis(src)
 	var/cost = products[type][path]
-	cost = round(cost/build_eff)
-	points -= cost
-	SSnano.update_uis(src)
+	cost = round((cost * amount) / efficiency)
+	biomass -= cost
 	update_icon()
-	sleep(30)
-	var/atom/movable/result = new path
-	result.dropInto(loc)
-	state = BG_COMPLETE
-	update_icon()
-	return 1
+	addtimer(CALLBACK(src, PROC_REF(drop_product), path, amount), (3 SECONDS * amount) / efficiency)
 
+/obj/machinery/biogenerator/proc/drop_product(path, amount)
+	if(ispath(path, /obj/item/stack))
+		new path(get_turf(src), amount)
+	else
+		for(var/i in 1 to amount)
+			new path(get_turf(src))
+	processing = FALSE
+	SStgui.update_uis(src)
+	update_icon()
 
 /obj/machinery/biogenerator/RefreshParts()
 	..()
-	build_eff = clamp(total_component_rating_of_type(/obj/item/stock_parts/manipulator), 1, 10)
-	eat_eff = clamp(total_component_rating_of_type(/obj/item/stock_parts/matter_bin), 1, 10)
+	efficiency = clamp(total_component_rating_of_type(/obj/item/stock_parts/manipulator), 1, 10)
+	productivity = clamp(total_component_rating_of_type(/obj/item/stock_parts/matter_bin), 1, 10)
+
+#undef BASE_MAX_STORABLE_PLANTS

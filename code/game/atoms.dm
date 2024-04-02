@@ -88,7 +88,7 @@
 		crash_with("Warning: [src]([type]) initialized multiple times!")
 	atom_flags |= ATOM_FLAG_INITIALIZED
 
-	if (IsAbstract())
+	if(IsAbstract())
 		log_debug("Abstract atom [type] created!")
 		return INITIALIZE_HINT_QDEL
 
@@ -101,7 +101,7 @@
 		if(istype(T))
 			T.recalc_atom_opacity()
 
-	if (health_max)
+	if(health_max)
 		health_current = health_max
 		health_dead = FALSE
 

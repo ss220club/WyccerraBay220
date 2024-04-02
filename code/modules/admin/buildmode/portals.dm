@@ -13,20 +13,21 @@ Right Click + Ctrl  - Delete all portals
 ************************************\
 "}
 
-/datum/build_mode/portals/OnClick(atom/A, list/parameters)
-	if (parameters["ctrl"])
-		if (parameters["left"])
+/datum/build_mode/portals/OnClick(atom/A, params)
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, CTRL_CLICK))
+		if (LAZYACCESS(modifiers, LEFT_CLICK))
 			if (istype(A, /obj/portal) && (A in portals))
 				qdel(A)
 				to_chat(user, SPAN_NOTICE("Portal deleted."))
-		else if (parameters["right"])
+		else if (LAZYACCESS(modifiers, RIGHT_CLICK))
 			var/choice = alert("Delete all active portals?", "Delete All", "Yes", "No")
 
 			if (choice == "Yes")
 				for (var/obj/portal/P in portals)
 					qdel(P)
 				portals.Cut()
-	else if (parameters["left"])
+	else if (LAZYACCESS(modifiers, LEFT_CLICK))
 		if (!entrance)
 			entrance = get_turf(A)
 			to_chat(user, SPAN_NOTICE("Entrance turf selected: [entrance]"))
@@ -56,7 +57,7 @@ Right Click + Ctrl  - Delete all portals
 
 			entrance = null
 			exit = null
-	else if (parameters["right"])
+	else if (LAZYACCESS(modifiers, RIGHT_CLICK))
 		entrance = null
 		exit = null
 		to_chat(user, SPAN_NOTICE("Selection cancelled."))

@@ -179,7 +179,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 
 /datum/asset/spritesheet/proc/Insert(sprite_name, icon/I, icon_state="", dir=SOUTH, frame=1, moving=FALSE)
 	I = icon(I, icon_state=icon_state, dir=dir, frame=frame, moving=moving)
-	if(!I || !length(icon_states(I)))  // that direction or state doesn't exist
+	if(!I || ICON_IS_EMPTY(I))  // that direction or state doesn't exist
 		return
 	//any sprite modifications we want to do (aka, coloring a greyscaled asset)
 	I = ModifyInserted(I)
@@ -224,7 +224,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	if(!directions)
 		directions = list(SOUTH)
 
-	for(var/icon_state_name in icon_states(I))
+	for(var/icon_state_name in ICON_STATES(I))
 		for(var/direction in directions)
 			var/prefix2 = (length(directions)) ? "[dir2text(direction)]-" : ""
 			Insert("[prefix][prefix2][icon_state_name]", I, icon_state=icon_state_name, dir=direction)
@@ -289,7 +289,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	var/generic_icon_names = FALSE //generate icon filenames using generate_asset_name() instead the above format
 
 /datum/asset/simple/icon_states/register(_icon = icon)
-	for(var/icon_state_name in icon_states(_icon))
+	for(var/icon_state_name in ICON_STATES(_icon))
 		for(var/direction in directions)
 			var/asset = icon(_icon, icon_state_name, direction, frame, movement_states)
 			if(!asset)

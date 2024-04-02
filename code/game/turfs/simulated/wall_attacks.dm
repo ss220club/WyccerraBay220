@@ -57,11 +57,11 @@
 
 
 /turf/simulated/wall/proc/fail_smash(mob/user)
-	to_chat(user, SPAN_DANGER("You smash against \the [src]!"))
+	to_chat(user, SPAN_DANGER("You smash against [src]!"))
 	damage_health(rand(25, 75), DAMAGE_BRUTE)
 
 /turf/simulated/wall/proc/success_smash(mob/user)
-	to_chat(user, SPAN_DANGER("You smash through \the [src]!"))
+	to_chat(user, SPAN_DANGER("You smash through [src]!"))
 	user.do_attack_animation(src)
 	kill_health()
 
@@ -69,14 +69,14 @@
 
 	if(rotting)
 		if(reinf_material)
-			to_chat(user, SPAN_DANGER("\The [reinf_material.display_name] feels porous and crumbly."))
+			to_chat(user, SPAN_DANGER("[reinf_material.display_name] feels porous and crumbly."))
 		else
-			to_chat(user, SPAN_DANGER("\The [material.display_name] crumbles under your touch!"))
+			to_chat(user, SPAN_DANGER("[material.display_name] crumbles under your touch!"))
 			kill_health()
 			return 1
 
 	if(!can_open)
-		to_chat(user, SPAN_NOTICE("You push \the [src], but nothing happens."))
+		to_chat(user, SPAN_NOTICE("You push [src], but nothing happens."))
 		playsound(src, hitsound, 25, 1)
 	else
 		toggle_open(user)
@@ -95,7 +95,7 @@
 				try_touch(M, rotting)
 			if(I_HURT)
 				if(rotting && !reinf_material)
-					M.visible_message(SPAN_DANGER("[M.name] punches \the [src] and it crumbles!"), SPAN_DANGER("You punch \the [src] and it crumbles!"))
+					M.visible_message(SPAN_DANGER("[M.name] punches [src] and it crumbles!"), SPAN_DANGER("You punch [src] and it crumbles!"))
 					kill_health()
 					playsound(src, pick(GLOB.punch_sound), 20)
 					return TRUE
@@ -130,7 +130,7 @@
 /turf/simulated/wall/use_tool(obj/item/W, mob/living/user, list/click_params)
 	var/area/A = get_area(src)
 	if (!A.can_modify_area())
-		to_chat(user, SPAN_NOTICE("\The [src] deflects all attempts to interact with it!"))
+		to_chat(user, SPAN_NOTICE("[src] deflects all attempts to interact with it!"))
 		return TRUE
 
 	user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
@@ -151,30 +151,23 @@
 		burn(heat_value)
 
 	if(locate(/obj/overlay/wallrot) in src)
-		if(isWelder(W))
-			var/obj/item/weldingtool/WT = W
-			if(!WT.can_use(1, user))
+		if(W.tool_behaviour == TOOL_WELDER)
+			if(!W.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return TRUE
-
-			WT.remove_fuel(1,user)
-			to_chat(user, SPAN_NOTICE("You burn away the fungi with \the [WT]."))
-			playsound(src, 'sound/items/Welder.ogg', 10, 1)
+			to_chat(user, SPAN_NOTICE("You burn away the fungi with [W]."))
 			for(var/obj/overlay/wallrot/WR in src)
 				qdel(WR)
 			return TRUE
-
 		else if(!is_sharp(W) && W.force >= 10 || W.force >= 20)
-			to_chat(user, SPAN_NOTICE("\The [src] crumbles away under the force of your [W.name]."))
+			to_chat(user, SPAN_NOTICE("[src] crumbles away under the force of your [W]."))
 			kill_health()
 			return TRUE
 
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
 	if(thermite)
-		if(isWelder(W))
-			var/obj/item/weldingtool/WT = W
-			if(!WT.can_use(1, user))
+		if(W.tool_behaviour == TOOL_WELDER)
+			if(!W.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return TRUE
-			WT.remove_fuel(1, user)
 			thermitemelt(user)
 			return TRUE
 
@@ -185,7 +178,7 @@
 		else if( istype(W, /obj/item/melee/energy/blade) )
 			var/obj/item/melee/energy/blade/EB = W
 			EB.spark_system.start()
-			to_chat(user, SPAN_NOTICE("You slash \the [src] with \the [EB]; the thermite ignites!"))
+			to_chat(user, SPAN_NOTICE("You slash [src] with [W]; the thermite ignites!"))
 			playsound(src, "sparks", 50, 1)
 			playsound(src, 'sound/weapons/blade1.ogg', 50, 1)
 			thermitemelt(user)
@@ -194,14 +187,15 @@
 	var/turf/T = user.loc	//get user's location for delay checks
 
 	var/damage = get_damage_value()
-	if(damage && istype(W, /obj/item/weldingtool))
-		var/obj/item/weldingtool/WT = W
-		if(WT.can_use(2, user))
-			to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			if(do_after(user, max(5, damage / 5), src, DO_REPAIR_CONSTRUCT) && WT.remove_fuel(2, user))
-				to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
-				restore_health(damage)
+	if(damage && W.tool_behaviour == TOOL_WELDER)
+		if(!W.tool_start_check(user, 2))
+			return
+		USE_FEEDBACK_REPAIR_START(user)
+		to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
+		if(!W.use_as_tool(src, user, (max(5, damage / 5)) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		USE_FEEDBACK_REPAIR_FINISH(user)
+		restore_health(damage)
 		return TRUE
 
 	// Basic dismantling.
@@ -211,14 +205,12 @@
 		var/dismantle_sound
 		var/strict_timer_flags = FALSE
 
-		if(istype(W,/obj/item/weldingtool))
-			var/obj/item/weldingtool/WT = W
-			if(!WT.can_use(1,user))
+		if(istype(W, /obj/item/weldingtool))
+			if(!W.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return TRUE
 			dismantle_verb = "cutting"
 			dismantle_sound = 'sound/items/Welder.ogg'
 			cut_delay *= 0.7
-			WT.remove_fuel(1, user)
 
 		else if(istype(W,/obj/item/melee/energy/blade) || istype(W,/obj/item/psychic_power/psiblade/master) || istype(W, /obj/item/gun/energy/plasmacutter))
 			if(istype(W, /obj/item/gun/energy/plasmacutter))
@@ -238,7 +230,7 @@
 			strict_timer_flags = TRUE
 
 		if(dismantle_verb)
-			to_chat(user, SPAN_NOTICE("You begin [dismantle_verb] through the outer plating."))
+			USE_FEEDBACK_DECONSTRUCT_START(user)
 			if(dismantle_sound)
 				playsound(src, dismantle_sound, 100, 1)
 
@@ -247,7 +239,7 @@
 
 			if (do_after(user, cut_delay, src, strict_timer_flags ? DO_PUBLIC_UNIQUE : DO_REPAIR_CONSTRUCT))
 				dismantle_wall()
-				user.visible_message(SPAN_WARNING("\The [src] was torn open by [user]!"), SPAN_NOTICE("You remove the outer plating."))
+				user.visible_message(SPAN_WARNING("[src] was torn open by [user]!"), SPAN_NOTICE("You remove the outer plating."))
 			return TRUE
 
 	//Reinforced dismantling.
@@ -255,7 +247,7 @@
 		switch(construction_stage)
 			if(6)
 				if(istype(W, /obj/item/psychic_power/psiblade/master/grand/paramount))
-					to_chat(user, SPAN_NOTICE("You sink \the [W] into the wall and begin trying to rip out the support frame..."))
+					to_chat(user, SPAN_NOTICE("You sink [W] into the wall and begin trying to rip out the support frame..."))
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
 					if(!do_after(user, 6 SECONDS, src, DO_PUBLIC_UNIQUE))
@@ -267,7 +259,7 @@
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 					return TRUE
 
-				else if(isWirecutter(W))
+				else if(W.tool_behaviour == TOOL_WIRECUTTER)
 					playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 					construction_stage = 5
 					new /obj/item/stack/material/rods( src )
@@ -275,7 +267,7 @@
 					update_icon()
 					return TRUE
 			if(5)
-				if(isScrewdriver(W))
+				if(W.tool_behaviour == TOOL_SCREWDRIVER)
 					to_chat(user, SPAN_NOTICE("You begin removing the support lines."))
 					playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 					if(!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT) || construction_stage != 5)
@@ -298,10 +290,8 @@
 				var/cut_cover
 				var/strict_timer_flags = FALSE
 				if(istype(W,/obj/item/weldingtool))
-					var/obj/item/weldingtool/WT = W
-					if(!WT.can_use(1, user))
+					if(!W.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 						return TRUE
-					WT.remove_fuel(1, user)
 					cut_cover=1
 
 				else if (istype(W, /obj/item/gun/energy/plasmacutter) || istype(W, /obj/item/psychic_power/psiblade/master))
@@ -322,7 +312,7 @@
 					to_chat(user, SPAN_NOTICE("You press firmly on the cover, dislodging it."))
 					return TRUE
 			if(3)
-				if(isCrowbar(W))
+				if(W.tool_behaviour == TOOL_CROWBAR)
 					to_chat(user, SPAN_NOTICE("You struggle to pry off the cover."))
 					playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 					if(!do_after(user, (W.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT) || construction_stage != 3)
@@ -332,7 +322,7 @@
 					to_chat(user, SPAN_NOTICE("You pry off the cover."))
 					return TRUE
 			if(2)
-				if(isWrench(W))
+				if(W.tool_behaviour == TOOL_WRENCH)
 					to_chat(user, SPAN_NOTICE("You start loosening the anchoring bolts which secure the support rods to their frame."))
 					playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 					if(!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT) || construction_stage != 2)
@@ -345,10 +335,8 @@
 				var/cut_cover
 				var/strict_timer_flags = FALSE
 				if(istype(W, /obj/item/weldingtool))
-					var/obj/item/weldingtool/WT = W
-					if(!WT.can_use(1, user))
+					if(!W.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 						return TRUE
-					WT.remove_fuel(1, user)
 					cut_cover=1
 
 				else if(istype(W, /obj/item/gun/energy/plasmacutter) || istype(W,/obj/item/psychic_power/psiblade/master))
@@ -370,7 +358,7 @@
 					to_chat(user, SPAN_NOTICE("The support rods drop out as you cut them loose from the frame."))
 					return TRUE
 			if(0)
-				if(isCrowbar(W))
+				if(W.tool_behaviour == TOOL_CROWBAR)
 					to_chat(user, SPAN_NOTICE("You struggle to pry off the outer sheath."))
 					playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 					if(!do_after(user, (W.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT) || !W || !T )

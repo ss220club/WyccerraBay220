@@ -1,7 +1,6 @@
 SUBSYSTEM_DEF(lighting)
 	name = "Lighting"
 	wait = LIGHTING_INTERVAL
-	priority = SS_PRIORITY_LIGHTING
 	init_order = SS_INIT_LIGHTING
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
 
@@ -87,8 +86,7 @@ SUBSYSTEM_DEF(lighting)
  * - `zlev` int - z-level index
  */
 /datum/controller/subsystem/lighting/proc/InitializeZlev(zlev)
-	for (var/thing in Z_ALL_TURFS(zlev))
-		var/turf/T = thing
+	for (var/turf/T as anything in Z_ALL_TURFS(zlev))
 		if (TURF_IS_DYNAMICALLY_LIT_UNSAFE(T) && !T.lighting_overlay)	// Can't assume that one hasn't already been created on bay/neb.
 			new /atom/movable/lighting_overlay(T)
 			. += 1
@@ -99,7 +97,7 @@ SUBSYSTEM_DEF(lighting)
 
 /// Initialize a set of turfs (for example as part of loading a map template) It's safe to pass a list of non-turfs to this list - it'll only check turfs.
 /datum/controller/subsystem/lighting/proc/InitializeTurfs(list/targets)
-	for (var/turf/T in (targets || world))
+	for (var/turf/T in targets)
 		if (TURF_IS_DYNAMICALLY_LIT_UNSAFE(T))
 			T.lighting_build_overlay()
 

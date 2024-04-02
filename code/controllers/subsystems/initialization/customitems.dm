@@ -2,10 +2,7 @@ SUBSYSTEM_DEF(customitems)
 	name = "Custom Items"
 	flags = SS_NO_FIRE
 	init_order = SS_INIT_MISC_LATE
-
 	var/list/custom_items_by_ckey = list()
-	var/list/item_states = list()
-	var/list/mob_states =  list()
 
 
 /datum/controller/subsystem/customitems/UpdateStat(time)
@@ -13,10 +10,6 @@ SUBSYSTEM_DEF(customitems)
 
 
 /datum/controller/subsystem/customitems/Initialize(start_uptime)
-
-	item_states = icon_states(CUSTOM_ITEM_OBJ)
-	mob_states =  icon_states(CUSTOM_ITEM_MOB)
-
 	if(!fexists(CUSTOM_ITEM_CONFIG))
 		report_progress("Custom item directory [CUSTOM_ITEM_CONFIG] does not exist, no custom items will be loaded.")
 		return
@@ -83,6 +76,15 @@ SUBSYSTEM_DEF(customitems)
 				return
 		place_custom_item(M,citem)
 
+
+/datum/controller/subsystem/customitems/proc/mob_state_valid(icon_state)
+	return ICON_HAS_STATE(CUSTOM_ITEM_MOB, icon_state)
+
+
+/datum/controller/subsystem/customitems/proc/item_state_valid(icon_state)
+	return ICON_HAS_STATE(CUSTOM_ITEM_OBJ, icon_state)
+
+
 /datum/custom_item
 	var/ckey
 	var/character_name
@@ -110,19 +112,21 @@ SUBSYSTEM_DEF(customitems)
 /datum/custom_item/proc/validate()
 	if(!ispath(item_path, /obj/item))
 		return SPAN_WARNING("The given item path is invalid or does not exist.")
+
 	if(apply_to_target_type && !ispath(apply_to_target_type, /obj/item))
 		return SPAN_WARNING("The target item path is invalid or does not exist.")
+
 	else if(item_icon_state)
 		if(ispath(item_path, /obj/item/device/kit/suit))
 			for(var/state in list("[item_icon_state]_suit", "[item_icon_state]_helmet"))
-				if(!(state in SScustomitems.item_states))
+				if(!SScustomitems.mob_state_valid(state))
 					return SPAN_WARNING("The given item icon [state] does not exist.")
-				if(!(state in SScustomitems.mob_states))
+
+				if(!SScustomitems.item_state_valid(state))
 					return SPAN_WARNING("The given mob icon [state] does not exist.")
 		else
-			for(var/state in list(item_icon_state))
-				if(!(state in SScustomitems.item_states))
-					return SPAN_WARNING("The given item icon [state] does not exist.")
+			if(!SScustomitems.item_state_valid(item_icon_state))
+				return SPAN_WARNING("The given item icon [item_icon_state] does not exist.")
 
 /datum/custom_item/proc/spawn_item(newloc)
 	. = new item_path(newloc)

@@ -8,8 +8,6 @@
 	var/list/received_moves
 
 	var/list/stored_global_listen_count
-	var/list/stored_event_sources_count
-	var/list/stored_event_listen_count
 
 /datum/unit_test/observation/start_test()
 	if(!received_moves)
@@ -20,8 +18,6 @@
 		GLOB.moved_event.unregister_global(global_listener)
 
 	stored_global_listen_count = GLOB.global_listen_count.Copy()
-	stored_event_sources_count = GLOB.event_sources_count.Copy()
-	stored_event_listen_count = GLOB.event_listen_count.Copy()
 
 	sanity_check_events("Pre-Test")
 	. = conduct_test()
@@ -54,10 +50,6 @@
 
 	for(var/entry in (GLOB.global_listen_count - stored_global_listen_count))
 		fail("[phase]: global_listen_count - Contained [log_info_line(entry)].")
-	for(var/entry in (GLOB.event_sources_count - stored_event_sources_count))
-		fail("[phase]: event_sources_count - Contained [log_info_line(entry)].")
-	for(var/entry in (GLOB.event_listen_count - stored_event_listen_count))
-		fail("[phase]: event_listen_count - Contained [log_info_line(entry)].")
 
 /datum/unit_test/observation/proc/conduct_test()
 	return 0
@@ -200,51 +192,6 @@
 	qdel(O)
 
 	return 1
-
-/*
-/datum/unit_test/observation/moved_shall_only_trigger_for_recursive_drop
-	name = "OBSERVATION: Moved - Shall Only Trigger Once For Recursive Drop"
-
-/datum/unit_test/observation/moved_shall_only_trigger_for_recursive_drop/conduct_test()
-	var/turf/T = get_safe_turf()
-	var/obj/exosuit/exosuit = get_named_instance(/obj/exosuit, T, "exosuit")
-	var/obj/item/wrench/held_item = get_named_instance(/obj/item/wrench, T, "Wrench")
-	var/mob/living/carbon/human/dummy/held_mob = get_named_instance(/mob/living/carbon/human/dummy, T, "Held Mob")
-	var/mob/living/carbon/human/dummy/holding_mob = get_named_instance(/mob/living/carbon/human/dummy, T, "Holding Mob")
-
-	held_mob.mob_size = MOB_SMALL
-	held_mob.put_in_active_hand(held_item)
-	held_mob.get_scooped(holding_mob)
-
-	holding_mob.forceMove(exosuit)
-
-	exosuit.occupant = holding_mob
-
-	GLOB.moved_event.register(held_item, src, TYPE_PROC_REF(/datum/unit_test/observation, receive_move)
-	holding_mob.drop_from_inventory(held_item)
-
-	if(length(received_moves) != 1)
-		fail("Expected 1 raised moved event, were [length(received_moves)].")
-		dump_received_moves()
-		return 1
-
-	var/list/event = received_moves[1]
-	if(event[1] != held_item || event[2] != held_mob || event[3] != exosuit)
-		fail("Unexpected move event received. Expected [held_item], was [event[1]]. Expected [held_mob], was [event[2]]. Expected [exosuit], was [event[3]]")
-	else if(!(held_item in exosuit.dropped_items))
-		fail("Expected \the [held_item] to be in the mechs' dropped item list")
-	else
-		pass("One one moved event with expected arguments raised.")
-
-	GLOB.moved_event.unregister(held_item, src)
-	qdel(exosuit)
-	qdel(held_item)
-	qdel(held_mob)
-	qdel(holding_mob)
-
-	return 1
-*/
-
 /datum/unit_test/observation/moved_shall_not_unregister_recursively_one
 	name = "OBSERVATION: Moved - Shall Not Unregister Recursively - One"
 

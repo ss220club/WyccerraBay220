@@ -6,4 +6,7 @@
 #define N_NORTHEAST 32
 #define N_NORTHWEST 512
 #define N_SOUTHEAST 64
-#define N_SOUTHWEST 1024 
+#define N_SOUTHWEST 1024
+
+#define IS_DIR_DIAGONAL(dir) (dir & (dir - 1))
+#define DIR_TO_CARDINAL(dir) (IS_DIR_DIAGONAL(dir) ? (dir & ~(dir & dir - 1)) : dir)

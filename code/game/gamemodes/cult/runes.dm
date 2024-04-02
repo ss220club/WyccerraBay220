@@ -354,7 +354,7 @@
 
 /obj/rune/defile/cast(mob/living/user)
 	speak_incantation(user, "Ia! Ia! Zasan therium viortia!")
-	for(var/turf/T in range(1, src))
+	for(var/turf/T as anything in RANGE_TURFS(src, 1))
 		if(T.holy)
 			T.holy = 0
 		else
@@ -401,15 +401,20 @@
 	speak_incantation(user, "N'ath reth sh'yro eth d[pick("'","`")]raggathnor!")
 	visible_message(SPAN_WARNING("\The [src] disappears with a flash of red light, and a set of armor appears on \the [user]."), SPAN_WARNING("You are blinded by the flash of red light. After you're able to see again, you see that you are now wearing a set of armor."))
 
-	var/obj/O = user.get_equipped_item(slot_head) // This will most likely kill you if you are wearing a spacesuit, and it's 100% intended
-	if(O && !istype(O, /obj/item/clothing/head/culthood) && user.unEquip(O))
-		user.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(user), slot_head)
+	var/obj/O = user.get_equipped_item(slot_head)
+	if(O)
+		user.unEquip(O)
+	user.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(user), slot_head)
+
 	O = user.get_equipped_item(slot_wear_suit)
-	if(O && !istype(O, /obj/item/clothing/suit/cultrobes) && user.unEquip(O))
-		user.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(user), slot_wear_suit)
+	if(O)
+		user.unEquip(O)
+	user.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(user), slot_wear_suit)
+
 	O = user.get_equipped_item(slot_shoes)
-	if(O && !istype(O, /obj/item/clothing/shoes/cult) && user.unEquip(O))
-		user.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult(user), slot_shoes)
+	if(O)
+		user.unEquip(O)
+	user.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult(user), slot_shoes)
 
 	O = user.get_equipped_item(slot_back)
 	if(istype(O, /obj/item/storage) && !istype(O, /obj/item/storage/backpack/cultpack) && user.unEquip(O)) // We don't want to make the vox drop their nitrogen tank, though
@@ -632,7 +637,7 @@
 	else
 		for(var/mob/living/M in cultists)
 			M.say("Ia! Ia! Zasan therium viortia! Razan gilamrua kioha!")
-		for(var/turf/T in range(5, src))
+		for(var/turf/T as anything in RANGE_TURFS(src, 5))
 			if(T.holy)
 				T.holy = 0
 			else
@@ -814,7 +819,7 @@
 			if(prob(5))
 				M.say(pick("Hakkrutju gopoenjim.", "Nherasai pivroiashan.", "Firjji prhiv mazenhor.", "Tanah eh wakantahe.", "Obliyae na oraie.", "Miyf hon vnor'c.", "Wakabai hij fen juswix."))
 
-		for(var/turf/T in range(min(the_end_comes, 15)))
+		for(var/turf/T as anything in RANGE_TURFS(src, min(the_end_comes, 15)))
 			if(prob(the_end_comes / 3))
 				T.cultify()
 		sleep(10)

@@ -116,6 +116,20 @@
 	if(modded)
 		to_chat(user, SPAN_WARNING("Someone has wrenched open its tap - it's spilling everywhere!"))
 
+/obj/structure/reagent_dispensers/watertank/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	modded = !modded
+	user.visible_message(
+		SPAN_NOTICE("[user] [modded ? "opens" : "closes"] [src]'s valve with [tool]."),
+		SPAN_NOTICE("You [user] [modded ? "open" : "close"] [src]'s valve with [tool].")
+	)
+	if (modded)
+		log_and_message_admins("opened a water tank at [get_area(src)], leaking water", user, get_turf(src))
+		START_PROCESSING(SSprocessing, src)
+	else
+		STOP_PROCESSING(SSprocessing, src)
 
 /obj/structure/reagent_dispensers/watertank/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Robot Arm - Attach arm for farmbot
@@ -127,24 +141,10 @@
 		transfer_fingerprints_to(new_assembly)
 		tool.transfer_fingerprints_to(new_assembly)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] attaches \a [tool] to \the [src]."),
-			SPAN_NOTICE("You attach \a [tool] to \the [src].")
+			SPAN_NOTICE("[user] attaches [tool] to [src]."),
+			SPAN_NOTICE("You attach [tool] to [src].")
 		)
 		qdel(tool)
-		return TRUE
-
-	// Wrench - Toggle valve
-	if (isWrench(tool))
-		modded = !modded
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [modded ? "opens" : "closes"] \the [src]'s valve with \a [tool]."),
-			SPAN_NOTICE("You [user] [modded ? "open" : "close"] \the [src]'s valve with \the [tool].")
-		)
-		if (modded)
-			log_and_message_admins("opened a water tank at [get_area(src)], leaking water", user, get_turf(src))
-			START_PROCESSING(SSprocessing, src)
-		else
-			STOP_PROCESSING(SSprocessing, src)
 		return TRUE
 
 	return ..()
@@ -180,9 +180,9 @@
 
 /obj/structure/reagent_dispensers/fueltank/attack_hand()
 	if (rig)
-		usr.visible_message(SPAN_NOTICE("\The [usr] begins to detach \the [rig] from \the [src]."), SPAN_NOTICE("You begin to detach \the [rig] from \the [src]."))
+		usr.visible_message(SPAN_NOTICE("[usr] begins to detach [rig] from [src]."), SPAN_NOTICE("You begin to detach [rig] from [src]."))
 		if(do_after(usr, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
-			usr.visible_message(SPAN_NOTICE("\The [usr] detaches \the [rig] from \the [src]."), SPAN_NOTICE("You detach [rig] from \the [src]"))
+			usr.visible_message(SPAN_NOTICE("[usr] detaches [rig] from [src]."), SPAN_NOTICE("You detach [rig] from [src]"))
 			rig.dropInto(usr.loc)
 			rig = null
 			ClearOverlays()
@@ -192,42 +192,54 @@
 	// Flame Source - Kaboom
 	if (IsFlameSource(weapon))
 		user.visible_message(
-			SPAN_WARNING("\The [user] holds \a [weapon] up against \the [src], heating it up!"),
-			SPAN_WARNING("You hold \the [weapon] up against \the [src], heating it up!")
+			SPAN_WARNING("[user] holds [weapon] up against [src], heating it up!"),
+			SPAN_WARNING("You hold [weapon] up against [src], heating it up!")
 		)
 		if (!do_after(user, 5 SECONDS, src, DO_DEFAULT | DO_BOTH_UNIQUE_ACT) || !user.use_sanity_check(src, weapon))
 			return TRUE
 		if (!IsFlameSource(weapon))
-			USE_FEEDBACK_FAILURE("\The [weapon] isn't hot enough anymore.")
+			USE_FEEDBACK_FAILURE("[weapon] isn't hot enough anymore.")
 			return TRUE
-		log_and_message_admins("triggered a fuel tank explosion with \the [weapon] in [get_area(src)]", user, get_turf(src))
+		log_and_message_admins("triggered a fuel tank explosion with [weapon] in [get_area(src)]", user, get_turf(src))
 		user.visible_message(
-			SPAN_DANGER("\The [user] holds \a [weapon] against \the [src], causing it to explode!"),
-			SPAN_DANGER("You hold \the [weapon] against \the [src], causing it to explode!")
+			SPAN_DANGER("[user] holds [weapon] against [src], causing it to explode!"),
+			SPAN_DANGER("You hold [weapon] against [src], causing it to explode!")
 		)
 		explode()
 		return TRUE
 
 	return ..()
 
+/obj/structure/reagent_dispensers/fueltank/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	modded = !modded
+	user.visible_message(
+		SPAN_NOTICE("[user] [modded ? "opens" : "closes"] [src]'s valve with [tool]."),
+		SPAN_NOTICE("You [user] [modded ? "open" : "close"] [src]'s valve with [tool].")
+	)
+	if(modded)
+		log_and_message_admins("opened a fuel tank at [get_area(src)], leaking fuel.")
+		leak_fuel(amount_per_transfer_from_this)
 
 /obj/structure/reagent_dispensers/fueltank/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Assembly Holder - Attach assembly
 	if (istype(tool, /obj/item/device/assembly_holder))
 		if (rig)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [rig] attached.")
+			USE_FEEDBACK_FAILURE("[src] already has [rig] attached.")
 			return TRUE
 		if (!user.canUnEquip(tool))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts attaching \a [tool] to \the [src]."),
-			SPAN_NOTICE("You start attaching \the [tool] to \the [src].")
+			SPAN_NOTICE("[user] starts attaching [tool] to [src]."),
+			SPAN_NOTICE("You start attaching [tool] to [src].")
 		)
 		if (!user.do_skilled(2 SECONDS, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool, SANITY_CHECK_DEFAULT | SANITY_CHECK_TOOL_UNEQUIP))
 			return TRUE
 		if (rig)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [rig] attached.")
+			USE_FEEDBACK_FAILURE("[src] already has [rig] attached.")
 			return TRUE
 		user.unEquip(tool, src)
 		rig = tool
@@ -235,26 +247,14 @@
 			log_and_message_admins("rigged a fuel tank for explosion at [get_area(src)].", user, get_turf(src))
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] attaches \a [tool] to \the [src]."),
-			SPAN_NOTICE("You attach \the [tool] to \the [src].")
+			SPAN_NOTICE("[user] attaches [tool] to [src]."),
+			SPAN_NOTICE("You attach [tool] to [src].")
 		)
 		return TRUE
 
 	// Flame Source - Warn against kaboom
 	if (IsFlameSource(tool))
-		USE_FEEDBACK_FAILURE("You refrain from heating up \the [src] with \the [tool].")
-		return TRUE
-
-	// Wrench - Toggle valve
-	if (isWrench(tool))
-		modded = !modded
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [modded ? "opens" : "closes"] \the [src]'s valve with \a [tool]."),
-			SPAN_NOTICE("You [user] [modded ? "open" : "close"] \the [src]'s valve with \the [tool].")
-		)
-		if (modded)
-			log_and_message_admins("opened a fuel tank at [get_area(src)], leaking fuel.")
-			leak_fuel(amount_per_transfer_from_this)
+		USE_FEEDBACK_FAILURE("You refrain from heating up [src] with [tool].")
 		return TRUE
 
 	return ..()
@@ -275,7 +275,7 @@
 			var/turf/turf = get_turf(src)
 			if(turf)
 				var/area/area = turf.loc || "*unknown area*"
-				log_and_message_admins("[key_name_admin(Proj.firer)] shot a fuel tank in \the [area].")
+				log_and_message_admins("[key_name_admin(Proj.firer)] shot a fuel tank in [area].")
 			else
 				log_and_message_admins("shot a fuel tank outside the world.")
 
@@ -342,7 +342,7 @@
 		to_chat(user, RejectionMessage(user))
 
 /obj/structure/reagent_dispensers/water_cooler/proc/DispenserMessages(mob/user)
-	return list("\The [user] grabs a paper cup from \the [src].", "You grab a paper cup from \the [src]'s cup compartment.")
+	return list("[user] grabs a paper cup from [src].", "You grab a paper cup from [src]'s cup compartment.")
 
 /obj/structure/reagent_dispensers/water_cooler/proc/RejectionMessage(mob/user)
 	return "The [src]'s cup dispenser is empty."

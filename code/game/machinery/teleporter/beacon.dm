@@ -60,28 +60,27 @@ var/global/const/TELEBEACON_WIRE_SIGNALLER = 4
 	level = anchored ? ATOM_LEVEL_UNDER_TILE : ATOM_LEVEL_OVER_TILE
 	..()
 
-/obj/machinery/tele_beacon/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if (!panel_open && isMultitool(I))
-		var/new_name = input(user, "What label would you like to set this beacon to? Leave empty to enable automatic naming based on area.", "Set Beacon Label", beacon_name) as text|null
-		if (QDELETED(src))
-			return TRUE
-		if (isnull(new_name))
-			autoset_name = TRUE
-			generate_name()
-			user.visible_message(
-				SPAN_NOTICE("\The [user] reconfigures \the [src] with \the [I]."),
-				SPAN_NOTICE("You enable \the [src]'s automatic labeling with \the [I].")
-			)
-		else
-			beacon_name = new_name
-			autoset_name = FALSE
-			user.visible_message(
-				SPAN_NOTICE("\The [user] reconfigures \the [src] with \the [I]."),
-				SPAN_NOTICE("You reconfigure \the [src]'s relay label to \"[beacon_name]\" with \the [I].")
-			)
-		return TRUE
-
-	return ..()
+/obj/machinery/tele_beacon/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		return
+	var/new_name = input(user, "What label would you like to set this beacon to? Leave empty to enable automatic naming based on area.", "Set Beacon Label", beacon_name) as text|null
+	if (QDELETED(src))
+		return
+	if (isnull(new_name))
+		autoset_name = TRUE
+		generate_name()
+		user.visible_message(
+			SPAN_NOTICE("\The [user] reconfigures \the [src] with \the [tool]."),
+			SPAN_NOTICE("You enable \the [src]'s automatic labeling with \the [tool].")
+		)
+	else
+		beacon_name = new_name
+		autoset_name = FALSE
+		user.visible_message(
+			SPAN_NOTICE("\The [user] reconfigures \the [src] with \the [tool]."),
+			SPAN_NOTICE("You reconfigure \the [src]'s relay label to \"[beacon_name]\" with \the [tool].")
+		)
 
 /obj/machinery/tele_beacon/emp_act(severity)
 	..()

@@ -13,7 +13,7 @@
 	var/datum/computer/file/embedded_program/docking/active_docking_controller
 
 	var/obj/shuttle_landmark/landmark_transition  //This variable is type-abused initially: specify the landmark_tag, not the actual landmark.
-	var/move_time = 120		//the time spent in the transition area
+	var/move_time = 12 SECONDS		//the time spent in the transition area
 
 	category = /datum/shuttle/autodock
 	flags = SHUTTLE_FLAGS_PROCESS | SHUTTLE_FLAGS_ZERO_G
@@ -127,8 +127,10 @@
 		process_state = IDLE_STATE
 		in_use = null
 		return
-	if (get_travel_time() && landmark_transition)
-		. = long_jump(next_location, landmark_transition, get_travel_time())
+
+	var/travel_time = get_travel_time()
+	if (travel_time && landmark_transition)
+		. = long_jump(next_location, landmark_transition, travel_time)
 	else
 		. = short_jump(next_location)
 	process_state = WAIT_ARRIVE

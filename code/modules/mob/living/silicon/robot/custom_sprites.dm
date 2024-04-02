@@ -26,9 +26,8 @@ var/global/list/robot_custom_icons
 	if(rname && rname == real_name)
 		custom_sprite = TRUE
 		icon = CUSTOM_ITEM_SYNTH
-		var/list/valid_states = icon_states(icon)
 		if(icon_state == "robot")
-			if("[ckey]-Standard" in valid_states)
+			if(ICON_HAS_STATE(icon, "[ckey]-Standard"))
 				icon_state = "[ckey]-Standard"
 			else
 				to_chat(src, SPAN_WARNING("Could not locate [ckey]-Standard sprite."))

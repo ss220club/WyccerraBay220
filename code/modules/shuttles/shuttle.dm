@@ -2,7 +2,10 @@
 
 /datum/shuttle
 	var/name = ""
+	/// Time it takes shuttle to takeoff
 	var/warmup_time = 0
+	/// Time it takes shuttle to land
+	var/landing_time = 10 SECONDS
 	var/moving_status = SHUTTLE_IDLE
 
 	var/list/shuttle_area //can be both single area type or a list of areas
@@ -75,73 +78,118 @@
 	. = ..()
 
 /datum/shuttle/proc/short_jump(obj/shuttle_landmark/destination)
-	if(moving_status != SHUTTLE_IDLE) return
+	if(moving_status != SHUTTLE_IDLE)
+		return
 
 	moving_status = SHUTTLE_WARMUP
 	if(sound_takeoff)
 		playsound(current_location, sound_takeoff, 100, 20, 0.2)
-	spawn(warmup_time*10)
-		if (moving_status == SHUTTLE_IDLE)
-			return //someone cancelled the launch
 
-		if(!fuel_check()) //fuel error (probably out of fuel) occured, so cancel the launch
-			var/datum/shuttle/autodock/S = src
-			if(istype(S))
-				S.cancel_launch(null)
-			return
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/shuttle, perform_short_jump), destination), warmup_time)
 
-		moving_status = SHUTTLE_INTRANSIT //shouldn't matter but just to be safe
-		attempt_move(destination)
-		moving_status = SHUTTLE_IDLE
+/datum/shuttle/proc/perform_short_jump(obj/shuttle_landmark/destination)
+	if (moving_status == SHUTTLE_IDLE)
+		return //someone cancelled the launch
+
+	if(!fuel_check()) //fuel error (probably out of fuel) occured, so cancel the launch
+		var/datum/shuttle/autodock/self = src
+		if(istype(self))
+			self.cancel_launch(null)
+		return
+
+	moving_status = SHUTTLE_INTRANSIT //shouldn't matter but just to be safe
+	attempt_move(destination)
+	moving_status = SHUTTLE_IDLE
 
 /datum/shuttle/proc/long_jump(obj/shuttle_landmark/destination, obj/shuttle_landmark/interim, travel_time)
-	if(moving_status != SHUTTLE_IDLE) return
+	if(moving_status != SHUTTLE_IDLE)
+		return
 
 	var/obj/shuttle_landmark/start_location = current_location
 
 	moving_status = SHUTTLE_WARMUP
 	if(sound_takeoff)
 		playsound(current_location, sound_takeoff, 100, 20, 0.2)
-		if (!istype(start_location.base_area, /area/space))
-			var/area/A = get_area(start_location)
+		if(!isspace(start_location.base_area))
+			var/list/shuttle_area_refs_set = get_area_refs_set(shuttle_area)
+			for(var/mob/mob_to_notify as anything in GLOB.player_list)
+				if(!mob_to_notify.client)
+					continue
 
-			for (var/mob/M in GLOB.player_list)
-				if (M.client && M.z == A.z && !istype(get_turf(M), /turf/space) && !(get_area(M) in src.shuttle_area))
-					to_chat(M, SPAN_NOTICE("The rumble of engines are heard as a shuttle lifts off."))
+				if(mob_to_notify.z != start_location.z)
+					continue
 
-	spawn(warmup_time*10)
-		if(moving_status == SHUTTLE_IDLE)
-			return	//someone cancelled the launch
+				if(isspaceturf(get_turf(mob_to_notify)))
+					continue
 
-		if(!fuel_check()) //fuel error (probably out of fuel) occured, so cancel the launch
-			var/datum/shuttle/autodock/S = src
-			if(istype(S))
-				S.cancel_launch(null)
-			return
+				if(shuttle_area_refs_set[ref(get_area(mob_to_notify))])
+					continue
 
-		arrive_time = world.time + travel_time*10
-		moving_status = SHUTTLE_INTRANSIT
-		if(attempt_move(interim))
-			var/fwooshed = 0
-			while (world.time < arrive_time)
-				if(!fwooshed && (arrive_time - world.time) < 100)
-					fwooshed = 1
-					playsound(destination, sound_landing, 100, 0, 7)
-					if (!istype(destination.base_area, /area/space))
-						var/area/A = get_area(destination)
+				to_chat(mob_to_notify, SPAN_NOTICE("The rumble of engines are heard as a shuttle lifts off."))
 
-						for (var/mob/M in GLOB.player_list)
-							if (M.client && M.z == A.z && !istype(get_turf(M), /turf/space) && !(get_area(M) in src.shuttle_area))
-								to_chat(M, SPAN_NOTICE("The rumble of a shuttle's engines fill the area as a ship manuevers in for a landing."))
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/shuttle, launch_shuttle), start_location, interim, destination, travel_time), warmup_time)
 
-				sleep(5)
-			if(!attempt_move(destination))
-				attempt_move(start_location) //try to go back to where we started. If that fails, I guess we're stuck in the interim location
+/datum/shuttle/proc/launch_shuttle(obj/shuttle_landmark/start_location, obj/shuttle_landmark/interim, obj/shuttle_landmark/destination, travel_time)
+	if(moving_status == SHUTTLE_IDLE)
+		return	//someone cancelled the launch
 
+	if(!fuel_check()) //fuel error (probably out of fuel) occured, so cancel the launch
+		var/datum/shuttle/autodock/self = src
+		if(istype(self))
+			self.cancel_launch(null)
+
+		return
+
+	var/start_landing_in = travel_time - landing_time
+	arrive_time = world.time + travel_time
+	moving_status = SHUTTLE_INTRANSIT
+
+	if(!attempt_move(interim))
 		moving_status = SHUTTLE_IDLE
+		return
+
+	if(start_landing_in > 0)
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/shuttle, prepare_for_landing), start_location, destination), start_landing_in)
+	else
+		prepare_for_landing(start_location, destination)
+
+/// Plans landing of shuttle and plays landing sound
+/datum/shuttle/proc/prepare_for_landing(obj/shuttle_landmark/start_location, obj/shuttle_landmark/destination)
+	if(sound_landing)
+		playsound(destination, sound_landing, 100, 0, 7)
+		if(!isspace(destination.base_area))
+			var/list/shuttle_area_refs_set = get_area_refs_set(shuttle_area)
+			for(var/mob/mob_to_notify as anything in GLOB.player_list)
+				if(!mob_to_notify.client)
+					continue
+
+				if(mob_to_notify.z != destination.z)
+					continue
+
+				if(isspaceturf(get_turf(mob_to_notify)))
+					continue
+
+				if(shuttle_area_refs_set[ref(get_area(mob_to_notify))])
+					continue
+
+				to_chat(mob_to_notify, SPAN_NOTICE("The rumble of a shuttle's engines fill the area as a ship manuevers in for a landing."))
+
+	var/landing_in = arrive_time - world.time
+	if(landing_in > 0)
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/shuttle, land_shuttle), start_location, destination), landing_in)
+	else
+		land_shuttle(start_location, destination)
+
+/// Actually moves shuttle to new location from the interim
+/datum/shuttle/proc/land_shuttle(obj/shuttle_landmark/start_location, obj/shuttle_landmark/destination)
+	if(!attempt_move(destination))
+		/// Something went wrong, so we try to move back
+		attempt_move(start_location)
+
+	moving_status = SHUTTLE_IDLE
 
 /datum/shuttle/proc/fuel_check()
-	return 1 //fuel check should always pass in non-overmap shuttles (they have magic engines)
+	return TRUE //fuel check should always pass in non-overmap shuttles (they have magic engines)
 
 /*****************
 * Shuttle Moved Handling * (Observer Pattern Implementation: Shuttle Moved)
@@ -154,14 +202,14 @@
 
 	if(!destination.is_valid(src))
 		return FALSE
+
 	if(current_location.cannot_depart(src))
 		return FALSE
+
 	testing("[src] moving to [destination]. Areas are [english_list(shuttle_area)]")
-	var/list/translation = list()
-	for(var/area/A in shuttle_area)
-		testing("Moving [A]")
-		translation += get_turf_translation(get_turf(current_location), get_turf(destination), A.contents)
+
 	var/old_location = current_location
+	var/list/translation = get_turf_translation(get_turf(current_location), get_turf(destination), get_turfs())
 	GLOB.shuttle_pre_move_event.raise_event(src, old_location, destination)
 	shuttle_moved(destination, translation)
 	GLOB.shuttle_moved_event.raise_event(src, old_location, destination)
@@ -178,6 +226,14 @@
 	// - BANDAID
 	return TRUE
 
+/// Returns list of all turfs that shuttle posses
+/datum/shuttle/proc/get_turfs()
+	var/list/shuttle_turfs = list()
+	for(var/area/area_on_shuttle as anything in shuttle_area)
+		shuttle_turfs += get_area_turfs(area_on_shuttle)
+
+	return shuttle_turfs
+
 //just moves the shuttle from A to B, if it can be moved
 //A note to anyone overriding move in a subtype. shuttle_moved() must absolutely not, under any circumstances, fail to move the shuttle.
 //If you want to conditionally cancel shuttle launches, that logic must go in short_jump(), long_jump() or attempt_move()
@@ -187,44 +243,46 @@
 //	log_degug("area_coming_from: [origin]")
 //	log_debug("destination: [destination]")
 	if((flags & SHUTTLE_FLAGS_ZERO_G))
-		var/new_grav = 1
+		var/new_area_has_gravity = TRUE
+
 		if(destination.flags & SLANDMARK_FLAG_ZERO_G)
 			var/area/new_area = get_area(destination)
-			new_grav = new_area.has_gravity
-		for(var/area/our_area in shuttle_area)
-			if(our_area.has_gravity != new_grav)
-				our_area.gravitychange(new_grav)
+			new_area_has_gravity = new_area.has_gravity
+
+		for(var/area/our_area as anything in shuttle_area)
+			if(our_area.has_gravity != new_area_has_gravity)
+				our_area.gravitychange(new_area_has_gravity)
 
 	for(var/turf/src_turf in turf_translation)
 		var/turf/dst_turf = turf_translation[src_turf]
-		if(src_turf.is_solid_structure()) //in case someone put a hole in the shuttle and you were lucky enough to be under it
-			for(var/atom/movable/AM in dst_turf)
-				if(!AM.simulated)
-					continue
-				AM.shuttle_land_on()
-	var/list/powernets = list()
-	for(var/area/A in shuttle_area)
-		// if there was a zlevel above our origin, erase our ceiling now we're leaving
-		if(HasAbove(current_location.z))
-			for(var/turf/TO in A.contents)
-				var/turf/TA = GetAbove(TO)
-				if(istype(TA, ceiling_type))
-					TA.ChangeTurf(get_base_turf_by_area(TA), 1, 1)
-		if(knockdown)
-			for(var/mob/M in A)
-				spawn(0)
-					if(istype(M, /mob/living/carbon))
-						if(M.buckled)
-							to_chat(M, SPAN_WARNING("Sudden acceleration presses you into your chair!"))
-							shake_camera(M, 3, 1)
-						else
-							to_chat(M, SPAN_WARNING("The floor lurches beneath you!"))
-							shake_camera(M, 10, 1)
-							M.visible_message(SPAN_WARNING("[M.name] is tossed around by the sudden acceleration!"))
-							M.throw_at_random(FALSE, 4, 1)
+		if(!src_turf.is_solid_structure())
+			continue
 
-		for(var/obj/structure/cable/C in A)
-			powernets |= C.powernet
+		//in case someone put a hole in the shuttle and you were lucky enough to be under it
+		for(var/atom/movable/target as anything in dst_turf)
+			if(!target.simulated)
+				continue
+
+			target.shuttle_land_on()
+
+	var/list/old_powernets = list()
+	var/has_z_level_above = HasAbove(current_location.z)
+	for(var/turf/old_turf as anything in get_turfs())
+		// if there was a zlevel above our origin, erase our ceiling now we're leaving
+		if(has_z_level_above)
+			var/turf/turf_above = GetAbove(old_turf)
+
+			if(!istype(turf_above, ceiling_type))
+				continue
+
+			turf_above.ChangeTurf(get_base_turf_by_area(turf_above), 1, 1)
+
+		for(var/obj/structure/cable/C in old_turf)
+			old_powernets |= C.powernet
+
+	if(knockdown)
+		invoke_async(src, TYPE_PROC_REF(/datum/shuttle, knockdown_passengers))
+
 	if(logging_home_tag)
 		var/datum/shuttle_log/s_log = SSshuttle.shuttle_logs[src]
 		s_log.handle_move(current_location, destination)
@@ -234,32 +292,61 @@
 
 	// if there's a zlevel above our destination, paint in a ceiling on it so we retain our air
 	if(HasAbove(current_location.z))
-		for(var/area/A in shuttle_area)
-			for(var/turf/TD in A.contents)
-				var/turf/TA = GetAbove(TD)
-				if(istype(TA, get_base_turf_by_area(TA)) || istype(TA, /turf/simulated/open))
-					if(get_area(TA) in shuttle_area)
-						continue
-					TA.ChangeTurf(ceiling_type, TRUE, TRUE, TRUE)
+		var/list/area_refs_set = get_area_refs_set(shuttle_area)
+		var/list/destination_turfs = get_turfs()
+		for(var/turf/destination_turf as anything in destination_turfs)
+			var/turf/turf_above = GetAbove(destination_turf)
+
+			if(!istype(turf_above, get_base_turf_by_area(turf_above)) && !istype(turf_above, /turf/simulated/open))
+				continue
+
+			if(area_refs_set[ref(get_area(turf_above))])
+				continue
+
+			turf_above.ChangeTurf(ceiling_type, TRUE, TRUE, TRUE)
 
 	// Remove all powernets that were affected, and rebuild them.
-	var/list/cables = list()
-	for(var/datum/powernet/P in powernets)
-		cables |= P.cables
-		qdel(P)
-	for(var/obj/structure/cable/C in cables)
-		if(!C.powernet)
-			var/datum/powernet/NewPN = new()
-			NewPN.add_cable(C)
-			propagate_network(C,C.powernet)
+	var/list/shuttle_cables = list()
+	for(var/datum/powernet/old_powernet as anything in old_powernets)
+		shuttle_cables |= old_powernet.cables
+		qdel(old_powernet)
+
+	for(var/obj/structure/cable/C as anything in shuttle_cables)
+		if(C.powernet)
+			continue
+
+		var/datum/powernet/NewPN = new()
+		NewPN.add_cable(C)
+		propagate_network(C, C.powernet)
 
 	if(mothershuttle)
-		var/datum/shuttle/mothership = SSshuttle.shuttles[mothershuttle]
-		if(mothership)
-			if(current_location.landmark_tag == motherdock)
-				mothership.shuttle_area |= shuttle_area
-			else
-				mothership.shuttle_area -= shuttle_area
+		return
+
+	var/datum/shuttle/mothership = SSshuttle.shuttles[mothershuttle]
+	if(!mothership)
+		return
+
+	if(current_location.landmark_tag == motherdock)
+		mothership.shuttle_area |= shuttle_area
+	else
+		mothership.shuttle_area -= shuttle_area
+
+/datum/shuttle/proc/knockdown_passengers()
+	var/list/area_refs_set = get_area_refs_set(shuttle_area)
+	for(var/mob/living/carbon/passenger_to_knockdown as anything in SSmobs.get_mobs_of_type(/mob/living/carbon))
+		/// TODO: cache mobs inside areas
+		if(!area_refs_set[ref(get_area(passenger_to_knockdown))])
+			continue
+
+		if(passenger_to_knockdown.buckled)
+			to_chat(passenger_to_knockdown, SPAN_WARNING("Sudden acceleration presses you into your chair!"))
+			shake_camera(passenger_to_knockdown, 3, 1)
+			continue
+
+		to_chat(passenger_to_knockdown, SPAN_WARNING("The floor lurches beneath you!"))
+		shake_camera(passenger_to_knockdown, 10, 1)
+		passenger_to_knockdown.visible_message(SPAN_WARNING("[passenger_to_knockdown.name] is tossed around by the sudden acceleration!"))
+		passenger_to_knockdown.throw_at_random(FALSE, 4, 1)
 
 /// Handler for shuttles landing on atoms. Called by `shuttle_moved()`.
 /atom/movable/proc/shuttle_land_on()

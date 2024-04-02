@@ -46,32 +46,38 @@ var/global/bomb_set
 			addtimer(CALLBACK(src, PROC_REF(explode)), 0)
 		SSnano.update_uis(src)
 
-/obj/machinery/nuclearbomb/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(isScrewdriver(O))
-		ClearOverlays()
-		if(auth)
-			if(panel_open == 0)
-				panel_open = 1
+/obj/machinery/nuclearbomb/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
+/obj/machinery/nuclearbomb/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	ClearOverlays()
+	switch(panel_open)
+		if(FALSE)
+			if(auth)
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return
+				panel_open = TRUE
 				AddOverlays("panel_open")
 				to_chat(user, "You unscrew the control panel of [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			else
-				panel_open = 0
-				to_chat(user, "You screw the control panel of [src] back on.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-		else
-			if(panel_open == 0)
-				to_chat(user, "\The [src] emits a buzzing noise, the panel staying locked in.")
-			if(panel_open == 1)
-				panel_open = 0
-				to_chat(user, "You screw the control panel of \the [src] back on.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			flick("lock", src)
-		return TRUE
+				to_chat(user, "[src] emits a buzzing noise, the panel staying locked in.")
+				flick("lock", src)
+		if(TRUE)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			panel_open = FALSE
+			to_chat(user, "You screw the control panel of [src] back on.")
 
-	if(panel_open && isMultitool(O) || isWirecutter(O))
-		return attack_hand(user)
 
+/obj/machinery/nuclearbomb/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(panel_open)
+		attack_hand(user)
+
+/obj/machinery/nuclearbomb/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if(extended)
 		if(istype(O, /obj/item/disk/nuclear))
 			if(!user.unEquip(O, src))
@@ -82,66 +88,60 @@ var/global/bomb_set
 	if(anchored)
 		switch(removal_stage)
 			if(0)
-				if(isWelder(O))
-					var/obj/item/weldingtool/WT = O
-					if(!WT.can_use(5, user))
+				if(O.tool_behaviour == TOOL_WELDER)
+					if(!O.tool_start_check(user, 5))
 						return TRUE
-
 					user.visible_message(
-						SPAN_NOTICE("\The [user] starts cutting loose the anchoring bolt covers on \the [src]."),
-						SPAN_NOTICE("You start cutting loose the anchoring bolt covers on \the [src] with \the [O].")
+						SPAN_NOTICE("[user] starts cutting loose the anchoring bolt covers on [src]."),
+						SPAN_NOTICE("You start cutting loose the anchoring bolt covers on [src] with [O].")
 					)
-
-					if(do_after(user, (O.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if(!src || !user || !WT.remove_fuel(5, user)) return TRUE
-						user.visible_message(
-							SPAN_NOTICE("\The [user] cuts through the bolt covers on \the [src]."),
-							SPAN_NOTICE("You cut through the bolt covers on \the [src].")
-						)
-						removal_stage = 1
+					if(!O.use_as_tool(src, user, 4 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+						return TRUE
+					user.visible_message(
+						SPAN_NOTICE("[user] cuts through the bolt covers on [src]."),
+						SPAN_NOTICE("You cut through the bolt covers on [src].")
+					)
+					removal_stage = 1
 					return TRUE
 
 			if(1)
-				if(isCrowbar(O))
+				if(O.tool_behaviour == TOOL_CROWBAR)
 					user.visible_message(
-						SPAN_NOTICE("\The [user] starts forcing open the bolt covers on \the [src]."),
-						SPAN_NOTICE("You start forcing open the anchoring bolt covers on \the [src] with \the [O].")
+						SPAN_NOTICE("[user] starts forcing open the bolt covers on [src]."),
+						SPAN_NOTICE("You start forcing open the anchoring bolt covers on [src] with [O].")
 					)
 
 					if(do_after(user, (O.toolspeed * 1.5) SECONDS, src, DO_REPAIR_CONSTRUCT))
 						if(!src || !user) return TRUE
 						user.visible_message(
-							SPAN_NOTICE("\The [user] forces open the bolt covers on \the [src]."),
+							SPAN_NOTICE("[user] forces open the bolt covers on [src]."),
 							SPAN_NOTICE("You force open the bolt covers.")
 						)
 						removal_stage = 2
 					return TRUE
 
 			if(2)
-				if(isWelder(O))
-					var/obj/item/weldingtool/WT = O
-					if(!WT.can_use(5, user))
+				if(O.tool_behaviour == TOOL_WELDER)
+					if(!O.tool_start_check(user, 5))
 						return TRUE
-
 					user.visible_message(
-						SPAN_NOTICE("\The [user] starts cutting apart the anchoring system sealant on \the [src]."),
-						SPAN_NOTICE("You start cutting apart the anchoring system's sealant on \the [src] with \the [O].")
+						SPAN_NOTICE("[user] starts cutting apart the anchoring system sealant on [src]."),
+						SPAN_NOTICE("You start cutting apart the anchoring system's sealant on [src] with [O].")
 					)
-
-					if(do_after(user, (O.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT))
-						if(!src || !user || !WT.remove_fuel(5, user)) return TRUE
-						user.visible_message(
-							SPAN_NOTICE("\The [user] cuts apart the anchoring system sealant on \the [src]."),
-							SPAN_NOTICE("You cut apart the anchoring system's sealant.")
-						)
-						removal_stage = 3
+					if(!O.use_as_tool(src, user, 4 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+						return TRUE
+					user.visible_message(
+						SPAN_NOTICE("[user] cuts apart the anchoring system sealant on [src]."),
+						SPAN_NOTICE("You cut apart the anchoring system's sealant.")
+					)
+					removal_stage = 3
 					return TRUE
 
 			if(3)
-				if(isWrench(O))
+				if(O.tool_behaviour == TOOL_WRENCH)
 					user.visible_message(
-						SPAN_NOTICE("\The [user] begins unwrenching the anchoring bolts on \the [src]."),
-						SPAN_NOTICE("You begin unwrenching the anchoring bolts on \the [src].")
+						SPAN_NOTICE("[user] begins unwrenching the anchoring bolts on [src]."),
+						SPAN_NOTICE("You begin unwrenching the anchoring bolts on [src].")
 					)
 					if(do_after(user, (O.toolspeed * 5) SECONDS, src, DO_REPAIR_CONSTRUCT))
 						if(!src || !user) return TRUE
@@ -150,16 +150,16 @@ var/global/bomb_set
 					return TRUE
 
 			if(4)
-				if(isCrowbar(O))
+				if(O.tool_behaviour == TOOL_CROWBAR)
 					user.visible_message(
-						SPAN_NOTICE("\The [user] begins lifting \the [src] off of its anchors."),
-						SPAN_NOTICE("You begin lifting \the [src] off its anchors.")
+						SPAN_NOTICE("[user] begins lifting [src] off of its anchors."),
+						SPAN_NOTICE("You begin lifting [src] off its anchors.")
 						)
 					if(do_after(user, (O.toolspeed * 8) SECONDS, src, DO_REPAIR_CONSTRUCT))
 						if(!src || !user) return TRUE
 						user.visible_message(
-							SPAN_NOTICE("\The [user] crowbars \the [src] off of the anchors. It can now be moved."),
-							SPAN_NOTICE("You jam the crowbar under \the [src] and lift it off its anchors. You can now move it!")
+							SPAN_NOTICE("[user] crowbars [src] off of the anchors. It can now be moved."),
+							SPAN_NOTICE("You jam the crowbar under [src] and lift it off its anchors. You can now move it!")
 						)
 						anchored = FALSE
 						removal_stage = 5
@@ -173,7 +173,7 @@ var/global/bomb_set
 			src.anchored = TRUE
 			visible_message(SPAN_WARNING("With a steely snap, bolts slide out of [src] and anchor it to the flooring!"))
 		else
-			visible_message(SPAN_WARNING("\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut."))
+			visible_message(SPAN_WARNING("[src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut."))
 		extended = 1
 		if(!src.lighthack)
 			flick("lock", src)
@@ -263,7 +263,7 @@ var/global/bomb_set
 				if(code == r_code)
 					yes_code = 1
 					code = null
-					log_and_message_admins("has armed \the [src]")
+					log_and_message_admins("has armed [src]")
 				else
 					code = "ERROR"
 			else
@@ -291,7 +291,7 @@ var/global/bomb_set
 				if(timing == -1)
 					return 1
 				if(!anchored)
-					to_chat(usr, SPAN_WARNING("\The [src] needs to be anchored."))
+					to_chat(usr, SPAN_WARNING("[src] needs to be anchored."))
 					return 1
 				if(safety)
 					to_chat(usr, SPAN_WARNING("The safety is still on."))
@@ -319,16 +319,16 @@ var/global/bomb_set
 			if(href_list["anchor"])
 				if(removal_stage == 5)
 					anchored = FALSE
-					visible_message(SPAN_WARNING("\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut."))
+					visible_message(SPAN_WARNING("[src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut."))
 					return 1
 
 				if(!isinspace())
 					anchored = !anchored
 					if(anchored)
-						visible_message(SPAN_WARNING("With a steely snap, bolts slide out of \the [src] and anchor it to the flooring."))
+						visible_message(SPAN_WARNING("With a steely snap, bolts slide out of [src] and anchor it to the flooring."))
 					else
 						secure_device()
-						visible_message(SPAN_WARNING("The anchoring bolts slide back into the depths of \the [src]."))
+						visible_message(SPAN_WARNING("The anchoring bolts slide back into the depths of [src]."))
 				else
 					to_chat(usr, SPAN_WARNING("There is nothing to anchor to!"))
 	return 1
@@ -336,7 +336,7 @@ var/global/bomb_set
 /obj/machinery/nuclearbomb/proc/start_bomb()
 	timeleft += world.time
 	timing = 1
-	log_and_message_admins("activated the detonation countdown of \the [src]")
+	log_and_message_admins("activated the detonation countdown of [src]")
 	bomb_set++ //There can still be issues with this resetting when there are multiple bombs. Not a big deal though for Nuke/N
 	var/singleton/security_state/security_state = GET_SINGLETON(GLOB.using_map.security_state)
 	original_level = security_state.current_security_level
@@ -429,7 +429,7 @@ var/global/bomb_set
 
 /obj/item/storage/secure/briefcase/nukedisk/examine(mob/user)
 	. = ..()
-	to_chat(user,"On closer inspection, you see \a [GLOB.using_map.company_name] emblem is etched into the front of it.")
+	to_chat(user,"On closer inspection, you see [GLOB.using_map.company_name] emblem is etched into the front of it.")
 
 /obj/item/folder/envelope/nuke_instructions
 	name = "instructions envelope"

@@ -27,7 +27,7 @@
 			if(!synth)
 				user.adjust_nutrition(-(5 * DEFAULT_HUNGER_FACTOR))
 				user.adjust_hydration(-(5 * DEFAULT_THIRST_FACTOR))
-			to_chat(user, SPAN_WARNING("You [pick(hit_message)] \the [src]."))
+			to_chat(user, SPAN_WARNING("You [pick(hit_message)] [src]."))
 
 /obj/structure/fitness/weightlifter
 	name = "weightlifting machine"
@@ -39,19 +39,16 @@
 	var/list/fail_message = list(", lifting them part of the way and then letting them drop", ", unable to even budge them")
 
 
-/obj/structure/fitness/weightlifter/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/fitness/weightlifter/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	// Wrench - Set weight level
-	if (isWrench(tool))
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, TRUE)
-		weight = (weight % max_weight) + 1
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \the [src]'s weight level with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s weight level to [weight] with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
+	weight = (weight % max_weight) + 1
+	user.visible_message(
+		SPAN_NOTICE("[user] adjusts [src]'s weight level with [tool]."),
+		SPAN_NOTICE("You set [src]'s weight level to [weight] with [tool].")
+	)
 
 /obj/structure/fitness/weightlifter/attack_hand(mob/living/carbon/human/user)
 	if(!istype(user))
@@ -84,13 +81,13 @@
 						message = "; this does not look safe"
 				else
 					message = fail_message[min(1 + round(weight - skill), length(fail_message))]
-				user.visible_message(SPAN_NOTICE("\The [user] fails to lift the weights[message]."), SPAN_NOTICE("You fail to lift the weights[message]."))
+				user.visible_message(SPAN_NOTICE("[user] fails to lift the weights[message]."), SPAN_NOTICE("You fail to lift the weights[message]."))
 			else
 				if(!synth)
 					var/adj_weight = weight * 5
 					user.adjust_nutrition(-(adj_weight * DEFAULT_HUNGER_FACTOR))
 					user.adjust_hydration(-(adj_weight * DEFAULT_THIRST_FACTOR))
 				message = success_message[min(1 + round(skill - weight), length(fail_message))]
-				user.visible_message(SPAN_NOTICE("\The [user] lift\s the weights [message]."), SPAN_NOTICE("You lift the weights [message]."))
+				user.visible_message(SPAN_NOTICE("[user] lift\s the weights [message]."), SPAN_NOTICE("You lift the weights [message]."))
 				user.update_personal_goal(/datum/goal/weights, 1)
 		being_used = FALSE

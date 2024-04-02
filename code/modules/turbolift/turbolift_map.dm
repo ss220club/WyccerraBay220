@@ -166,8 +166,9 @@
 
 		var/area_path = areas_to_use[az]
 		var/area/A = locate(area_path) || new area_path()
-		for(var/T in floor_turfs)
-			ChangeArea(T, A)
+		for(var/turf/T as anything in floor_turfs)
+			T.change_area(A)
+
 		cfloor.set_area_ref("\ref[A]")
 
 		// Place exterior doors.

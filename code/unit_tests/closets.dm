@@ -27,18 +27,16 @@
 		if(!closet.base_icon)
 			LAZYADD(bad_base_icon, "[closet.type]")
 		else
-			var/list/base_states = icon_states(closet.base_icon)
 			for(var/thing in check_base_states)
-				if(!(thing in base_states))
+				if(!ICON_HAS_STATE(closet.base_icon, thing))
 					LAZYADD(bad_base_state, "[closet.type] - [thing] - [closet.base_icon]")
 		if(LAZYLEN(closet.decals) && !closet.decal_icon)
 			LAZYADD(bad_decal_icon, "[closet.type]")
 		else
-			var/list/decal_states = icon_states(closet.decal_icon)
 			for(var/thing in closet.decals)
 				if(isnull(closet.decals[thing]))
 					LAZYADD(bad_decal_colour, "[check_appearance] - [thing]")
-				if(!(thing in decal_states) && !("[thing]_open" in decal_states) && !("[thing]_closed" in decal_states))
+				if(!ICON_HAS_STATE(closet.decal_icon, thing) && !ICON_HAS_STATE(closet.decal_icon, "[thing]_open") && !ICON_HAS_STATE(closet.decal_icon, "[thing]_closed"))
 					LAZYADD(bad_decal_state, "[check_appearance] - [thing] - [closet.decal_icon]")
 
 	if( \

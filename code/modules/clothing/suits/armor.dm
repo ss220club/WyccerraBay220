@@ -103,27 +103,43 @@
 
 
 /obj/item/clothing/suit/armor/reactive/handle_shield(mob/user, damage, atom/damage_source = null, mob/attacker = null, def_zone = null, attack_text = "the attack")
-	if(prob(50))
-		user.visible_message(SPAN_DANGER("The reactive teleport system flings [user] clear of the attack!"))
-		var/list/turfs = list()
-		for(var/turf/T in orange(6, user))
-			if(istype(T,/turf/space)) continue
-			if(T.density) continue
-			if(T.x>world.maxx-6 || T.x<6)	continue
-			if(T.y>world.maxy-6 || T.y<6)	continue
-			turfs += T
-		if(!length(turfs)) turfs += pick(/turf in orange(6))
-		var/turf/picked = pick(turfs)
-		if(!isturf(picked)) return
+	if(!prob(50))
+		return FALSE
 
-		var/datum/effect/spark_spread/spark_system = new /datum/effect/spark_spread()
-		spark_system.set_up(5, 0, user.loc)
-		spark_system.start()
-		playsound(user.loc, "sparks", 50, 1)
+	user.visible_message(SPAN_DANGER("The reactive teleport system flings [user] clear of the attack!"))
+	var/list/turfs = list()
 
-		user.forceMove(picked)
-		return PROJECTILE_FORCE_MISS
-	return 0
+	var/turf/user_turf = get_turf(user)
+	var/list/possible_teleport_locations = ORANGE_TURFS(user_turf, 6)
+	for(var/turf/T as anything in possible_teleport_locations)
+		if(isspaceturf(T))
+			continue
+
+		if(T.density)
+			continue
+
+		if(T.x > world.maxx - 6 || T.x < 6)
+			continue
+
+		if(T.y > world.maxy - 6 || T.y < 6)
+			continue
+
+		turfs += T
+
+	if(!length(turfs))
+		turfs += pick(possible_teleport_locations)
+
+	var/turf/picked = pick(turfs)
+	if(!isturf(picked))
+		return
+
+	var/datum/effect/spark_spread/spark_system = new /datum/effect/spark_spread()
+	spark_system.set_up(5, 0, user.loc)
+	spark_system.start()
+	playsound(user.loc, "sparks", 50, 1)
+
+	user.forceMove(picked)
+	return PROJECTILE_FORCE_MISS
 
 /obj/item/clothing/suit/armor/reactive/attack_self(mob/user as mob)
 	src.active = !( src.active )

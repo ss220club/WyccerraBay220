@@ -104,7 +104,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			if(powered)
 				to_chat(user, desc_holder)
 			else
-				to_chat(user, "\The [src] is assembled")
+				to_chat(user, "[src] is assembled")
 
 
 /obj/structure/particle_accelerator/can_anchor(obj/item/tool, mob/user, silent)
@@ -113,7 +113,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		return
 	if (construction_state > CONSTRUCT_STATE_ANCHORED)
 		if (!silent)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be further dismantled before you can move it.")
+			USE_FEEDBACK_FAILURE("[src] needs to be further dismantled before you can move it.")
 		return FALSE
 
 
@@ -123,61 +123,62 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	update_icon()
 	..()
 
+/obj/structure/particle_accelerator/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (construction_state < CONSTRUCT_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("[src] needs to be wired before you can close the panel.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if (construction_state == CONSTRUCT_STATE_WIRED)
+		construction_state = CONSTRUCT_STATE_COMPLETE
+	else
+		construction_state = CONSTRUCT_STATE_WIRED
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] [construction_state == CONSTRUCT_STATE_COMPLETE ? "closes" : "opens"] [src]'s maintenance panel with [tool]."),
+		SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_COMPLETE ? "close" : "open"] [src]'s maintenance panel with [tool].")
+	)
+
+/obj/structure/particle_accelerator/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (construction_state < CONSTRUCT_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
+		return
+	if (construction_state > CONSTRUCT_STATE_WIRED)
+		USE_FEEDBACK_FAILURE("[src]'s panel must be open before you can access the wiring.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	construction_state = CONSTRUCT_STATE_ANCHORED
+	update_state()
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),
+		SPAN_NOTICE("You cut [src]'s wiring with [tool].")
+	)
 
 /obj/structure/particle_accelerator/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Add wiring
 	if (isCoil(tool))
 		if (construction_state < CONSTRUCT_STATE_ANCHORED)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be anchored before you can wire it.")
+			USE_FEEDBACK_FAILURE("[src] needs to be anchored before you can wire it.")
 			return TRUE
 		if (construction_state > CONSTRUCT_STATE_ANCHORED)
-			USE_FEEDBACK_FAILURE("\The [src] is already wired.")
+			USE_FEEDBACK_FAILURE("[src] is already wired.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.use(1))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 1, "to wire [src].")
 			return TRUE
 		construction_state = CONSTRUCT_STATE_WIRED
 		update_state()
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] wires \the [src] with \a [tool]."),
-			SPAN_NOTICE("You wire \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] wires [src] with [tool]."),
+			SPAN_NOTICE("You wire [src] with [tool].")
 		)
 		return TRUE
-
-	// Screwdriver - Toggle panel
-	if (isScrewdriver(tool))
-		if (construction_state < CONSTRUCT_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] needs to be wired before you can close the panel.")
-			return TRUE
-		if (construction_state == CONSTRUCT_STATE_WIRED)
-			construction_state = CONSTRUCT_STATE_COMPLETE
-		else
-			construction_state = CONSTRUCT_STATE_WIRED
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [construction_state == CONSTRUCT_STATE_COMPLETE ? "closes" : "opens"] \the [src]'s maintenance panel with \a [tool]."),
-			SPAN_NOTICE("You [construction_state == CONSTRUCT_STATE_COMPLETE ? "close" : "open"] \the [src]'s maintenance panel with \the [tool].")
-		)
-		return TRUE
-
-	// Wirecutters - Remove wiring
-	if (isWirecutter(tool))
-		if (construction_state < CONSTRUCT_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (construction_state > CONSTRUCT_STATE_WIRED)
-			USE_FEEDBACK_FAILURE("\The [src]'s panel must be open before you can access the wiring.")
-			return TRUE
-		construction_state = CONSTRUCT_STATE_ANCHORED
-		update_state()
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \the [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
-		)
-
 	return ..()
 
 
@@ -276,16 +277,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			if(powered)
 				to_chat(user, desc_holder)
 			else
-				to_chat(user, "\The [src] is assembled")
-
-
-/obj/machinery/particle_accelerator/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if (I.istool())
-		if (process_tool_hit(I, user))
-			return TRUE
-
-	return ..()
-
+				to_chat(user, "[src] is assembled")
 
 /obj/machinery/particle_accelerator/ex_act(severity)
 	switch(severity)
@@ -307,57 +299,70 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 /obj/machinery/particle_accelerator/proc/update_state()
 	return 0
 
-
-/obj/machinery/particle_accelerator/proc/process_tool_hit(obj/O, mob/user)
-	if(!(O) || !(user))
-		return 0
-	if(!ismob(user) || !isobj(O))
-		return 0
-	var/temp_state = src.construction_state
-	switch(src.construction_state)//TODO:Might be more interesting to have it need several parts rather than a single list of steps
-		if(0)
-			if(isWrench(O))
-				playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-				src.anchored = TRUE
-				user.visible_message("[user.name] secures the [src.name] to the floor.", \
-					"You secure the external bolts.")
-				temp_state++
-		if(1)
-			if(isWrench(O))
-				playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-				src.anchored = FALSE
-				user.visible_message("[user.name] detaches the [src.name] from the floor.", \
-					"You remove the external bolts.")
-				temp_state--
-			else if(isCoil(O))
-				if(O:use(1))
-					user.visible_message("[user.name] adds wires to the [src.name].", \
-						"You add some wires.")
-					temp_state++
+/obj/machinery/particle_accelerator/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	switch(construct_state)
 		if(2)
-			if(isWirecutter(O))//TODO:Shock user if its on?
-				user.visible_message("[user.name] removes some wires from the [src.name].", \
-					"You remove some wires.")
-				temp_state--
-			else if(isScrewdriver(O))
-				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
-					"You close the access panel.")
-				temp_state++
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			user.visible_message("[user.name] closes the [src.name]'s access panel.", \
+				"You close the access panel.")
+			construct_state = 3
 		if(3)
-			if(isScrewdriver(O))
-				user.visible_message("[user.name] opens the [src.name]'s access panel.", \
-					"You open the access panel.")
-				temp_state--
-				active = 0
-	if(temp_state == src.construction_state)//Nothing changed
-		return 0
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			user.visible_message("[user.name] opens the [src.name]'s access panel.", \
+				"You open the access panel.")
+			construct_state = 2
+			active = FALSE
+	check_step()
+
+/obj/machinery/particle_accelerator/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	switch(construct_state)
+		if(0)
+			if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			anchored = TRUE
+			user.visible_message("[user.name] secures the [src.name] to the floor.", \
+				"You secure the external bolts.")
+			construct_state = 1
+		if(1)
+			if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+				return
+			anchored = FALSE
+			user.visible_message("[user.name] detaches the [src.name] from the floor.", \
+				"You remove the external bolts.")
+			construct_state = 0
+	check_step()
+
+/obj/machinery/particle_accelerator/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(construct_state != 2)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message("[user.name] removes some wires from the [src.name].", \
+		"You remove some wires.")
+	construct_state = 1
+	check_step()
+
+/obj/machinery/particle_accelerator/use_tool(obj/item/I, mob/living/user, list/click_params)
+	if(isCoil(I) && construction_state == 1)
+		var/obj/item/stack/cable_coil/A = I
+		if(A.use(1))
+			user.visible_message("[user.name] adds wires to the [src.name].", \
+				"You add some wires.")
+			construct_state = 2
+			check_step()
+		return TRUE
+	. = ..()
+
+/obj/machinery/particle_accelerator/proc/check_step()
+	if(construction_state < 3) //Was taken apart, update state
+		update_state()
+		if(use_power)
+			update_use_power(POWER_USE_OFF)
 	else
-		if(src.construction_state < 3)//Was taken apart, update state
-			update_state()
-			if(use_power)
-				update_use_power(POWER_USE_OFF)
-		src.construction_state = temp_state
-		if(src.construction_state >= 3)
-			update_use_power(POWER_USE_IDLE)
-		update_icon()
-		return 1
+		update_use_power(POWER_USE_IDLE)
+	update_icon()

@@ -29,7 +29,7 @@
 	set_busy(TRUE)
 	addtimer(CALLBACK(src, PROC_REF(finish_special)), 2 SECONDS)
 
-	for (var/turf/T in trange(2, get_turf(holder)))
+	for (var/turf/T as anything in RANGE_TURFS(holder, 2))
 		var/datum/gas_mixture/env = T.return_air()
 
 		if (!env)

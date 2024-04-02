@@ -83,17 +83,12 @@ GLOBAL_LIST_EMPTY(big_deepmaint_room_templates)
 		if(picked_room in done_rooms)
 			continue
 		var/list/turf/viable_turfs = list()
-		for (var/turf/simulated/floor/F in range(roomMinSize + 1, picked_room.centre))
+		for (var/turf/simulated/floor/F in RANGE_TURFS(picked_room.centre, roomMinSize + 1))
 			//not under walls
 			if (F.is_wall())
 				continue
 
 			if (F.contains_dense_objects()) //There's a lot of things rangine from tables to mechs or closets that can be on the chosen turf, so we'll ignore all turfs that have something aside lighting overlay
-				continue
-
-
-			//No turfs in space
-			if (istype(F, /turf/space))
 				continue
 
 			//To be valid, the floor needs to have a wall in a cardinal direction

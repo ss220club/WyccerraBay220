@@ -186,7 +186,7 @@
 		return 0
 	return 1
 
-/obj/item/stack/proc/use(used)
+/obj/item/stack/use(used)
 	if (!can_use(used))
 		return 0
 	if(!uses_charge)

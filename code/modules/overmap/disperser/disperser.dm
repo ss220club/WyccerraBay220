@@ -12,21 +12,18 @@
 	if(panel_open)
 		to_chat(user, "The maintenance panel is open.")
 
-/obj/machinery/disperser/use_tool(obj/item/I, mob/living/user, list/click_params)
-	if(isWrench(I))
-		if(panel_open)
-			user.visible_message(
-				SPAN_NOTICE("\The [user] rotates \the [src] with \the [I]."),
-				SPAN_NOTICE("You rotate \the [src] with \the [I].")
-			)
-			set_dir(turn(dir, 90))
-			playsound(src, 'sound/items/jaws_pry.ogg', 50, 1)
-			return TRUE
-		else
-			to_chat(user,SPAN_NOTICE("The maintenance panel must be screwed open for this!"))
-			return TRUE
-
-	return ..()
+/obj/machinery/disperser/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!panel_open)
+		to_chat(user,SPAN_NOTICE("The maintenance panel must be screwed open for this!"))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] rotates [src] with [tool]."),
+		SPAN_NOTICE("You rotate [src] with [tool].")
+	)
+	set_dir(turn(dir, 90))
 
 /obj/machinery/disperser/front
 	name = "obstruction field disperser beam generator"

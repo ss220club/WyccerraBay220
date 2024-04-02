@@ -15,14 +15,14 @@
 		} \
 	}
 
-/mob/living/UnarmedAttack(atom/A, proximity)
+/mob/living/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	. = ..()
 	if(. && psi)
-		INVOKE_PSI_POWERS(src, psi.get_melee_powers(SSpsi.faculties_by_intent[a_intent]), A, FALSE)
+		INVOKE_PSI_POWERS(src, psi.get_melee_powers(SSpsi.faculties_by_intent[a_intent]), target, FALSE)
 
-/mob/living/RangedAttack(atom/A, params)
+/mob/living/ranged_attack(atom/target, modifiers)
 	if(psi)
-		INVOKE_PSI_POWERS(src, psi.get_ranged_powers(SSpsi.faculties_by_intent[a_intent]), A, TRUE)
+		INVOKE_PSI_POWERS(src, psi.get_ranged_powers(SSpsi.faculties_by_intent[a_intent]), target, TRUE)
 	. = ..()
 
 /mob/living/proc/check_psi_grab(obj/item/grab/grab)

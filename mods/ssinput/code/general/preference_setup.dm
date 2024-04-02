@@ -165,9 +165,9 @@
 				return TOPIC_REFRESH
 
 			var/new_key = uppertext(href_list["key"])
-			var/AltMod = text2num(href_list["alt"]) ? "Alt" : ""
-			var/CtrlMod = text2num(href_list["ctrl"]) ? "Ctrl" : ""
-			var/ShiftMod = text2num(href_list["shift"]) ? "Shift" : ""
+			var/AltMod = text2num(href_list[ALT_CLICK]) ? "Alt" : ""
+			var/CtrlMod = text2num(href_list[CTRL_CLICK]) ? "Ctrl" : ""
+			var/ShiftMod = text2num(href_list[SHIFT_CLICK]) ? "Shift" : ""
 			var/numpad = text2num(href_list["numpad"]) ? "Numpad" : ""
 
 			if(!new_key) // Just in case (; - not work although keyCode 186 and nothing should break)

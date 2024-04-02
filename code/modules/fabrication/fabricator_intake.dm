@@ -62,28 +62,41 @@
 
 /obj/machinery/fabricator/proc/show_intake_message(mob/user, value, obj/item/thing)
 	if(value == SUBSTANCE_TAKEN_FULL)
-		to_chat(user, SPAN_NOTICE("You fill \the [src] to capacity with \the [thing]."))
+		to_chat(user, SPAN_NOTICE("You fill [src] to capacity with [thing]."))
 	else if(value == SUBSTANCE_TAKEN_SOME)
-		to_chat(user, SPAN_NOTICE("You fill \the [src] from \the [thing]."))
+		to_chat(user, SPAN_NOTICE("You fill [src] from [thing]."))
 	else if(value == SUBSTANCE_TAKEN_ALL)
-		to_chat(user, SPAN_NOTICE("You dump \the [thing] into \the [src]."))
+		to_chat(user, SPAN_NOTICE("You dump [thing] into [src]."))
 	else
-		to_chat(user, SPAN_WARNING("\The [src] cannot process \the [thing]."))
+		to_chat(user, SPAN_WARNING("[src] cannot process [thing]."))
+
+/obj/machinery/fabricator/multitool_act(mob/living/user, obj/item/tool)
+	if(stat)
+		USE_FEEDBACK_FAILURE("[src] is not operating.")
+		return
+	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
+		attack_hand(user)
+
+/obj/machinery/fabricator/wirecutter_act(mob/living/user, obj/item/tool)
+	if(stat)
+		USE_FEEDBACK_FAILURE("[src] is not operating.")
+		return
+	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
+		attack_hand(user)
 
 /obj/machinery/fabricator/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if ((. = ..()))
 		return
 	if(stat)
-		to_chat(user, SPAN_WARNING("\The [src] is not operating."))
-		return TRUE
-	if(panel_open && (isMultitool(O) || isWirecutter(O)))
-		attack_hand(user)
+		to_chat(user, SPAN_WARNING("[src] is not operating."))
 		return TRUE
 	// Take reagents, if any are applicable.
 	var/reagents_taken = take_reagents(O, user)
 	if(reagents_taken != SUBSTANCE_TAKEN_NONE && !has_recycler)
 		show_intake_message(user, reagents_taken, O)
-		updateUsrDialog()
+		SStgui.update_uis(src)
 		return TRUE
 	// Take everything if we have a recycler.
 	if(has_recycler && !is_robot_module(O) && user.unEquip(O))
@@ -98,7 +111,8 @@
 				user.put_in_active_hand(stack)
 		else
 			qdel(O)
-		updateUsrDialog()
+
+		SStgui.update_uis(src)
 		return TRUE
 
 /obj/machinery/fabricator/physical_attack_hand(mob/user)
@@ -108,9 +122,10 @@
 
 /obj/machinery/fabricator/interface_interact(mob/user)
 	if((fab_status_flags & FAB_DISABLED) && !panel_open)
-		to_chat(user, SPAN_WARNING("\The [src] is disabled!"))
+		to_chat(user, SPAN_WARNING("[src] is disabled!"))
 		return TRUE
-	interact(user)
+
+	tgui_interact(user)
 	return TRUE
 
 #undef SUBSTANCE_TAKEN_FULL

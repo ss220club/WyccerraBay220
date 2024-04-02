@@ -63,7 +63,7 @@ Class Procs:
 
 SUBSYSTEM_DEF(air)
 	name = "Air"
-	priority = SS_PRIORITY_AIR
+	priority = FIRE_PRIORITY_AIR
 	init_order = SS_INIT_AIR
 	flags = SS_POST_FIRE_TIMING
 

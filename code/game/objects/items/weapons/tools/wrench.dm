@@ -13,6 +13,8 @@
 	matter = list(MATERIAL_STEEL = 150)
 	center_of_mass = "x=17;y=16"
 	attack_verb = list("bashed", "battered", "bludgeoned", "whacked")
+	tool_behaviour = TOOL_WRENCH
+	usesound = DEFAULT_WRENCH_SOUND
 
 /obj/item/wrench/Initialize()
 	icon_state = "wrench[pick("","_red","_black","_green","_blue")]"

@@ -1,11 +1,11 @@
 /datum/stored_items
 	// Name of the item(s) displayed
 	var/item_name = "name"
-	/// The original amount held
-	var/amount = 0
-	///
+	/// Path of the item
 	var/atom/item_path = null
 	var/atom/storing_object
+	/// The original amount held
+	var/amount = 0
 	/// What items are actually stored
 	var/list/instances
 

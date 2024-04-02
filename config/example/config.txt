@@ -52,6 +52,9 @@ WARN_IF_STAFF_SAME_IP
 ## log game actions (start of round, results, etc.)
 LOG_GAME
 
+## log tool actions
+LOG_TOOL
+
 ## log player votes
 LOG_VOTE
 
@@ -160,6 +163,9 @@ VOTE_AUTOGAMEMODE_TIMELEFT 160
 ## Time (seconds) before the server will attempt to start a round.
 # Should be bigger than VOTE_AUTOGAMEMODE_TIMELEFT + VOTE_PERIOD.
 PRE_GAME_TIME 180
+
+## If we want to bypass gamemode vote
+BYPASS_GAMEMODE_VOTE
 
 ## prevents dead players from voting or starting votes
 #NO_DEAD_VOTE

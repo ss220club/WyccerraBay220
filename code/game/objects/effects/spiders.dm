@@ -236,7 +236,8 @@
 
 	if(isturf(loc))
 		if(prob(25))
-			var/list/nearby = trange(5, src) - loc
+			var/turf/center = get_turf(src)
+			var/list/nearby = ORANGE_TURFS(center, 5)
 			if(length(nearby))
 				var/target_atom = pick(nearby)
 				walk_to(src, target_atom, 5)

@@ -14,21 +14,27 @@
 	..()
 	return
 
-/obj/item/assembly/shock_kit/attackby(obj/item/W as obj, mob/user as mob)
-	if(isWrench(W) && !status)
-		part1.dropInto(loc)
-		part2.dropInto(loc)
-		part1.master = null
-		part2.master = null
-		part1 = null
-		part2 = null
-		qdel(src)
+/obj/item/assembly/shock_kit/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	if(isScrewdriver(W))
-		status = !status
-		to_chat(user, SPAN_NOTICE("[src] is now [status ? "secured" : "unsecured"]!"))
+	status = !status
+	to_chat(user, SPAN_NOTICE("[src] is now [status ? "secured" : "unsecured"]!"))
 	add_fingerprint(user)
-	return
+
+/obj/item/assembly/shock_kit/wrench_act(mob/living/user, obj/item/tool)
+	if(status)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	part1.dropInto(loc)
+	part2.dropInto(loc)
+	part1.master = null
+	part2.master = null
+	part1 = null
+	part2 = null
+	qdel(src)
 
 /obj/item/assembly/shock_kit/attack_self(mob/user as mob)
 	part1.attack_self(user, status)

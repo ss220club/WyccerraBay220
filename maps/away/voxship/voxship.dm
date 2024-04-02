@@ -33,7 +33,7 @@
 
 /datum/shuttle/autodock/overmap/vox_ship
 	name = "Vox Scavenger Ship"
-	move_time = 10
+	move_time = 1 SECOND
 	shuttle_area = list(
 		/area/voxship/engineering,
 		/area/voxship/thrusters,
@@ -70,7 +70,7 @@
 //Ship's little lander defined here
 /datum/shuttle/autodock/overmap/vox_lander
 	name = "Vox Scavenger Shuttle"
-	move_time = 10
+	move_time = 1 SECOND
 	shuttle_area = list(/area/voxship/shuttle)
 	dock_target = "vox_scavshuttle"
 	current_location = "nav_hangar_scavshuttle"

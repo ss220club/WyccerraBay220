@@ -26,7 +26,7 @@
 /turf/simulated/ocean/proc/add_decal()
 	return prob(20)
 
-/turf/simulated/ocean/Initialize()
+/turf/simulated/ocean/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	if(isnull(detail_decal) && add_decal())
 		detail_decal = "asteroid[rand(0,9)]"

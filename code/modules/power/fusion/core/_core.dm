@@ -89,14 +89,14 @@
 		Shutdown()
 	return TRUE
 
+/obj/machinery/power/fusion_core/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
+	fusion.get_new_tag(user)
+
 /obj/machinery/power/fusion_core/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if(owned_field)
 		to_chat(user,SPAN_WARNING("Shut \the [src] off first!"))
-		return TRUE
-
-	if(isMultitool(W))
-		var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
-		fusion.get_new_tag(user)
 		return TRUE
 
 	return ..()

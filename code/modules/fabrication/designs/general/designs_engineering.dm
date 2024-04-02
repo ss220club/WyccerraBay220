@@ -1,24 +1,35 @@
-/datum/fabricator_recipe/engineering
-	path = /obj/item/airlock_electronics
+/singleton/fabricator_recipe/engineering
+	abstract_type = /singleton/fabricator_recipe/engineering
 	category = "Engineering"
 
-/datum/fabricator_recipe/engineering/airalarm
+/singleton/fabricator_recipe/engineering/airlock_electronics
+	id =  "airlock_electronics"
+	path = /obj/item/airlock_electronics
+
+/singleton/fabricator_recipe/engineering/airalarm
+	id =  "airalarm"
 	path = /obj/item/airalarm_electronics
 
-/datum/fabricator_recipe/engineering/firealarm
+/singleton/fabricator_recipe/engineering/firealarm
+	id =  "firealarm"
 	path = /obj/item/firealarm_electronics
 
-/datum/fabricator_recipe/engineering/intercom
+/singleton/fabricator_recipe/engineering/intercom
+	id =  "intercom"
 	path = /obj/item/intercom_electronics
 
-/datum/fabricator_recipe/engineering/powermodule
+/singleton/fabricator_recipe/engineering/powermodule
+	id =  "powermodule"
 	path = /obj/item/module/power_control
 
-/datum/fabricator_recipe/engineering/rcd_ammo
+/singleton/fabricator_recipe/engineering/rcd_ammo
+	id =  "rcd_ammo"
 	path = /obj/item/rcd_ammo
 
-/datum/fabricator_recipe/engineering/rcd_ammo_large
+/singleton/fabricator_recipe/engineering/rcd_ammo_large
+	id =  "rcd_ammo_large"
 	path = /obj/item/rcd_ammo/large
 
-/datum/fabricator_recipe/engineering/camera_assembly
+/singleton/fabricator_recipe/engineering/camera_assembly
+	id =  "camera_assembly"
 	path = /obj/item/camera_assembly

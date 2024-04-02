@@ -22,7 +22,6 @@
 	var/datum/component/tts_component/tts_component = GetComponent(/datum/component/tts_component)
 	if(tts_component)
 		return tts_component.tts_seed
-
 /atom/proc/change_tts_seed(mob/chooser, override, fancy_voice_input_tgui = FALSE, list/new_traits = null)
 	if(!get_tts_seed())
 		if(alert(chooser, "Отсутствует TTS компонент. Создать?", "Изменение TTS", "Да", "Нет") == "Нет")

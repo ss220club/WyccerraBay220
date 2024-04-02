@@ -257,7 +257,8 @@
 	character.fully_replace_character_name(real_name)
 
 	character.gender = gender
-	character.tts_seed = tts_seed
+	character.AddComponent(/datum/component/tts_component, SStts220.tts_seeds[tts_seed])
+	character.dna.tts_seed_dna = SStts220.tts_seeds[tts_seed]
 	character.age = age
 	character.b_type = b_type
 

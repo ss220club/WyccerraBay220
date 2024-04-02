@@ -311,7 +311,7 @@ var/global/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","E
 
 	domutcheck(src, null)
 	src.UpdateAppearance()
-
+	src.AddComponent(/datum/component/tts_component, chosen_dna.dna.tts_seed_dna)
 
 //Transform into a monkey.
 /mob/proc/changeling_lesser_form()

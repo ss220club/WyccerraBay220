@@ -300,17 +300,18 @@ var/global/list/empty_playable_ai_cores = list()
 	// - State 5 - Finish core
 	if (tool.tool_behaviour == TOOL_SCREWDRIVER)
 		if (state < STATE_CIRCUIT)
-			USE_FEEDBACK_FAILURE("[src] has no circuit to fasten.")
+			balloon_alert(user, "нет платы!")
 			return TRUE
 		if (state > STATE_CIRCUIT_SECURE && state < STATE_PANEL)
-			USE_FEEDBACK_FAILURE("[src]'s wiring blocks access to [circuit].")
+			balloon_alert(user, "нужно снять проводку!")
 			return TRUE
 		// Finish core
 		if (state == STATE_PANEL)
 			if (!authorized)
-				USE_FEEDBACK_FAILURE("[src] is not authorized and cannot be finished.")
+				balloon_alert(user, "не авторизовано!")
 				return TRUE
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
+			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return TRUE
 			user.visible_message(
 				SPAN_NOTICE("[user] finishes [src] with [tool]."),
 				SPAN_NOTICE("You finish [src] with [tool]."),
@@ -353,14 +354,11 @@ var/global/list/empty_playable_ai_cores = list()
 	if (tool.tool_behaviour == TOOL_WELDER)
 		if (state == STATE_FRAME)
 			if(anchored)
-				USE_FEEDBACK_FAILURE("[src] needs to be unanchored from the floor before you can dismantle it with [tool].")
+				USE_FEEDBACK_NEED_UNANCHOR(user)
 				return TRUE
 			if(!tool.tool_start_check(user, 1))
 				return TRUE
-			user.visible_message(
-				SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
-				SPAN_NOTICE("You start dismantling [src] with [tool].")
-			)
+			USE_FEEDBACK_DECONSTRUCT_START(user)
 			if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 				return TRUE
 			new /obj/item/stack/material/plasteel(loc, 4)
@@ -368,7 +366,7 @@ var/global/list/empty_playable_ai_cores = list()
 				SPAN_NOTICE("[user] dismantles [src] with [tool]."),
 				SPAN_NOTICE("You dismantle [src] with [tool].")
 			)
-			qdel_self()
+			qdel(src)
 			return TRUE
 
 	// Wirecutters

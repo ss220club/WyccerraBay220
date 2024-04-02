@@ -122,11 +122,11 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!density)
 		return
-	visible_message(SPAN_DANGER("[user] begins to [deployed ? "un" : ""]deploy [src]..."))
+	balloon_alert(user, "[deployed ? "деактивация креплений" : "активация креплений"]")
 	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	visible_message(SPAN_NOTICE("[user] has [deployed ? "un" : ""]deployed [src]."))
 	deployed = !deployed
+	balloon_alert_to_viewers("[deployed ? "крепления активны!" : "крепления деактивированы!"]")
 	if(deployed)
 		basic_chance = 70
 	else
@@ -136,14 +136,14 @@
 /obj/structure/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health == maxhealth)
-		to_chat(user, SPAN_NOTICE("[src] is fully repaired."))
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	visible_message(SPAN_WARNING("[user] is repairing [src]..."))
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	health = maxhealth
 
 /obj/structure/barrier/bullet_act(obj/item/projectile/P)
@@ -246,14 +246,14 @@
 		qdel(src)
 
 /obj/item/barrier/welder_act(mob/living/user, obj/item/tool)
-	if(health == initial(health))
-		to_chat(user, SPAN_NOTICE("[src] is fully repaired."))
-		return
 	. = ITEM_INTERACT_SUCCESS
+	if(health == initial(health))
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
+		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	visible_message(SPAN_WARNING("[user] is repairing [src]..."))
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, (max(5, health / 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	health = initial(health)

@@ -257,18 +257,13 @@
 
 /obj/machinery/door/firedoor/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(operating)
-		return
-	if(!density)
+	if(operating || !density)
+		balloon_alert(user, "нужно закрыть!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 25, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	hatch_open = !hatch_open
-	user.visible_message(
-		SPAN_NOTICE("[user] [hatch_open ? "opens" : "closes"] [src]'s maintenance hatch."),
-		SPAN_NOTICE("You [hatch_open ? "open" : "close"] [src]'s maintenance hatch."),
-		SPAN_ITALIC("You hear screws being adjusted.")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, hatch_open)
 	update_icon()
 
 /obj/machinery/door/firedoor/welder_act(mob/living/user, obj/item/tool)
@@ -277,19 +272,11 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 2))
 		return
-	user.visible_message(
-		SPAN_WARNING("[user] starts [!blocked ? "welding [src] shut" : "cutting open [src]"]."),
-		SPAN_DANGER("You start [!blocked ? "welding [src] closed" : "cutting open [src]"]."),
-		SPAN_ITALIC("You hear welding.")
-	)
+	USE_FEEDBACK_WELD_UNWELD(user, blocked)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	blocked = !blocked
-	user.visible_message(
-		SPAN_DANGER("[user] [blocked ? "welds [src] shut" : "cuts open [src]"]."),
-		SPAN_DANGER("You [blocked ? "weld shut" : "undo the welds on"] [src]."),
-		SPAN_ITALIC("You hear welding.")
-	)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, blocked)
 	update_icon()
 
 /obj/machinery/door/firedoor/use_tool(obj/item/C, mob/living/user, list/click_params)

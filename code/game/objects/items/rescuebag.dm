@@ -31,11 +31,12 @@
 
 /obj/item/bodybag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
 	if(!airtank)
+		balloon_alert(user, "нет баллона!")
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, "You remove [airtank] from [src].")
+	balloon_alert_to_viewers("баллон снят!")
 	airtank.dropInto(loc)
 	airtank = null
 
@@ -93,17 +94,14 @@
 
 /obj/structure/closet/body_bag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!airtank)
-		USE_FEEDBACK_FAILURE("[src] has no airtank to remove.")
+	if(!airtank)
+		balloon_alert(user, "нет баллона!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
+	balloon_alert_to_viewers("баллон снят!")
 	airtank.dropInto(loc)
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] removes [src]'s [airtank.name] with [tool]."),
-		SPAN_NOTICE("You remove [src]'s [airtank.name] with [tool].")
-	)
 	airtank = null
 
 /obj/structure/closet/body_bag/rescue/use_tool(obj/item/tool, mob/user, list/click_params)

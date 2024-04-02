@@ -514,7 +514,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				third_limb =  BP_GROIN
 				choice_options = list("Normal","Prosthesis")
 
-				if((!whitelist_lookup(SPECIES_FBP, user.ckey) && current_species.name != SPECIES_IPC) && !user.client.holder)
+				if((!is_any_alien_whitelisted(user, SPECIES_FBP) && current_species.name != SPECIES_IPC) && !user.client.holder)
 					choice_options -= "Prosthesis"
 
 		var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in choice_options

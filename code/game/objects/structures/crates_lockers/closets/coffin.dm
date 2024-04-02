@@ -23,7 +23,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle lock
 	if(opened)
-		USE_FEEDBACK_FAILURE("[src] needs to be closed before you can screw the lid shut.")
+		balloon_alert(user, "нужно закрыть!")
 		return
 	user.visible_message(
 		SPAN_NOTICE("[user] begins screwing [src]'s lid [locked ? "open" : "shut"] with [tool]."),

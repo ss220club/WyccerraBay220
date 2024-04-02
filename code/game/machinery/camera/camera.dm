@@ -178,10 +178,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panel_open = !panel_open
-	user.visible_message(
-		SPAN_WARNING("[user] screws [src]'s panel [panel_open ? "open" : "closed"]!"),
-		SPAN_NOTICE("You screw [src]'s panel [panel_open ? "open" : "closed"].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
 
 /obj/machinery/camera/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -192,24 +189,28 @@
 	. = ITEM_INTERACT_SUCCESS
 	var/datum/wires/camera/camera_wires = wires
 	if(camera_wires.CanDeconstruct() || (MACHINE_IS_BROKEN(src)))
-		if(weld(tool, user))
-			if(assembly)
-				assembly.dropInto(loc)
-				assembly.anchored = TRUE
-				assembly.camera_name = c_tag
-				assembly.camera_network = english_list(network, "Exodus", ",", ",")
-				assembly.update_icon()
-				assembly.dir = dir
-				if(MACHINE_IS_BROKEN(src))
-					assembly.state = 2
-					to_chat(user, SPAN_NOTICE("You repaired [src] frame."))
-					cancelCameraAlarm()
-				else
-					assembly.state = 1
-					to_chat(user, SPAN_NOTICE("You cut [src] free from the wall."))
-					new /obj/item/stack/cable_coil(loc, 2)
-				assembly = null //so qdel doesn't eat it.
-			qdel(src)
+		if(!tool.tool_start_check(user, 1))
+			return
+		USE_FEEDBACK_DECONSTRUCT_START(user)
+		if(!tool.use_as_tool(src, user, 10 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		if(assembly)
+			assembly.dropInto(loc)
+			assembly.anchored = TRUE
+			assembly.camera_name = c_tag
+			assembly.camera_network = english_list(network, "Exodus", ",", ",")
+			assembly.update_icon()
+			assembly.dir = dir
+			if(MACHINE_IS_BROKEN(src))
+				assembly.state = 2
+				user.balloon_alert_to_viewers("камера отремонтирована")
+				cancelCameraAlarm()
+			else
+				assembly.state = 1
+				user.balloon_alert_to_viewers("камера отварена от стены")
+				new /obj/item/stack/cable_coil(loc, 2)
+			assembly = null //so qdel doesn't eat it.
+		qdel(src)
 
 /obj/machinery/camera/use_tool(obj/item/W, mob/living/user, list/click_params)
 	update_coverage()
@@ -389,14 +390,6 @@
 			return C
 
 	return null
-
-/obj/machinery/camera/proc/weld(obj/item/tool, mob/user)
-	if(!tool.tool_start_check(user, 1))
-		return FALSE
-	to_chat(user, SPAN_NOTICE("You start to weld [src].."))
-	if(!tool.use_as_tool(src, user, 10 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
-		return FALSE
-	return TRUE
 
 /obj/machinery/camera/proc/add_network(network_name)
 	add_networks(list(network_name))

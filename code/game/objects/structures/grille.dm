@@ -165,20 +165,17 @@
 		SPAN_NOTICE("You cut [src] apart with [tool].")
 	)
 
-/obj/structure/grille/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Plasma Cutter - Cut grille
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if (!plasmacutter.slice(user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		dismantle()
-		user.visible_message(
-			SPAN_NOTICE("[user] cuts [src] apart with [tool]."),
-			SPAN_NOTICE("You cut [src] apart with [tool].")
-		)
-		return TRUE
+/obj/structure/grille/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] cuts [src] apart with [tool]."),
+		SPAN_NOTICE("You cut [src] apart with [tool].")
+	)
+	dismantle()
 
+/obj/structure/grille/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Material Stack - Place window
 	if (istype(tool, /obj/item/stack/material))
 		var/obj/item/stack/material/stack = tool

@@ -24,25 +24,17 @@
 /obj/machinery/barrier/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!emagged)
-		to_chat(user, SPAN_WARNING("[src]'s locking clamps are not damaged."))
+		balloon_alert(user, "фиксаторы не повреждены!")
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		"[user] starts to repair [src]'s locking clamps with \an [tool].",
-		"You start to repair [src]'s locking clamps with [tool].",
-		"You hear a hissing flame."
-	)
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 15 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, SPAN_NOTICE("You finished repairing [src]'s locking clamps."))
 	emagged = FALSE
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	if(locked)
-		visible_message(
-			"[src]'s clamps engage, locking onto [get_turf(src)].",
-			"You hear metal sliding and creaking.",
-			range = 5
-		)
+		playsound(src, 'sound/machines/bolts_down.ogg', 50, TRUE)
 		anchored = TRUE
 	update_icon()
 

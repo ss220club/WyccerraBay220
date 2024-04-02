@@ -1,4 +1,5 @@
 //Sound environment defines. Reverb preset for sounds played in an area, see sound datum reference for more.
+#define NO_CHANGE -1
 #define GENERIC 0
 #define PADDED_CELL 1
 #define ROOM 2

@@ -29,10 +29,7 @@
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded
-	user.visible_message(
-		SPAN_NOTICE("[user] [welded ? "un" : "welds"] [src] with [tool]."),
-		SPAN_NOTICE("You [welded ? "un" : "weld"] [src] with [tool].")
-	)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded)
 	update_icon()
 
 

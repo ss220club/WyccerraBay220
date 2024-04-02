@@ -51,7 +51,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	var/list/tiles = get_tiles()
 	if(!length(tiles))
-		to_chat(user, SPAN_NOTICE("[src] is empty."))
+		balloon_alert(user, "внутри пусто!")
 		return
 	var/obj/item/stack/tile/new_tile = input("Choose tile type.", "Tiles") as null|anything in tiles
 	if(!istype(new_tile))

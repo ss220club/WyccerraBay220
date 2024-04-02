@@ -61,7 +61,7 @@
 /obj/structure/sign/double/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_BLOCKING
 	// Screwdriver - Block interaction
-	USE_FEEDBACK_FAILURE("[src] cannot be removed.")
+	balloon_alert(user, "нельзя снять!")
 
 /obj/structure/sign/double/map
 	name = "map"

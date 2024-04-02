@@ -150,10 +150,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	toggle_stat(MACHINE_STAT_MAINT)
-	user.visible_message(
-		SPAN_NOTICE("[user] [GET_FLAGS(stat, MACHINE_STAT_MAINT) ? "opens" : "closes"] [src]."),
-		SPAN_NOTICE("You [GET_FLAGS(stat, MACHINE_STAT_MAINT) ? "open" : "close"] [src].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, GET_FLAGS(stat, MACHINE_STAT_MAINT))
 	if(GET_FLAGS(stat, MACHINE_STAT_MAINT))
 		icon_state = icon_state_open
 	if(!stat)

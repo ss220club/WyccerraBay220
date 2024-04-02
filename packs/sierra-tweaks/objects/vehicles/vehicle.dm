@@ -95,20 +95,20 @@
 		return
 	open = !open
 	update_icon()
-	to_chat(user, SPAN_NOTICE("Maintenance panel is now [open ? "opened" : "closed"]."))
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
 
 /obj/vehicle/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health >= maxhealth)
-		to_chat(user, SPAN_NOTICE("[src] does not need a repair."))
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!open)
-		to_chat(user, SPAN_NOTICE("Unable to repair with the maintenance panel closed."))
+		balloon_alert(user, "нужно открыть панель!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	adjust_health(10)
-	user.visible_message(SPAN_WARNING("[user] repairs [src]!"), SPAN_NOTICE("You repair [src]!"))
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/vehicle/use_tool(obj/item/tool, mob/user, list/click_params)
 	if(istype(tool, /obj/item/hand_labeler))

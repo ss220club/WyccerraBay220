@@ -487,7 +487,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(opened)
 		if(get_cell())
-			to_chat(user, SPAN_WARNING("Either close the cover or remove the cell first."))
+			balloon_alert(user, "нужно снять батарею!")
 			return
 
 		switch(has_electronics)
@@ -499,24 +499,24 @@
 					return
 				has_electronics = ELECTRONICS_SECURED
 				set_stat(MACHINE_STAT_MAINT, FALSE)
-				to_chat(user, "You screw the circuit electronics into place.")
+				balloon_alert(user, "плата закручена")
 				update_icon()
 			if(ELECTRONICS_SECURED)
 				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 					return
 				has_electronics = ELECTRONICS_PLUGGED
 				set_stat(MACHINE_STAT_MAINT, TRUE)
-				to_chat(user, "You unfasten the electronics.")
+				balloon_alert(user, "плата откручена")
 				update_icon()
 			if(ELECTRONICS_NONE)
-				to_chat(user, SPAN_WARNING("There is no power control board to secure!"))
+				balloon_alert(user, "нет платы!")
 		return
 
 	// Otherwise, if not opened, expose the wires.
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	wiresexposed = !wiresexposed
-	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+	USE_FEEDBACK_WIRING_EXPOSED(user, wiresexposed)
 	update_icon()
 
 /obj/machinery/power/apc/wirecutter_act(mob/living/user, obj/item/tool)
@@ -527,23 +527,19 @@
 /obj/machinery/power/apc/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!opened)
-		to_chat(user, SPAN_WARNING("You must first open the cover."))
+		balloon_alert(user, "нужно открыть панель!")
 		return
 	if(has_electronics)
-		to_chat(user, SPAN_WARNING("You must first remove the power control board inside."))
+		balloon_alert(user, "нужно убрать плату!")
 		return
 	if(terminal())
-		to_chat(user, SPAN_WARNING("The wire connection is in the way."))
+		balloon_alert(user, "нужно убрать проводку!")
 		return
-
 	if(!tool.tool_start_check(user, 3))
 		return
-	user.visible_message(SPAN_WARNING("[user] begins to weld [src]."), \
-						"You start welding the APC frame...", \
-						"You hear welding.")
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 5 SECONDS, 3, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !opened || has_electronics || terminal())
 		return
-
 	if(emagged || MACHINE_IS_BROKEN(src) || opened == 2)
 		new /obj/item/stack/material/steel(loc)
 		user.visible_message(\

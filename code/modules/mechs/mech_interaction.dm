@@ -369,25 +369,19 @@
 /mob/living/exosuit/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!maintenance_protocols)
-		USE_FEEDBACK_FAILURE("[src]'s maintenance protocols must be enabled to access the power cell.")
+		balloon_alert(user, "протоколы техобслуживания отключены!")
 		return
 	if(!body?.cell)
-		USE_FEEDBACK_FAILURE("[src] has no power cell to remove.")
+		USE_FEEDBACK_CELL_MISSING(user)
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts removing [src]'s power cell with [tool]."),
-		SPAN_NOTICE("You start removing [src]'s power cell with [tool].")
-	)
+	balloon_alert(user, "снятие батареи")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !maintenance_protocols || !body?.cell)
 		return
 	user.put_in_hands(body.cell)
 	power = MECH_POWER_OFF
 	hud_power_control.update_icon()
 	body.cell = null
-	user.visible_message(
-		SPAN_NOTICE("[user] removes [src]'s power cell with [tool]."),
-		SPAN_NOTICE("You remove [src]'s power cell with [tool].")
-	)
+	USE_FEEDBACK_CELL_REMOVED(user)
 
 /mob/living/exosuit/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -408,18 +402,18 @@
 
 /mob/living/exosuit/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!getBruteLoss())
-		USE_FEEDBACK_FAILURE("[src] has no physical damage to repair.")
+	if(!getBruteLoss())
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	var/list/damaged_parts = list()
-	for (var/obj/item/mech_component/component in list(arms, legs, body, head))
-		if (component?.brute_damage)
+	for(var/obj/item/mech_component/component in list(arms, legs, body, head))
+		if(component?.brute_damage)
 			damaged_parts += component
 	var/obj/item/mech_component/input_fix = input(user, "Which component would you like to fix?", "[src] - Fix Component") as null|anything in damaged_parts
-	if (!input_fix || !user.use_sanity_check(src, tool))
+	if(!input_fix || !user.use_sanity_check(src, tool))
 		return
-	if (!input_fix.brute_damage)
-		USE_FEEDBACK_FAILURE("[src]'s [input_fix.name] no longer needs repair.")
+	if(!input_fix.brute_damage)
+		balloon_alert(user, "больше не нуждается в ремонте!")
 		return
 	input_fix.repair_brute_generic(tool, user)
 

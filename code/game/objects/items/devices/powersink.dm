@@ -68,34 +68,27 @@
 /obj/item/device/powersink/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle connection to cable
-	if (mode != DISCONNECTED)
+	if(mode != DISCONNECTED)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		user.visible_message(
-			SPAN_NOTICE("[user] detaches [src] from [attached] with [tool]."),
-			SPAN_NOTICE("You detach [src] from [attached] with [tool].")
-		)
+		balloon_alert(user, "отключено!")
 		set_mode(DISCONNECTED)
 		return
-	if (!isturf(loc))
-		USE_FEEDBACK_FAILURE("[src] must be placed on the ground before you can connect it.")
+	if(!isturf(loc))
+		balloon_alert(user, "нужен пол!")
 		return
 	var/turf/turf = loc
-	if (!turf.is_plating())
-		USE_FEEDBACK_FAILURE("[turf]'s plating must be removed before you can connect [src].")
+	if(!turf.is_plating())
+		balloon_alert(user, "нужно убрать покрытие с пола!")
 		return
 	attached = locate() in turf
-	if (!attached)
-		USE_FEEDBACK_FAILURE("[src] must be placed over an exposed, powered cable node before it can be connected.")
+	if(!attached)
+		balloon_alert(user, "нужен кабель на полу!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	set_mode(CLAMPED_OFF)
-	user.visible_message(
-		SPAN_NOTICE("[user] attaches [src] to [attached] with [tool]."),
-		SPAN_NOTICE("You attach [src] to [attached] with [tool].")
-	)
-
+	balloon_alert(user, "подключено")
 
 /obj/item/device/powersink/attack_ai()
 	return

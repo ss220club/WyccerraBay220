@@ -905,14 +905,8 @@ About the new airlock wires panel:
 		if(!item.use_as_tool(src, user, amount = 3, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		cut_verb = "cutting"
-		cut_sound = 'sound/items/Welder.ogg'
-	else if(istype(item,/obj/item/gun/energy/plasmacutter)) //They could probably just shoot them out, but who cares!
-		var/obj/item/gun/energy/plasmacutter/cutter = item
-		if(!cutter.slice(user))
-			return 0
-		cut_verb = "cutting"
-		cut_sound = 'sound/items/Welder.ogg'
-		cut_delay *= 0.66
+		cut_sound = item.usesound
+		cut_delay *= item.toolspeed
 	else if(istype(item,/obj/item/melee/energy/blade) || istype(item,/obj/item/melee/energy/sword))
 		cut_verb = "slicing"
 		cut_sound = "sparks"
@@ -1007,16 +1001,16 @@ About the new airlock wires panel:
 		if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		p_open = TRUE
-		user.visible_message(SPAN_NOTICE("[user.name] opens the maintenance panel on [src]."), SPAN_NOTICE("You open the maintenance panel on [src]."))
+		USE_FEEDBACK_NEW_PANEL_OPEN(user, p_open)
 		update_icon()
 		return
 	if(MACHINE_IS_BROKEN(src))
-		to_chat(user, SPAN_WARNING("The panel is broken, and cannot be closed."))
+		balloon_alert(user, "панель сломана!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 20, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	p_open = FALSE
-	user.visible_message(SPAN_NOTICE("[user.name] closes the maintenance panel on [src]."), SPAN_NOTICE("You close the maintenance panel on [src]."))
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, p_open)
 	update_icon()
 
 /obj/machinery/door/airlock/wirecutter_act(mob/living/user, obj/item/tool)
@@ -1033,11 +1027,11 @@ About the new airlock wires panel:
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(SPAN_WARNING("[user] begins welding [src] [welded ? "open" : "closed"]!"),
-						SPAN_NOTICE("You begin welding [src] [welded ? "open" : "closed"]."))
+	USE_FEEDBACK_WELD_UNWELD(user, welded)
 	if(!tool.use_as_tool(src, user, (rand(3, 5)) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || repairing || operating == DOOR_OPERATING_YES || !density)
 		return
 	welded = !welded
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded)
 	update_icon()
 
 /obj/machinery/door/airlock/use_tool(obj/item/C, mob/living/user, list/click_params)

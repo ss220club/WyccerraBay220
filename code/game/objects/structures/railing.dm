@@ -243,12 +243,12 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle Anchored
 	if(!density)
-		USE_FEEDBACK_FAILURE("[src] needs to be closed before you can unanchor it.")
+		balloon_alert(user, "нужно закрыть!")
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts [anchored ? "un" : null]fastening [src] [anchored ? "from" : "to"] the floor with [tool]."),
-		SPAN_NOTICE("You start [anchored ? "un" : null]fastening [src] [anchored ? "from" : "to"] the floor with [tool].")
-	)
+	if(anchored)
+		balloon_alert(user, "открепление от пола")
+	else
+		balloon_alert(user, "закрепление к полу")
 	if(!tool.use_as_tool(src, user, 1 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !density)
 		return
 	user.visible_message(
@@ -256,6 +256,7 @@
 		SPAN_NOTICE("You [anchored ? "un" : null]fasten [src] [anchored ? "from" : "to"] the floor with [tool].")
 	)
 	anchored = !anchored
+	USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
 	update_icon()
 
 /obj/structure/railing/wrench_act(mob/living/user, obj/item/tool)
@@ -292,22 +293,15 @@
 	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Repair
 	if(!health_damaged())
-		USE_FEEDBACK_FAILURE("[src] doesn't require repairs.")
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
-
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts repairing [src] with [tool]."),
-		SPAN_NOTICE("You start repairing [src] with [tool].")
-	)
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !health_damaged())
 		return
 	restore_health(get_max_health() / 5)
-	user.visible_message(
-		SPAN_NOTICE("[user] repairs [src] with [tool]."),
-		SPAN_NOTICE("You repair [src] with [tool].")
-	)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/structure/railing/can_climb(mob/living/user, post_climb_check=FALSE, check_silicon=TRUE)
 	. = ..()

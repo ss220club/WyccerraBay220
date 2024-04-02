@@ -371,19 +371,16 @@
 /obj/structure/window/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!health_damaged())
-		USE_FEEDBACK_FAILURE("[src] does not need repairs.")
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	if(!repair_pending)
-		USE_FEEDBACK_FAILURE("[src] needs some [get_material_display_name()] applied before you can weld it.")
+		balloon_alert(user, "нужно установить [get_material_display_name()]!")
 		return
 	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	restore_health(repair_pending)
 	repair_pending = 0
-	user.visible_message(
-		SPAN_NOTICE("[user] welds [src]'s [material] into place with [tool]."),
-		SPAN_NOTICE("You weld [src]'s [material] into place with [tool].")
-	)
 
 /obj/structure/window/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Polarize window
@@ -425,26 +422,6 @@
 		)
 		if(repair_pending < get_damage_value())
 			user.show_message(SPAN_WARNING("It looks like it could use more sheets"), VISIBLE_MESSAGE)
-		return TRUE
-
-	// Plasmacutter - Dismantle window
-	if(istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if(!plasmacutter.slice(user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] starts slicing [src] apart with [tool]."),
-			SPAN_NOTICE("You start slicing [src] apart with [tool].")
-		)
-		if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] slices [src] apart with [tool]."),
-			SPAN_NOTICE("You slice [src] apart with [tool].")
-		)
-		dismantle()
 		return TRUE
 
 	return ..()
@@ -718,7 +695,7 @@
 		for(var/obj/O in loc)
 			if((O != src) && O.density && !(O.atom_flags & ATOM_FLAG_CHECKS_BORDER) \
 			&& !(istype(O, /obj/structure/wall_frame) || istype(O, /obj/structure/grille)))
-				to_chat(user, SPAN_NOTICE("There isn't enough space to install [src]."))
+				balloon_alert(user, "недостаточно места!")
 				return FALSE
 	return TRUE
 

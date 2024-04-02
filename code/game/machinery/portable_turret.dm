@@ -663,10 +663,10 @@ var/global/list/turret_icons
 			else if(I.tool_behaviour == TOOL_WELDER)
 				if(!I.tool_start_check(user, 5))
 					return TRUE
+				balloon_alert(user, "снятие брони")
 				if(!I.use_as_tool(src, user, 2 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 					return TRUE
 				build_step = 1
-				to_chat(user, "You remove the turret's interior metal armor.")
 				new /obj/item/stack/material/steel( loc, 2)
 				return TRUE
 
@@ -704,9 +704,10 @@ var/global/list/turret_icons
 
 		if(5)
 			if(I.tool_behaviour == TOOL_SCREWDRIVER)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
+				if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
 				build_step = 6
-				to_chat(user, SPAN_NOTICE("You close the internal access hatch."))
+				USE_FEEDBACK_NEW_PANEL_OPEN(user, FALSE)
 				return TRUE
 
 		if(6)
@@ -720,19 +721,21 @@ var/global/list/turret_icons
 				return TRUE
 
 			else if(I.tool_behaviour == TOOL_SCREWDRIVER)
+				if(!I.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
 				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 5
-				to_chat(user, SPAN_NOTICE("You open the internal access hatch."))
+				USE_FEEDBACK_NEW_PANEL_OPEN(user, TRUE)
 				return TRUE
 
 		if(7)
 			if(I.tool_behaviour == TOOL_WELDER)
 				if(!I.tool_start_check(user, 5))
 					return TRUE
+				balloon_alert(user, "приваривание брони")
 				if(!I.use_as_tool(src, user, 3 SECONDS, 5, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 					return TRUE
 				build_step = 8
-				to_chat(user, SPAN_NOTICE("You weld the turret's armor down."))
 
 				//The final step: create a full turret
 				var/obj/machinery/porta_turret/Turret = new target_type(loc)

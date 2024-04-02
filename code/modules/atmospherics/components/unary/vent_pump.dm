@@ -305,15 +305,12 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 1))
 		return
-	to_chat(user, SPAN_NOTICE("Now welding [src]."))
+	USE_FEEDBACK_WELD_UNWELD(user, welded)
 	if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] [welded ? "welds [src] shut" : "unwelds [src]"]."), \
-		SPAN_NOTICE("You [welded ? "weld [src] shut" : "unweld [src]"]."), \
-		"You hear welding.")
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded)
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/get_console_data()
 	. = list()

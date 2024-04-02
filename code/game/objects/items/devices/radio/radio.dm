@@ -728,10 +728,10 @@
 
 /obj/item/device/radio/borg/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!keyslot)
-		USE_FEEDBACK_FAILURE("[src] doesn't have an encryption key to remove.")
+	if(!keyslot)
+		balloon_alert(user, "нет ключей шифрования!")
 		return
-	for (var/channel_name in channels)
+	for(var/channel_name in channels)
 		radio_controller.remove_object(src, radiochannels[channel_name])
 		secure_radio_connections[channel_name] = null
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

@@ -550,7 +550,7 @@ Renders children icons on top of each other in order to make your own icon.
 ### `ImageButton`
 
 A Robust button is specifically for sticking a picture in it.
-Has support for both base64 and spritesheets.
+Has support for base64, spritesheets and URLs.
 
 **Props:**
 
@@ -579,7 +579,7 @@ over the button.
 be truncated with an ellipsis. Be careful however, because this prop breaks
 the baseline alignment.
 - `children: ImageButton.Item|any` - Items that are added to the right of the horizontal button.
-- `onClick: function` - Called when element is clicked.
+- `onClick: function` - Called when element is clicked. Also enables hover effects.
 
 ### `ImageButton.Item`
 

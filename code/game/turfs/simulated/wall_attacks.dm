@@ -171,10 +171,6 @@
 			thermitemelt(user)
 			return TRUE
 
-		else if(istype(W, /obj/item/gun/energy/plasmacutter))
-			thermitemelt(user)
-			return TRUE
-
 		else if( istype(W, /obj/item/melee/energy/blade) )
 			var/obj/item/melee/energy/blade/EB = W
 			EB.spark_system.start()
@@ -190,10 +186,11 @@
 	if(damage && W.tool_behaviour == TOOL_WELDER)
 		if(!W.tool_start_check(user, 2))
 			return
+		USE_FEEDBACK_REPAIR_START(user)
 		to_chat(user, SPAN_NOTICE("You start repairing the damage to [src]."))
 		if(!W.use_as_tool(src, user, (max(5, damage / 5)) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+		USE_FEEDBACK_REPAIR_FINISH(user)
 		restore_health(damage)
 		return TRUE
 
@@ -229,7 +226,7 @@
 			strict_timer_flags = TRUE
 
 		if(dismantle_verb)
-			to_chat(user, SPAN_NOTICE("You begin [dismantle_verb] through the outer plating."))
+			USE_FEEDBACK_DECONSTRUCT_START(user)
 			if(dismantle_sound)
 				playsound(src, dismantle_sound, 100, 1)
 
@@ -268,8 +265,7 @@
 			if(5)
 				if(W.tool_behaviour == TOOL_SCREWDRIVER)
 					to_chat(user, SPAN_NOTICE("You begin removing the support lines."))
-					playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
-					if(!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT) || construction_stage != 5)
+					if(!W.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || construction_stage != 5)
 						return TRUE
 					construction_stage = 4
 					update_icon()

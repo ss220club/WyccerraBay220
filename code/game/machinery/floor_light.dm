@@ -41,7 +41,7 @@ var/global/list/floor_light_cache = list()
 	if(use_power)
 		update_use_power(POWER_USE_OFF)
 		queue_icon_update()
-	visible_message(SPAN_NOTICE("[user] has [anchored ? "attached" : "detached"] [src]."))
+	USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
 
 /obj/machinery/floor_light/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -55,9 +55,10 @@ var/global/list/floor_light_cache = list()
 /obj/machinery/floor_light/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(health_damaged() || MACHINE_IS_BROKEN(src))
+		USE_FEEDBACK_REPAIR_START(user)
 		if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 			return
-		visible_message(SPAN_NOTICE("[user] has repaired [src]."))
+		USE_FEEDBACK_REPAIR_FINISH(user)
 		set_broken(FALSE)
 		revive_health()
 

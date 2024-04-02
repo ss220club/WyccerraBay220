@@ -63,8 +63,6 @@
 		attack_hand(user)
 
 /obj/structure/catwalk/proc/deconstruct(mob/user)
-	playsound(src, 'sound/items/Welder.ogg', 100, 1)
-	to_chat(user, SPAN_NOTICE("Slicing [src] joints ..."))
 	new /obj/item/stack/material/rods(src.loc)
 	new /obj/item/stack/material/rods(src.loc)
 	//Lattice would delete itself, but let's save ourselves a new obj
@@ -95,14 +93,6 @@
 	deconstruct(user)
 
 /obj/structure/catwalk/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Plasma Cutter - Deconstruct
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = tool
-		if (!cutter.slice(user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
-
 	// Floor Tile - Plate catwalk
 	if (istype(tool, /obj/item/stack/tile))
 		if (plated_tile)

@@ -43,12 +43,13 @@
 
 /obj/item/music_tape/screwdriver_act(mob/living/user, obj/item/tool)
 	if(!ruined)
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
 		return
 	. = ITEM_INTERACT_SUCCESS
-	to_chat(user, SPAN_NOTICE("You start winding [src] back in..."))
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 12 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, SPAN_NOTICE("You wound [src] back in."))
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	fix()
 
 /obj/item/music_tape/use_tool(obj/item/tool, mob/living/user, list/click_params)

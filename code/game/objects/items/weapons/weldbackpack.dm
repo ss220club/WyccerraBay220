@@ -23,10 +23,10 @@
 	if(!istype(T))
 		return
 	if(!T.tank)
-		to_chat(user, SPAN_WARNING("[T] has no tank attached!"))
+		balloon_alert(user, "нет баллона!")
 		return
 	if(!T.tank.can_refuel)
-		to_chat(user, SPAN_WARNING("[T]'s [T.tank.name] does not have a refuelling port."))
+		balloon_alert(user, "невозможно заправить этот баллон!")
 		return
 	if(T.welding)
 		if(user.a_intent == I_HURT)
@@ -43,9 +43,9 @@
 			to_chat(user, SPAN_WARNING("You need to turn [T] off before you can refuel it. Or use harm intent if you're suicidal."))
 			return
 	if(!reagents.trans_to_obj(T.tank, T.tank.max_fuel))
-		to_chat(user, SPAN_WARNING("[T]'s [T.tank.name] is already full."))
+		balloon_alert(user, "баллон уже полон!")
 		return
-	to_chat(user, SPAN_NOTICE("You refill [T] with [src]."))
+	balloon_alert(user, "баллон пополнен")
 	playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 
 /obj/item/storage/backpack/weldpack/use_tool(obj/item/W, mob/living/user, list/click_params)

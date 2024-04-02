@@ -107,23 +107,17 @@
 
 /obj/structure/windoor_assembly/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!electronics)
-		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
+	if(!electronics)
+		balloon_alert(user, "нет платы!")
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts removing [src]'s circuits with [tool]."),
-		SPAN_NOTICE("You start removing [src]'s circuits with [tool].")
-	)
+	balloon_alert(user, "снятие платы")
 	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !electronics)
 		return
 	electronics.dropInto(loc)
 	electronics.add_fingerprint(user, tool = tool)
 	electronics = null
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] starts removing [src]'s circuits with [tool]."),
-		SPAN_NOTICE("You start removing [src]'s circuits with [tool].")
-	)
+	balloon_alert_to_viewers("плата снята")
 
 /obj/structure/windoor_assembly/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -151,17 +145,14 @@
 /obj/structure/windoor_assembly/welder_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(state != WINDOOR_STATE_FRAME)
-		USE_FEEDBACK_FAILURE("[src]'s wiring must be removed before you can dismantle it.")
+		balloon_alert(user, "нужно убрать проводку!")
 		return
 	if(anchored)
-		USE_FEEDBACK_FAILURE("[src] needs to be unanchored before you can dismantle it.")
+		USE_FEEDBACK_NEED_UNANCHOR(user)
 		return
 	if(!tool.tool_start_check(user, 1))
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts dismantling [src] with [tool]."),
-		SPAN_NOTICE("You start dismantling [src] with [tool].")
-	)
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || state != WINDOOR_STATE_FRAME || anchored)
 		return
 	var/obj/item/stack/material/glass/reinforced/glass = new(loc, 5)

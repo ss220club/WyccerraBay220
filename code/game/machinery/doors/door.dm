@@ -203,14 +203,14 @@
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!density)
-		to_chat(user, SPAN_WARNING("[src] must be closed before you can repair it."))
+		balloon_alert(user, "нужно закрыть!")
 		return
 	if(!tool.tool_start_check(user, 2))
 		return
-	to_chat(user, SPAN_NOTICE("You start to fix dents and weld [repairing] into place."))
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, (0.5 * repairing.amount) SECONDS, 2, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !repairing || !density)
 		return
-	to_chat(user, SPAN_NOTICE("You finish repairing the damage to [src]."))
+	USE_FEEDBACK_REPAIR_FINISH(user)
 	restore_health(repairing.amount * DOOR_REPAIR_AMOUNT)
 	update_icon()
 	qdel(repairing)

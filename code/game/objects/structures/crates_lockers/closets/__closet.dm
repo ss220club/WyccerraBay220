@@ -298,18 +298,11 @@
 		)
 		return TRUE
 
-	// Plasma Cutter - Dismantle closet
-	if (istype(weapon, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = weapon
-		if (!cutter.slice(user))
-			return TRUE
-		slice_into_parts(weapon, user)
-		return TRUE
-
 	return ..()
 
 /obj/structure/closet/welder_act_secondary(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	USE_FEEDBACK_DECONSTRUCT_START(user)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	slice_into_parts(tool, user)
@@ -319,18 +312,16 @@
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!HAS_FLAGS(setup, CLOSET_CAN_BE_WELDED))
-		USE_FEEDBACK_FAILURE("[src] can't be welded shut.")
+		balloon_alert(user, "невозможно заварить!")
 		return
 	if(user.loc == src)
 		return
+	USE_FEEDBACK_WELD_UNWELD(user, welded)
 	if(!tool.use_as_tool(src, user, 4 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	welded = !welded
 	update_icon()
-	user.visible_message(
-		SPAN_WARNING("[user] [welded ? "welds" : "unwelds"] [src] with [tool]."),
-		SPAN_WARNING("You [welded ? "weld" : "unweld"] [src] with [tool].")
-	)
+	USE_FEEDBACK_WELD_UNWELD_FINISH(user, welded)
 
 /obj/structure/closet/use_tool(obj/item/tool, mob/user, list/click_params)
 	// General Action - Place item in closet, if open.

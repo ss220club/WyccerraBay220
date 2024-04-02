@@ -720,9 +720,10 @@
 	if(update_icon)	//forces a full overlay update
 		update_icon = FALSE
 		regenerate_icons()
+		SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
 	else if( lying != lying_prev )
 		update_icons()
-	SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
+		SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
 
 /mob/proc/reset_layer()
 	if(lying)

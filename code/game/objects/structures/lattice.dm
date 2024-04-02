@@ -51,8 +51,8 @@
 
 /obj/structure/lattice/proc/deconstruct(mob/user, obj/item/tool)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] slices \the [src] apart with \a [tool]."),
-		SPAN_NOTICE("You \the [src] apart with \a [tool].")
+		SPAN_NOTICE("[user] slices [src] apart with [tool]."),
+		SPAN_NOTICE("You [src] apart with [tool].")
 	)
 	var/obj/item/stack/material/rods/rods = new(loc, 1, material.name)
 	transfer_fingerprints_to(rods)
@@ -74,14 +74,6 @@
 	// Floor Tile, Cable Coil - Passthrough to turf
 	if(istype(tool, /obj/item/stack/tile) || isCoil(tool))
 		return tool.resolve_attackby(get_turf(src), user, click_params)
-
-	// Plasma Cutter - Deconstruct
-	if(istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = tool
-		if(!cutter.slice(user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
 
 	// Rods - Create catwalk
 	if(istype(tool, /obj/item/stack/material/rods))

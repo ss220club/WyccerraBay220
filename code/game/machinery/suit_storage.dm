@@ -117,10 +117,11 @@
 
 /obj/machinery/suit_storage_unit/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
+	balloon_alert(user, "[panelopen ? "закрытие панели" : "открытие панели"]")
 	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panelopen = !panelopen
-	to_chat(user, SPAN_NOTICE("You [panelopen ? "open" : "close"] the unit's maintenance panel."))
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panelopen)
 	SStgui.update_uis(src)
 	update_icon()
 

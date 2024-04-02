@@ -88,7 +88,7 @@
 	bcell.update_icon()
 	bcell.dropInto(loc)
 	bcell = null
-	to_chat(user, SPAN_NOTICE("You remove the cell from the [src]."))
+	USE_FEEDBACK_CELL_REMOVED(user)
 	status = 0
 	update_icon()
 

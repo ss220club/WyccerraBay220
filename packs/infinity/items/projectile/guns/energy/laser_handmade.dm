@@ -242,6 +242,8 @@
 				buildstate++
 		if(17)
 			if(tool.tool_behaviour == TOOL_SCREWDRIVER)
+				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+					return TRUE
 				to_chat(user, SPAN_NOTICE("You secure everything with [tool]."))
 				new /obj/item/gun/energy/laser/craftable(get_turf(src))
 				qdel(src)

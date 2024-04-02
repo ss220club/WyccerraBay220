@@ -897,7 +897,8 @@
 
 	var/network = input("Which network would you like to configure it for?") as null|anything in (all_networks)
 	if(!network)
-		to_chat(user, SPAN_WARNING("You cannot connect to any camera network!."))
+		balloon_alert(user, "не удалось подключиться!")
+		return
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !network)
 		return
 	camera.network = list(network)

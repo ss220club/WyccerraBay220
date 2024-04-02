@@ -161,6 +161,12 @@
 			if (prob(25))
 				qdel(src)
 
+/obj/machinery/tgui_status(mob/user, datum/tgui_state/state)
+	if(MACHINE_IS_BROKEN(src) || (!interact_offline && !is_powered()))
+		return STATUS_CLOSE
+
+	return ..()
+
 /obj/machinery/CanUseTopic(mob/user)
 	if(MACHINE_IS_BROKEN(src))
 		return STATUS_CLOSE
@@ -399,11 +405,18 @@
 /obj/machinery/proc/malf_upgrade(mob/living/silicon/ai/user)
 	return FALSE
 
-/obj/machinery/CouldUseTopic(mob/user)
-	..()
+/obj/machinery/proc/click_sound(mob/user)
 	if(clicksound && world.time > next_clicksound && istype(user, /mob/living/carbon))
 		next_clicksound = world.time + CLICKSOUND_INTERVAL
 		playsound(src, clicksound, clickvol)
+
+/obj/machinery/CouldUseTopic(mob/user)
+	. = ..()
+	click_sound(user)
+
+/obj/machinery/tgui_act(action, list/params)
+	. = ..()
+	click_sound(usr)
 
 /// Displays all components in the machine to the user.
 /obj/machinery/proc/display_parts(mob/user)

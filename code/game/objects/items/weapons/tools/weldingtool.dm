@@ -33,6 +33,7 @@
 	update_icon()
 
 	. = ..()
+	RegisterSignal(src, COMSIG_TOOL_ATOM_ACTED_PRIMARY(TOOL_WELDER), TYPE_PROC_REF(/atom, update_icon))
 
 /obj/item/weldingtool/Destroy()
 	if(welding)
@@ -174,17 +175,16 @@
 /// If welding tool ran out of fuel during a construction task, construction fails.
 /obj/item/weldingtool/tool_use_check(mob/living/user, amount)
 	if(!isOn() || !check_fuel())
-		to_chat(user, SPAN_WARNING("[src] has to be on to complete this task!"))
+		balloon_alert(user, "нужен включенный аппарат!")
 		return FALSE
 
 	if(get_fuel() >= amount)
 		if(user)
 			user.welding_eyecheck()//located in mob_helpers.dm
 			set_light(5, 0.7, COLOR_LIGHT_CYAN)
-			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
 		return TRUE
 	else
-		to_chat(user, SPAN_WARNING("You need more welding fuel to complete this task!"))
+		balloon_alert(user, "нужно больше топлива!")
 		return FALSE
 
 /obj/item/weldingtool/proc/burn_fuel(amount)

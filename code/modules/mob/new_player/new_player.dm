@@ -212,7 +212,7 @@
 			return 0
 
 		if(client.prefs.organ_data[BP_CHEST] == "cyborg")
-			if(!whitelist_lookup(SPECIES_FBP, client.ckey) && client.prefs.species != SPECIES_IPC)
+			if(!is_any_alien_whitelisted(src, SPECIES_FBP) && client.prefs.species != SPECIES_IPC)
 				to_chat(usr, "Нельзя зайти за ППТ без вайтлиста.")
 				return FALSE
 
@@ -472,7 +472,7 @@
 /mob/new_player/proc/create_character(turf/spawn_turf)
 	spawning = 1
 	if(client.prefs.organ_data[BP_CHEST] == "cyborg")
-		if(!whitelist_lookup(SPECIES_FBP, client.ckey) && client.prefs.species != SPECIES_IPC)
+		if(!is_any_alien_whitelisted(src, SPECIES_FBP) && client.prefs.species != SPECIES_IPC)
 			to_chat(src, "Нельзя зайти за ППТ без вайтлиста.")
 			spawning = 0
 			return null

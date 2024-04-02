@@ -284,6 +284,7 @@
 
 	/// An associative list of /singleton/trait and trait level - See individual traits for valid levels
 	var/list/traits = list()
+	var/tts_trait = null
 
 	/**
 	* Allows a species to override footprints on worn clothing. Used by get_move_trail.

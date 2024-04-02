@@ -108,6 +108,8 @@
 		/mob/living/carbon/human/proc/MachineShowText
 	)
 
+	tts_trait = TTS_TRAIT_ROBOTIZE
+
 /datum/species/machine/handle_death(mob/living/carbon/human/H)
 	..()
 	if(istype(H.wear_mask,/obj/item/clothing/mask/monitor))

@@ -94,7 +94,7 @@
 		. += SPAN_NOTICE("[contained] is kept inside.")
 	if (attached_paper)
 		. += SPAN_NOTICE("There's a paper clipped on the side.")
-		attached_paper.examine(user, distance)
+		. += attached_paper.examine(user, distance)
 	if (health_dead)
 		. += SPAN_NOTICE("The borosilicate panels are completely shattered.")
 

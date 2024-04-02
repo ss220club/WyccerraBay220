@@ -184,17 +184,6 @@
 			visible_message(SPAN_WARNING("[user] has melted the plating's reinforcements! It should be possible to pry it off."))
 			return TRUE
 
-		else if(istype(C, /obj/item/gun/energy/plasmacutter) && (is_plating()) && !broken && !burnt)
-			var/obj/item/gun/energy/plasmacutter/cutter = C
-			if(!cutter.slice(user))
-				return ..()
-			playsound(src, 'sound/items/Welder.ogg', 80, 1)
-			visible_message(SPAN_NOTICE("[user] has started slicing through the plating's reinforcements!"))
-			if(do_after(user, (C.toolspeed * 3) SECONDS, src, DO_PUBLIC_UNIQUE) && !welder_melt())
-				visible_message(SPAN_WARNING("[user] has sliced through the plating's reinforcements! It should be possible to pry it off."))
-				playsound(src, 'sound/items/Welder.ogg', 80, 1)
-			return TRUE
-
 	return ..()
 
 /turf/simulated/floor/proc/welder_melt()

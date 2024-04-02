@@ -905,14 +905,8 @@ About the new airlock wires panel:
 		if(!item.use_as_tool(src, user, amount = 3, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		cut_verb = "cutting"
-		cut_sound = 'sound/items/Welder.ogg'
-	else if(istype(item,/obj/item/gun/energy/plasmacutter)) //They could probably just shoot them out, but who cares!
-		var/obj/item/gun/energy/plasmacutter/cutter = item
-		if(!cutter.slice(user))
-			return 0
-		cut_verb = "cutting"
-		cut_sound = 'sound/items/Welder.ogg'
-		cut_delay *= 0.66
+		cut_sound = item.usesound
+		cut_delay *= item.toolspeed
 	else if(istype(item,/obj/item/melee/energy/blade) || istype(item,/obj/item/melee/energy/sword))
 		cut_verb = "slicing"
 		cut_sound = "sparks"

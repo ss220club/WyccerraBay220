@@ -298,14 +298,6 @@
 		)
 		return TRUE
 
-	// Plasma Cutter - Dismantle closet
-	if (istype(weapon, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = weapon
-		if (!cutter.slice(user))
-			return TRUE
-		slice_into_parts(weapon, user)
-		return TRUE
-
 	return ..()
 
 /obj/structure/closet/welder_act_secondary(mob/living/user, obj/item/tool)

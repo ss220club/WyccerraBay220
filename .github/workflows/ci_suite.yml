@@ -140,7 +140,6 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       maps: ${{ steps.map_finder.outputs.maps }}
-      alternate_tests: ${{ steps.alternate_test_finder.outputs.alternate_tests }}
       max_required_byond_client: ${{ steps.max_required_byond_client.outputs.max_required_byond_client }}
     concurrency:
       group: find_all_maps-${{ github.head_ref || github.run_id }}

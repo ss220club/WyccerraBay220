@@ -349,13 +349,8 @@ SUBSYSTEM_DEF(tts220)
 
 	var/sound/output = sound(filename2play)
 	output.status = SOUND_STREAM
-	if(is_local)
-		output.channel = get_local_channel_by_owner(speaker)
-	else
+	if(!is_local || isnull(speaker))
 		output.channel = tts_channel_radio
-		output.wait = TRUE
-
-	if(isnull(speaker))
 		output.wait = TRUE
 		output.volume = volume
 		output.environment = NO_CHANGE
@@ -363,22 +358,26 @@ SUBSYSTEM_DEF(tts220)
 		if(output.volume <= 0)
 			return
 
-		if(preSFX)
-			play_sfx(listener, preSFX, output.channel, output.volume, output.environment)
-
+		play_sfx_if_exists(listener, preSFX, output)
 		sound_to(listener, output)
+		play_sfx_if_exists(listener, postSFX, output)
+
 		return
 
-	if(preSFX)
-		play_sfx(listener, preSFX, output.channel, output.volume, output.environment)
+	output.channel = get_local_channel_by_owner(speaker)
+
+	play_sfx_if_exists(listener, preSFX, output)
 
 	output = listener.playsound_local(turf_source, output, volume)
 
 	if(!output || output.volume <= 0)
 		return
 
-	if(postSFX)
-		play_sfx(listener, postSFX, output.channel, output.volume, output.environment)
+	play_sfx_if_exists(listener, postSFX, output)
+
+/datum/controller/subsystem/tts220/proc/play_sfx_if_exists(mob/listener, sfx, sound/output)
+    if(sfx)
+        play_sfx(listener, sfx, output.channel, output.volume, output.environment)
 
 /datum/controller/subsystem/tts220/proc/play_sfx(mob/listener, sfx, channel, volume, environment)
 	var/sound/output = sound(sfx)

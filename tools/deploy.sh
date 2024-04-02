@@ -10,6 +10,7 @@ if [[ $# -eq 2 ]] ; then
 fi
 
 mkdir -p \
+    $1/config \
     $1/maps \
     $1/icons \
     $1/sound \
@@ -22,6 +23,7 @@ if [ -d ".git" ]; then
 fi
 
 cp baystation12.dmb baystation12.rsc $1/
+cp -r config/* $1/config/
 cp -r maps/* $1/maps/
 cp -r icons/* $1/icons/
 cp -r tgui/public/* $1/tgui/public/

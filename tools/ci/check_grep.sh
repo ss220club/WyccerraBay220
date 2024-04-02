@@ -20,13 +20,13 @@ if command -v rg >/dev/null 2>&1; then
 		pcre2_support=0
 	fi
 	code_files="code/**/**.dm"
-	map_files="_maps/**/**.dmm"
+	map_files="maps/**/**.dmm"
 	code_x_515="code/**/!(__byond_version_compat).dm"
 else
 	pcre2_support=0
 	grep=grep
 	code_files="-r --include=code/**/**.dm"
-	map_files="-r --include=_maps/**/**.dmm"
+	map_files="-r --include=maps/**/**.dmm"
 	code_x_515="-r --include=code/**/!(__byond_version_compat).dm"
 fi
 

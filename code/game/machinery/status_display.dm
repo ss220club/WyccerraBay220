@@ -37,6 +37,8 @@
 	var/friendc = 0      // track if Friend Computer mode
 	var/ignore_friendc = 0
 
+	var/area/linked_area
+
 	maptext_height = 26
 	maptext_width = 32
 
@@ -61,11 +63,10 @@
 	playsound(src, "shatter", 70, 1)
 	visible_message(SPAN_DANGER("\The [src] is smashed into many pieces!"))
 	remove_display()
-	STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
 
 /obj/machinery/status_display/on_revive()
 	..()
-	START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF)
+	update()
 
 /obj/machinery/status_display/on_update_icon()
 	if (MACHINE_IS_BROKEN(src))
@@ -90,17 +91,10 @@
 // register for radio system
 /obj/machinery/status_display/Initialize()
 	. = ..()
+	find_and_set_linked_area()
 	if(radio_controller)
 		radio_controller.add_object(src, frequency)
 
-// timed process
-/obj/machinery/status_display/Process()
-	if (MACHINE_IS_BROKEN(src))
-		return PROCESS_KILL
-	if(!is_powered())
-		remove_display()
-		return
-	update()
 
 /obj/machinery/status_display/emp_act(severity)
 	if(inoperable())
@@ -109,10 +103,45 @@
 	set_picture("ai_bsod")
 	..(severity)
 
+// Signals
+
+/obj/machinery/status_display/proc/find_and_set_linked_area()
+	var/area/target_area = get_area(src)
+	if(!target_area.apc)
+		RegisterSignal(target_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+		return
+
+	on_apc_add(target_area)
+
+/obj/machinery/status_display/proc/on_apc_add(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_ADDED)
+	linked_area = apc_area
+	RegisterSignal(apc_area, COMSIG_AREA_APC_REMOVED, PROC_REF(on_apc_removal))
+	RegisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE, PROC_REF(change_status))
+
+/obj/machinery/status_display/proc/on_apc_removal(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_REMOVED)
+	UnregisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE)
+	linked_area = null
+	update()
+
+	RegisterSignal(apc_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+
+/obj/machinery/status_display/proc/change_status()
+	SIGNAL_HANDLER
+
+	power_channel = linked_area.powered(EQUIP)
+	update()
+
+
 // set what is displayed
 /obj/machinery/status_display/proc/update()
 	remove_display()
-	if (MACHINE_IS_BROKEN(src))
+	if (!operable())
 		return
 	if(friendc && !ignore_friendc)
 		set_picture("ai_friend")

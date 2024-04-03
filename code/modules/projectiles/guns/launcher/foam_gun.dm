@@ -84,7 +84,7 @@
 /obj/item/gun/launcher/foam/revolver/tampered/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "The hammer is a lot more resistant than you'd expect.")
+		. += SPAN_NOTICE("The hammer is a lot more resistant than you'd expect.")
 
 //the projectile
 /obj/item/foam_dart
@@ -114,7 +114,7 @@
 /obj/item/foam_dart/tampered/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, SPAN_WARNING("Closer inspection reveals some weights in the rubber dome."))
+		. += SPAN_WARNING("Closer inspection reveals some weights in the rubber dome.")
 
 //boxes of the projectile
 /obj/item/storage/box/foam_darts

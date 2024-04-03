@@ -26,7 +26,7 @@
 /obj/item/rsf/examine(mob/user, distance)
 	. = ..()
 	if (distance <= 0)
-		to_chat(user, "It currently holds [stored_matter]/[max_stored_matter] fabrication units.")
+		. += SPAN_NOTICE("It currently holds [stored_matter]/[max_stored_matter] fabrication units.")
 
 
 /obj/item/rsf/attack_self(mob/living/user)

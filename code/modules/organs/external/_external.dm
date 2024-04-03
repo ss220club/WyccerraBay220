@@ -213,10 +213,10 @@
 		for(var/obj/item/I in contents)
 			if(istype(I, /obj/item/organ))
 				continue
-			to_chat(user, SPAN_DANGER("There is \a [I] sticking out of it."))
+			. += SPAN_DANGER("There is [I] sticking out of it.")
 		var/ouchies = get_wounds_desc()
 		if(ouchies != "nothing")
-			to_chat(user, SPAN_NOTICE("There is [ouchies] visible on it."))
+			. += SPAN_NOTICE("There is [ouchies] visible on it.")
 
 	return
 

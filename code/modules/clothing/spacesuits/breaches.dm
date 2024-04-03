@@ -256,7 +256,7 @@
 	. = ..()
 	if(can_breach && breaches && length(breaches))
 		for(var/datum/breach/B in breaches)
-			to_chat(user, SPAN_DANGER("It has [B.descriptor]."))
+			. += SPAN_DANGER("It has [B.descriptor].")
 
 /obj/item/clothing/suit/space/get_pressure_weakness(pressure)
 	. = ..()

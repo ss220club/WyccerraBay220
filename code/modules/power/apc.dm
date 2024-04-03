@@ -248,22 +248,21 @@
 		var/terminal = terminal()
 		if(opened)
 			if(has_electronics && terminal)
-				to_chat(user, "The cover is [opened==2?"removed":"open"] and the power cell is [ get_cell() ? "installed" : "missing"].")
+				. += SPAN_NOTICE("The cover is [opened==2?"removed":"open"] and the power cell is [ get_cell() ? "installed" : "missing"].")
 			else if (!has_electronics && terminal)
-				to_chat(user, "There are some wires but no any electronics.")
+				. += SPAN_NOTICE("There are some wires but no any electronics.")
 			else if (has_electronics && !terminal)
-				to_chat(user, "Electronics installed but not wired.")
+				. += SPAN_NOTICE("Electronics installed but not wired.")
 			else /* if (!has_electronics && !terminal) */
-				to_chat(user, "There is no electronics nor connected wires.")
+				. += SPAN_NOTICE("There is no electronics nor connected wires.")
 
 		else
 			if (GET_FLAGS(stat, MACHINE_STAT_MAINT))
-				to_chat(user, "The cover is closed. Something wrong with it: it doesn't work.")
+				. += SPAN_NOTICE("The cover is closed. Something wrong with it: it doesn't work.")
 			else if (hacker && !hacker.hacked_apcs_hidden)
-				to_chat(user, "The cover is locked.")
+				. += SPAN_NOTICE("The cover is locked.")
 			else
-				to_chat(user, "The cover is closed.")
-
+				. += SPAN_NOTICE("The cover is closed.")
 
 // update the APC icon to show the three base states
 // also add overlays for indicator lights

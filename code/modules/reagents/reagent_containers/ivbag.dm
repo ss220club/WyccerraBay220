@@ -58,7 +58,7 @@
 			message = "two thirds full"
 		else
 			message = "full"
-	to_chat(user, "It has a flow rate of [transfer_amount]u of fluid per cycle and looks [message].")
+	. += SPAN_NOTICE("It has a flow rate of [transfer_amount]u of fluid per cycle and looks [message].")
 
 
 /obj/item/reagent_containers/ivbag/on_reagent_change()

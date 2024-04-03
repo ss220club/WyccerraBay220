@@ -89,7 +89,7 @@
 	var/laying = mode["laying"]
 	var/collect = mode["collect"]
 	var/message = SPAN_NOTICE("[src] [!current_tile?"don't ":""]has [!current_tile?"":"[current_tile.get_amount()] [current_tile] "]tile\s, dismantle is [dismantle?"on":"off"], laying is [laying?"on":"off"], collect is [collect?"on":"off"].")
-	to_chat(user, message)
+	. += message
 
 /obj/machinery/floorlayer/proc/reset()
 	on = 0

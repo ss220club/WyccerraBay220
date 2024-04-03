@@ -69,13 +69,13 @@
 /obj/item/gun/energy/examine(mob/user)
 	. = ..(user)
 	if(!power_supply)
-		to_chat(user, "Seems like it's dead.")
+		. += SPAN_WARNING("Seems like it's dead.")
 		return
 	if (charge_cost == 0)
-		to_chat(user, "This gun seems to have an unlimited number of shots.")
+		. += SPAN_NOTICE("This gun seems to have an unlimited number of shots.")
 	else
 		var/shots_remaining = round(power_supply.charge / charge_cost)
-		to_chat(user, "Has [shots_remaining] shot\s remaining.")
+		. += SPAN_NOTICE("Has [shots_remaining] shot\s remaining.")
 
 /obj/item/gun/energy/on_update_icon()
 	..()

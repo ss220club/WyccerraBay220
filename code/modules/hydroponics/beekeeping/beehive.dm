@@ -44,7 +44,7 @@
 /obj/machinery/beehive/examine(mob/user)
 	. = ..()
 	if(!closed)
-		to_chat(user, "The lid is open.")
+		. += SPAN_NOTICE("The lid is open.")
 
 /obj/machinery/beehive/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

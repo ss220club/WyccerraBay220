@@ -69,7 +69,7 @@
 /obj/item/storage/sheetsnatcher/examine(mob/user, distance)
 	. = ..()
 	if (distance < 2)
-		to_chat(user, "It has a capacity of [max_sheets] sheets and current holds [cur_sheets].")
+		. += SPAN_NOTICE("It has a capacity of [max_sheets] sheets and current holds [cur_sheets].")
 
 
 /obj/item/storage/sheetsnatcher/can_be_inserted(obj/item/stack/material/stack, mob/user, silent)

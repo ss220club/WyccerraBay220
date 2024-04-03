@@ -31,11 +31,11 @@
 
 /obj/machinery/power/breakerbox/examine(mob/user)
 	. = ..()
-	to_chat(user, "Large machine with heavy duty switching circuits used for advanced grid control")
+	. += SPAN_NOTICE("Large machine with heavy duty switching circuits used for advanced grid control")
 	if(on)
-		to_chat(user, SPAN_GOOD("It seems to be online."))
+		. += SPAN_GOOD("It seems to be online.")
 	else
-		to_chat(user, SPAN_WARNING("It seems to be offline."))
+		. += SPAN_WARNING("It seems to be offline.")
 
 /obj/machinery/power/breakerbox/attack_ai(mob/user)
 	if(update_locked)

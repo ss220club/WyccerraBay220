@@ -100,7 +100,7 @@
 	if(distance <= 1)
 		src.show_content(user)
 	else
-		to_chat(user, SPAN_NOTICE("It is too far away."))
+		. += SPAN_NOTICE(SPAN_NOTICE("It is too far away."))
 
 /obj/item/paper_bundle/proc/show_content(mob/user as mob)
 	var/dat

@@ -60,11 +60,11 @@
 	. = ..()
 	switch(damage)
 		if(0)
-			to_chat(user, "It is undamaged.")
+			. += SPAN_NOTICE("It is undamaged.")
 		if(1)
-			to_chat(user, "It is badly damaged.")
+			. += SPAN_NOTICE("It is badly damaged.")
 		if(2)
-			to_chat(user, "It is almost completely destroyed.")
+			. += SPAN_NOTICE("It is almost completely destroyed.")
 
 /obj/item/rig_module/attackby(obj/item/W as obj, mob/user as mob)
 

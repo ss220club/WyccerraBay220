@@ -95,13 +95,13 @@
 	if(distance > 1)
 		return
 	if(locked)
-		to_chat(user, SPAN_WARNING("A light on the control mechanism is flashing red, indicating it is locked open."))
+		. += SPAN_WARNING("A light on the control mechanism is flashing red, indicating it is locked open.")
 	if(!density)
 		return
 
 	if(pdiff >= FIREDOOR_MAX_PRESSURE_DIFF)
-		to_chat(user, SPAN_WARNING("WARNING: Current pressure differential is [pdiff] kPa! Opening door may result in injury!"))
-	to_chat(user, "<b>Sensor readings:</b>")
+		. += SPAN_WARNING("WARNING: Current pressure differential is [pdiff] kPa! Opening door may result in injury!")
+	. += SPAN_NOTICE("<b>Sensor readings:</b>")
 	for(var/index = 1; index <= length(tile_info); index++)
 		var/o = "&nbsp;&nbsp;"
 		switch(index)
@@ -115,20 +115,20 @@
 				o += "WEST: "
 		if(isnull(tile_info[index]))
 			o += SPAN_WARNING("DATA UNAVAILABLE")
-			to_chat(user, o)
+			. += o
 			continue
 		var/celsius = convert_k2c(tile_info[index][1])
 		var/pressure = tile_info[index][2]
 		o += "[SPAN_CLASS("[(dir_alerts[index] & (FIREDOOR_ALERT_HOT|FIREDOOR_ALERT_COLD)) ? "warning" : "color:blue"]", "[celsius]&deg;C")] "
 		o += "<span style='color:blue'>[pressure]kPa</span>"
 		o += "</li>"
-		to_chat(user, o)
+		. += o
 	if(islist(users_to_open) && length(users_to_open))
 		var/users_to_open_string = users_to_open[1]
 		if(length(users_to_open) >= 2)
 			for(var/i = 2 to length(users_to_open))
 				users_to_open_string += ", [users_to_open[i]]"
-		to_chat(user, "These people have opened [src] during an alert: [users_to_open_string].")
+		. += SPAN_NOTICE("These people have opened [src] during an alert: [users_to_open_string].")
 
 /obj/machinery/door/firedoor/Bumped(atom/AM)
 	if (p_open || operating)

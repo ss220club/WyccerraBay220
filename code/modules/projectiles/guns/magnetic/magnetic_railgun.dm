@@ -126,7 +126,7 @@
 /obj/item/gun/magnetic/railgun/automatic/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, SPAN_NOTICE("Someone has scratched <i>Ultima Ratio Regum</i> onto the side of the barrel."))
+		. += SPAN_NOTICE("Someone has scratched <i>Ultima Ratio Regum</i> onto the side of the barrel.")
 
 /obj/item/gun/magnetic/railgun/automatic/mmi
 	name = "\improper RHR accelerator"

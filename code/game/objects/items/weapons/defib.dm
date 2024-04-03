@@ -60,9 +60,9 @@
 /obj/item/defibrillator/examine(mob/user)
 	. = ..()
 	if(bcell)
-		to_chat(user, "The charge meter is showing [bcell.percent()]% charge left.")
+		. += SPAN_NOTICE("The charge meter is showing [bcell.percent()]% charge left.")
 	else
-		to_chat(user, "There is no cell inside.")
+		. += SPAN_NOTICE("There is no cell inside.")
 
 /obj/item/defibrillator/ui_action_click(mob/living/user)
 	toggle_paddles()

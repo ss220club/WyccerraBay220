@@ -29,9 +29,9 @@
 /obj/vehicle/train/examine(mob/user)
 	. = ..()
 	if (lead)
-		to_chat(user, SPAN_NOTICE("It is hitched to \the [lead]."))
+		. += SPAN_NOTICE("It is hitched to [lead].")
 	if (tow)
-		to_chat(user, SPAN_NOTICE("It is towing \the [tow]."))
+		. += SPAN_NOTICE("It is towinge [tow].")
 
 /obj/vehicle/train/Move()
 	var/old_loc = get_turf(src)

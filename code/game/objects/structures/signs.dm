@@ -462,6 +462,6 @@
 /obj/item/sign/medipolma/examine(mob/user)
 	. = ..()
 	if(claimant)
-		to_chat(user,"This one belongs to Dr.[claimant], MD.")
+		. += SPAN_NOTICE("This one belongs to Dr.[claimant], MD.")
 	else
-		to_chat(user,"The name is left blank for some reason.")
+		. += SPAN_NOTICE("The name is left blank for some reason.")

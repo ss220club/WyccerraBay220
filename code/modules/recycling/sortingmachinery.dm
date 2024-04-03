@@ -125,9 +125,9 @@
 	. = ..()
 	if(distance <= 4)
 		if(sortTag)
-			to_chat(user, SPAN_NOTICE("It is labeled \"[sortTag]\""))
+			. += SPAN_NOTICE("It is labeled \"[sortTag]\"")
 		if(examtext)
-			to_chat(user, SPAN_NOTICE("It has a note attached which reads, \"[examtext]\""))
+			. += SPAN_NOTICE("It has a note attached which reads, \"[examtext]\"")
 
 ///Procs exclusive to the package subtype.
 /obj/structure/bigDelivery/package/Initialize(mapload, obj/structure/closet/parcel, wrap_type)
@@ -457,9 +457,9 @@
 	. = ..()
 	if(distance <= 4)
 		if(sortTag)
-			to_chat(user, SPAN_NOTICE("It is labeled \"[sortTag]\""))
+			. += SPAN_NOTICE("It is labeled \"[sortTag]\"")
 		if(examtext)
-			to_chat(user, SPAN_NOTICE("It has a note attached which reads, \"[examtext]\""))
+			. += SPAN_NOTICE("It has a note attached which reads, \"[examtext]\"")
 
 /obj/item/device/destTagger
 	name = "destination tagger"

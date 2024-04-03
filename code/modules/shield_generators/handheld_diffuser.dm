@@ -48,5 +48,5 @@
 
 /obj/item/shield_diffuser/examine(mob/user)
 	. = ..()
-	to_chat(user, "The charge meter reads [cell ? cell.percent() : 0]%")
-	to_chat(user, "It is [enabled ? "enabled" : "disabled"].")
+	. += SPAN_NOTICE("The charge meter reads [cell ? cell.percent() : 0]%")
+	. += SPAN_NOTICE("It is [enabled ? "enabled" : "disabled"].")

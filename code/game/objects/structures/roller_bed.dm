@@ -75,16 +75,16 @@
 	if (distance >= 2 && !isghost(user))
 		return
 	if (drip_active)
-		to_chat(user, "\The [buckled_mob] is hooked up to it.")
+		. += SPAN_NOTICE("[buckled_mob] is hooked up to it.")
 	if (!iv_bag)
-		to_chat(user, "It has no IV bag attached.")
+		. += SPAN_NOTICE("It has no IV bag attached.")
 		return
 	var/volume = floor(iv_bag.reagents.total_volume)
 	if (!volume)
-		to_chat(user, "It has an empty [iv_bag.name] attached.")
+		. += SPAN_NOTICE("It has an empty [iv_bag.name] attached.")
 		return
-	to_chat(user, "It has \a [iv_bag] attached with [volume] units of liquid inside.")
-	to_chat(user, "It is set to inject [iv_bag.transfer_amount]u of fluid per cycle.")
+	. += SPAN_NOTICE("It has [iv_bag] attached with [volume] units of liquid inside.")
+	. += SPAN_NOTICE("It is set to inject [iv_bag.transfer_amount]u of fluid per cycle.")
 
 
 /obj/structure/roller_bed/CanPass(atom/movable/movable, turf/target, height, air_group)

@@ -34,8 +34,8 @@
 /obj/item/device/spy_bug/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 0)
-		to_chat(user, "It's a tiny camera, microphone, and transmission device in a happy union.")
-		to_chat(user, "Needs to be both configured and brought in contact with monitor device to be fully functional.")
+		. += SPAN_NOTICE("It's a tiny camera, microphone, and transmission device in a happy union.")
+		. += SPAN_NOTICE("Needs to be both configured and brought in contact with monitor device to be fully functional.")
 
 /obj/item/device/spy_bug/attack_self(mob/user)
 	radio.attack_self(user)
@@ -82,7 +82,7 @@
 /obj/item/device/spy_monitor/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "The time '12:00' is blinking in the corner of the screen and \the [src] looks very cheaply made.")
+		. += SPAN_NOTICE("The time '12:00' is blinking in the corner of the screen and \the [src] looks very cheaply made.")
 
 /obj/item/device/spy_monitor/attack_self(mob/user)
 	if(operating)

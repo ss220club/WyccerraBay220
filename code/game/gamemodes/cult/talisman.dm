@@ -40,10 +40,10 @@
 
 /obj/item/paper/talisman/examine(mob/user, distance)
 	. = ..()
-	if (iscultist(user))
-		to_chat(user, SPAN_OCCULT("This is \a [talisman_name] talisman."))
-		if (talisman_desc)
-			to_chat(user, SPAN_OCCULT("Effect: [talisman_desc]."))
+	if(iscultist(user))
+		. += SPAN_OCCULT("This is [talisman_name] talisman.")
+		if(talisman_desc)
+			. += SPAN_OCCULT("Effect: [talisman_desc].")
 
 
 /obj/item/paper/talisman/attack_self(mob/living/user)

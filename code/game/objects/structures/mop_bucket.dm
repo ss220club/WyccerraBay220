@@ -16,7 +16,7 @@
 /obj/structure/mopbucket/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "[src] [icon2html(src, user)] contains [reagents.total_volume] unit\s of water!")
+		. += SPAN_NOTICE("[src] [icon2html(src, user)] contains [reagents.total_volume] unit\s of water!")
 
 
 /obj/structure/mopbucket/use_tool(obj/item/tool, mob/user, list/click_params)

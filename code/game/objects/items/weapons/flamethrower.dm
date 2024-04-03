@@ -28,14 +28,14 @@
 	. = ..()
 	if (beaker)
 		if (beaker.reagents)
-			to_chat(user, SPAN_NOTICE("The loaded [beaker.name] has about [beaker.reagents.total_volume] unit\s left."))
+			. += SPAN_NOTICE("The loaded [beaker.name] has about [beaker.reagents.total_volume] unit\s left.")
 		else
-			to_chat(user, SPAN_NOTICE("The loaded [beaker.name] is empty."))
+			. += SPAN_NOTICE("The loaded [beaker.name] is empty.")
 	else
-		to_chat(user, SPAN_NOTICE("[src] has no fuel container loaded!."))
+		. += SPAN_NOTICE("[src] has no fuel container loaded!.")
 
 	if (lit)
-		to_chat(user, SPAN_WARNING("[src] is lit!"))
+		. += SPAN_NOTICE("[src] is lit!")
 
 
 /obj/item/flamethrower/Destroy()

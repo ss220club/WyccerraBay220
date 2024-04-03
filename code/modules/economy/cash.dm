@@ -181,5 +181,6 @@
 
 /obj/item/spacecash/ewallet/examine(mob/user, distance)
 	. = ..(user)
-	if (distance > 2 && user != loc) return
-	to_chat(user, SPAN_NOTICE("Charge card's owner: [src.owner_name]. [GLOB.using_map.local_currency_name] remaining: [src.worth]."))
+	if(distance > 2 && user != loc)
+		return
+	. += SPAN_NOTICE("Charge card's owner: [src.owner_name]. [GLOB.using_map.local_currency_name] remaining: [src.worth].")

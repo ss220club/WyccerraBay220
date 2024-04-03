@@ -68,7 +68,7 @@
 
 /obj/item/material/knife/folding/swiss/examine(mob/user)
 	. = ..()
-	to_chat(user, active_tool == SWISSKNF_CLOSED ? "It is closed." : "Its [lowertext(active_tool)] is folded out.")
+	. += SPAN_NOTICE(active_tool == SWISSKNF_CLOSED ? "It is closed." : "Its [lowertext(active_tool)] is folded out.")
 
 /obj/item/material/knife/folding/swiss/update_force()
 	if(active_tool in sharp_tools)

@@ -29,11 +29,11 @@
 	. = ..()
 	if(distance <= 0)
 		if(det_time > 1)
-			to_chat(user, "The timer is set to [det_time/10] seconds.")
+			. += SPAN_NOTICE("The timer is set to [det_time/10] seconds.")
 			return
 		if(isnull(det_time))
 			return
-		to_chat(user, "\The [src] is set for instant detonation.")
+		. += SPAN_NOTICE("[src] is set for instant detonation.")
 
 
 /obj/item/grenade/attack_self(mob/living/user)

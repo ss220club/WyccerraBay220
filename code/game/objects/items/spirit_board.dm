@@ -10,7 +10,7 @@
 
 /obj/item/spirit_board/examine(mob/user)
 	. = ..()
-	to_chat(user, "The planchette is sitting at \"[planchette]\".")
+	. += SPAN_NOTICE("The planchette is sitting at \"[planchette]\".")
 
 /obj/item/spirit_board/attack_hand(mob/user)
 	if (user.a_intent == I_GRAB)

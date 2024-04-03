@@ -50,7 +50,7 @@
 /obj/item/grab/examine(mob/user)
 	. = ..()
 	var/obj/item/O = get_targeted_organ()
-	to_chat(user, "A grab on \the [affecting]'s [O.name].")
+	. += SPAN_NOTICE("A grab on [affecting]'s [O].")
 
 /obj/item/grab/Process()
 	if (!use_sanity_check(affecting))

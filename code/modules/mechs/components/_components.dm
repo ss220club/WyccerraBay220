@@ -32,16 +32,16 @@
 /obj/item/mech_component/examine(mob/user)
 	. = ..()
 	if(ready_to_install())
-		to_chat(user, SPAN_NOTICE("It is ready for installation."))
+		. += SPAN_NOTICE("It is ready for installation.")
 	else
-		show_missing_parts(user)
+		. += show_missing_parts(user)
 
 //These icons have multiple directions but before they're attached we only want south.
 /obj/item/mech_component/set_dir()
 	..(SOUTH)
 
 /obj/item/mech_component/proc/show_missing_parts(mob/user)
-	return
+	. = list()
 
 /obj/item/mech_component/proc/prebuild()
 	return

@@ -24,9 +24,8 @@
 		return
 	if (!istype(user))
 		return
-	var/datum/pronouns/pronouns = user.choose_from_pronouns()
 	user.visible_message(
-		SPAN_WARNING("\The [user] places \the [src] up to [pronouns.his] face."),
+		SPAN_WARNING("\The [user] places \the [src] up to [user.p_their()] face."),
 		SPAN_WARNING("You place \the [src] up to your face.")
 	)
 	if (!do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE) || !user.use_sanity_check(src))

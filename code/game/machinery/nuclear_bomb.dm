@@ -430,7 +430,7 @@ var/global/bomb_set
 
 /obj/item/storage/secure/briefcase/nukedisk/examine(mob/user)
 	. = ..()
-	to_chat(user,"On closer inspection, you see [GLOB.using_map.company_name] emblem is etched into the front of it.")
+	. += SPAN_NOTICE("On closer inspection, you see [GLOB.using_map.company_name] emblem is etched into the front of it.")
 
 /obj/item/folder/envelope/nuke_instructions
 	name = "instructions envelope"

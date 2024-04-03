@@ -46,9 +46,9 @@
 /obj/item/weldingtool/examine(mob/user, distance)
 	. = ..()
 	if (!tank)
-		to_chat(user, "There is no [welding_resource] source attached.")
+		. += SPAN_NOTICE("There is no [welding_resource] source attached.")
 	else
-		to_chat(user, (distance <= 1 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[tank] is attached.")
+		. += SPAN_NOTICE((distance <= 1 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[tank] is attached.")
 
 /obj/item/weldingtool/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

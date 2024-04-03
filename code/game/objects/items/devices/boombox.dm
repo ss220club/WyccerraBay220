@@ -53,7 +53,7 @@
 			message += "[message?" ":""]It's broken."
 	if (!message)
 		return
-	to_chat(user, SPAN_ITALIC(message))
+	. += SPAN_ITALIC(message)
 
 /obj/item/boombox/screwdriver_act_secondary(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

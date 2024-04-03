@@ -504,7 +504,7 @@
 			if(E)
 				if(hasHUD(user, HUD_MEDICAL))
 					to_chat(usr, "<b>Name:</b> [E.get_name()]")
-					to_chat(usr, "<b>Pronouns:</b> [E.get_sex()]")
+					to_chat(usr, "<b>Gender:</b> [E.get_sex()]")
 					to_chat(usr, "<b>Species:</b> [E.get_species()]")
 					to_chat(usr, "<b>Blood Type:</b> [E.get_bloodtype()]")
 					to_chat(usr, "<b>Details:</b> [E.get_medRecord()]")
@@ -822,17 +822,11 @@
 		else
 			gender = NEUTER
 
-	var/new_pronouns = input("Please select pronouns.", "Character Generation", pronouns) as null|anything in GLOB.pronouns.by_key
-	if(new_pronouns)
-		pronouns = new_pronouns
-
 	regenerate_icons()
 	check_dna()
 
-	var/datum/pronouns/P = choose_from_pronouns()
-
 	visible_message(
-		SPAN_NOTICE("\The [src] morphs and changes [P.his] appearance!"),
+		SPAN_NOTICE("\The [src] morphs and changes [p_their()] appearance!"),
 		SPAN_NOTICE("You change your appearance!"),
 		SPAN_WARNING("Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!")
 	)
@@ -902,20 +896,6 @@
 	else
 		remoteview_target = null
 		reset_view(0)
-
-/**
- * Retrieves the atom's pronouns. Generally this is just based on `gender` but some factors may mask or change this.
- *
- * Returns instance of `/datum/pronouns`.
- */
-/atom/proc/choose_from_pronouns()
-	RETURN_TYPE(/datum/pronouns)
-	return GLOB.pronouns_from_gender[gender]
-
-/mob/living/carbon/human/choose_from_pronouns()
-	if (wear_suit && HAS_FLAGS(wear_suit.flags_inv, HIDEJUMPSUIT) && ((head && HAS_FLAGS(head.flags_inv, HIDEMASK)) || wear_mask))
-		return GLOB.pronouns.by_key[PRONOUNS_THEY_THEM]
-	return ..()
 
 /mob/living/carbon/human/proc/increase_germ_level(n)
 	if(gloves)
@@ -1215,9 +1195,6 @@
 
 	if(!(gender in species.genders))
 		gender = species.genders[1]
-
-	if(!(pronouns in species.pronouns))
-		pronouns = species.pronouns[1]
 
 	icon_state = lowertext(species.name)
 
@@ -1538,10 +1515,9 @@
 	var/fail_prob = U.skill_fail_chance(SKILL_MEDICAL, 60, SKILL_TRAINED, 3)
 	if(self)
 		fail_prob += U.skill_fail_chance(SKILL_MEDICAL, 20, SKILL_EXPERIENCED, 1)
-	var/datum/pronouns/P = choose_from_pronouns()
 	if(prob(fail_prob))
 		visible_message( \
-		SPAN_CLASS("danger", "[U] pops [self ? "[P.his]" : "[S]'s"] [current_limb.joint] in the WRONG place!"), \
+		SPAN_CLASS("danger", "[U] pops [self ? "[p_their()]" : "[S]'s"] [current_limb.joint] in the WRONG place!"), \
 		SPAN_CLASS("danger", "[self ? "You pop" : "[U] pops"] your [current_limb.joint] in the WRONG place!") \
 		)
 		current_limb.add_pain(30)
@@ -1549,7 +1525,7 @@
 		shock_stage += 20
 	else
 		visible_message( \
-		SPAN_CLASS("danger", "[U] pops [self ? "[P.his]" : "[S]'s"] [current_limb.joint] back in!"), \
+		SPAN_CLASS("danger", "[U] pops [self ? "[p_their()]" : "[S]'s"] [current_limb.joint] back in!"), \
 		SPAN_CLASS("danger", "[self ? "You pop" : "[U] pops"] your [current_limb.joint] back in!") \
 		)
 		current_limb.undislocate()
@@ -1693,9 +1669,8 @@
 	if(src != M)
 		..()
 	else
-		var/datum/pronouns/P = choose_from_pronouns(src)
 		visible_message( \
-			SPAN_NOTICE("[src] examines [P.self]."), \
+			SPAN_NOTICE("[src] examines [p_them()]self."), \
 			SPAN_NOTICE("You check yourself for injuries.") \
 			)
 

@@ -43,8 +43,8 @@
 /obj/item/rcd/examine(mob/user)
 	. = ..()
 	if(src.type == /obj/item/rcd && loc == user)
-		to_chat(user, "The current mode is '[work_mode]'")
-		to_chat(user, "It currently holds [stored_matter]/[max_stored_matter] matter-units.")
+		. += SPAN_NOTICE("The current mode is '[work_mode]'")
+		. += SPAN_NOTICE("It currently holds [stored_matter]/[max_stored_matter] matter-units.")
 
 /obj/item/rcd/New()
 	..()
@@ -164,7 +164,7 @@
 /obj/item/rcd_ammo/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, SPAN_NOTICE("It has [remaining] unit\s of matter left."))
+		. += SPAN_NOTICE("It has [remaining] unit\s of matter left.")
 
 /obj/item/rcd_ammo/large
 	name = "high-capacity matter cartridge"

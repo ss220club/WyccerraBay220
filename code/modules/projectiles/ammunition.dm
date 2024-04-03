@@ -91,9 +91,9 @@
 /obj/item/ammo_casing/examine(mob/user)
 	. = ..()
 	if(caliber)
-		to_chat(user, "Its caliber is [caliber].")
+		. += SPAN_NOTICE("Its caliber is [caliber].")
 	if (!BB)
-		to_chat(user, "This one is spent.")
+		. += SPAN_NOTICE("This one is spent.")
 
 
 //An item that holds casings and can be used to put them inside guns
@@ -223,7 +223,7 @@
 
 /obj/item/ammo_magazine/examine(mob/user)
 	. = ..()
-	to_chat(user, "There [(length(stored_ammo) == 1)? "is" : "are"] [length(stored_ammo)] round\s left!")
+	. += SPAN_NOTICE("There [(length(stored_ammo) == 1)? "is" : "are"] [length(stored_ammo)] round\s left!")
 
 
 //magazine icon state caching

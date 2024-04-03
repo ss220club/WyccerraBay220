@@ -72,7 +72,6 @@
 
 	new_human.SetName(H.name)
 	new_human.real_name = H.real_name
-	new_human.pronouns = H.pronouns
 	new_human.gender = H.gender
 
 	transfer_languages(H, new_human)

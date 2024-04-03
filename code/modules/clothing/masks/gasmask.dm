@@ -31,7 +31,7 @@
 /obj/item/clothing/mask/gas/examine(mob/user)
 	. = ..()
 	if(clogged)
-		to_chat(user, SPAN_WARNING("The intakes are clogged with [clogged]!"))
+		. += SPAN_WARNING("The intakes are clogged with [clogged]!")
 
 /obj/item/clothing/mask/gas/filters_water()
 	return (filter_water && !clogged)

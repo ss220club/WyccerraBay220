@@ -26,9 +26,9 @@
 /obj/machinery/cell_charger/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 5)
-		to_chat(user, "There's [charging ? "a" : "no"] cell in the charger.")
+		. += SPAN_NOTICE("There's [charging ? "a" : "no"] cell in the charger.")
 		if(charging)
-			to_chat(user, "Current charge: [charging.charge]")
+			. += SPAN_NOTICE("Current charge: [charging.charge]")
 
 /obj/machinery/cell_charger/post_anchor_change()
 	..()

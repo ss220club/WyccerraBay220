@@ -94,16 +94,16 @@
 /obj/item/gun/magnetic/examine(mob/user)
 	. = ..()
 	if(cell)
-		to_chat(user, SPAN_NOTICE("The installed [cell.name] has a charge level of [round((cell.charge/cell.maxcharge)*100)]%."))
+		. += SPAN_NOTICE("The installed [cell.name] has a charge level of [round((cell.charge/cell.maxcharge)*100)]%.")
 	if(capacitor)
-		to_chat(user, SPAN_NOTICE("The installed [capacitor.name] has a charge level of [round((capacitor.charge/capacitor.max_charge)*100)]%."))
+		. += SPAN_NOTICE("The installed [capacitor.name] has a charge level of [round((capacitor.charge/capacitor.max_charge)*100)]%.")
 	if(!cell || !capacitor)
-		to_chat(user, SPAN_NOTICE("The capacitor charge indicator is blinking [SPAN_COLOR("[COLOR_RED]", "red")]. Maybe you should check the cell or capacitor."))
+		. += SPAN_NOTICE("The capacitor charge indicator is blinking [SPAN_COLOR("[COLOR_RED]", "red")]. Maybe you should check the cell or capacitor.")
 	else
 		if(capacitor.charge < power_cost)
-			to_chat(user, SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_ORANGE]", "amber")]."))
+			. += SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_ORANGE]", "amber")].")
 		else
-			to_chat(user, SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_GREEN]", "green")]."))
+			. += SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_GREEN]", "green")].")
 
 /obj/item/gun/magnetic/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -178,7 +178,7 @@
 /obj/item/grenade/chem_grenade/examine(mob/user)
 	. = ..()
 	if(detonator)
-		to_chat(user, "With attached [detonator.name]")
+		. += SPAN_NOTICE("With attached [detonator.name]")
 
 
 /obj/item/grenade/chem_grenade/large

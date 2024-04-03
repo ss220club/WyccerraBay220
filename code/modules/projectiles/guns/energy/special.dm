@@ -268,7 +268,7 @@
 /obj/item/gun/energy/laser/xenofauna/examine(mob/user, distance)
 	. = ..()
 	if (emagged && distance < 3)
-		to_chat(user, SPAN_DANGER("The safety limiter doesn't look functional."))
+		. += SPAN_DANGER("The safety limiter doesn't look functional.")
 
 
 /obj/item/gun/energy/laser/xenofauna/broken

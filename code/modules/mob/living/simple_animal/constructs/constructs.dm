@@ -67,9 +67,9 @@
 	. = ..()
 	if (health < maxHealth)
 		if (health >= maxHealth / 2)
-			to_chat(user, SPAN_WARNING("It looks slightly dented."))
+			. += SPAN_WARNING("It looks slightly dented.")
 		else
-			to_chat(user, SPAN_WARNING(SPAN_BOLD("It looks severely dented!")))
+			. += SPAN_WARNING(SPAN_BOLD("It looks severely dented!"))
 
 /obj/item/ectoplasm
 	name = "ectoplasm"

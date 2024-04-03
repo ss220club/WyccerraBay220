@@ -48,8 +48,8 @@
 	if(distance > 1 || !radio_desc)
 		return
 
-	to_chat(user, "The following channels are available:")
-	to_chat(user, radio_desc)
+	. += SPAN_NOTICE("The following channels are available:")
+	. += SPAN_NOTICE("[radio_desc]")
 
 /obj/item/device/radio/headset/handle_message_mode(mob/living/M as mob, message, channel)
 	if (channel == "special")

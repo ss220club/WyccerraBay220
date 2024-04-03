@@ -119,9 +119,9 @@
 	if (distance > 5 && !isghost(user))
 		return
 	if (iron)
-		to_chat(user, "It has \a [iron] resting on it.")
+		. += SPAN_NOTICE("It has [iron] resting on it.")
 	if (clothing)
-		to_chat(user, "\A [clothing] is spread out across it.")
+		. += SPAN_NOTICE("[clothing] is spread out across it.")
 
 /obj/structure/ironing_board/use_grab(obj/item/grab/grab, list/click_params)
 	if (deployed)

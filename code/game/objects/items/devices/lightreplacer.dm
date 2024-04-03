@@ -54,16 +54,16 @@
 /obj/item/device/lightreplacer/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 2)
-		to_chat(user, "It has [uses] light\s remaining.")
+		. += SPAN_NOTICE("It has [uses] light\s remaining.")
 		switch (lighting_tone)
 			if (LIGHT_REPLACE_AREA)
-				to_chat(user, "It is configured to match the room's blueprints for bulb color and tone.")
+				. += SPAN_NOTICE("It is configured to match the room's blueprints for bulb color and tone.")
 			if (LIGHT_REPLACE_EXISTING)
-				to_chat(user, "It is configured to match the replaced bulb's color and tone.")
+				. += SPAN_NOTICE("It is configured to match the replaced bulb's color and tone.")
 			if (LIGHT_REPLACE_RANDOM)
-				to_chat(user, "It is configured to print bulbs in random tones.")
+				. += SPAN_NOTICE("It is configured to print bulbs in random tones.")
 			else
-				to_chat(user, "It is configured to print bulbs in this color: <span style='color: [lighting_tone];'>■</span>")
+				. += SPAN_NOTICE("It is configured to print bulbs in this color: <span style='color: [lighting_tone];'>■</span>")
 
 /obj/item/device/lightreplacer/resolve_attackby(atom/A, mob/user)
 

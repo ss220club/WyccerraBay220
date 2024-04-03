@@ -482,7 +482,7 @@
 
 /obj/item/material/drill_head/examine(mob/user, distance)
 	. = ..()
-	to_chat(user, "It [get_visible_durability()].")
+	. += SPAN_NOTICE("It [get_visible_durability()].")
 
 
 /obj/item/material/drill_head/steel
@@ -533,11 +533,11 @@
 /obj/item/mech_equipment/drill/examine(mob/user, distance)
 	. = ..()
 	if (drill_head)
-		to_chat(user, "It has a[distance > 3 ? "" : " [drill_head.material.name]"] drill head installed.")
+		. += SPAN_NOTICE("It has a[distance > 3 ? "" : " [drill_head.material.name]"] drill head installed.")
 		if (distance < 4)
-			to_chat(user, "The drill head [drill_head.get_visible_durability()].")
+			. += SPAN_NOTICE("The drill head [drill_head.get_visible_durability()].")
 	else
-		to_chat(user, "It does not have a drill head installed.")
+		. += SPAN_NOTICE("It does not have a drill head installed.")
 
 /obj/item/mech_equipment/drill/proc/attach_head(obj/item/material/drill_head/DH, mob/user)
 	if (user && !user.unEquip(DH))
@@ -874,7 +874,7 @@
 
 /obj/item/mech_equipment/camera/examine(mob/user)
 	. = ..()
-	to_chat(user, "Network: [english_list(camera.network)]; Feed is currently: [camera.status ? "Online" : "Offline"].")
+	. += SPAN_NOTICE("Network: [english_list(camera.network)]; Feed is currently: [camera.status ? "Online" : "Offline"].")
 
 /obj/item/mech_equipment/camera/proc/activate()
 	camera.set_status(TRUE)

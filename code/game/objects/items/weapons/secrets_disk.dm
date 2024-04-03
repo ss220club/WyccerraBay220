@@ -31,10 +31,10 @@
 /obj/item/disk/secret_project/examine(mob/user)
 	. = ..()
 	if(!locked)
-		to_chat(user, "With the disk's classified contents unlocked, \
-		you peer into its preview screen and see [SPAN_NOTICE("[subject]")].")
+		. += SPAN_NOTICE("With the disk's classified contents unlocked, \
+		you peer into its preview screen and see [SPAN_ITALIC("[subject]")].")
 	else
-		to_chat(user, "The disk is locked, you cannot see its contents.")
+		. += SPAN_NOTICE("The disk is locked, you cannot see its contents.")
 
 /obj/item/disk/secret_project/emag_act(remaining_charges, mob/user)
 	to_chat(user, SPAN_WARNING("The cryptographic lock on this disk is far too complex. \

@@ -242,7 +242,7 @@
 /obj/item/device/transfer_valve/examine(mob/user, distance)
 	. = ..()
 	if (armed && distance < 3)
-		to_chat(user, SPAN_DANGER("This one looks like a bomb."))
+		. += SPAN_DANGER("This one looks like a bomb.")
 
 	/*
 	Exadv1: I know this isn't how it's going to work, but this was just to check

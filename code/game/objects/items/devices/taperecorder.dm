@@ -106,7 +106,7 @@
 /obj/item/device/taperecorder/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1 && maintenance)
-		to_chat(user, SPAN_NOTICE("The wires are exposed."))
+		. += SPAN_NOTICE("The wires are exposed.")
 
 /obj/item/device/taperecorder/hear_talk(mob/living/M as mob, msg, verb="says", datum/language/speaking=null)
 	var/speaker = null
@@ -572,6 +572,6 @@
 /obj/item/device/tape/loose/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, SPAN_NOTICE("It looks long enough to hold [max_capacity] seconds worth of recording."))
+		. += SPAN_NOTICE("It looks long enough to hold [max_capacity] seconds worth of recording.")
 		if(doctored && user.skill_check(SKILL_FORENSICS, SKILL_MASTER))
-			to_chat(user, SPAN_NOTICE("It has been tampered with..."))
+			. += SPAN_NOTICE("It has been tampered with...")

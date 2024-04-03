@@ -31,9 +31,9 @@
 
 /obj/item/device/camera/tvcamera/examine(mob/user)
 	. = ..()
-	to_chat(user, "Video feed is currently: [camera.status ? "Online" : "Offline"]")
-	to_chat(user, "Audio feed is currently: [radio.broadcasting ? "Online" : "Offline"]")
-	to_chat(user, "Photography setting is currently: [on ? "On" : "Off"]")
+	. += SPAN_NOTICE("Video feed is currently: [camera.status ? "Online" : "Offline"]")
+	. += SPAN_NOTICE("Audio feed is currently: [radio.broadcasting ? "Online" : "Offline"]")
+	. += SPAN_NOTICE("Photography setting is currently: [on ? "On" : "Off"]")
 
 /obj/item/device/camera/tvcamera/attack_self(mob/user)
 	add_fingerprint(user)

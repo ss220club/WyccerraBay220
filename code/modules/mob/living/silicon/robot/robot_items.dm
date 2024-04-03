@@ -315,8 +315,8 @@
 
 /obj/item/inflatable_dispenser/examine(mob/user)
 	. = ..()
-	to_chat(user, "It has [stored_walls] wall segment\s and [stored_doors] door segment\s stored.")
-	to_chat(user, "It is set to deploy [mode ? "doors" : "walls"]")
+	. += SPAN_NOTICE("It has [stored_walls] wall segment\s and [stored_doors] door segment\s stored.")
+	. += SPAN_NOTICE("It is set to deploy [mode ? "doors" : "walls"]")
 
 /obj/item/inflatable_dispenser/attack_self()
 	mode = !mode
@@ -423,7 +423,7 @@
 
 /obj/item/robot_rack/examine(mob/user)
 	. = ..()
-	to_chat(user, "It can hold up to [capacity] item[capacity == 1 ? "" : "s"].")
+	. += SPAN_NOTICE("It can hold up to [capacity] item[capacity == 1 ? "" : "s"].")
 
 /obj/item/robot_rack/Initialize(mapload, starting_objects = 0)
 	. = ..()

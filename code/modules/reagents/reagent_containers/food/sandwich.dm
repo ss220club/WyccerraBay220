@@ -99,7 +99,7 @@
 /obj/item/reagent_containers/food/snacks/csandwich/examine(mob/user)
 	. = ..(user)
 	var/obj/item/O = pick(contents)
-	to_chat(user, SPAN_ITALIC("You think you can see [O.name] in there."))
+	. += SPAN_NOTICE("You think you can see [O] in there.")
 
 /obj/item/reagent_containers/food/snacks/csandwich/use_before(mob/living/M as mob, mob/user as mob)
 	. = FALSE

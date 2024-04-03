@@ -23,7 +23,7 @@
 	if(displayed_name && displayed_name != name)
 		shown_label = " labeled '[displayed_name]'"
 
-	to_chat(user, "There is \a [src][shown_label], which displays [!isnull(stuff_to_display) ? "'[stuff_to_display]'" : "nothing"].")
+	return SPAN_NOTICE("There is [src][shown_label], which displays [!isnull(stuff_to_display) ? "'[stuff_to_display]'" : "nothing"].")
 
 /obj/item/integrated_circuit/output/screen/get_topic_data()
 	return stuff_to_display ? list(stuff_to_display) : list()
@@ -336,4 +336,4 @@
 	else
 		text_output += "\an ["\improper[name]"] labeled '[displayed_name]'"
 	text_output += " which is currently [get_pin_data(IC_INPUT, 1) ? "lit [SPAN_COLOR(led_color, "*")]" : "unlit"]."
-	to_chat(user, text_output)
+	return ("[text_output]")

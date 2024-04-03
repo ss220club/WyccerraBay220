@@ -101,19 +101,19 @@ var/global/const/TELEBEACON_WIRE_SIGNALLER = 4
 	. = ..()
 
 	if (!anchored)
-		to_chat(user, SPAN_WARNING("It is disconnected from \the [get_turf(src)]."))
+		. += SPAN_WARNING("It is disconnected from [get_turf(src)].")
 		return
 
 	if (!functioning())
 		if (user.skill_check(SKILL_DEVICES, SKILL_BASIC))
-			to_chat(user, SPAN_WARNING("It appears to be offline or disabled."))
+			. += SPAN_WARNING("It appears to be offline or disabled.")
 		return
 
 	if (user.skill_check(SKILL_DEVICES, SKILL_TRAINED))
 		if (wires.IsIndexCut(TELEBEACON_WIRE_SIGNALLER))
-			to_chat(user, SPAN_WARNING("The signal lights appear to be disabled."))
+			. += SPAN_WARNING("The signal lights appear to be disabled.")
 		else if (LAZYLEN(connected_computers))
-			to_chat(user, SPAN_WARNING("The signal lights indicate it has an active teleporter connection."))
+			. += SPAN_WARNING("The signal lights indicate it has an active teleporter connection.")
 
 
 /obj/machinery/tele_beacon/power_change()

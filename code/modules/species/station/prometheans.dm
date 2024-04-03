@@ -79,9 +79,8 @@ var/global/datum/species/shapeshifter/promethean/prometheans
 	prometheans = src
 
 /datum/species/shapeshifter/promethean/hug(mob/living/carbon/human/H,mob/living/target)
-	var/datum/gender/G = GLOB.gender_datums[target.gender]
-	H.visible_message(SPAN_NOTICE("\The [H] glomps [target] to make [G.him] feel better!"), \
-					SPAN_NOTICE("You glomps [target] to make [G.him] feel better!"))
+	H.visible_message(SPAN_NOTICE("\The [H] glomps [target] to make [target.p_them()] feel better!"), \
+					SPAN_NOTICE("You glomps [target] to make [target.p_them()] feel better!"))
 	H.apply_stored_shock_to(target)
 
 /datum/species/shapeshifter/promethean/handle_death(mob/living/carbon/human/H)
@@ -147,14 +146,13 @@ var/global/datum/species/shapeshifter/promethean/prometheans
 
 	if(!stored_shock_by_ref["\ref[H]"])
 		return
-	var/datum/gender/G = GLOB.gender_datums[H.gender]
 
 	switch(stored_shock_by_ref["\ref[H]"])
 		if(1 to 10)
-			return "[G.He] [G.is] flickering gently with a little electrical activity."
+			return "[H.p_They()] [H.p_are()] flickering gently with a little electrical activity."
 		if(11 to 20)
-			return "[G.He] [G.is] glowing gently with moderate levels of electrical activity.\n"
+			return "[H.p_They()] [H.p_are()] glowing gently with moderate levels of electrical activity.\n"
 		if(21 to 35)
-			return SPAN_WARNING("[G.He] [G.is] glowing brightly with high levels of electrical activity.")
+			return SPAN_WARNING("[H.p_They()] [H.p_are()] glowing brightly with high levels of electrical activity.")
 		if(35 to INFINITY)
-			return SPAN_DANGER("[G.He] [G.is] radiating massive levels of electrical activity!")
+			return SPAN_DANGER("[H.p_They()] [H.p_are()] radiating massive levels of electrical activity!")

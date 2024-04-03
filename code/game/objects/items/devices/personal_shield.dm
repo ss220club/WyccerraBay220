@@ -41,10 +41,10 @@
 	. = ..()
 	if(open)
 		if(power_cell)
-			to_chat(user, "There is \a [power_cell] in \the [src].")
+			. += SPAN_NOTICE("There is \a [power_cell] in \the [src].")
 		else
-			to_chat(user, "There is no cell in \the [src].")
-	to_chat(user, "The internal capacitor currently has [round(currently_stored_power/max_stored_power * 100)]% charge.")
+			. += SPAN_NOTICE("There is no cell in \the [src].")
+	. += SPAN_NOTICE("The internal capacitor currently has [round(currently_stored_power/max_stored_power * 100)]% charge.")
 
 /obj/item/device/personal_shield/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

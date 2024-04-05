@@ -26,6 +26,7 @@ They sell generic supplies and ask for generic supplies.
 				TRADER_INSULT_BAD        = "I do not understand, are you insulting me?",
 
 				TRADER_BRIBE_FAILURE     = "You have given me money to stay, however, I am a station. I do not leave.",
+				TRADER_HAIL_START + SPECIES_RESOMI = "Greetings, I am MERCHANT, Artifical Intelligence onboard ORIGIN. We wish to trade with you, no more."
 				)
 	possible_wanted_items = list(/obj/item/device                       = TRADER_SUBTYPES_ONLY,
 								/obj/item/device/assembly                = TRADER_BLACKLIST_ALL,

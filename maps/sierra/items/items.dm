@@ -293,11 +293,6 @@ Passports
 	icon_state = "passport"
 	desc = "A passport for Xenos."
 
-/obj/item/passport/xeno/resomi
-	name = "\improper Resomi registration document"
-	icon_state = "passport"
-	desc = "Something like a passport for Resomi."
-
 /obj/item/passport/xeno/unathi
 	name = "\improper Unathi registration document"
 	icon_state = "passport"

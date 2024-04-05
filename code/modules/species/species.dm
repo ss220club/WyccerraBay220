@@ -97,6 +97,7 @@
 	var/stun_mod =       1                    // Stun period modifier.
 	var/paralysis_mod =  1                    // Paralysis period modifier.
 	var/weaken_mod =     1                    // Weaken period modifier.
+	var/pulse_rate_mod = 1
 
 	var/vision_flags = SEE_SELF               // Same flags as glasses.
 

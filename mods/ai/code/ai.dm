@@ -16,7 +16,6 @@
 	add_language(LANGUAGE_SIIK_MAAS, TRUE)
 	add_language(LANGUAGE_LEGALESE, TRUE)
 
-
 // New verbs
 
 /mob/living/silicon/ai/proc/ai_take_image()

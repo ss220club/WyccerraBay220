@@ -36,6 +36,10 @@ var/global/list/tank_gauge_cache = list()
 
 	var/list/starting_pressure //list in format 'xgm gas id' = 'desired pressure at start'
 
+	sprite_sheets = list(
+		SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_back_resomi.dmi'
+	)
+
 /obj/item/tank/Initialize()
 	. = ..()
 	proxyassembly = new /obj/item/device/tankassemblyproxy(src)

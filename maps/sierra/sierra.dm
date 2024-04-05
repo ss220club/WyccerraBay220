@@ -193,8 +193,6 @@
 	// Keep them in ascending alphabetical order too, please
 
 	// #include "../../mods/atmos_ret_field/_atm_ret_field.dme"
-	// #include "../../mods/resomi/_resomi.dme"
-	// #include "../../mods/_maps/miningpirate/_map_miningpirate.dme"
 
 	// Почему UNUSED MODS стоит хранить?
 	// Потому что никто не проверяет использование тех или иных файлов

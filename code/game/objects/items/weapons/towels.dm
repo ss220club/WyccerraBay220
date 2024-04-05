@@ -16,7 +16,8 @@
 			sprite_sheets = list(
 				SPECIES_VOX = 'icons/mob/species/vox/onmob_head_vox.dmi',
 				SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_head_unathi.dmi',
-				SPECIES_NABBER = 'icons/mob/species/nabber/onmob_head_gas.dmi'
+				SPECIES_NABBER = 'icons/mob/species/nabber/onmob_head_gas.dmi',
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_head_resomi.dmi'
 				)
 		if(slot_belt)
 			sprite_sheets = list()
@@ -24,7 +25,8 @@
 			sprite_sheets = list(
 				SPECIES_VOX = 'icons/mob/species/vox/onmob_suit_vox.dmi',
 				SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_suit_unathi.dmi',
-				SPECIES_NABBER = 'icons/mob/species/nabber/onmob_suit_gas.dmi'
+				SPECIES_NABBER = 'icons/mob/species/nabber/onmob_suit_gas.dmi',
+				SPECIES_RESOMI = 'icons/mob/species/resomi/onmob_suit_resomi.dmi'
 				)
 	return ..()
 

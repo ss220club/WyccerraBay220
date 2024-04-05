@@ -120,6 +120,7 @@
 	plushes["deer plush"] = /obj/item/toy/plushie/deer
 	plushes["blue squid plush"] = /obj/item/toy/plushie/squid_blue
 	plushes["orange squid plush"] = /obj/item/toy/plushie/squid_orange
+	plushes["resomi plush"] = /obj/item/toy/plushie/resomi
 	gear_tweaks += new /datum/gear_tweak/path(plushes)
 
 /datum/gear/foundation_civilian

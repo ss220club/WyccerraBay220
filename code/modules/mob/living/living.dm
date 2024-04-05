@@ -609,12 +609,12 @@ default behaviour is:
 		location.add_blood(src)
 		if(prob(25))
 			adjustBruteLoss(1)
-			balloon_alert_to_viewers("[isSynthetic() ? "повреждения ухудшаются!" : "раны открываются!"]")
+			balloon_alert_to_viewers("[isSynthetic() ? "состояние ухудшается!" : "травмы усиливаются!"]")
 			. = TRUE
 	if(pull_damage())
 		if(prob(25))
 			adjustBruteLoss(2)
-			balloon_alert_to_viewers("[isSynthetic() ? "повреждения значительно ухудшаются!" : "раны сильно открываются!"]")
+			balloon_alert_to_viewers("[isSynthetic() ? "состояние значительно ухудшается!" : "травмы многократно усиливаются!"]")
 			location.add_blood(src)
 			. = TRUE
 

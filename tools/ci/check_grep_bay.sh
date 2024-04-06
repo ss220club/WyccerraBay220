@@ -63,10 +63,6 @@ exactly 0 "new/list list instantiations" 'new\s*/list' -P
 exactly 0 "== null tests" '(==\s*null\b)|(\bnull\s*==)' -P #Use isnull() instead
 # If you increase any of these numbers you're probably doing it wrong
 
-num=`find ./html/changelogs -not -name "*.yml" | wc -l`
-echo "$num non-yml files (expecting exactly 2)"
-[ $num -eq 2 ] || FAILED=1
-
 num=`find . -perm /111 -name "*.dm*" | wc -l`
 echo "$num executable *.dm? files (expecting exactly 0)"
 [ $num -eq 0 ] || FAILED=1

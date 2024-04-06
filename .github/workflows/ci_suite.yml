@@ -69,6 +69,9 @@ jobs:
       - name: Run Grep Checks
         if: steps.linter-setup.conclusion == 'success' && !cancelled()
         run: bash tools/ci/check_grep.sh
+      - name: Run Old Grep Checks
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: bash tools/ci/check_grep_bay.sh
       # Enable if we decide to undef everything(we wont)
       # - name: Check Define Sanity
       #   if: steps.linter-setup.conclusion == 'success' && !cancelled()

@@ -11,7 +11,6 @@ tools/deploy.sh ci_test
 cp maps/$MAP.json ci_test/data/next_map.json
 
 cd ci_test
-ls tgui/public
 DreamDaemon baystation12.dmb -close -trusted -verbose -params "log-directory=ci"
 
 cd ..

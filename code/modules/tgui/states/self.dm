@@ -2,7 +2,7 @@
  * tgui state: self_state
  *
  * Only checks that the user and src_object are the same.
- **/
+ *\
 
 GLOBAL_DATUM_INIT(tgui_self_state, /datum/tgui_state/self_state, new)
 

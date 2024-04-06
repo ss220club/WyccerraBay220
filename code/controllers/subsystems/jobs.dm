@@ -287,7 +287,7 @@ SUBSYSTEM_DEF(jobs)
 /** Proc divide_occupations
  *  fills var "assigned_role" for all ready players.
  *  This proc must not have any side effect besides of modifying "assigned_role".
- **/
+ *\
 /datum/controller/subsystem/jobs/proc/divide_occupations(datum/game_mode/mode)
 	//Get the players who are ready
 	for(var/mob/new_player/player in GLOB.player_list)

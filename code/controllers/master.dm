@@ -5,7 +5,7 @@
  * Note: if you read parts of this code and think "why is it doing it that way"
  * Odds are, there is a reason
  *
- **/
+ *\
 
 //This is the ABSOLUTE ONLY THING that should init globally like this
 var/global/datum/controller/master/Master = new

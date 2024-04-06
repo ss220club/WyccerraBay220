@@ -205,7 +205,7 @@
 	icon_state = "corp_polo"
 
 /datum/category_item/underwear/undershirt/polo_nt
-	name = "Polo, NanoTrasen"
+	name = "Polo, Nanotrasen"
 	icon_state = "ntpolo"
 
 /datum/category_item/underwear/undershirt/polo_dais

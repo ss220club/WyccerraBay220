@@ -1,6 +1,6 @@
 /obj/overmap/visitable/sector/corporate
-	name = "Mining - NanoTrasen outpost"
-	desc = "Sensors capture corporate signal: For authorized NanoTrasen personnel only."
+	name = "Mining - Nanotrasen outpost"
+	desc = "Sensors capture corporate signal: For authorized Nanotrasen personnel only."
 	icon_state = "sector"
 	initial_restricted_waypoints = list(
 		"Guppy" = list("nav_corporate_8", "nav_corporate_hiden"),
@@ -31,7 +31,7 @@
 /datum/map_template/ruin/away_site/mining_corporate
 	name = "Mining - Corporate"
 	id = "awaysite_mining_corporate"
-	description = "A medium-sized asteroid full of minerals. Old mining facility detected at one of sides, owner - NanoTrasen."
+	description = "A medium-sized asteroid full of minerals. Old mining facility detected at one of sides, owner - Nanotrasen."
 	suffixes = list("mining/mining-corporate.dmm")
 	spawn_cost = 1
 	accessibility_weight = 10

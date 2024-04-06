@@ -48,10 +48,10 @@
 	filled = TRUE
 
 /obj/item/storage/lunchbox/nt
-	name = "\improper NanoTrasen brand lunchbox"
+	name = "\improper Nanotrasen brand lunchbox"
 	icon_state = "lunchbox_nanotrasen"
 	item_state = "toolbox_blue"
-	desc = "A little lunchbox. This one is branded with the NanoTrasen logo!"
+	desc = "A little lunchbox. This one is branded with the Nanotrasen logo!"
 
 /obj/item/storage/lunchbox/dais
 	name = "\improper DAIS brand lunchbox"

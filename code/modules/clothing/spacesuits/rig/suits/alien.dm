@@ -1,6 +1,6 @@
 /obj/item/rig/unathi
 	name = "\improper NT breacher chassis control module"
-	desc = "A NanoTrasen-made Unathi battle-rig. Looks like a fish, moves like a fish, steers like a cow."
+	desc = "A Nanotrasen-made Unathi battle-rig. Looks like a fish, moves like a fish, steers like a cow."
 	suit_type = "\improper NT breacher rig"
 	icon_state = "breacher_rig_cheap"
 	armor = list(

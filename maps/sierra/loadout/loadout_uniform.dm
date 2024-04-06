@@ -19,12 +19,12 @@
 */
 
 /datum/gear/uniform/si_guard
-	display_name = "NanoTrasen guard uniform"
+	display_name = "Nanotrasen guard uniform"
 	path = /obj/item/clothing/under/rank/guard/nanotrasen
 	allowed_roles = list(/datum/job/officer)
 
 /datum/gear/uniform/si_exec
-	display_name = "NanoTrasen senior researcher alt uniform"
+	display_name = "Nanotrasen senior researcher alt uniform"
 	path = /obj/item/clothing/under/rank/scientist/executive/nanotrasen
 	allowed_roles = list(/datum/job/senior_scientist)
 
@@ -53,7 +53,7 @@
 	gear_tweaks += new/datum/gear_tweak/path(flight)
 
 /datum/gear/uniform/si_exec_jacket
-	display_name = "NanoTrasen liason suit"
+	display_name = "Nanotrasen liason suit"
 	path = /obj/item/clothing/under/suit_jacket/corp/nanotrasen
 	allowed_roles = list(/datum/job/iaa)
 

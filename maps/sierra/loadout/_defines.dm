@@ -61,7 +61,7 @@
 	/datum/job/detective \
 )
 
-//For NanoTrasen employees
+//For Nanotrasen employees
 #define NANOTRASEN_ROLES list(\
 	/datum/job/captain, /datum/job/hop, /datum/job/rd, /datum/job/cmo, /datum/job/chief_engineer, /datum/job/hos, \
 	/datum/job/iaa, \

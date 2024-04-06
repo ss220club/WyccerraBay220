@@ -267,7 +267,7 @@ AI MODULES
 	origin_tech = list(TECH_DATA = 3, TECH_MATERIAL = 4)
 	laws = new/datum/ai_laws/asimov
 
-/******************** NanoTrasen ********************/
+/******************** Nanotrasen ********************/
 
 /obj/item/aiModule/nanotrasen // -- TLE
 	name = "\improper'Corporate Default' Core AI Module"

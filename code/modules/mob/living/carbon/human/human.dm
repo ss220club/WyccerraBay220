@@ -1895,7 +1895,7 @@ GLOBAL_LIST_INIT(dream_tokens, list(
 	"warmth", "freezing", "the sun", "a hat",
 	"a ruined station", "a planet", "phoron", "air",
 	"the medical bay", "the bridge", "blinking lights", "a blue light",
-	"an abandoned laboratory", "NanoTrasen", "pirates", "mercenaries",
+	"an abandoned laboratory", "Nanotrasen", "pirates", "mercenaries",
 	"blood", "healing", "power", "respect",
 	"riches", "space", "a crash", "happiness",
 	"pride", "a fall", "water", "flames",

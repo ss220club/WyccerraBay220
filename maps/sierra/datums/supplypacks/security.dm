@@ -4,20 +4,20 @@
 	cost = 15
 
 /singleton/hierarchy/supply_pack/security/nanoarmor
-	name = "Armor - NanoTrasen"
+	name = "Armor - Nanotrasen"
 	contains = list(/obj/item/clothing/suit/armor/pcarrier/medium/nt = 2,
 					/obj/item/clothing/head/helmet/nt/guard =2)
 	cost = 25
 	containertype = /obj/structure/closet/crate/secure
-	containername = "NanoTrasen armor crate"
+	containername = "Nanotrasen armor crate"
 
 /singleton/hierarchy/supply_pack/security/lightnanoarmor
-	name = "Armor - NanoTrasen light"
+	name = "Armor - Nanotrasen light"
 	contains = list(/obj/item/clothing/suit/armor/pcarrier/light/nt = 2,
 					/obj/item/clothing/head/helmet/nt/guard =2)
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure
-	containername = "NanoTrasen light armor crate"
+	containername = "Nanotrasen light armor crate"
 
 /singleton/hierarchy/supply_pack/security/armory
 	name = "Weapons - Ballistic sidearms"

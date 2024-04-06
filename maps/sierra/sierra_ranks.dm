@@ -171,10 +171,10 @@
 	name = "Civilian"
 
 /datum/mil_rank/civ/nt
-	name = "NanoTrasen Employee"
+	name = "Nanotrasen Employee"
 
 /datum/mil_rank/civ/contractor
-	name = "NanoTrasen Contractor"
+	name = "Nanotrasen Contractor"
 
 /datum/mil_rank/civ/offduty
 	name = "Off-Duty Personnel"

@@ -91,7 +91,7 @@ Unique items
 
 /obj/item/storage/fakebook
 	name = "Workplace Crisis Management"
-	desc = "Also known as 'I fucked up, what do?'. A very popular book among the NanoTrasen management."
+	desc = "Also known as 'I fucked up, what do?'. A very popular book among the Nanotrasen management."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "booknanoregs"
 	attack_verb = list("bashed", "whacked", "educated")

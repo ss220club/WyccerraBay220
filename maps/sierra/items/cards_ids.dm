@@ -19,14 +19,14 @@
 	color = "#d4c780"
 	extra_details = list("goldstripe")
 
-// NanoTrasen Personnel and Passengers
+// Nanotrasen Personnel and Passengers
 /obj/item/card/id/sierra/passenger
 	desc = "An identification card issued to passengers aboard the NSV Sierra."
 	job_access_type = /datum/job/assistant
 	color = "#ccecff"
 
 /obj/item/card/id/sierra/crew
-	desc = "An identification card issued to NanoTrasen crewmembers aboard the NSV Sierra."
+	desc = "An identification card issued to Nanotrasen crewmembers aboard the NSV Sierra."
 	job_access_type = /datum/job/assistant
 	color = "#ccecff"
 

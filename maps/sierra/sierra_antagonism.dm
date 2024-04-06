@@ -26,7 +26,7 @@
 	if(!..())
 		return 0
 	player.char_branch = GLOB.mil_branches.get_branch("Employee")
-	player.char_rank = GLOB.mil_branches.get_rank("Employee", "NanoTrasen Employee")
+	player.char_rank = GLOB.mil_branches.get_rank("Employee", "Nanotrasen Employee")
 
 	var/singleton/hierarchy/outfit/ert_outfit = outfit_by_type((player.mind == leader) ? /singleton/hierarchy/outfit/job/sierra/ert/leader : /singleton/hierarchy/outfit/job/sierra/ert)
 	ert_outfit.equip(player)

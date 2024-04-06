@@ -58,8 +58,8 @@
 
 
 /obj/item/clothing/accessory/corptie/nanotrasen
-	name = "\improper NanoTrasen tie"
-	desc = "A red neosilk clip-on tie. This one has a clip on it that proudly bears the NanoTrasen logo."
+	name = "\improper Nanotrasen tie"
+	desc = "A red neosilk clip-on tie. This one has a clip on it that proudly bears the Nanotrasen logo."
 	icon_state = "cliptie_nt"
 
 

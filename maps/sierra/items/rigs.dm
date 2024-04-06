@@ -78,7 +78,7 @@
 /obj/item/rig/command/hop
 	name = "HoP's HCM"
 	suit_type = "advanced command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to ranking personnel command staff of the NanoTrasen and their peers."
+	desc = "A specialized hardsuit rig control module issued to ranking personnel command staff of the Nanotrasen and their peers."
 	icon_state = "command_XO_rig"
 	armor = list(
 		melee = ARMOR_MELEE_KNIVES,
@@ -114,7 +114,7 @@
 /obj/item/rig/command/captain
 	name = "captain's HCM"
 	suit_type = "advanced command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to captains of the NanoTrasen."
+	desc = "A specialized hardsuit rig control module issued to captains of the Nanotrasen."
 	icon_state = "command_CO_rig"
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,
@@ -151,7 +151,7 @@
 /obj/item/rig/command/cmo
 	name = "CMO's HCM"
 	suit_type = "medical command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to ranking medical command staff of the NanoTrasen and their peers."
+	desc = "A specialized hardsuit rig control module issued to ranking medical command staff of the Nanotrasen and their peers."
 
 	sprite_sheets = list(
 		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi',
@@ -197,7 +197,7 @@
 /obj/item/rig/command/hos
 	name = "HoS' HCM"
 	suit_type = "security command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to ranking security command staff of the NanoTrasen and their peers."
+	desc = "A specialized hardsuit rig control module issued to ranking security command staff of the Nanotrasen and their peers."
 	icon = 'maps/sierra/icons/obj/rig_modules.dmi'
 	icon_state = "hos_rig"
 	armor = list(

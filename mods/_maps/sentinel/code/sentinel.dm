@@ -80,7 +80,7 @@
 
 /obj/machinery/telecomms/allinone/away_scg_patrol
 	listening_freqs = list(SFV_FREQ)
-	channel_color = COMMS_COLOR_CENTCOMM
+	channel_color = COMMS_COLOR_CENTCOM
 	channel_name = "SCG Patrol"
 	circuitboard = /obj/item/stock_parts/circuitboard/telecomms/allinone/away_scg_patrol
 

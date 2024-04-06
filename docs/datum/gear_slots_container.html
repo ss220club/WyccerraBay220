@@ -16,7 +16,7 @@
 <h1>gear_slots_container <aside>/<a href="datum.html">datum</a>/<a href="datum/gear_slots_container.html">gear_slots_container</a></aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L231">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L231">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 231"/></a></h1>
 
 <p>Simple objects that represents all gear slots the player has in preferences.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
@@ -38,75 +38,75 @@ If the <code>gear_slots</code> is already of desired size, no changes will happe
             <aside>&ndash; /list</aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L237">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L237">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 237"/></a></h3>
         <p>The flat list of gear slots, where index of slot in the list is slot number</p><h3 id="var/picked_gear_slot"><aside class="declaration">var </aside>picked_gear_slot
             <aside>&ndash; </aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L235">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L235">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 235"/></a></h3>
         <p>The gear slot that is currently displayed in preferences</p><h3 id="var/size"><aside class="declaration">var </aside>size
             <aside>&ndash; </aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L233">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L233">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 233"/></a></h3>
         <p>Max size of the container. New gear slots are added to <code>gear_slots</code> when required</p><h2 id="proc">Proc Details</h2><h3 id="proc/cycle_slot_left"><aside class="declaration">proc </aside>cycle_slot_left<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L304">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L304">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 304"/></a></aside>
         </h3>
         <p>Sets <code>picked_gear_slot</code> to the <code>picked_gear_slot - 1</code>, or to length(gear_slots) if new slot is &lt;= 0
 Returns <code>true</code>, if slot successfully changed, <code>false</code> otherwise</p><h3 id="proc/cycle_slot_right"><aside class="declaration">proc </aside>cycle_slot_right<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L295">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L295">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 295"/></a></aside>
         </h3>
         <p>Sets <code>picked_gear_slot</code> to the <code>picked_gear_slot + 1</code>, or to 1 if overflowed
 Returns <code>true</code>, if slot successfully changed, <code>false</code> otherwise</p><h3 id="proc/fill_with_slots"><aside class="declaration">proc </aside>fill_with_slots<aside>(/list/new_slots) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L313">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L313">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 313"/></a></aside>
         </h3>
         <p>Create new <code>/datum/gear_slot</code> until <code>gear_slots</code> length wil be equal to <code>size</code>.
 If the <code>gear_slots</code> is already of desired size, no changes will happen</p><h3 id="proc/get_gear_slots"><aside class="declaration">proc </aside>get_gear_slots<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L282">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L282">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 282"/></a></aside>
         </h3>
         <p>Get copy of <code>get_gear_slots</code> list</p><h3 id="proc/get_picked_gear_slot"><aside class="declaration">proc </aside>get_picked_gear_slot<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L259">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L259">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 259"/></a></aside>
         </h3>
         <p>Get currently picked gear slot. If no valid slot picked, we pick the first one</p><h3 id="proc/get_picked_gear_slot_number"><aside class="declaration">proc </aside>get_picked_gear_slot_number<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L263">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L263">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 263"/></a></aside>
         </h3>
         <p>Get currently picked gear slot number.</p><h3 id="proc/get_size"><aside class="declaration">proc </aside>get_size<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L290">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L290">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 290"/></a></aside>
         </h3>
         <p>Returs the size of the container</p><h3 id="proc/set_size"><aside class="declaration">proc </aside>set_size<aside>(new_size) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/473cd497ee4e5df65eee4250c9dab17b4e52024f/code/modules/client/preference_setup/loadout/gear.dm#L268">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/74fbdacdb191f534e21c719964b79d5addfa3258/code/modules/client/preference_setup/loadout/gear.dm#L268">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 268"/></a></aside>
         </h3>
         <p>Trims <code>gear_slots</code> to desired size. <code>trim_size</code> must be greater or equal to 0.</p></main>
 <footer>
     baystation12.dme
-    <a href="https://github.com/ss220club/WyccerraBay220/tree/473cd497ee4e5df65eee4250c9dab17b4e52024f">473cd49</a>
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/74fbdacdb191f534e21c719964b79d5addfa3258">74fbdac</a>
         (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
 </body>
 </html>

@@ -470,6 +470,7 @@
 	/// python3 script to host assets stored in `data/asset-store/` via http://localhost:58715/
 	var/static/asset_cdn_url = "http://localhost:58715/"
 
+	var/static/topic_ip_ratelimit_bypass = list()
 
 /datum/configuration/New()
 	load_config()
@@ -952,6 +953,8 @@
 				ffmpeg_cpuaffinity = sanitized
 			if("tts_api_url_silero")
 				tts_api_url_silero = value
+			if("topic_ip_ratelimit_bypass")
+				topic_ip_ratelimit_bypass = params2list(value)
 			// [/SS220-ADD]
 			else
 				log_misc("Unknown setting in config/config.txt: '[name]'")

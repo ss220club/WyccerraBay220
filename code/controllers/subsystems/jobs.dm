@@ -360,9 +360,9 @@ SUBSYSTEM_DEF(jobs)
 
 /datum/controller/subsystem/jobs/proc/attempt_role_assignment(mob/new_player/player, datum/job/job, level, datum/game_mode/mode)
 	if(!jobban_isbanned(player, job.title) && \
-	 job.player_old_enough(player.client) && \
-	 player.client.prefs.CorrectLevel(job, level) && \
-	 job.is_position_available())
+	job.player_old_enough(player.client) && \
+	player.client.prefs.CorrectLevel(job, level) && \
+	job.is_position_available())
 		assign_role(player, job.title, mode = mode)
 		return TRUE
 	return FALSE

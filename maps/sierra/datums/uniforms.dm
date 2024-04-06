@@ -44,10 +44,10 @@
 	/obj/item/clothing/suit/storage/hooded/wintercoat)
 /*
 	utility_extra = list(/obj/item/clothing/head/beret/solgov/fleet/engineering,
-						 /obj/item/clothing/head/ushanka/solgov/fleet,
-						 /obj/item/clothing/suit/storage/hooded/wintercoat/solgov/fleet,
-						 /obj/item/clothing/head/soft/solgov/fleet,
-						 /obj/item/clothing/gloves/thick/duty/solgov/eng)
+						/obj/item/clothing/head/ushanka/solgov/fleet,
+						/obj/item/clothing/suit/storage/hooded/wintercoat/solgov/fleet,
+						/obj/item/clothing/head/soft/solgov/fleet,
+						/obj/item/clothing/gloves/thick/duty/solgov/eng)
 */
 
 /singleton/hierarchy/mil_uniform/nt

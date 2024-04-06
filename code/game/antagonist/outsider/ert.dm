@@ -5,9 +5,9 @@ GLOBAL_DATUM_INIT(ert, /datum/antagonist/ert, new)
 	role_text = "Emergency Responder"
 	role_text_plural = "Emergency Responders"
 	antag_text = "You are an <b>anti</b>-antagonist! Within the rules, try to save the ship and its crew from the ongoing crisis. \
-				 Try to make sure the other players have <i>fun</i>, and if you are confused or at a loss, always adminhelp. \
-				 You should also contact the staff before taking any extreme actions. \
-				 <b>Remember that all rules outside of those with explicit exceptions apply to the ERT!</b>"
+				Try to make sure the other players have <i>fun</i>, and if you are confused or at a loss, always adminhelp. \
+				You should also contact the staff before taking any extreme actions. \
+				<b>Remember that all rules outside of those with explicit exceptions apply to the ERT!</b>"
 	welcome_text = "You shouldn't see this"
 	leader_welcome_text = "You shouldn't see this"
 	landmark_id = "Response Team"

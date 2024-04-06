@@ -6,7 +6,7 @@
 	id = "Patrol Hub"
 	network = "senttcommsat"
 	autolinkers = list("sentHub", "sentrelay", "albrelay", "senttroops", "sentmedical", "sentcommon", "sentcommand",
-	 "receiverSent", "broadcasterSent")
+	"receiverSent", "broadcasterSent")
 
 /obj/machinery/telecomms/relay/preset/sent
 	id = "Patrol Relay"

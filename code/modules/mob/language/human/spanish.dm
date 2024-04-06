@@ -7,7 +7,7 @@
 /datum/language/human/iberian
 	name = LANGUAGE_HUMAN_IBERIAN
 	desc = "One of the few great common Earth languages to come about naturally, this language developed in the late 21st century during\
-			 a historic period of closeness between Spain, Portugal and their former colonies."
+			a historic period of closeness between Spain, Portugal and their former colonies."
 	colour = "iberian"
 	key = "5"
 	shorthand = "Iber"

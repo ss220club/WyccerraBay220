@@ -111,15 +111,15 @@ var/global/const/access_away_iccgn_captain = "ACCESS_ICCGN_CAPTAIN"
 	Являясь одним из членов экипажа разведывательного корабля Пионерского Корпуса ГКК, вы - член прикоммандированного к нему отряда Космодесантных войск ГКК. \
 	По данным бортового компьютера, в данном регионе могут потенциально находиться цели вашей разведывательной экседиции.\
 	\
-	 Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
-	 Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
+	Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
+	Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
 	required_language = LANGUAGE_HUMAN_RUSSIAN
 	whitelisted_species = list(SPECIES_HUMAN, SPECIES_IPC)
 	min_skill = list(SKILL_COMBAT  = SKILL_BASIC,
-					 SKILL_WEAPONS = SKILL_BASIC,
-					 SKILL_HAULING = SKILL_BASIC,
-					 SKILL_MEDICAL = SKILL_BASIC,
-					 SKILL_EVA = SKILL_BASIC)
+					SKILL_WEAPONS = SKILL_BASIC,
+					SKILL_HAULING = SKILL_BASIC,
+					SKILL_MEDICAL = SKILL_BASIC,
+					SKILL_EVA = SKILL_BASIC)
 
 	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_engine_equip)
 
@@ -136,16 +136,16 @@ var/global/const/access_away_iccgn_captain = "ACCESS_ICCGN_CAPTAIN"
 	Являясь одним из членов экипажа разведывательного корабля Пионерского Корпуса ГКК, вы - командир прикоммандированного к нему отряда Космодесантных войск ГКК. \
 	По данным бортового компьютера, в данном регионе могут потенциально находиться цели вашей разведывательной экседиции.\
 	\
-	 Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
-	 Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
+	Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
+	Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
 	required_language = LANGUAGE_HUMAN_RUSSIAN
 	whitelisted_species = list(SPECIES_HUMAN)
 	min_skill = list(SKILL_COMBAT  = SKILL_BASIC,
-					 SKILL_WEAPONS = SKILL_BASIC,
-					 SKILL_HAULING = SKILL_BASIC,
-					 SKILL_MEDICAL = SKILL_BASIC,
-					 SKILL_PILOT = SKILL_TRAINED,
-					 SKILL_EVA = SKILL_BASIC)
+					SKILL_WEAPONS = SKILL_BASIC,
+					SKILL_HAULING = SKILL_BASIC,
+					SKILL_MEDICAL = SKILL_BASIC,
+					SKILL_PILOT = SKILL_TRAINED,
+					SKILL_EVA = SKILL_BASIC)
 
 
 	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_engine_equip)
@@ -166,16 +166,16 @@ var/global/const/access_away_iccgn_captain = "ACCESS_ICCGN_CAPTAIN"
 	Будучи одним из членов экипажа разведывательного корабля Пионерского Корпуса ГКК, вы - капитан разведывательного корабля. \
 	По данным бортового компьютера, в данном регионе могут потенциально находиться цели вашей разведывательной экседиции.\
 	\
-	 Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
-	 Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
+	Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
+	Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
 	required_language = LANGUAGE_HUMAN_RUSSIAN
 	whitelisted_species = list(SPECIES_HUMAN)
 	min_skill = list(SKILL_COMBAT  = SKILL_BASIC,
-					 SKILL_WEAPONS = SKILL_BASIC,
-					 SKILL_HAULING = SKILL_BASIC,
-					 SKILL_MEDICAL = SKILL_BASIC,
-					 SKILL_PILOT = SKILL_TRAINED,
-					 SKILL_EVA = SKILL_BASIC)
+					SKILL_WEAPONS = SKILL_BASIC,
+					SKILL_HAULING = SKILL_BASIC,
+					SKILL_MEDICAL = SKILL_BASIC,
+					SKILL_PILOT = SKILL_TRAINED,
+					SKILL_EVA = SKILL_BASIC)
 
 	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, access_engine_equip)
 
@@ -193,18 +193,18 @@ var/global/const/access_away_iccgn_captain = "ACCESS_ICCGN_CAPTAIN"
 	info = "Вы просыпаетесь и выходите из криосна, ощущая прохладный воздух на своём лице, а также лёгкую тошноту. \
 	Являясь одним из членов экипажа разведывательного корабля Пионерского Корпуса ГКК, ваша задача состоит в медицинской поддержке экипажа. \
 	\
-	 Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
-	 Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
+	Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
+	Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
 	required_language = LANGUAGE_HUMAN_RUSSIAN
 	whitelisted_species = list(SPECIES_HUMAN, SPECIES_IPC)
 	is_semi_antagonist = TRUE
 	min_skill = list(SKILL_COMBAT  = SKILL_BASIC,
-					 SKILL_WEAPONS = SKILL_BASIC,
-					 SKILL_HAULING = SKILL_TRAINED,
-					 SKILL_MEDICAL = SKILL_EXPERIENCED,
-					 SKILL_ANATOMY = SKILL_BASIC,
-					 SKILL_CHEMISTRY = SKILL_BASIC,
-					 SKILL_EVA = SKILL_BASIC)
+					SKILL_WEAPONS = SKILL_BASIC,
+					SKILL_HAULING = SKILL_TRAINED,
+					SKILL_MEDICAL = SKILL_EXPERIENCED,
+					SKILL_ANATOMY = SKILL_BASIC,
+					SKILL_CHEMISTRY = SKILL_BASIC,
+					SKILL_EVA = SKILL_BASIC)
 
 
 
@@ -224,22 +224,22 @@ var/global/const/access_away_iccgn_captain = "ACCESS_ICCGN_CAPTAIN"
 	info = "Вы просыпаетесь и выходите из криосна, ощущая прохладный воздух на своём лице, а также лёгкую тошноту. \
 	Являясь одним из членов экипажа разведывательного корабля Пионерского Корпуса ГКК, ваша задача состоит в ведении огня из ракетных установок, пилотирования корабля, поддержании работоспособности судна и экипировки экипажа. \
 	\
-	 Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
-	 Исключением являются те ситуации, когда вы атакованы противником,  терпите бедствие или на вашем судне аварийная ситуация."
+	Вам крайне нежелательно приближаться к кораблям и станциям с опозновательными знаками, или вступать в огневой контакт с кораблями или войсками ЦПСС без разрешения от командования группировкой. \
+	Исключением являются те ситуации, когда вы атакованы противником,  терпите бедствие или на вашем судне аварийная ситуация."
 	required_language = LANGUAGE_HUMAN_RUSSIAN
 	whitelisted_species = list(SPECIES_HUMAN, SPECIES_IPC)
 	is_semi_antagonist = TRUE
 	min_skill = list(SKILL_COMBAT  = SKILL_BASIC,
-					 SKILL_WEAPONS = SKILL_BASIC,
-					 SKILL_HAULING = SKILL_TRAINED,
-					 SKILL_MEDICAL = SKILL_BASIC,
-					 SKILL_PILOT = SKILL_TRAINED,
-					 SKILL_EVA = SKILL_TRAINED,
-					 SKILL_CONSTRUCTION = SKILL_TRAINED,
-					 SKILL_ELECTRICAL = SKILL_TRAINED,
-					 SKILL_ATMOS  = SKILL_BASIC,
-					 SKILL_ENGINES = SKILL_TRAINED,
-					 SKILL_DEVICES = SKILL_BASIC)
+					SKILL_WEAPONS = SKILL_BASIC,
+					SKILL_HAULING = SKILL_TRAINED,
+					SKILL_MEDICAL = SKILL_BASIC,
+					SKILL_PILOT = SKILL_TRAINED,
+					SKILL_EVA = SKILL_TRAINED,
+					SKILL_CONSTRUCTION = SKILL_TRAINED,
+					SKILL_ELECTRICAL = SKILL_TRAINED,
+					SKILL_ATMOS  = SKILL_BASIC,
+					SKILL_ENGINES = SKILL_TRAINED,
+					SKILL_DEVICES = SKILL_BASIC)
 
 	access = list(access_away_iccgn, access_engine_equip)
 
@@ -256,19 +256,19 @@ var/global/const/access_away_iccgn_captain = "ACCESS_ICCGN_CAPTAIN"
 	Вы - сотрдник отдела 'П' Конфедеративной Службы Безопасности, приписанный к кораблю Пионерского Корпуса. \
 	По данным бортового компьютера, в данном регионе могут потенциально находиться цели вашей разведывательной экседиции.\
 	\
-	 Вашей первичной задачей является сбор разведданных об активности корпоративных судов, судов ЦПСС, а также иной активности, которая покажется вам подозрительной. \
-	 У вас нет права подниматься на борт судов Nanotrasen или ЦПСС. Помните об этом и не провоцируйте ненужные Конфедерации конфликты. \
-	 Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
+	Вашей первичной задачей является сбор разведданных об активности корпоративных судов, судов ЦПСС, а также иной активности, которая покажется вам подозрительной. \
+	У вас нет права подниматься на борт судов Nanotrasen или ЦПСС. Помните об этом и не провоцируйте ненужные Конфедерации конфликты. \
+	Исключением являются те ситуации, когда вы атакованы противником, терпите бедствие или на вашем судне аварийная ситуация."
 	required_language = LANGUAGE_HUMAN_RUSSIAN
 	whitelisted_species = list(SPECIES_HUMAN)
 	is_semi_antagonist = TRUE
 	min_skill = list(SKILL_BUREAUCRACY = SKILL_TRAINED,
-					 SKILL_COMBAT  = SKILL_BASIC,
-					 SKILL_WEAPONS = SKILL_BASIC,
-					 SKILL_HAULING = SKILL_BASIC,
-					 SKILL_MEDICAL = SKILL_BASIC,
-					 SKILL_PILOT = SKILL_TRAINED,
-					 SKILL_EVA = SKILL_BASIC)
+					SKILL_COMBAT  = SKILL_BASIC,
+					SKILL_WEAPONS = SKILL_BASIC,
+					SKILL_HAULING = SKILL_BASIC,
+					SKILL_MEDICAL = SKILL_BASIC,
+					SKILL_PILOT = SKILL_TRAINED,
+					SKILL_EVA = SKILL_BASIC)
 
 	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, access_engine_equip)
 

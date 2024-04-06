@@ -347,7 +347,7 @@
 	if(a_intent == "walk")
 		. *= 1.5
 
-	 . += ..()
+	. += ..()
 
 /mob/living/simple_animal/get_inventory_slot(obj/item/I)
 	return -1

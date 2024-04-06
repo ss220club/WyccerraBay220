@@ -48,7 +48,7 @@
 	if(!has_footsteps())
 		return
 
-	 //every other turf makes a sound
+	//every other turf makes a sound
 	if((step_count % 2) && MOVING_QUICKLY(src))
 		return
 

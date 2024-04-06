@@ -247,11 +247,11 @@
 				return TRUE
 			else
 				user.visible_message(SPAN_WARNING("[user] begins to wipe [H]'s lipstick off with \the [src]."), \
-								 	 SPAN_NOTICE("You begin to wipe off [H]'s lipstick."))
+										SPAN_NOTICE("You begin to wipe off [H]'s lipstick."))
 				if (!do_after(user, 2 SECONDS, H, (DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) & ~DO_BOTH_CAN_TURN))
 					return TRUE
 				user.visible_message(SPAN_NOTICE("[user] wipes [H]'s lipstick off with \the [src]."), \
-									 SPAN_NOTICE("You wipe off [H]'s lipstick."))
+										SPAN_NOTICE("You wipe off [H]'s lipstick."))
 				H.makeup_style = null
 				H.update_body()
 				return TRUE

@@ -6,8 +6,8 @@
 
 	monsters_common = list(/mob/living/simple_animal/hostile/carp = 50, /mob/living/simple_animal/hostile/carp/pike = 1)
 	monsters_uncommon = list(/mob/living/simple_animal/hostile/hivebot = 10,
-	 /mob/living/simple_animal/hostile/hivebot/strong = 1
-	 )
+	/mob/living/simple_animal/hostile/hivebot/strong = 1
+	)
 
 /datum/random_map/winding_dungeon/premade/New()
 	loot_common += subtypesof(/obj/item/reagent_containers/food) + subtypesof(/obj/item/material) + subtypesof(/obj/item/melee)

@@ -302,8 +302,8 @@ The megabot
 	)
 	say_threaten = list(
 		"T-t-t-target located, analyzing...",
-	 	"S-s-scanning tarrrrrget...",
-		 "Possible thrrrreat detected, obtaining classification..."
+		"S-s-scanning tarrrrrget...",
+		"Possible thrrrreat detected, obtaining classification..."
 	)
 	say_maybe_target = list("Possible threat detected. Investigating.", "Anomaly detected, commencing vis-visual sweep.", "Investigating.")
 	say_escalate = list(

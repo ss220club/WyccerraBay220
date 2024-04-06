@@ -95,8 +95,8 @@
 /obj/item/robot_module/medical/surgeon/finalize_equipment()
 	. = ..()
 	for(var/thing in list(
-		 /obj/item/stack/nanopaste,
-		 /obj/item/stack/medical/advanced/bruise_pack
+		/obj/item/stack/nanopaste,
+		/obj/item/stack/medical/advanced/bruise_pack
 		))
 		var/obj/item/stack/medical/stack = locate(thing) in equipment
 		stack.uses_charge = 1
@@ -107,8 +107,8 @@
 	. = ..()
 	var/datum/matter_synth/medicine/medicine = locate() in synths
 	for(var/thing in list(
-		 /obj/item/stack/nanopaste,
-		 /obj/item/stack/medical/advanced/bruise_pack
+		/obj/item/stack/nanopaste,
+		/obj/item/stack/medical/advanced/bruise_pack
 		))
 		var/obj/item/stack/medical/stack = locate(thing) in equipment
 		stack.synths = list(medicine)
@@ -164,9 +164,9 @@
 /obj/item/robot_module/medical/crisis/finalize_equipment()
 	. = ..()
 	for(var/thing in list(
-		 /obj/item/stack/medical/advanced/ointment,
-		 /obj/item/stack/medical/advanced/bruise_pack,
-		 /obj/item/stack/medical/splint
+		/obj/item/stack/medical/advanced/ointment,
+		/obj/item/stack/medical/advanced/bruise_pack,
+		/obj/item/stack/medical/splint
 		))
 		var/obj/item/stack/medical/stack = locate(thing) in equipment
 		stack.uses_charge = 1
@@ -177,9 +177,9 @@
 	. = ..()
 	var/datum/matter_synth/medicine/medicine = locate() in synths
 	for(var/thing in list(
-		 /obj/item/stack/medical/advanced/ointment,
-		 /obj/item/stack/medical/advanced/bruise_pack,
-		 /obj/item/stack/medical/splint
+		/obj/item/stack/medical/advanced/ointment,
+		/obj/item/stack/medical/advanced/bruise_pack,
+		/obj/item/stack/medical/splint
 		))
 		var/obj/item/stack/medical/stack = locate(thing) in equipment
 		stack.synths = list(medicine)

@@ -64,7 +64,7 @@
 /singleton/cultural_info/location/otherskrell
 	name = HOME_SYSTEM_OTHERSKRELL
 	description = "Skrell control a much wider region of space than humanity, and to many their space is seen as uncountably infinite. This planet is one of the many skrellian worlds \
-	 that are less known."
+	that are less known."
 	capital = "None"
 	ruling_body = "None"
 	distance = "None"

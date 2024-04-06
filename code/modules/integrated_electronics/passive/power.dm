@@ -89,7 +89,7 @@
 	desc = "Produces electricity from chemicals."
 	icon_state = "chemical_cell"
 	extended_desc = "This is effectively an internal beaker. It will consume and produce power from phoron, welding fuel, carbon,\
-	 ethanol, nutriment, and blood in order of decreasing efficiency. It will consume fuel only if the battery can take more energy."
+	ethanol, nutriment, and blood in order of decreasing efficiency. It will consume fuel only if the battery can take more energy."
 	atom_flags = ATOM_FLAG_OPEN_CONTAINER
 	complexity = 4
 	inputs = list()

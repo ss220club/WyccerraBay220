@@ -65,7 +65,7 @@ var/global/list/wrapped_species_by_ref = list()
 	if(H)
 		var/datum/species/S = all_species[wrapped_species_by_ref["\ref[H]"]]
 		if(S) return S.get_husk_icon(H)
-	 return ..()
+	return ..()
 
 /datum/species/shapeshifter/handle_pre_spawn(mob/living/carbon/human/H)
 	..()

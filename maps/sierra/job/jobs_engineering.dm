@@ -36,20 +36,20 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/atmos_control,
-							 /datum/computer_file/program/rcon_console,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor)
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/atmos_control,
+							/datum/computer_file/program/rcon_console,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor)
 
 	// SIERRA TODO: need_exp_to_play
 	// need_exp_to_play = 2
 
 /datum/job/senior_engineer/get_description_blurb()
 	return "Старший Инженер выполняет распоряжения Главного Инженера и контролирует повседневную работу отдела.\
-	 Он - очень опытный и высокопоставленный сотрудник, поэтому должен иметь обширные знания во многих \
-	 областях инженерии. При необходимости он может инструктировать рядовых инженеров."
+	Он - очень опытный и высокопоставленный сотрудник, поэтому должен иметь обширные знания во многих \
+	областях инженерии. При необходимости он может инструктировать рядовых инженеров."
 
 /datum/job/engineer
 	title = "Engineer"
@@ -97,12 +97,12 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/atmos_control,
-							 /datum/computer_file/program/rcon_console,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor)
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/atmos_control,
+							/datum/computer_file/program/rcon_console,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor)
 
 /datum/job/engineer/get_description_blurb()
 	return "Инженер поддерживает рабочее состояние систем корабля. Он отвечает за обеспечение энергией, \
@@ -146,12 +146,12 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/atmos_control,
-							 /datum/computer_file/program/rcon_console,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor)
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/atmos_control,
+							/datum/computer_file/program/rcon_console,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor)
 
 /datum/job/engineer_trainee/get_description_blurb()
 	return "Инженер-стажер выполняет несложные поручения инженеров, изучая инженерную механику на практике. \

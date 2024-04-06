@@ -166,7 +166,7 @@
 				   /obj/item/ammo_magazine,
 				   /obj/item/device/flashlight,
 				   /obj/item/tank,
-			 	   /obj/item/device/suit_cooling_unit,
+				   /obj/item/device/suit_cooling_unit,
 				   /obj/item/storage/firstaid,
 				   /obj/item/device/scanner/health,
 				   /obj/item/stack/medical,
@@ -216,7 +216,7 @@
 	glove_type = /obj/item/clothing/gloves/rig/command/hos
 
 	allowed = list(/obj/item/gun,
-	 			  /obj/item/ammo_magazine,
+				  /obj/item/ammo_magazine,
 	  			  /obj/item/handcuffs,
 	   			  /obj/item/device/flashlight,
 	    		  /obj/item/tank,

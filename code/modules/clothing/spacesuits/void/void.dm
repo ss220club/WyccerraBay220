@@ -109,9 +109,9 @@ else if(##equipment_var) {\
 	var/list/part_list = new
 	for(var/obj/item/I in list(helmet,boots,tank))
 		part_list += "[I]"
-	to_chat(user, "[src] has [english_list(part_list)] installed.")
+	. += SPAN_NOTICE("[src] has [english_list(part_list)] installed.")
 	if(tank && distance <= 1)
-		to_chat(user, SPAN_NOTICE("The wrist-mounted pressure gauge reads [max(round(tank.air_contents.return_pressure()),0)] kPa remaining in [tank]."))
+		. += SPAN_NOTICE("The wrist-mounted pressure gauge reads [max(round(tank.air_contents.return_pressure()),0)] kPa remaining in [tank].")
 
 /obj/item/clothing/suit/space/void/refit_for_species(target_species)
 	..()
@@ -237,29 +237,29 @@ else if(##equipment_var) {\
 /obj/item/clothing/suit/space/void/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(user.get_inventory_slot(src) == slot_wear_suit)//maybe I should make this into a proc?
-		to_chat(user, SPAN_WARNING("You cannot modify [src] while it is being worn."))
+		balloon_alert(user, "нужно снять!")
 		return
 
-	if(helmet || boots || tank)
-		var/choice = input("What component would you like to remove?") as null|anything in list(helmet,boots,tank)
-		if(!choice)
-			return
-		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-			return
-		if(choice == tank)	//No, a switch doesn't work here. Sorry. ~Techhead
-			to_chat(user, "You pop [tank] out of [src]'s storage compartment.")
-			user.put_in_hands(tank)
-			src.tank = null
-		else if(choice == helmet)
-			to_chat(user, "You detatch [helmet] from [src]'s helmet mount.")
-			user.put_in_hands(helmet)
-			src.helmet = null
-		else if(choice == boots)
-			to_chat(user, "You detatch [boots] from [src]'s boot mounts.")
-			user.put_in_hands(boots)
-			src.boots = null
-	else
-		to_chat(user, "[src] does not have anything installed.")
+	if(!helmet && !boots && !tank)
+		balloon_alert(user, "внутри пусто!")
+		return
+	var/choice = input("What component would you like to remove?") as null|anything in list(helmet,boots,tank)
+	if(!choice)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(choice == tank && tank)	//No, a switch doesn't work here. Sorry. ~Techhead
+		balloon_alert(user, "[tank] снят")
+		user.put_in_hands(tank)
+		src.tank = null
+	else if(choice == helmet && helmet)
+		balloon_alert(user, "[helmet] снят")
+		user.put_in_hands(helmet)
+		src.helmet = null
+	else if(choice == boots && boots)
+		balloon_alert(user, "[boots] снят")
+		user.put_in_hands(boots)
+		src.boots = null
 
 /obj/item/clothing/suit/space/void/attackby(obj/item/W as obj, mob/user as mob)
 	if(!istype(user,/mob/living))

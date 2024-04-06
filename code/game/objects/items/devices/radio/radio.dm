@@ -624,11 +624,11 @@
 	. = ..()
 	if (distance <= 1 || loc == user)
 		if (b_stat)
-			to_chat(user, SPAN_NOTICE("[src] can be attached and modified!"))
+			. += SPAN_NOTICE("[src] can be attached and modified!")
 		else
-			to_chat(user, SPAN_NOTICE("[src] can not be modified or attached!"))
+			. += SPAN_NOTICE("[src] can not be modified or attached!")
 		if (power_usage && cell)
-			to_chat(user, SPAN_NOTICE("[src] charge meter reads [round(cell.percent(), 0.1)]%."))
+			. += SPAN_NOTICE("[src] charge meter reads [round(cell.percent(), 0.1)]%.")
 
 /obj/item/device/radio/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -728,10 +728,10 @@
 
 /obj/item/device/radio/borg/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!keyslot)
-		USE_FEEDBACK_FAILURE("[src] doesn't have an encryption key to remove.")
+	if(!keyslot)
+		balloon_alert(user, "нет ключей шифрования!")
 		return
-	for (var/channel_name in channels)
+	for(var/channel_name in channels)
 		radio_controller.remove_object(src, radiochannels[channel_name])
 		secure_radio_connections[channel_name] = null
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))

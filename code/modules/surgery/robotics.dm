@@ -216,10 +216,6 @@
 		if(tool.tool_behaviour == TOOL_WELDER)
 			if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return FALSE
-		if(istype(tool, /obj/item/gun/energy/plasmacutter))
-			var/obj/item/gun/energy/plasmacutter/cutter = tool
-			if(!cutter.slice(user))
-				return FALSE
 		return TRUE
 	return FALSE
 

@@ -114,11 +114,8 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	cover_open = !cover_open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, cover_open)
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] [cover_open ? "opens" : "closes"] [src]'s panel with [tool]."),
-		SPAN_NOTICE("You [cover_open ? "open" : "close"] [src]'s panel with [tool].")
-	)
 
 /obj/item/device/suit_cooling_unit/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Power Cell - Install cell
@@ -177,12 +174,12 @@
 		return
 
 	if (on)
-		to_chat(user, "It's switched on and running.")
+		. += SPAN_NOTICE("It's switched on and running.")
 	else
-		to_chat(user, "It is switched off.")
+		. += SPAN_NOTICE("It is switched off.")
 
 	if (cover_open)
-		to_chat(user, "The panel is open.")
+		. += SPAN_NOTICE("The panel is open.")
 
 	if (cell)
-		to_chat(user, "The charge meter reads [round(cell.percent())]%.")
+		. += SPAN_NOTICE("The charge meter reads [round(cell.percent())]%.")

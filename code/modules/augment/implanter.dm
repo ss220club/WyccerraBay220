@@ -22,13 +22,13 @@
 
 /obj/item/device/augment_implanter/examine(mob/user)
 	. = ..()
-	if (isobserver(user) || (user.mind && user.mind.special_role != null) || user.skill_check(SKILL_DEVICES, SKILL_MASTER))
-		to_chat(user, "A single-use augment installer with no medical knowledge necessary! " + SPAN_DANGER("Painkillers not included!"))
-	if (isnull(augment))
-		to_chat(user, "It seems to be empty.")
+	if(isobserver(user) || (user.mind && user.mind.special_role != null) || user.skill_check(SKILL_DEVICES, SKILL_MASTER))
+		. += SPAN_NOTICE("A single-use augment installer with no medical knowledge necessary! " + SPAN_DANGER("Painkillers not included!"))
+	if(isnull(augment))
+		. += SPAN_NOTICE("It seems to be empty.")
 		return
-	to_chat(user, SPAN_BOLD("It contains:"))
-	augment.examine(arglist(args))
+	. += SPAN_NOTICE("It contains:")
+	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(examinate), user, augment), 0.1 SECONDS)
 
 /obj/item/device/augment_implanter/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

@@ -266,9 +266,9 @@
 /obj/item/hand/examine(mob/user)
 	. = ..()
 	if((!concealed || src.loc == user) && length(cards))
-		to_chat(user, "It contains: ")
+		. += SPAN_NOTICE("It contains: ")
 		for(var/datum/playingcard/P in cards)
-			to_chat(user, "The [P.name].")
+			. += SPAN_NOTICE("The [P.name].")
 
 /obj/item/hand/on_update_icon(direction = 0)
 	if(!length(cards))

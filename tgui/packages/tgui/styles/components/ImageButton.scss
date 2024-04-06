@@ -90,8 +90,7 @@ $bg-map: colors.$bg-map !default;
 }
 
 .ImageButton--selected {
-  @include button-style($color-selected);
-  border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
+  @include button-style($color-selected, true);
 }
 
 .ImageButton__content__vertical {
@@ -209,6 +208,5 @@ $bg-map: colors.$bg-map !default;
 
 .ImageButton__item--selected {
   @include item-style($color-selected);
-  border: base.em(1px) solid rgba(lighten($color-selected, 100%), 0.25);
   border-left: 0;
 }

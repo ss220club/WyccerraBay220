@@ -71,13 +71,6 @@
 		else
 			M.randomize_gender()
 
-	if((spawn_flags & CORPSE_SPAWNER_RANDOM_PRONOUNS))
-		if(species_choice in pronouns_per_species)
-			var/choice = pick(pronouns_per_species[species_choice])
-			M.change_pronouns(choice)
-		else
-			M.randomize_pronouns()
-
 	if((spawn_flags & CORPSE_SPAWNER_RANDOM_SKIN_TONE))
 		if(species_choice in skin_tones_per_species)
 			M.change_skin_tone(pick(skin_tones_per_species[species_choice]))

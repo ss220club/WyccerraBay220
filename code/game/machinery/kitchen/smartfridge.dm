@@ -118,7 +118,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panel_open = !panel_open
-	user.visible_message("[user] [panel_open ? "opens" : "closes"] the maintenance panel of [src].", "You [panel_open ? "open" : "close"] the maintenance panel of [src].")
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
 	update_icon()
 	SSnano.update_uis(src)
 

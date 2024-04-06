@@ -32,7 +32,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 
 /obj/item/integrated_circuit/examine(mob/user)
 	. = ..()
-	external_examine(user)
+	. += external_examine(user)
 
 /obj/item/integrated_circuit/ShiftClick(mob/user)
 	if (isliving(user))
@@ -42,12 +42,13 @@ a creative player the means to solve many problems.  Circuits are held inside an
 
 // This should be used when someone is examining while the case is opened.
 /obj/item/integrated_circuit/proc/internal_examine(mob/user)
-	any_examine(user)
+	. = list()
+	. += any_examine(user)
 	interact(user)
 
 // This should be used when someone is examining from an 'outside' perspective, e.g. reading a screen or LED.
 /obj/item/integrated_circuit/proc/external_examine(mob/user)
-	any_examine(user)
+	return any_examine(user)
 
 /obj/item/integrated_circuit/proc/any_examine(mob/user)
 	return
@@ -286,12 +287,13 @@ a creative player the means to solve many problems.  Circuits are held inside an
 
 	else if(href_list["remove"] && assembly)
 		if(held_item.tool_behaviour == TOOL_SCREWDRIVER)
+			if(!held_item.use_as_tool(src, usr, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+				return
 			disconnect_all()
 			dropInto(loc)
-			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
-			to_chat(usr, SPAN_NOTICE("You pop \the [src] out of the case, and slide it out."))
+			to_chat(usr, SPAN_NOTICE("You pop [src] out of the case, and slide it out."))
 		else
-			to_chat(usr, SPAN_WARNING("You need a screwdriver to remove components."))
+			balloon_alert(usr, "нужна отвертка!")
 		interact_with_assembly(usr)
 		. = IC_TOPIC_REFRESH
 

@@ -68,12 +68,13 @@
 	storage_compartment = locate() in src
 
 /obj/item/mech_component/chassis/show_missing_parts(mob/user)
+	. = ..()
 	if(!cell)
-		to_chat(user, SPAN_WARNING("It is missing a power cell."))
+		. += SPAN_WARNING("It is missing a power cell.")
 	if(!diagnostics)
-		to_chat(user, SPAN_WARNING("It is missing a diagnostics unit."))
+		. += SPAN_WARNING("It is missing a diagnostics unit.")
 	if(!m_armour)
-		to_chat(user, SPAN_WARNING("It is missing exosuit armour plating."))
+		. += SPAN_WARNING("It is missing exosuit armour plating.")
 
 /obj/item/mech_component/chassis/Initialize()
 	. = ..()

@@ -121,13 +121,11 @@
 /obj/item/device/suit_sensor_jammer/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 3)
-		var/list/message = list()
-		message += "This device appears to be [active ? "" : "in"]active and "
+		. += SPAN_NOTICE("This device appears to be [active ? "" : "in"]active and ")
 		if(bcell)
-			message += "displays a charge level of [bcell.percent()]%."
+			. += SPAN_NOTICE("displays a charge level of [bcell.percent()]%.")
 		else
-			message += "is lacking a cell."
-		to_chat(user, jointext(message,.))
+			. += SPAN_NOTICE("is lacking a cell.")
 
 /obj/item/device/suit_sensor_jammer/CanUseTopic(user, state)
 	if(!bcell || bcell.charge <= 0)

@@ -41,21 +41,18 @@
 	. = ..()
 	if(open)
 		if(power_cell)
-			to_chat(user, "There is \a [power_cell] in \the [src].")
+			. += SPAN_NOTICE("There is \a [power_cell] in \the [src].")
 		else
-			to_chat(user, "There is no cell in \the [src].")
-	to_chat(user, "The internal capacitor currently has [round(currently_stored_power/max_stored_power * 100)]% charge.")
+			. += SPAN_NOTICE("There is no cell in \the [src].")
+	. += SPAN_NOTICE("The internal capacitor currently has [round(currently_stored_power/max_stored_power * 100)]% charge.")
 
 /obj/item/device/personal_shield/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	open = !open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("\The [user] [open ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
-		SPAN_NOTICE("You [open ? "open" : "close"] \the [src]'s panel with \the [tool].")
-	)
 
 /obj/item/device/personal_shield/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Power Cell - Install cell

@@ -29,11 +29,11 @@
 	. = ..()
 	if(distance <= 0)
 		if(det_time > 1)
-			to_chat(user, "The timer is set to [det_time/10] seconds.")
+			. += SPAN_NOTICE("The timer is set to [det_time/10] seconds.")
 			return
 		if(isnull(det_time))
 			return
-		to_chat(user, "\The [src] is set for instant detonation.")
+		. += SPAN_NOTICE("[src] is set for instant detonation.")
 
 
 /obj/item/grenade/attack_self(mob/living/user)
@@ -70,16 +70,16 @@
 	switch(det_time)
 		if(1)
 			det_time = 1 SECONDS
-			to_chat(user, SPAN_NOTICE("You set the [name] for 1 second detonation time."))
+			balloon_alert(user, "1 секунда")
 		if(1 SECONDS)
 			det_time = 3 SECONDS
-			to_chat(user, SPAN_NOTICE("You set the [name] for 3 second detonation time."))
+			balloon_alert(user, "3 секунды")
 		if(3 SECONDS)
 			det_time = 5 SECONDS
-			to_chat(user, SPAN_NOTICE("You set the [name] for 5 second detonation time."))
+			balloon_alert(user, "5 секунд")
 		if(5 SECONDS)
 			det_time = 1
-			to_chat(user, SPAN_NOTICE("You set the [name] for instant detonation."))
+			balloon_alert(user, "мгновенная детонация")
 	add_fingerprint(user)
 
 /obj/item/grenade/attack_hand()

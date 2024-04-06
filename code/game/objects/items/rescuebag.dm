@@ -31,11 +31,12 @@
 
 /obj/item/bodybag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
 	if(!airtank)
+		balloon_alert(user, "нет баллона!")
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	to_chat(user, "You remove [airtank] from [src].")
+	balloon_alert_to_viewers("баллон снят!")
 	airtank.dropInto(loc)
 	airtank = null
 
@@ -54,10 +55,10 @@
 /obj/item/bodybag/rescue/examine(mob/user)
 	. = ..()
 	if(airtank)
-		to_chat(user,"The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
-		to_chat(user,"The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
+		. += SPAN_NOTICE("The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
+		. += SPAN_NOTICE("The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
 	else
-		to_chat(user, SPAN_WARNING("The air tank is missing."))
+		. += SPAN_WARNING("The air tank is missing.")
 
 /obj/structure/closet/body_bag/rescue
 	name = "rescue bag"
@@ -93,17 +94,14 @@
 
 /obj/structure/closet/body_bag/rescue/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!airtank)
-		USE_FEEDBACK_FAILURE("[src] has no airtank to remove.")
+	if(!airtank)
+		balloon_alert(user, "нет баллона!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
+	balloon_alert_to_viewers("баллон снят!")
 	airtank.dropInto(loc)
 	update_icon()
-	user.visible_message(
-		SPAN_NOTICE("[user] removes [src]'s [airtank.name] with [tool]."),
-		SPAN_NOTICE("You remove [src]'s [airtank.name] with [tool].")
-	)
 	airtank = null
 
 /obj/structure/closet/body_bag/rescue/use_tool(obj/item/tool, mob/user, list/click_params)
@@ -152,12 +150,12 @@
 /obj/structure/closet/body_bag/rescue/examine(mob/user)
 	. = ..()
 	if(airtank)
-		to_chat(user,"The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
-		to_chat(user,"The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
+		. += SPAN_NOTICE("The pressure meter on [airtank] shows '[airtank.air_contents.return_pressure()] kPa'.")
+		. += SPAN_NOTICE("The distribution valve on [airtank] is set to '[airtank.distribute_pressure] kPa'.")
 	else
-		to_chat(user, SPAN_WARNING("The air tank is missing."))
-	to_chat(user,"The pressure meter on [src] shows '[atmo.return_pressure()] kPa'.")
+		. += SPAN_WARNING("The air tank is missing.")
+	. += SPAN_NOTICE("The pressure meter on [src] shows '[atmo.return_pressure()] kPa'.")
 	if(Adjacent(user)) //The bag's rather thick and opaque from a distance.
-		to_chat(user, SPAN_INFO("You peer into [src]."))
+		. += SPAN_INFO("You peer into [src].")
 		for(var/mob/living/L in contents)
-			L.examine(arglist(args))
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(examinate), user, L), 0.1 SECONDS)

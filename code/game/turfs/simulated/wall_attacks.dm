@@ -171,10 +171,6 @@
 			thermitemelt(user)
 			return TRUE
 
-		else if(istype(W, /obj/item/gun/energy/plasmacutter))
-			thermitemelt(user)
-			return TRUE
-
 		else if( istype(W, /obj/item/melee/energy/blade) )
 			var/obj/item/melee/energy/blade/EB = W
 			EB.spark_system.start()
@@ -269,8 +265,7 @@
 			if(5)
 				if(W.tool_behaviour == TOOL_SCREWDRIVER)
 					to_chat(user, SPAN_NOTICE("You begin removing the support lines."))
-					playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
-					if(!do_after(user, (W.toolspeed * 4) SECONDS, src, DO_REPAIR_CONSTRUCT) || construction_stage != 5)
+					if(!W.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || construction_stage != 5)
 						return TRUE
 					construction_stage = 4
 					update_icon()

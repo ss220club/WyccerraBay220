@@ -265,11 +265,11 @@
 /obj/machinery/atmospherics/unary/vent_pump/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "A small gauge in the corner reads [round(last_flow_rate, 0.1)] L/s; [round(last_power_draw)] W")
+		. += SPAN_NOTICE("A small gauge in the corner reads [round(last_flow_rate, 0.1)] L/s; [round(last_power_draw)] W")
 	else
-		to_chat(user, "You are too far away to read the gauge.")
+		. += SPAN_NOTICE("You are too far away to read the gauge.")
 	if(welded)
-		to_chat(user, "It seems welded shut.")
+		. += SPAN_NOTICE("It seems welded shut.")
 
 /obj/machinery/atmospherics/unary/vent_pump/multitool_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

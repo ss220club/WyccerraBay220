@@ -24,7 +24,7 @@
 /obj/item/gun/launcher/net/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 2 && chambered)
-		to_chat(user, "\A [chambered] is chambered.")
+		. += SPAN_NOTICE("[chambered] is chambered.")
 
 /obj/item/gun/launcher/net/proc/can_load(obj/item/net_shell/S, mob/user)
 	if(chambered)
@@ -110,4 +110,4 @@
 
 /obj/item/gun/launcher/net/borg/examine(mob/user)
 	. = ..()
-	to_chat(user, "There are [LAZYLEN(shells)] shell\s loaded.")
+	. += SPAN_NOTICE("There are [LAZYLEN(shells)] shell\s loaded.")

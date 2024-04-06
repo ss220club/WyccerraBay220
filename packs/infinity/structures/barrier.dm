@@ -20,15 +20,15 @@
 	update_icon()
 
 /obj/structure/barrier/examine(mob/user)
-	..()
+	. = ..()
 	if(health>=200)
-		to_chat(user, SPAN_NOTICE("It looks undamaged."))
+		. += SPAN_NOTICE("It looks undamaged.")
 	if(health>=140 && health<200)
-		USE_FEEDBACK_FAILURE("It has small dents.")
+		. += SPAN_WARNING("It has small dents.")
 	if(health>=80 && health<140)
-		USE_FEEDBACK_FAILURE("It has medium dents.")
+		. += SPAN_WARNING("It has medium dents.")
 	if(health<80)
-		to_chat(user, "<span class='danger'>It will break apart soon!</span>")
+		. += SPAN_DANGER("It will break apart soon!")
 
 /obj/structure/barrier/Destroy()
 	if(health <= 0)
@@ -122,11 +122,11 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(!density)
 		return
-	visible_message(SPAN_DANGER("[user] begins to [deployed ? "un" : ""]deploy [src]..."))
+	balloon_alert(user, "[deployed ? "деактивация креплений" : "активация креплений"]")
 	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
-	visible_message(SPAN_NOTICE("[user] has [deployed ? "un" : ""]deployed [src]."))
 	deployed = !deployed
+	balloon_alert_to_viewers("[deployed ? "крепления активны!" : "крепления деактивированы!"]")
 	if(deployed)
 		basic_chance = 70
 	else

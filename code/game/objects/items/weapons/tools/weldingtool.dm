@@ -33,6 +33,7 @@
 	update_icon()
 
 	. = ..()
+	RegisterSignal(src, COMSIG_TOOL_ATOM_ACTED_PRIMARY(TOOL_WELDER), TYPE_PROC_REF(/atom, update_icon))
 
 /obj/item/weldingtool/Destroy()
 	if(welding)
@@ -45,9 +46,9 @@
 /obj/item/weldingtool/examine(mob/user, distance)
 	. = ..()
 	if (!tank)
-		to_chat(user, "There is no [welding_resource] source attached.")
+		. += SPAN_NOTICE("There is no [welding_resource] source attached.")
 	else
-		to_chat(user, (distance <= 1 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[tank] is attached.")
+		. += SPAN_NOTICE((distance <= 1 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[tank] is attached.")
 
 /obj/item/weldingtool/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -181,7 +182,6 @@
 		if(user)
 			user.welding_eyecheck()//located in mob_helpers.dm
 			set_light(5, 0.7, COLOR_LIGHT_CYAN)
-			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
 		return TRUE
 	else
 		balloon_alert(user, "нужно больше топлива!")

@@ -35,7 +35,7 @@
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	open = !open
-	user.show_message(SPAN_NOTICE("You [open ? "open" : "close"] the service panel."))
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
 
 /obj/item/storage/secure/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (!locked)
@@ -115,7 +115,7 @@
 /obj/item/storage/secure/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, text("The service panel is [src.open ? "open" : "closed"]."))
+		. += SPAN_NOTICE("The service panel is [src.open ? "open" : "closed"].")
 
 
 /obj/item/storage/secure/emag_act(remaining_charges, mob/user, feedback)

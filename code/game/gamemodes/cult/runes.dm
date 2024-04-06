@@ -42,8 +42,7 @@
 /obj/rune/examine(mob/user)
 	. = ..()
 	if(iscultist(user))
-		to_chat(user, "This is \a [cultname] rune.")
-
+		. += SPAN_OCCULT("This is [cultname] rune.")
 
 /obj/rune/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cultist Tome - Remove rune
@@ -176,7 +175,7 @@
 /obj/rune/teleport/examine(mob/user)
 	. = ..()
 	if(iscultist(user))
-		to_chat(user, "Its name is [destination].")
+		. += SPAN_OCCULT("Its name is [destination].")
 
 /obj/rune/teleport/cast(mob/living/user)
 	if(user.loc == src)

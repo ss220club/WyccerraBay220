@@ -405,44 +405,53 @@
 /obj/machinery/proc/malf_upgrade(mob/living/silicon/ai/user)
 	return FALSE
 
-/obj/machinery/CouldUseTopic(mob/user)
-	..()
+/obj/machinery/proc/click_sound(mob/user)
 	if(clicksound && world.time > next_clicksound && istype(user, /mob/living/carbon))
 		next_clicksound = world.time + CLICKSOUND_INTERVAL
 		playsound(src, clicksound, clickvol)
 
+/obj/machinery/CouldUseTopic(mob/user)
+	. = ..()
+	click_sound(user)
+
+/obj/machinery/tgui_act(action, list/params)
+	. = ..()
+	click_sound(usr)
+
 /// Displays all components in the machine to the user.
 /obj/machinery/proc/display_parts(mob/user)
-	to_chat(user, SPAN_NOTICE("Following parts detected in the machine:"))
+	. = list()
+	. += SPAN_NOTICE("Following parts detected in the machine:")
 	for(var/obj/item/C in component_parts)
-		to_chat(user, SPAN_NOTICE("	[C.name]"))
+		. += SPAN_NOTICE("	[C.name]")
 	for(var/path in uncreated_component_parts)
 		var/obj/item/thing = path
-		to_chat(user, SPAN_NOTICE("	[initial(thing.name)] ([uncreated_component_parts[path] || 1])"))
+		. += SPAN_NOTICE("	[initial(thing.name)] ([uncreated_component_parts[path] || 1])")
 
 /obj/machinery/examine(mob/user)
 	. = ..()
 	if(panel_open)
-		to_chat(user, SPAN_NOTICE("The service panel is open."))
+		. += SPAN_NOTICE("The service panel is open.")
 	if(component_parts && hasHUD(user, HUD_SCIENCE))
-		display_parts(user)
+		. += display_parts(user)
 	if(GET_FLAGS(stat, MACHINE_STAT_NOSCREEN))
-		to_chat(user, SPAN_WARNING("It is missing a screen, making it hard to interact with."))
+		. += SPAN_WARNING("It is missing a screen, making it hard to interact with.")
 	else if(GET_FLAGS(stat, MACHINE_STAT_NOINPUT))
-		to_chat(user, SPAN_WARNING("It is missing any input device."))
+		. += SPAN_WARNING("It is missing any input device.")
 	else if((!is_powered()) && !interact_offline)
-		to_chat(user, SPAN_WARNING("It is not receiving power."))
+		. += SPAN_WARNING("It is not receiving power.")
 	if(construct_state && construct_state.mechanics_info())
-		to_chat(user, SPAN_NOTICE("It can be <a href='?src=\ref[src];mechanics_text=1'>manipulated</a> using tools."))
+		. += SPAN_NOTICE("It can be <a href='?src=\ref[src];mechanics_text=1'>manipulated</a> using tools.")
 	var/list/missing = missing_parts()
 	if(missing)
 		var/list/parts = list()
 		for(var/type in missing)
 			var/obj/item/fake_thing = type
 			parts += "[num2text(missing[type])] [initial(fake_thing.name)]"
-		to_chat(user, SPAN_WARNING("\The [src] is missing [english_list(parts)], rendering it inoperable."))
+		. += SPAN_WARNING("[src] is missing [english_list(parts)], rendering it inoperable.")
 	if (user.skill_check(SKILL_CONSTRUCTION, SKILL_BASIC) || isobserver(user))
-		to_chat(user, SPAN_NOTICE(machine_desc))
+		if(machine_desc)
+			. += SPAN_NOTICE(machine_desc)
 
 /obj/machinery/get_mechanics_info()
 	. = ..()

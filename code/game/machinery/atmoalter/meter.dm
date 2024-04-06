@@ -83,19 +83,19 @@
 	. = ..()
 
 	if(distance > 3 && !(istype(user, /mob/living/silicon/ai) || isghost(user)))
-		to_chat(user, SPAN_WARNING("You are too far away to read it."))
+		. += SPAN_WARNING("You are too far away to read it.")
 
 	else if(inoperable())
-		to_chat(user, SPAN_WARNING("The display is off."))
+		. += SPAN_WARNING("The display is off.")
 
 	else if(src.target)
 		var/datum/gas_mixture/environment = target.return_air()
 		if(environment)
-			to_chat(user, "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [round(environment.temperature,0.01)]K ([round(environment.temperature-T0C,0.01)]&deg;C)")
+			. += SPAN_NOTICE("The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [round(environment.temperature,0.01)]K ([round(environment.temperature-T0C,0.01)]&deg;C)")
 		else
-			to_chat(user, "The sensor error light is blinking.")
+			. += SPAN_NOTICE("The sensor error light is blinking.")
 	else
-		to_chat(user, "The connect error light is blinking.")
+		. += SPAN_NOTICE("The connect error light is blinking.")
 
 
 /obj/machinery/meter/interface_interact(mob/user)

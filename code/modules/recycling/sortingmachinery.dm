@@ -125,9 +125,9 @@
 	. = ..()
 	if(distance <= 4)
 		if(sortTag)
-			to_chat(user, SPAN_NOTICE("It is labeled \"[sortTag]\""))
+			. += SPAN_NOTICE("It is labeled \"[sortTag]\"")
 		if(examtext)
-			to_chat(user, SPAN_NOTICE("It has a note attached which reads, \"[examtext]\""))
+			. += SPAN_NOTICE("It has a note attached which reads, \"[examtext]\"")
 
 ///Procs exclusive to the package subtype.
 /obj/structure/bigDelivery/package/Initialize(mapload, obj/structure/closet/parcel, wrap_type)
@@ -457,9 +457,9 @@
 	. = ..()
 	if(distance <= 4)
 		if(sortTag)
-			to_chat(user, SPAN_NOTICE("It is labeled \"[sortTag]\""))
+			. += SPAN_NOTICE("It is labeled \"[sortTag]\"")
 		if(examtext)
-			to_chat(user, SPAN_NOTICE("It has a note attached which reads, \"[examtext]\""))
+			. += SPAN_NOTICE("It has a note attached which reads, \"[examtext]\"")
 
 /obj/item/device/destTagger
 	name = "destination tagger"
@@ -594,22 +594,14 @@
 	return
 
 /obj/machinery/disposal/deliveryChute/screwdriver_act(mob/living/user, obj/item/tool)
-	switch(c_mode)
-		if(0)
-			. = ITEM_INTERACT_SUCCESS
-			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-				return
-			c_mode = 1
-			to_chat(user, SPAN_NOTICE("You remove the screws around the power connection."))
-		if(1)
-			. = ITEM_INTERACT_SUCCESS
-			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-				return
-			c_mode = 0
-			to_chat(user, SPAN_NOTICE("You attach the screws around the power connection."))
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	c_mode = !c_mode
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, c_mode)
 
 /obj/machinery/disposal/deliveryChute/welder_act(mob/living/user, obj/item/tool)
-	if(c_mode != 1)
+	if(!c_mode)
 		return
 	. = ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, 1))

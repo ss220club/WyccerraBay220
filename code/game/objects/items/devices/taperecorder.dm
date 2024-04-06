@@ -47,10 +47,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	maintenance = !maintenance
-	user.visible_message(
-		SPAN_NOTICE("[user] [maintenance ? "opens" : "closes"] [src]'s lid with [tool]."),
-		SPAN_NOTICE("You [maintenance ? "open" : "close"] [src]'s lid with [tool].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, maintenance)
 
 /obj/item/device/taperecorder/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Tape - Insert tape
@@ -109,7 +106,7 @@
 /obj/item/device/taperecorder/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1 && maintenance)
-		to_chat(user, SPAN_NOTICE("The wires are exposed."))
+		. += SPAN_NOTICE("The wires are exposed.")
 
 /obj/item/device/taperecorder/hear_talk(mob/living/M as mob, msg, verb="says", datum/language/speaking=null)
 	var/speaker = null
@@ -458,23 +455,17 @@
 
 /obj/item/device/tape/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if (!max_capacity)
-		USE_FEEDBACK_FAILURE("[src] has no tape to wind.")
+	if(!max_capacity)
+		balloon_alert(user, "нет касеты!")
 		return
-	if (!ruined)
-		USE_FEEDBACK_FAILURE("[src]'s tape doesn't need re-winding.")
+	if(!ruined)
+		balloon_alert(user, "касета не повреждена!")
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts winding [src]'s tape back in with [tool]."),
-		SPAN_NOTICE("You start winding [src]'s tape back in with [tool].")
-	)
+	USE_FEEDBACK_REPAIR_START(user)
 	if(!tool.use_as_tool(src, user, 12 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT) || !max_capacity || !ruined)
 		return
 	fix()
-	user.visible_message(
-		SPAN_NOTICE("[user] winds [src]'s tape back in with [tool]."),
-		SPAN_NOTICE("You wind [src]'s tape back in with [tool].")
-	)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/item/device/tape/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -581,6 +572,6 @@
 /obj/item/device/tape/loose/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, SPAN_NOTICE("It looks long enough to hold [max_capacity] seconds worth of recording."))
+		. += SPAN_NOTICE("It looks long enough to hold [max_capacity] seconds worth of recording.")
 		if(doctored && user.skill_check(SKILL_FORENSICS, SKILL_MASTER))
-			to_chat(user, SPAN_NOTICE("It has been tampered with..."))
+			. += SPAN_NOTICE("It has been tampered with...")

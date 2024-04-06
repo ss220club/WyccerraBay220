@@ -62,4 +62,4 @@
 
 /obj/item/device/modkit/examine(mob/user)
 	. = ..(user)
-	to_chat(user, "It looks as though it modifies hardsuits to fit [target_species] users.")
+	. += SPAN_NOTICE("It looks as though it modifies hardsuits to fit [target_species] users.")

@@ -45,9 +45,9 @@
 	. = ..()
 	if(user.skill_check(SKILL_DEVICES, SKILL_BASIC))
 		if(length(restricted_software))
-			to_chat(user, SPAN_SUBTLE("It seems it would require [english_list(restricted_software)] to be used."))
+			. += SPAN_NOTICE("It seems it would require [english_list(restricted_software)] to be used.")
 		if(length(restricted_hardpoints))
-			to_chat(user, SPAN_SUBTLE("You figure it could be mounted in the [english_list(restricted_hardpoints)]."))
+			. += SPAN_NOTICE("You figure it could be mounted in the [english_list(restricted_hardpoints)].")
 
 /obj/item/mech_equipment/proc/deactivate()
 	active = FALSE

@@ -117,15 +117,15 @@
 
 	if (mode)
 		var/datum/reagent/R = reagent_ids[mode]
-		to_chat(user, SPAN_NOTICE("It is currently producing [initial(R.name)] and has [reagent_volumes[R]] out of [volume] units left."))
+		. += SPAN_NOTICE("It is currently producing [initial(R.name)] and has [reagent_volumes[R]] out of [volume] units left.")
 	else
 		var/obj/item/reagent_containers/container = dispense.resolve()
 		if (istype(container))
 			var/datum/reagents/R = container.reagents
 			if (istype(R))
-				to_chat(user, SPAN_NOTICE("It is currently dispensing from \the [container] which has [R.total_volume] out of [R.maximum_volume] units left."))
+				. += SPAN_NOTICE("It is currently dispensing from \the [container] which has [R.total_volume] out of [R.maximum_volume] units left.")
 				return
-		to_chat(user, SPAN_WARNING("It is currently empty."))
+		. += SPAN_WARNING("It is currently empty.")
 
 /obj/item/reagent_containers/borghypo/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = TRUE)
 	var/data = list()
@@ -296,10 +296,10 @@
 /obj/item/robot_rack/bottle/examine(mob/user)
 	. = ..()
 	var/mob/living/silicon/robot/R = user
-	if (istype(R))
+	if(istype(R))
 		var/obj/item/reagent_containers/borghypo/hypo = locate() in R.module.equipment
-		if (istype(hypo))
-			to_chat(user, "Its contents are available to \the [hypo].")
+		if(istype(hypo))
+			. += SPAN_NOTICE("Its contents are available to [hypo].")
 
 // Extra message for if you try to pick up beakers
 /obj/item/robot_rack/bottle/resolve_attackby(obj/O, mob/user, click_params)

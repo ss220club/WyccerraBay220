@@ -19,9 +19,9 @@
 /obj/item/weldingtool/electric/examine(mob/user, distance)
 	. = ..()
 	if (!cell)
-		to_chat(user, "There is no [welding_resource] source attached.")
+		. += SPAN_NOTICE("There is no [welding_resource] source attached.")
 	else
-		to_chat(user, (distance == 0 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[cell] is attached.")
+		. += SPAN_NOTICE((distance == 0 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[cell] is attached.")
 
 /obj/item/weldingtool/electric/use_after(obj/O, mob/living/user)
 	if(istype(O, /obj/structure/reagent_dispensers/fueltank))
@@ -48,13 +48,13 @@
 /obj/item/weldingtool/electric/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!cell)
-		to_chat(user, SPAN_WARNING("[src] has no cell installed."))
+		USE_FEEDBACK_CELL_MISSING(user)
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	cell.dropInto(get_turf(src))
 	user.put_in_hands(cell)
-	to_chat(user, SPAN_NOTICE("You pop [cell] out of [src]."))
+	USE_FEEDBACK_CELL_REMOVED(user)
 	welding = FALSE
 	cell = null
 	update_icon()

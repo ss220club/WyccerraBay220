@@ -20,12 +20,13 @@
 	. = ..()
 
 /obj/item/mech_component/sensors/show_missing_parts(mob/user)
+	. = ..()
 	if(!radio)
-		to_chat(user, SPAN_WARNING("It is missing a radio."))
+		. += SPAN_WARNING("It is missing a radio.")
 	if(!camera)
-		to_chat(user, SPAN_WARNING("It is missing a camera."))
+		. += SPAN_WARNING("It is missing a camera.")
 	if(!software)
-		to_chat(user, SPAN_WARNING("It is missing a software control module."))
+		. += SPAN_WARNING("It is missing a software control module.")
 
 /obj/item/mech_component/sensors/prebuild()
 	radio = new(src)
@@ -105,7 +106,7 @@
 
 /obj/item/mech_component/control_module/examine(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("It has [max_installed_software - LAZYLEN(installed_software)] empty slot\s remaining out of [max_installed_software]."))
+	. += SPAN_NOTICE("It has [max_installed_software - LAZYLEN(installed_software)] empty slot\s remaining out of [max_installed_software].")
 
 /obj/item/mech_component/control_module/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ..()

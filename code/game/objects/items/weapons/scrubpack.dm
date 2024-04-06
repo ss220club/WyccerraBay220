@@ -43,7 +43,7 @@
 /obj/item/scrubpack/examine(mob/user, distance)
 	. = ..()
 	if (distance < 5)
-		to_chat(user, "It [cell ? "has" : "is missing"] a cell and [tank ? "has" : "is missing"] a tank.")
+		. += SPAN_NOTICE("It [cell ? "has" : "is missing"] a cell and [tank ? "has" : "is missing"] a tank.")
 	if (distance < 2)
 		if (tank)
 			var/datum/gas_mixture/air = tank.return_air()
@@ -59,7 +59,7 @@
 						display = "low ([display])"
 					else
 						display = "very low ([display])"
-			to_chat(user, "[tank] pressure is [display]")
+			. += SPAN_NOTICE("[tank] pressure is [display]")
 		if (cell)
 			var/display = cell.percent()
 			if (user.skill_check(SKILL_ELECTRICAL, SKILL_BASIC))
@@ -72,15 +72,15 @@
 						display = "low ([display]%)"
 			else
 				display = "[display]%"
-			to_chat(user, "[cell] charge is [display]")
+			. += SPAN_NOTICE("[cell] charge is [display]")
 
 /obj/item/scrubpack/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(enabled)
-		to_chat(user, SPAN_WARNING("Turn [src] off first!"))
+		USE_FEEDBACK_NEED_DISABLED(user)
 		return
 	if(!cell && !tank)
-		to_chat(user, SPAN_WARNING("[src] doesn't have anything you can remove."))
+		balloon_alert(user, "нечего снимать!")
 		return
 	var/list/options = list()
 	if(cell)

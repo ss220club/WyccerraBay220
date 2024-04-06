@@ -29,12 +29,12 @@
 	if(distance > 2)
 		return
 
-	to_chat(user, SPAN_NOTICE("It contains:"))
+	. += SPAN_NOTICE("It contains:")
 	if(reagents && length(reagents.reagent_list))
 		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, SPAN_NOTICE("[R.volume] units of [R.name]"))
+			. += SPAN_NOTICE("[R.volume] units of [R.name]")
 	else
-		to_chat(user, SPAN_NOTICE("Nothing."))
+		. += SPAN_NOTICE("Nothing.")
 
 /obj/structure/reagent_dispensers/verb/set_amount_per_transfer_from_this()
 	set name = "Set transfer amount"
@@ -112,9 +112,8 @@
 
 /obj/structure/reagent_dispensers/watertank/examine(mob/user)
 	. = ..()
-
 	if(modded)
-		to_chat(user, SPAN_WARNING("Someone has wrenched open its tap - it's spilling everywhere!"))
+		. += SPAN_WARNING("Someone has wrenched open its tap - it's spilling everywhere!")
 
 /obj/structure/reagent_dispensers/watertank/wrench_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
@@ -172,11 +171,10 @@
 
 /obj/structure/reagent_dispensers/fueltank/examine(mob/user)
 	. = ..()
-
 	if (modded)
-		to_chat(user, SPAN_WARNING("The faucet is wrenched open, leaking fuel!"))
+		. += SPAN_WARNING("The faucet is wrenched open, leaking fuel!")
 	if(rig)
-		to_chat(user, SPAN_NOTICE("There is some kind of device rigged to the tank."))
+		. += SPAN_NOTICE("There is some kind of device rigged to the tank.")
 
 /obj/structure/reagent_dispensers/fueltank/attack_hand()
 	if (rig)

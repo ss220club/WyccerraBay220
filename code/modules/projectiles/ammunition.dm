@@ -65,13 +65,14 @@
 /obj/item/ammo_casing/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!BB)
-		to_chat(user, SPAN_NOTICE("There is no bullet in the casing to inscribe anything into."))
+		balloon_alert(user, "нет пули!")
 		return
 	var/tmp_label = ""
 	var/label_text = sanitizeSafe(input(user, "Inscribe some text into [initial(BB.name)]","Inscription",tmp_label), MAX_NAME_LEN)
 	if(length(label_text) > 20)
 		to_chat(user, SPAN_WARNING("The inscription can be at most 20 characters long."))
-	else if(!label_text)
+		return
+	if(!label_text)
 		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 			return
 		to_chat(user, SPAN_NOTICE("You scratch the inscription off of [initial(BB)]."))
@@ -90,9 +91,9 @@
 /obj/item/ammo_casing/examine(mob/user)
 	. = ..()
 	if(caliber)
-		to_chat(user, "Its caliber is [caliber].")
+		. += SPAN_NOTICE("Its caliber is [caliber].")
 	if (!BB)
-		to_chat(user, "This one is spent.")
+		. += SPAN_NOTICE("This one is spent.")
 
 
 //An item that holds casings and can be used to put them inside guns
@@ -222,7 +223,7 @@
 
 /obj/item/ammo_magazine/examine(mob/user)
 	. = ..()
-	to_chat(user, "There [(length(stored_ammo) == 1)? "is" : "are"] [length(stored_ammo)] round\s left!")
+	. += SPAN_NOTICE("There [(length(stored_ammo) == 1)? "is" : "are"] [length(stored_ammo)] round\s left!")
 
 
 //magazine icon state caching

@@ -43,7 +43,7 @@
 /obj/machinery/light_switch/examine(mob/user, distance)
 	. = ..()
 	if(distance)
-		to_chat(user, "A light switch. It is [on? "on" : "off"].")
+		. += SPAN_NOTICE("It is [on? "on" : "off"].")
 
 /obj/machinery/light_switch/proc/set_state(newstate)
 	if(on != newstate)

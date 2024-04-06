@@ -53,7 +53,7 @@
 /obj/machinery/pipelayer/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!metal)
-		to_chat(user, "[src] is empty.")
+		balloon_alert(user, "внутри пусто!")
 		return
 	var/m = round(input(usr,"Please specify the amount of metal to remove","Remove metal",min(round(metal),50)) as num, 1)
 	m = min(m, 50)
@@ -92,7 +92,7 @@
 
 /obj/machinery/pipelayer/examine(mob/user)
 	. = ..()
-	to_chat(user, "[src] has [metal] sheet\s, is set to produce [P_type_t], and auto-dismantling is [!a_dis?"de":""]activated.")
+	. += SPAN_NOTICE("[src] has [metal] sheet\s, is set to produce [P_type_t], and auto-dismantling is [!a_dis?"de":""]activated.")
 
 /obj/machinery/pipelayer/proc/reset()
 	on=0

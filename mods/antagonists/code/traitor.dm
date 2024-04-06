@@ -69,7 +69,8 @@
 
 /obj/item/device/syndiejaunter/examine(mob/user, distance)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("Display is [usable ? "online and shows number [usable]" : "offline"]."))
+	. += SPAN_NOTICE("Display is [usable ? "online and shows number [usable]" : "offline"].")
+
 /obj/item/device/syndiejaunter/Initialize()
 	. = ..()
 	update_icon()
@@ -266,6 +267,5 @@
 
 /obj/item/device/scanner/health/syndie/examine(mob/user)
 	. = ..()
-	if (isobserver(user) || (user.mind && user.mind.special_role != null) || user.skill_check(SKILL_DEVICES, SKILL_MASTER) || user.skill_check(SKILL_MEDICAL, SKILL_MASTER))
-		to_chat(user, "The scanner contacts do not look as they should. ")
-		return
+	if(isobserver(user) || (user.mind && user.mind.special_role != null) || user.skill_check(SKILL_DEVICES, SKILL_MASTER) || user.skill_check(SKILL_MEDICAL, SKILL_MASTER))
+		. += SPAN_NOTICE("The scanner contacts do not look as they should.")

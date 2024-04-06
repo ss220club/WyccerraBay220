@@ -189,10 +189,10 @@
 /obj/machinery/status_display/examine(mob/user)
 	. = ..()
 	if(mode != STATUS_DISPLAY_BLANK && mode != STATUS_DISPLAY_ALERT)
-		to_chat(user, "The display says:<br>\t[sanitize(message1)]<br>\t[sanitize(message2)]")
+		. += SPAN_NOTICE("The display says:<br>\t[sanitize(message1)]<br>\t[sanitize(message2)]")
 	if(mode == STATUS_DISPLAY_ALERT || status_display_show_alert_border)
 		var/singleton/security_state/security_state = GET_SINGLETON(GLOB.using_map.security_state)
-		to_chat(user, "The current alert level is [security_state.current_security_level.name].")
+		. += SPAN_NOTICE("The current alert level is [security_state.current_security_level.name].")
 
 /obj/machinery/status_display/proc/set_message(m1, m2)
 	if(m1)

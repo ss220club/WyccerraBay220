@@ -154,4 +154,4 @@
 /obj/machinery/atmospherics/unary/heater/examine(mob/user)
 	. = ..()
 	if(panel_open)
-		to_chat(user, "The maintenance hatch is open.")
+		. += SPAN_NOTICE("The maintenance hatch is open.")

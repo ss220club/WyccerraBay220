@@ -81,10 +81,10 @@
 		if(GIRDER_STATE_NORMAL)
 			. = ITEM_INTERACT_SUCCESS
 			if(!anchored)
-				USE_FEEDBACK_FAILURE("[src] needs to be anchored before you can add reinforcements.")
+				USE_FEEDBACK_NEED_UNANCHOR(user)
 				return
 			if(reinf_material)
-				USE_FEEDBACK_FAILURE("[src] already has [reinf_material.adjective_name] reinforcement.")
+				balloon_alert(user, "уже имеются укрепления!")
 				return
 			if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 				return
@@ -173,12 +173,27 @@
 				SPAN_NOTICE("You remove [src]'s support struts with [tool].")
 			)
 
+/obj/structure/girder/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_start_check(user, 1))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts cutting [src] with [tool]."),
+		SPAN_NOTICE("You start cutting [src] with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, (reinf_material ? 4 : 2) SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] cuts apart [src] with [tool]."),
+		SPAN_NOTICE("You cut apart [src] with [tool].")
+	)
+	if(reinf_material)
+		reinf_material.place_dismantled_product(get_turf(src))
+	dismantle()
+
 /obj/structure/girder/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Diamond Drill, Plasmacutter, Psiblade (Paramount) - Slice girder
-	if (istype(tool, /obj/item/pickaxe/diamonddrill) || istype(tool, /obj/item/gun/energy/plasmacutter) || istype(tool, /obj/item/psychic_power/psiblade/master/grand/paramount))
-		var/obj/item/gun/energy/plasmacutter/cutter = tool
-		if (istype(cutter) && !cutter.slice(user))
-			return TRUE
+	if (istype(tool, /obj/item/pickaxe/diamonddrill) || istype(tool, /obj/item/psychic_power/psiblade/master/grand/paramount))
 		playsound(loc, 'sound/items/Welder.ogg', 50, TRUE)
 		user.visible_message(
 			SPAN_NOTICE("[user] starts cutting [src] with [tool]."),

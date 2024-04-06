@@ -94,7 +94,7 @@
 /obj/item/device/core_sampler/examine(mob/user, distance)
 	. = ..(user)
 	if(distance <= 2)
-		to_chat(user, SPAN_NOTICE("Used to extract geological core samples - this one is [sampled_turf ? "full" : "empty"], and has [num_stored_bags] bag[num_stored_bags != 1 ? "s" : ""] remaining."))
+		. += SPAN_NOTICE("Used to extract geological core samples - this one is [sampled_turf ? "full" : "empty"], and has [num_stored_bags] bag[num_stored_bags != 1 ? "s" : ""] remaining.")
 
 
 /obj/item/device/core_sampler/use_tool(obj/item/tool, mob/user, list/click_params)

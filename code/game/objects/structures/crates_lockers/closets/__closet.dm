@@ -62,15 +62,15 @@
 			if(!AM.anchored)
 				content_size += content_size(AM)
 		if(!content_size)
-			to_chat(user, "It is empty.")
+			. += SPAN_NOTICE("It is empty.")
 		else if(storage_capacity > content_size*4)
-			to_chat(user, "It is barely filled.")
+			. += SPAN_NOTICE("It is barely filled.")
 		else if(storage_capacity > content_size*2)
-			to_chat(user, "It is less than half full.")
+			. += SPAN_NOTICE("It is less than half full.")
 		else if(storage_capacity > content_size)
-			to_chat(user, "There is still some free space.")
+			. += SPAN_NOTICE("There is still some free space.")
 		else
-			to_chat(user, "It is full.")
+			. += SPAN_NOTICE("It is full.")
 
 /obj/structure/closet/damage_health(damage, damage_type, damage_flags, severity, skip_can_damage_check)
 	. = ..()
@@ -296,14 +296,6 @@
 			SPAN_NOTICE("[user] empties [weapon] into [src]."),
 			SPAN_NOTICE("You empty [weapon] into [src].")
 		)
-		return TRUE
-
-	// Plasma Cutter - Dismantle closet
-	if (istype(weapon, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = weapon
-		if (!cutter.slice(user))
-			return TRUE
-		slice_into_parts(weapon, user)
 		return TRUE
 
 	return ..()

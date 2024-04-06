@@ -330,13 +330,13 @@
 /obj/item/gun/projectile/examine(mob/user)
 	. = ..()
 	if(is_jammed && user.skill_check(SKILL_WEAPONS, SKILL_BASIC))
-		to_chat(user, SPAN_WARNING("It looks jammed."))
+		. += SPAN_WARNING("It looks jammed.")
 	if(ammo_magazine)
-		to_chat(user, "It has \a [ammo_magazine] loaded.")
+		. += SPAN_NOTICE("It has [ammo_magazine] loaded.")
 	if(user.skill_check(SKILL_WEAPONS, SKILL_TRAINED))
-		to_chat(user, "Has [getAmmo()] round\s remaining.")
+		. += SPAN_NOTICE("Has [getAmmo()] round\s remaining.")
 	if (user.skill_check(SKILL_WEAPONS, SKILL_EXPERIENCED))
-		to_chat(user, "[src.DrawChamber()]")
+		. += SPAN_NOTICE("[src.DrawChamber()]")
 
 /obj/item/gun/projectile/proc/getAmmo()
 	var/bullets = 0

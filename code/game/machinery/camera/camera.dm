@@ -41,10 +41,10 @@
 
 /obj/machinery/camera/examine(mob/user)
 	. = ..()
-	if (MACHINE_IS_BROKEN(src))
-		to_chat(user, SPAN_WARNING("It is completely demolished."))
-	else if (inoperable(MACHINE_STAT_EMPED))
-		to_chat(user, SPAN_WARNING("It's unpowered."))
+	if(MACHINE_IS_BROKEN(src))
+		. += SPAN_WARNING("It is completely demolished.")
+	else if(inoperable(MACHINE_STAT_EMPED))
+		. += SPAN_WARNING("It's unpowered.")
 
 /obj/machinery/camera/malf_upgrade(mob/living/silicon/ai/user)
 	..()
@@ -178,10 +178,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panel_open = !panel_open
-	user.visible_message(
-		SPAN_WARNING("[user] screws [src]'s panel [panel_open ? "open" : "closed"]!"),
-		SPAN_NOTICE("You screw [src]'s panel [panel_open ? "open" : "closed"].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
 
 /obj/machinery/camera/wirecutter_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS

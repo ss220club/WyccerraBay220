@@ -73,15 +73,15 @@ var/global/list/tank_gauge_cache = list()
 		if (proxyassembly.assembly)
 			mods += user.skill_check(SKILL_DEVICES, SKILL_TRAINED) ? "an ignition assembly" : "a device"
 		if (length(mods))
-			to_chat(user, "[english_list(mods)] are attached.")
+			. += SPAN_NOTICE("[english_list(mods)] are attached.")
 	else
 		return
 
 	if (distance < 3)
 		if (GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-			to_chat(user, SPAN_WARNING("The emergency relief valve has been welded shut!"))
+			. += SPAN_WARNING("The emergency relief valve has been welded shut!")
 		else if (GET_FLAGS(tank_flags, TANK_FLAG_FORCED))
-			to_chat(user, SPAN_WARNING("The emergency relief valve has been forced open!"))
+			. += SPAN_WARNING("The emergency relief valve has been forced open!")
 	else
 		return
 
@@ -106,12 +106,10 @@ var/global/list/tank_gauge_cache = list()
 					descriptive = "cold"
 				else
 					descriptive = "bitterly cold"
-		to_chat(user, SPAN_ITALIC("[src] feels [descriptive]."))
+		. += SPAN_NOTICE("[src] feels [descriptive].")
 
 /obj/item/tank/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
-	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
-		return
 	add_fingerprint(user)
 	user.visible_message(
 		SPAN_ITALIC("[user] starts to use [tool] on [src]."),
@@ -120,7 +118,7 @@ var/global/list/tank_gauge_cache = list()
 		range = 5
 	)
 	if(GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
-		to_chat(user, SPAN_WARNING("The valve is stuck. You can't move it at all!"))
+		balloon_alert(user, "клапан заварен!")
 		return
 	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = SKILL_ATMOS, do_flags = DO_REPAIR_CONSTRUCT) || GET_FLAGS(tank_flags, TANK_FLAG_WELDED))
 		return

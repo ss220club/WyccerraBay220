@@ -3,7 +3,6 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 /datum/preferences
 	var/species = SPECIES_HUMAN
 	var/gender = MALE					//gender of character (well duh)
-	var/pronouns = PRONOUNS_THEY_THEM
 	var/tts_seed = "arthas" // TTS seed
 	var/b_type = "A+"					//blood type (not-chooseable)
 	var/head_hair_style = "Bald"				//Hair type
@@ -34,16 +33,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		pref.species = "human"
 	pref.age = R.read("age")
 	pref.gender = R.read("gender")
-	pref.pronouns = R.read("pronouns")
 	pref.tts_seed = R.read("tts_seed")
-	if(R.get_version() < 3 && !(pref.pronouns))
-		switch (pref.gender)
-			if (MALE)
-				pref.pronouns = PRONOUNS_HE_HIM
-			if (FEMALE)
-				pref.pronouns = PRONOUNS_SHE_HER
-			else
-				pref.pronouns = PRONOUNS_THEY_THEM
 	pref.head_hair_color = R.read("head_hair_color")
 	if (!pref.head_hair_color)
 		pref.head_hair_color = rgb(R.read("hair_red"), R.read("hair_green"), R.read("hair_blue"))
@@ -71,7 +61,6 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 /datum/category_item/player_setup_item/physical/body/save_character(datum/pref_record_writer/W)
 	W.write("species", pref.species)
 	W.write("gender", pref.gender)
-	W.write("pronouns", pref.pronouns)
 	W.write("tts_seed", pref.tts_seed)
 	W.write("age", pref.age)
 	W.write("head_hair_color", pref.head_hair_color)
@@ -104,7 +93,6 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	var/datum/species/mob_species = all_species[pref.species]
 
 	pref.gender = sanitize_inlist(pref.gender, mob_species.genders, pick(mob_species.genders))
-	pref.pronouns = sanitize_inlist(pref.pronouns, mob_species.pronouns, pick(mob_species.pronouns))
 	pref.age = sanitize_integer(pref.age, mob_species.min_age, mob_species.max_age, initial(pref.age))
 
 	var/low_skin_tone = mob_species ? (35 - mob_species.max_skin_tone()) : -185
@@ -145,7 +133,6 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	. += "<br />[TBTN("set_species", mob_species.name, "Selected")]"
 	. += "<br /><br /><b>Body</b> [BTN("random", "Randomize")]"
 	. += "<br />[TBTN("gender", pref.gender, "Bodytype")]"
-	. += "<br />[TBTN("pronouns", pref.pronouns, "Pronouns")]"
 	. += "<br />[TBTN("tts_explorer", pref.tts_seed, "Voice")]"
 	. += "<br />[TBTN("age", pref.age, "Age")]"
 	. += "<br />[TBTN("blood_type", pref.b_type, "Blood Type")]"
@@ -273,13 +260,6 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		pref.randomize_appearance_and_body_for()
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
-	else if(href_list["pronouns"])
-		var/new_pronouns = tgui_input_list(user, "Choose your character's pronouns", CHARACTER_PREFERENCE_INPUT_TITLE, mob_species.pronouns, pref.pronouns)
-		mob_species = all_species[pref.species]
-		if(new_pronouns && CanUseTopic(user) && (new_pronouns in mob_species.pronouns))
-			pref.pronouns = new_pronouns
-		return TOPIC_REFRESH
-
 	if(href_list["tts_explorer"])
 		var/datum/tgui_module/tts_seeds_explorer/explorer = explorer_users[usr]
 		if(!explorer)
@@ -333,8 +313,6 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			mob_species = all_species[pref.species]
 			if(!(pref.gender in mob_species.genders))
 				pref.gender = mob_species.genders[1]
-			if(!(pref.pronouns in mob_species.pronouns))
-				pref.pronouns = mob_species.pronouns[1]
 
 			ResetAllHair()
 

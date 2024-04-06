@@ -94,32 +94,29 @@
 /obj/item/gun/magnetic/examine(mob/user)
 	. = ..()
 	if(cell)
-		to_chat(user, SPAN_NOTICE("The installed [cell.name] has a charge level of [round((cell.charge/cell.maxcharge)*100)]%."))
+		. += SPAN_NOTICE("The installed [cell.name] has a charge level of [round((cell.charge/cell.maxcharge)*100)]%.")
 	if(capacitor)
-		to_chat(user, SPAN_NOTICE("The installed [capacitor.name] has a charge level of [round((capacitor.charge/capacitor.max_charge)*100)]%."))
+		. += SPAN_NOTICE("The installed [capacitor.name] has a charge level of [round((capacitor.charge/capacitor.max_charge)*100)]%.")
 	if(!cell || !capacitor)
-		to_chat(user, SPAN_NOTICE("The capacitor charge indicator is blinking [SPAN_COLOR("[COLOR_RED]", "red")]. Maybe you should check the cell or capacitor."))
+		. += SPAN_NOTICE("The capacitor charge indicator is blinking [SPAN_COLOR("[COLOR_RED]", "red")]. Maybe you should check the cell or capacitor.")
 	else
 		if(capacitor.charge < power_cost)
-			to_chat(user, SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_ORANGE]", "amber")]."))
+			. += SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_ORANGE]", "amber")].")
 		else
-			to_chat(user, SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_GREEN]", "green")]."))
+			. += SPAN_NOTICE("The capacitor charge indicator is [SPAN_COLOR("[COLOR_GREEN]", "green")].")
 
 /obj/item/gun/magnetic/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!removable_components)
-		USE_FEEDBACK_FAILURE("[src]'s components can't be swapped out.")
+		balloon_alert(user, "нельзя снять компоненты!")
 		return
 	if(!capacitor)
-		USE_FEEDBACK_FAILURE("[src] has no capacitor to remove.")
+		balloon_alert(user, "нет конденсатора!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	user.put_in_hands(capacitor)
-	user.visible_message(
-		SPAN_NOTICE("[user] detaches [capacitor] from [src] with [tool]."),
-		SPAN_NOTICE("You detach [capacitor] from [src] with [tool].")
-	)
+	balloon_alert(user, "конденсатор снят")
 	capacitor = null
 	power_per_tick = 0
 	update_icon()

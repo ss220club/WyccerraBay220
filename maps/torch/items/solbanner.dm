@@ -21,7 +21,7 @@
 /obj/structure/solbanner/exo/examine(mob/user)
 	. = ..()
 	if(plantedby)
-		to_chat(user, SPAN_NOTICE("[plantedby]"))
+		. += SPAN_NOTICE(plantedby)
 
 /obj/item/solbanner
 	name = "\improper SCG banner capsule"

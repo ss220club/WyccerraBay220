@@ -21,7 +21,7 @@
 /obj/structure/decorative/ed209/examine(mob/user)
 	. = ..()
 	if(anchored)
-		to_chat(user, "Magnetic chains hold it in place. Somebody isn't taking any risks with this one.")
+		. += SPAN_NOTICE("Magnetic chains hold it in place. Somebody isn't taking any risks with this one.")
 
 /obj/structure/decorative/ed209/on_update_icon()
 	. = ..()
@@ -32,21 +32,15 @@
 /obj/structure/decorative/ed209/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(!user.skill_check(SKILL_DEVICES, SKILL_BASIC))
-		USE_FEEDBACK_FAILURE("You're not skill enough to salvage [src].")
+		balloon_alert(user, "не хватает навыков!")
 		return
 	if(salvaged)
-		USE_FEEDBACK_FAILURE("It doesn't seem like there's anything of use left on [src].")
+		balloon_alert(user, "нет полезных компонентов!")
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] starts rummaging through [src] with [tool]."),
-		SPAN_NOTICE("You start looking for useful components [src] with [tool].")
-	)
+	balloon_alert(user, "снятие компонентов")
 	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || salvaged)
 		return
-	user.visible_message(
-		SPAN_NOTICE("[user] detaches some components from [src] with [tool]."),
-		SPAN_NOTICE("You detach some useful components from [src] with [tool].")
-	)
+	balloon_alert_to_viewers("компоненты сняты")
 	var/obj/item/part = pickweight(loot)
 	part = new part(get_turf(user))
 	user.put_in_hands(part)

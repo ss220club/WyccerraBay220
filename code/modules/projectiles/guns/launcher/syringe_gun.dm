@@ -91,10 +91,9 @@
 
 /obj/item/gun/launcher/syringe/examine(mob/user, distance)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("\The [src] has [length(darts)] dart\s left!"))
-
-	if (next)
-		to_chat(user, SPAN_WARNING("\The [src] is ready to fire!"))
+	. += SPAN_NOTICE("[src] has [length(darts)] dart\s left!")
+	if(next)
+		. += SPAN_WARNING("[src] is ready to fire!")
 
 
 /obj/item/gun/launcher/syringe/consume_next_projectile()
@@ -184,4 +183,4 @@
 /obj/item/gun/launcher/syringe/disguised/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "The button is a little stiff.")
+		. += SPAN_NOTICE("The button is a little stiff.")

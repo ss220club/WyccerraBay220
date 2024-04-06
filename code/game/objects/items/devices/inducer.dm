@@ -59,7 +59,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	opened = !opened
-	to_chat(user, SPAN_NOTICE("You [opened ? "open" : "close"] the battery compartment."))
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, opened)
 	update_icon()
 
 /obj/item/inducer/attackby(obj/item/W, mob/user)
@@ -154,11 +154,11 @@
 	. = ..()
 	var/obj/item/cell/MyC = get_cell()
 	if(MyC)
-		to_chat(M, SPAN_NOTICE("Its display shows: [MyC.percent()]%."))
+		. += SPAN_NOTICE("Its display shows: [MyC.percent()]%.")
 	else
-		to_chat(M,SPAN_NOTICE("Its display is dark."))
+		. += SPAN_NOTICE("Its display is dark.")
 	if(opened)
-		to_chat(M,SPAN_NOTICE("Its battery compartment is open."))
+		. += SPAN_NOTICE("Its battery compartment is open.")
 
 /obj/item/inducer/on_update_icon()
 	ClearOverlays()

@@ -61,7 +61,7 @@
 /obj/structure/sign/double/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_BLOCKING
 	// Screwdriver - Block interaction
-	USE_FEEDBACK_FAILURE("[src] cannot be removed.")
+	balloon_alert(user, "нельзя снять!")
 
 /obj/structure/sign/double/map
 	name = "map"
@@ -462,6 +462,6 @@
 /obj/item/sign/medipolma/examine(mob/user)
 	. = ..()
 	if(claimant)
-		to_chat(user,"This one belongs to Dr.[claimant], MD.")
+		. += SPAN_NOTICE("This one belongs to Dr.[claimant], MD.")
 	else
-		to_chat(user,"The name is left blank for some reason.")
+		. += SPAN_NOTICE("The name is left blank for some reason.")

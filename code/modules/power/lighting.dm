@@ -57,15 +57,18 @@
 	. = ..()
 	if(distance > 2)
 		return
-
 	switch(stage)
-		if(LIGHT_STAGE_EMPTY) to_chat(user, "It's an empty frame.")
-		if(LIGHT_STAGE_WIRED) to_chat(user, "It's wired.")
-		if(LIGHT_STAGE_COMPLETE) to_chat(user, "The casing is closed.")
+		if(LIGHT_STAGE_EMPTY)
+			. += SPAN_NOTICE("It's an empty frame.")
+		if(LIGHT_STAGE_WIRED)
+			. += SPAN_NOTICE("It's wired.")
+		if(LIGHT_STAGE_COMPLETE)
+			. += SPAN_NOTICE("The casing is closed.")
 
 /obj/machinery/light_construct/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(stage != LIGHT_STAGE_WIRED)
+		balloon_alert(user, "нужно добавить проводку!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -387,13 +390,13 @@
 	var/fitting = get_fitting_name()
 	switch(get_status())
 		if(LIGHT_OK)
-			to_chat(user, "It is turned [on? "on" : "off"].")
+			. += SPAN_NOTICE("It is turned [on? "on" : "off"].")
 		if(LIGHT_EMPTY)
-			to_chat(user, "The [fitting] has been removed.")
+			. += SPAN_NOTICE("The [fitting] has been removed.")
 		if(LIGHT_BURNED)
-			to_chat(user, "The [fitting] is burnt out.")
+			. += SPAN_NOTICE("The [fitting] is burnt out.")
 		if(LIGHT_BROKEN)
-			to_chat(user, "The [fitting] has been smashed.")
+			. += SPAN_NOTICE("The [fitting] has been smashed.")
 
 /// Fetches the name of `light_type`.
 /obj/machinery/light/proc/get_fitting_name()
@@ -445,6 +448,7 @@
 /obj/machinery/light/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_SUCCESS
 	if(lightbulb)
+		balloon_alert(user, "нужно убрать лампочку!")
 		return
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -682,8 +686,8 @@
 
 /obj/item/light/examine(mob/user)
 	. = ..()
-	if (reagents?.total_volume && Adjacent(user))
-		to_chat(user, SPAN_WARNING("There's some sort of fluid inside [src]."))
+	if(reagents?.total_volume && Adjacent(user))
+		. += SPAN_WARNING("There's some sort of fluid inside [src].")
 
 /obj/item/light/get_color()
 	return b_colour

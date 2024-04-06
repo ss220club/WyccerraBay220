@@ -248,22 +248,21 @@
 		var/terminal = terminal()
 		if(opened)
 			if(has_electronics && terminal)
-				to_chat(user, "The cover is [opened==2?"removed":"open"] and the power cell is [ get_cell() ? "installed" : "missing"].")
+				. += SPAN_NOTICE("The cover is [opened==2?"removed":"open"] and the power cell is [ get_cell() ? "installed" : "missing"].")
 			else if (!has_electronics && terminal)
-				to_chat(user, "There are some wires but no any electronics.")
+				. += SPAN_NOTICE("There are some wires but no any electronics.")
 			else if (has_electronics && !terminal)
-				to_chat(user, "Electronics installed but not wired.")
+				. += SPAN_NOTICE("Electronics installed but not wired.")
 			else /* if (!has_electronics && !terminal) */
-				to_chat(user, "There is no electronics nor connected wires.")
+				. += SPAN_NOTICE("There is no electronics nor connected wires.")
 
 		else
 			if (GET_FLAGS(stat, MACHINE_STAT_MAINT))
-				to_chat(user, "The cover is closed. Something wrong with it: it doesn't work.")
+				. += SPAN_NOTICE("The cover is closed. Something wrong with it: it doesn't work.")
 			else if (hacker && !hacker.hacked_apcs_hidden)
-				to_chat(user, "The cover is locked.")
+				. += SPAN_NOTICE("The cover is locked.")
 			else
-				to_chat(user, "The cover is closed.")
-
+				. += SPAN_NOTICE("The cover is closed.")
 
 // update the APC icon to show the three base states
 // also add overlays for indicator lights
@@ -488,7 +487,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(opened)
 		if(get_cell())
-			to_chat(user, SPAN_WARNING("Either close the cover or remove the cell first."))
+			balloon_alert(user, "нужно снять батарею!")
 			return
 
 		switch(has_electronics)
@@ -500,24 +499,24 @@
 					return
 				has_electronics = ELECTRONICS_SECURED
 				set_stat(MACHINE_STAT_MAINT, FALSE)
-				to_chat(user, "You screw the circuit electronics into place.")
+				balloon_alert(user, "плата закручена")
 				update_icon()
 			if(ELECTRONICS_SECURED)
 				if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 					return
 				has_electronics = ELECTRONICS_PLUGGED
 				set_stat(MACHINE_STAT_MAINT, TRUE)
-				to_chat(user, "You unfasten the electronics.")
+				balloon_alert(user, "плата откручена")
 				update_icon()
 			if(ELECTRONICS_NONE)
-				to_chat(user, SPAN_WARNING("There is no power control board to secure!"))
+				balloon_alert(user, "нет платы!")
 		return
 
 	// Otherwise, if not opened, expose the wires.
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	wiresexposed = !wiresexposed
-	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+	USE_FEEDBACK_WIRING_EXPOSED(user, wiresexposed)
 	update_icon()
 
 /obj/machinery/power/apc/wirecutter_act(mob/living/user, obj/item/tool)

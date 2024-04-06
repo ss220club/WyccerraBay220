@@ -750,7 +750,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	wiresexposed = !wiresexposed
-	to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+	USE_FEEDBACK_WIRING_EXPOSED(user, wiresexposed)
 	update_icon()
 
 /obj/machinery/alarm/wrench_act(mob/living/user, obj/item/tool)

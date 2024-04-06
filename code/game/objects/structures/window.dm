@@ -102,29 +102,27 @@
 
 /obj/structure/window/examine(mob/user)
 	. = ..(user)
-	to_chat(user, SPAN_NOTICE("It is fitted with [material.display_name] pane."))
+	. += SPAN_NOTICE("It is fitted with [material.display_name] pane.")
 	if(reinf_material)
-		to_chat(user, SPAN_NOTICE("It is reinforced with [reinf_material.display_name] lattice."))
+		. += SPAN_NOTICE("It is reinforced with [reinf_material.display_name] lattice.")
 
 	if (reinf_material)
 		switch (construction_state)
 			if (CONSTRUCT_STATE_UNANCHORED)
-				to_chat(user, SPAN_WARNING("The window is not in the frame."))
+				. += SPAN_WARNING("The window is not in the frame.")
 			if (CONSTRUCT_STATE_ANCHORED)
-				to_chat(user, SPAN_WARNING("The window is pried into the frame but not yet fastened."))
+				. += SPAN_WARNING("The window is pried into the frame but not yet fastened.")
 			if (CONSTRUCT_STATE_COMPLETE)
-				to_chat(user, SPAN_NOTICE("The window is fastened to the frame."))
+				. += SPAN_NOTICE("The window is fastened to the frame.")
 
 	if (anchored)
-		to_chat(user, SPAN_NOTICE("It is fastened to [get_turf(src)]."))
+		. += SPAN_NOTICE("It is fastened to [get_turf(src)].")
 	else
-		to_chat(user, SPAN_WARNING("It is not fastened to anything."))
-
+		. += SPAN_NOTICE("It is not fastened to anything.")
 	if (paint_color)
-		to_chat(user, SPAN_NOTICE("[material] pane is stained with paint."))
-
+		. += SPAN_NOTICE("[material] pane is stained with paint.")
 	if (polarized)
-		to_chat(user, SPAN_NOTICE("It appears to be wired."))
+		. += SPAN_NOTICE("It appears to be wired.")
 
 /obj/structure/window/examine_damage_state(mob/user)
 	var/damage_percentage = get_damage_percentage()
@@ -426,26 +424,6 @@
 			user.show_message(SPAN_WARNING("It looks like it could use more sheets"), VISIBLE_MESSAGE)
 		return TRUE
 
-	// Plasmacutter - Dismantle window
-	if(istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/plasmacutter = tool
-		if(!plasmacutter.slice(user))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] starts slicing [src] apart with [tool]."),
-			SPAN_NOTICE("You start slicing [src] apart with [tool].")
-		)
-		if(!user.do_skilled((tool.toolspeed * 2) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		playsound(src, 'sound/items/Welder.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("[user] slices [src] apart with [tool]."),
-			SPAN_NOTICE("You slice [src] apart with [tool].")
-		)
-		dismantle()
-		return TRUE
-
 	return ..()
 
 
@@ -717,7 +695,7 @@
 		for(var/obj/O in loc)
 			if((O != src) && O.density && !(O.atom_flags & ATOM_FLAG_CHECKS_BORDER) \
 			&& !(istype(O, /obj/structure/wall_frame) || istype(O, /obj/structure/grille)))
-				to_chat(user, SPAN_NOTICE("There isn't enough space to install [src]."))
+				balloon_alert(user, "недостаточно места!")
 				return FALSE
 	return TRUE
 

@@ -23,7 +23,7 @@
 /obj/structure/janitorialcart/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "[src] [icon2html(src, viewers(get_turf(src)))] contains [reagents.total_volume] unit\s of liquid!")
+		. += SPAN_NOTICE("[src] [icon2html(src, viewers(get_turf(src)))] contains [reagents.total_volume] unit\s of liquid!")
 
 
 /obj/structure/janitorialcart/use_tool(obj/item/tool, mob/user, list/click_params)
@@ -242,9 +242,9 @@
 	if(distance > 1)
 		return
 
-	to_chat(user, "[icon2html(src, user)] This [callme] contains [reagents.total_volume] unit\s of water!")
+	. += SPAN_NOTICE("[icon2html(src, user)] This [callme] contains [reagents.total_volume] unit\s of water!")
 	if(mybag)
-		to_chat(user, "\A [mybag] is hanging on the [callme].")
+		. += SPAN_NOTICE("[mybag] is hanging on the [callme].")
 
 
 /obj/structure/bed/chair/janicart/use_tool(obj/item/tool, mob/user, list/click_params)

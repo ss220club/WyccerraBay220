@@ -111,7 +111,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	hatch_open = !hatch_open
-	to_chat(user, "You [hatch_open ? "open" : "close"] [src] panel.")
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, hatch_open)
 	update_icon()
 
 /obj/machinery/sealgen/wrench_act(mob/living/user, obj/item/tool)

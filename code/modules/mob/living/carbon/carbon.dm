@@ -196,7 +196,6 @@
 		swap_hand()
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
-	var/datum/pronouns/P = src.choose_from_pronouns()
 	if(!is_asystole())
 		if (on_fire)
 			playsound(src.loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -230,20 +229,20 @@
 			var/mob/living/carbon/human/H = src
 			if(istype(H)) show_ssd = H.species.show_ssd
 			if(show_ssd && ssd_check())
-				M.visible_message(SPAN_NOTICE("[M] shakes [src] trying to wake [P.him] up!"), \
+				M.visible_message(SPAN_NOTICE("[M] shakes [src] trying to wake [p_them()] up!"), \
 				SPAN_NOTICE("You shake [src], but they do not respond... Maybe they have S.S.D?"))
 			else if(lying || src.sleeping || player_triggered_sleeping)
 				src.player_triggered_sleeping = 0
 				AdjustSleeping(-5)
-				M.visible_message(SPAN_NOTICE("[M] shakes [src] trying to wake [P.him] up!"), \
-									SPAN_NOTICE("You shake [src] trying to wake [P.him] up!"))
+				M.visible_message(SPAN_NOTICE("[M] shakes [src] trying to wake [p_them()] up!"), \
+									SPAN_NOTICE("You shake [src] trying to wake [p_them()] up!"))
 			else
 				var/mob/living/carbon/human/hugger = M
 				if(istype(hugger))
 					hugger.species.hug(hugger,src)
 				else
-					M.visible_message(SPAN_NOTICE("[M] hugs [src] to make [P.him] feel better!"), \
-								SPAN_NOTICE("You hug [src] to make [P.him] feel better!"))
+					M.visible_message(SPAN_NOTICE("[M] hugs [src] to make [p_them()] feel better!"), \
+								SPAN_NOTICE("You hug [src] to make [p_them()] feel better!"))
 				if(M.fire_stacks >= (src.fire_stacks + 3))
 					src.fire_stacks += 1
 					M.fire_stacks -= 1

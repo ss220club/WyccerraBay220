@@ -44,11 +44,11 @@
 /obj/machinery/space_heater/examine(mob/user)
 	. = ..()
 
-	to_chat(user, "The heater is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].")
+	. += SPAN_NOTICE("The heater is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].")
 	if(panel_open)
-		to_chat(user, "The power cell is [cell ? "installed" : "missing"].")
+		. += SPAN_NOTICE("The power cell is [cell ? "installed" : "missing"].")
 	else
-		to_chat(user, "The charge meter reads [cell ? round(cell.percent(),1) : 0]%")
+		. += SPAN_NOTICE("The charge meter reads [cell ? round(cell.percent(),1) : 0]%")
 
 /obj/machinery/space_heater/emp_act(severity)
 	if(inoperable())
@@ -63,10 +63,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	panel_open = !panel_open
-	user.visible_message(
-		SPAN_NOTICE("[user] [panel_open ? "opens" : "closes"] the hatch on [src]."),
-		SPAN_NOTICE("You [panel_open ? "open" : "close"] the hatch on [src].")
-	)
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, panel_open)
 	update_icon(1)
 	if(!panel_open && user.machine == src)
 		show_browser(user, null, "window=spaceheater")

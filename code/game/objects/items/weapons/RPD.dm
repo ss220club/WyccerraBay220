@@ -159,9 +159,9 @@ GLOBAL_LIST_INIT(rpd_pipe_selection_skilled, list(
 	. = ..()
 	if(distance <= 1)
 		if(user.skill_check(SKILL_ATMOS,SKILL_BASIC))
-			to_chat(user, "[SPAN_NOTICE("Current selection reads:")] [P]")
+			. += "[SPAN_NOTICE("Current selection reads:")] [P]"
 		else
-			to_chat(user, SPAN_WARNING("The readout is flashing some atmospheric jargon, you can't understand."))
+			. += SPAN_WARNING("The readout is flashing some atmospheric jargon, you can't understand.")
 
 /obj/item/rpd/attack_self(mob/user)
 	interact(user)

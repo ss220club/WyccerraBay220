@@ -181,43 +181,23 @@
 				qdel(src)
 
 /obj/item/examine(mob/user, distance, is_adjacent)
-	var/size
-	switch(src.w_class)
-		if(ITEM_SIZE_TINY)
-			size = "tiny"
-		if(ITEM_SIZE_SMALL)
-			size = "small"
-		if(ITEM_SIZE_NORMAL)
-			size = "normal-sized"
-		if(ITEM_SIZE_LARGE)
-			size = "large"
-		if(ITEM_SIZE_HUGE)
-			size = "bulky"
-		if(ITEM_SIZE_HUGE + 1 to INFINITY)
-			size = "huge"
-	var/desc_comp = "" //For "description composite"
-	desc_comp += "It is a [size] item."
-
+	. = ..()
 	if(hasHUD(user, HUD_SCIENCE)) //Mob has a research scanner active.
-		desc_comp += "<BR>*--------* <BR>"
 
 		if(origin_tech)
-			desc_comp += "[SPAN_NOTICE("Testing potentials:")]<BR>"
+			. += SPAN_NOTICE("Testing potentials:")
 			//var/list/techlvls = params2list(origin_tech)
 			for(var/T in origin_tech)
-				desc_comp += "Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]] <BR>"
+				. += SPAN_NOTICE("	Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]]")
 		else
-			desc_comp += "No tech origins detected.<BR>"
+			. += SPAN_NOTICE("	No tech origins detected.")
 
 		if(LAZYLEN(matter))
-			desc_comp += "[SPAN_NOTICE("Extractable materials:")]<BR>"
+			. += SPAN_NOTICE("Extractable materials:")
 			for(var/mat in matter)
-				desc_comp += "[SSmaterials.get_material_by_name(mat)]<BR>"
+				. += SPAN_NOTICE("	[SSmaterials.get_material_by_name(mat)]")
 		else
-			desc_comp += "[SPAN_DANGER("No extractable materials detected.")]<BR>"
-		desc_comp += "*--------*"
-
-	return ..(user, distance, is_adjacent, "", desc_comp)
+			. += SPAN_DANGER("	No extractable materials detected.")
 
 /obj/item/attack_hand(mob/user as mob)
 	if (!user) return

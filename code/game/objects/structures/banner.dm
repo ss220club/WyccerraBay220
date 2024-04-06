@@ -61,7 +61,7 @@
 
 /obj/structure/banner/examine(mob/user)
 	. = ..()
-	to_chat(user, "It displays [banner_type[selected]].")
+	. += SPAN_NOTICE("It displays [banner_type[selected]].")
 
 /obj/structure/banner/get_mechanics_info()
 	. = ..()

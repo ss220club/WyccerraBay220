@@ -365,7 +365,7 @@
 		/obj/item/rig_module/cooling_unit)
 
 /*
- Overrides for standard mapset rig items
+Overrides for standard mapset rig items
  */
 
 /obj/item/clothing/head/helmet/space/rig/industrial

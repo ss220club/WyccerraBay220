@@ -1,5 +1,5 @@
 /*********************
- tactical accessories
+tactical accessories
 *********************/
 /datum/gear/tactical/ubac
 	display_name = "UBAC shirt selection"

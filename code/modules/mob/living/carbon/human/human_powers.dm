@@ -1,5 +1,5 @@
 /****************
- true human verbs
+true human verbs
 ****************/
 /mob/living/carbon/human/proc/tie_hair()
 	set name = "Tie Hair"
@@ -34,7 +34,7 @@
 			to_chat(src, SPAN_NOTICE("You're already using that style."))
 
 /****************
- misc alien verbs
+misc alien verbs
 ****************/
 /mob/living/carbon/human/proc/commune()
 	set category = "Abilities"
@@ -86,7 +86,7 @@
 	return
 
 /***********
- diona verbs
+diona verbs
 ***********/
 /mob/living/carbon/human/proc/diona_heal_toggle()
 	set name = "Toggle Heal"

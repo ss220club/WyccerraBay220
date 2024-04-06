@@ -214,6 +214,6 @@
 	return FALSE
 
 /proc/forbidden_varedit_object_types()
- 	return list(
+	return list(
 		/datum/admins
 	)

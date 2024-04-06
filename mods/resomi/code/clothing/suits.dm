@@ -14,9 +14,9 @@
 	 species_restricted = list(SPECIES_RESOMI)
 
 /obj/item/clothing/suit/storage/toggle/Resomicoat/white
- 	icon_state = "white_resomicoat"
- 	icon_open = "white_resomicoat_open"
- 	icon_closed = "white_resomicoat"
+	icon_state = "white_resomicoat"
+	icon_open = "white_resomicoat_open"
+	icon_closed = "white_resomicoat"
 
 /obj/item/clothing/suit/storage/toggle/Resomilabcoat
 	name = "small labcoat"

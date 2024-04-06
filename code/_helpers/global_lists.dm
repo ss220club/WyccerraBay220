@@ -174,6 +174,17 @@ var/global/list/string_slot_flags = list(
 	for(var/datum/tech/tech_type as anything in subtypesof(/datum/tech))
 		GLOB.tech_id_to_name[initial(tech_type.id)] = initial(tech_type.name)
 
+	// Setup world topic handlers
+	for(var/topic_handler_type in subtypesof(/datum/world_topic_handler))
+		var/datum/world_topic_handler/wth = new topic_handler_type()
+		if(!wth.topic_key)
+			stack_trace("[wth.type] has no topic key!")
+			continue
+		if(GLOB.world_topic_handlers[wth.topic_key])
+			stack_trace("[wth.type] has the same topic key as [GLOB.world_topic_handlers[wth.topic_key]]! ([wth.topic_key])")
+			continue
+		GLOB.world_topic_handlers[wth.topic_key] = topic_handler_type
+
 	return TRUE
 
 //*** params cache

@@ -48,10 +48,4 @@
 			status_info["security_level"] = ""
 			status_info["ticker_state"] = 1
 
-		if(SSshuttle.emergency)
-			// Shuttle status, see /__DEFINES/stat.dm
-			status_info["shuttle_mode"] = 0
-			// Shuttle timer, in seconds
-			status_info["shuttle_timer"] = 0
-
 	return json_encode(status_info)

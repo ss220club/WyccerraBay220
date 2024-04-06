@@ -68,8 +68,8 @@
 	)
 
 /obj/item/mech_component/sensors/light/salvage/prebuild()
-  ..()
-  software.installed_software = list(MECH_SOFTWARE_UTILITY, MECH_SOFTWARE_ENGINEERING)
+	..()
+	software.installed_software = list(MECH_SOFTWARE_UTILITY, MECH_SOFTWARE_ENGINEERING)
 
 /mob/living/exosuit/premade/salvage_gantry
 	name = "\improper Carrion Crawler"

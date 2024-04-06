@@ -68,16 +68,16 @@ GLOBAL_LIST_INIT(surgery_tool_exception_cache, new)
 		if(affected)
 			// Check various conditional flags.
 			if(((surgery_candidate_flags & SURGERY_NO_ROBOTIC) && BP_IS_ROBOTIC(affected)) || \
-			 ((surgery_candidate_flags & SURGERY_NO_CRYSTAL) && BP_IS_CRYSTAL(affected))   || \
-			 ((surgery_candidate_flags & SURGERY_NO_STUMP) && affected.is_stump())         || \
-			 ((surgery_candidate_flags & SURGERY_NO_FLESH) && !(BP_IS_ROBOTIC(affected) || BP_IS_CRYSTAL(affected))))
+			((surgery_candidate_flags & SURGERY_NO_CRYSTAL) && BP_IS_CRYSTAL(affected))   || \
+			((surgery_candidate_flags & SURGERY_NO_STUMP) && affected.is_stump())         || \
+			((surgery_candidate_flags & SURGERY_NO_FLESH) && !(BP_IS_ROBOTIC(affected) || BP_IS_CRYSTAL(affected))))
 				return FALSE
 			// Check if the surgery target is accessible.
 			if(BP_IS_ROBOTIC(affected))
 				if(((surgery_candidate_flags & SURGERY_NEEDS_ENCASEMENT) || \
-				 (surgery_candidate_flags & SURGERY_NEEDS_INCISION)      || \
-				 (surgery_candidate_flags & SURGERY_NEEDS_RETRACTED))    && \
-				 affected.hatch_state != HATCH_OPENED)
+				(surgery_candidate_flags & SURGERY_NEEDS_INCISION)      || \
+				(surgery_candidate_flags & SURGERY_NEEDS_RETRACTED))    && \
+				affected.hatch_state != HATCH_OPENED)
 					return FALSE
 			else
 				var/open_threshold = 0
@@ -88,7 +88,7 @@ GLOBAL_LIST_INIT(surgery_tool_exception_cache, new)
 				else if(surgery_candidate_flags & SURGERY_NEEDS_ENCASEMENT)
 					open_threshold = (affected.encased ? SURGERY_ENCASED : SURGERY_RETRACTED)
 				if(open_threshold && ((strict_access_requirement && affected.how_open() != open_threshold) || \
-				 affected.how_open() < open_threshold))
+				affected.how_open() < open_threshold))
 					return FALSE
 			// Check if clothing is blocking access
 			var/obj/item/I = target.get_covering_equipped_item_by_zone(target_zone)

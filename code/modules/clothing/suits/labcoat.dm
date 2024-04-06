@@ -77,8 +77,8 @@
 	icon_state = "labcoat_tox"
 
 /obj/item/clothing/suit/storage/toggle/labcoat/science/nanotrasen
-	name = "\improper NanoTrasen labcoat"
-	desc = "A suit that protects against minor chemical spills. it has a red stripe on the shoulder and red trim on the sleeves, denoting it as a NanoTrasen labcoat."
+	name = "\improper Nanotrasen labcoat"
+	desc = "A suit that protects against minor chemical spills. it has a red stripe on the shoulder and red trim on the sleeves, denoting it as a Nanotrasen labcoat."
 	icon_state = "labcoat_nt"
 
 /obj/item/clothing/suit/storage/toggle/labcoat/science/heph
@@ -125,7 +125,7 @@
 
 /obj/item/clothing/suit/storage/toggle/labcoat/rd/nanotrasen
 	name = "\improper NT research director's labcoat"
-	desc = "A full-body labcoat covered in red and black designs, denoting it as a NanoTrasen management coat. Judging by the amount of designs on it, it is only to be worn by the most enthusiastic of employees."
+	desc = "A full-body labcoat covered in red and black designs, denoting it as a Nanotrasen management coat. Judging by the amount of designs on it, it is only to be worn by the most enthusiastic of employees."
 	icon_state = "labcoat_rd_nt"
 
 /obj/item/clothing/suit/storage/toggle/labcoat/rd/heph

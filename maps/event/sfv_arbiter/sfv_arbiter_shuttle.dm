@@ -54,7 +54,7 @@
 
 /obj/machinery/telecomms/allinone/sfv_arbiter
 	listening_freqs = list(SFV_FREQ)
-	channel_color = COMMS_COLOR_CENTCOMM
+	channel_color = COMMS_COLOR_CENTCOM
 	channel_name = "SFV Arbiter"
 	circuitboard = /obj/item/stock_parts/circuitboard/telecomms/allinone/sfv_arbiter
 

@@ -35,7 +35,7 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/digitalwarrant,
-							 /datum/computer_file/program/camera_monitor)
+							/datum/computer_file/program/camera_monitor)
 
 	// SIERRA TODO: need_exp_to_play
 	// need_exp_to_play = 2
@@ -84,7 +84,7 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/digitalwarrant,
-							 /datum/computer_file/program/camera_monitor)
+							/datum/computer_file/program/camera_monitor)
 
 /datum/job/detective/get_description_blurb()
 	return "Детектив занимается расследованием преступлений, взятием отпечатков пальцев, поиском потенциальных преступников и разрешением самых запутанных дел.\
@@ -125,12 +125,12 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/digitalwarrant,
-							 /datum/computer_file/program/camera_monitor)
+							/datum/computer_file/program/camera_monitor)
 
 /datum/job/officer/get_description_blurb()
 	return "Охранник - это основная должность отдела безопасности. Офицеры представляют собой первую линию защиты корабля от криминальных элементов и враждебных форм жизни. \
-	 Со своими надежными дубинкой и тазером, охрана преследует различных нарушителей закона на судне и отправляет их в бриг отбывать заслуженное наказание. \
-	 Главной задачей офицеров СБ является предотвращение ущерба персоналу корабля и собственности корпорации, и охранник который не ставит эти обязанности для себя на первое место имеет мало шансов задержаться на этой работе."
+	Со своими надежными дубинкой и тазером, охрана преследует различных нарушителей закона на судне и отправляет их в бриг отбывать заслуженное наказание. \
+	Главной задачей офицеров СБ является предотвращение ущерба персоналу корабля и собственности корпорации, и охранник который не ставит эти обязанности для себя на первое место имеет мало шансов задержаться на этой работе."
 
 /datum/job/security_assistant
 	title = "Security Cadet"

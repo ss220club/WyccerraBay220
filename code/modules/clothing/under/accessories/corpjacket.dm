@@ -11,8 +11,8 @@
 
 
 /obj/item/clothing/accessory/toggleable/corpjacket/nanotrasen
-	name = "\improper NanoTrasen suit jacket"
-	desc = "A jacket that NanoTrasen has their executives wear."
+	name = "\improper Nanotrasen suit jacket"
+	desc = "A jacket that Nanotrasen has their executives wear."
 	icon_state = "jacket_nt"
 
 

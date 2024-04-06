@@ -61,7 +61,7 @@
 	/datum/job/detective \
 )
 
-//For NanoTrasen employees
+//For Nanotrasen employees
 #define NANOTRASEN_ROLES list(\
 	/datum/job/captain, /datum/job/hop, /datum/job/rd, /datum/job/cmo, /datum/job/chief_engineer, /datum/job/hos, \
 	/datum/job/iaa, \
@@ -109,7 +109,7 @@
 //For members of the engineering department
 #define ENGINEERING_ROLES list(\
 	/datum/job/chief_engineer, /datum/job/senior_engineer, /datum/job/engineer, /datum/job/infsys,\
-	 /datum/job/roboticist, /datum/job/engineer_trainee, /datum/job/explorer_engineer \
+	/datum/job/roboticist, /datum/job/engineer_trainee, /datum/job/explorer_engineer \
 )
 
 //For members of Engineering, Cargo, and Research

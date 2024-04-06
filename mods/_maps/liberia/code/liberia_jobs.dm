@@ -96,13 +96,13 @@
 	name = "Merchant Assistant"
 
 /obj/submap_landmark/spawnpoint/liberia/security
- 	name = "Merchant Security"
+	name = "Merchant Security"
 
 /obj/submap_landmark/spawnpoint/liberia/engineer
- 	name = "Merchant Engineer"
+	name = "Merchant Engineer"
 
 /obj/submap_landmark/spawnpoint/liberia/doctor
- 	name = "Merchant Medical"
+	name = "Merchant Medical"
 
 /singleton/hierarchy/outfit/job/liberia/merchant
 	name = OUTFIT_JOB_NAME("Merchant Assistant")

@@ -133,7 +133,7 @@
 	random_colour = TRUE
 
 /******
- Zippo
+Zippo
 ******/
 /obj/item/flame/lighter/zippo
 	name = "zippo lighter"

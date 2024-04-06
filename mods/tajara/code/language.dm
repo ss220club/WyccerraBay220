@@ -32,7 +32,7 @@
 	flags = WHITELISTED | SIGNLANG | NO_STUTTER | NONVERBAL
 	shorthand = "TS"
 
- //AUTOHISS
+//AUTOHISS
 /datum/species/tajaran
 	//Autohiss
 	autohiss_basic_map = list(

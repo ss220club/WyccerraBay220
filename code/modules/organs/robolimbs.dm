@@ -121,7 +121,7 @@ var/global/datum/robolimb/basic_robolimb
 	has_screen = TRUE
 
 /datum/robolimb/nanotrasen
-	company = "NanoTrasen"
+	company = "Nanotrasen"
 	desc = "This limb is made from a cheap polymer."
 	icon = 'icons/mob/human_races/cyberlimbs/nanotrasen/nanotrasen_main.dmi'
 

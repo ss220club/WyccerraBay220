@@ -1,6 +1,6 @@
 /obj/item/gun/projectile/automatic/nt41
 	name = "NT41 submachine gun"
-	desc = "The NT41 Enforcer is a self-defense weapon made on bullpup system. Produced by NanoTrasen for it's Security Force. Looks cool and stylish, but sometimes too uncomfortably to run with it. Uses 5.7x28mm rounds."
+	desc = "The NT41 Enforcer is a self-defense weapon made on bullpup system. Produced by Nanotrasen for it's Security Force. Looks cool and stylish, but sometimes too uncomfortably to run with it. Uses 5.7x28mm rounds."
 	icon_state = "nt41"
 	item_state = "nt41"
 	icon = 'packs/infinity/icons/obj/guns.dmi'

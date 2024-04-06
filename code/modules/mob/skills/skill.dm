@@ -6,7 +6,7 @@ GLOBAL_LIST_EMPTY(skills)
 	hierarchy_type = /singleton/hierarchy/skill // Don't mess with this without changing how Initialize works.
 	var/desc = "Placeholder skill"         // Generic description of this skill.
 
-   	// Names for different skill values, in order from 1 up.
+	// Names for different skill values, in order from 1 up.
 	var/levels = list( 		"Unskilled"			= "Unskilled Description",
 							"Basic"				= "Basic Description",
 							"Trained"			= "Trained Description",

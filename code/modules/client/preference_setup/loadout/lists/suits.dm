@@ -25,7 +25,7 @@
 	path = /obj/item/clothing/suit/poncho/roles/science
 
 /datum/gear/suit/nanotrasen_poncho
-	display_name = "poncho, NanoTrasen"
+	display_name = "poncho, Nanotrasen"
 	path = /obj/item/clothing/suit/poncho/roles/science/nanotrasen
 
 /datum/gear/suit/cargo_poncho

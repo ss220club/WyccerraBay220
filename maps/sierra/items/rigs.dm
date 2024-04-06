@@ -78,7 +78,7 @@
 /obj/item/rig/command/hop
 	name = "HoP's HCM"
 	suit_type = "advanced command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to ranking personnel command staff of the NanoTrasen and their peers."
+	desc = "A specialized hardsuit rig control module issued to ranking personnel command staff of the Nanotrasen and their peers."
 	icon_state = "command_XO_rig"
 	armor = list(
 		melee = ARMOR_MELEE_KNIVES,
@@ -114,7 +114,7 @@
 /obj/item/rig/command/captain
 	name = "captain's HCM"
 	suit_type = "advanced command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to captains of the NanoTrasen."
+	desc = "A specialized hardsuit rig control module issued to captains of the Nanotrasen."
 	icon_state = "command_CO_rig"
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,
@@ -151,7 +151,7 @@
 /obj/item/rig/command/cmo
 	name = "CMO's HCM"
 	suit_type = "medical command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to ranking medical command staff of the NanoTrasen and their peers."
+	desc = "A specialized hardsuit rig control module issued to ranking medical command staff of the Nanotrasen and their peers."
 
 	sprite_sheets = list(
 		SPECIES_RESOMI = 'mods/resomi/icons/clothing/onmob_rig_back_resomi.dmi',
@@ -166,7 +166,7 @@
 				   /obj/item/ammo_magazine,
 				   /obj/item/device/flashlight,
 				   /obj/item/tank,
-			 	   /obj/item/device/suit_cooling_unit,
+				   /obj/item/device/suit_cooling_unit,
 				   /obj/item/storage/firstaid,
 				   /obj/item/device/scanner/health,
 				   /obj/item/stack/medical,
@@ -197,7 +197,7 @@
 /obj/item/rig/command/hos
 	name = "HoS' HCM"
 	suit_type = "security command hardsuit"
-	desc = "A specialized hardsuit rig control module issued to ranking security command staff of the NanoTrasen and their peers."
+	desc = "A specialized hardsuit rig control module issued to ranking security command staff of the Nanotrasen and their peers."
 	icon = 'maps/sierra/icons/obj/rig_modules.dmi'
 	icon_state = "hos_rig"
 	armor = list(
@@ -216,7 +216,7 @@
 	glove_type = /obj/item/clothing/gloves/rig/command/hos
 
 	allowed = list(/obj/item/gun,
-	 			  /obj/item/ammo_magazine,
+				  /obj/item/ammo_magazine,
 	  			  /obj/item/handcuffs,
 	   			  /obj/item/device/flashlight,
 	    		  /obj/item/tank,
@@ -365,7 +365,7 @@
 		/obj/item/rig_module/cooling_unit)
 
 /*
- Overrides for standard mapset rig items
+Overrides for standard mapset rig items
  */
 
 /obj/item/clothing/head/helmet/space/rig/industrial

@@ -50,11 +50,11 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	return TRUE
 
 /**
-  * # Chat Message Overlay
-  *
-  * Datum for generating a message overlay on the map
-  * Ported from TGStation; https://github.com/tgstation/tgstation/pull/50608, author:  bobbahbrown
-  */
+ * # Chat Message Overlay
+ *
+ * Datum for generating a message overlay on the map
+ * Ported from TGStation; https://github.com/tgstation/tgstation/pull/50608, author:  bobbahbrown
+ */
 /datum/chatmessage
 	/// The visual element of the chat message
 	var/image/message
@@ -80,15 +80,15 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	var/animate_lifespan = 0
 
 /**
-  * Constructs a chat message overlay
-  *
-  * Arguments:
-  * * text - The text content of the overlay
-  * * target - The target atom to display the overlay at
-  * * owner - The mob that owns this overlay, only this mob will be able to view it
-  * * extra_classes - Extra classes to apply to the span that holds the text
-  * * lifespan - The lifespan of the message in deciseconds
-  */
+ * Constructs a chat message overlay
+ *
+ * Arguments:
+ * * text - The text content of the overlay
+ * * target - The target atom to display the overlay at
+ * * owner - The mob that owns this overlay, only this mob will be able to view it
+ * * extra_classes - Extra classes to apply to the span that holds the text
+ * * lifespan - The lifespan of the message in deciseconds
+ */
 /datum/chatmessage/New(text, atom/target, mob/owner, list/extra_classes = list(), lifespan = CHAT_MESSAGE_LIFESPAN)
 	. = ..()
 	if (!istype(target))
@@ -121,15 +121,15 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 
 
 /**
-  * Generates a chat message image representation
-  *
-  * Arguments:
-  * * text - The text content of the overlay
-  * * target - The target atom to display the overlay at
-  * * owner - The mob that owns this overlay, only this mob will be able to view it
-  * * extra_classes - Extra classes to apply to the span that holds the text
-  * * lifespan - The lifespan of the message in deciseconds
-  */
+ * Generates a chat message image representation
+ *
+ * Arguments:
+ * * text - The text content of the overlay
+ * * target - The target atom to display the overlay at
+ * * owner - The mob that owns this overlay, only this mob will be able to view it
+ * * extra_classes - Extra classes to apply to the span that holds the text
+ * * lifespan - The lifespan of the message in deciseconds
+ */
 /datum/chatmessage/proc/generate_image(text, atom/target, mob/owner, list/extra_classes, lifespan)
 	// Register client who owns this message
 	owned_by = owner.client
@@ -274,14 +274,14 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	return (1 - ((time_spent - time_before_fade) / CHAT_MESSAGE_EOL_FADE)) * 255
 
 /**
-  * Creates a message overlay at a defined location for a given speaker
-  *
-  * Arguments:
-  * * speaker - The atom who is saying this message
-  * * message - The text content of the message
-  * * italics - Decides if this should be small or not, as generally italics text are for whisper/radio overhear
-  * * existing_extra_classes - Additional classes to add to the message
-  */
+ * Creates a message overlay at a defined location for a given speaker
+ *
+ * Arguments:
+ * * speaker - The atom who is saying this message
+ * * message - The text content of the message
+ * * italics - Decides if this should be small or not, as generally italics text are for whisper/radio overhear
+ * * existing_extra_classes - Additional classes to add to the message
+ */
 /mob/proc/create_chat_message(atom/movable/speaker, message, italics, list/existing_extra_classes, audible = TRUE)
 	if(!client)
 		return
@@ -319,15 +319,15 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	new /datum/chatmessage(message, speaker, src, extra_classes)
 
 /**
-  * Gets a color for a name, will return the same color for a given string consistently within a round.atom
-  *
-  * Note that this proc aims to produce pastel-ish colors using the HSL colorspace. These seem to be favorable for displaying on the map.
-  *
-  * Arguments:
-  * * name - The name to generate a color for
-  * * sat_shift - A value between 0 and 1 that will be multiplied against the saturation
-  * * lum_shift - A value between 0 and 1 that will be multiplied against the luminescence
-  */
+ * Gets a color for a name, will return the same color for a given string consistently within a round.atom
+ *
+ * Note that this proc aims to produce pastel-ish colors using the HSL colorspace. These seem to be favorable for displaying on the map.
+ *
+ * Arguments:
+ * * name - The name to generate a color for
+ * * sat_shift - A value between 0 and 1 that will be multiplied against the saturation
+ * * lum_shift - A value between 0 and 1 that will be multiplied against the luminescence
+ */
 /datum/chatmessage/proc/colorize_string(name, sat_shift = 1, lum_shift = 1)
 	// seed to help randomness
 	var/static/rseed = rand(1,26)

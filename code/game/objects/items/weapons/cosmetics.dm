@@ -60,16 +60,16 @@
 
 			if (H == user)
 				user.visible_message(SPAN_NOTICE("\The [user] does their lips with \the [src]."), \
-									 SPAN_NOTICE("You take a moment to apply \the [src]. Perfect!"))
+									SPAN_NOTICE("You take a moment to apply \the [src]. Perfect!"))
 				H.makeup_style = colour
 				H.update_body()
 				return TRUE
 			else
 				user.visible_message(SPAN_WARNING("\The [user] begins to do \the [H]'s lips with \the [src]."), \
-									 SPAN_NOTICE("You begin to apply \the [src] on \the [H]'s lips."))
+									SPAN_NOTICE("You begin to apply \the [src] on \the [H]'s lips."))
 				if (do_after(user, 4 SECONDS, H, DO_EQUIP))
 					user.visible_message(SPAN_NOTICE("\The [user] does \the [H]'s lips with \the [src]."), \
-										 SPAN_NOTICE("You apply \the [src] on \the [H]'s lips."))
+										SPAN_NOTICE("You apply \the [src] on \the [H]'s lips."))
 					H.makeup_style = colour
 					H.update_body()
 				return TRUE

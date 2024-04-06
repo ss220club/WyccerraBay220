@@ -186,13 +186,13 @@
 
 /obj/item/stock_parts/power/battery/buildable/crap
 	name = "battery backup (weak)"
-	desc = "The NanoTrasen BAT84 is an all-in-one battery backup system sold at an affordable price."
+	desc = "The Nanotrasen BAT84 is an all-in-one battery backup system sold at an affordable price."
 	matter = list(MATERIAL_STEEL = 100)
 	charge_rate = 0.25
 	charge_wait_counter = 15
 
 /obj/item/stock_parts/power/battery/buildable/crap/get_lore_info()
-	return "The NanoTrasen BAT84's debut on the battery backup market was greeted by universally negative reviews, \
+	return "The Nanotrasen BAT84's debut on the battery backup market was greeted by universally negative reviews, \
 	highlighting its slow recharge rate and exceptional lack of responsiveness to power changes.\
 	Nevertheless, it has been steadily gaining market share due to rock-bottom prices and a predatory marketing campaign."
 

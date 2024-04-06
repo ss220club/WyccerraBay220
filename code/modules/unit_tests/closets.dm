@@ -40,14 +40,14 @@
 					LAZYADD(bad_decal_state, "[check_appearance] - [thing] - [closet.decal_icon]")
 
 	if( \
-		 LAZYLEN(bad_singleton)         || \
-		 LAZYLEN(bad_icon)         || \
-		 LAZYLEN(bad_colour)       || \
-		 LAZYLEN(bad_base_icon)    || \
-		 LAZYLEN(bad_base_state)   || \
-		 LAZYLEN(bad_decal_icon)   || \
-		 LAZYLEN(bad_decal_colour) || \
-		 LAZYLEN(bad_decal_state)     \
+		LAZYLEN(bad_singleton)         || \
+		LAZYLEN(bad_icon)         || \
+		LAZYLEN(bad_colour)       || \
+		LAZYLEN(bad_base_icon)    || \
+		LAZYLEN(bad_base_state)   || \
+		LAZYLEN(bad_decal_icon)   || \
+		LAZYLEN(bad_decal_colour) || \
+		LAZYLEN(bad_decal_state)     \
 		)
 		var/fail_msg = "Insane closet appearances found: "
 		if(LAZYLEN(bad_singleton))

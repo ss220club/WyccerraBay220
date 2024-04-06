@@ -21,9 +21,9 @@
 	skill_points = 30
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
-							 /datum/computer_file/program/card_mod,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/card_mod,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/reports)
 
 /datum/job/captain/get_description_blurb()
 	return "You are the Commanding Officer. You are the top dog. You are an experienced professional officer in control of an entire ship, and ultimately responsible for all that happens onboard. Your job is to make sure [GLOB.using_map.full_name] fulfils its space exploration mission. Delegate to your Executive Officer, your department heads, and your Senior Enlisted Advisor to effectively manage the ship, and listen to and trust their expertise."
@@ -77,9 +77,9 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
-							 /datum/computer_file/program/card_mod,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/card_mod,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/reports)
 
 /datum/job/hop/get_description_blurb()
 	return "You are the Executive Officer. You are an experienced senior officer, second in command of the ship, and are responsible for the smooth operation of the ship under your Commanding Officer. In their absence, you are expected to take their place. Your primary duty is directly managing department heads and all those outside a department heading. You are also responsible for the contractors and passengers aboard the ship. Consider the Senior Enlisted Advisor and Bridge Officers tools at your disposal."
@@ -124,9 +124,9 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
-							 /datum/computer_file/program/aidiag,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/aidiag,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/reports)
 
 /datum/job/rd/get_description_blurb()
 	return "You are the Chief Science Officer. You are responsible for the research department. You handle the science aspects of the project and liase with the corporate interests of the Expeditionary Corps Organisation. Make sure science gets done, do some yourself, and get your scientists on away missions to find things to benefit the project. Advise the CO on science matters."
@@ -169,9 +169,9 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
-							 /datum/computer_file/program/suit_sensors,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/suit_sensors,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/reports)
 
 /datum/job/cmo/get_description_blurb()
 	return "You are the Chief Medical Officer. You manage the medical department. You ensure all members of medical are skilled, tasked and handling their duties. Ensure your doctors are staffing your infirmary and your corpsman/paramedics are ready for response. Act as a second surgeon or backup pharmacist in the absence of either. You are expected to know medical very well, along with general regulations."
@@ -220,15 +220,15 @@
 		)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
-							 /datum/computer_file/program/ntnetmonitor,
-							 /datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/atmos_control,
-							 /datum/computer_file/program/rcon_console,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/ntnetmonitor,
+							/datum/computer_file/program/power_monitor,
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/atmos_control,
+							/datum/computer_file/program/rcon_console,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor,
+							/datum/computer_file/program/reports)
 
 /datum/job/chief_engineer/get_description_blurb()
 	return "You are the Chief Engineer. You manage the Engineering Department. You are responsible for the Senior engineer, who is your right hand and (should be) an experienced, skilled engineer. Delegate to and listen to them. Manage your engineers, ensure vessel power stays on, breaches are patched and problems are fixed. Advise the CO on engineering matters. You are also responsible for the maintenance and control of any vessel synthetics. You are an experienced engineer with a wealth of theoretical knowledge. You should also know vessel regulations to a reasonable degree."
@@ -271,9 +271,9 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
-							 /datum/computer_file/program/digitalwarrant,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/digitalwarrant,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/reports)
 
 /datum/job/hos/get_description_blurb()
 	return "You are the Chief of Security. You manage ship security. The Masters at Arms and the Military Police, as well as the Brig Chief and the Forensic Technician. You keep the vessel safe. You handle both internal and external security matters. You are the law. You are subordinate to the CO and the XO. You are expected to know the SCMJ and Sol law and Alert Procedure to a very high degree along with general regulations."
@@ -351,7 +351,7 @@
 		)
 
 	software_on_spawn = list(/datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/reports)
 
 /datum/job/sea/get_description_blurb()
 	return "You are the Senior Enlisted Advisor. You are the highest enlisted person on the ship. You are directly subordinate to the CO. You advise them on enlisted concerns and provide expertise and advice to officers. You are responsible for ensuring discipline and good conduct among enlisted, as well as notifying officers of any issues and \"advising\" them on mistakes they make. You also handle various duties on behalf of the CO and XO. You are an experienced enlisted person, very likely equal only in experience to the CO and XO. You know the regulations better than anyone."
@@ -393,14 +393,14 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
-							 /datum/computer_file/program/suit_sensors,
-							 /datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor,
-							 /datum/computer_file/program/reports,
-							 /datum/computer_file/program/deck_management)
+							/datum/computer_file/program/suit_sensors,
+							/datum/computer_file/program/power_monitor,
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor,
+							/datum/computer_file/program/reports,
+							/datum/computer_file/program/deck_management)
 
 /datum/job/bridgeofficer/get_description_blurb()
 	return "You are a Bridge Officer. You are a very junior officer. You do not give orders of your own. You are subordinate to all of command. You handle matters on the bridge and report directly to the CO and XO. You take the Torch's helm and pilot the Aquila if needed. You monitor bridge computer programs and communications and report relevant information to command."

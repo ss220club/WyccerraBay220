@@ -76,7 +76,7 @@
 
 /obj/item/gun/energy/confuseray/secure
 	name = "disorientator"
-	desc = "The W-T Mk. 6 Disorientator fitted with an NT1017 secure fire chip. It has a NanoTrasen logo on the grip."
+	desc = "The W-T Mk. 6 Disorientator fitted with an NT1017 secure fire chip. It has a Nanotrasen logo on the grip."
 	icon = 'mods/guns/icons/obj/confuseray_secure.dmi'
 	icon_state = "confusesecure"
 	req_access = list(list(access_brig, access_bridge))

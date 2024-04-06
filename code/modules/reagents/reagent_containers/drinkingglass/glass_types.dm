@@ -167,7 +167,7 @@
 
 /obj/item/reagent_containers/food/drinks/glass2/coffeecup/NT
 	name = "\improper NT coffee cup"
-	desc = "A red NanoTrasen coffee cup."
+	desc = "A red Nanotrasen coffee cup."
 	icon_state = "coffeecup_NT"
 	base_name = "\improper NT cup"
 

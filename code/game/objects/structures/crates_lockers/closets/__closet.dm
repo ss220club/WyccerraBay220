@@ -350,8 +350,8 @@
 /obj/structure/closet/proc/slice_into_parts(obj/W, mob/user)
 	material.place_sheet(src.loc, 2)
 	user.visible_message(SPAN_NOTICE("[src] has been cut apart by [user] with [W]."), \
-						 SPAN_NOTICE("You have cut [src] apart with [W]."), \
-						 "You hear welding.")
+						SPAN_NOTICE("You have cut [src] apart with [W]."), \
+						"You hear welding.")
 	qdel(src)
 
 /obj/structure/closet/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)

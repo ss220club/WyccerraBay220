@@ -57,7 +57,7 @@
 				which_hand = BP_R_HAND
 			triggered(user, which_hand)
 			user.visible_message(SPAN_WARNING("[user] accidentally sets off [src], breaking their fingers."), \
-								 SPAN_WARNING("You accidentally trigger [src]!"))
+								SPAN_WARNING("You accidentally trigger [src]!"))
 			return
 		to_chat(user, SPAN_NOTICE("You disarm [src]."))
 	armed = !armed
@@ -73,7 +73,7 @@
 				which_hand = BP_R_HAND
 			triggered(user, which_hand)
 			user.visible_message(SPAN_WARNING("[user] accidentally sets off [src], breaking their fingers."), \
-								 SPAN_WARNING("You accidentally trigger [src]!"))
+								SPAN_WARNING("You accidentally trigger [src]!"))
 			return
 	..()
 

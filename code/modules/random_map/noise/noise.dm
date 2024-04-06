@@ -106,7 +106,7 @@
 		map[current_cell] *= (rand(1,2)==1 ? (1.0-random_element) : (1.0+random_element))
 		map[current_cell] = max(0,min(cell_range,map[current_cell]))
 
- 	// Recurse until size is too small to subdivide.
+	// Recurse until size is too small to subdivide.
 	if(isize>3)
 		if(!priority_process)
 			CHECK_TICK

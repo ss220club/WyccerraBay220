@@ -42,7 +42,7 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/suit_sensors,
-							 /datum/computer_file/program/camera_monitor)
+							/datum/computer_file/program/camera_monitor)
 
 /datum/job/junior_doctor
 	title = "Medical Resident"
@@ -85,7 +85,7 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/suit_sensors,
-							 /datum/computer_file/program/camera_monitor)
+							/datum/computer_file/program/camera_monitor)
 
 /datum/job/doctor
 	title = "Medical Technician"
@@ -129,7 +129,7 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/suit_sensors,
-							 /datum/computer_file/program/camera_monitor)
+							/datum/computer_file/program/camera_monitor)
 	skill_points = 22
 
 /datum/job/medical_trainee
@@ -175,7 +175,7 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/suit_sensors,
-							 /datum/computer_file/program/camera_monitor)
+							/datum/computer_file/program/camera_monitor)
 
 /datum/job/medical_trainee/get_description_blurb()
 	return "You are a Trainee Medical Technician. You are learning how to treat and recover wounded crew from the more experienced medical personnel aboard. You are subordinate to the rest of the medical team. The role is only for players new to the medical system and department."
@@ -209,7 +209,7 @@
 	access = list(
 		access_medical, access_maint_tunnels, access_emergency_storage,
 		access_medical_equip, access_solgov_crew, access_chemistry,
-	 	access_virology, access_morgue, access_crematorium, access_radio_med
+		access_virology, access_morgue, access_crematorium, access_radio_med
 	)
 
 /datum/job/chemist/get_description_blurb()

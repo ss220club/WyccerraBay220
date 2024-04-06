@@ -264,7 +264,7 @@
 	allowed_roles = list(/datum/job/psychiatrist)
 
 /*********************
- tactical accessories
+tactical accessories
 *********************/
 /datum/gear/tactical/ubac
 	display_name = "black UBAC shirt"

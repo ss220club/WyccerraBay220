@@ -287,7 +287,7 @@ SUBSYSTEM_DEF(jobs)
 /** Proc divide_occupations
  *  fills var "assigned_role" for all ready players.
  *  This proc must not have any side effect besides of modifying "assigned_role".
- **/
+ */
 /datum/controller/subsystem/jobs/proc/divide_occupations(datum/game_mode/mode)
 	//Get the players who are ready
 	for(var/mob/new_player/player in GLOB.player_list)
@@ -360,9 +360,9 @@ SUBSYSTEM_DEF(jobs)
 
 /datum/controller/subsystem/jobs/proc/attempt_role_assignment(mob/new_player/player, datum/job/job, level, datum/game_mode/mode)
 	if(!jobban_isbanned(player, job.title) && \
-	 job.player_old_enough(player.client) && \
-	 player.client.prefs.CorrectLevel(job, level) && \
-	 job.is_position_available())
+	job.player_old_enough(player.client) && \
+	player.client.prefs.CorrectLevel(job, level) && \
+	job.is_position_available())
 		assign_role(player, job.title, mode = mode)
 		return TRUE
 	return FALSE

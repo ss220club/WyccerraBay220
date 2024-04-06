@@ -4,19 +4,19 @@
 //////////////
 
 /obj/item/clothing/suit/storage/toggle/Resomicoat
-	 name = "small cloak"
-	 icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
-	 desc = "A cloak that seems too small to fit a human."
-	 icon_state = "resomicoat"
-	 icon_open = "resomicoat_open"
-	 icon_closed = "resomicoat"
-	 body_parts_covered = UPPER_TORSO|ARMS|LOWER_TORSO|LEGS
-	 species_restricted = list(SPECIES_RESOMI)
+	name = "small cloak"
+	icon = 'packs/infinity/icons/obj/clothing/species/resomi/obj_suit_resomi.dmi'
+	desc = "A cloak that seems too small to fit a human."
+	icon_state = "resomicoat"
+	icon_open = "resomicoat_open"
+	icon_closed = "resomicoat"
+	body_parts_covered = UPPER_TORSO|ARMS|LOWER_TORSO|LEGS
+	species_restricted = list(SPECIES_RESOMI)
 
 /obj/item/clothing/suit/storage/toggle/Resomicoat/white
- 	icon_state = "white_resomicoat"
- 	icon_open = "white_resomicoat_open"
- 	icon_closed = "white_resomicoat"
+	icon_state = "white_resomicoat"
+	icon_open = "white_resomicoat_open"
+	icon_closed = "white_resomicoat"
 
 /obj/item/clothing/suit/storage/toggle/Resomilabcoat
 	name = "small labcoat"

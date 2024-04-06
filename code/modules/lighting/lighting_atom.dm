@@ -1,6 +1,6 @@
 #define MINIMUM_USEFUL_LIGHT_RANGE 1.4
 
- /// Intensity of the light.
+/// Intensity of the light.
 /atom/var/light_power = 1
 /// Range in tiles of the light.
 /atom/var/light_range = 0

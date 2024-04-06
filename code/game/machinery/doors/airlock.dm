@@ -342,10 +342,10 @@
 	mineral = MATERIAL_PHORON
 
 /obj/machinery/door/airlock/centcom
-	airlock_type = "centcomm"
+	airlock_type = "centcom"
 	name = "\improper Airlock"
-	icon = 'icons/obj/doors/centcomm/door.dmi'
-	fill_file = 'icons/obj/doors/centcomm/fill_steel.dmi'
+	icon = 'icons/obj/doors/centcom/door.dmi'
+	fill_file = 'icons/obj/doors/centcom/fill_steel.dmi'
 
 /obj/machinery/door/airlock/highsecurity
 	airlock_type = "secure"

@@ -1,8 +1,8 @@
- /**
-  * tgui state: observer_state
-  *
-  * Checks that the user is an observer/ghost.
- **/
+/**
+ * tgui state: observer_state
+ *
+ * Checks that the user is an observer/ghost.
+ */
 
 GLOBAL_DATUM_INIT(tgui_observer_state, /datum/tgui_state/observer_state, new)
 
@@ -12,4 +12,3 @@ GLOBAL_DATUM_INIT(tgui_observer_state, /datum/tgui_state/observer_state, new)
 	if(check_rights(R_ADMIN, 0, src))
 		return STATUS_INTERACTIVE
 	return STATUS_CLOSE
-

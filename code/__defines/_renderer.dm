@@ -127,7 +127,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 * Higher plane values are composited over lower. Here, they are ordered from under to over.
 */
 
- /// Handles byond internal letterboxing. Avoid touching.
+/// Handles byond internal letterboxing. Avoid touching.
 /atom/movable/renderer/letterbox
 	name = "Letterbox"
 	group = RENDER_GROUP_SCENE

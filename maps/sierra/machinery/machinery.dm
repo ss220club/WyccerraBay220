@@ -15,7 +15,7 @@
 	network = "tcommsat"
 	autolinkers = list("hub", "relay", "c_relay", "s_relay", "m_relay", "r_relay", "b_relay", "1_relay", "2_relay", "3_relay", "4_relay", "5_relay", "s_relay", "science", "medical",
 	"supply", "service", "common", "command", "engineering", "security", "exploration", "unused",
- 	"receiverA", "broadcasterA")
+	"receiverA", "broadcasterA")
 
 /obj/machinery/telecomms/receiver/preset_right
 	freq_listening = list(AI_FREQ, SCI_FREQ, MED_FREQ, SUP_FREQ, SRV_FREQ, COMM_FREQ, ENG_FREQ, SEC_FREQ, ENT_FREQ, EXP_FREQ)
@@ -122,16 +122,16 @@
 	base_icon_state = "industrial"
 	islocked = 0
 
-/obj/machinery/photocopier/faxmachine/centcomm
+/obj/machinery/photocopier/faxmachine/centcom
 	req_access = list(access_cent_general)
 	department = "Office of Civil Investigation and Enforcement"
 
-/obj/machinery/photocopier/faxmachine/centcomm/Initialize()
+/obj/machinery/photocopier/faxmachine/centcom/Initialize()
 	. = ..()
 	destination = pick(GLOB.alldepartments)
 	department = "[GLOB.using_map.boss_name]"
 
-/obj/machinery/photocopier/faxmachine/centcomm/attack_hand(mob/user as mob)
+/obj/machinery/photocopier/faxmachine/centcom/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	var/dat = "Fax Machine<BR>"
 	var/scan_name
@@ -164,7 +164,7 @@
 	onclose(user, "copier")
 	return
 
-/obj/machinery/photocopier/faxmachine/centcomm/Topic(href, href_list)
+/obj/machinery/photocopier/faxmachine/centcom/Topic(href, href_list)
 	var/mob/user = usr
 	if(href_list["send"])
 		if(copyitem)

@@ -176,7 +176,7 @@
 /obj/item/card/id/torch/crew/research/scientist
 	job_access_type = /datum/job/scientist
 
-//NanoTrasen and Passengers
+//Nanotrasen and Passengers
 
 /obj/item/card/id/torch/passenger
 	desc = "A card issued to passengers aboard the SEV Torch."

@@ -21,7 +21,7 @@ Before 515:
 After 515:
 - src::name() must be used for the last override, or ::name() for the global.
 - nameof() is available at compile time to resolve safe proc names like nameof(/datum::fooBehavior()).
-  This can be preferable to direct refs in complex cases.
+This can be preferable to direct refs in complex cases.
 A specific version of a proc may be called by fully specifying its type depth, like
 invoke(myLivingMob, TYPE_PROC_REF(/mob/living, handle_vision)
 

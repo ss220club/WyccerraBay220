@@ -60,8 +60,8 @@ Scent intensity
 	else
 		to_chat(user, SPAN_WARNING("ALERT! Your sensors pick up an overwhelming concentration of [scent]."))
 /*****
- Scent extensions
- Usage:
+Scent extensions
+Usage:
 	To add:
 		set_extension(atom, /datum/extension/scent/PATH/TO/SPECIFIC/SCENT)
 		This will set up the extension and will make it begin to emit_scent.

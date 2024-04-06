@@ -171,7 +171,7 @@
 		var/obj/machinery/power/terminal/terminal = temp_apc && temp_apc.terminal()
 		if(terminal && terminal.powernet)
 			terminal.powernet.trigger_warning(50) // Long alarm
-			 // Such power surges are not good for APC electronics/cell in general.
+			// Such power surges are not good for APC electronics/cell in general.
 			if(prob(explosion_intensity))
 				temp_apc.emp_act(1)
 

@@ -22,4 +22,4 @@
 	name = "corporate neck holobadge"
 
 /obj/item/clothing/accessory/badge/nanotrasen
-	badge_string = "NanoTrasen Executive Body"
+	badge_string = "Nanotrasen Executive Body"

@@ -31,9 +31,9 @@ process()
 check_build()
 
 Setup map
-  |EC|
+|EC|
 CC|FC|
-  |PB|
+|PB|
 PE|PE|PE
 
 

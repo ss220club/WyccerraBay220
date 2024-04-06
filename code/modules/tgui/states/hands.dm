@@ -1,8 +1,8 @@
- /**
-  * tgui state: hands_state
-  *
-  * Checks that the src_object is in the user's hands.
- **/
+/**
+ * tgui state: hands_state
+ *
+ * Checks that the src_object is in the user's hands.
+ */
 
 GLOBAL_DATUM_INIT(tgui_hands_state, /datum/tgui_state/hands_state, new)
 

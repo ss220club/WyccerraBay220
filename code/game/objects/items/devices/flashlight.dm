@@ -114,7 +114,7 @@
 				return TRUE
 
 			user.visible_message(SPAN_NOTICE("\The [user] directs [src] into [M]'s [vision.name]."), \
-								 SPAN_NOTICE("You direct [src] into [M]'s [vision.name]."))
+								SPAN_NOTICE("You direct [src] into [M]'s [vision.name]."))
 
 			inspect_vision(vision, user)
 

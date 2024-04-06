@@ -38,8 +38,8 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/supply,
-							 /datum/computer_file/program/deck_management,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/deck_management,
+							/datum/computer_file/program/reports)
 
 /datum/job/cargo_tech
 	title = "Deck Technician"
@@ -77,8 +77,8 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/supply,
-							 /datum/computer_file/program/deck_management,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/deck_management,
+							/datum/computer_file/program/reports)
 
 /datum/job/mining
 	title = "Prospector"

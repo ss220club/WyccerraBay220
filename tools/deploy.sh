@@ -16,7 +16,8 @@ mkdir -p \
     $1/icons \
     $1/sound \
     $1/tgui/public \
-    $1/tgui/packages/tgfont/static
+    $1/tgui/packages/tgfont/static \
+    $1/nano/images
 
 if [ -d ".git" ]; then
   mkdir -p $1/.git/logs
@@ -30,6 +31,7 @@ cp -r maps/* $1/maps/
 cp -r icons/* $1/icons/
 cp -r tgui/public/* $1/tgui/public/
 cp -r tgui/packages/tgfont/static/* $1/tgui/packages/tgfont/static/
+cp -r nano/images/* $1/nano/images
 
 #remove .dm files from _maps
 

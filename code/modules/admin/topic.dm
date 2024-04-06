@@ -1508,18 +1508,18 @@
 			M.Weaken(20)
 			M.stuttering = 20
 
-	else if(href_list["CentcommReply"])
-		var/mob/living/L = locate(href_list["CentcommReply"])
+	else if(href_list["CentcomReply"])
+		var/mob/living/L = locate(href_list["CentcomReply"])
 		if(!istype(L))
 			to_chat(usr, "This can only be used on instances of type /mob/living/")
 			return
 
 		if(L.can_centcom_reply())
-			var/input = sanitize(input(src.owner, "Please enter a message to reply to [key_name(L)] via their headset.","Outgoing message from Centcomm", ""))
+			var/input = sanitize(input(src.owner, "Please enter a message to reply to [key_name(L)] via their headset.","Outgoing message from Centcom", ""))
 			if(!input)		return
 
 			to_chat(src.owner, "You sent [input] to [L] via a secure channel.")
-			log_admin("[src.owner] replied to [key_name(L)]'s Centcomm message with the message [input].")
+			log_admin("[src.owner] replied to [key_name(L)]'s Centcom message with the message [input].")
 			message_admins("[src.owner] replied to [key_name(L)]'s Centcom message with: \"[input]\"")
 			if(!isAI(L))
 				to_chat(L, SPAN_INFO("You hear something crackle in your headset for a moment before a voice speaks."))

@@ -3,8 +3,8 @@ Robolimbs for robocats - Restricted roster of prosthetics for tajara
 */
 
 /datum/robolimb/tajara
-	company = "NanoTrasen Lion"
-	desc = "This limb is made from a cheap polymer. It has stamp reads: produced by NanoTrasen in Mi'dyn Al'Mank."
+	company = "Nanotrasen Lion"
+	desc = "This limb is made from a cheap polymer. It has stamp reads: produced by Nanotrasen in Mi'dyn Al'Mank."
 	icon = 'icons/mob/human_races/cyberlimbs/nanotrasen/nanotrasen_main.dmi'
 	restricted_to = list(SPECIES_TAJARA)
 	allowed_bodytypes = list(SPECIES_TAJARA)

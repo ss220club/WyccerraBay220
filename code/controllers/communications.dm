@@ -1,9 +1,9 @@
 /*
-  HOW IT WORKS
+HOW IT WORKS
 
-  The radio_controller is a global object maintaining all radio transmissions, think about it as about "ether".
-  Note that walkie-talkie, intercoms and headsets handle transmission using nonstandard way.
-  procs:
+The radio_controller is a global object maintaining all radio transmissions, think about it as about "ether".
+Note that walkie-talkie, intercoms and headsets handle transmission using nonstandard way.
+procs:
 
 	add_object(obj/device as obj, var/new_frequency as num, var/filter as text|null = null)
 	  Adds listening object.
@@ -12,10 +12,10 @@
 		  one device may listen several frequencies, but not same frequency twice.
 		new_frequency - see possibly frequencies below;
 		filter - thing for optimization. Optional, but recommended.
-				 All filters should be consolidated in this file, see defines later.
-				 Device without listening filter will receive all signals (on specified frequency).
-				 Device with filter will receive any signals sent without filter.
-				 Device with filter will not receive any signals sent with different filter.
+				All filters should be consolidated in this file, see defines later.
+				Device without listening filter will receive all signals (on specified frequency).
+				Device with filter will receive any signals sent without filter.
+				Device with filter will not receive any signals sent with different filter.
 	  returns:
 	   Reference to frequency object.
 
@@ -23,12 +23,12 @@
 	  Obliviously, after calling this proc, device will not receive any signals on old_frequency.
 	  Other frequencies will left unaffected.
 
-   return_frequency(var/frequency as num)
+return_frequency(var/frequency as num)
 	  returns:
 	   Reference to frequency object. Use it if you need to send and do not need to listen.
 
-  radio_frequency is a global object maintaining list of devices that listening specific frequency.
-  procs:
+radio_frequency is a global object maintaining list of devices that listening specific frequency.
+procs:
 
 	post_signal(obj/source as obj|null, datum/signal/signal, var/filter as text|null = null, var/range as num|null = null)
 	  Sends signal to all devices that wants such signal.
@@ -38,7 +38,7 @@
 		filter - described above.
 		range - radius of regular byond's square circle on that z-level. null means everywhere, on all z-levels.
 
-  obj/proc/receive_signal(datum/signal/signal, var/receive_method as num, var/receive_param)
+obj/proc/receive_signal(datum/signal/signal, var/receive_method as num, var/receive_param)
 	Handler from received signals. By default does nothing. Define your own for your object.
 	Avoid of sending signals directly from this proc, use spawn(-1). DO NOT use sleep() here or call procs that sleep please. If you must, use spawn()
 	  parameters:
@@ -47,7 +47,7 @@
 		  TRANSMISSION_WIRE is currently unused.
 		receive_param - for TRANSMISSION_RADIO here comes frequency.
 
-  datum/signal
+datum/signal
 	vars:
 	source
 	  an object that emitted signal. Used for debug and bearing.
@@ -186,7 +186,7 @@ var/global/list/channel_color_presets = list(
 	"Painful Pink" = COMMS_COLOR_AI,
 	"Phenomenal Purple" = COMMS_COLOR_SCIENCE,
 	"Powerful Plum" = COMMS_COLOR_BEARCAT,
-	"Pretty Periwinkle" = COMMS_COLOR_CENTCOMM,
+	"Pretty Periwinkle" = COMMS_COLOR_CENTCOM,
 	"Radical Ruby" = COMMS_COLOR_VOX,
 	"Raging Red" = COMMS_COLOR_SECURITY,
 	"Spectacular Silver" = COMMS_COLOR_ENTERTAIN,
@@ -210,7 +210,7 @@ var/global/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FR
 	// Antags!
 	if (frequency in ANTAG_FREQS)
 		return "syndradio"
-	// centcomm channels (deathsquid and ert)
+	// centcom channels (deathsquid and ert)
 	if(frequency in CENT_FREQS)
 		return "centradio"
 	// command channel

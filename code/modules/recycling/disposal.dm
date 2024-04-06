@@ -185,10 +185,10 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	var/old_loc = AM.loc
 	if(AM == user)
 		user.visible_message(SPAN_WARNING("[user] starts climbing into [src]."), \
-							 SPAN_NOTICE("You start climbing into [src]."))
+							SPAN_NOTICE("You start climbing into [src]."))
 	else
 		user.visible_message(SPAN_CLASS("[is_dangerous ? "warning" : "notice"]", "[user] starts stuffing [AM] into [src]."), \
-							 SPAN_NOTICE("You start stuffing [AM] into [src]."))
+							SPAN_NOTICE("You start stuffing [AM] into [src]."))
 
 	if(!do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
 		return
@@ -204,11 +204,11 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	// Messages and logging
 	if(AM == user)
 		user.visible_message(SPAN_DANGER("[user] climbs into [src]."), \
-							 SPAN_NOTICE("You climb into [src]."))
+							SPAN_NOTICE("You climb into [src]."))
 		admin_attack_log(user, null, "Stuffed themselves into [src].", null, "stuffed themselves into [src].")
 	else
 		user.visible_message(SPAN_CLASS("[is_dangerous ? "danger" : "notice"]", "[user] stuffs [AM] into [src][is_dangerous ? "!" : "."]"), \
-							 SPAN_NOTICE("You stuff [AM] into [src]."))
+							SPAN_NOTICE("You stuff [AM] into [src]."))
 		if(ismob(M))
 			admin_attack_log(user, M, "Placed the victim into [src].", "Was placed into [src] by the attacker.", "stuffed [src] with")
 			if (M.client)

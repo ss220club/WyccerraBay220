@@ -604,7 +604,7 @@
 	..()
 
 /obj/item/device/electronic_assembly/default //The /default electronic_assemblys are to allow the introduction of the new naming scheme without breaking old saves.
-  name = "type-a electronic assembly"
+	name = "type-a electronic assembly"
 
 /obj/item/device/electronic_assembly/calc
 	name = "type-b electronic assembly"

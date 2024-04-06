@@ -24,11 +24,11 @@
 	station_short = "Sierra"
 	dock_name     = "TBD"
 	boss_name     = "Central Command"
-	boss_short    = "Centcomm"
-	company_name  = "NanoTrasen"
+	boss_short    = "Centcom"
+	company_name  = "Nanotrasen"
 	company_short = "NT"
 
-	map_admin_faxes = list("NanoTrasen Central Office")
+	map_admin_faxes = list("Nanotrasen Central Office")
 
 	evac_controller_type = /datum/evacuation_controller/starship
 

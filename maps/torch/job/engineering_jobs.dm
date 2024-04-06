@@ -43,12 +43,12 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/atmos_control,
-							 /datum/computer_file/program/rcon_console,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor)
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/atmos_control,
+							/datum/computer_file/program/rcon_console,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor)
 
 /datum/job/senior_engineer/get_description_blurb()
 	return "You are the Senior Engineer. You are a veteran SNCO. You are subordinate to the Chief Engineer though you may have many years more experience than them and your subordinates are the rest of engineering. You should be an expert in practically every engineering area and familiar and possess leadership skills. Coordinate the team and ensure the smooth running of the department along with the Chief Engineer."
@@ -102,12 +102,12 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/atmos_control,
-							 /datum/computer_file/program/rcon_console,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor)
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/atmos_control,
+							/datum/computer_file/program/rcon_console,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor)
 
 /datum/job/engineer/get_description_blurb()
 	return "You are an Engineer. You operate under one of many titles and may be highly specialised in a specific area of engineering. You probably have at least a general familiarity with most other areas though this is not expected. You are subordinate to the Senior Engineer and the Chief Engineer and are expected to follow them."
@@ -156,12 +156,12 @@
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
-							 /datum/computer_file/program/supermatter_monitor,
-							 /datum/computer_file/program/alarm_monitor,
-							 /datum/computer_file/program/atmos_control,
-							 /datum/computer_file/program/rcon_console,
-							 /datum/computer_file/program/camera_monitor,
-							 /datum/computer_file/program/shields_monitor)
+							/datum/computer_file/program/supermatter_monitor,
+							/datum/computer_file/program/alarm_monitor,
+							/datum/computer_file/program/atmos_control,
+							/datum/computer_file/program/rcon_console,
+							/datum/computer_file/program/camera_monitor,
+							/datum/computer_file/program/shields_monitor)
 
 /datum/job/engineer_trainee/get_description_blurb()
 	return "You are an Engineer Trainee. You are learning how to operate the various onboard engineering systems from senior engineering staff. You are subordinate to all of the other engineers aboard. The role is only for players new to the engineering system and department."

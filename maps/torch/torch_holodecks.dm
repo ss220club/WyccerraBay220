@@ -10,23 +10,23 @@
 		"desert"           = new/datum/holodeck_program(/area/holodeck/source_desert,
 														list(
 															'sound/effects/wind/wind_2_1.ogg',
-											 				'sound/effects/wind/wind_2_2.ogg',
-											 				'sound/effects/wind/wind_3_1.ogg',
-											 				'sound/effects/wind/wind_4_1.ogg',
-											 				'sound/effects/wind/wind_4_2.ogg',
-											 				'sound/effects/wind/wind_5_1.ogg'
-												 			)
-		 												),
+															'sound/effects/wind/wind_2_2.ogg',
+															'sound/effects/wind/wind_3_1.ogg',
+															'sound/effects/wind/wind_4_1.ogg',
+															'sound/effects/wind/wind_4_2.ogg',
+															'sound/effects/wind/wind_5_1.ogg'
+															)
+														),
 		"snowfield"        = new/datum/holodeck_program(/area/holodeck/source_snowfield,
 														list(
 															'sound/effects/wind/wind_2_1.ogg',
-											 				'sound/effects/wind/wind_2_2.ogg',
-											 				'sound/effects/wind/wind_3_1.ogg',
-											 				'sound/effects/wind/wind_4_1.ogg',
-											 				'sound/effects/wind/wind_4_2.ogg',
-											 				'sound/effects/wind/wind_5_1.ogg'
-												 			)
-		 												),
+															'sound/effects/wind/wind_2_2.ogg',
+															'sound/effects/wind/wind_3_1.ogg',
+															'sound/effects/wind/wind_4_1.ogg',
+															'sound/effects/wind/wind_4_2.ogg',
+															'sound/effects/wind/wind_5_1.ogg'
+															)
+														),
 		"space"            = new/datum/holodeck_program(/area/holodeck/source_space,
 														list(
 															'sound/ambience/ambispace.ogg',

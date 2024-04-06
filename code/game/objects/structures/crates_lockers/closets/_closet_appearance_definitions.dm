@@ -652,7 +652,7 @@
 	color = COLOR_NT_RED
 	decals = list(
 		"crate_bracing"
-	 )
+	)
 	extra_decals = list(
 		"marking" = COLOR_OFF_WHITE,
 		"text_upper" = COLOR_OFF_WHITE

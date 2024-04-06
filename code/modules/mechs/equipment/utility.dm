@@ -329,7 +329,7 @@
 	require_adjacent = FALSE
 
 	var/activated_passive_power = 1 KILOWATTS
- 	///For when targetting a single object, will create a warp beam
+	///For when targetting a single object, will create a warp beam
 	var/datum/beam = null
 	var/max_dist = 6
 	var/obj/effect/warp/small/warpeffect = null

@@ -32,7 +32,7 @@
 "ah" = (
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Facility Access"
 	},
@@ -1616,7 +1616,7 @@
 "dc" = (
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Foxtrot Barracks"
 	},
@@ -1709,7 +1709,7 @@
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
 	dir = 4;
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Delta Barracks"
 	},

@@ -192,13 +192,13 @@
 	SStgui.update_uis(src)
 
 /**
-  * Sets the amount per transfer.
-  *
-  ** Arguments:
-  * new_amount - amount per transfer we want to set
-  *
-  * Returns: TRUE if `amount_per_transfer` has changed to `new_amount`, FALSE otherwise
-  */
+ * Sets the amount per transfer.
+ *
+ ** Arguments:
+ * new_amount - amount per transfer we want to set
+ *
+ * Returns: TRUE if `amount_per_transfer` has changed to `new_amount`, FALSE otherwise
+ */
 /obj/machinery/chemical_dispenser/proc/set_amount_per_transfer(new_amount)
 	PRIVATE_PROC(TRUE)
 
@@ -210,13 +210,13 @@
 	return TRUE
 
 /**
-  * Removes desired cartridge from chem dispanser.
-  *
-  ** Arguments:
-  * user - user trying to remove cartridge
-  * screwdriver - scredriver used to remove cartridge
-  * cartridge_to_remove_label - label of cartridge user wants to remove
-  */
+ * Removes desired cartridge from chem dispanser.
+ *
+ ** Arguments:
+ * user - user trying to remove cartridge
+ * screwdriver - scredriver used to remove cartridge
+ * cartridge_to_remove_label - label of cartridge user wants to remove
+ */
 /obj/machinery/chemical_dispenser/proc/remove_cartridge(mob/user, obj/item/screwdriver, cartridge_to_remove_label)
 	PRIVATE_PROC(TRUE)
 

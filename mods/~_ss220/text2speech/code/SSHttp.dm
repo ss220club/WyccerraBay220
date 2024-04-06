@@ -43,11 +43,11 @@ SUBSYSTEM_DEF(http)
 				log_debug(log_data.Join("\n"))
 
 /**
-  * Async request creator
-  *
-  * Generates an async request, and adds it to the subsystem's processing list
-  * These should be used as they do not lock the entire DD process up as they execute inside their own thread pool inside RUSTG
-  */
+ * Async request creator
+ *
+ * Generates an async request, and adds it to the subsystem's processing list
+ * These should be used as they do not lock the entire DD process up as they execute inside their own thread pool inside RUSTG
+ */
 /datum/controller/subsystem/http/proc/create_async_request(method, url, body = "", list/headers, datum/callback/proc_callback)
 	var/datum/http_request/req = new()
 	req.prepare(method, url, body, headers)
@@ -72,22 +72,22 @@ SUBSYSTEM_DEF(http)
 		log_debug(log_data.Join("\n"))
 
 /**
-  * Blocking request creator
-  *
-  * Generates a blocking request, executes it, logs the info then cleanly returns the response
-  * Exists as a proof of concept, and should never be used
-  */
+ * Blocking request creator
+ *
+ * Generates a blocking request, executes it, logs the info then cleanly returns the response
+ * Exists as a proof of concept, and should never be used
+ */
 /datum/controller/subsystem/http/proc/make_blocking_request(method, url, body = "", list/headers)
 	CRASH("Attempted use of a blocking HTTP request")
 
 /**
-  * # HTTP Request
-  *
-  * Holder datum for ingame HTTP requests
-  *
-  * Holds information regarding to methods used, URL, and response,
-  * as well as job IDs and progress tracking for async requests
-  */
+ * # HTTP Request
+ *
+ * Holder datum for ingame HTTP requests
+ *
+ * Holds information regarding to methods used, URL, and response,
+ * as well as job IDs and progress tracking for async requests
+ */
 /datum/http_request
 	/// The ID of the request (Only set if it is an async request)
 	var/id
@@ -116,16 +116,16 @@ THE METHODS IN THIS FILE ARE TO BE USED BY THE SUBSYSTEM AS A MANGEMENT HUB
 */
 
 /**
-  * Preparation handler
-  *
-  * Call this with relevant parameters to form the request you want to make
-  *
-  * Arguments:
-  * * _method - HTTP Method to use, see code/__DEFINES/rust_g.dm for a full list
-  * * _url - The URL to send the request to
-  * * _body - The body of the request, if applicable
-  * * _headers - Associative list of HTTP headers to send, if applicab;e
-  */
+ * Preparation handler
+ *
+ * Call this with relevant parameters to form the request you want to make
+ *
+ * Arguments:
+ * * _method - HTTP Method to use, see code/__DEFINES/rust_g.dm for a full list
+ * * _url - The URL to send the request to
+ * * _body - The body of the request, if applicable
+ * * _headers - Associative list of HTTP headers to send, if applicab;e
+ */
 /datum/http_request/proc/prepare(_method, _url, _body = "", list/_headers, _output_file)
 	if(!length(_headers))
 		headers = ""
@@ -138,22 +138,22 @@ THE METHODS IN THIS FILE ARE TO BE USED BY THE SUBSYSTEM AS A MANGEMENT HUB
 	output_file = _output_file
 
 /**
-  * Blocking executor
-  *
-  * Remains as a proof of concept to show it works, but should NEVER be used to do FFI halting the entire DD process up
-  * Async rqeuests are much preferred, but also require the subsystem to be firing for them to be answered
-  */
+ * Blocking executor
+ *
+ * Remains as a proof of concept to show it works, but should NEVER be used to do FFI halting the entire DD process up
+ * Async rqeuests are much preferred, but also require the subsystem to be firing for them to be answered
+ */
 /datum/http_request/proc/execute_blocking()
 	CRASH("Attempted to execute a blocking HTTP request")
 	// _raw_response = rustg_http_request_blocking(method, url, body, headers, build_options())
 
 /**
-  * Async execution starter
-  *
-  * Tells the request to start executing inside its own thread inside RUSTG
-  * Preferred over blocking, but also requires SShttp to be active
-  * As such, you cannot use this for events which may happen at roundstart (EG: IPIntel, BYOND account tracking, etc)
-  */
+ * Async execution starter
+ *
+ * Tells the request to start executing inside its own thread inside RUSTG
+ * Preferred over blocking, but also requires SShttp to be active
+ * As such, you cannot use this for events which may happen at roundstart (EG: IPIntel, BYOND account tracking, etc)
+ */
 /datum/http_request/proc/begin_async()
 	if(in_progress)
 		CRASH("Attempted to re-use a request object.")
@@ -167,22 +167,22 @@ THE METHODS IN THIS FILE ARE TO BE USED BY THE SUBSYSTEM AS A MANGEMENT HUB
 		in_progress = TRUE
 
 /**
-  * Options builder
-  *
-  * Builds options for if we want to download files with SShttp
-  */
+ * Options builder
+ *
+ * Builds options for if we want to download files with SShttp
+ */
 /datum/http_request/proc/build_options()
 	if(output_file)
 		return json_encode(list("output_filename" = output_file, "body_filename" = null))
 	return null
 
 /**
-  * Async completion checker
-  *
-  * Checks if an async request has been complete
-  * Has safety checks built in to compensate if you call this on blocking requests,
-  * or async requests which have already finished
-  */
+ * Async completion checker
+ *
+ * Checks if an async request has been complete
+ * Has safety checks built in to compensate if you call this on blocking requests,
+ * or async requests which have already finished
+ */
 /datum/http_request/proc/is_complete()
 	// If we dont have an ID, were blocking, so assume complete
 	if(isnull(id))
@@ -205,12 +205,12 @@ THE METHODS IN THIS FILE ARE TO BE USED BY THE SUBSYSTEM AS A MANGEMENT HUB
 		return TRUE
 
 /**
-  * Response deserializer
-  *
-  * Takes a HTTP request object, and converts it into a [/datum/http_response]
-  * The entire thing is wrapped in try/catch to ensure it doesnt break on invalid requests
-  * Can be called on async and blocking requests
-  */
+ * Response deserializer
+ *
+ * Takes a HTTP request object, and converts it into a [/datum/http_response]
+ * The entire thing is wrapped in try/catch to ensure it doesnt break on invalid requests
+ * Can be called on async and blocking requests
+ */
 /datum/http_request/proc/into_response()
 	var/datum/http_response/R = new()
 
@@ -226,13 +226,13 @@ THE METHODS IN THIS FILE ARE TO BE USED BY THE SUBSYSTEM AS A MANGEMENT HUB
 	return R
 
 /**
-  * # HTTP Response
-  *
-  * Holder datum for HTTP responses
-  *
-  * Created from calling [/datum/http_request/proc/into_response()]
-  * Contains vars about the result of the response
-  */
+ * # HTTP Response
+ *
+ * Holder datum for HTTP responses
+ *
+ * Created from calling [/datum/http_request/proc/into_response()]
+ * Contains vars about the result of the response
+ */
 /datum/http_response
 	/// The HTTP status code of the response
 	var/status_code

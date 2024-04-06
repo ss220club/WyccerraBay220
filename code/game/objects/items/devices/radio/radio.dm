@@ -447,7 +447,7 @@
 
 
 
-  /* ###### Radio headsets can only broadcast through subspace ###### */
+/* ###### Radio headsets can only broadcast through subspace ###### */
 	if(subspace_transmission)
 		// First, we want to generate a new radio signal
 		var/datum/signal/signal = new
@@ -507,7 +507,7 @@
 					return R.talk_into(M, message, channel, verb, speaking)
 			return FALSE
 
-  /* ###### Intercoms and station-bounced radios ###### */
+/* ###### Intercoms and station-bounced radios ###### */
 
 	var/filter_type = 2
 

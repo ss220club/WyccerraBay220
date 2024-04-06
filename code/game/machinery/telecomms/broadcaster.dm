@@ -280,7 +280,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 						channel_tag, channel_color)
 
 
-  /* ###### Prepare the radio connection ###### */
+/* ###### Prepare the radio connection ###### */
 
 	var/display_freq = freq
 
@@ -330,9 +330,9 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 	// Get a list of mobs who can hear from the radios we collected.
 	var/list/receive = get_mobs_in_radio_ranges(radios)
 
-  /* ###### Organize the receivers into categories for displaying the message ###### */
+/* ###### Organize the receivers into categories for displaying the message ###### */
 
-  	// Understood the message:
+	// Understood the message:
 	var/list/heard_masked 	= list() // masked name or no real name
 	var/list/heard_normal 	= list() // normal message
 
@@ -380,7 +380,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 				heard_garbled += R
 
 
-  /* ###### Begin formatting and sending the message ###### */
+/* ###### Begin formatting and sending the message ###### */
 	if (length(heard_masked) || length(heard_normal) || length(heard_voice) || length(heard_garbled) || length(heard_gibberish))
 
 	  /* --- Some miscellaneous variables to format the string output --- */
@@ -402,7 +402,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 		var/part_c = "</span></span>"
 
 
-		 /* ###### Send the message ###### */
+		/* ###### Send the message ###### */
 
 	  	/* --- Process all the mobs that heard a masked voice (understood) --- */
 
@@ -440,7 +440,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 
 /proc/Broadcast_SimpleMessage(source, frequency, text, data, mob/M, compression, level, channel_tag, channel_color)
 
-  /* ###### Prepare the radio connection ###### */
+/* ###### Prepare the radio connection ###### */
 
 	if(!M)
 		var/mob/living/carbon/human/H = new
@@ -494,7 +494,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 				receive |= R.send_hear(display_freq)
 
 
-  /* ###### Organize the receivers into categories for displaying the message ###### */
+/* ###### Organize the receivers into categories for displaying the message ###### */
 
 	// Understood the message:
 	var/list/heard_normal 	= list() // normal message
@@ -526,7 +526,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 			heard_garbled += R
 
 
-  /* ###### Begin formatting and sending the message ###### */
+/* ###### Begin formatting and sending the message ###### */
 	if (length(heard_normal) || length(heard_garbled) || length(heard_gibberish))
 
 	  /* --- Some miscellaneous variables to format the string output --- */
@@ -550,7 +550,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 
 		//End of research and feedback code.
 
-	 /* ###### Send the message ###### */
+	/* ###### Send the message ###### */
 
 		/* --- Process all the mobs that heard the voice normally (understood) --- */
 
@@ -607,7 +607,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 	)
 	signal.frequency = PUB_FREQ// Common channel
 
-  //#### Sending the signal to all subspace receivers ####//
+//#### Sending the signal to all subspace receivers ####//
 	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
 		R.receive_signal(signal)
 

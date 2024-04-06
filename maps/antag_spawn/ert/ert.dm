@@ -75,6 +75,6 @@
 
 /obj/machinery/telecomms/allinone/ert
 	listening_freqs = list(ERT_FREQ)
-	channel_color = COMMS_COLOR_CENTCOMM
+	channel_color = COMMS_COLOR_CENTCOM
 	channel_name = "Response Team"
 	circuitboard = /obj/item/stock_parts/circuitboard/telecomms/allinone/ert

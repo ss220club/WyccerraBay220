@@ -96,7 +96,7 @@
 		AddOverlays(image('icons/obj/atmospherics/pipes.dmi', "comp-o2", FLY_LAYER))
 	else if(rpm>500)
 		AddOverlays(image('icons/obj/atmospherics/pipes.dmi', "comp-o1", FLY_LAYER))
-	 //TODO: DEFERRED
+	//TODO: DEFERRED
 
 /obj/machinery/power/turbine/Initialize()
 	..()

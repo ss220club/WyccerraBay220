@@ -63,7 +63,7 @@ SUBSYSTEM_DEF(supply)
 	point_sources[source] += amount
 	point_sources["total"] += amount
 
-	//To stop things being sent to centcomm which should not be sent to centcomm. Recursively checks for these types.
+	//To stop things being sent to centcom which should not be sent to centcom. Recursively checks for these types.
 /datum/controller/subsystem/supply/proc/forbidden_atoms_check(atom/A)
 	if (istype(A, /mob/living))
 		var/mob/living/mob = A

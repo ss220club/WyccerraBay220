@@ -12,13 +12,13 @@
 
 
 #define ORGAN_STYLE ( \
-  (organ.status & ORGAN_ROBOTIC) ? 1 \
+(organ.status & ORGAN_ROBOTIC) ? 1 \
 : (organ.status & ORGAN_CRYSTAL) ? 2 \
 : 0 \
 )
 
 #define ORGAN_STYLE_OK ( \
-   style == 0 && (augment_flags & AUGMENT_BIOLOGICAL) \
+style == 0 && (augment_flags & AUGMENT_BIOLOGICAL) \
 || style == 1 && (augment_flags & AUGMENT_MECHANICAL) \
 || style == 2 && (augment_flags & AUGMENT_CRYSTALINE) \
 )

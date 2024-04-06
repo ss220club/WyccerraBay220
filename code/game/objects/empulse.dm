@@ -15,7 +15,7 @@
  * - `log` - If `TRUE`, generates an admin log detailing the EMP's size and origin area.
  *
  * Returns `FALSE` if the emp failed to generate, `TRUE` otherwise.
- **/
+ */
 /proc/empulse(atom/origin, heavy_range, light_range, log = FALSE)
 	if (!origin)
 		return FALSE

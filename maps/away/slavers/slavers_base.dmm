@@ -1284,12 +1284,6 @@
 /obj/item/gun/projectile/shotgun/pump,
 /turf/simulated/floor/tiled,
 /area/slavers_base/secwing)
-"dn" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor/tiled,
-/area/slavers_base/secwing)
 "do" = (
 /obj/structure/cable{
 	d2 = 6;
@@ -1477,9 +1471,6 @@
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /turf/simulated/floor/ceiling,
 /area/slavers_base/powatm)
-"dL" = (
-/turf/simulated/floor/tiled,
-/area/slavers_base/secwing)
 "dM" = (
 /obj/structure/cable/green{
 	d1 = 2;
@@ -3187,10 +3178,6 @@
 /obj/random/snack,
 /turf/simulated/floor/tiled,
 /area/slavers_base/dorms)
-"hZ" = (
-/obj/structure/table/standard,
-/turf/simulated/floor/tiled,
-/area/slavers_base/dorms)
 "ia" = (
 /obj/structure/table/standard,
 /obj/machinery/light{
@@ -3201,9 +3188,6 @@
 /area/slavers_base/dorms)
 "ib" = (
 /obj/structure/closet/fridge,
-/turf/simulated/floor/tiled,
-/area/slavers_base/dorms)
-"ic" = (
 /turf/simulated/floor/tiled,
 /area/slavers_base/dorms)
 "id" = (
@@ -3367,10 +3351,6 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/tiled,
-/area/slavers_base/dorms)
-"iv" = (
-/obj/decal/cleanable/generic,
 /turf/simulated/floor/tiled,
 /area/slavers_base/dorms)
 "iw" = (
@@ -3797,9 +3777,6 @@
 /obj/decal/cleanable/dirt,
 /turf/simulated/floor/tiled,
 /area/slavers_base/hallway)
-"jv" = (
-/turf/simulated/floor/tiled,
-/area/slavers_base/demo)
 "jw" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -4064,10 +4041,6 @@
 /area/slavers_base/demo)
 "kk" = (
 /mob/living/simple_animal/hostile/abolition_extremist,
-/turf/simulated/floor/tiled,
-/area/slavers_base/demo)
-"kl" = (
-/obj/decal/cleanable/generic,
 /turf/simulated/floor/tiled,
 /area/slavers_base/demo)
 "km" = (
@@ -16918,8 +16891,8 @@ aX
 aO
 cS
 dd
-dL
-dL
+dp
+dp
 eL
 fn
 fu
@@ -17120,7 +17093,7 @@ aW
 aP
 cS
 de
-dL
+dp
 eh
 eM
 cS
@@ -17133,8 +17106,8 @@ gi
 gi
 gi
 hT
-ic
-ic
+gt
+gt
 iM
 jf
 jq
@@ -17322,8 +17295,8 @@ aP
 cJ
 cS
 df
-dL
-dL
+dp
+dp
 eM
 cS
 fv
@@ -17335,8 +17308,8 @@ gZ
 hj
 hD
 hU
-iv
-ic
+ha
+gt
 iN
 gi
 gi
@@ -17524,7 +17497,7 @@ aP
 bO
 cS
 dg
-dL
+dp
 ei
 eM
 cS
@@ -17537,11 +17510,11 @@ gt
 hk
 gi
 hT
-ic
-ic
+gt
+gt
 iN
-ic
-ic
+gt
+gt
 jA
 jP
 ka
@@ -17726,8 +17699,8 @@ cv
 aP
 cS
 dh
-dL
-dL
+dp
+dp
 eM
 cS
 fv
@@ -17739,11 +17712,11 @@ gt
 hl
 gi
 hV
-ic
-iv
+gt
+ha
 iN
-ic
-ic
+gt
+gt
 jB
 gi
 kb
@@ -17946,7 +17919,7 @@ iB
 iO
 jg
 jr
-ic
+gt
 gi
 kc
 ko
@@ -18143,12 +18116,12 @@ gt
 hn
 gi
 hX
-ic
+gt
 iC
 iP
 jh
 jr
-ic
+gt
 gi
 kd
 gi
@@ -18345,12 +18318,12 @@ ha
 gD
 gi
 hX
-ic
+gt
 iC
 iQ
 ji
 jr
-ic
+gt
 gi
 ke
 gi
@@ -18547,12 +18520,12 @@ gt
 gz
 gi
 hY
-ic
+gt
 iC
 iR
 jj
 jr
-ic
+gt
 gi
 gi
 gi
@@ -18748,13 +18721,13 @@ gt
 gt
 ho
 gi
-hZ
-ic
+gA
+gt
 iD
 iS
 jk
 jr
-ic
+gt
 gi
 ad
 ad
@@ -18951,11 +18924,11 @@ gN
 gD
 gi
 ia
-ic
-ic
+gt
+gt
 iN
-ic
-ic
+gt
+gt
 jB
 gi
 ad
@@ -19139,7 +19112,7 @@ cy
 aP
 aP
 cS
-dn
+df
 dN
 en
 dp
@@ -19153,11 +19126,11 @@ gt
 hp
 gi
 ib
-ic
-ic
+gt
+gt
 iT
-iv
-ic
+ha
+gt
 jC
 gi
 ad
@@ -19355,12 +19328,12 @@ gN
 gA
 gi
 ib
-ic
+gt
 iE
 iN
-ic
-ic
-ic
+gt
+gt
+gt
 gi
 ad
 ad
@@ -19556,12 +19529,12 @@ gt
 gt
 gy
 gi
-ic
-ic
-ic
+gt
+gt
+gt
 iU
-iv
-ic
+ha
+gt
 jD
 gi
 ad
@@ -19758,7 +19731,7 @@ gt
 gt
 hq
 gi
-ic
+gt
 ix
 iF
 iV
@@ -20773,8 +20746,8 @@ gH
 iH
 iW
 hd
-jv
-jv
+hw
+hw
 jR
 kj
 ks
@@ -20975,10 +20948,10 @@ gI
 gI
 iX
 hd
-jv
-jv
-jv
-jv
+hw
+hw
+hw
+hw
 kt
 hd
 gJ
@@ -21178,9 +21151,9 @@ hd
 iY
 hd
 jw
-jv
-jv
-jv
+hw
+hw
+hw
 kt
 hd
 gI
@@ -21581,11 +21554,11 @@ hd
 iJ
 ja
 jn
-jv
+hw
 jJ
 jT
 kk
-jv
+hw
 hd
 gI
 gI
@@ -21783,11 +21756,11 @@ hd
 iI
 jb
 jn
-jv
+hw
 jK
 jT
-jv
-jv
+hw
+hw
 hd
 kF
 gI
@@ -21985,11 +21958,11 @@ hd
 iK
 iI
 jn
-jv
+hw
 jL
 jT
-kl
-jv
+jc
+hw
 hd
 gI
 kF
@@ -22187,11 +22160,11 @@ hd
 iI
 iI
 jn
-jv
+hw
 jM
 jT
-jv
-jv
+hw
+hw
 hd
 gI
 gI
@@ -22389,11 +22362,11 @@ hd
 iI
 iI
 jn
-jv
+hw
 jL
 jT
-jv
-jv
+hw
+hw
 hd
 gI
 kF
@@ -22591,11 +22564,11 @@ hd
 iL
 iI
 jn
-jv
+hw
 jN
 jT
-jv
-jv
+hw
+hw
 hd
 gJ
 gI
@@ -22793,11 +22766,11 @@ hd
 iI
 iI
 jn
-jv
+hw
 jO
 jU
-jv
-jv
+hw
+hw
 hd
 hy
 gI
@@ -22996,10 +22969,10 @@ hd
 hd
 hd
 jw
-jv
-jv
-jv
-jv
+hw
+hw
+hw
+hw
 hd
 gI
 gI
@@ -23197,11 +23170,11 @@ hw
 hw
 hw
 hd
-jv
-jv
-jv
-jv
-jv
+hw
+hw
+hw
+hw
+hw
 hd
 kF
 gI
@@ -23399,8 +23372,8 @@ hN
 hw
 jc
 hd
-jv
-jv
+hw
+hw
 jV
 jV
 jV
@@ -23601,8 +23574,8 @@ iy
 hw
 jd
 hd
-jv
-jv
+hw
+hw
 jW
 jN
 jL
@@ -23803,11 +23776,11 @@ iz
 hw
 hw
 hd
-jv
-jv
+hw
+hw
 jL
-jv
-jv
+hw
+hw
 hd
 gK
 gI
@@ -24005,10 +23978,10 @@ hQ
 hw
 hw
 hd
-jv
-jv
+hw
+hw
 jN
-jv
+hw
 kv
 hd
 gI
@@ -24207,9 +24180,9 @@ hw
 hw
 hw
 jo
-jv
-jv
-jv
+hw
+hw
+hw
 km
 kw
 hd

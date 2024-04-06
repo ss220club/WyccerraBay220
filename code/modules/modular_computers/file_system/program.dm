@@ -163,13 +163,13 @@
 	return TRUE
 
 /**
-  * CONVENTIONS, READ THIS WHEN CREATING NEW PROGRAM AND OVERRIDING THIS PROC:
-  * Topic calls are automatically forwarded from NanoModule this program contains.
-  * Calls beginning with "PRG_" are reserved for programs handling.
-  * Calls beginning with "PC_" are reserved for computer handling (by whatever runs the program)
-  * ALWAYS INCLUDE PARENT CALL ..() AT THE TOP OF THE PROC OR DIE IN FIRE.
-  * Return values should be one of TOPIC_*
-  */
+ * CONVENTIONS, READ THIS WHEN CREATING NEW PROGRAM AND OVERRIDING THIS PROC:
+ * Topic calls are automatically forwarded from NanoModule this program contains.
+ * Calls beginning with "PRG_" are reserved for programs handling.
+ * Calls beginning with "PC_" are reserved for computer handling (by whatever runs the program)
+ * ALWAYS INCLUDE PARENT CALL ..() AT THE TOP OF THE PROC OR DIE IN FIRE.
+ * Return values should be one of TOPIC_*
+ */
 /datum/computer_file/program/Topic(href, href_list)
 	if(..())
 		return TOPIC_HANDLED

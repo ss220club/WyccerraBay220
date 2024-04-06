@@ -30,19 +30,19 @@
 	. = ..()
 
 /**
-  * Access stuff. The report's access/access_edit should control whether it can be opened/submitted.
-  * For field editing or viewing, use the field's access/access_edit permission instead.
-  * The access system is based on "access patterns", lists of access values.
-  * A user needs all access values in a pattern to be granted access.
-  * A user needs to only match one of the potentially several stored access patterns to be granted access.
-  * You must have access to have edit access.
-  *
-  * This proc resets the access to the report, resulting in just one access pattern for access/edit.
-  * Arguments can be access values (numbers) or lists of access values.
-  * If null is passed to one of the arguments, that access type is left alone. Pass list() to reset to no access needed instead.
-  * The recursive option resets access to all fields in the report as well.
-  * If the override option is set to FALSE, the access supplied will instead be added as another access pattern, rather than resetting the access.
-  */
+ * Access stuff. The report's access/access_edit should control whether it can be opened/submitted.
+ * For field editing or viewing, use the field's access/access_edit permission instead.
+ * The access system is based on "access patterns", lists of access values.
+ * A user needs all access values in a pattern to be granted access.
+ * A user needs to only match one of the potentially several stored access patterns to be granted access.
+ * You must have access to have edit access.
+ *
+ * This proc resets the access to the report, resulting in just one access pattern for access/edit.
+ * Arguments can be access values (numbers) or lists of access values.
+ * If null is passed to one of the arguments, that access type is left alone. Pass list() to reset to no access needed instead.
+ * The recursive option resets access to all fields in the report as well.
+ * If the override option is set to FALSE, the access supplied will instead be added as another access pattern, rather than resetting the access.
+ */
 /datum/computer_file/report/proc/set_access(access, access_edit, recursive = 1, override = 1)
 	if(access)
 		if(!islist(access))
@@ -142,10 +142,10 @@
 	for(var/datum/report_field/field in fields)
 		.["fields"] += list(field.generate_nano_data(given_access))
 /**
-  * This formats the report into pencode for use with paper and printing. Setting access to null will bypass access checks.
-  * with_fields will include a field link after the field value (useful to print fillable forms).
-  * no_html will strip any html, possibly killing useful formatting in the process.
-  */
+ * This formats the report into pencode for use with paper and printing. Setting access to null will bypass access checks.
+ * with_fields will include a field link after the field value (useful to print fillable forms).
+ * no_html will strip any html, possibly killing useful formatting in the process.
+ */
 /datum/computer_file/report/proc/generate_pencode(access, with_fields, no_html)
 	. = list()
 	. += "\[center\][logo]\[/center\]"

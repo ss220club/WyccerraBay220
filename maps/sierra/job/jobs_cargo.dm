@@ -28,8 +28,8 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/supply,
-							 /datum/computer_file/program/deck_management,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/deck_management,
+							/datum/computer_file/program/reports)
 	// SIERRA TODO: need_exp_to_play
 	// need_exp_to_play = 2
 
@@ -61,8 +61,8 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/supply,
-							 /datum/computer_file/program/deck_management,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/deck_management,
+							/datum/computer_file/program/reports)
 
 /datum/job/cargo_tech/get_description_blurb()
 	return "Спустя долгого перетаскивания тяжёлых грузов из точки А в точку В Вы превратились из Ассистента Карго в настоящего Карготехника.\
@@ -130,8 +130,8 @@
 
 
 	software_on_spawn = list(/datum/computer_file/program/supply,
-							 /datum/computer_file/program/deck_management,
-							 /datum/computer_file/program/reports)
+							/datum/computer_file/program/deck_management,
+							/datum/computer_file/program/reports)
 
 /datum/job/cargo_tech/get_description_blurb()
 	return "Папа, мама, бабушка, дедушка, второй папа, всегда говорили Вам, что без хорошего образования Вы будете грузчиком. Однако они не ожидали, что Вы станете космическим грузчиком.\

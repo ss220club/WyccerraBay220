@@ -77,18 +77,18 @@
 	MD.glass = glass
 
 	for(var/thing in list(
-		 /obj/item/stack/material/cyborg/steel,
-		 /obj/item/stack/material/cyborg/aluminium,
-		 /obj/item/stack/material/rods/cyborg,
-		 /obj/item/stack/tile/floor/cyborg,
-		 /obj/item/stack/material/cyborg/glass/reinforced
+		/obj/item/stack/material/cyborg/steel,
+		/obj/item/stack/material/cyborg/aluminium,
+		/obj/item/stack/material/rods/cyborg,
+		/obj/item/stack/tile/floor/cyborg,
+		/obj/item/stack/material/cyborg/glass/reinforced
 		))
 		var/obj/item/stack/stack = locate(thing) in equipment
 		LAZYDISTINCTADD(stack.synths, metal)
 
 	for(var/thing in list(
-		 /obj/item/stack/material/cyborg/glass/reinforced,
-		 /obj/item/stack/material/cyborg/glass
+		/obj/item/stack/material/cyborg/glass/reinforced,
+		/obj/item/stack/material/cyborg/glass
 		))
 		var/obj/item/stack/stack = locate(thing) in equipment
 		LAZYDISTINCTADD(stack.synths, glass)

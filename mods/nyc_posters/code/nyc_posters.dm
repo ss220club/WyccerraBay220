@@ -30,7 +30,7 @@
 	icon_state = "blood_donation"
 	name = "Стань донором крови!"
 	desc = "Плакат на недорогой бумаге, агитирующий сдать кровь или аналогичную \
-	биологическую жидкость в ближайшем медицинском учреждении NanoTrasen. \
+	биологическую жидкость в ближайшем медицинском учреждении Nanotrasen. \
 	Надпись на плакате гласит: \"Даже один стакан крови может спасти жизнь \
 	ценного сотрудника!\"."
 
@@ -203,7 +203,7 @@
 	icon_state = "work_for_profit"
 	name = "Work for profit"
 	desc = "Always remember why you are here. Do your job, make more money for corp, \
-	waste less money of corp. This is how things work in NanoTrasen."
+	waste less money of corp. This is how things work in Nanotrasen."
 
 /singleton/poster/nyc/toolbox
 	poster_flags = POSTER_FLAG_RANDOM_PICK | POSTER_FLAG_CONTRABAND
@@ -244,7 +244,7 @@
 	poster, you can see a surgeon in the middle of an operation covering a body on the \
 	table from someone with his hand. You can also see an empty drip, drops of blood on \
 	the floor, a flat pulse line... Hell, there is a body bag on the table. Glory to the \
-	free medicine of NanoTrasen!"
+	free medicine of Nanotrasen!"
 
 /singleton/poster/nyc/xmas_gas
 	poster_flags = POSTER_FLAG_RANDOM_PICK | POSTER_FLAG_CONTRABAND

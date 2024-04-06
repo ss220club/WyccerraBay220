@@ -35,7 +35,7 @@ exactly 2 "/mob text paths" '"/mob'
 exactly 8 "/turf text paths" '"/turf'
 exactly 117 "to_world uses" '\sto_world\('
 exactly 0 "globals with leading /" '^/var' -P
-exactly 0 "globals without global sugar" '^var/(?!global/)' -P
+exactly 3 "globals without global sugar" '^var/(?!global/)' -P
 exactly 0 "apparent paths with trailing /" '\w/[,\)\n]' -P
 exactly $((53)) "to_world_log uses" '\sto_world_log\('
 exactly 0 "world<< uses" 'world<<|world[[:space:]]<<'
@@ -53,7 +53,7 @@ exactly 0 "anchored = 0/1" 'anchored\s*=\s*\d' -P
 exactly 2 "density = 0/1" 'density\s*=\s*\d' -P
 exactly 0 "emagged = 0/1" 'emagged\s*=\s*\d' -P
 exactly 0 "simulated = 0/1" 'simulated\s*=\s*\d' -P
-exactly 2 "var/ in proc arguments" '(^/[^/].+/.+?\(.*?)var/' -P
+exactly 0 "var/ in proc arguments" '(^/[^/].+/.+?\(.*?)var/' -P
 exactly 0 "tmp/ vars" 'var.*/tmp/' -P
 exactly 7 "uses of .len" '\.len\b' -P
 exactly 174 "attackby() override" '\/attackby\((.*)\)'  -P

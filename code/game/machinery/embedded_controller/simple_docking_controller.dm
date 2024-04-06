@@ -74,10 +74,6 @@
 	signal.data["command"] = command
 	post_signal(signal)
 
-///datum/computer/file/embedded_program/docking/simple/proc/signal_mech_sensor(var/command)
-//	signal_door(command)
-//	return
-
 /datum/computer/file/embedded_program/docking/simple/proc/open_door()
 	if(memory["door_status"]["state"] == "closed")
 		//signal_mech_sensor("enable")

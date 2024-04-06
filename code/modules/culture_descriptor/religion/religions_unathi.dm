@@ -7,7 +7,7 @@
 /singleton/cultural_info/religion/unathi_precursors
 	name = RELIGION_UNATHI_PRECURSOR
 	description = "Focused primarily with learning and understanding everything they can about the precursors, unathi of this faith \
- want to build a better world for their people with the tools that the precursors left for them."
+want to build a better world for their people with the tools that the precursors left for them."
 
 /singleton/cultural_info/religion/unathi_strat
 	name = RELIGION_UNATHI_STRATAGEM

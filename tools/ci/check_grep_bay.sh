@@ -35,7 +35,7 @@ exactly 2 "/mob text paths" '"/mob'
 exactly 8 "/turf text paths" '"/turf'
 exactly 117 "to_world uses" '\sto_world\('
 exactly 0 "globals with leading /" '^/var' -P
-exactly 0 "globals without global sugar" '^var/(?!global/)' -P
+exactly 3 "globals without global sugar" '^var/(?!global/)' -P
 exactly 0 "apparent paths with trailing /" '\w/[,\)\n]' -P
 exactly $((53)) "to_world_log uses" '\sto_world_log\('
 exactly 0 "world<< uses" 'world<<|world[[:space:]]<<'

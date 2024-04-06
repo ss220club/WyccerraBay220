@@ -73,6 +73,7 @@ GLOBAL_VAR(href_logfile)
 #endif
 
 /world/New()
+	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if (debug_server)
 		CALL_EXT(debug_server, "auxtools_init")()
@@ -103,8 +104,7 @@ GLOBAL_VAR(href_logfile)
 	log_unit_test("Unit Tests Enabled. This will destroy the world when testing is complete.")
 	load_unit_test_changes()
 #endif
-	Master.Initialize(10, FALSE)
-
+	Master.Initialize(10, FALSE, TRUE)
 
 /world/Del()
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
@@ -119,6 +119,7 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 
 
 /world/Topic(T, addr, master, key)
+	TGS_TOPIC
 	if (GLOB.world_topic_last > world.timeofday)
 		GLOB.world_topic_throttle = list() //probably passed midnight
 	GLOB.world_topic_last = world.timeofday
@@ -504,8 +505,10 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 	if(config.shutdown_on_reboot)
 		sleep(0)
 		del(world)
+		TgsEndProcess()
 		return
 	// [/SIERRA-ADD]
+	TgsReboot()
 	..(reason)
 
 /hook/startup/proc/loadMode()

@@ -2,12 +2,12 @@
  * ENDGAME STUFF
  **********************/
 
- // Universal State
- // Handles stuff like space icon_state, constants, etc.
- // Essentially a policy manager.  Once shit hits the fan, this changes its policies.
- // Called by master controller.
+// Universal State
+// Handles stuff like space icon_state, constants, etc.
+// Essentially a policy manager.  Once shit hits the fan, this changes its policies.
+// Called by master controller.
 
- // Default shit.
+// Default shit.
 /datum/universal_state
 	// Just for reference, for now.
 	// Might eventually add an observatory job.

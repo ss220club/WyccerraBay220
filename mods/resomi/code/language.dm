@@ -16,7 +16,7 @@
 	shorthand = "SCH"
 
 
- //AUTOHISS
+//AUTOHISS
 /datum/species/resomi
 	autohiss_basic_map = list(
 			"з" = list("с")

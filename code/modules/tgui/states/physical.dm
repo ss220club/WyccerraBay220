@@ -1,4 +1,4 @@
- /**
+/**
   * tgui state: physical_state
   *
   * Short-circuits the default state to only check physical distance.

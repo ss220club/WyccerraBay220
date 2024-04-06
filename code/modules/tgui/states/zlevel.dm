@@ -1,4 +1,4 @@
- /**
+/**
   * tgui state: z_state
   *
   * Only checks that the Z-level of the user and src_object are the same.

@@ -1,5 +1,5 @@
 
- /**
+/**
   * tgui state: always_state
   *
   * Always grants the user UI_INTERACTIVE. Period.

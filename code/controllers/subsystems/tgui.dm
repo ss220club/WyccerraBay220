@@ -1,4 +1,4 @@
- /**
+/**
   * tgui subsystem
   *
   * Contains all tgui state and subsystem code.
@@ -318,7 +318,7 @@ SUBSYSTEM_DEF(tgui)
 		open_uis_by_src.Remove(key)
 	return TRUE
 
- /**
+/**
   * private
   *
   * Handle client logout, by closing all their UIs.
@@ -330,7 +330,7 @@ SUBSYSTEM_DEF(tgui)
 /datum/controller/subsystem/tgui/proc/on_logout(mob/user)
 	return close_user_uis(user, logout = TRUE)
 
- /**
+/**
   * private
   *
   * Handle clients switching mobs, by transferring their UIs.

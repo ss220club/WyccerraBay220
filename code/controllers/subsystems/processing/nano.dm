@@ -6,7 +6,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 	// a list of current open /nanoui UIs, grouped by src_object and ui_key
 	var/list/open_uis = list()
 
- /**
+/**
   * Get an open /nanoui ui for the current user, src_object and ui_key and try to update it with data
   *
   * @param user /mob The mob who opened/owns the ui
@@ -27,7 +27,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 	force_open ? ui.reinitialise(new_initial_data=data) : ui.push_data(data)
 	return ui
 
- /**
+/**
   * Get an open /nanoui ui for the current user, src_object and ui_key
   *
   * @param user /mob The mob who opened/owns the ui
@@ -45,7 +45,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 		if (ui.user == user)
 			return ui
 
- /**
+/**
   * Update all /nanoui uis attached to src_object
   *
   * @param src_object /obj|/mob The obj or mob which the uis are attached to
@@ -66,7 +66,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 			else
 				ui.close()
 
- /**
+/**
   * Close all /nanoui uis attached to src_object
   *
   * @param src_object /obj|/mob The obj or mob which the uis are attached to
@@ -84,7 +84,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 			ui.close() // If it's missing src_object or user, we want to close it even more.
 			.++
 
- /**
+/**
   * Update /nanoui uis belonging to user
   *
   * @param user /mob The mob who owns the uis
@@ -103,7 +103,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 			ui.try_update(1)
 			.++
 
- /**
+/**
   * Close /nanoui uis belonging to user
   *
   * @param user /mob The mob who owns the uis
@@ -122,7 +122,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 			ui.close()
 			.++
 
- /**
+/**
   * Add a /nanoui ui to the list of open uis
   * This is called by the /nanoui open() proc
   *
@@ -137,7 +137,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 	LAZYDISTINCTADD(ui.user.open_uis, ui)
 	START_PROCESSING(SSnano, ui)
 
- /**
+/**
   * Remove a /nanoui ui from the list of open uis
   * This is called by the /nanoui close() proc
   *
@@ -160,7 +160,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 			open_uis -= src_object_key
 	return 1
 
- /**
+/**
   * This is called on user logout
   * Closes/clears all uis attached to the user's /mob
   *
@@ -171,7 +171,7 @@ PROCESSING_SUBSYSTEM_DEF(nano)
 /datum/controller/subsystem/processing/nano/proc/user_logout(mob/user)
 	return close_user_uis(user)
 
- /**
+/**
   * This is called when a player transfers from one mob to another
   * Transfers all open UIs to the new mob
   *

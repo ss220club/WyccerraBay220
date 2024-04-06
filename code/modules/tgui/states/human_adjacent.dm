@@ -1,5 +1,5 @@
 
- /**
+/**
   * tgui state: human_adjacent_state
   *
   * In addition to default checks, only allows interaction for a

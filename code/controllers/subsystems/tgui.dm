@@ -1,7 +1,7 @@
 /**
-  * tgui subsystem
-  *
-  * Contains all tgui state and subsystem code.
+ * tgui subsystem
+ *
+ * Contains all tgui state and subsystem code.
  **/
 
 
@@ -319,26 +319,26 @@ SUBSYSTEM_DEF(tgui)
 	return TRUE
 
 /**
-  * private
-  *
-  * Handle client logout, by closing all their UIs.
-  *
-  * required user mob The mob which logged out.
-  *
-  * return int The number of UIs closed.
+ * private
+ *
+ * Handle client logout, by closing all their UIs.
+ *
+ * required user mob The mob which logged out.
+ *
+ * return int The number of UIs closed.
  **/
 /datum/controller/subsystem/tgui/proc/on_logout(mob/user)
 	return close_user_uis(user, logout = TRUE)
 
 /**
-  * private
-  *
-  * Handle clients switching mobs, by transferring their UIs.
-  *
-  * required user source The client's original mob.
-  * required user target The client's new mob.
-  *
-  * return bool If the UIs were transferred.
+ * private
+ *
+ * Handle clients switching mobs, by transferring their UIs.
+ *
+ * required user source The client's original mob.
+ * required user target The client's new mob.
+ *
+ * return bool If the UIs were transferred.
  **/
 /datum/controller/subsystem/tgui/proc/on_transfer(mob/source, mob/target)
 	// The old mob had no open UIs.

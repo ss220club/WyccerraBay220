@@ -1,10 +1,10 @@
 /**
-  * Important! Avoid editing the content of file objects already saved on a disk,
-  * as this bypasses checks for anything that might prevent saving. Instead,
-  * clone the file, make the changes to the clone, and attempt to save the clone
-  * with the same filename using save_file(). Additional useful procs for data
-  * files in particular are also available.
-  */
+ * Important! Avoid editing the content of file objects already saved on a disk,
+ * as this bypasses checks for anything that might prevent saving. Instead,
+ * clone the file, make the changes to the clone, and attempt to save the clone
+ * with the same filename using save_file(). Additional useful procs for data
+ * files in particular are also available.
+ */
 /obj/item/stock_parts/computer/hard_drive
 	name = "basic hard drive"
 	desc = "A small power efficient solid state drive, with 128GQ of storage capacity for use in basic computers where power efficiency is desired."

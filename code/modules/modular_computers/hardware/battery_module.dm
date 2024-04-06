@@ -1,9 +1,9 @@
 /**
-  * This device is wrapper for actual power cell. I have decided to not use power
-  * cells directly as even low-end cells available on station have tremendeous capacity
-  * in comparsion. Higher tier cells would provide your device with nearly infinite
-  * battery life, which is something i want to avoid.
-  */
+ * This device is wrapper for actual power cell. I have decided to not use power
+ * cells directly as even low-end cells available on station have tremendeous capacity
+ * in comparsion. Higher tier cells would provide your device with nearly infinite
+ * battery life, which is something i want to avoid.
+ */
 /obj/item/stock_parts/computer/battery_module
 	name = "standard battery"
 	desc = "A standard power cell, commonly seen in high-end portable microcomputers or low-end laptops. It's rating is 120 Wh."

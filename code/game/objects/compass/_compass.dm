@@ -1,7 +1,7 @@
 /*
-  This folder contains an abstract type (/obj/compass_holder) which contains a set of
-  waypoints (/datum/compass_waypoint) and generates a circular compass with markers for
-  mobs that have the object in their screen list. See GPS for an example implementation.
+This folder contains an abstract type (/obj/compass_holder) which contains a set of
+waypoints (/datum/compass_waypoint) and generates a circular compass with markers for
+mobs that have the object in their screen list. See GPS for an example implementation.
 */
 
 /image/compass_marker

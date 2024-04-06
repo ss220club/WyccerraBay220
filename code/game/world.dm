@@ -114,8 +114,10 @@ GLOBAL_VAR(href_logfile)
 	return ..()
 
 
-GLOBAL_LIST_EMPTY(world_topic_throttle)
-GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
+/// List of all world topic spam prevention handlers. See code/modules/world_topic/_spam_prevention_handler.dm
+GLOBAL_LIST_EMPTY(world_topic_spam_prevention_handlers)
+/// List of all world topic handler datums. Populated inside makeDatumRefLists()
+GLOBAL_LIST_EMPTY(world_topic_handlers)
 
 
 /world/Topic(T, addr, master, key)
@@ -123,7 +125,7 @@ GLOBAL_VAR_INIT(world_topic_last, world.timeofday)
 	log_misc("WORLD/TOPIC: \"[T]\", from:[addr], master:[master], key:[key]")
 
 	// Handle spam prevention, if their IP isnt in the whitelist
-	if(!(addr in GLOB.configuration.system.topic_ip_ratelimit_bypass))
+	if(!(addr in config.topic_ip_ratelimit_bypass))
 		if(!GLOB.world_topic_spam_prevention_handlers[addr])
 			GLOB.world_topic_spam_prevention_handlers[addr] = new /datum/world_topic_spam_prevention_handler(addr)
 

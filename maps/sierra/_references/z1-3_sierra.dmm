@@ -99350,7 +99350,7 @@
 	},
 /obj/machinery/embedded_controller/radio/airlock/docking_port{
 	dir = 8;
-	display_name = "Aft Dock (NanoTrasen)";
+	display_name = "Aft Dock (Nanotrasen)";
 	id_tag = "petrov_shuttle_dock";
 	pixel_x = 20;
 	pixel_y = 32;

@@ -28,8 +28,6 @@
 	var/force = 0
 	var/attack_cooldown = DEFAULT_WEAPON_COOLDOWN
 	var/melee_accuracy_bonus = 0
-	/// Used to determine how fast an item completes a certain action. Lower values are faster.
-	var/toolspeed = 1
 
 	var/heat_protection = 0 //flags which determine which body parts are protected from heat. Use the HEAD, UPPER_TORSO, LOWER_TORSO, etc. flags. See setup.dm
 	var/cold_protection = 0 //flags which determine which body parts are protected from cold. Use the HEAD, UPPER_TORSO, LOWER_TORSO, etc. flags. See setup.dm
@@ -100,6 +98,12 @@
 
 	var/attack_ignore_harm_check = FALSE
 
+	///How a tool acts when you use it on something, such as wirecutters cutting wires while multitools measure power
+	var/tool_behaviour = null
+	///How fast does the tool work
+	var/toolspeed = 1
+	///Played when the item is used, for example tools
+	var/usesound
 
 /obj/item/Initialize()
 	. = ..()
@@ -177,43 +181,23 @@
 				qdel(src)
 
 /obj/item/examine(mob/user, distance, is_adjacent)
-	var/size
-	switch(src.w_class)
-		if(ITEM_SIZE_TINY)
-			size = "tiny"
-		if(ITEM_SIZE_SMALL)
-			size = "small"
-		if(ITEM_SIZE_NORMAL)
-			size = "normal-sized"
-		if(ITEM_SIZE_LARGE)
-			size = "large"
-		if(ITEM_SIZE_HUGE)
-			size = "bulky"
-		if(ITEM_SIZE_HUGE + 1 to INFINITY)
-			size = "huge"
-	var/desc_comp = "" //For "description composite"
-	desc_comp += "It is a [size] item."
-
+	. = ..()
 	if(hasHUD(user, HUD_SCIENCE)) //Mob has a research scanner active.
-		desc_comp += "<BR>*--------* <BR>"
 
 		if(origin_tech)
-			desc_comp += "[SPAN_NOTICE("Testing potentials:")]<BR>"
+			. += SPAN_NOTICE("Testing potentials:")
 			//var/list/techlvls = params2list(origin_tech)
 			for(var/T in origin_tech)
-				desc_comp += "Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]] <BR>"
+				. += SPAN_NOTICE("	Tech: Level [origin_tech[T]] [GLOB.tech_id_to_name[T]]")
 		else
-			desc_comp += "No tech origins detected.<BR>"
+			. += SPAN_NOTICE("	No tech origins detected.")
 
 		if(LAZYLEN(matter))
-			desc_comp += "[SPAN_NOTICE("Extractable materials:")]<BR>"
+			. += SPAN_NOTICE("Extractable materials:")
 			for(var/mat in matter)
-				desc_comp += "[SSmaterials.get_material_by_name(mat)]<BR>"
+				. += SPAN_NOTICE("	[SSmaterials.get_material_by_name(mat)]")
 		else
-			desc_comp += "[SPAN_DANGER("No extractable materials detected.")]<BR>"
-		desc_comp += "*--------*"
-
-	return ..(user, distance, is_adjacent, "", desc_comp)
+			. += SPAN_DANGER("	No extractable materials detected.")
 
 /obj/item/attack_hand(mob/user as mob)
 	if (!user) return
@@ -975,3 +959,87 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	if (href_list["examine"])
 		examinate(usr, src)
 		return TOPIC_HANDLED
+
+/obj/item/proc/change_tool_behaviour(new_tool_behaviour = tool_behaviour, new_toolspeed = toolspeed, override_sound)
+	tool_behaviour = new_tool_behaviour
+	toolspeed = new_toolspeed
+	if(override_sound)
+		usesound = override_sound
+	else
+		switch(tool_behaviour)
+			if(TOOL_CROWBAR)
+				usesound = DEFAULT_CROWBAR_SOUND
+			if(TOOL_SCREWDRIVER)
+				usesound = DEFAULT_SCREWDRIVER_SOUND
+			if(TOOL_WRENCH)
+				usesound = DEFAULT_WRENCH_SOUND
+			if(TOOL_WELDER)
+				usesound = DEFAULT_WELDER_SOUND
+	SEND_SIGNAL(src, COMSIG_OBJ_CHANGE_TOOL_BEHAVIOUR, tool_behaviour, toolspeed, override_sound)
+
+/// Called when a mob tries to use the item as a tool. Handles most checks.
+/obj/item/proc/use_as_tool(atom/target, mob/living/user, delay, amount=0, volume=0, skill_path, datum/callback/extra_checks, do_flags = DO_DEFAULT)
+	// No delay means there is no start message, and no reason to call tool_start_check before use_tool.
+	// Run the start check here so we wouldn't have to call it manually.
+	if(!delay && !tool_start_check(user, amount))
+		return
+
+	var/skill_modifier = user.skill_delay_total(skill_path)
+
+	delay *= toolspeed * skill_modifier
+
+	// Play tool sound at the beginning of tool usage.
+	play_tool_sound(target, volume)
+
+	if(delay)
+		// Create a callback with checks that would be called every tick by do_after.
+		var/datum/callback/tool_check = CALLBACK(src, PROC_REF(tool_check_callback), user, amount, extra_checks)
+
+		if(!do_after(user, delay, target=target, do_flags = do_flags, extra_checks=tool_check))
+			return
+	else
+		// Invoke the extra checks once, just in case.
+		if(extra_checks && !invoke(extra_checks))
+			return
+
+	// Use tool's fuel, stack sheets or charges if amount is set.
+	if(amount && !use(amount))
+		return
+
+	// Play tool sound at the end of tool usage,
+	// but only if the delay between the beginning and the end is not too small
+	if(delay >= MIN_TOOL_SOUND_DELAY)
+		play_tool_sound(target, volume)
+
+	return TRUE
+
+/// Called before [obj/item/proc/use_tool] if there is a delay, or by [obj/item/proc/use_tool] if there isn't. Only ever used by welding tools and stacks, so it's not added on any other [obj/item/proc/use_tool] checks.
+/obj/item/proc/tool_start_check(mob/living/user, amount=0)
+	. = tool_use_check(user, amount)
+	if(.)
+		SEND_SIGNAL(src, COMSIG_TOOL_START_USE, user)
+
+/// A check called by [/obj/item/proc/tool_start_check] once, and by use_tool on every tick of delay.
+/obj/item/proc/tool_use_check(mob/living/user, amount)
+	return !amount
+
+/// Plays item's usesound, if any.
+/obj/item/proc/play_tool_sound(atom/target, volume=50)
+	if(target && usesound && volume)
+		var/played_sound = usesound
+
+		if(islist(usesound))
+			played_sound = pick(usesound)
+
+		playsound(target, played_sound, volume, TRUE)
+
+/// Used in a callback that is passed by use_tool into do_after call. Do not override, do not call manually.
+/obj/item/proc/tool_check_callback(mob/living/user, amount, datum/callback/extra_checks)
+	SHOULD_NOT_OVERRIDE(TRUE)
+	. = tool_start_check(user, amount) && (!extra_checks || invoke(extra_checks))
+	if(.)
+		SEND_SIGNAL(src, COMSIG_TOOL_IN_USE, user)
+
+/// Generic use proc. Depending on the item, it uses up fuel, charges, sheets, etc. Returns TRUE on success, FALSE on failure.
+/obj/item/proc/use(used)
+	return !used

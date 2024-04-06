@@ -96,7 +96,8 @@
 	update_use_power(POWER_USE_OFF)
 
 /obj/machinery/shieldgen/proc/create_shields()
-	for(var/turf/target_tile as anything in RANGE_TURFS(src, 8))
+	var/turf/center = get_turf(src)
+	for(var/turf/target_tile as anything in RANGE_TURFS(center, 8))
 		if ((isspaceturf(target_tile) || isopenturf(target_tile)) && !(locate(/obj/machinery/shield) in target_tile))
 			if (malfunction && prob(33) || !malfunction)
 				var/obj/machinery/shield/S = new/obj/machinery/shield(target_tile)
@@ -195,18 +196,15 @@
 		update_icon()
 		return 1
 
-/obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isScrewdriver(W))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 100, 1)
-		if(is_open)
-			to_chat(user, SPAN_NOTICE("You close the panel."))
-			is_open = 0
-		else
-			to_chat(user, SPAN_NOTICE("You open the panel and expose the wiring."))
-			is_open = 1
-		return TRUE
+/obj/machinery/shieldgen/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	is_open = !is_open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, is_open)
 
-	else if(isCoil(W) && malfunction && is_open)
+/obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
+	if(isCoil(W) && malfunction && is_open)
 		var/obj/item/stack/cable_coil/coil = W
 		to_chat(user, SPAN_NOTICE("You begin to replace the wires."))
 		//if(do_after(user, min(60, round( ((maxhealth/health)*10)+(malfunction*10) ))) //Take longer to repair heavier damage

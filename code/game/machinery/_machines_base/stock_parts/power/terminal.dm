@@ -86,7 +86,7 @@
 		return
 	if(istype(new_loc) && (terminal.loc == get_step(new_loc, terminal_dir)))
 		return     // This location is fine
-	machine.visible_message(SPAN_WARNING("The terminal is ripped out of \the [machine]!"))
+	machine.visible_message(SPAN_WARNING("The terminal is ripped out of [machine]!"))
 	qdel(terminal) // will handle everything via the destroyed event
 
 /obj/item/stock_parts/power/terminal/proc/make_terminal(obj/machinery/machine)
@@ -115,6 +115,35 @@
 			to_chat(user, SPAN_NOTICE("There is already a terminal here."))
 			return TRUE
 
+/obj/item/stock_parts/power/terminal/wirecutter_act(mob/living/user, obj/item/tool)
+	var/obj/machinery/machine = loc
+	if(!istype(machine))
+		return
+	if(!terminal)
+		return
+	var/turf/T = get_step(machine, terminal_dir)
+	if(terminal_dir && user.loc != T)
+		return null // Wrong terminal handler.
+	if(istype(T) && !T.is_plating())
+		. = ITEM_INTERACT_SUCCESS
+		to_chat(user, SPAN_WARNING("You must remove the floor plating in front of [machine] first."))
+		return
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(SPAN_WARNING("[user] dismantles the power terminal from [machine]."), \
+						"You begin to cut the cables...")
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(terminal && (machine == loc) && machine.components_are_accessible(type))
+		if(prob(50) && electrocute_mob(user, terminal.powernet, terminal))
+			var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
+			s.set_up(5, 1, machine)
+			s.start()
+			if(user.stunned)
+				return
+		new /obj/item/stack/cable_coil(T, 10)
+		to_chat(user, SPAN_NOTICE("You cut the cables and dismantle the power terminal."))
+		qdel(terminal)
+
 /obj/item/stock_parts/power/terminal/attackby(obj/item/I, mob/user)
 	var/obj/machinery/machine = loc
 	if(!istype(machine))
@@ -129,14 +158,14 @@
 			return FALSE
 
 		if(istype(T) && !T.is_plating())
-			to_chat(user, SPAN_WARNING("You must remove the floor plating in front of \the [machine] first."))
+			to_chat(user, SPAN_WARNING("You must remove the floor plating in front of [machine] first."))
 			return TRUE
 		var/obj/item/stack/cable_coil/C = I
 		if(!C.can_use(10))
-			to_chat(user, SPAN_WARNING("You need ten lengths of cable for \the [machine]."))
+			to_chat(user, SPAN_WARNING("You need ten lengths of cable for [machine]."))
 			return TRUE
-		user.visible_message(SPAN_WARNING("\The [user] adds cables to the \the [machine]."), \
-							"You start adding cables to \the [machine] frame...")
+		user.visible_message(SPAN_WARNING("[user] adds cables to the [machine]."), \
+							"You start adding cables to [machine] frame...")
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, 2 SECONDS, machine, DO_REPAIR_CONSTRUCT))
 			if(C.can_use(10) && !terminal && (machine == loc) && machine.components_are_accessible(type) && !blocking_terminal_at_loc(machine, T, user))
@@ -149,32 +178,9 @@
 						return TRUE
 				C.use(10)
 				user.visible_message(\
-					SPAN_WARNING("\The [user] has added cables to the \the [machine]!"),\
-					"You add cables to the \the [machine].")
+					SPAN_WARNING("[user] has added cables to the [machine]!"),\
+					"You add cables to the [machine].")
 				make_terminal(machine)
-		return TRUE
-
-	if(isWirecutter(I) && terminal)
-		var/turf/T = get_step(machine, terminal_dir)
-		if(terminal_dir && user.loc != T)
-			return FALSE // Wrong terminal handler.
-		if(istype(T) && !T.is_plating())
-			to_chat(user, SPAN_WARNING("You must remove the floor plating in front of \the [machine] first."))
-			return TRUE
-		user.visible_message(SPAN_WARNING("\The [user] dismantles the power terminal from \the [machine]."), \
-							"You begin to cut the cables...")
-		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, (I.toolspeed * 5) SECONDS, machine, DO_REPAIR_CONSTRUCT))
-			if(terminal && (machine == loc) && machine.components_are_accessible(type))
-				if (prob(50) && electrocute_mob(user, terminal.powernet, terminal))
-					var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
-					s.set_up(5, 1, machine)
-					s.start()
-					if(user.stunned)
-						return TRUE
-				new /obj/item/stack/cable_coil(T, 10)
-				to_chat(user, SPAN_NOTICE("You cut the cables and dismantle the power terminal."))
-				qdel(terminal)
 		return TRUE
 
 /obj/item/stock_parts/power/terminal/buildable

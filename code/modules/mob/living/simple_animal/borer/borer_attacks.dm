@@ -1,12 +1,12 @@
-/mob/living/simple_animal/borer/UnarmedAttack(atom/A, proximity)
+/mob/living/simple_animal/borer/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 
-	if(!isliving(A) || a_intent != I_GRAB)
+	if(!isliving(target) || a_intent != I_GRAB)
 		return ..()
 
 	if(host || !can_use_borer_ability(requires_host_value = FALSE, check_last_special = FALSE))
 		return
 
-	var/mob/living/M = A
+	var/mob/living/M = target
 	if(M.has_brain_worms())
 		to_chat(src, SPAN_WARNING("You cannot take a host who already has a passenger!"))
 		return
@@ -59,10 +59,10 @@
 		else if(E) // If they're in normally, implant removal can get them out.
 			E.implants += src
 
-/mob/living/simple_animal/borer/RangedAttack(atom/A, params)
+/mob/living/simple_animal/borer/ranged_attack(atom/target, modifiers)
 	. = ..()
-	if(!. && a_intent == I_DISARM && !host && isliving(A) && !neutered && can_use_borer_ability(requires_host_value = FALSE))
-		var/mob/living/M = A
+	if(!. && a_intent == I_DISARM && !host && isliving(target) && !neutered && can_use_borer_ability(requires_host_value = FALSE))
+		var/mob/living/M = target
 		if(M.has_brain_worms())
 			to_chat(src, SPAN_WARNING("You cannot dominate a host who already has a passenger!"))
 		else

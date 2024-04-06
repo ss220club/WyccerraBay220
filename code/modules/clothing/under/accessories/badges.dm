@@ -41,8 +41,8 @@
 
 /obj/item/clothing/accessory/badge/examine(user)
 	. = ..()
-	if (stored_name)
-		to_chat(user,"It reads: [stored_name], [badge_string].")
+	if(stored_name)
+		. += SPAN_NOTICE("It reads: [stored_name], [badge_string].")
 
 
 /obj/item/clothing/accessory/badge/attack_self(mob/user)
@@ -111,8 +111,8 @@
 
 /obj/item/clothing/accessory/badge/holo/examine(user)
 	. = ..()
-	if (badge_number)
-		to_chat(user,"The badge number is [badge_number].")
+	if(badge_number)
+		. += SPAN_NOTICE("The badge number is [badge_number].")
 
 
 /obj/item/clothing/accessory/badge/holo/attack_self(mob/user)

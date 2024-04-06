@@ -60,10 +60,10 @@
 		rating = M.rating
 
 /obj/machinery/pile_ripper/examine(mob/user)
-	..()
-	to_chat(user, "The power light is [(stat & MACHINE_STAT_NOPOWER) ? "off" : "on"].")
-	to_chat(user, "The safety-mode light is [safety_mode ? "on" : "off"].")
-	to_chat(user, "The safety-sensors status light is [emagged ? "off" : "on"].")
+	. = ..()
+	. += SPAN_NOTICE("The power light is [(stat & MACHINE_STAT_NOPOWER) ? "off" : "on"].")
+	. += SPAN_NOTICE("The safety-mode light is [safety_mode ? "on" : "off"].")
+	. += SPAN_NOTICE("The safety-sensors status light is [emagged ? "off" : "on"].")
 
 /obj/machinery/pile_ripper/power_change()
 	..()

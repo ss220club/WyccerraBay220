@@ -63,9 +63,9 @@
 	qdel(src)
 
 /mob/living/bot/secbot/ed209/handleRangedTarget()
-	RangedAttack(target)
+	ranged_attack(target)
 
-/mob/living/bot/secbot/ed209/RangedAttack(atom/A, params)
+/mob/living/bot/secbot/ed209/ranged_attack(atom/target, modifiers)
 	if(last_shot + shot_delay > world.time)
 		to_chat(src, "You are not ready to fire yet!")
 		return TRUE
@@ -77,6 +77,6 @@
 
 	playsound(loc, emagged ? 'sound/weapons/Laser.ogg' : 'sound/weapons/Taser.ogg', 50, 1)
 	var/obj/item/projectile/P = new projectile(loc)
-	var/def_zone = get_exposed_defense_zone(A)
-	P.launch(A, def_zone)
+	var/def_zone = get_exposed_defense_zone(target)
+	P.launch(target, def_zone)
 	return TRUE

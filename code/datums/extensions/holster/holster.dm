@@ -98,10 +98,11 @@
 	return 0
 
 /datum/extension/holster/proc/examine_holster(mob/user)
+	. = list()
 	if (holstered)
-		to_chat(user, "\A [holstered] is holstered here.")
+		. += SPAN_NOTICE("[holstered] is holstered here.")
 	else
-		to_chat(user, "It is empty.")
+		. += SPAN_NOTICE("It is empty.")
 
 /datum/extension/holster/proc/check_holster()
 	if(holstered.loc != storage)

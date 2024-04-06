@@ -209,7 +209,7 @@
 		var/turf/turf = get_turf(src)
 		if (!turf.is_plating())
 			if (!silent)
-				USE_FEEDBACK_FAILURE("You must remove the plating before you can secure \the [src].")
+				USE_FEEDBACK_FAILURE("You must remove the plating before you can secure [src].")
 			return FALSE
 
 		// Catwalks
@@ -217,45 +217,28 @@
 		if (catwalk)
 			if (catwalk.plated_tile && !catwalk.hatch_open)
 				if (!silent)
-					USE_FEEDBACK_FAILURE("\The [catwalk]'s hatch needs to be opened before you can secure \the [src].")
+					USE_FEEDBACK_FAILURE("[catwalk]'s hatch needs to be opened before you can secure [src].")
 				return FALSE
 			else if (!catwalk.plated_tile)
 				if (!silent)
-					USE_FEEDBACK_FAILURE("\The [catwalk] is blocking access to the floor.")
+					USE_FEEDBACK_FAILURE("[catwalk] is blocking access to the floor.")
 				return FALSE
 
 
-/obj/structure/disposalpipe/use_tool(obj/item/tool, mob/user, list/click_params)
+/obj/structure/disposalpipe/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Welding Tool - Cut pipe
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to slice \the [src]."))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts slicing \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start slicing \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 3) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.remove_fuel(1, user))
-			return TRUE
-		welded()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] slices \the [src] with \a [tool]."),
-			SPAN_NOTICE("You slice \the [src] with \the [tool].")
-		)
-		return TRUE
-
-	return ..()
-
-
-	// called when pipe is cut with welder
-/obj/structure/disposalpipe/proc/welded()
+	if(!tool.tool_start_check(user, 1))
+		return
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
+	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	var/obj/structure/disposalconstruct/C = new (src.loc, src)
-	src.transfer_fingerprints_to(C)
+	transfer_fingerprints_to(C)
 	C.set_density(0)
 	C.anchored = TRUE
 	C.update()
-
+	C.balloon_alert_to_viewers("отверено от пола!")
 	qdel(src)
 
 // pipe is deleted
@@ -493,13 +476,13 @@
 	if (istype(tool, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/tagger = tool
 		if (!tagger.currTag)
-			USE_FEEDBACK_FAILURE("\The [tagger] does not have a destination tag set.")
+			USE_FEEDBACK_FAILURE("[tagger] does not have a destination tag set.")
 			return TRUE
 		sort_type = tagger.currTag
 		playsound(src, 'sound/machines/twobeep.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] reconfigures \the [src] with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s filter to '[sort_type]' with \the [tool].")
+			SPAN_NOTICE("[user] reconfigures [src] with [tool]."),
+			SPAN_NOTICE("You set [src]'s filter to '[sort_type]' with [tool].")
 		)
 		updatename()
 		updatedesc()
@@ -575,13 +558,13 @@
 	if (istype(tool, /obj/item/disposal_switch_construct))
 		var/obj/item/disposal_switch_construct/construct = tool
 		if (!construct.id_tag)
-			USE_FEEDBACK_FAILURE("\The [tool] doesn't have an ID tag set.")
+			USE_FEEDBACK_FAILURE("[tool] doesn't have an ID tag set.")
 			return TRUE
 		id_tag = construct.id_tag
 		playsound(src, 'sound/machines/twobeep.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] reconfigures \the [src] with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s ID tag to '[id_tag]' with \the [tool]..")
+			SPAN_NOTICE("[user] reconfigures [src] with [tool]."),
+			SPAN_NOTICE("You set [src]'s ID tag to '[id_tag]' with [tool]..")
 		)
 		return TRUE
 
@@ -675,13 +658,13 @@
 	if (istype(tool, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/tagger = tool
 		if (!tagger.currTag)
-			USE_FEEDBACK_FAILURE("\The [tagger] does not have a destination tag set.")
+			USE_FEEDBACK_FAILURE("[tagger] does not have a destination tag set.")
 			return TRUE
 		sort_type = tagger.currTag
 		playsound(src, 'sound/machines/twobeep.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] reconfigures \the [src] with \a [tool]."),
-			SPAN_NOTICE("You set \the [src]'s filter to '[sort_type]' with \the [tool].")
+			SPAN_NOTICE("[user] reconfigures [src] with [tool]."),
+			SPAN_NOTICE("You set [src]'s filter to '[sort_type]' with [tool].")
 		)
 		updatename()
 		updatedesc()
@@ -797,7 +780,7 @@
 
 	var/obj/structure/disposalconstruct/construct = locate() in get_turf(src)
 	if (construct?.anchored)
-		USE_FEEDBACK_FAILURE("\The [construct] blocks access to \the [src].")
+		USE_FEEDBACK_FAILURE("[construct] blocks access to [src].")
 		return FALSE
 
 
@@ -843,8 +826,13 @@
 	update()
 	return
 
-	// called when welded
-	// for broken pipe, remove and turn into scrap
-
-/obj/structure/disposalpipe/broken/welded()
+// for broken pipe, remove and turn into scrap
+/obj/structure/disposalpipe/broken/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	// Welding Tool - Cut pipe
+	if(!tool.tool_start_check(user, 1))
+		return
+	USE_FEEDBACK_UNWELD_FROM_FLOOR(user)
+	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
 	qdel(src)

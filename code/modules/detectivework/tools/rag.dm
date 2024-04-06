@@ -141,10 +141,9 @@
 					H.forehead_graffiti = null
 					reagents.remove_reagent(R, wash_amount)
 					if (user == target)
-						var/datum/pronouns/P = M.choose_from_pronouns()
-						user.visible_message(SPAN_NOTICE("\The [user] scrubs the ink off [P.his] forehead."), SPAN_NOTICE("You scrub the ink off your forehead."))
+						user.visible_message(SPAN_NOTICE("[user] scrubs the ink off [M.p_their()] forehead."), SPAN_NOTICE("You scrub the ink off your forehead."))
 					else
-						user.visible_message(SPAN_NOTICE("\The [user] scrubs the ink off \the [M]'s forehead."), SPAN_NOTICE("You scrub the ink off \the [M]'s forehead."))
+						user.visible_message(SPAN_NOTICE("[user] scrubs the ink off [M]'s forehead."), SPAN_NOTICE("You scrub the ink off [M]'s forehead."))
 				else
 					to_chat(user, SPAN_WARNING("You need to wet the rag with [wash_amount] units of [initial(R.name)] to get the ink off!"))
 			return TRUE

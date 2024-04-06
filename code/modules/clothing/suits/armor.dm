@@ -108,7 +108,9 @@
 
 	user.visible_message(SPAN_DANGER("The reactive teleport system flings [user] clear of the attack!"))
 	var/list/turfs = list()
-	var/list/possible_teleport_locations = ORANGE_TURFS(user, 6)
+
+	var/turf/user_turf = get_turf(user)
+	var/list/possible_teleport_locations = ORANGE_TURFS(user_turf, 6)
 	for(var/turf/T as anything in possible_teleport_locations)
 		if(isspaceturf(T))
 			continue

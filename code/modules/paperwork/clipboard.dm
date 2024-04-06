@@ -61,7 +61,7 @@
 		update_icon()
 
 	else if(istype(toppaper) && istype(W, /obj/item/pen))
-		toppaper.attackby(W, usr)
+		W.resolve_attackby(toppaper, usr)
 		update_icon()
 
 	return
@@ -113,7 +113,7 @@
 
 				if(istype(I, /obj/item/pen))
 
-					P.attackby(I, usr)
+					I.resolve_attackby(P, usr)
 
 		else if(href_list["remove"])
 			var/obj/item/P = locate(href_list["remove"])

@@ -1,0 +1,160 @@
+name: CI Suite
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+  merge_group:
+    branches:
+    - master
+jobs:
+  run_linters:
+    if: ( !contains(github.event.head_commit.message, '[ci skip]') )
+    name: Run Linters
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: run_linters-${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore SpacemanDMM cache
+        uses: actions/cache@v4
+        with:
+          path: ~/SpacemanDMM
+          key: ${{ runner.os }}-spacemandmm-${{ hashFiles('dependencies.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-spacemandmm-
+      - name: Restore Yarn cache
+        uses: actions/cache@v4
+        with:
+          path: tgui/.yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('tgui/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Restore Node cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.nvm
+          key: ${{ runner.os }}-node-${{ hashFiles('dependencies.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Restore Bootstrap cache
+        uses: actions/cache@v4
+        with:
+          path: tools/bootstrap/.cache
+          key: ${{ runner.os }}-bootstrap-${{ hashFiles('tools/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-bootstrap-
+      - name: Restore Rust cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo
+          key: ${{ runner.os }}-rust-${{ hashFiles('tools/ci/ci_dependencies.sh')}}
+          restore-keys: |
+            ${{ runner.os }}-rust-
+
+
+      - name: Install Tools
+        run: |
+          pip3 install setuptools
+          bash tools/ci/install_node.sh
+          bash tools/ci/install_spaceman_dmm.sh dreamchecker
+          bash tools/ci/install_ripgrep.sh
+          tools/bootstrap/python -c ''
+      - name: Give Linters A Go
+        id: linter-setup
+        run: ':'
+      - name: Run Grep Checks
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: bash tools/ci/check_grep.sh
+      - name: Run Old Grep Checks
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: bash tools/ci/check_grep_bay.sh
+      # Enable if we decide to undef everything(we wont)
+      # - name: Check Define Sanity
+      #   if: steps.linter-setup.conclusion == 'success' && !cancelled()
+      #   run: tools/bootstrap/python -m define_sanity.check
+      # Enable when we have traits
+      # - name: Check Trait Validity
+      #   if: steps.linter-setup.conclusion == 'success' && !cancelled()
+      #   run: tools/bootstrap/python -m trait_validity.check
+      - name: Run DreamChecker
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        shell: bash
+        run: ~/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
+      - name: Run Map Checks
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: |
+          tools/bootstrap/python -m mapmerge2.dmm_test
+        # Enable when our mappers define the rules(in a hour)
+        # tools/bootstrap/python -m tools.maplint.source
+      - name: Run DMI Tests
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: tools/bootstrap/python -m dmi.test
+      - name: Check File Directories
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: bash tools/ci/check_filedirs.sh baystation12.dme
+
+      - name: Check Miscellaneous Files
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: bash tools/ci/check_misc.sh
+      - name: Run TGUI Checks
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: tools/build/build --ci lint tgui-test
+
+  compile_all_maps:
+    if: ( !contains(github.event.head_commit.message, '[ci skip]') )
+    name: Compile Maps
+    needs: [collect_data]
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: compile_all_maps-${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore BYOND cache
+        uses: actions/cache@v4
+        with:
+          path: ~/BYOND
+          key: ${{ runner.os }}-byond
+      - name: Compile All Maps
+        run: |
+          bash tools/ci/install_byond.sh
+          source $HOME/BYOND/byond/bin/byondsetup
+          tools/build/build --ci dm -DCIBUILDING -DCITESTING -DALL_MAPS
+
+  collect_data:
+    if: ( !contains(github.event.head_commit.message, '[ci skip]') )
+    name: Collect data for other tasks
+    runs-on: ubuntu-22.04
+    outputs:
+      maps: ${{ steps.map_finder.outputs.maps }}
+    concurrency:
+      group: find_all_maps-${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find Maps
+        id: map_finder
+        run: |
+          echo "$(ls -mw0 maps/*.json)" > maps_output.txt
+          sed -i -e s+maps/+\"+g -e s+.json+\"+g maps_output.txt
+          echo "Maps: $(cat maps_output.txt)"
+          echo "maps={\"paths\":[$(cat maps_output.txt)]}" >> $GITHUB_OUTPUT
+
+  run_all_tests:
+    if: ( !contains(github.event.head_commit.message, '[ci skip]') )
+    name: Integration Tests
+    needs: [collect_data]
+    strategy:
+      fail-fast: false
+      matrix:
+        map: ${{ fromJSON(needs.collect_data.outputs.maps).paths }}
+    concurrency:
+      group: run_all_tests-${{ github.head_ref || github.run_id }}-${{ matrix.map }}
+      cancel-in-progress: true
+    uses: ./.github/workflows/run_integration_tests.yml
+    with:
+      map: ${{ matrix.map }}

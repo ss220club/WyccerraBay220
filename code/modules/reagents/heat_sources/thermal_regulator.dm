@@ -89,26 +89,27 @@
 		return TRUE // Don't kill this processing loop unless we're not powered.
 	. = ..()
 
-/obj/machinery/reagent_temperature/use_tool(obj/item/thing, mob/living/user, list/click_params)
-	if(isWrench(thing) && use_power == POWER_USE_ACTIVE)
-		to_chat(user, SPAN_WARNING("Turn \the [src] off first!"))
-		return TRUE
+/obj/machinery/reagent_temperature/wrench_act(mob/living/user, obj/item/tool)
+	if(use_power == POWER_USE_ACTIVE)
+		to_chat(user, SPAN_WARNING("Turn [src] off first!"))
+		return ITEM_INTERACT_SUCCESS
 
+/obj/machinery/reagent_temperature/use_tool(obj/item/thing, mob/living/user, list/click_params)
 	if(thing.reagents)
 		for(var/checktype in permitted_types)
 			if(istype(thing, checktype))
 				if(container)
-					to_chat(user, SPAN_WARNING("\The [src] is already holding \the [container]."))
+					to_chat(user, SPAN_WARNING("[src] is already holding [container]."))
 				else if(user.unEquip(thing))
 					thing.forceMove(src)
 					container = thing
-					visible_message(SPAN_NOTICE("\The [user] places \the [container] on \the [src]."))
+					visible_message(SPAN_NOTICE("[user] places [container] on [src]."))
 					update_icon()
 				return TRUE
-		to_chat(user, SPAN_WARNING("\The [src] cannot accept \the [thing]."))
+		to_chat(user, SPAN_WARNING("[src] cannot accept [thing]."))
 		return TRUE
 
-	return ..()
+	. = ..()
 
 /obj/machinery/reagent_temperature/on_update_icon()
 	ClearOverlays()

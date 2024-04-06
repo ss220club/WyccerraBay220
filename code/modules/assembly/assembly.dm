@@ -90,6 +90,15 @@
 		update_icon()
 	return secured
 
+/obj/item/device/assembly/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	set_secure(!secured)
+	user.visible_message(
+		SPAN_NOTICE("[user] adjusts [src] with [tool]."),
+		SPAN_NOTICE("You adjust [src] with [tool]. It [secured ? "is now ready to use" : "can now be taken apart"].")
+	)
 
 /obj/item/device/assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Assembly - Attach assembly
@@ -101,11 +110,11 @@
 			FEEDBACK_UNEQUIP_FAILURE(user, src)
 			return TRUE
 		if (secured)
-			USE_FEEDBACK_FAILURE("\The [src] is not ready to be modified or attached.")
+			USE_FEEDBACK_FAILURE("[src] is not ready to be modified or attached.")
 			return TRUE
 		var/obj/item/device/assembly/assembly = tool
 		if (assembly.secured)
-			USE_FEEDBACK_FAILURE("\The [tool] is not ready to be modified or attached.")
+			USE_FEEDBACK_FAILURE("[tool] is not ready to be modified or attached.")
 			return TRUE
 		user.unEquip(src)
 		user.unEquip(tool)
@@ -123,23 +132,12 @@
 		set_secure(TRUE)
 		assembly.set_secure(TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] attaches \a [tool] to \a [src]."),
-			SPAN_NOTICE("You attach \the [tool] to \the [src]."),
+			SPAN_NOTICE("[user] attaches [tool] to [src]."),
+			SPAN_NOTICE("You attach [tool] to [src]."),
 			range = 3
 		)
 		return TRUE
-
-	// Screwdriver - Toggle secured
-	if (isScrewdriver(tool))
-		set_secure(!secured)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \a [src] with \a [tool]."),
-			SPAN_NOTICE("You adjust \the [src] with \the [tool]. It [secured ? "is now ready to use" : "can now be taken apart"].")
-		)
-		return TRUE
-
 	return ..()
-
 
 /obj/item/device/assembly/Process()
 	return PROCESS_KILL
@@ -149,9 +147,9 @@
 	. = ..()
 	if(distance <= 1 || loc == user)
 		if(secured)
-			to_chat(user, "\The [src] is ready!")
+			. += SPAN_NOTICE("[src] is ready!")
 		else
-			to_chat(user, "\The [src] can be attached!")
+			. += SPAN_NOTICE("[src] can be attached!")
 
 
 /obj/item/device/assembly/attack_self(mob/user as mob)

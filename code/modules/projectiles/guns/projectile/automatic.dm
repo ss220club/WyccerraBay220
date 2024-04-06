@@ -248,9 +248,9 @@
 	if(!launcher)
 		return
 	if(launcher.chambered)
-		to_chat(user, "\The [launcher] has \a [launcher.chambered] loaded.")
+		. += SPAN_NOTICE("[launcher] has [launcher.chambered] loaded.")
 	else
-		to_chat(user, "\The [launcher] is empty.")
+		. += SPAN_NOTICE("[launcher] is empty.")
 
 /obj/item/gun/projectile/automatic/bullpup_rifle/light
 	name = "light bullpup assault rifle"

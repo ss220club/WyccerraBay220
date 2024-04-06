@@ -12,7 +12,7 @@
 /obj/item/clothing/mask/smokable/cigarette/rolled/examine(mob/user)
 	. = ..()
 	if(filter)
-		to_chat(user, "One of the ends is capped off by a filter.")
+		. += SPAN_NOTICE("One of the ends is capped off by a filter.")
 
 /obj/item/clothing/mask/smokable/cigarette/rolled/on_update_icon()
 	. = ..()

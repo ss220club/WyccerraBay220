@@ -131,21 +131,22 @@
 	det_time = rand(5,100) // Fuse is randomized.
 	. = ..()
 
+/obj/item/grenade/frag/makeshift/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_BLOCKING
+	balloon_alert(user, "нельзя изменить таймер!")
+
 /obj/item/grenade/frag/makeshift/attackby(obj/item/W, mob/user)
-	if(isScrewdriver(W)) //overrides the act to screwdrive a grenade to set its fuse.
-		to_chat(user, SPAN_WARNING("You can't adjust the timer on \the [src]!"))
-		return TRUE
 	if (is_type_in_list(W, possible_reinforcements))
 		if(shrapnel_reinforced<10) //you can only add 10 items inside the can
 			user.visible_message(
-				SPAN_WARNING("\The [user] pries \the [src] open and drops \a [W] inside."),
-				SPAN_DANGER("You open \the [src], carefully adding \a [W] before sealing the lid again."),
+				SPAN_WARNING("[user] pries [src] open and drops [W] inside."),
+				SPAN_DANGER("You open [src], carefully adding [W] before sealing the lid again."),
 				SPAN_WARNING("You hear a metallic crack, followed by clinking.")
 			)
 			num_fragments += rand(3,7) // add 3 to 7 pellets. If you're /REALLY/ lucky, you'll end up with something similar to a standard grenade
 			shrapnel_reinforced += 1
 			qdel(W)
 		else
-			to_chat(user, SPAN_WARNING("You can't add any more items to \the [src]!"))
+			to_chat(user, SPAN_WARNING("You can't add any more items to [src]!"))
 		return TRUE
 	return ..()

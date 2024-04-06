@@ -60,9 +60,9 @@
 /obj/item/defibrillator/examine(mob/user)
 	. = ..()
 	if(bcell)
-		to_chat(user, "The charge meter is showing [bcell.percent()]% charge left.")
+		. += SPAN_NOTICE("The charge meter is showing [bcell.percent()]% charge left.")
 	else
-		to_chat(user, "There is no cell inside.")
+		. += SPAN_NOTICE("There is no cell inside.")
 
 /obj/item/defibrillator/ui_action_click(mob/living/user)
 	toggle_paddles()
@@ -83,30 +83,35 @@
 		src.add_fingerprint(usr)
 		M.put_in_any_hand_if_possible(src)
 
+/obj/item/defibrillator/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!bcell)
+		USE_FEEDBACK_CELL_MISSING(user)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	bcell.update_icon()
+	bcell.dropInto(loc)
+	bcell = null
+	USE_FEEDBACK_CELL_REMOVED(user)
+	update_icon()
 
 /obj/item/defibrillator/attackby(obj/item/W, mob/user, params)
 	if(W == paddles)
 		reattach_paddles(user)
-	else if(istype(W, /obj/item/cell))
+		return
+	if(istype(W, /obj/item/cell))
 		if(bcell)
-			to_chat(user, SPAN_NOTICE("\the [src] already has a cell."))
+			to_chat(user, SPAN_NOTICE("[src] already has a cell."))
 		else
 			if(!user.unEquip(W))
 				return
 			W.forceMove(src)
 			bcell = W
-			to_chat(user, SPAN_NOTICE("You install a cell in \the [src]."))
+			to_chat(user, SPAN_NOTICE("You install a cell in [src]."))
 			update_icon()
-
-	else if(isScrewdriver(W))
-		if(bcell)
-			bcell.update_icon()
-			bcell.dropInto(loc)
-			bcell = null
-			to_chat(user, SPAN_NOTICE("You remove the cell from \the [src]."))
-			update_icon()
-	else
-		return ..()
+		return
+	. = ..()
 
 /obj/item/defibrillator/emag_act(uses, mob/user)
 	if(paddles)
@@ -158,7 +163,7 @@
 	if(ismob(paddles.loc))
 		var/mob/M = paddles.loc
 		if(M.drop_from_inventory(paddles, src))
-			to_chat(user, SPAN_NOTICE("\The [paddles] snap back into the main unit."))
+			to_chat(user, SPAN_NOTICE("[paddles] snap back into the main unit."))
 	else
 		paddles.forceMove(src)
 
@@ -253,13 +258,13 @@
 	if(busy)
 		return 0
 	if(!check_charge(chargecost))
-		to_chat(user, SPAN_WARNING("\The [src] doesn't have enough charge left to do that."))
+		to_chat(user, SPAN_WARNING("[src] doesn't have enough charge left to do that."))
 		return 0
 	if(!wielded && !isrobot(user))
 		to_chat(user, SPAN_WARNING("You need to wield the paddles with both hands before you can use them on someone!"))
 		return 0
 	if(cooldown)
-		to_chat(user, SPAN_WARNING("\The [src] are re-energizing!"))
+		to_chat(user, SPAN_WARNING("[src] are re-energizing!"))
 		return 0
 	return 1
 
@@ -333,10 +338,10 @@
 		to_chat(find_dead_player(H.ckey, 1), SPAN_NOTICE("Someone is attempting to resuscitate you. Re-enter your body if you want to be revived!"))
 
 	//beginning to place the paddles on patient's chest to allow some time for people to move away to stop the process
-	user.visible_message(SPAN_WARNING("\The [user] begins to place [src] on [H]'s chest."), SPAN_WARNING("You begin to place [src] on [H]'s chest..."))
+	user.visible_message(SPAN_WARNING("[user] begins to place [src] on [H]'s chest."), SPAN_WARNING("You begin to place [src] on [H]'s chest..."))
 	if(!user.do_skilled(3 SECONDS, SKILL_MEDICAL, H, do_flags = DO_MEDICAL | DO_USER_UNIQUE_ACT))
 		return
-	user.visible_message(SPAN_NOTICE("\The [user] places [src] on [H]'s chest."), SPAN_WARNING("You place [src] on [H]'s chest."))
+	user.visible_message(SPAN_NOTICE("[user] places [src] on [H]'s chest."), SPAN_WARNING("You place [src] on [H]'s chest."))
 	playsound(get_turf(src), 'sound/machines/defib_charge.ogg', 50, 0)
 
 	var/error = can_defib(H)
@@ -358,7 +363,7 @@
 		playsound(get_turf(src), 'sound/machines/defib_failed.ogg', 50, 0)
 		return
 
-	H.visible_message(SPAN_WARNING("\The [H]'s body convulses a bit."))
+	H.visible_message(SPAN_WARNING("[H]'s body convulses a bit."))
 	playsound(get_turf(src), "bodyfall", 50, 1)
 	playsound(get_turf(src), 'sound/machines/defib_zap.ogg', 50, 1, -1)
 	set_cooldown(cooldowntime)
@@ -381,19 +386,19 @@
 		var/obj/item/cell/C = potato.cell
 		C.give(chargecost)
 	H.AdjustSleeping(-60)
-	log_and_message_admins("used \a [src] to revive [key_name(H)].")
+	log_and_message_admins("used [src] to revive [key_name(H)].")
 
 /obj/item/shockpaddles/proc/lowskill_revive(mob/living/carbon/human/H, mob/living/user)
 	if(prob(60))
 		playsound(get_turf(src), 'sound/machines/defib_zap.ogg', 100, 1, -1)
 		H.electrocute_act(burn_damage_amt*4, src, def_zone = BP_CHEST)
-		user.visible_message(SPAN_WARNING("<i>The paddles were misaligned! \The [user] shocks [H] with \the [src]!</i>"), SPAN_WARNING("The paddles were misaligned! You shock [H] with \the [src]!"))
+		user.visible_message(SPAN_WARNING("<i>The paddles were misaligned! [user] shocks [H] with [src]!</i>"), SPAN_WARNING("The paddles were misaligned! You shock [H] with [src]!"))
 		return 0
 	if(prob(50))
 		playsound(get_turf(src), 'sound/machines/defib_zap.ogg', 100, 1, -1)
 		user.electrocute_act(burn_damage_amt*2, src, def_zone = BP_L_HAND)
 		user.electrocute_act(burn_damage_amt*2, src, def_zone = BP_R_HAND)
-		user.visible_message(SPAN_WARNING("<i>\The [user] shocks themselves with \the [src]!</i>"), SPAN_WARNING("You forget to move your hands away and shock yourself with \the [src]!"))
+		user.visible_message(SPAN_WARNING("<i>[user] shocks themselves with [src]!</i>"), SPAN_WARNING("You forget to move your hands away and shock yourself with [src]!"))
 		return 0
 	return 1
 
@@ -404,7 +409,7 @@
 		return
 
 	//no need to spend time carefully placing the paddles, we're just trying to shock them
-	user.visible_message(SPAN_DANGER("\The [user] slaps [src] onto [H]'s [affecting.name]. [safety? "However, it fizzles out as the safety indicator flashes.": ""]"), SPAN_DANGER("You overcharge [src] and slap them onto [H]'s [affecting.name]. [safety? "However, it fizzles out as the safety indicator flashes.": ""]"))
+	user.visible_message(SPAN_DANGER("[user] slaps [src] onto [H]'s [affecting.name]. [safety? "However, it fizzles out as the safety indicator flashes.": ""]"), SPAN_DANGER("You overcharge [src] and slap them onto [H]'s [affecting.name]. [safety? "However, it fizzles out as the safety indicator flashes.": ""]"))
 
 	//Just stop at awkwardly slapping electrodes on people if the safety is enabled
 	if(safety)
@@ -412,7 +417,7 @@
 		return
 
 	playsound(get_turf(src), 'sound/machines/defib_charge.ogg', 50, 0)
-	audible_message(SPAN_WARNING("\The [src] lets out a steadily rising hum..."))
+	audible_message(SPAN_WARNING("[src] lets out a steadily rising hum..."))
 
 	if(!do_after(user, chargetime, H, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
 		return
@@ -423,7 +428,7 @@
 		playsound(get_turf(src), 'sound/machines/defib_failed.ogg', 50, 0)
 		return
 
-	user.visible_message(SPAN_DANGER("<i>\The [user] shocks [H] with \the [src]!</i>"), SPAN_WARNING("You shock [H] with \the [src]!"))
+	user.visible_message(SPAN_DANGER("<i>[user] shocks [H] with [src]!</i>"), SPAN_WARNING("You shock [H] with [src]!"))
 	playsound(get_turf(src), 'sound/machines/defib_zap.ogg', 100, 1, -1)
 	playsound(loc, 'sound/weapons/Egloves.ogg', 100, 1, -1)
 	set_cooldown(cooldowntime)
@@ -437,7 +442,7 @@
 		to_chat(doki, SPAN_DANGER("Your [doki] has stopped!"))
 		doki.pulse = PULSE_NONE
 
-	admin_attack_log(user, H, "Electrocuted using \a [src]", "Was electrocuted with \a [src]", "used \a [src] to electrocute")
+	admin_attack_log(user, H, "Electrocuted using [src]", "Was electrocuted with [src]", "used [src] to electrocute")
 
 /obj/item/shockpaddles/proc/make_alive(mob/living/carbon/human/M) //This revives the mob
 	var/deadtime = world.time - M.timeofdeath
@@ -466,7 +471,7 @@
 	H.setBrainLoss(brain_damage)
 
 /obj/item/shockpaddles/proc/make_announcement(message, msg_class)
-	audible_message("<b>\The [src]</b> [message]", "\The [src] vibrates slightly.")
+	audible_message("<b>[src]</b> [message]", "[src] vibrates slightly.")
 
 /obj/item/shockpaddles/emag_act(uses, mob/user, obj/item/defibrillator/base)
 	if(istype(src, /obj/item/shockpaddles/linked))
@@ -477,13 +482,13 @@
 		return
 	if(safety)
 		safety = 0
-		to_chat(user, SPAN_WARNING("You silently disable \the [src]'s safety protocols with the cryptographic sequencer."))
+		to_chat(user, SPAN_WARNING("You silently disable [src]'s safety protocols with the cryptographic sequencer."))
 		burn_damage_amt *= 3
 		base.update_icon()
 		return 1
 	else
 		safety = 1
-		to_chat(user, SPAN_NOTICE("You silently enable \the [src]'s safety protocols with the cryptographic sequencer."))
+		to_chat(user, SPAN_NOTICE("You silently enable [src]'s safety protocols with the cryptographic sequencer."))
 		burn_damage_amt = initial(burn_damage_amt)
 		base.update_icon()
 		return 1
@@ -575,7 +580,7 @@
 	return (base_unit.bcell && base_unit.bcell.checked_use(charge_amt))
 
 /obj/item/shockpaddles/linked/make_announcement(message, msg_class)
-	base_unit.audible_message("<b>\The [base_unit]</b> [message]", "\The [base_unit] vibrates slightly.")
+	base_unit.audible_message("<b>[base_unit]</b> [message]", "[base_unit] vibrates slightly.")
 
 /*
 	Standalone Shockpaddles
@@ -610,11 +615,11 @@
 	switch(severity)
 		if(EMP_ACT_HEAVY)
 			new_fail = max(fail_counter, 20)
-			visible_message("\The [src]'s reactor overloads!")
+			visible_message("[src]'s reactor overloads!")
 		if(EMP_ACT_LIGHT)
 			new_fail = max(fail_counter, 8)
 			if(ismob(loc))
-				to_chat(loc, SPAN_WARNING("\The [src] feel pleasantly warm."))
+				to_chat(loc, SPAN_WARNING("[src] feel pleasantly warm."))
 
 	if(new_fail && !fail_counter)
 		START_PROCESSING(SSobj, src)

@@ -14,23 +14,17 @@
 	attack_cooldown_modifier = 1
 	base_parry_chance = 30
 	applies_material_colour = FALSE
-
-
-/obj/item/material/twohanded/jack/IsCrowbar()
-	return TRUE
-
+	tool_behaviour = TOOL_CROWBAR
+	usesound = DEFAULT_CROWBAR_SOUND
 
 /obj/item/material/twohanded/jack/aluminium
 	default_material = MATERIAL_ALUMINIUM
 
-
 /obj/item/material/twohanded/jack/titanium
 	default_material = MATERIAL_TITANIUM
 
-
 /obj/item/material/twohanded/jack/silver
 	default_material = MATERIAL_SILVER
-
 
 /obj/item/airlock_brace
 	name = "airlock brace"
@@ -68,6 +62,18 @@
 /obj/item/airlock_brace/attack_self(mob/living/user)
 	electronics.attack_self(user)
 
+/obj/item/airlock_brace/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!health_damaged())
+		USE_FEEDBACK_NOTHING_TO_REPAIR(user)
+		return
+	if(!tool.tool_start_check(user, 1))
+		return
+	USE_FEEDBACK_REPAIR_START(user)
+	if(!tool.use_as_tool(src, user, 3 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	USE_FEEDBACK_REPAIR_FINISH(user)
+	restore_health(rand(75, 150))
 
 /obj/item/airlock_brace/attackby(obj/item/item, mob/living/user)
 	if (istype(item.GetIdCard(), /obj/item/card/id))
@@ -75,18 +81,18 @@
 			update_access()
 			if (check_access(item))
 				user.visible_message(
-					SPAN_ITALIC("\The [user] swipes \a [item] through \a [src]."),
-					SPAN_ITALIC("You swipe \the [item] through \the [src]."),
+					SPAN_ITALIC("[user] swipes [item] through [src]."),
+					SPAN_ITALIC("You swipe [item] through [src]."),
 				)
 				if (do_after(user, 1 SECOND, airlock, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
-					to_chat(user, "\The [src] clicks and detaches from \the [airlock]!")
+					to_chat(user, "[src] clicks and detaches from [airlock]!")
 					user.put_in_hands(src)
 					airlock.brace = null
 					airlock.update_icon()
 					airlock = null
 					update_icon()
 			else
-				to_chat(user, "You swipe \the [item] through \the [src], but it does not react.")
+				to_chat(user, "You swipe [item] through [src], but it does not react.")
 		else
 			attack_self(user)
 	if (user.a_intent == I_HURT)
@@ -95,13 +101,13 @@
 		if (!airlock)
 			return TRUE
 		user.visible_message(
-			SPAN_ITALIC("\The [user] begins removing \a [src] with \a [item]."),
-			SPAN_ITALIC("You begin removing \the [src] with \the [item].")
+			SPAN_ITALIC("[user] begins removing [src] with [item]."),
+			SPAN_ITALIC("You begin removing [src] with [item].")
 		)
 		if (do_after(user, 20 SECONDS, airlock, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
 			user.visible_message(
-				SPAN_ITALIC("\The [user] removes \a [src] with \a [item]."),
-				SPAN_ITALIC("You remove \the [src] with \the [item].")
+				SPAN_ITALIC("[user] removes [src] with [item]."),
+				SPAN_ITALIC("You remove [src] with [item].")
 			)
 			user.put_in_hands(src)
 			airlock.brace = null
@@ -109,30 +115,10 @@
 			airlock = null
 			update_icon()
 		return TRUE
-	if (isWelder(item) && user.a_intent != I_HURT)
-		if (!health_damaged())
-			to_chat(user, SPAN_NOTICE("\The [src] does not require repairs."))
-			return TRUE
-		var/obj/item/weldingtool/welder = item
-		if (welder.can_use(1, user))
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			user.visible_message(
-				SPAN_ITALIC("\The [user] begins repairing damage on \a [src]."),
-				SPAN_ITALIC("You begin repairing damage on the [src].")
-			)
-			if (do_after(user, (item.toolspeed * 3) SECONDS, airlock, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS) && welder.remove_fuel(1, user))
-				user.visible_message(
-					SPAN_ITALIC("\The [user] repairs damage on \a [src]."),
-					SPAN_ITALIC("You repair damage on the [src].")
-				)
-				restore_health(rand(75, 150))
-		return TRUE
-	return ..()
-
 
 /obj/item/airlock_brace/on_death()
 	if (airlock)
-		visible_message(SPAN_DANGER("\The [src] breaks, falling from \the [airlock]!"))
+		visible_message(SPAN_DANGER("[src] breaks, falling from [airlock]!"))
 		airlock.brace = null
 		airlock.update_icon()
 	qdel(src)

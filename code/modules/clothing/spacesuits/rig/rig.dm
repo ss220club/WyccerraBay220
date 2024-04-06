@@ -160,16 +160,16 @@
 		for(var/obj/item/piece in list(helmet,gloves,chest,boots))
 			if(!piece || piece.loc != wearer)
 				continue
-			to_chat(user, "[icon2html(piece, user)] \The [piece] [piece.gender == PLURAL ? "are" : "is"] deployed.")
+			. += SPAN_NOTICE("[icon2html(piece, user)] \The [piece] [piece.gender == PLURAL ? "are" : "is"] deployed.")
 
 	if(src.loc == user)
-		to_chat(user, "The access panel is [locked? "locked" : "unlocked"].")
-		to_chat(user, "The maintenance panel is [open ? "open" : "closed"].")
-		to_chat(user, "The wire panel is [p_open ? "open" : "closed"].")
-		to_chat(user, "Hardsuit systems are [offline ? SPAN_COLOR("red", "offline") : SPAN_COLOR("green", "online")].")
+		. += SPAN_NOTICE("The access panel is [locked? "locked" : "unlocked"].")
+		. += SPAN_NOTICE("The maintenance panel is [open ? "open" : "closed"].")
+		. += SPAN_NOTICE("The wire panel is [p_open ? "open" : "closed"].")
+		. += SPAN_NOTICE("Hardsuit systems are [offline ? SPAN_COLOR("red", "offline") : SPAN_COLOR("green", "online")].")
 
 		if(open)
-			to_chat(user, "It's equipped with [english_list(installed_modules)].")
+			. += SPAN_NOTICE("It's equipped with [english_list(installed_modules)].")
 
 /obj/item/rig/Initialize()
 	. = ..()

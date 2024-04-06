@@ -31,4 +31,4 @@
 /obj/item/material/urn/examine(mob/user)
 	. = ..()
 	if(length(contents))
-		to_chat(user, "\The [src] is full.")
+		. += SPAN_NOTICE("[src] is full.")

@@ -623,9 +623,9 @@
 	if(user.skill_check(SKILL_WEAPONS, SKILL_BASIC))
 		if(length(firemodes) > 1)
 			var/datum/firemode/current_mode = firemodes[sel_mode]
-			to_chat(user, "The fire selector is set to [current_mode.name].")
+			. += SPAN_NOTICE("The fire selector is set to [current_mode.name].")
 	if(has_safety)
-		to_chat(user, "The safety is [safety() ? "on" : "off"].")
+		. += SPAN_NOTICE("The safety is [safety() ? "on" : "off"].")
 	last_safety_check = world.time
 
 /obj/item/gun/proc/switch_firemodes()
@@ -710,7 +710,9 @@
 	if(!safety() && user.skill_fail_prob(skill_path, fail_chance, no_more_fail, factor) && special_check(user))
 		user.visible_message(SPAN_WARNING(message))
 		var/list/targets = list(user)
-		targets += RANGE_TURFS(src, 2)
+
+		var/turf/center = get_turf(src)
+		targets += RANGE_TURFS(center, 2)
 		var/picked = pick(targets)
 		afterattack(picked, user)
 		return TRUE

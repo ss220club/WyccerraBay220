@@ -44,7 +44,6 @@
 
 	if(!isliving(target))
 		return
-
 	to_chat(target, FONT_LARGE(SPAN_WARNING("Your vision goes blurry and nausea strikes your stomach. Where are you...?")))
 	do_teleport(target, safe_turf, precision, type)
 	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(do_teleport), target, destination), duration)

@@ -8,12 +8,34 @@
 	var/l_code = null
 	var/l_set = 0
 	var/l_setshort = 0
-	var/l_hacking = 0
 	var/emagged = FALSE
 	var/open = 0
 	w_class = ITEM_SIZE_NORMAL
 	max_w_class = ITEM_SIZE_SMALL
 	max_storage_space = DEFAULT_BOX_STORAGE
+
+/obj/item/storage/secure/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(open != 1)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	user.show_message(SPAN_NOTICE("Now attempting to reset internal memory, please hold."), 1)
+	if(!tool.use_as_tool(src, user, 10 SECONDS, volume = 50, skill_path = list(SKILL_DEVICES, SKILL_CONSTRUCTION), do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(!prob(40))
+		USE_FEEDBACK_FAILURE("Unable to reset internal memory.")
+		return
+	l_setshort = 1
+	l_set = 0
+	to_chat(user, SPAN_NOTICE("Internal memory reset. Please give it a few seconds to reinitialize."))
+	addtimer(CALLBACK(src, PROC_REF(update_setshort), FALSE), 8 SECONDS)
+
+/obj/item/storage/secure/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, 2 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
 
 /obj/item/storage/secure/use_tool(obj/item/W, mob/living/user, list/click_params)
 	if (!locked)
@@ -27,34 +49,12 @@
 		playsound(loc, "sparks", 50, 1)
 		return TRUE
 
-	else if (isScrewdriver(W))
-		if (do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			open = ! open
-			user.show_message(SPAN_NOTICE("You [open ? "open" : "close"] the service panel."))
-		return TRUE
-
-	else if (isMultitool(W) && (open == 1)&& (!l_hacking))
-		user.show_message(SPAN_NOTICE("Now attempting to reset internal memory, please hold."), 1)
-		l_hacking = 1
-		if (do_after(usr, (W.toolspeed * 10) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			if (prob(40))
-				l_setshort = 1
-				l_set = 0
-				user.show_message(SPAN_NOTICE("Internal memory reset. Please give it a few seconds to reinitialize."), 1)
-				sleep(80)
-				l_setshort = 0
-				l_hacking = 0
-			else
-				user.show_message(SPAN_WARNING("Unable to reset internal memory."), 1)
-				l_hacking = 0
-		else
-			l_hacking = 0
-		return TRUE
-
 	else
 		to_chat(user, SPAN_WARNING("\The [src] is locked and cannot be opened!"))
 		return TRUE
 
+/obj/item/storage/secure/proc/update_setshort(new_value)
+	l_setshort = new_value
 
 /obj/item/storage/secure/MouseDrop(over_object, src_location, over_location)
 	if (locked)
@@ -115,7 +115,7 @@
 /obj/item/storage/secure/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, text("The service panel is [src.open ? "open" : "closed"]."))
+		. += SPAN_NOTICE("The service panel is [src.open ? "open" : "closed"].")
 
 
 /obj/item/storage/secure/emag_act(remaining_charges, mob/user, feedback)

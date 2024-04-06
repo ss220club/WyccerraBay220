@@ -29,7 +29,7 @@
 
 /obj/item/device/dociler/examine(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("It is currently [loaded? "loaded": "recharging"]."))
+	. += SPAN_NOTICE("It is currently [loaded? "loaded": "recharging"].")
 
 /obj/item/device/dociler/use_before(mob/living/L, mob/user)
 	. = FALSE

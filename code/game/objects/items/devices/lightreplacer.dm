@@ -54,16 +54,16 @@
 /obj/item/device/lightreplacer/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 2)
-		to_chat(user, "It has [uses] light\s remaining.")
+		. += SPAN_NOTICE("It has [uses] light\s remaining.")
 		switch (lighting_tone)
 			if (LIGHT_REPLACE_AREA)
-				to_chat(user, "It is configured to match the room's blueprints for bulb color and tone.")
+				. += SPAN_NOTICE("It is configured to match the room's blueprints for bulb color and tone.")
 			if (LIGHT_REPLACE_EXISTING)
-				to_chat(user, "It is configured to match the replaced bulb's color and tone.")
+				. += SPAN_NOTICE("It is configured to match the replaced bulb's color and tone.")
 			if (LIGHT_REPLACE_RANDOM)
-				to_chat(user, "It is configured to print bulbs in random tones.")
+				. += SPAN_NOTICE("It is configured to print bulbs in random tones.")
 			else
-				to_chat(user, "It is configured to print bulbs in this color: <span style='color: [lighting_tone];'>■</span>")
+				. += SPAN_NOTICE("It is configured to print bulbs in this color: <span style='color: [lighting_tone];'>■</span>")
 
 /obj/item/device/lightreplacer/resolve_attackby(atom/A, mob/user)
 
@@ -184,8 +184,7 @@
 			to_chat(user, SPAN_NOTICE("You configure \the [src] to print bulbs in the color: <span style='color: [lighting_tone];'>■</span>"))
 
 
-/obj/item/device/lightreplacer/proc/Use(mob/user)
-
+/obj/item/device/lightreplacer/use(mob/user)
 	playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
 	AddUses(-1)
 	return 1
@@ -206,7 +205,7 @@
 		to_chat(U, "There is a working [target.get_fitting_name()] already inserted.")
 	else if(!CanUse(U))
 		to_chat(U, "\The [src]'s refill light blinks red.")
-	else if(Use(U))
+	else if(use(U))
 		to_chat(U, SPAN_NOTICE("You replace the [target.get_fitting_name()] with the [src]."))
 
 		var/bulb_color = null

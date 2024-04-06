@@ -18,7 +18,7 @@
 
 /obj/item/device/scanner/mining/examine(mob/user)
 	. = ..()
-	to_chat(user,"A tiny indicator on the [src] shows it holds [survey_data] good explorer points.")
+	. += SPAN_NOTICE("A tiny indicator on the [src] shows it holds [survey_data] good explorer points.")
 
 /obj/item/device/scanner/mining/is_valid_scan_target(turf/simulated/T)
 	return istype(T)
@@ -69,7 +69,7 @@
 
 /obj/item/disk/survey/examine(mob/user)
 	. = ..()
-	to_chat(user,"A tiny indicator on the [src] shows it holds [data] good explorer points.")
+	. += SPAN_NOTICE("A tiny indicator on the [src] shows it holds [data] good explorer points.")
 
 /obj/item/disk/survey/Value()
 	if(data < 10000)

@@ -122,8 +122,8 @@
 
 /obj/structure/inflatable/examine(mob/user)
 	. = ..()
-	if (taped)
-		to_chat(user, SPAN_NOTICE("It's been duct taped in few places."))
+	if(taped)
+		. += SPAN_NOTICE("It's been duct taped in few places.")
 
 /obj/structure/inflatable/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	return 0

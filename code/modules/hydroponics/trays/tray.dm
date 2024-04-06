@@ -414,13 +414,27 @@
 
 	return
 
+/obj/machinery/portable_atmospherics/hydroponics/wrench_act(mob/living/user, obj/item/tool)
+	if(!mechanical)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	//If there's a connector here, the portable_atmospherics setup can handle it.
+	if(locate(/obj/machinery/atmospherics/portables_connector) in loc) // TODO: what's this
+		var/obj/machinery/atmospherics/portables_connector/connector = locate(/obj/machinery/atmospherics/portables_connector)
+		return connector.wrench_act(user, tool)
+
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = !anchored
+	to_chat(user, "You [anchored ? "wrench" : "unwrench"] [src].")
+
 /obj/machinery/portable_atmospherics/hydroponics/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (O.is_open_container())
 		return FALSE
 
 	if(O.edge && O.w_class < ITEM_SIZE_NORMAL && user.a_intent != I_HURT)
 		if(!seed)
-			to_chat(user, SPAN_WARNING("There is nothing to take a sample from in \the [src]."))
+			to_chat(user, SPAN_WARNING("There is nothing to take a sample from in [src]."))
 			return TRUE
 
 		if(sampled)
@@ -507,16 +521,6 @@
 		check_health()
 		return TRUE
 
-	if (mechanical && isWrench(O))
-		//If there's a connector here, the portable_atmospherics setup can handle it.
-		if(locate(/obj/machinery/atmospherics/portables_connector) in loc)
-			return ..()
-
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-		anchored = !anchored
-		to_chat(user, "You [anchored ? "wrench" : "unwrench"] \the [src].")
-		return TRUE
-
 	if (mechanical)
 		return component_attackby(O, user)
 
@@ -526,7 +530,7 @@
 	if (weapon.force && seed)
 		user.setClickCooldown(user.get_attack_speed(weapon))
 		user.do_attack_animation(src)
-		user.visible_message(SPAN_DANGER("\The [seed.display_name] has been attacked by [user] with \the [weapon]!"))
+		user.visible_message(SPAN_DANGER("[seed.display_name] has been attacked by [user] with [weapon]!"))
 		playsound(get_turf(src), weapon.hitsound, 100, 1)
 		if(!dead)
 			health -= weapon.force
@@ -537,7 +541,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/plant_seed(mob/user, obj/item/seeds/S)
 
 	if(seed)
-		to_chat(user, SPAN_WARNING("\The [src] already has seeds in it!"))
+		to_chat(user, SPAN_WARNING("[src] already has seeds in it!"))
 		return
 
 	if(!S.seed)
@@ -577,21 +581,21 @@
 /obj/machinery/portable_atmospherics/hydroponics/examine(mob/user)
 	. = ..(user)
 	if(!seed)
-		to_chat(user, "\The [src] is empty.")
+		. += SPAN_NOTICE("[src] is empty.")
 		return
 
-	to_chat(user, SPAN_NOTICE("\An [seed.display_name] is growing here."))
+	. += SPAN_NOTICE("\An [seed.display_name] is growing here.")
 
 	if(user.skill_check(SKILL_BOTANY, SKILL_BASIC))
 		if(weedlevel >= 5)
-			to_chat(user, "\The [src] is [SPAN_DANGER("infested with weeds")]!")
+			. += SPAN_NOTICE("[src] is [SPAN_DANGER("infested with weeds")]!")
 		if(pestlevel >= 5)
-			to_chat(user, "\The [src] is [SPAN_DANGER("infested with tiny worms")]!")
+			. += SPAN_NOTICE("[src] is [SPAN_DANGER("infested with tiny worms")]!")
 
 		if(dead)
-			to_chat(user, SPAN_DANGER("The [seed.display_name] is dead."))
+			. += SPAN_DANGER("The [seed.display_name] is dead.")
 		else if(health <= (seed.get_trait(TRAIT_ENDURANCE)/ 2))
-			to_chat(user, "The [seed.display_name] looks [SPAN_DANGER("unhealthy")].")
+			. += SPAN_NOTICE("The [seed.display_name] looks [SPAN_DANGER("unhealthy")].")
 
 	if(mechanical && Adjacent(user))
 		var/turf/T = loc
@@ -614,9 +618,9 @@
 			var/light_available = T.get_lumcount() * 5
 			light_string = "a light level of [light_available] lumens"
 
-		to_chat(user, "Water: [round(waterlevel,0.1)]/100")
-		to_chat(user, "Nutrient: [round(nutrilevel,0.1)]/10")
-		to_chat(user, "The tray's sensor suite is reporting [light_string] and a temperature of [environment.temperature]K.")
+		. += SPAN_NOTICE("Water: [round(waterlevel,0.1)]/100")
+		. += SPAN_NOTICE("Nutrient: [round(nutrilevel,0.1)]/10")
+		. += SPAN_NOTICE("The tray's sensor suite is reporting [light_string] and a temperature of [environment.temperature]K.")
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid_verb()
 	set name = "Toggle Tray Lid"

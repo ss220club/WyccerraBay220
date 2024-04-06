@@ -129,11 +129,10 @@
 //Appearance
 /turf/simulated/wall/examine(mob/user)
 	. = ..()
-
 	if(paint_color)
-		to_chat(user, SPAN_NOTICE("It has a coat of paint applied."))
+		. += SPAN_NOTICE("It has a coat of paint applied.")
 	if(locate(/obj/overlay/wallrot) in src)
-		to_chat(user, SPAN_WARNING("There is fungus growing on [src]."))
+		. += SPAN_WARNING("There is fungus growing on [src].")
 
 //Damage
 

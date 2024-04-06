@@ -24,4 +24,4 @@
 
 /obj/item/ship_tracker/examine(mob/user)
 	. = ..()
-	to_chat(user, "It appears to be [enabled ? "enabled" : "disabled"]")
+	. += SPAN_NOTICE("It appears to be [enabled ? "enabled" : "disabled"]")

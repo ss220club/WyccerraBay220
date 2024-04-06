@@ -18,9 +18,9 @@
 /obj/item/card/id/guest/examine(mob/user)
 	. = ..()
 	if (!expired)
-		to_chat(user, SPAN_NOTICE("This pass expires at [worldtime2stationtime(expiration_time)]."))
+		. += SPAN_NOTICE("This pass expires at [worldtime2stationtime(expiration_time)].")
 	else
-		to_chat(user, SPAN_WARNING("It expired at [worldtime2stationtime(expiration_time)]."))
+		. += SPAN_WARNING("It expired at [worldtime2stationtime(expiration_time)].")
 
 /obj/item/card/id/guest/read()
 	if (expired)

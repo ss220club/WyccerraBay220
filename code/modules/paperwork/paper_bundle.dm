@@ -51,7 +51,7 @@
 		if(istype(W, /obj/item/pen))
 			show_browser(user, "", "window=[name]") //Closes the dialog
 		var/obj/P = pages[page]
-		P.attackby(W, user)
+		W.resolve_attackby(P, user)
 
 	update_icon()
 	attack_self(user) //Update the browsed page.
@@ -100,7 +100,7 @@
 	if(distance <= 1)
 		src.show_content(user)
 	else
-		to_chat(user, SPAN_NOTICE("It is too far away."))
+		. += SPAN_NOTICE(SPAN_NOTICE("It is too far away."))
 
 /obj/item/paper_bundle/proc/show_content(mob/user as mob)
 	var/dat

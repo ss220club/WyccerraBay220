@@ -15,7 +15,7 @@
 	///2 = wired/built, 1 = circuit installed, 0 = frame
 	var/buildstage = 2
 	var/number = 0
-	var/last_tick //used to delay the powercheck
+	var/area/linked_area
 	intercom_handling = TRUE
 
 /obj/item/device/radio/intercom/get_storage_cost()
@@ -93,7 +93,7 @@
 
 /obj/item/device/radio/intercom/Initialize(loc, dir, atom/frame)
 	. = ..()
-	START_PROCESSING(SSobj, src)
+	find_and_set_linked_area()
 
 	if (dir)
 		set_dir(dir)
@@ -148,10 +148,6 @@
 	. = ..()
 	internal_channels[num2text(RAID_FREQ)] = list(access_syndicate)
 
-/obj/item/device/radio/intercom/Destroy()
-	STOP_PROCESSING(SSobj, src)
-	return ..()
-
 /obj/item/device/radio/intercom/attack_ai(mob/user)
 	add_fingerprint(user)
 	if (buildstage == 2)
@@ -177,64 +173,97 @@
 
 	return canhear_range
 
+//TODO: cable act
+/obj/item/device/radio/intercom/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage > 1)
+		USE_FEEDBACK_FAILURE("[src]'s wiring needs to be removed before you can remove the circuit.")
+		return
+	if(buildstage < 1)
+		USE_FEEDBACK_FAILURE("[src] has no circuit to remove.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts removing [src]'s circuit with [tool]."),
+		SPAN_NOTICE("You start removing [src]'s circuit with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || buildstage != 1)
+		return
+	var/obj/item/intercom_electronics/circuit = new(get_turf(src))
+	buildstage = 0
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [circuit] from [src] with [tool]."),
+		SPAN_NOTICE("You remove [circuit] from [src] with [tool].")
+	)
+
+/obj/item/device/radio/intercom/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(buildstage < 2)
+		balloon_alert(user, "нет проводки!")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	wiresexposed = !wiresexposed
+	b_stat = !b_stat
+	update_icon()
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, wiresexposed)
+
+/obj/item/device/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/frame/intercom(get_turf(src))
+	user.visible_message(
+		SPAN_NOTICE("[user] removes [src] from the wall with [tool]."),
+		SPAN_NOTICE("You remove [src] from the wall with [tool].")
+	)
+	qdel(src)
+
+/obj/item/device/radio/intercom/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (buildstage < 2)
+		USE_FEEDBACK_FAILURE("[src] has no wiring to remove.")
+		return
+	if (!wiresexposed)
+		USE_FEEDBACK_FAILURE("[src]'s wire panel needs to be opened before you can cut the wiring.")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	new /obj/item/stack/cable_coil(get_turf(src), 5)
+	b_stat = FALSE
+	buildstage = 1
+	update_icon()
+	user.visible_message(
+		SPAN_NOTICE("[user] cuts [src]'s wiring with [tool]."),
+		SPAN_NOTICE("You cut [src]'s wiring with [tool].")
+	)
 
 /obj/item/device/radio/intercom/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Cable Coil - Install wiring
 	if (isCoil(tool))
 		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src] is already wired.")
+			USE_FEEDBACK_FAILURE("[src] is already wired.")
 			return TRUE
 		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuitry to wire.")
+			USE_FEEDBACK_FAILURE("[src] has no circuitry to wire.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.use(5))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to wire \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to wire [src].")
 			return TRUE
 		b_stat = TRUE
 		buildstage = 2
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] wires \a [src] with [cable.get_vague_name(TRUE)]."),
-			SPAN_NOTICE("You wire \the [src] with [cable.get_exact_name(5)].")
-		)
-		return TRUE
-
-	// Crowbar - Remove circuits
-	if (isCrowbar(tool))
-		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
-			return TRUE
-		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts removing \a [src]'s circuit with \a [tool]."),
-			SPAN_NOTICE("You start removing \the [src]'s circuit with \the [tool].")
-		)
-		if (!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (buildstage > 1)
-			USE_FEEDBACK_FAILURE("\The [src]'s wiring needs to be removed before you can remove the circuit.")
-			return TRUE
-		if (buildstage < 1)
-			USE_FEEDBACK_FAILURE("\The [src] has no circuit to remove.")
-			return TRUE
-		var/obj/item/intercom_electronics/circuit = new(get_turf(src))
-		buildstage = 0
-		update_icon()
-		playsound(loc, 'sound/items/Crowbar.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [circuit] from \a [src] with \a [tool]."),
-			SPAN_NOTICE("You remove \the [circuit] from \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] wires [src] with [cable.get_vague_name(TRUE)]."),
+			SPAN_NOTICE("You wire [src] with [cable.get_exact_name(5)].")
 		)
 		return TRUE
 
 	// Intercom Electronics - Install circuit
 	if (istype(tool, /obj/item/intercom_electronics))
 		if (buildstage > 0)
-			USE_FEEDBACK_FAILURE("\The [src] already has a circuit installed.")
+			USE_FEEDBACK_FAILURE("[src] already has a circuit installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -242,57 +271,11 @@
 		buildstage = 1
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] inserts \a [tool] into \a [src]."),
-			SPAN_NOTICE("You insert \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] inserts [tool] into [src]."),
+			SPAN_NOTICE("You insert [tool] into [src].")
 		)
 		qdel(tool)
 		return TRUE
-
-	// Screwdriver - Toggle wire panel
-	if (isScrewdriver(tool))
-		if (buildstage < 2)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to expose.")
-			return TRUE
-		wiresexposed = !wiresexposed
-		b_stat = !b_stat
-		update_icon()
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [wiresexposed ? "opens" : "closes"] \a [src]'s wiring panel with \a [tool]."),
-			SPAN_NOTICE("You [wiresexposed ? "open" : "close"] \the [src]'s wiring panel with \the [tool].")
-		)
-		return TRUE
-
-	// Wirecutters - Cut wiring
-	if (isWirecutter(tool))
-		if (buildstage < 2)
-			USE_FEEDBACK_FAILURE("\The [src] has no wiring to remove.")
-			return TRUE
-		if (!wiresexposed)
-			USE_FEEDBACK_FAILURE("\The [src]'s wire panel needs to be opened before you can cut the wiring.")
-			return TRUE
-		new /obj/item/stack/cable_coil(get_turf(src), 5)
-		b_stat = FALSE
-		buildstage = 1
-		playsound(src, 'sound/items/Wirecutter.ogg', 50, TRUE)
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] cuts \a [src]'s wiring with \a [tool]."),
-			SPAN_NOTICE("You cut \the [src]'s wiring with \the [tool].")
-		)
-		return TRUE
-
-	// Wrench - Remove from wall
-	if (isWrench(tool))
-		new /obj/item/frame/intercom(get_turf(src))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] removes \a [src] from the wall with \a [tool]."),
-			SPAN_NOTICE("You remove \the [src] from the wall with \the [tool].")
-		)
-		qdel(src)
-		return TRUE
-
 	return ..()
 
 
@@ -322,25 +305,6 @@
 	.["Wirecutters"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
 	.["Wrench"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
 
-/obj/item/device/radio/intercom/Process()
-	if (wiresexposed)
-		on = FALSE
-		return
-	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))
-		last_tick = world.timeofday
-		var/old_on = on
-
-		if(!src.loc)
-			on = FALSE
-		else
-			var/area/A = get_area(src)
-			if(!A)
-				on = FALSE
-			else
-				on = A.powered(EQUIP) // set "on" to the power status
-
-		if (on != old_on)
-			update_icon()
 
 /obj/item/device/radio/intercom/on_update_icon()
 	if (buildstage == 2 && wiresexposed)
@@ -349,10 +313,11 @@
 		icon_state = "intercom-b1"
 	else if (buildstage == 0)
 		icon_state = "intercom-f"
-	else if (!on)
-		icon_state = "intercom-p"
 	else
-		icon_state = "intercom_[broadcasting][listening]"
+		if(on)
+			icon_state = "intercom_[broadcasting][listening]"
+		else
+			icon_state = "intercom-p"
 
 /obj/item/device/radio/intercom/ToggleBroadcast()
 	..()
@@ -360,6 +325,39 @@
 
 /obj/item/device/radio/intercom/ToggleReception()
 	..()
+	update_icon()
+
+/obj/item/device/radio/intercom/proc/find_and_set_linked_area()
+	var/area/target_area = get_area(src)
+	if(!target_area.apc)
+		RegisterSignal(target_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+		return
+
+	on_apc_add(target_area)
+
+/obj/item/device/radio/intercom/proc/on_apc_add(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_ADDED)
+	linked_area = apc_area
+	RegisterSignal(apc_area, COMSIG_AREA_APC_REMOVED, PROC_REF(on_apc_removal))
+	RegisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE, PROC_REF(change_status))
+
+/obj/item/device/radio/intercom/proc/on_apc_removal(area/apc_area)
+	SIGNAL_HANDLER
+
+	UnregisterSignal(apc_area, COMSIG_AREA_APC_REMOVED)
+	UnregisterSignal(apc_area, COMSIG_AREA_POWER_CHANGE)
+	linked_area = null
+	on = FALSE
+	update_icon()
+
+	RegisterSignal(apc_area, COMSIG_AREA_APC_ADDED, PROC_REF(on_apc_add))
+
+/obj/item/device/radio/intercom/proc/change_status()
+	SIGNAL_HANDLER
+
+	on = linked_area.powered(EQUIP)
 	update_icon()
 
 /obj/item/device/radio/intercom/broadcasting

@@ -51,8 +51,8 @@
 
 /obj/structure/lattice/proc/deconstruct(mob/user, obj/item/tool)
 	user.visible_message(
-		SPAN_NOTICE("\The [user] slices \the [src] apart with \a [tool]."),
-		SPAN_NOTICE("You \the [src] apart with \a [tool].")
+		SPAN_NOTICE("[user] slices [src] apart with [tool]."),
+		SPAN_NOTICE("You [src] apart with [tool].")
 	)
 	var/obj/item/stack/material/rods/rods = new(loc, 1, material.name)
 	transfer_fingerprints_to(rods)
@@ -64,30 +64,19 @@
 			qdel(C)
 	qdel_self()
 
+/obj/structure/lattice/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	deconstruct(user)
 
 /obj/structure/lattice/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Floor Tile, Cable Coil - Passthrough to turf
-	if (istype(tool, /obj/item/stack/tile) || isCoil(tool))
+	if(istype(tool, /obj/item/stack/tile) || isCoil(tool))
 		return tool.resolve_attackby(get_turf(src), user, click_params)
 
-	// Plasma Cutter - Deconstruct
-	if (istype(tool, /obj/item/gun/energy/plasmacutter))
-		var/obj/item/gun/energy/plasmacutter/cutter = tool
-		if (!cutter.slice(user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
-
-	// Welder - Deconstruct
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.remove_fuel(1, user))
-			return TRUE
-		deconstruct(user)
-		return TRUE
-
 	// Rods - Create catwalk
-	if (istype(tool, /obj/item/stack/material/rods))
+	if(istype(tool, /obj/item/stack/material/rods))
 		var/obj/item/stack/material/rods/rods = tool
 		if (!rods.use(2))
 			USE_FEEDBACK_STACK_NOT_ENOUGH(rods, 2, "to create a catwalk")
@@ -99,7 +88,7 @@
 			SPAN_NOTICE("\The [user] constructs \a [catwalk] over \the [src] with \a [tool]."),
 			SPAN_NOTICE("You construct \a [catwalk] over \the [src] with \the [tool].")
 		)
-		qdel_self()
+		qdel(src)
 		return TRUE
 
 	return ..()

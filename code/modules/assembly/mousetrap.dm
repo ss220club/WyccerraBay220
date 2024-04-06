@@ -9,7 +9,7 @@
 /obj/item/device/assembly/mousetrap/examine(mob/user)
 	. = ..()
 	if(armed)
-		to_chat(user, "It looks like it's armed.")
+		. += SPAN_NOTICE("It looks like it's armed.")
 
 /obj/item/device/assembly/mousetrap/on_update_icon()
 	if(armed)

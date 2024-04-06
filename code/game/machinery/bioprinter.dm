@@ -45,7 +45,7 @@
 
 /obj/machinery/organ_printer/examine(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("It is loaded with [stored_matter]/[max_stored_matter] matter units."))
+	. += SPAN_NOTICE("It is loaded with [stored_matter]/[max_stored_matter] matter units.")
 
 /obj/machinery/organ_printer/RefreshParts()
 	print_delay = initial(print_delay)

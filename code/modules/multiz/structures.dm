@@ -92,7 +92,14 @@
 		landing.visible_message(SPAN_WARNING("\The [I] falls from the top of \the [target_down]!"))
 
 /obj/structure/ladder/attack_hand(mob/M)
-	climb(M)
+	climb(M, direction = "up")
+
+/obj/structure/ladder/attack_hand_secondary(mob/living/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	climb(user, direction = "down")
 
 /obj/structure/ladder/attack_ai(mob/M)
 	var/mob/living/silicon/ai/ai = M
@@ -103,19 +110,26 @@
 		instant_climb(AIeye)
 
 /obj/structure/ladder/attack_robot(mob/M)
-	climb(M)
+	climb(M, direction = "up")
+
+/obj/structure/ladder/attack_robot_secondary(mob/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	climb(user, direction = "down")
 
 /obj/structure/ladder/proc/instant_climb(mob/M)
 	var/atom/target_ladder = getTargetLadder(M)
 	if(target_ladder)
 		M.dropInto(target_ladder.loc)
 
-/obj/structure/ladder/proc/climb(mob/M, obj/item/I = null)
+/obj/structure/ladder/proc/climb(mob/M, obj/item/I = null, direction)
 	if(!M.may_climb_ladders(src))
 		return
 
 	add_fingerprint(M)
-	var/obj/structure/ladder/target_ladder = getTargetLadder(M)
+	var/obj/structure/ladder/target_ladder = getTargetLadder(M, direction)
 	if(!target_ladder)
 		return
 	if (bluespace_affected && prob(displacement_chance))
@@ -132,11 +146,9 @@
 	for (var/obj/item/grab/G in M)
 		G.adjust_position()
 
-	var/direction = target_ladder == target_up ? "up" : "down"
+	direction = target_ladder == target_up ? "up" : "down"
 
-	M.visible_message(SPAN_NOTICE("\The [M] begins climbing [direction] \the [src]!"),
-	"You begin climbing [direction] \the [src]!",
-	"You hear the grunting and clanging of a metal ladder being used.")
+	balloon_alert_to_viewers("[direction == "up" ? "поднимается" : "спускается"]")
 
 	target_ladder.audible_message(SPAN_NOTICE("You hear something coming [direction] \the [src]"))
 
@@ -151,13 +163,24 @@
 /obj/structure/ladder/attack_ghost(mob/M)
 	instant_climb(M)
 
-/obj/structure/ladder/proc/getTargetLadder(mob/M)
+/obj/structure/ladder/proc/getTargetLadder(mob/M, direction)
 	if((!target_up && !target_down) || (target_up && !istype(target_up.loc, /turf/simulated/open) || (target_down && !istype(target_down.loc, /turf))))
 		to_chat(M, SPAN_NOTICE("\The [src] is incomplete and can't be climbed."))
 		return
 
+	if(direction == "up")
+		if(!target_up)
+			balloon_alert(M, "сверху пусто!")
+			return
+		return target_up
+	if(direction == "down")
+		if(!target_down)
+			balloon_alert(M, "внизу пусто!")
+			return
+		return target_down
+
 	if(target_down && target_up)
-		var/direction = alert(M,"Do you want to go up or down?", "Ladder", "Up", "Down", "Cancel")
+		direction = alert(M,"Do you want to go up or down?", "Ladder", "Up", "Down", "Cancel")
 
 		if(direction == "Cancel")
 			return

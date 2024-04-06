@@ -121,7 +121,7 @@
 
 /obj/item/folder/envelope/examine(mob/user)
 	. = ..()
-	to_chat(user, "The seal is [sealed ? "intact" : "broken"].")
+	. += SPAN_NOTICE("The seal is [sealed ? "intact" : "broken"].")
 
 /obj/item/folder/envelope/proc/sealcheck(user)
 	var/ripperoni = alert("Are you sure you want to break the seal on \the [src]?", "Confirmation","Yes", "No")

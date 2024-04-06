@@ -28,6 +28,9 @@
 	/// log game events
 	var/static/log_game = FALSE
 
+	/// log tool usage
+	var/static/log_tool = FALSE
+
 	/// log voting
 	var/static/log_vote = FALSE
 
@@ -551,6 +554,8 @@
 				log_debug = TRUE
 			if ("log_game")
 				log_game = TRUE
+			if ("log_tool")
+				log_tool = TRUE
 			if ("log_vote")
 				log_vote = TRUE
 			if ("log_whisper")

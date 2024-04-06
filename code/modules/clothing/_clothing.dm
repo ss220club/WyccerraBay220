@@ -181,7 +181,7 @@
 	. = ..()
 	var/datum/extension/armor/ablative/armor_datum = get_extension(src, /datum/extension/armor/ablative)
 	if(istype(armor_datum) && LAZYLEN(armor_datum.get_visible_damage()))
-		to_chat(user, SPAN_WARNING("It has some <a href='?src=\ref[src];list_armor_damage=1'>damage</a>."))
+		. +=SPAN_WARNING("It has some <a href='?src=\ref[src];list_armor_damage=1'>damage</a>.")
 
 /obj/item/clothing/CanUseTopic(user)
 	if(user in view(get_turf(src)))
@@ -318,7 +318,6 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/Initialize()
 	if(item_flags & ITEM_FLAG_PREMODIFIED)
 		cut_fingertops()
-
 	. = ..()
 
 /obj/item/clothing/gloves/update_clothing_icon()
@@ -335,13 +334,10 @@ BLIND     // can't see anything
 	..()
 
 
-// Called just before an attack_hand(), in mob/UnarmedAttack()
-/obj/item/clothing/gloves/proc/Touch(atom/A, proximity)
-	return 0 // return 1 to cancel attack_hand()
 
 /obj/item/clothing/gloves/attackby(obj/item/W, mob/user)
-	if (isWirecutter(W) || istype(W, /obj/item/scalpel))
-		if (clipped)
+	if(W.tool_behaviour == TOOL_WIRECUTTER || istype(W, /obj/item/scalpel))
+		if(clipped)
 			to_chat(user, SPAN_NOTICE("\The [src] have already been modified!"))
 			update_icon()
 			return TRUE
@@ -643,12 +639,12 @@ BLIND     // can't see anything
 /obj/item/clothing/shoes/examine(mob/user)
 	. = ..()
 	if (attached_cuffs)
-		to_chat(user, SPAN_WARNING("They are connected by \the [attached_cuffs]."))
+		. += SPAN_WARNING("They are connected by [attached_cuffs].")
 	if (hidden_item)
 		if (loc == user)
-			to_chat(user, SPAN_ITALIC("\An [hidden_item] is inside."))
+			. += SPAN_NOTICE(SPAN_ITALIC("\An [hidden_item] is inside."))
 		else if (get_dist(src, user) == 1)
-			to_chat(user, SPAN_ITALIC("Something is hidden inside."))
+			. += SPAN_NOTICE(SPAN_ITALIC("Something is hidden inside."))
 
 /obj/item/clothing/shoes/attack_hand(mob/living/user)
 	if (remove_hidden(user))
@@ -976,13 +972,13 @@ BLIND     // can't see anything
 	. = ..()
 	switch(src.sensor_mode)
 		if(SUIT_SENSOR_OFF)
-			to_chat(user, "Its sensors appear to be disabled.")
+			. += SPAN_NOTICE("Its sensors appear to be disabled.")
 		if(SUIT_SENSOR_BINARY)
-			to_chat(user, "Its binary life sensors appear to be enabled.")
+			. += SPAN_NOTICE("Its binary life sensors appear to be enabled.")
 		if(SUIT_SENSOR_VITAL)
-			to_chat(user, "Its vital tracker appears to be enabled.")
+			. += SPAN_NOTICE("Its vital tracker appears to be enabled.")
 		if(SUIT_SENSOR_TRACKING)
-			to_chat(user, "Its vital tracker and tracking beacon appear to be enabled.")
+			. += SPAN_NOTICE("Its vital tracker and tracking beacon appear to be enabled.")
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	var/mob/M = user

@@ -24,14 +24,26 @@
 	wires = null
 	return ..()
 
+/obj/item/plastique/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open_panel = !open_panel
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open_panel)
+
+/obj/item/plastique/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	wires.Interact(user)
+
+/obj/item/plastique/wirecutter_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	wires.Interact(user)
+
 /obj/item/plastique/attackby(obj/item/I, mob/user)
-	if(isScrewdriver(I))
-		open_panel = !open_panel
-		to_chat(user, SPAN_NOTICE("You [open_panel ? "open" : "close"] the wire panel."))
-	else if(isWirecutter(I) || isMultitool(I) || istype(I, /obj/item/device/assembly/signaler ))
+	if(istype(I, /obj/item/device/assembly/signaler))
 		wires.Interact(user)
-	else
-		..()
+		return
+	. = ..()
 
 /obj/item/plastique/attack_self(mob/user as mob)
 	var/newtime = input(usr, "Please set the timer.", "Timer", 10) as num
@@ -64,7 +76,7 @@
 			log_game("[key_name(user)] planted [src.name] on [key_name(target)] with [timer] second fuse")
 
 		else
-			log_and_message_admins("planted \a [src] with a [timer] second fuse on \the [target].")
+			log_and_message_admins("planted \a [src] with a [timer] second fuse on [target].")
 
 		target.AddOverlays(image_overlay)
 		to_chat(user, "Bomb has been planted. Timer counting down from [timer].")

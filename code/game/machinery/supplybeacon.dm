@@ -12,13 +12,13 @@
 	deploy_path = /obj/machinery/power/supply_beacon/supermatter
 
 /obj/item/supply_beacon/attack_self(mob/user)
-	user.visible_message(SPAN_NOTICE("\The [user] begins setting up \the [src]."))
+	user.visible_message(SPAN_NOTICE("[user] begins setting up [src]."))
 	if(!do_after(user, deploy_time, src, DO_PUBLIC_UNIQUE))
 		return
 	if(!user.unEquip(src))
 		return
 	var/obj/S = new deploy_path(get_turf(user))
-	user.visible_message(SPAN_NOTICE("\The [user] deploys \the [S]."))
+	user.visible_message(SPAN_NOTICE("[user] deploys [S]."))
 	qdel(src)
 
 /obj/machinery/power/supply_beacon
@@ -43,21 +43,22 @@
 	name = "supermatter supply beacon"
 	drop_type = "supermatter"
 
-/obj/machinery/power/supply_beacon/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(!use_power && isWrench(W))
-		if(!anchored && !connect_to_network())
-			to_chat(user, SPAN_WARNING("This device must be placed over an exposed cable."))
-			return TRUE
-		anchored = !anchored
-		user.visible_message(SPAN_NOTICE("\The [user] [anchored ? "secures" : "unsecures"] \the [src]."))
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		return TRUE
-	return ..()
+/obj/machinery/power/supply_beacon/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(use_power)
+		return
+	if(!anchored && !connect_to_network())
+		to_chat(user, SPAN_WARNING("This device must be placed over an exposed cable."))
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = !anchored
+	user.visible_message(SPAN_NOTICE("[user] [anchored ? "secures" : "unsecures"] [src]."))
 
 /obj/machinery/power/supply_beacon/physical_attack_hand(mob/user)
 	if(expended)
 		update_use_power(POWER_USE_OFF)
-		to_chat(user, SPAN_WARNING("\The [src] has used up its charge."))
+		to_chat(user, SPAN_WARNING("[src] has used up its charge."))
 		return TRUE
 
 	if(anchored)

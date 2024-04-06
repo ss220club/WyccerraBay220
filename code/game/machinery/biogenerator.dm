@@ -91,9 +91,9 @@
 /obj/machinery/biogenerator/examine(mob/user)
 	. = ..()
 	if(processing)
-		to_chat(user, SPAN_NOTICE("\The [src] is currently processing."))
+		. += SPAN_NOTICE("[src] is currently processing.")
 	if(stored_plants >= max_storable_plants)
-		to_chat(user, SPAN_NOTICE("\The [src] is full!"))
+		. += SPAN_NOTICE("[src] is full!")
 
 /obj/machinery/biogenerator/use_tool(obj/item/O, mob/living/user, list/click_params)
 	. = ..()

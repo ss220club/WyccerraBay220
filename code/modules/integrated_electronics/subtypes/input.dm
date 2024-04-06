@@ -9,7 +9,7 @@
 		message = "There is \a [src]."
 	else
 		message = "There is \a ["\improper[initial_name]"] labeled '[name]'."
-	to_chat(user, message)
+	return SPAN_NOTICE("[message]")
 
 
 /obj/item/integrated_circuit/input/button

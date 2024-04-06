@@ -43,9 +43,9 @@
 	. = ..()
 	var/msg = "[scanning ? "ambient" : "stored"] Radiation level: [radiation_count ? radiation_count : "0"] IU/s."
 	if(radiation_count > RAD_LEVEL_LOW)
-		to_chat(user, SPAN_WARNING("[msg]"))
+		. += SPAN_WARNING("[msg]")
 	else
-		to_chat(user, SPAN_NOTICE("[msg]"))
+		. += SPAN_NOTICE("[msg]")
 
 /obj/item/device/geiger/attack_self(mob/user)
 	scanning = !scanning

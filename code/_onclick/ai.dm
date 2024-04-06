@@ -27,22 +27,22 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	if (modifiers["ctrl"] && modifiers["alt"] && modifiers["shift"])
+	if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (!control_disabled && A.AICtrlAltShiftClick(src))
 			return TRUE
 		if (CtrlAltShiftClickOn(A))
 			return TRUE
-	else if (modifiers["ctrl"] && modifiers["alt"])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (!control_disabled && A.AICtrlAltClick(src))
 			return TRUE
 		if (CtrlAltClickOn(A))
 			return TRUE
-	else if (modifiers["shift"] && modifiers["ctrl"])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, CTRL_CLICK))
 		if (!control_disabled && A.AICtrlShiftClick(src))
 			return TRUE
 		if (CtrlShiftClickOn(A))
 			return TRUE
-	else if (modifiers["shift"] && modifiers["alt"])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (!control_disabled && A.AIAltShiftClick(src))
 			return TRUE
 		if (AltShiftClickOn(A))
@@ -52,17 +52,17 @@
 			return TRUE
 		if (MiddleClickOn(A))
 			return TRUE
-	else if (modifiers["shift"])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (!control_disabled && A.AIShiftClick(src))
 			return TRUE
 		if (ShiftClickOn(A))
 			return TRUE
-	else if (modifiers["alt"])
+	else if (LAZYACCESS(modifiers, ALT_CLICK))
 		if (!control_disabled && A.AIAltClick(src))
 			return TRUE
 		if (AltClickOn(A))
 			return TRUE
-	else if (modifiers["ctrl"])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK))
 		if (!control_disabled && A.AICtrlClick(src))
 			return TRUE
 		if (CtrlClickOn(A))
@@ -85,26 +85,26 @@
 		silicon_camera.captureimage(A, usr)
 		return
 
-	/*
-		AI restrained() currently does nothing
-	if(restrained())
-		RestrainedClickOn(A)
-	else
-	*/
+	if(LAZYACCESS(modifiers, RIGHT_CLICK))
+		var/secondary_result = A.attack_ai_secondary(src, modifiers)
+		if(secondary_result == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN || secondary_result == SECONDARY_ATTACK_CONTINUE_CHAIN)
+			return
+		else if (secondary_result != SECONDARY_ATTACK_CALL_NORMAL)
+			CRASH("attack_robot_secondary did not return a SECONDARY_ATTACK_* define.")
 	A.add_hiddenprint(src)
 	A.attack_ai(src)
 
 /*
-	AI has no need for the UnarmedAttack() and RangedAttack() procs,
+	AI has no need for the UnarmedAttack() and ranged_attack() procs,
 	because the AI code is not generic;	attack_ai() is used instead.
 	The below is only really for safety, or you can alter the way
 	it functions and re-insert it above.
 */
-/mob/living/silicon/ai/UnarmedAttack(atom/A)
-	A.attack_ai(src)
+/mob/living/silicon/ai/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
+	target.attack_ai(src)
 
-/mob/living/silicon/ai/RangedAttack(atom/A, params)
-	A.attack_ai(src)
+/mob/living/silicon/ai/ranged_attack(atom/target, modifiers)
+	target.attack_ai(src)
 	return TRUE
 
 
@@ -116,6 +116,9 @@
  */
 /atom/proc/attack_ai(mob/user as mob)
 	return
+
+/atom/proc/attack_ai_secondary(mob/living/user, modifiers)
+	return SECONDARY_ATTACK_CALL_NORMAL
 
 /*
 	The following criminally helpful code is just the previous code cleaned up;
@@ -168,6 +171,18 @@
 		return FALSE
 	Topic(src, list("breaker"="1"))
 	return TRUE
+
+/obj/machinery/power/apc/attack_ai_secondary(mob/living/user, modifiers)
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(user.incapacitated())
+		return
+	togglelock(user)
+
+/obj/machinery/alarm/attack_ai_secondary(mob/living/user, modifiers)
+	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	if(user.incapacitated())
+		return
+	togglelock(user)
 
 /obj/machinery/turretid/AICtrlClick() //turns off/on Turrets
 	if(usr.incapacitated())

@@ -16,7 +16,7 @@
 /obj/item/sample/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1 && object)
-		to_chat(user, "The label says: '[object]'")
+		. += SPAN_NOTICE("The label says: '[object]'")
 
 /obj/item/sample/print/on_update_icon()
 	if(evidence && length(evidence))

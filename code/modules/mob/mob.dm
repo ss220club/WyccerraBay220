@@ -116,12 +116,6 @@
 			M.show_message(self_message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
 			continue
 
-		if(!(M.knows_target(src)) && !isghost(M))
-			for(var/datum/pronouns/entry as anything in GLOB.pronouns.instances)
-				mob_message = replacetext(mob_message, " [initial(entry.his)] ", " their ")
-				mob_message = replacetext(mob_message, " [initial(entry.him)] ", " them ")
-				mob_message = replacetext(mob_message, " [initial(entry.self)] ", " themselves ")
-
 		if((!M.is_blind() && M.see_invisible >= src.invisibility) || narrate)
 			M.show_message(mob_message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
 			if(runemessage != -1)
@@ -158,12 +152,6 @@
 			if(ghost_skip_message(M))
 				continue
 			mob_message = add_ghost_track(mob_message, M)
-
-		if(!(M.knows_target(src)) && !(isghost(M)))
-			for(var/datum/pronouns/entry as anything in GLOB.pronouns.instances)
-				mob_message = replacetext(mob_message, " [initial(entry.his)] ", " their ")
-				mob_message = replacetext(mob_message, " [initial(entry.him)] ", " them ")
-				mob_message = replacetext(mob_message, " [initial(entry.self)] ", " themselves ")
 
 		if(self_message && M == src)
 			M.show_message(self_message, AUDIBLE_MESSAGE, deaf_message, VISIBLE_MESSAGE)
@@ -626,17 +614,6 @@
 /mob/proc/is_ready()
 	return client && !!mind
 
-
-/mob/choose_from_pronouns()
-	if (!pronouns)
-		return ..()
-
-	var/datum/pronouns/P = GLOB.pronouns.by_key[pronouns]
-	if(P.types)
-		P = GLOB.pronouns.by_key[pick(P.types)]
-	return P
-
-
 /mob/proc/see(message)
 	if(!is_active())
 		return 0
@@ -743,9 +720,10 @@
 	if(update_icon)	//forces a full overlay update
 		update_icon = FALSE
 		regenerate_icons()
+		SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
 	else if( lying != lying_prev )
 		update_icons()
-	SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
+		SEND_SIGNAL(src, COMSIG_MOB_UPDATE_LYING_BUCKLED_VERBSTATUS)
 
 /mob/proc/reset_layer()
 	if(lying)
@@ -840,6 +818,7 @@
 /mob/proc/AdjustParalysis(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(paralysis + amount,0)
+		UpdateLyingBuckledAndVerbStatus()
 	return
 
 /mob/proc/Sleeping(amount)
@@ -853,6 +832,7 @@
 
 /mob/proc/AdjustSleeping(amount)
 	sleeping = max(sleeping + amount,0)
+	UpdateLyingBuckledAndVerbStatus()
 	return
 
 
@@ -1247,10 +1227,8 @@
 		to_chat(U, SPAN_WARNING("You already know [S.name]!"))
 		return
 
-	var/datum/pronouns/P = choose_from_pronouns(U)
-
-	to_chat(U, SPAN_WARNING("You introduce yourself to [S.name]!"))
-	to_chat(S, SPAN_WARNING("[U.name] introduces [P.self]!"))
+	to_chat(U, SPAN_WARNING("You introduce yourself to [S]!"))
+	to_chat(S, SPAN_WARNING("[U] introduces [U.p_they()]self!"))
 	U.mind.add_known_mob(S)
 	S.mind.add_known_mob(U)
 

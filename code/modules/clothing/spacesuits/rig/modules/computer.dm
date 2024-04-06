@@ -96,7 +96,7 @@
 			return 0
 
 		// Since we've explicitly checked for three types, this should be safe.
-		input_device.attackby(card,user)
+		card.resolve_attackby(input_device,user)
 
 		// If the transfer failed we can delete the card.
 		if(locate(/mob/living/silicon/ai) in card)

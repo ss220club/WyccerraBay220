@@ -99,6 +99,19 @@
 	QDEL_NULL(piston)
 	return ..()
 
+/obj/machinery/crusher_base/wrench_act(mob/living/user, obj/item/tool)
+	if(!panel_open)
+		return
+	. = ITEM_INTERACT_SUCCESS
+	to_chat(user, SPAN_NOTICE("You start [valve_open ? "closing" : "opening"] the pressure relief valve of [src]."))
+	if(!tool.use_as_tool(src, user, 5 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || !panel_open)
+		return
+	valve_open = !valve_open
+	to_chat(user, SPAN_NOTICE("You [valve_open ? "open" : "close"] the pressure relief valve of [src]."))
+	if(valve_open)
+		blocked = 0
+		action = "retract"
+
 /obj/machinery/crusher_base/use_tool(obj/item/tool, mob/living/user, list/click_params)
 	if(status != "idle" && prob(40) && ishuman(user))
 		var/mob/living/carbon/human/M = user
@@ -121,18 +134,6 @@
 			if(M.can_feel_pain())
 				M.emote("scream")
 		return TRUE
-
-	//Stuff you can do if the maint hatch is open
-	if(panel_open)
-		if(isWrench(tool))
-			to_chat(user, SPAN_NOTICE("You start [valve_open ? "closing" : "opening"] the pressure relief valve of [src]."))
-			if(do_after(user, 50) && user.use_sanity_check(src, tool))
-				valve_open = !valve_open
-				to_chat(user, SPAN_NOTICE("You [valve_open ? "open" : "close"] the pressure relief valve of [src]."))
-				if(valve_open)
-					blocked = 0
-					action = "retract"
-			return TRUE
 	return ..()
 
 /obj/machinery/crusher_base/proc/change_neighbor_base_icons()

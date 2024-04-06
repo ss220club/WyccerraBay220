@@ -69,14 +69,28 @@
 /obj/item/melee/baton/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		examine_cell(user)
+		. += examine_cell(user)
 
 // Addition made by Techhead0, thanks for fullfilling the todo!
 /obj/item/melee/baton/proc/examine_cell(mob/user)
+	. = list()
 	if(bcell)
-		to_chat(user, SPAN_NOTICE("The baton is [round(bcell.percent())]% charged."))
+		. += SPAN_NOTICE("The baton is [round(bcell.percent())]% charged.")
 	if(!bcell)
-		to_chat(user, SPAN_WARNING("The baton does not have a power source installed."))
+		. += SPAN_WARNING("The baton does not have a power source installed.")
+
+/obj/item/melee/baton/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!bcell)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	bcell.update_icon()
+	bcell.dropInto(loc)
+	bcell = null
+	USE_FEEDBACK_CELL_REMOVED(user)
+	status = 0
+	update_icon()
 
 /obj/item/melee/baton/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/cell/device))
@@ -87,16 +101,8 @@
 			update_icon()
 		else
 			to_chat(user, SPAN_NOTICE("[src] already has a cell."))
-	else if(isScrewdriver(W))
-		if(bcell)
-			bcell.update_icon()
-			bcell.dropInto(loc)
-			bcell = null
-			to_chat(user, SPAN_NOTICE("You remove the cell from the [src]."))
-			status = 0
-			update_icon()
-	else
-		..()
+		return
+	. = ..()
 
 /obj/item/melee/baton/attack_self(mob/user)
 	set_status(!status, user)
@@ -201,7 +207,7 @@
 
 // Addition made by Techhead0, thanks for fullfilling the todo!
 /obj/item/melee/baton/robot/examine_cell(mob/user)
-	to_chat(user, SPAN_NOTICE("The baton is running off an external power supply."))
+	return SPAN_NOTICE("The baton is running off an external power supply.")
 
 // Override proc for the stun baton module, found in PC Security synthetics
 // Refactored to fix #14470 - old proc defination increased the hitcost beyond

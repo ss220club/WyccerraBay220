@@ -27,14 +27,11 @@
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/kinetic_harvester/use_tool(obj/item/thing, mob/living/user, list/click_params)
-	if(isMultitool(thing))
-		var/datum/extension/local_network_member/lanm = get_extension(src, /datum/extension/local_network_member)
-		if(lanm.get_new_tag(user))
-			find_core()
-		return TRUE
-
-	return ..()
+/obj/machinery/kinetic_harvester/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/lanm = get_extension(src, /datum/extension/local_network_member)
+	if(lanm.get_new_tag(user))
+		find_core()
 
 /obj/machinery/kinetic_harvester/proc/find_core()
 	harvest_from = null

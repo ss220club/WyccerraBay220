@@ -427,7 +427,7 @@ var/global/list/all_objectives = list()
 	explanation_text = "Reproduce at least once."
 
 /datum/objective/ninja_highlander
-explanation_text = "You aspire to be a Grand Master of the Spider Clan. Kill all of your fellow acolytes."
+	explanation_text = "You aspire to be a Grand Master of the Spider Clan. Kill all of your fellow acolytes."
 
 /datum/objective/cult/survive
 	explanation_text = "Our knowledge must live on."

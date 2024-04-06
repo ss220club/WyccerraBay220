@@ -112,7 +112,7 @@
 
 /* For Meatbag */
 /datum/say_list/parrot/heist
-speak = list("Yaaar!","Squaaak!","Fight me Matey!","BAWWWWK Vox trying to eat me!")
+	speak = list("Yaaar!","Squaaak!","Fight me Matey!","BAWWWWK Vox trying to eat me!")
 
 /datum/say_list/thoom
 	speak = list("Q'moo","Q'mooooo","Q'rrrr","Q'emb")

@@ -125,7 +125,7 @@
 #define rustg_file_write_b64decode(text, fname) RUSTG_CALL(RUST_G, "file_write")(text, fname, "true")
 
 #ifdef RUSTG_OVERRIDE_BUILTINS
-	#define file2text(fname) rustg_file_read("[fname]") Disable
+	#define file2text(fname) rustg_file_read("[fname]")
 	#define text2file(text, fname) rustg_file_append(text, "[fname]")
 	#define fexists(fname) (rustg_file_exists("[fname]") == "true")
 #endif

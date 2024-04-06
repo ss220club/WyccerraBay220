@@ -65,7 +65,7 @@
 	return (charge >= amount)
 
 // use power from a cell, returns the amount actually used
-/obj/item/cell/proc/use(amount)
+/obj/item/cell/use(amount)
 	var/used = min(charge, amount)
 	charge -= used
 	update_icon()
@@ -87,8 +87,8 @@
 
 /obj/item/cell/examine(mob/user)
 	. = ..()
-	to_chat(user, "The label states it's capacity is [maxcharge] Wh")
-	to_chat(user, "The charge meter reads [round(src.percent(), 0.1)]%")
+	. += SPAN_NOTICE("The label states it's capacity is [maxcharge] Wh")
+	. += SPAN_NOTICE("The charge meter reads [round(src.percent(), 0.1)]%")
 
 /obj/item/cell/emp_act(severity)
 	//remove this once emp changes on dev are merged in

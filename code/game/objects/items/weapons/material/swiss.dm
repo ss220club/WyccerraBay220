@@ -53,13 +53,22 @@
 			user.visible_message(SPAN_NOTICE("\The [user] opens the [lowertext(choice)]."))
 
 	active_tool = choice
+	tool_behaviour = null
+	switch(active_tool)
+		if(SWISSKNF_CROWBAR)
+			change_tool_behaviour(TOOL_CROWBAR)
+		if(SWISSKNF_CLIFTER, SWISSKNF_COPENER)
+			change_tool_behaviour(TOOL_SCREWDRIVER)
+		if(SWISSKNF_WCUTTER)
+			change_tool_behaviour(TOOL_WIRECUTTER)
+
 	update_force()
 	update_icon()
 	add_fingerprint(user)
 
 /obj/item/material/knife/folding/swiss/examine(mob/user)
 	. = ..()
-	to_chat(user, active_tool == SWISSKNF_CLOSED ? "It is closed." : "Its [lowertext(active_tool)] is folded out.")
+	. += SPAN_NOTICE(active_tool == SWISSKNF_CLOSED ? "It is closed." : "Its [lowertext(active_tool)] is folded out.")
 
 /obj/item/material/knife/folding/swiss/update_force()
 	if(active_tool in sharp_tools)
@@ -90,15 +99,6 @@
 		if(blood_overlay)
 			AddOverlays(blood_overlay)
 
-/obj/item/material/knife/folding/swiss/IsCrowbar()
-	return active_tool == SWISSKNF_CROWBAR && can_use_tools
-
-/obj/item/material/knife/folding/swiss/IsScrewdriver()
-	return (active_tool == SWISSKNF_CLIFTER || active_tool == SWISSKNF_COPENER) && can_use_tools
-
-/obj/item/material/knife/folding/swiss/IsWirecutter()
-	return active_tool == SWISSKNF_WCUTTER && can_use_tools
-
 /obj/item/material/knife/folding/swiss/IsHatchet()
 	return active_tool == SWISSKNF_WBLADE
 
@@ -108,12 +108,6 @@
 		. = ..()
 		update_force()
 		return
-	if(istype(target, /obj/item))
-		if(target.w_class <= ITEM_SIZE_HUGE)
-			can_use_tools = TRUE
-			. = ..()
-			can_use_tools = FALSE
-			return
 	return ..()
 
 /obj/item/material/knife/folding/swiss/officer

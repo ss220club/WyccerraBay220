@@ -63,7 +63,7 @@
 /obj/item/seeds/examine(mob/user)
 	. = ..()
 	if(seed && !seed.roundstart)
-		to_chat(user, "It's tagged as variety #[seed.uid].")
+		. += SPAN_NOTICE("It's tagged as variety #[seed.uid].")
 
 /obj/item/seeds/cutting
 	name = "cuttings"

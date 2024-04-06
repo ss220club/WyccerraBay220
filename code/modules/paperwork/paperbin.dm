@@ -98,9 +98,9 @@
 	. = ..()
 	if(distance <= 1)
 		if(amount)
-			to_chat(user, SPAN_NOTICE("There " + (amount > 1 ? "are [amount] papers" : "is one paper") + " in the bin."))
+			. += SPAN_NOTICE("There " + (amount > 1 ? "are [amount] papers" : "is one paper") + " in the bin.")
 		else
-			to_chat(user, SPAN_NOTICE("There are no papers in the bin."))
+			. += SPAN_NOTICE("There are no papers in the bin.")
 
 
 /obj/item/paper_bin/on_update_icon()

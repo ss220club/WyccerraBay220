@@ -96,15 +96,16 @@
 	update_use_power(POWER_USE_OFF)
 
 /obj/machinery/shieldgen/proc/create_shields()
-	for(var/turf/target_tile in range(8, src))
-		if ((istype(target_tile,/turf/space)|| istype(target_tile, /turf/simulated/open)) && !(locate(/obj/machinery/shield) in target_tile))
+	var/turf/center = get_turf(src)
+	for(var/turf/target_tile as anything in RANGE_TURFS(center, 8))
+		if ((isspaceturf(target_tile) || isopenturf(target_tile)) && !(locate(/obj/machinery/shield) in target_tile))
 			if (malfunction && prob(33) || !malfunction)
 				var/obj/machinery/shield/S = new/obj/machinery/shield(target_tile)
 				deployed_shields += S
 				use_power_oneoff(S.shield_generate_power)
 
-	for(var/turf/above in range(8, GetAbove(src)))//Probably a better way to do this.
-		if ((istype(above,/turf/space)|| istype(above, /turf/simulated/open)) && !(locate(/obj/machinery/shield) in above))
+	for(var/turf/above as anything in RANGE_TURFS(GetAbove(src), 8)) //Probably a better way to do this.
+		if ((isspaceturf(above)|| isopenturf(above)) && !(locate(/obj/machinery/shield) in above))
 			if (malfunction && prob(33) || !malfunction)
 				var/obj/machinery/shield/A = new/obj/machinery/shield(above)
 				deployed_shields += A
@@ -195,18 +196,15 @@
 		update_icon()
 		return 1
 
-/obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isScrewdriver(W))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 100, 1)
-		if(is_open)
-			to_chat(user, SPAN_NOTICE("You close the panel."))
-			is_open = 0
-		else
-			to_chat(user, SPAN_NOTICE("You open the panel and expose the wiring."))
-			is_open = 1
-		return TRUE
+/obj/machinery/shieldgen/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	is_open = !is_open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, is_open)
 
-	else if(isCoil(W) && malfunction && is_open)
+/obj/machinery/shieldgen/use_tool(obj/item/W, mob/living/user, list/click_params)
+	if(isCoil(W) && malfunction && is_open)
 		var/obj/item/stack/cable_coil/coil = W
 		to_chat(user, SPAN_NOTICE("You begin to replace the wires."))
 		//if(do_after(user, min(60, round( ((maxhealth/health)*10)+(malfunction*10) ))) //Take longer to repair heavier damage

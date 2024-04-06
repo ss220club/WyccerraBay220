@@ -70,14 +70,14 @@
 		artifact_distance = rand()
 		artifact_id = container.artifact_find.artifact_id
 	else
-		for (var/turf/simulated/mineral/T as anything in GLOB.xeno_artifact_turfs)
+		for (var/turf/simulated/mineral/T as anything in SSxenoarch.xeno_artifact_turfs)
 			if(T.artifact_find)
 				var/cur_dist = get_dist(container, T) * 2
 				if( (artifact_distance < 0 || cur_dist < artifact_distance))
 					artifact_distance = cur_dist + rand() * 2 - 1
 					artifact_id = T.artifact_find.artifact_id
 			else
-				GLOB.xeno_artifact_turfs -= T
+				SSxenoarch.xeno_artifact_turfs -= T
 
 /obj/item/device/core_sampler
 	name = "core sampler"
@@ -94,7 +94,7 @@
 /obj/item/device/core_sampler/examine(mob/user, distance)
 	. = ..(user)
 	if(distance <= 2)
-		to_chat(user, SPAN_NOTICE("Used to extract geological core samples - this one is [sampled_turf ? "full" : "empty"], and has [num_stored_bags] bag[num_stored_bags != 1 ? "s" : ""] remaining."))
+		. += SPAN_NOTICE("Used to extract geological core samples - this one is [sampled_turf ? "full" : "empty"], and has [num_stored_bags] bag[num_stored_bags != 1 ? "s" : ""] remaining.")
 
 
 /obj/item/device/core_sampler/use_tool(obj/item/tool, mob/user, list/click_params)

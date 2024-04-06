@@ -65,8 +65,7 @@
 				if (!T) //no open spaces to spawn on
 					T = pick_area_turf(area)
 			else
-				var/list/turfs = trange(radius, center)
-				T = pick(turfs)
+				T = pick(RANGE_TURFS(center, radius))
 
 			M = pick(mobs)
 

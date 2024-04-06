@@ -1,7 +1,7 @@
 #define any2ref(x) "\ref[x]"
 
 //Do (almost) nothing - indev placeholder for switch case implementations etc
-#define NOOP (.=.);
+#define NOOP (.=.)
 
 #define PUBLIC_GAME_MODE SSticker.master_mode
 
@@ -86,6 +86,8 @@
 
 #define isspaceturf(A) istype(A, /turf/space)
 
+#define issimulatedturf(A) istype(A, /turf/simulated)
+
 #define isopenturf(A) istype(A, /turf/simulated/open)
 
 #define ispAI(A) istype(A, /mob/living/silicon/pai)
@@ -123,10 +125,7 @@
 /// Common use
 #define legacy_chat(target, message)          to_target(target, message)
 #define to_world(message)                     to_chat(world, message)
-// [SIERRA-EDIT] - RUST_G
-// #define to_world_log(message)                 to_target(world.log, message) // SIERRA-EDIT - ORIGINAL
 #define to_world_log(message) if (istext(world.log)) { rustg_log_write_formatted(world.log, message) } else { to_target(world.log, message) }
-// [/SIERRA-EDIT]
 #define sound_to(target, sound)               to_target(target, sound)
 #define image_to(target, image)               to_target(target, image)
 #define show_browser(target, content, title)  to_target(target, browse(content, title))
@@ -155,6 +154,8 @@
 #define CanPhysicallyInteract(user) (CanUseTopicPhysical(user) == STATUS_INTERACTIVE)
 
 #define CanPhysicallyInteractWith(user, target) (target.CanUseTopicPhysical(user) == STATUS_INTERACTIVE)
+
+#define QDEL_LIST(x) if(x) { for(var/y in x) qdel(y); x.Cut(); }
 
 #define QDEL_NULL_LIST(x) if(x) { for(var/y in x) { qdel(y) }}; if(x) {x.Cut(); x = null; } // Second x check to handle items that LAZYREMOVE on qdel.
 

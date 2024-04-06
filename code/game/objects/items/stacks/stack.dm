@@ -53,9 +53,9 @@
 	. = ..()
 	if(distance <= 1)
 		if(!uses_charge)
-			to_chat(user, "There [amount == 1 ? "is 1 [singular_name]" : "are [amount] [plural_name]"] in the stack.")
+			. += SPAN_NOTICE("There [amount == 1 ? "is 1 [singular_name]" : "are [amount] [plural_name]"] in the stack.")
 		else
-			to_chat(user, "There is enough charge for [get_amount() == 1 ? "1 [singular_name]" : "[amount] [plural_name]"].")
+			. += SPAN_NOTICE("There is enough charge for [get_amount() == 1 ? "1 [singular_name]" : "[amount] [plural_name]"].")
 
 /obj/item/stack/attack_self(mob/user as mob)
 	list_recipes(user)
@@ -186,7 +186,7 @@
 		return 0
 	return 1
 
-/obj/item/stack/proc/use(used)
+/obj/item/stack/use(used)
 	if (!can_use(used))
 		return 0
 	if(!uses_charge)

@@ -46,4 +46,5 @@
 
 /obj/structure/diona_gestalt/examine(mob/user)
 	. = ..()
-	if(nymphs) to_chat(user, "It seems to be composed of at least [length(nymphs)] nymph\s.")
+	if(nymphs)
+		. += SPAN_NOTICE("It seems to be composed of at least [length(nymphs)] nymph\s.")

@@ -3,7 +3,7 @@
 	group = RENDER_GROUP_SCENE
 	plane = LIGHTING_EXPOSURE_PLANE
 	blend_mode = BLEND_ADD
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	appearance_flags = PLANE_MASTER|PIXEL_SCALE // should use client color
 
 /atom/movable/renderer/exposure/proc/Setup()
@@ -45,7 +45,7 @@
 	group = RENDER_GROUP_SCENE
 	plane = LIGHTING_LAMPS_PLANE
 	blend_mode = BLEND_ADD
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	appearance_flags = PLANE_MASTER // should use client color
 
 /atom/movable/renderer/lamps/proc/Setup()
@@ -89,7 +89,7 @@
 	group = RENDER_GROUP_SCENE
 	plane = LIGHTING_LAMPS_GLARE
 	blend_mode = BLEND_OVERLAY
-	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	appearance_flags = PLANE_MASTER // should use client color
 
 /atom/movable/renderer/lamps_glare/proc/Setup()

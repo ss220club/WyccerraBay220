@@ -128,27 +128,25 @@
 	else
 		to_chat(user, SPAN_DANGER("You need to screw the beacon to the floor first!"))
 
-/obj/machinery/power/singularity_beacon/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isScrewdriver(W))
-		if(active)
-			to_chat(user, SPAN_DANGER("You need to deactivate the beacon first!"))
-			return TRUE
-
-		if(anchored)
-			anchored = FALSE
-			to_chat(user, SPAN_NOTICE("You unscrew the beacon from the floor."))
-			disconnect_from_network()
-			return TRUE
-		else
-			if(!connect_to_network())
-				to_chat(user, "This device must be placed over an exposed cable.")
-				return TRUE
-			anchored = TRUE
-			to_chat(user, SPAN_NOTICE("You screw the beacon to the floor and attach the cable."))
-			return TRUE
-
-	return ..()
-
+/obj/machinery/power/singularity_beacon/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(active)
+		USE_FEEDBACK_NEED_DISABLED(user)
+		return
+	if(anchored)
+		if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		anchored = FALSE
+		USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
+		disconnect_from_network()
+		return
+	if(!connect_to_network())
+		balloon_alert(user, "нужно установить над кабелем!")
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = TRUE
+	USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
 
 /obj/machinery/power/singularity_beacon/Destroy()
 	if(active)

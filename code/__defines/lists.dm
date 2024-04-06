@@ -29,6 +29,10 @@
 #define LAZYCLEARLIST(L) if(L) { L.len = 0; L = null; }
 // Safely merges L2 into L1 as lazy lists, initializing L1 if necessary.
 #define LAZYMERGELIST(L1, L2) if (length(L2)) { if (!L1) { L1 = list() } L1 |= L2 }
+/// Copies the L from element START to elememt END if L is initialized, otherwise returns an empty list.
+#define LAZYCOPY_RANGE(L, START, END) ( L ? L.Copy(START, END) : list() )
+/// Cuts the L from element START to elememt END if L is initialized, otherwise returns an empty list.
+#define LAZYCUT(L, START, END) ( L ? L.Cut(START, END) : NOOP )
 // Reads L or an empty list if L is not a list.  Note: Does NOT assign, L may be an expression.
 #define SANITIZE_LIST(L) ( islist(L) ? L : list() )
 ///This is used to add onto lazy assoc list when the value you're adding is a /list/. This one has extra safety over lazyaddassoc because the value could be null (and thus cant be used to += objects)
@@ -37,9 +41,14 @@
 #define LAZYADDASSOC(L, K, V) if(!L) { L = list(); } L[K] += V;
 // Removes the value V from the item K, if the item K is empty will remove it from the list, if the list is empty will set the list to null
 #define LAZYREMOVEASSOC(L, K, V) if(L) { if(L[K]) { L[K] -= V; if(!length(L[K])) L -= K; } if(!length(L)) L = null; }
+/// Performs an insertion on the given lazy list with the given key and value. If the value already exists, a new one will not be made.
+#define LAZYORASSOCLIST(lazy_list, key, value) \
+	LAZYINITLIST(lazy_list); \
+	LAZYINITLIST(lazy_list[key]); \
+	lazy_list[key] |= value;
 
 /****
-* Binary search sorted insert
+* Binary search sorted insert from TG
 * INPUT: Object to be inserted
 * LIST: List to insert object into
 * TYPECONT: The typepath of the contents of the list

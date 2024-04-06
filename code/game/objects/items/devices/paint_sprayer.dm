@@ -301,7 +301,7 @@
 
 /obj/item/device/paint_sprayer/examine(mob/user)
 	. = ..(user)
-	to_chat(user, "It is configured to produce the '[decal]' decal using <span style='color:[paint_color]'>[paint_color]</span> paint.")
+	. += SPAN_NOTICE("It is configured to produce the '[decal]' decal using <span style='color:[paint_color]'>[paint_color]</span> paint.")
 
 /obj/item/device/paint_sprayer/AltClick()
 	if (!isturf(loc))
@@ -364,9 +364,9 @@
 	if (A != paint_sprayer)
 		if(!istype(user.buckled) || user.buckled.buckle_movable)
 			user.face_atom(A)
-		if(modifiers["ctrl"] && paint_sprayer.pick_color(A, user))
+		if(LAZYACCESS(modifiers, CTRL_CLICK) && paint_sprayer.pick_color(A, user))
 			return
-		if(modifiers["shift"] && paint_sprayer.remove_paint(A, user))
+		if(LAZYACCESS(modifiers, SHIFT_CLICK) && paint_sprayer.remove_paint(A, user))
 			return
 	user.ClickOn(A, params)
 

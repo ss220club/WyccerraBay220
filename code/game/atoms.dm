@@ -88,7 +88,7 @@
 		crash_with("Warning: [src]([type]) initialized multiple times!")
 	atom_flags |= ATOM_FLAG_INITIALIZED
 
-	if (IsAbstract())
+	if(IsAbstract())
 		log_debug("Abstract atom [type] created!")
 		return INITIALIZE_HINT_QDEL
 
@@ -101,7 +101,7 @@
 		if(istype(T))
 			T.recalc_atom_opacity()
 
-	if (health_max)
+	if(health_max)
 		health_current = health_max
 		health_dead = FALSE
 
@@ -384,7 +384,7 @@
  *  This is used rather than SHOULD_CALL_PARENT as it enforces that subtypes of a type that explicitly returns still call parent
  */
 /atom/proc/examine(mob/user, distance, is_adjacent, infix = "", suffix = "")
-	var/list/examine_info = list()
+	. = list()
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src][infix]."
 	if(blood_color && !istype(src, /obj/decal))
@@ -394,26 +394,18 @@
 			f_name = "a "
 		f_name += "[SPAN_COLOR(blood_color, "stained")] [name][infix]!"
 
-	examine_info = "[icon2html(src, user)] That's [f_name] [suffix]"
+	. += "[icon2html(src, user)] That's [f_name] [suffix]"
 	if(desc)
-		examine_info += "\n [desc]"
-	to_chat(user, chat_box_examine(examine_info))
+		. += desc
 
 	if(get_max_health())
 		examine_damage_state(user)
 	if(IsFlameSource())
-		to_chat(user, SPAN_DANGER("It has an open flame."))
+		. += SPAN_DANGER("It has an open flame.")
 	else if(distance <= 1 && IsHeatSource())
-		to_chat(user, SPAN_WARNING("It's hot to the touch."))
+		. += SPAN_WARNING("It's hot to the touch.")
 
-	return TRUE
-
-/// Works same as /atom/proc/Examine(), only this output comes immediately after any and all made by /atom/proc/Examine()
-/atom/proc/LateExamine(mob/user, distance, is_adjacent)
-	SHOULD_NOT_SLEEP(TRUE)
-
-	user.ForensicsExamination(src, distance)
-	return TRUE
+	SEND_SIGNAL(src, COMSIG_ATOM_EXAMINE, user, .)
 
 /**
  * Called when a mob with this atom as their machine, pulledby, loc, buckled, or other relevant var atom attempts to move.

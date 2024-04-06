@@ -177,4 +177,4 @@ var/global/const/NETWORK_HELMETS       = "Helmet Cameras"
 #define  PART_TESLA  	/obj/item/stock_parts/computer/tesla_link					// Tesla Link, Allows remote charging from nearest APC.
 #define  PART_SCANNER  	/obj/item/stock_parts/computer/scanner							// One of several optional scanner attachments.
 
-#define CLICKSOUND_INTERVAL (5 SECONDS)
+#define CLICKSOUND_INTERVAL (2.5 SECONDS)

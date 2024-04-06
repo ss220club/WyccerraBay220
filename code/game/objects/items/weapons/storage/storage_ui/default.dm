@@ -1,3 +1,6 @@
+/// length of sprite for start and end of the box representing the stored item
+#define STORED_CAP_WIDTH 4
+
 /datum/storage_ui/default
 	var/list/is_seeing = list() //List of mobs which are currently seeing the contents of this item's storage
 
@@ -5,10 +8,9 @@
 	var/obj/screen/storage/storage_start //storage UI
 	var/obj/screen/storage/storage_continue
 	var/obj/screen/storage/storage_end
-	var/obj/screen/storage/stored_start
-	var/obj/screen/storage/stored_continue
-	var/obj/screen/storage/stored_end
+	var/list/obj/screen/containers
 	var/obj/screen/close/closer
+	var/static/list/storage_container_icons_size = list()
 
 /datum/storage_ui/default/New(storage)
 	..()
@@ -38,15 +40,7 @@
 	storage_end.screen_loc = "7,7 to 10,8"
 	storage_end.layer = HUD_BASE_LAYER
 
-	stored_start = new /obj //we just need these to hold the icon
-	stored_start.icon_state = "stored_start"
-	stored_start.layer = HUD_BASE_LAYER
-	stored_continue = new /obj
-	stored_continue.icon_state = "stored_continue"
-	stored_continue.layer = HUD_BASE_LAYER
-	stored_end = new /obj
-	stored_end.icon_state = "stored_end"
-	stored_end.layer = HUD_BASE_LAYER
+	containers = list()
 
 	closer = new /obj/screen/close(  )
 	closer.master = storage
@@ -59,9 +53,7 @@
 	QDEL_NULL(storage_start)
 	QDEL_NULL(storage_continue)
 	QDEL_NULL(storage_end)
-	QDEL_NULL(stored_start)
-	QDEL_NULL(stored_continue)
-	QDEL_NULL(stored_end)
+	QDEL_NULL_LIST(containers)
 	QDEL_NULL(closer)
 	. = ..()
 
@@ -105,8 +97,11 @@
 	user.client.screen -= storage_end
 	user.client.screen -= closer
 	user.client.screen -= storage.contents
+	user.client.screen -= containers
+
 	user.client.screen += closer
 	user.client.screen += storage.contents
+	user.client.screen += containers
 	if(storage.storage_slots)
 		user.client.screen += boxes
 	else
@@ -126,11 +121,15 @@
 	user.client.screen -= storage_end
 	user.client.screen -= closer
 	user.client.screen -= storage.contents
+	user.client.screen -= containers
 	if(user.s_active == storage)
 		user.s_active = null
 
 //Creates the storage UI
 /datum/storage_ui/default/prepare_ui()
+	for(var/mob/user in is_seeing)
+		user.client?.screen -= containers
+	QDEL_LIST(containers)
 	//if storage slots is null then use the storage space UI, otherwise use the slots UI
 	if(isnull(storage.storage_slots))
 		space_orient_objs()
@@ -183,6 +182,9 @@
 	boxes.screen_loc = "4:16,2:16 to [4+cols]:16,[2+rows]:16"
 
 	for(var/obj/O in storage.contents)
+		var/obj/screen/container/container = create_container(O)
+		container.screen_loc = "[cx]:16,[cy]:16"
+		containers += container
 		O.screen_loc = "[cx]:16,[cy]:16"
 		O.maptext = ""
 		O.hud_layerise()
@@ -197,10 +199,7 @@
 
 	var/baseline_max_storage_space = DEFAULT_BOX_STORAGE //storage size corresponding to 224 pixels
 	var/storage_cap_width = 2 //length of sprite for start and end of the box representing total storage space
-	var/stored_cap_width = 4 //length of sprite for start and end of the box representing the stored item
 	var/storage_width = min( round( 224 * storage.max_storage_space/baseline_max_storage_space ,1) ,284) //length of sprite for the box representing total storage space
-
-	storage_start.ClearOverlays()
 
 	storage_continue.SetTransform(scale_x = (storage_width - storage_cap_width * 2 + 3) / 32)
 
@@ -214,23 +213,45 @@
 	for(var/obj/item/O in storage.contents)
 		startpoint = endpoint + 1
 		endpoint += storage_width * O.get_storage_cost()/storage.max_storage_space
-		stored_start.SetTransform(offset_x = startpoint)
-		stored_end.SetTransform(offset_x = endpoint - stored_cap_width)
-		stored_continue.SetTransform(
-			offset_x = startpoint + stored_cap_width + (endpoint - startpoint - stored_cap_width * 2) / 2 - 16,
-			scale_x = (endpoint - startpoint - stored_cap_width * 2) / 32
-		)
-		storage_start.AddOverlays(list(
-			stored_start,
-			stored_continue,
-			stored_end
-		))
+		var/obj/screen/container/container = create_container(O, floor(endpoint - startpoint))
+		container.screen_loc = "4:[16 + round(startpoint)],2:16"
+		containers += container
 
-		O.screen_loc = "4:[round((startpoint+endpoint)/2)+2],2:16"
+		O.screen_loc = "4:[round((startpoint+endpoint)/2) + 1],2:16"
 		O.maptext = ""
 		O.hud_layerise()
 
 	closer.screen_loc = "4:[storage_width+19],2:16"
+
+/datum/storage_ui/default/proc/create_container(obj/item/new_master, width = 32)
+	var/obj/screen/container/container = new()
+	container.SetName(new_master.name)
+	container.master = new_master
+
+	if(width == 32)
+		return container
+
+	if(storage_container_icons_size["[width]"])
+		container.icon = storage_container_icons_size["[width]"]
+		return container
+
+	var/icon/new_icon = icon('icons/mob/screen1.dmi', "blank")
+	new_icon.Scale(width, 32)
+
+	var/icon/stored_start = icon('icons/mob/screen1.dmi', "stored_start")
+	var/icon/stored_continue = icon('icons/mob/screen1.dmi', "stored_continue")
+	var/icon/stored_end = icon('icons/mob/screen1.dmi', "stored_end")
+
+	stored_continue.Scale(clamp(width - STORED_CAP_WIDTH * 2, 1, 64), 32)
+
+	new_icon.Blend(stored_start, ICON_OVERLAY)
+	new_icon.Blend(stored_continue, ICON_OVERLAY, x = STORED_CAP_WIDTH + 1)
+	new_icon.Blend(stored_end, ICON_OVERLAY, x = width + 1 - STORED_CAP_WIDTH)
+
+	storage_container_icons_size["[width]"] = new_icon
+
+	container.icon = new_icon
+	return container
 
 // Sets up numbered display to show the stack size of each stored mineral
 // NOTE: numbered display is turned off currently because it's broken
@@ -244,3 +265,5 @@
 	arrange_item_slots(row_num, col_count)
 	if(user && user.s_active)
 		user.s_active.show_to(user)
+
+#undef STORED_CAP_WIDTH

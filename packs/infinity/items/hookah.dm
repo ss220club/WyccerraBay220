@@ -114,11 +114,14 @@
 
 /obj/item/hookah/examine(mob/user, distance)
 	. = ..()
-	to_chat(user, lit ? "It looks lit up" : "It looks unlit")
+	if(lit)
+		. += SPAN_NOTICE("It looks lit up")
+	else
+		. += SPAN_NOTICE("It looks unlit")
 	if(distance <= 1)
-		to_chat(user, smoketime < 500 ? SPAN_WARNING("There is no coal inside") : coal_status_examine_msg[round(smoketime/(maxsmoketime/5), 1)])
-		to_chat(user, reagents.total_volume > 0 ? "There's tobacco inside" : SPAN_WARNING("There is no tobacco inside"))
-		to_chat(user, liquid_level > 0 ? "There's some water inside" : SPAN_WARNING("There is no water inside"))
+		. += smoketime < 500 ? SPAN_WARNING("There is no coal inside") : SPAN_NOTICE(coal_status_examine_msg[round(smoketime/(maxsmoketime/5), 1)])
+		. += reagents.total_volume > 0 ? SPAN_NOTICE("There's tobacco inside") : SPAN_WARNING("There is no tobacco inside")
+		. += liquid_level > 0 ? SPAN_NOTICE("There's some water inside") : SPAN_WARNING("There is no water inside")
 
 /obj/item/hookah/proc/extinguish(mob/user, no_message = FALSE)
 	if(!no_message && !user)
@@ -155,7 +158,7 @@
 			text = zippomes
 		else if(istype(tool, /obj/item/flame/lighter))
 			text = lightermes
-		else if(isWelder(tool))
+		else if(tool.tool_behaviour == TOOL_WELDER)
 			text = weldermes
 		else if(istype(tool, /obj/item/device/assembly/igniter))
 			text = ignitermes

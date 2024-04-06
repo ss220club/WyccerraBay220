@@ -210,11 +210,15 @@
 		return SPAN_NOTICE("Wait until \the [src] cools down from emergency shutdown first!")
 	return ..()
 
-/obj/machinery/power/shield_generator/use_tool(obj/item/O, mob/living/user, list/click_params)
-	if(panel_open && (isMultitool(O) || isWirecutter(O)))
+/obj/machinery/power/shield_generator/multitool_act(mob/living/user, obj/item/tool)
+	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
 		attack_hand(user)
-		return TRUE
-	return ..()
+
+/obj/machinery/power/shield_generator/wirecutter_act(mob/living/user, obj/item/tool)
+	if(panel_open)
+		. = ITEM_INTERACT_SUCCESS
+		attack_hand(user)
 
 /obj/machinery/power/shield_generator/proc/energy_failure()
 	if(running == SHIELD_DISCHARGING)
@@ -473,26 +477,21 @@
 
 
 /obj/machinery/power/shield_generator/proc/fieldtype_hull()
-	set background = 1
 	. = list()
+
 	var/list/base_turfs = get_base_turfs()
-
-
-
-
 	for(var/turf/gen_turf in base_turfs)
 		var/area/TA = null // Variable for area checking. Defining it here so memory does not have to be allocated repeatedly.
-		for(var/turf/T in trange(field_radius, gen_turf))
+		for(var/turf/T as anything in RANGE_TURFS(gen_turf, field_radius))
 			// Don't expand to space or on shuttle areas.
 			if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
 				continue
 
 			// Find adjacent space/shuttle tiles and cover them. Shuttles won't be blocked if shield diffuser is mapped in and turned on.
-			for(var/turf/TN in orange(1, T))
+			for(var/turf/TN as anything in ORANGE_TURFS(T, 1))
 				TA = get_area(TN)
-				if ((istype(TN, /turf/space) || (istype(TN, /turf/simulated/open) && (istype(TA, /area/space) || TA.area_flags & AREA_FLAG_EXTERNAL))))
+				if(isspaceturf(TN) || (isopenturf(TN) && (isspace(TA) || TA.area_flags & AREA_FLAG_EXTERNAL)))
 					. |= TN
-					continue
 
 // Returns a list of turfs from which a field will propagate. If multi-Z mode is enabled, this will return a "column" of turfs above and below the generator.
 /obj/machinery/power/shield_generator/proc/get_base_turfs()

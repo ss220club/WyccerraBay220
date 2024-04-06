@@ -41,19 +41,16 @@ other types of metals and chemistry for reagents).
 /datum/design/proc/AssembleDesignInfo()
 	AssembleDesignName()
 	AssembleDesignDesc()
-	return
 
 /datum/design/proc/AssembleDesignName()
 	if(!name && build_path)					//Get name from build path if posible
 		var/atom/movable/A = build_path
 		name = initial(A.name)
 		item_name = name
-	return
 
 /datum/design/proc/AssembleDesignDesc()
 	if(!desc)								//Try to make up a nice description if we don't have one
 		desc = "Allows for the construction of \a [item_name]."
-	return
 
 //Returns a new instance of the item for this design
 //This is to allow additional initialization to be performed, including possibly additional contructor arguments.

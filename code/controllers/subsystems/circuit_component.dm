@@ -2,7 +2,7 @@
 
 SUBSYSTEM_DEF(circuit_components)
 	name = "Circuit Components"
-	priority = SS_PRIORITY_CIRCUIT_COMP
+	priority = FIRE_PRIORITY_CIRCUIT_COMP
 	flags = SS_NO_INIT
 	wait = 1
 

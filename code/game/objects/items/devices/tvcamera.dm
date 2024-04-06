@@ -31,9 +31,9 @@
 
 /obj/item/device/camera/tvcamera/examine(mob/user)
 	. = ..()
-	to_chat(user, "Video feed is currently: [camera.status ? "Online" : "Offline"]")
-	to_chat(user, "Audio feed is currently: [radio.broadcasting ? "Online" : "Offline"]")
-	to_chat(user, "Photography setting is currently: [on ? "On" : "Off"]")
+	. += SPAN_NOTICE("Video feed is currently: [camera.status ? "Online" : "Offline"]")
+	. += SPAN_NOTICE("Audio feed is currently: [radio.broadcasting ? "Online" : "Offline"]")
+	. += SPAN_NOTICE("Photography setting is currently: [on ? "On" : "Off"]")
 
 /obj/item/device/camera/tvcamera/attack_self(mob/user)
 	add_fingerprint(user)
@@ -140,7 +140,7 @@ Using robohead because of restricting to roboticist */
 				desc = "This TV camera assembly has wires sticking out."
 				return
 		if(3)
-			if(isWirecutter(W))
+			if(W.tool_behaviour == TOOL_WIRECUTTER)
 				to_chat(user, SPAN_NOTICE(" You trim the wires."))
 				buildstep++
 				desc = "This TV camera assembly needs casing."

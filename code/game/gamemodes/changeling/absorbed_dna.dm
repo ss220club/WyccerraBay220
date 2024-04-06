@@ -3,7 +3,6 @@
 	var/datum/dna/dna
 	var/speciesName
 	var/list/languages
-	var/pronouns
 
 /datum/absorbed_dna/New(newName, newDNA, newSpecies, newLanguages, newPronouns)
 	..()
@@ -11,4 +10,3 @@
 	dna = newDNA
 	speciesName = newSpecies
 	languages = newLanguages
-	pronouns = newPronouns

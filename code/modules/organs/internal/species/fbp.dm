@@ -35,7 +35,7 @@
 		return FALSE
 	return cell && cell.checked_use(amount)
 
-/obj/item/organ/internal/cell/proc/use(amount)
+/obj/item/organ/internal/cell/use(amount)
 	if(!is_usable())
 		return 0
 	return cell && cell.use(amount)
@@ -66,36 +66,40 @@
 	if(cell)
 		cell.emp_act(severity)
 
+/obj/item/organ/internal/cell/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!open || !cell)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.put_in_hands(cell)
+	to_chat(user, SPAN_NOTICE("You remove [cell] from [src]."))
+	cell = null
+
+/obj/item/organ/internal/cell/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	open = !open
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, open)
+
 /obj/item/organ/internal/cell/attackby(obj/item/W, mob/user)
-	if(isScrewdriver(W))
-		if(open)
-			open = 0
-			to_chat(user, SPAN_NOTICE("You screw the battery panel in place."))
-		else
-			open = 1
-			to_chat(user, SPAN_NOTICE("You unscrew the battery panel."))
-
-	if(isCrowbar(W))
-		if(open)
-			if(cell)
-				user.put_in_hands(cell)
-				to_chat(user, SPAN_NOTICE("You remove \the [cell] from \the [src]."))
-				cell = null
-
-	if (istype(W, /obj/item/cell))
+	if(istype(W, /obj/item/cell))
 		if(open)
 			if(cell)
 				to_chat(user, SPAN_WARNING("There is a power cell already installed."))
 			else if(user.unEquip(W, src))
 				cell = W
-				to_chat(user, SPAN_NOTICE("You insert \the [cell]."))
+				to_chat(user, SPAN_NOTICE("You insert [cell]."))
+		return TRUE
+	. = ..()
 
 /obj/item/organ/internal/cell/replaced()
 	..()
 	// This is very ghetto way of rebooting an IPC. TODO better way.
 	if(owner && owner.stat == DEAD)
 		owner.set_stat(CONSCIOUS)
-		owner.visible_message(SPAN_DANGER("\The [owner] twitches visibly!"))
+		owner.visible_message(SPAN_DANGER("[owner] twitches visibly!"))
 
 /obj/item/organ/internal/cell/listen()
 	if(get_charge())
@@ -160,7 +164,7 @@
 	if(owner && owner.stat == DEAD)
 		owner.set_stat(CONSCIOUS)
 		owner.switch_from_dead_to_living_mob_list()
-		owner.visible_message(SPAN_DANGER("\The [owner] twitches visibly!"))
+		owner.visible_message(SPAN_DANGER("[owner] twitches visibly!"))
 
 /obj/item/organ/internal/mmi_holder/cut_away(mob/living/user)
 	var/obj/item/organ/external/parent = owner.get_organ(parent_organ)

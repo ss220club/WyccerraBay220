@@ -60,7 +60,7 @@ Frequency:
 			if (sr)
 				src.temp += "<B>Located Beacons:</B><BR>"
 
-				for(var/obj/machinery/tele_beacon/W in world)
+				for(var/obj/machinery/tele_beacon/W as anything in SSmachines.get_machinery_of_type(/obj/machinery/tele_beacon))
 					if(!W.functioning())
 						continue
 					var/turf/tr = get_turf(W)

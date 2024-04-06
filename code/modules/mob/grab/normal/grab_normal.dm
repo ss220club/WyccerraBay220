@@ -7,10 +7,9 @@
 		return
 	var/obj/O = get_targeted_organ()
 	if(affecting != assailant)
-		visible_message(SPAN_WARNING("[assailant] has grabbed [affecting]'s [O.name]!"))
+		visible_message(SPAN_WARNING("[assailant] has grabbed [affecting]'s [O]!"))
 	else
-		var/datum/pronouns/P = assailant.choose_from_pronouns()
-		visible_message(SPAN_NOTICE("[assailant] has grabbed [P.his] [O.name]!"))
+		visible_message(SPAN_NOTICE("[assailant] has grabbed [assailant.p_their()] [O]!"))
 
 	if(!(affecting.a_intent == I_HELP))
 		upgrade(TRUE)

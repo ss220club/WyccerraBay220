@@ -87,9 +87,9 @@
 /mob/living/carbon/alien/diona/examine(mob/user)
 	. = ..()
 	if(holding_item)
-		to_chat(user, SPAN_NOTICE("It is holding [icon2html(holding_item, user)] \a [holding_item]."))
+		. += SPAN_NOTICE("It is holding [icon2html(holding_item, user)] \a [holding_item].")
 	if(hat)
-		to_chat(user, SPAN_NOTICE("It is wearing [icon2html(hat, user)] \a [hat]."))
+		. += SPAN_NOTICE("It is wearing [icon2html(hat, user)] \a [hat].")
 
 /mob/living/carbon/alien/diona/IsAdvancedToolUser()
 	return FALSE

@@ -11,9 +11,9 @@
 /obj/item/device/drone_designator/examine(mob/user, distance)
 	. = ..()
 	if (network)
-		to_chat(user, "It is connected to the '[network]' network.")
+		. += SPAN_NOTICE("It is connected to the '[network]' network.")
 	else
-		to_chat(user, "The device hasn't been linked to a transport network.")
+		. += SPAN_NOTICE("The device hasn't been linked to a transport network.")
 
 /obj/item/device/drone_designator/proc/recursive_validate_contents(atom/A, depth = 1)
 	if(depth >= 4)
@@ -137,12 +137,12 @@
 	var/datum/extension/local_network_member/transport = get_extension(src, /datum/extension/local_network_member)
 	var/network = transport.id_tag
 	if (network)
-		to_chat(user, "It is connected to the '[network]' network.")
+		. += SPAN_NOTICE("It is connected to the '[network]' network.")
 	else
-		to_chat(user, "The device hasn't been linked to a transport network.")
+		. += SPAN_NOTICE("The device hasn't been linked to a transport network.")
 
 	if (current_flight)
-		to_chat(user, "There is a drone en route to this pad. The drone is [ time_to_readable(current_flight.time_of_arrival - world.time) ] away.")
+		. += SPAN_NOTICE("There is a drone en route to this pad. The drone is [ time_to_readable(current_flight.time_of_arrival - world.time) ] away.")
 
 /obj/machinery/drone_pad/proc/pickup_animation(obj/target)
 	var/image/object = new
@@ -245,13 +245,14 @@
 		pointdefense.set_tag(null, initial_id_tag)
 		update_icon()
 
+/obj/machinery/drone_pad/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/datum/extension/local_network_member/transport = get_extension(src, /datum/extension/local_network_member)
+	transport.get_new_tag(user)
+	update_icon()
+
 /obj/machinery/drone_pad/use_tool(obj/item/tool, mob/user)
 	var/datum/extension/local_network_member/transport = get_extension(src, /datum/extension/local_network_member)
-	if (isMultitool(tool))
-		transport.get_new_tag(user)
-		update_icon()
-		return TRUE
-
 	var/obj/item/device/drone_designator/designator = tool
 	if (istype(designator))
 		if (!transport.id_tag)

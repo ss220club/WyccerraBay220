@@ -183,7 +183,7 @@
 /obj/item/gripper/examine(mob/user)
 	. = ..()
 	if(wrapped)
-		to_chat(user, "It is holding \a [wrapped].")
+		. += SPAN_NOTICE("It is holding \a [wrapped].")
 
 /obj/item/gripper/attack_self(mob/user as mob)
 	if(wrapped)

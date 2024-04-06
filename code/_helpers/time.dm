@@ -223,3 +223,16 @@ var/global/rollovercheck_last_timeofday = 0
 //for when you need a reliable time number that doesn't depend on byond time.
 #define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
 #define MIDNIGHT_ROLLOVER_CHECK ( global.rollovercheck_last_timeofday != world.timeofday ? update_midnight_rollover() : global.midnight_rollovers )
+
+/**
+ * Returns "watch handle" (really just a timestamp :V)
+ */
+/proc/start_watch()
+	return REALTIMEOFDAY
+
+/**
+ * Returns number of seconds elapsed.
+ * @param wh number The "Watch Handle" from start_watch(). (timestamp)
+ */
+/proc/stop_watch(wh)
+	return round(0.1 * (REALTIMEOFDAY - wh), 0.1)

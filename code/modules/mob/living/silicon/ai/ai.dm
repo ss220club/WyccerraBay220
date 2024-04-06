@@ -253,8 +253,6 @@ var/global/list/ai_verbs_default = list(
 	var/lines = splittext(file, "\n")
 
 	var/custom_index = 1
-	var/custom_icon_states = icon_states(CUSTOM_ITEM_SYNTH)
-
 	for(var/line in lines)
 	// split & clean up
 		var/list/Entry = splittext(line, ":")
@@ -270,11 +268,11 @@ var/global/list/ai_verbs_default = list(
 			var/alive_icon_state = "[Entry[3]]-ai"
 			var/dead_icon_state = "[Entry[3]]-ai-crash"
 
-			if(!(alive_icon_state in custom_icon_states))
+			if(!ICON_HAS_STATE(CUSTOM_ITEM_SYNTH, alive_icon_state))
 				to_chat(src, SPAN_WARNING("Custom display entry found but the icon state '[alive_icon_state]' is missing!"))
 				continue
 
-			if(!(dead_icon_state in custom_icon_states))
+			if(!ICON_HAS_STATE(CUSTOM_ITEM_SYNTH, dead_icon_state))
 				dead_icon_state = ""
 
 			selected_sprite = new/singleton/ai_icon("Custom Icon [custom_index++]", alive_icon_state, dead_icon_state, COLOR_WHITE, CUSTOM_ITEM_SYNTH)
@@ -620,6 +618,19 @@ var/global/list/ai_verbs_default = list(
 				src.camera.set_light(AI_CAMERA_LUMINOSITY, 0.5)
 		camera_light_on = world.timeofday + 1 * 20 // Update the light every 2 seconds.
 
+/mob/living/silicon/ai/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	user.visible_message(
+		SPAN_NOTICE("[user] starts [anchored ? "unbolting" : "bolting"] [src] from the floor with [tool]."),
+		SPAN_NOTICE("You start [anchored ? "unbolting" : "bolting"] [src] from the floor with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 4 SECONDS, volume = 50, skill_path = list(SKILL_CONSTRUCTION, SKILL_DEVICES), do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = !anchored
+	user.visible_message(
+		SPAN_NOTICE("[user] [anchored ? "bolts" : "unbolts"] [src] from the floor with [tool]."),
+		SPAN_NOTICE("You [anchored ? "bolts" : "unbolts"] [src] from the floor with [tool].")
+	)
 
 /mob/living/silicon/ai/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Intellicard - Swap AI
@@ -627,24 +638,7 @@ var/global/list/ai_verbs_default = list(
 		var/obj/item/aicard/card = tool
 		card.grab_ai(src, user)
 		return TRUE
-
-	// Wrench - Toggle anchored
-	if (isWrench(tool))
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts [anchored ? "unbolting" : "bolting"] \the [src] from the floor with \a [tool]."),
-			SPAN_NOTICE("You start [anchored ? "unbolting" : "bolting"] \the [src] from the floor with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 4) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		anchored = !anchored
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [anchored ? "bolts" : "unbolts"] \the [src] from the floor with \a [tool]."),
-			SPAN_NOTICE("You [anchored ? "bolts" : "unbolts"] \the [src] from the floor with \the [tool].")
-		)
-		return
-
-	return ..()
-
+	. = ..()
 
 /mob/living/silicon/ai/proc/control_integrated_radio()
 	set name = "Radio Settings"

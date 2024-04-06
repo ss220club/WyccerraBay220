@@ -9,3 +9,13 @@
 /// from mob/CanPass(): (atom/movable/mover, turf/target, height, air_group)
 #define COMSIG_MOB_CAN_PASS "mob_can_pass"
 	#define COMPONENT_MOB_PASSABLE FLAG(0)
+
+///from base of mob/ranged_attack(): (/atom, modifiers)
+#define COMSIG_MOB_ATTACK_RANGED "mob_attack_ranged"
+///from base of mob/ranged_attack_secondary(): (/atom, modifiers)
+#define COMSIG_MOB_ATTACK_RANGED_SECONDARY "mob_attack_ranged_secondary"
+
+///from base of proc/examinate(): (/atom, list/examine_strings)
+#define COMSIG_MOB_EXAMINING "mob_examining"
+///from base of proc/examinate(): (/atom)
+#define COMSIG_MOB_EXAMINATE "mob_examinate"

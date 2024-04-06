@@ -12,3 +12,7 @@
 	hub = "Exadv1.spacestation13"
 	icon_size = WORLD_ICON_SIZE
 	fps = 20
+
+#ifdef CIBUILDING
+	#define UNIT_TEST
+#endif

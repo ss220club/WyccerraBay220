@@ -19,14 +19,14 @@
 /obj/item/weldingtool/electric/examine(mob/user, distance)
 	. = ..()
 	if (!cell)
-		to_chat(user, "There is no [welding_resource] source attached.")
+		. += SPAN_NOTICE("There is no [welding_resource] source attached.")
 	else
-		to_chat(user, (distance == 0 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[cell] is attached.")
+		. += SPAN_NOTICE((distance == 0 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[cell] is attached.")
 
 /obj/item/weldingtool/electric/use_after(obj/O, mob/living/user)
 	if(istype(O, /obj/structure/reagent_dispensers/fueltank))
 		if(!welding)
-			to_chat(user, SPAN_WARNING("\The [src] runs on an internal charge and does not need to be refuelled."))
+			to_chat(user, SPAN_WARNING("[src] runs on an internal charge and does not need to be refuelled."))
 		return TRUE
 	return ..()
 
@@ -45,27 +45,30 @@
 	var/obj/item/cell/cell = get_cell()
 	return cell ? cell.charge : 0
 
+/obj/item/weldingtool/electric/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!cell)
+		USE_FEEDBACK_CELL_MISSING(user)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	cell.dropInto(get_turf(src))
+	user.put_in_hands(cell)
+	USE_FEEDBACK_CELL_REMOVED(user)
+	welding = FALSE
+	cell = null
+	update_icon()
+
 /obj/item/weldingtool/electric/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/stack/material/rods) || istype(W, /obj/item/welder_tank))
 		return
-	if(isScrewdriver(W))
+	if(istype(W, /obj/item/cell))
 		if(cell)
-			cell.dropInto(get_turf(src))
-			user.put_in_hands(cell)
-			to_chat(user, SPAN_NOTICE("You pop \the [cell] out of \the [src]."))
-			welding = FALSE
-			cell = null
-			update_icon()
-		else
-			to_chat(user, SPAN_WARNING("\The [src] has no cell installed."))
-		return
-	else if(istype(W, /obj/item/cell))
-		if(cell)
-			to_chat(user, SPAN_WARNING("\The [src] already has a cell installed."))
+			to_chat(user, SPAN_WARNING("[src] already has a cell installed."))
 		else if(user.unEquip(W))
 			cell = W
 			cell.forceMove(src)
-			to_chat(user, SPAN_NOTICE("You slot \the [cell] into \the [src]."))
+			to_chat(user, SPAN_NOTICE("You slot [cell] into [src]."))
 			update_icon()
 		return
 	. = ..()

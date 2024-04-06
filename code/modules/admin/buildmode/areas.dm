@@ -43,24 +43,25 @@ Shift + Right Click - Select point B
 		return
 	M.color = colors.get(T.loc)
 
-/datum/build_mode/areas/OnClick(atom/A, list/parameters)
-	if (parameters["right"] && !parameters["shift"])
+/datum/build_mode/areas/OnClick(atom/A, params)
+	var/list/modifiers = params2list(params)
+	if (LAZYACCESS(modifiers, RIGHT_CLICK) && !LAZYACCESS(modifiers, SHIFT_CLICK))
 		Configurate()
 		return
 	var/turf/T = get_turf(A)
 	var/area/R = T?.loc
 	if ((!T) || (!R))
 		return
-	if (parameters["ctrl"] || parameters["middle"])
+	if (LAZYACCESS(modifiers, CTRL_CLICK) || LAZYACCESS(modifiers, MIDDLE_CLICK))
 		selected_area = R
 		to_chat(user, "Picked area [selected_area.name]")
 	else if (selected_area)
 
-		if (parameters["left"] && parameters["shift"])
+		if (LAZYACCESS(modifiers, LEFT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 			coordinate_A = get_turf(A)
 			to_chat(user, SPAN_NOTICE("Defined [coordinate_A] ([coordinate_A.type]) as point A."))
 
-		if (parameters["right"] && parameters["shift"])
+		if (LAZYACCESS(modifiers, RIGHT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 			coordinate_B = get_turf(A)
 			to_chat(user, SPAN_NOTICE("Defined [coordinate_B] ([coordinate_B.type]) as point B."))
 
@@ -74,7 +75,7 @@ Shift + Right Click - Select point B
 
 
 
-		ChangeArea(T, selected_area)
+		T.change_area(selected_area)
 		to_chat(user, "Set area of turf [T.name] to [selected_area.name]")
 	else
 		to_chat(user, "Pick or create an area first")
@@ -84,7 +85,7 @@ Shift + Right Click - Select point B
 	if (mode == "Pick")
 		var/area/path = select_subpath((selected_area?.type || /area/space), /area)
 		if (path)
-			for (var/area/R in world)
+			for (var/area/R as anything in GLOB.areas)
 				if (R.type == path)
 					SelectArea(R)
 					to_chat(user, "Picked area [selected_area.name]")
@@ -127,4 +128,4 @@ Shift + Right Click - Select point B
 	for(var/i = low_bound_x, i <= high_bound_x, i++)
 		for(var/j = low_bound_y, j <= high_bound_y, j++)
 			var/turf/T = locate(i, j, z_level)
-			ChangeArea(T, selected_area)
+			T.change_area(selected_area)

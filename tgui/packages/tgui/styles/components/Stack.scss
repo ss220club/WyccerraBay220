@@ -7,6 +7,7 @@
 @use './Divider.scss';
 
 $zebra-background-color: base.$color-bg-section !default;
+$zebra2-background-color: rgba(255, 255, 255, 0.05) !default;
 
 .Stack--fill {
   height: 100%;
@@ -30,6 +31,10 @@ $zebra-background-color: base.$color-bg-section !default;
 
 .Stack--zebra > .Stack__item:nth-child(even) {
   background-color: $zebra-background-color;
+}
+
+.Stack--zebra > .Stack__item:nth-child(odd) {
+  background-color: $zebra2-background-color;
 }
 
 .Stack--horizontal > .Stack__divider:not(.Stack__divider--hidden) {

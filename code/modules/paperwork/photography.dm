@@ -71,9 +71,9 @@ var/global/photo_count = 0
 		return
 	if(distance <= 1)
 		show(user)
-		to_chat(user, desc)
+		. += SPAN_NOTICE(desc)
 	else
-		to_chat(user, SPAN_NOTICE("It is too far away."))
+		. += SPAN_NOTICE("It is too far away.")
 
 /obj/item/photo/proc/show(mob/user as mob)
 	send_rsc(user, img, "tmp_photo_[id].png")
@@ -228,7 +228,7 @@ var/global/photo_count = 0
 
 /obj/item/device/camera/examine(mob/user)
 	. = ..()
-	to_chat(user, "It has [pictures_left] photo\s left.")
+	. += SPAN_NOTICE("It has [pictures_left] photo\s left.")
 
 //Proc for capturing check
 /mob/living/proc/can_capture_turf(turf/T)

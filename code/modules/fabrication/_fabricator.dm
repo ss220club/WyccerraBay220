@@ -36,7 +36,6 @@
 		/material/plastic =   12500
 	)
 
-	var/show_category = "All"
 	var/fab_status_flags = 0
 	var/mat_efficiency = 1.1
 	var/build_time_multiplier = 1
@@ -53,9 +52,9 @@
 		var/list/material_names = list()
 		for(var/thing in storage_capacity)
 			material_names += "[storage_capacity[thing]] [stored_substances_to_names[thing]]"
-		to_chat(user, SPAN_NOTICE("It can store [english_list(material_names)]."))
+		. += SPAN_NOTICE("It can store [english_list(material_names)].")
 	if(has_recycler)
-		to_chat(user, SPAN_NOTICE("It has a built-in shredder that can recycle most items, although any materials it cannot use will be wasted."))
+		. += SPAN_NOTICE("It has a built-in shredder that can recycle most items, although any materials it cannot use will be wasted.")
 
 /obj/machinery/fabricator/Initialize()
 	panel_image = image(icon, "[base_icon_state]_panel")

@@ -17,9 +17,9 @@
 /obj/item/book/tome/examine(mob/user)
 	. = ..()
 	if(!iscultist(user))
-		to_chat(user, "An old, dusty tome with frayed edges and a sinister looking cover.")
+		. += SPAN_NOTICE("An old, dusty tome with frayed edges and a sinister looking cover.")
 	else
-		to_chat(user, "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though.")
+		. += SPAN_OCCULT("The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though.")
 
 /obj/item/book/tome/use_before(mob/living/M, mob/living/user)
 	. = FALSE

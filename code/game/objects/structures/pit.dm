@@ -168,7 +168,7 @@
 
 /obj/structure/gravemarker/examine(mob/user)
 	. = ..()
-	to_chat(user, "It says: '[message]'")
+	. += SPAN_NOTICE("It says: '[message]'")
 
 /obj/structure/gravemarker/random/Initialize()
 	generate()

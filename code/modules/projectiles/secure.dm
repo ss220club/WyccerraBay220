@@ -23,7 +23,7 @@ GLOBAL_LIST_INIT(secure_weapons, list())
 /obj/item/gun/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 0 && is_secure_gun())
-		to_chat(user, "The registration screen shows, \"" + (registered_owner ? "[registered_owner]" : "unregistered") + "\"")
+		. += SPAN_NOTICE("The registration screen shows, \"" + (registered_owner ? "[registered_owner]" : "unregistered") + "\"")
 
 
 /obj/item/gun/use_tool(obj/item/tool, mob/user, list/click_params)

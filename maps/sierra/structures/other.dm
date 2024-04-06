@@ -22,20 +22,14 @@
 	var/icon/virtualIcon
 	var/list/bulletholes = list()
 
-/obj/item/target/use_tool(obj/item/tool, mob/living/user, list/click_params)
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (welder.remove_fuel(0, user))
-			ClearOverlays()
-			bulletholes.Cut()
-			hp = initial(hp)
-			user.visible_message(
-				SPAN_NOTICE("[user] slices off uneven chunks of aluminium and scorch marks from [src]."),
-				SPAN_NOTICE("You slice off uneven chunks of aluminium and scorch marks from [src]."),
-				SPAN_NOTICE("You hear welding."),
-			)
-		return TRUE
-	return ..()
+/obj/item/target/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, amount = 1, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	ClearOverlays()
+	bulletholes.Cut()
+	hp = initial(hp)
+	USE_FEEDBACK_REPAIR_FINISH(user)
 
 /obj/item/target/syndicate
 	icon_state = "target_s"

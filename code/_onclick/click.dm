@@ -17,9 +17,9 @@
 */
 
 /atom/Click(location, control, params) // This is their reaction to being clicked on (standard proc)
-	var/list/L = params2list(params)
-	var/dragged = L["drag"]
-	if(dragged && !L[dragged])
+	var/list/modifiers = params2list(params)
+	var/dragged = LAZYACCESS(modifiers, DRAG)
+	if(dragged && !LAZYACCESS(modifiers, dragged))
 		return
 
 	var/datum/click_handler/click_handler = usr.GetClickHandler()
@@ -57,7 +57,7 @@
 	* mob/UnarmedAttack(atom,adjacent) - used here only when adjacent, with no item in hand; in the case of humans, checks gloves
 	* atom/resolve_attackby(item,user) - used only when adjacent
 	* item/afterattack(atom,user,adjacent,params) - used for ranged; called when resolve_attackby returns FALSE.
-	* mob/RangedAttack(atom,params) - used only ranged, only used for tk and laser eyes but could be changed
+	* mob/ranged_attack(atom,params) - used only ranged, only used for tk and laser eyes but could be changed
 */
 /mob/proc/ClickOn(atom/A, params)
 
@@ -67,28 +67,28 @@
 	next_click = world.time + 1
 
 	var/list/modifiers = params2list(params)
-	if (modifiers["ctrl"] && modifiers["alt"] && modifiers["shift"])
+	if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK) && LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (CtrlAltShiftClickOn(A))
 			return TRUE
-	else if (modifiers["shift"] && modifiers["ctrl"])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, CTRL_CLICK))
 		if (CtrlShiftClickOn(A))
 			return TRUE
-	else if (modifiers["ctrl"] && modifiers["alt"])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (CtrlAltClickOn(A))
 			return TRUE
-	else if (modifiers["shift"] && modifiers["alt"])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK) && LAZYACCESS(modifiers, ALT_CLICK))
 		if (AltShiftClickOn(A))
 			return TRUE
 	else if (modifiers["middle"])
 		if (MiddleClickOn(A))
 			return TRUE
-	else if (modifiers["shift"])
+	else if (LAZYACCESS(modifiers, SHIFT_CLICK))
 		if (ShiftClickOn(A))
 			return TRUE
-	else if (modifiers["alt"])
+	else if (LAZYACCESS(modifiers, ALT_CLICK))
 		if (AltClickOn(A))
 			return TRUE
-	else if (modifiers["ctrl"])
+	else if (LAZYACCESS(modifiers, CTRL_CLICK))
 		if (CtrlClickOn(A))
 			return TRUE
 
@@ -130,13 +130,18 @@
 	var/sdepth = A.storage_depth(src)
 	if((!isturf(A) && A == loc) || (sdepth != -1 && sdepth <= 1))
 		if(W)
-			var/resolved = W.resolve_attackby(A, src, modifiers)
+			var/resolved = W.resolve_attackby(A, src, params)
 			if(!resolved && A && W)
-				W.afterattack(A, src, 1, modifiers) // 1 indicates adjacency
+				if(LAZYACCESS(modifiers, RIGHT_CLICK))
+					var/after_attack_secondary_result = W.afterattack_secondary(A, src, TRUE, params)
+					if(after_attack_secondary_result == SECONDARY_ATTACK_CALL_NORMAL)
+						W.afterattack(A, src, TRUE, params)
+				else
+					W.afterattack(A, src, TRUE, params) // 1 indicates adjacency
 		else
 			if(ismob(A)) // No instant mob attacking
 				setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-			UnarmedAttack(A, 1)
+			UnarmedAttack(A, TRUE, modifiers)
 
 		trigger_aiming(TARGET_CAN_CLICK)
 		return 1
@@ -151,21 +156,34 @@
 		if(A.Adjacent(src)) // see adjacent.dm
 			if(W)
 				// Return TRUE in resolve_attackby() to prevent afterattack() effects (when safely moving items for example)
-				var/resolved = W.resolve_attackby(A,src, modifiers)
+				var/resolved = W.resolve_attackby(A, src, params)
 				if(!resolved && A && W)
-					W.afterattack(A, src, 1, modifiers) // 1: clicking something Adjacent
+					if(LAZYACCESS(modifiers, RIGHT_CLICK))
+						var/after_attack_secondary_result = W.afterattack_secondary(A, src, TRUE, params)
+						if(after_attack_secondary_result == SECONDARY_ATTACK_CALL_NORMAL)
+							W.afterattack(A, src, TRUE, params)
+					else
+						W.afterattack(A, src, TRUE, params) // 1 indicates adjacency
 			else
 				if(ismob(A)) // No instant mob attacking
 					setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
-				UnarmedAttack(A, 1)
+				UnarmedAttack(A, TRUE, modifiers)
 
 			trigger_aiming(TARGET_CAN_CLICK)
 			return
 		else // non-adjacent click
 			if(W)
-				W.afterattack(A, src, 0, modifiers) // 0: not Adjacent
+				if(LAZYACCESS(modifiers, RIGHT_CLICK))
+					var/after_attack_secondary_result = W.afterattack_secondary(A, src, FALSE, params)
+					if(after_attack_secondary_result == SECONDARY_ATTACK_CALL_NORMAL)
+						W.afterattack(A, src, TRUE, params)
+				else
+					W.afterattack(A, src, FALSE, params) // 1 indicates adjacency
 			else
-				RangedAttack(A, modifiers)
+				if(LAZYACCESS(modifiers, RIGHT_CLICK))
+					ranged_attack_secondary(A, modifiers)
+				else
+					ranged_attack(A, modifiers)
 
 			trigger_aiming(TARGET_CAN_CLICK)
 	return 1
@@ -183,29 +201,24 @@
 	return
 
 /**
- * Called when the mob interacts with something it is adjacent to. For complex mobs, this includes interacting with an empty hand or empty module. Generally, this translates to `attack_hand()`, `attack_robot()`, etc.
+ * UnarmedAttack: The higest level of mob click chain discounting click itself.
  *
- * Exception: This is also called when telekinesis is used, even if not adjacent to the target.
+ * This handles, just "clicking on something" without an item. It translates
+ * into [atom/proc/attack_hand], [atom/proc/attack_animal] etc.
  *
- * **Parameters**:
- * - `A` - The atom that was clicked on/interacted with.
- * - `proximity_flag` - Whether or not the mob was at range from the targeted atom. Generally, this is always `1` unless telekinesis was used, where this will be `0`. This is not currently passed to attack_hand, and is instead used in human click code to allow glove touches only at melee range.
+ * Note: proximity_flag here is used to distinguish between normal usage (flag=1),
+ * and usage when clicking on things telekinetically (flag=0).  This proc will
+ * not be called at ranged except with telekinesis.
  *
- * Returns boolean - Whether or not the mob was able to perform the interaction.
+ * proximity_flag is not currently passed to attack_hand, and is instead used
+ * in human click code to allow glove touches only at melee range.
+ *
+ * modifiers is a lazy list of click modifiers this attack had,
+ * used for figuring out different properties of the click, mostly right vs left and such.
  */
-/mob/proc/UnarmedAttack(atom/A, proximity_flag)
+
+/mob/proc/UnarmedAttack(atom/target, proximity_flag, list/modifiers)
 	return
-
-/mob/living/UnarmedAttack(atom/A, proximity_flag)
-
-	if(GAME_STATE < RUNLEVEL_GAME)
-		to_chat(src, "You cannot attack people before the game has started.")
-		return 0
-
-	if(stat)
-		return 0
-
-	return 1
 
 /*
 	Ranged unarmed attack:
@@ -222,16 +235,22 @@
  *
  * **Parameters**:
  * - `A` - The atom that was clicked on/interacted with.
- * - `params` - List of click parameters. See BYOND's `CLick()` documentation.
+ * - `modifiers` - List of click parameters. See BYOND's `CLick()` documentation.
  *
  * Returns boolean - Whether or not the mob was able to perform the interaction.
  */
-/mob/proc/RangedAttack(atom/A, params)
+/mob/proc/ranged_attack(atom/A, modifiers)
+	if(SEND_SIGNAL(src, COMSIG_MOB_ATTACK_RANGED, A, modifiers) & COMPONENT_CANCEL_ATTACK_CHAIN)
+		return TRUE
 	if(!length(mutations))
 		return FALSE
 
 	if((MUTATION_LASER in mutations) && a_intent == I_HURT)
 		LaserEyes(A) // moved into a proc below
+		return TRUE
+
+/mob/proc/ranged_attack_secondary(atom/target, list/modifiers)
+	if(SEND_SIGNAL(src, COMSIG_MOB_ATTACK_RANGED_SECONDARY, target, modifiers) & COMPONENT_CANCEL_ATTACK_CHAIN)
 		return TRUE
 
 /**

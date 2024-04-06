@@ -98,11 +98,11 @@
 /obj/item/gun/projectile/dartgun/examine(mob/user)
 	. = ..()
 	if (length(beakers))
-		to_chat(user, SPAN_NOTICE("\The [src] contains:"))
+		. += SPAN_NOTICE("[src] contains:")
 		for(var/obj/item/reagent_containers/glass/beaker/B in beakers)
 			if(B.reagents && length(B.reagents.reagent_list))
 				for(var/datum/reagent/R in B.reagents.reagent_list)
-					to_chat(user, SPAN_NOTICE("[R.volume] units of [R.name]"))
+					. += SPAN_NOTICE("[R.volume] units of [R.name]")
 
 
 /obj/item/gun/projectile/dartgun/use_tool(obj/item/tool, mob/user, list/click_params)

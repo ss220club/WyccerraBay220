@@ -31,11 +31,11 @@
 
 /obj/machinery/power/breakerbox/examine(mob/user)
 	. = ..()
-	to_chat(user, "Large machine with heavy duty switching circuits used for advanced grid control")
+	. += SPAN_NOTICE("Large machine with heavy duty switching circuits used for advanced grid control")
 	if(on)
-		to_chat(user, SPAN_GOOD("It seems to be online."))
+		. += SPAN_GOOD("It seems to be online.")
 	else
-		to_chat(user, SPAN_WARNING("It seems to be offline."))
+		. += SPAN_WARNING("It seems to be offline.")
 
 /obj/machinery/power/breakerbox/attack_ai(mob/user)
 	if(update_locked)
@@ -81,15 +81,12 @@
 	busy = 0
 	return TRUE
 
-/obj/machinery/power/breakerbox/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if(isMultitool(W))
-		var/newtag = input(user, "Enter new RCON tag. Use \"NO_TAG\" to disable RCON or leave empty to cancel.", "SMES RCON system") as text
-		if(newtag)
-			RCon_tag = newtag
-			to_chat(user, SPAN_NOTICE("You changed the RCON tag to: [newtag]"))
-		return TRUE
-
-	return ..()
+/obj/machinery/power/breakerbox/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	var/newtag = input(user, "Enter new RCON tag. Use \"NO_TAG\" to disable RCON or leave empty to cancel.", "SMES RCON system") as text
+	if(newtag)
+		RCon_tag = newtag
+		to_chat(user, SPAN_NOTICE("You changed the RCON tag to: [newtag]"))
 
 /obj/machinery/power/breakerbox/proc/set_state(state)
 	on = state

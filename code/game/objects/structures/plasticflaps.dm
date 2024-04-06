@@ -38,47 +38,41 @@
 
 	return ..()
 
+/obj/structure/plasticflaps/crowbar_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(anchored)
+		USE_FEEDBACK_FAILURE("[src] has to be unanchored before you can deconstruct it.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts deconstructing [src] with [tool]."),
+		SPAN_NOTICE("You start deconstructing [src] with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 3 SECONDS, volume = 50, skill_path = SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT) || anchored)
+		return
+	var/obj/item/stack/material/plastic/stack = new(loc, 30)
+	transfer_fingerprints_to(stack)
+	user.visible_message(
+		SPAN_NOTICE("[user] deconstructs [src] with [tool]."),
+		SPAN_NOTICE("You deconstruct [src] with [tool].")
+	)
+	qdel(src)
 
-/obj/structure/plasticflaps/use_tool(obj/item/tool, mob/user, list/click_params)
-	// Crowbar - Deconstruct
-	if (isCrowbar(tool))
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can deconstruct it.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts deconstructing \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start deconstructing \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled((tool.toolspeed * 3) SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can deconstruct it.")
-			return TRUE
-		var/obj/item/stack/material/plastic/stack = new(loc, 30)
-		transfer_fingerprints_to(stack)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] deconstructs \the [src] with \a [tool]."),
-			SPAN_NOTICE("You deconstruct \the [src] with \the [tool].")
-		)
-		qdel_self()
-		return TRUE
-
+/obj/structure/plasticflaps/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
 	// Screwdriver - Toggle airflow
-	if (isScrewdriver(tool))
-		if (anchored)
-			USE_FEEDBACK_FAILURE("\The [src] has to be unanchored before you can adjust the airflow.")
-			return TRUE
-		if (airtight)
-			clear_airtight()
-		else
-			become_airtight()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] adjusts \the [src] with \a [tool]."),
-			SPAN_NOTICE("You adjust \the [src] with \the [tool], [airtight ? "preventing" : "allowing"] air flow.")
-		)
-		return TRUE
-
-	return ..()
+	if(anchored)
+		USE_FEEDBACK_NEED_UNANCHOR(user)
+		return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	if(airtight)
+		clear_airtight()
+	else
+		become_airtight()
+	user.visible_message(
+		SPAN_NOTICE("[user] adjusts [src] with [tool]."),
+		SPAN_NOTICE("You adjust [src] with [tool], [airtight ? "preventing" : "allowing"] air flow.")
+	)
 
 
 /obj/structure/plasticflaps/can_anchor(obj/item/tool, mob/user, silent)
@@ -87,7 +81,7 @@
 		return
 	if (airtight)
 		if (!silent)
-			USE_FEEDBACK_FAILURE("You have to readjust the airflow before unwrenching \the [src].")
+			USE_FEEDBACK_FAILURE("You have to readjust the airflow before unwrenching [src].")
 		return FALSE
 
 

@@ -9,8 +9,8 @@
 
 /mob/living/examine(mob/user, distance, is_adjacent, infix, suffix)
 	. = ..()
-	if (admin_paralyzed)
-		to_chat(user, SPAN_DEBUG("OOC: They have been paralyzed by staff. Please avoid interacting with them unless cleared to do so by staff."))
+	if(admin_paralyzed)
+		. += SPAN_DEBUG("OOC: They have been paralyzed by staff. Please avoid interacting with them unless cleared to do so by staff.")
 
 //mob verbs are faster than object verbs. See mob/verb/examine.
 /mob/living/verb/pulled(atom/movable/AM as mob|obj in oview(1))
@@ -608,13 +608,13 @@ default behaviour is:
 	if(lying && prob(getBruteLoss() / 6))
 		location.add_blood(src)
 		if(prob(25))
-			src.adjustBruteLoss(1)
-			visible_message(SPAN_CLASS("danger", "\The [src]'s [src.isSynthetic() ? "state worsens": "wounds open more"] from being dragged!"))
+			adjustBruteLoss(1)
+			balloon_alert_to_viewers("[isSynthetic() ? "состояние ухудшается!" : "травмы усиливаются!"]")
 			. = TRUE
-	if(src.pull_damage())
+	if(pull_damage())
 		if(prob(25))
-			src.adjustBruteLoss(2)
-			visible_message(SPAN_CLASS("danger", "\The [src]'s [src.isSynthetic() ? "state" : "wounds"] worsen terribly from being dragged!"))
+			adjustBruteLoss(2)
+			balloon_alert_to_viewers("[isSynthetic() ? "состояние значительно ухудшается!" : "травмы многократно усиливаются!"]")
 			location.add_blood(src)
 			. = TRUE
 

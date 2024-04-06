@@ -7,7 +7,9 @@
 /singleton/machine_construction/default/item_chassis/attackby(obj/item/I, mob/user, obj/machinery/machine)
 	if((. = ..()))
 		return
-	if(isWrench(I))
+	if(I.tool_behaviour == TOOL_WRENCH)
+		if(!I.use_as_tool(machine, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+			return
 		TRANSFER_STATE(down_state)
 		machine.dismantle()
 		return

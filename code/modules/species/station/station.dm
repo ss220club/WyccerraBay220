@@ -100,7 +100,6 @@
 	meat_type = /obj/item/reagent_containers/food/snacks/fish/octopus
 	bone_material = MATERIAL_BONE_CARTILAGE
 	genders = list(PLURAL)
-	pronouns = list(PRONOUNS_THEY_THEM)
 	hidden_from_codex = FALSE
 	min_age = 19
 	max_age = 90
@@ -329,7 +328,6 @@
 	flesh_color = "#907e4a"
 
 	genders = list(PLURAL)
-	pronouns = list(PRONOUNS_IT_ITS)
 
 	available_cultural_info = list(
 		TAG_CULTURE =   list(CULTURE_DIONA),

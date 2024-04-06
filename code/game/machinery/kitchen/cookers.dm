@@ -54,12 +54,12 @@
 	. = ..()
 	if (distance < 5)
 		if (is_processing)
-			to_chat(user, "It is[is_processing ? "" : " not"] running.")
+			. += SPAN_NOTICE("It is[is_processing ? "" : " not"] running.")
 		if (distance < 3)
 			if (length(cooking))
-				to_chat(user, "You can see \an [english_list(cooking)] inside.")
+				. += SPAN_NOTICE("You can see \an [english_list(cooking)] inside.")
 			else
-				to_chat(user, "It is empty.")
+				. += SPAN_NOTICE("It is empty.")
 
 
 /obj/machinery/cooker/components_are_accessible(path)

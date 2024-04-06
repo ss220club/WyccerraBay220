@@ -33,20 +33,19 @@ var/global/const/DRINK_ICON_NOISY = "noise"
 
 /obj/item/reagent_containers/food/drinks/glass2/examine(mob/M)
 	. = ..()
-
 	for(var/I in extras)
 		if(istype(I, /obj/item/glass_extra))
-			to_chat(M, "There is \a [I] in \the [src].")
+			. += SPAN_NOTICE("There is [I] in [src].")
 		else if(istype(I, /obj/item/reagent_containers/food/snacks/fruit_slice))
-			to_chat(M, "There is \a [I] on the rim.")
+			. += SPAN_NOTICE("There is [I] on the rim.")
 		else
-			to_chat(M, "There is \a [I] somewhere on the glass. Somehow.")
+			. += SPAN_NOTICE("There is [I] somewhere on the glass. Somehow.")
 
 	if(has_ice())
-		to_chat(M, "There is some ice floating in the drink.")
+		. += SPAN_NOTICE("There is some ice floating in the drink.")
 
 	if(has_fizz())
-		to_chat(M, "It is fizzing slightly.")
+		. += SPAN_NOTICE("It is fizzing slightly.")
 
 /obj/item/reagent_containers/food/drinks/glass2/proc/has_ice()
 	if(length(reagents?.reagent_list))
@@ -126,12 +125,7 @@ var/global/const/DRINK_ICON_NOISY = "noise"
 		playsound(src.loc, "sound/effects/Glasshit.ogg", 50)
 
 /obj/item/reagent_containers/food/drinks/glass2/proc/can_add_extra(obj/item/glass_extra/GE)
-	if(!("[base_icon]_[GE.glass_addition]left" in icon_states(icon)))
-		return 0
-	if(!("[base_icon]_[GE.glass_addition]right" in icon_states(icon)))
-		return 0
-
-	return 1
+	return ICON_HAS_STATE(icon, "[base_icon]_[GE.glass_addition]left") || ICON_HAS_STATE(icon, "[base_icon]_[GE.glass_addition]right")
 
 /obj/item/reagent_containers/food/drinks/glass2/proc/get_filling_overlay(amount, overlay)
 	var/image/I = new()
@@ -168,9 +162,9 @@ var/global/const/DRINK_ICON_NOISY = "noise"
 			over_liquid |= image(icon, src, "[base_icon]_vapor")
 
 		for(var/S in R.glass_special)
-			if("[base_icon]_[S]" in icon_states(icon))
+			if(ICON_HAS_STATE(icon, "[base_icon]_[S]"))
 				under_liquid |= image(icon, src, "[base_icon]_[S]")
-			else if("[base_icon][amnt]_[S]" in icon_states(icon))
+			else if(ICON_HAS_STATE(icon, "[base_icon][amnt]_[S]"))
 				over_liquid |= image(icon, src, "[base_icon][amnt]_[S]")
 
 		underlays += under_liquid

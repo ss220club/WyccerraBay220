@@ -55,15 +55,15 @@
 /obj/item/device/electronic_assembly/examine(mob/user)
 	. = ..()
 	if(IC_FLAG_ANCHORABLE & circuit_flags)
-		to_chat(user, SPAN_NOTICE("The anchoring bolts [anchored ? "are" : "can be"] <b>wrenched</b> in place and the maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place."))
+		. += SPAN_NOTICE("The anchoring bolts [anchored ? "are" : "can be"] <b>wrenched</b> in place and the maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place.")
 	else
-		to_chat(user, SPAN_NOTICE("The maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place."))
+		. += SPAN_NOTICE("The maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place.")
 
 	if((isobserver(user) && ckeys_allowed_to_scan[user.ckey]) || check_rights(R_ADMIN, 0, user))
-		to_chat(user, "You can <a href='?src=\ref[src];ghostscan=1'>scan</a> this circuit.");
+		. += SPAN_NOTICE("You can <a href='?src=\ref[src];ghostscan=1'>scan</a> this circuit.");
 
 /obj/item/device/electronic_assembly/on_death()
-	visible_message(SPAN_WARNING("\The [src] falls to pieces!"))
+	visible_message(SPAN_WARNING("[src] falls to pieces!"))
 	if(w_class == ITEM_SIZE_HUGE)
 		if(adrone)
 			new /obj/decal/cleanable/blood/gibs/robot(loc)
@@ -86,7 +86,7 @@
 	..()
 	if (get_damage_percentage() >= 75)
 		if(battery && battery.charge > 0)
-			visible_message(SPAN_WARNING("\The [src] sputters and sparks!"))
+			visible_message(SPAN_WARNING("[src] sputters and sparks!"))
 			spark_system.start()
 		opened = TRUE
 		queue_icon_update()
@@ -135,7 +135,7 @@
 	var/power_failure = FALSE
 	if(get_damage_percentage() >= 75 && prob(1))
 		if(battery && battery.charge > 0)
-			visible_message(SPAN_WARNING("\The [src] sparks violently!"))
+			visible_message(SPAN_WARNING("[src] sparks violently!"))
 			spark_system.start()
 		power_failure = TRUE
 	// Now spend it.
@@ -255,11 +255,11 @@
 
 	if(href_list["remove_cell"])
 		if(!battery)
-			to_chat(usr, SPAN_DANGER("There's no power cell to remove from \the [src]."))
+			to_chat(usr, SPAN_DANGER("There's no power cell to remove from [src]."))
 		else
 			battery.dropInto(loc)
 			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
-			to_chat(usr, SPAN_NOTICE("You pull \the [battery] out of \the [src]'s power supplier."))
+			to_chat(usr, SPAN_NOTICE("You pull [battery] out of [src]'s power supplier."))
 			battery = null
 
 	if(href_list["component"])
@@ -330,9 +330,9 @@
 	. = ..()
 	for(var/I in assembly_components)
 		var/obj/item/integrated_circuit/IC = I
-		IC.external_examine(user)
+		. += IC.external_examine(user)
 		if(opened)
-			IC.internal_examine(user)
+			. += IC.internal_examine(user)
 	if(opened)
 		interact(user)
 
@@ -359,11 +359,11 @@
 // Returns true if the circuit made it inside.
 /obj/item/device/electronic_assembly/proc/try_add_component(obj/item/integrated_circuit/IC, mob/user)
 	if(!opened)
-		to_chat(user, SPAN_DANGER("\The [src]'s hatch is closed, you can't put anything inside."))
+		to_chat(user, SPAN_DANGER("[src]'s hatch is closed, you can't put anything inside."))
 		return FALSE
 
 	if(IC.w_class > w_class)
-		to_chat(user, SPAN_DANGER("\The [IC] is way too big to fit into \the [src]."))
+		to_chat(user, SPAN_DANGER("[IC] is way too big to fit into [src]."))
 		return FALSE
 
 	var/total_part_size = return_total_size()
@@ -400,17 +400,17 @@
 /obj/item/device/electronic_assembly/proc/try_remove_component(obj/item/integrated_circuit/IC, mob/user, silent)
 	if(!opened)
 		if(!silent)
-			to_chat(user, SPAN_DANGER("\The [src]'s hatch is closed, so you can't fiddle with the internal components."))
+			to_chat(user, SPAN_DANGER("[src]'s hatch is closed, so you can't fiddle with the internal components."))
 		return FALSE
 
 	if(!IC.removable)
 		if(!silent)
-			to_chat(user, SPAN_DANGER("\The [src] is permanently attached to the case."))
+			to_chat(user, SPAN_DANGER("[src] is permanently attached to the case."))
 		return FALSE
 
 	remove_component(IC)
 	if(!silent)
-		to_chat(user, SPAN_NOTICE("You pop \the [IC] out of the case, and slide it out."))
+		to_chat(user, SPAN_NOTICE("You pop [IC] out of the case, and slide it out."))
 		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 		user.put_in_hands(IC)
 	add_allowed_scanner(user.ckey)
@@ -433,10 +433,48 @@
 	for(var/obj/item/integrated_circuit/input/S in assembly_components)
 		if(S.sense(target,user,proximity))
 			if(proximity)
-				visible_message(SPAN_NOTICE("\The [user] waves \the [src] around \the [target]."))
+				visible_message(SPAN_NOTICE("[user] waves [src] around [target]."))
 			else
-				visible_message(SPAN_NOTICE("\The [user] points \the [src] towards \the [target]."))
+				visible_message(SPAN_NOTICE("[user] points [src] towards [target]."))
 
+/obj/item/device/electronic_assembly/multitool_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if (!opened)
+		USE_FEEDBACK_FAILURE("[src]'s hatch needs to be opened before you can access the internal components.")
+		return
+	interact(user)
+
+/obj/item/device/electronic_assembly/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	for(var/obj/item/integrated_circuit/manipulation/hatchlock/hatchlock in assembly_components)
+		if(hatchlock.lock_enabled)
+			balloon_alert(user, "[hatchlock] закрыт!")
+			return
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	opened = !opened
+	update_icon()
+	USE_FEEDBACK_NEW_PANEL_OPEN(user, opened)
+
+/obj/item/device/electronic_assembly/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
+		USE_FEEDBACK_FAILURE("[src] can't be anchored.")
+		return
+	if(!isturf(loc))
+		USE_FEEDBACK_FAILURE("[src] needs to be on the floor to be anchored.")
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] starts wrenching [src] [anchored ? "from" : "to"] the floor with [tool]."),
+		SPAN_NOTICE("You start wrenching [src] [anchored ? "from" : "to"] the floor with [tool].")
+	)
+	if(!tool.use_as_tool(src, user, 1 SECONDS, volume = 50, skill_path = SKILL_DEVICES, do_flags = DO_REPAIR_CONSTRUCT) || !HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE) || !isturf(loc))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] wrenches [src] [anchored ? "from" : "to"] the floor with [tool]."),
+		SPAN_NOTICE("You wrenches [src] [anchored ? "from" : "to"] the floor with [tool].")
+	)
+	anchored = !anchored
 
 /obj/item/device/electronic_assembly/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Assembly Detailer - Set color
@@ -445,8 +483,8 @@
 		detail_color = detailer.detail_color
 		update_icon()
 		user.visible_message(
-			SPAN_NOTICE("\The [user] re-colors \a [src] with \a [tool]."),
-			SPAN_NOTICE("You re-color \the [src] with \the [tool].")
+			SPAN_NOTICE("[user] re-colors [src] with [tool]."),
+			SPAN_NOTICE("You re-color [src] with [tool].")
 		)
 		return TRUE
 
@@ -459,10 +497,10 @@
 			return TRUE
 		return ..()
 
-	// Multitool, wirer, debugger - Interact
-	if (isMultitool(tool) || istype(tool, /obj/item/device/integrated_electronics/wirer) || istype(tool, /obj/item/device/integrated_electronics/debugger))
+	// Wirer, debugger - Interact
+	if (istype(tool, /obj/item/device/integrated_electronics/wirer) || istype(tool, /obj/item/device/integrated_electronics/debugger))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s hatch needs to be opened before you can access the internal components.")
+			USE_FEEDBACK_FAILURE("[src]'s hatch needs to be opened before you can access the internal components.")
 			return TRUE
 		interact(user)
 		return TRUE
@@ -470,10 +508,10 @@
 	// Power Cell - Install battery
 	if (istype(tool, /obj/item/cell))
 		if (!opened)
-			USE_FEEDBACK_FAILURE("\The [src]'s hatch needs to be opened before you can install \the [tool].")
+			USE_FEEDBACK_FAILURE("[src]'s hatch needs to be opened before you can install [tool].")
 			return TRUE
 		if (battery)
-			USE_FEEDBACK_FAILURE("\The [src] already has \a [battery] installed.")
+			USE_FEEDBACK_FAILURE("[src] already has [battery] installed.")
 			return TRUE
 		if (!user.unEquip(tool, src))
 			FEEDBACK_UNEQUIP_FAILURE(user, tool)
@@ -481,79 +519,36 @@
 		battery = tool
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, TRUE)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] installs \a [tool] into \a [src]."),
-			SPAN_NOTICE("You install \the [tool] into \the [src].")
+			SPAN_NOTICE("[user] installs [tool] into [src]."),
+			SPAN_NOTICE("You install [tool] into [src].")
 		)
-		return TRUE
-
-	// Screwdriver - Toggle panel
-	if (isScrewdriver(tool))
-		for (var/obj/item/integrated_circuit/manipulation/hatchlock/hatchlock in assembly_components)
-			if (hatchlock.lock_enabled)
-				USE_FEEDBACK_FAILURE("\The [src]'s [hatchlock.name] is locked and prevents you from opening the panel.")
-				return TRUE
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, TRUE)
-		opened = !opened
-		update_icon()
-		user.visible_message(
-			SPAN_NOTICE("\The [user] [opened ? "opens" : "closes"] \a [src]'s panel with \a [tool]."),
-			SPAN_NOTICE("You [opened ? "open" : "close"] \the [src]'s panel with \the [tool].")
-		)
-		return TRUE
-
-	// Wrench - Toggle anchoring bolts
-	if (isWrench(tool))
-		if (!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
-			USE_FEEDBACK_FAILURE("\The [src] can't be anchored.")
-			return TRUE
-		if (!isturf(loc))
-			USE_FEEDBACK_FAILURE("\The [src] needs to be on the floor to be anchored.")
-			return TRUE
-		playsound(src, 'sound/items/Ratchet.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts wrenching \a [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You start wrenching \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		if (!user.do_skilled(tool.toolspeed, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool))
-			return TRUE
-		if (!HAS_FLAGS(circuit_flags, IC_FLAG_ANCHORABLE))
-			USE_FEEDBACK_FAILURE("\The [src] can't be anchored.")
-			return TRUE
-		if (!isturf(loc))
-			USE_FEEDBACK_FAILURE("\The [src] needs to be on the floor to be anchored.")
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] wrenches \a [src] [anchored ? "from" : "to"] the floor with \a [tool]."),
-			SPAN_NOTICE("You wrenches \the [src] [anchored ? "from" : "to"] the floor with \the [tool].")
-		)
-		anchored = !anchored
 		return TRUE
 
 	// Cable Coil - Repair damage
 	if (isCoil(tool))
 		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] doesn't need repair.")
+			USE_FEEDBACK_FAILURE("[src] doesn't need repair.")
 			return TRUE
 		var/obj/item/stack/cable_coil/cable = tool
 		if (!cable.can_use(5))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to repair \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to repair [src].")
 			return TRUE
 		user.visible_message(
-			SPAN_NOTICE("\The [user] starts repairing some of \a [src]'s damage with [cable.get_vague_name(TRUE)]."),
-			SPAN_NOTICE("You start repairing some of \the [src]'s damage with [cable.get_exact_name(5)].")
+			SPAN_NOTICE("[user] starts repairing some of [src]'s damage with [cable.get_vague_name(TRUE)]."),
+			SPAN_NOTICE("You start repairing some of [src]'s damage with [cable.get_exact_name(5)].")
 		)
 		if (!user.do_skilled(1 SECOND, SKILL_DEVICES, src) || !user.use_sanity_check(src, tool))
 			return TRUE
 		if (!health_damaged())
-			USE_FEEDBACK_FAILURE("\The [src] doesn't need repair.")
+			USE_FEEDBACK_FAILURE("[src] doesn't need repair.")
 			return TRUE
 		if (!cable.use(5))
-			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to repair \the [src].")
+			USE_FEEDBACK_STACK_NOT_ENOUGH(cable, 5, "to repair [src].")
 			return TRUE
 		restore_health(5)
 		user.visible_message(
-			SPAN_NOTICE("\The [user] repairs some of \a [src]'s damage with [cable.get_vague_name(TRUE)]."),
-			SPAN_NOTICE("You repair some of \the [src]'s damage with [cable.get_exact_name(5)].")
+			SPAN_NOTICE("[user] repairs some of [src]'s damage with [cable.get_vague_name(TRUE)]."),
+			SPAN_NOTICE("You repair some of [src]'s damage with [cable.get_exact_name(5)].")
 		)
 		return TRUE
 
@@ -816,7 +811,7 @@
 		return
 	var/turf/T = get_turf(user)
 	if(T.density)
-		to_chat(user, SPAN_DANGER("You cannot place \the [src] on this spot!"))
+		to_chat(user, SPAN_DANGER("You cannot place [src] on this spot!"))
 		return
 	if(gotwallitem(T, ndir))
 		to_chat(user, SPAN_DANGER("There's already an item on this wall!"))

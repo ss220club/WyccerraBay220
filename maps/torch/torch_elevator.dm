@@ -44,7 +44,7 @@
 /datum/shuttle/autodock/ferry/cargo_lift
 	name = "Primary Cargo Lift"
 	shuttle_area = /area/turbolift/cargo_lift
-	warmup_time = 3
+	warmup_time = 3 SECONDS
 	waypoint_station = "nav_cargo_lift_top"
 	waypoint_offsite = "nav_cargo_lift_bottom"
 	sound_takeoff = 'sound/effects/lift_heavy_start.ogg'
@@ -55,7 +55,7 @@
 /datum/shuttle/autodock/ferry/robotics_lift
 	name = "Robotics Lift"
 	shuttle_area = /area/turbolift/robotics_lift
-	warmup_time = 3
+	warmup_time = 3 SECONDS
 	waypoint_station = "nav_robotics_lift_top"
 	waypoint_offsite = "nav_robotics_lift_bottom"
 	sound_takeoff = 'sound/effects/lift_heavy_start.ogg'
@@ -66,7 +66,7 @@
 /datum/shuttle/autodock/ferry/medical_lift
 	name = "Medical Lift"
 	shuttle_area = /area/turbolift/medical_lift
-	warmup_time = 3
+	warmup_time = 3 SECONDS
 	waypoint_station = "nav_medical_lift_top"
 	waypoint_offsite = "nav_medical_lift_bottom"
 	sound_takeoff = 'sound/effects/lift_heavy_start.ogg'

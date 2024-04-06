@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(ticker)
 	name = "Ticker"
 	wait = 10
-	priority = SS_PRIORITY_TICKER
+	priority = FIRE_PRIORITY_TICKER
 	init_order = SS_INIT_TICKER
 	flags = SS_NO_TICK_CHECK | SS_KEEP_TIMING
 	runlevels = RUNLEVELS_PREGAME | RUNLEVELS_GAME
@@ -494,9 +494,14 @@ Helpers
 
 /datum/controller/subsystem/ticker/proc/declare_completion()
 	to_world("<br><br><br><H1>A round of [mode.name] has ended!</H1>")
-	for(var/client/C)
-		if(!C.credits)
-			C.RollCredits()
+	for(var/client/C as anything in GLOB.clients)
+		if(!C)
+			continue
+
+		if(C.credits)
+			continue
+
+		C.RollCredits()
 
 	GLOB.using_map.roundend_player_status()
 

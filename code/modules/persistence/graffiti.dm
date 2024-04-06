@@ -22,7 +22,7 @@
 		author = _author
 
 /obj/decal/writing/Initialize()
-	var/list/random_icon_states = icon_states(icon)
+	var/list/random_icon_states = ICON_STATES(icon)
 	for(var/obj/decal/writing/W in loc)
 		random_icon_states.Remove(W.icon_state)
 	if(length(random_icon_states))
@@ -36,8 +36,20 @@
 
 /obj/decal/writing/examine(mob/user)
 	. = ..(user)
-	to_chat(user,  "It reads \"[message]\".")
+	. += SPAN_NOTICE("It reads \"[message]\".")
 
+/obj/decal/writing/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.tool_start_check(user, 1))
+		return
+	balloon_alert(user, "очистка надписей")
+	if(!tool.use_as_tool(src, user, 1 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	user.visible_message(
+		SPAN_NOTICE("[user] clears away [src] with [tool]."),
+		SPAN_NOTICE("You clear away [src] with [tool].")
+	)
+	qdel(src)
 
 /obj/decal/writing/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Sharp Item - Engrave additional message
@@ -45,25 +57,4 @@
 		var/turf/target = get_turf(src)
 		target.try_graffiti(user, tool)
 		return TRUE
-
-	// Welding Torch - Remove decal
-	if (isWelder(tool))
-		var/obj/item/weldingtool/welder = tool
-		if (!welder.can_use(1, user, "to remove \the [src]."))
-			return TRUE
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		user.visible_message(
-			SPAN_NOTICE("\The [user] starts burning away \the [src] with \a [tool]."),
-			SPAN_NOTICE("You start burning away \the [src] with \the [tool].")
-		)
-		if (!user.do_skilled(1 SECOND, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT) || !user.use_sanity_check(src, tool) || !welder.can_use(1, user, "to remove \the [src]"))
-			return TRUE
-		user.visible_message(
-			SPAN_NOTICE("\The [user] clears away \the [src] with \a [tool]."),
-			SPAN_NOTICE("You clear away \the [src] with \the [tool].")
-		)
-		playsound(src, 'sound/items/Welder2.ogg', 50, TRUE)
-		qdel(src)
-		return TRUE
-
-	return ..()
+	. = ..()

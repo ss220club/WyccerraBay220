@@ -196,19 +196,19 @@
 	if (distance >= 2 && !isghost(user))
 		return
 	if (patient)
-		to_chat(user, "\The [patient] is hooked up to it.")
+		. += SPAN_NOTICE("[patient] is hooked up to it.")
 	if (!iv_bag)
-		to_chat(user, "It has no IV bag attached.")
+		. += SPAN_NOTICE("It has no IV bag attached.")
 		return
 	var/volume = floor(iv_bag.reagents.total_volume)
 	if (!volume)
-		to_chat(user, "It has an empty [iv_bag] attached.")
+		. += SPAN_NOTICE("It has an empty [iv_bag] attached.")
 		return
-	to_chat(user, "It has \a [iv_bag] attached with [volume] units of liquid inside.")
-	to_chat(user, {"\
+	. += SPAN_NOTICE("It has [iv_bag] attached with [volume] units of liquid inside.")
+	. += SPAN_NOTICE("\
 		It is set to [drip_mode == MODE_INJECT ? "inject" : drip_mode == MODE_EXTRACT ? "extract" : ""] \
 		[iv_bag.transfer_amount]u of fluid per cycle.\
-	"})
+	")
 
 
 /obj/structure/iv_stand/CheckDexterity(mob/living/user)

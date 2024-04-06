@@ -211,6 +211,11 @@
 		if(!check_species_allowed(S))
 			return 0
 
+		if(client.prefs.organ_data[BP_CHEST] == "cyborg")
+			if(!is_any_alien_whitelisted(src, SPECIES_FBP) && client.prefs.species != SPECIES_IPC)
+				to_chat(usr, "Нельзя зайти за ППТ без вайтлиста.")
+				return FALSE
+
 		AttemptLateSpawn(job, client.prefs.spawnpoint)
 		return
 
@@ -466,6 +471,11 @@
 
 /mob/new_player/proc/create_character(turf/spawn_turf)
 	spawning = 1
+	if(client.prefs.organ_data[BP_CHEST] == "cyborg")
+		if(!is_any_alien_whitelisted(src, SPECIES_FBP) && client.prefs.species != SPECIES_IPC)
+			to_chat(src, "Нельзя зайти за ППТ без вайтлиста.")
+			spawning = 0
+			return null
 	close_spawn_windows()
 
 	var/mob/living/carbon/human/new_character
@@ -559,11 +569,6 @@
 		return SPECIES_HUMAN
 
 	return chosen_species.name
-
-/mob/new_player/choose_from_pronouns()
-	if (!client?.prefs)
-		return ..()
-	return client.prefs.pronouns
 
 /mob/new_player/is_ready()
 	return ready && ..()

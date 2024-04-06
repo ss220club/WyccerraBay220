@@ -57,7 +57,7 @@
 		var/nearestSimpleTargetDist = -1
 		var/turf/cur_turf = get_turf(src)
 
-		for (var/turf/simulated/mineral/T as anything in GLOB.xeno_artifact_turfs)
+		for (var/turf/simulated/mineral/T as anything in SSxenoarch.xeno_artifact_turfs)
 			if(T.density && T.artifact_find)
 				if(T.z == cur_turf.z)
 					var/cur_dist = get_dist(cur_turf, T) * 2
@@ -65,16 +65,16 @@
 						nearestTargetDist = cur_dist + rand() * 2 - 1
 						nearestTargetId = T.artifact_find.artifact_id
 			else
-				GLOB.xeno_artifact_turfs -= T
+				SSxenoarch.xeno_artifact_turfs -= T
 
-		for(var/turf/simulated/mineral/T as anything in GLOB.xeno_digsite_turfs)
+		for(var/turf/simulated/mineral/T as anything in SSxenoarch.xeno_artifact_turfs)
 			if(T.density && T.finds && length(T.finds))
 				if(T.z == cur_turf.z)
 					var/cur_dist = get_dist(cur_turf, T) * 2
 					if(nearestSimpleTargetDist < 0 || cur_dist < nearestSimpleTargetDist)
 						nearestSimpleTargetDist = cur_dist + rand() * 2 - 1
 			else
-				GLOB.xeno_digsite_turfs -= T
+				SSxenoarch.xeno_digsite_turfs -= T
 
 		if(nearestTargetDist >= 0)
 			to_chat(user, SPAN_NOTICE("Exotic energy detected on wavelength '[nearestTargetId]' in a radius of [nearestTargetDist]m[nearestSimpleTargetDist > 0 ? "; small anomaly detected in a radius of [nearestSimpleTargetDist]m" : ""]"))
@@ -230,7 +230,7 @@
 	var/turf/T = get_turf(src)
 	var/zlevels = GetConnectedZlevels(T.z)
 	var/cur_dist = world.maxx+world.maxy
-	for(var/obj/machinery/tele_beacon/R in world)
+	for(var/obj/machinery/tele_beacon/R as anything in SSmachines.get_machinery_of_type(/obj/machinery/tele_beacon))
 		if(!R.functioning())
 			continue
 		if(R.z in zlevels)

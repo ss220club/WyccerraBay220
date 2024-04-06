@@ -17,11 +17,11 @@
 /obj/item/device/holowarrant/examine(mob/user, distance)
 	. = ..()
 	if(active)
-		to_chat(user, "It's a holographic warrant for '[active.fields["namewarrant"]]'.")
+		. += SPAN_NOTICE("It's a holographic warrant for '[active.fields["namewarrant"]]'.")
 	if(distance <= 1)
 		show_content(user)
 	else
-		to_chat(user, SPAN_NOTICE("You have to be closer if you want to read it."))
+		. += SPAN_NOTICE("You have to be closer if you want to read it.")
 
 // an active warrant with access authorized grants access
 /obj/item/device/holowarrant/GetAccess()

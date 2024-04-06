@@ -38,7 +38,7 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 		event_severity = EVENT_LEVEL_MODERATE
 		chosen_mob_list = pick(typesof(/datum/mob_list/moderate) - /datum/mob_list/moderate)
 
-	for (var/area/A in world)
+	for (var/area/A as anything in GLOB.areas)
 		if (A.planetary_surface)
 			LAZYADD(exoplanet_areas, A)
 

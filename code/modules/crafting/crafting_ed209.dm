@@ -18,7 +18,7 @@
 	item_icon_state = "ed209_2"
 	next_stages = list(/singleton/crafting_stage/ed209_legs/left)
 
-/singleton/crafting_stage/ed209_legs/is_appropriate_tool(obj/item/thing)
+/singleton/crafting_stage/ed209_legs/is_appropriate_tool(obj/item/thing, mob/user)
 	. = istype(thing, /obj/item/robot_parts/l_leg) || istype(thing, /obj/item/robot_parts/r_leg)
 
 /singleton/crafting_stage/ed209_legs/left

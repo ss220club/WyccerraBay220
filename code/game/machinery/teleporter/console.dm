@@ -145,7 +145,7 @@
 	if (active == effective)
 		return
 	active = effective
-	if (!active && !locate(/datum/event/bsd_instability) in SSevent.active_events)
+	if (!active && !SSevent.is_event_of_type_active(/datum/event/bsd_instability))
 		pad.interlude_chance = initial(pad.interlude_chance)
 	set_timer(!active)
 	if (notify && effective)

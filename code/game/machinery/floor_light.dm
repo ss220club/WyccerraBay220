@@ -20,71 +20,63 @@ var/global/list/floor_light_cache = list()
 	var/default_light_range = 3
 	var/default_light_colour = "#ffffff"
 
-
 /obj/machinery/floor_light/Initialize()
 	. = ..()
 	update_use_power(use_power)
 	queue_icon_update()
 
-
 /obj/machinery/floor_light/mapped_off
 	anchored = TRUE
 	use_power = POWER_USE_OFF
-
 
 /obj/machinery/floor_light/mapped_on
 	anchored = TRUE
 	use_power = POWER_USE_ACTIVE
 
+/obj/machinery/floor_light/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	anchored = !anchored
+	if(use_power)
+		update_use_power(POWER_USE_OFF)
+		queue_icon_update()
+	USE_FEEDBACK_NEW_ANCHOR_FINISH(user, anchored)
 
-/obj/machinery/floor_light/use_tool(obj/item/W, mob/living/user, list/click_params)
-	if (isScrewdriver(W))
-		anchored = !anchored
-		if(use_power)
-			update_use_power(POWER_USE_OFF)
-			queue_icon_update()
-		visible_message(SPAN_NOTICE("\The [user] has [anchored ? "attached" : "detached"] \the [src]."))
-		return TRUE
+/obj/machinery/floor_light/wrench_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(!tool.use_as_tool(src, user, volume = 75, do_flags = DO_REPAIR_CONSTRUCT))
+		return
+	to_chat(user, SPAN_NOTICE("You dismantle the floor light."))
+	new /obj/item/stack/material/steel(src.loc, 1)
+	new /obj/item/stack/material/glass(src.loc, 1)
+	qdel(src)
 
-	if (isWelder(W) && (health_damaged() || MACHINE_IS_BROKEN(src)))
-		var/obj/item/weldingtool/WT = W
-		if(!WT.can_use(1, user))
-			return TRUE
-		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-		if(!do_after(user, (W.toolspeed * 2) SECONDS, src, DO_REPAIR_CONSTRUCT))
-			return TRUE
-		if(!src || !WT.remove_fuel(1, user))
-			return TRUE
-		visible_message(SPAN_NOTICE("\The [user] has repaired \the [src]."))
+/obj/machinery/floor_light/welder_act(mob/living/user, obj/item/tool)
+	. = ITEM_INTERACT_SUCCESS
+	if(health_damaged() || MACHINE_IS_BROKEN(src))
+		USE_FEEDBACK_REPAIR_START(user)
+		if(!tool.use_as_tool(src, user, 2 SECONDS, 1, 50, SKILL_CONSTRUCTION, do_flags = DO_REPAIR_CONSTRUCT))
+			return
+		USE_FEEDBACK_REPAIR_FINISH(user)
 		set_broken(FALSE)
 		revive_health()
-		return TRUE
-
-	if (isWrench(W))
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
-		to_chat(user, SPAN_NOTICE("You dismantle the floor light."))
-		new /obj/item/stack/material/steel(src.loc, 1)
-		new /obj/item/stack/material/glass(src.loc, 1)
-		qdel(src)
-		return TRUE
-
-	return ..()
 
 /obj/machinery/floor_light/on_death()
 	..()
 	playsound(src, "shatter", 70, 1)
-	visible_message(SPAN_DANGER("\The [src] is smashed into many pieces!"))
+	visible_message(SPAN_DANGER("[src] is smashed into many pieces!"))
 
 /obj/machinery/floor_light/interface_interact(mob/user)
 	if(!CanInteract(user, DefaultTopicState()))
 		return FALSE
 	if(!anchored)
-		to_chat(user, SPAN_WARNING("\The [src] must be screwed down first."))
+		to_chat(user, SPAN_WARNING("[src] must be screwed down first."))
 		return TRUE
 
 	var/on = (use_power == POWER_USE_ACTIVE)
 	update_use_power(on ? POWER_USE_OFF : POWER_USE_ACTIVE)
-	visible_message(SPAN_NOTICE("\The [user] turns \the [src] [!on ? "on" : "off"]."))
+	visible_message(SPAN_NOTICE("[user] turns [src] [!on ? "on" : "off"]."))
 	queue_icon_update()
 	return TRUE
 

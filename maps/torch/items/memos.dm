@@ -159,9 +159,7 @@
 /obj/item/paper/memo/examine(mob/user, distance)
 	. = ..()
 	if (distance < 2)
-		to_chat(user, SPAN_NOTICE(info))
-
-
+		. += SPAN_NOTICE(info)
 
 // generic memos
 

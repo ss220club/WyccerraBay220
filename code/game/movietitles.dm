@@ -140,12 +140,11 @@ GLOBAL_LIST(end_titles)
 			actor_culture = SSculture.get_culture(CULTURE_HUMAN)
 		if(!showckey)
 			if(prob(90))
-				chunk += "[actor_culture.get_random_name(H.pronouns)]\t \t \t \t[uppertext(used_name)][job]"
+				chunk += "[actor_culture.get_random_name(H.gender)]\t \t \t \t[uppertext(used_name)][job]"
 			else
-				var/datum/pronouns/P = H.choose_from_pronouns()
-				chunk += "[used_name]\t \t \t \t[uppertext(P.him)]SELF"
+				chunk += "[used_name]\t \t \t \t[uppertext(H.p_them())]SELF"
 		else
-			chunk += "[uppertext(actor_culture.get_random_name(H.pronouns))] a.k.a. '[uppertext(H.ckey)]'\t \t \t \t[uppertext(used_name)][job]"
+			chunk += "[uppertext(actor_culture.get_random_name(H.gender))] a.k.a. '[uppertext(H.ckey)]'\t \t \t \t[uppertext(used_name)][job]"
 		chunksize++
 		if(chunksize > 2)
 			cast += "<center>[jointext(chunk,"<br>")]</center>"
@@ -174,7 +173,10 @@ GLOBAL_LIST(end_titles)
 	var/list/staff = list("PRODUCTION STAFF:")
 	var/list/staffjobs = list("Coffee Fetcher", "Cameraman", "Angry Yeller", "Chair Operator", "Choreographer", "Historical Consultant", "Costume Designer", "Chief Editor", "Executive Assistant")
 	var/list/goodboys = list()
-	for(var/client/C)
+	for(var/client/C as anything in GLOB.clients)
+		if(!C)
+			continue
+
 		if(!C.holder || C.is_stealthed())
 			continue
 

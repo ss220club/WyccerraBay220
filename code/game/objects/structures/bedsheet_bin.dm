@@ -110,12 +110,12 @@ LINEN BINS
 	. = ..()
 
 	if(amount < 1)
-		to_chat(user, "There are no bed sheets in the bin.")
+		. += SPAN_NOTICE("There are no bed sheets in the bin.")
 		return
 	if(amount == 1)
-		to_chat(user, "There is one bed sheet in the bin.")
+		. += SPAN_NOTICE("There is one bed sheet in the bin.")
 		return
-	to_chat(user, "There are [amount] bed sheets in the bin.")
+	. += SPAN_NOTICE("There are [amount] bed sheets in the bin.")
 
 
 /obj/structure/bedsheetbin/on_update_icon()

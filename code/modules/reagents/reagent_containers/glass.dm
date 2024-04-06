@@ -50,11 +50,11 @@
 		return
 
 	if(reagents && length(reagents.reagent_list))
-		to_chat(user, SPAN_NOTICE("It contains [reagents.total_volume] units of liquid."))
+		. += SPAN_NOTICE("It contains [reagents.total_volume] units of liquid.")
 	else
-		to_chat(user, SPAN_NOTICE("It is empty."))
+		. += SPAN_NOTICE("It is empty.")
 	if(!is_open_container())
-		to_chat(user, SPAN_NOTICE("The airtight lid seals it completely."))
+		. += SPAN_NOTICE("The airtight lid seals it completely.")
 
 /obj/item/reagent_containers/glass/attack_self()
 	..()

@@ -19,6 +19,8 @@
 /obj/Initialize()
 	. = ..()
 	temperature_coefficient = isnull(temperature_coefficient) ? clamp(MAX_TEMPERATURE_COEFFICIENT - w_class, MIN_TEMPERATURE_COEFFICIENT, MAX_TEMPERATURE_COEFFICIENT) : temperature_coefficient
+	if(HAS_FLAGS(obj_flags, OBJ_FLAG_ANCHORABLE))
+		RegisterSignal(src, COMSIG_ATOM_TOOL_ACT_RESULT(TOOL_WRENCH), PROC_REF(wrench_floor_bolts))
 
 /obj/proc/HandleObjectHeating(obj/item/heated_by, mob/user, adjust_temp)
 	if(ATOM_IS_TEMPERATURE_SENSITIVE(src))

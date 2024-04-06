@@ -23,7 +23,7 @@
 
 /obj/item/gun/launcher/alien/examine(mob/user)
 	. = ..()
-	to_chat(user, "It has [ammo] [ammo_name]\s remaining.")
+	. += SPAN_NOTICE("It has [ammo] [ammo_name]\s remaining.")
 
 /obj/item/gun/launcher/alien/consume_next_projectile()
 	if(ammo < 1) return null

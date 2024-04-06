@@ -44,7 +44,7 @@
 			var/obj/item/clothing/C = swag[slot]
 			if (C)
 				swagnames += C.get_examine_line()
-		to_chat(user,"[gender == MALE ? "He" : "She"] is wearing [english_list(swagnames)].")
+		. += SPAN_NOTICE("[p_They()] [p_are()] wearing [english_list(swagnames)].")
 
 
 /obj/structure/skele_stand/use_weapon(obj/item/weapon, mob/user, list/click_params)

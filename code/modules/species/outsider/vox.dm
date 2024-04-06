@@ -79,7 +79,6 @@
 		)
 
 	genders = list(NEUTER)
-	pronouns = list(PRONOUNS_THEY_THEM, PRONOUNS_IT_ITS)
 	descriptors = list(
 		/datum/mob_descriptor/height = -1,
 		/datum/mob_descriptor/build = 1,
@@ -139,8 +138,7 @@
 		H.set_internals(H.back)
 
 /datum/species/vox/disfigure_msg(mob/living/carbon/human/H)
-	var/datum/pronouns/P = H.choose_from_pronouns()
-	return "[SPAN_DANGER("[P.His] beak-segments are cracked and chipped! [P.He] [P.is] not even recognizable.")]\n"
+	return "[SPAN_DANGER("[H.p_Their()] beak-segments are cracked and chipped! [H.p_They()] [H.p_are()] not even recognizable.")]\n"
 
 /datum/species/vox/skills_from_age(age)
 	. = 8

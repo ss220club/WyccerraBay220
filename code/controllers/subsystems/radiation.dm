@@ -1,7 +1,7 @@
 SUBSYSTEM_DEF(radiation)
 	name = "Radiation"
 	wait = 2 SECONDS
-	priority = SS_PRIORITY_RADIATION
+	priority = FIRE_PRIORITY_RADIATION
 	flags = SS_NO_INIT
 
 	var/list/sources = list()			// all radiation source datums

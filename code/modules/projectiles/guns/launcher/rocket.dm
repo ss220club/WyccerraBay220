@@ -21,8 +21,7 @@
 /obj/item/gun/launcher/rocket/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 2)
-		to_chat(user, SPAN_NOTICE("[length(rockets)] / [max_rockets] rockets."))
-
+		. += SPAN_NOTICE("[length(rockets)] / [max_rockets] rockets.")
 
 /obj/item/gun/launcher/rocket/use_tool(obj/item/tool, mob/user, list/click_params)
 	// Rocket - Load ammo

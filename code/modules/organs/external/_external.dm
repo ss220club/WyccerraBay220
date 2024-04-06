@@ -213,10 +213,10 @@
 		for(var/obj/item/I in contents)
 			if(istype(I, /obj/item/organ))
 				continue
-			to_chat(user, SPAN_DANGER("There is \a [I] sticking out of it."))
+			. += SPAN_DANGER("There is [I] sticking out of it.")
 		var/ouchies = get_wounds_desc()
 		if(ouchies != "nothing")
-			to_chat(user, SPAN_NOTICE("There is [ouchies] visible on it."))
+			. += SPAN_NOTICE("There is [ouchies] visible on it.")
 
 	return
 
@@ -238,7 +238,7 @@
 				stage++
 				return
 		if(2)
-			if(W.sharp || istype(W,/obj/item/hemostat) || isWirecutter(W))
+			if(W.sharp || istype(W,/obj/item/hemostat) || W.tool_behaviour == TOOL_WIRECUTTER)
 				var/list/organs = get_contents_recursive()
 				if(length(organs))
 					var/obj/item/removing = pick(organs)

@@ -44,9 +44,9 @@
 		var/tmp_icon_state = overlay_state
 		if (!tmp_icon_state)
 			tmp_icon_state = icon_state
-		if(icon_override && ("[tmp_icon_state]_tie" in icon_states(icon_override)))
+		if(icon_override && ICON_HAS_STATE(icon_override, "[tmp_icon_state]_tie"))
 			inv_overlay = image(icon = icon_override, icon_state = "[tmp_icon_state]_tie", dir = SOUTH)
-		else if("[tmp_icon_state]_tie" in icon_states(GLOB.default_onmob_icons[slot_tie_str]))
+		else if(ICON_HAS_STATE(GLOB.default_onmob_icons[slot_tie_str], "[tmp_icon_state]_tie"))
 			inv_overlay = image(icon = GLOB.default_onmob_icons[slot_tie_str], icon_state = "[tmp_icon_state]_tie", dir = SOUTH)
 		else
 			inv_overlay = image(icon = GLOB.default_onmob_icons[slot_tie_str], icon_state = tmp_icon_state, dir = SOUTH)
@@ -67,16 +67,16 @@
 
 		if(istype(loc,/obj/item/clothing/under))
 			var/obj/item/clothing/under/C = loc
-			if (on_rolled_down && C.rolled_down > 0)
+			if (on_rolled_down && C.rolled_down > UNDER_ROLLDOWN_STATUS_UNROLLED)
 				tmp_icon_state = on_rolled_down
-			else if (on_rolled_sleeves && C.rolled_sleeves > 0)
+			else if (on_rolled_sleeves && C.rolled_sleeves == SLEEVES_ROLLDOWN_STATUS_ROLLED)
 				tmp_icon_state = on_rolled_sleeves
 
 		var/use_sprite_sheet = accessory_icons[slot]
 		if(sprite_sheets[bodytype])
 			use_sprite_sheet = sprite_sheets[bodytype]
 
-		if(icon_override && ("[tmp_icon_state]_mob" in icon_states(icon_override)))
+		if(icon_override && ICON_HAS_STATE(icon_override, "[tmp_icon_state]_mob"))
 			return overlay_image(icon_override, "[tmp_icon_state]_mob", color, RESET_COLOR)
 		else
 			return overlay_image(use_sprite_sheet, tmp_icon_state, color, RESET_COLOR)

@@ -29,7 +29,7 @@ MRE Stuff
 
 /obj/item/storage/mre/examine(mob/user)
 	. = ..()
-	to_chat(user, meal_desc)
+	. += SPAN_NOTICE("[meal_desc]")
 
 /obj/item/storage/mre/on_update_icon()
 	if(opened)

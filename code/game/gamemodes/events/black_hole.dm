@@ -20,16 +20,19 @@
 			qdel(src)
 			return
 
-		//DESTROYING STUFF AT THE EPICENTER
-		for(var/mob/living/M in orange(1,src))
-			qdel(M)
-		for(var/obj/O in orange(1,src))
-			qdel(O)
 		var/base_turf = get_base_turf_by_area(src)
-		for(var/turf/simulated/ST in orange(1,src))
-			if(ST.type == base_turf)
+		for(var/atom/affected_atom as anything in orange(1,src))
+			if(isobj(affected_atom) || ismob(affected_atom))
+				qdel(affected_atom)
+
+			if(!isturf(affected_atom))
 				continue
-			ST.ChangeTurf(base_turf)
+
+			var/turf/affected_turf = affected_atom
+			if(istype(affected_turf, base_turf))
+				continue
+
+			affected_turf.ChangeTurf(base_turf)
 
 		sleep(6)
 		grav(10, EX_ACT_LIGHT, 10, 0 )

@@ -268,7 +268,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	S.volume = 100
 	S.priority = 255
 	S.status = SOUND_UPDATE
-	process()
+	START_PROCESSING(SSbeach, src)
+
+/area/beach/Destroy()
+	STOP_PROCESSING(SSbeach, src)
+	. = ..()
 
 /area/beach/Entered(atom/movable/Obj,atom/OldLoc)
 	. = ..()
@@ -286,20 +290,21 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 			mysound.status = SOUND_PAUSED | SOUND_UPDATE
 			sound_to(M, mysound)
 
-/area/beach/proc/process()
-	set background = 1
+/area/beach/Process()
+	if(!prob(25))
+		return
 
-	var/sound/S = null
-	var/sound_delay = 0
-	if(prob(25))
-		S = sound(file=pick('sound/ambience/seag1.ogg','sound/ambience/seag2.ogg','sound/ambience/seag3.ogg'), volume=100)
-		sound_delay = rand(0, 50)
+	var/sound/seag_sound = sound(file=pick('sound/ambience/seag1.ogg','sound/ambience/seag2.ogg','sound/ambience/seag3.ogg'), volume=100)
+	mysound.status = SOUND_UPDATE
 
-	for(var/mob/living/carbon/human/H in src)
-		if(H.client)
-			mysound.status = SOUND_UPDATE
-			if(S)
-				spawn(sound_delay)
-					sound_to(H, S)
+	if(!seag_sound)
+		return
 
-	spawn(60) .()
+	for(var/mob/living/carbon/human/mob_to_send_sound in GLOB.player_list)
+		if(!mob_to_send_sound.client)
+			continue
+
+		if(get_area(mob_to_send_sound) != src)
+			continue
+
+		sound_to(mob_to_send_sound, seag_sound)

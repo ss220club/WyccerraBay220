@@ -15,7 +15,7 @@
 
 /obj/item/pickaxe/xeno/examine(mob/user)
 	. = ..()
-	to_chat(user, "This tool has a [excavation_amount] centimeter excavation depth.")
+	. += SPAN_NOTICE("This tool has a [excavation_amount] centimeter excavation depth.")
 
 /obj/item/pickaxe/xeno/brush
 	name = "wire brush"
@@ -120,7 +120,7 @@
 
 /obj/item/pickaxe/xeno/drill/examine(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("This tool can have its excavation depth adjusted up to [max_depth]cm."))
+	. += SPAN_NOTICE("This tool can have its excavation depth adjusted up to [max_depth]cm.")
 
 /obj/item/pickaxe/xeno/drill/plasma
 	name = "excavation plasma torch"

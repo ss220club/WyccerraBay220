@@ -22,7 +22,7 @@
 		if(R)
 			SetName("[R.company] [initial(name)]")
 			desc = "[R.desc]"
-			if(icon_state in icon_states(R.icon))
+			if(ICON_HAS_STATE(R.icon, icon_state))
 				icon = R.icon
 	else
 		SetDefaultName()

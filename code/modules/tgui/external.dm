@@ -67,6 +67,17 @@
 /**
  * public
  *
+ * Will force an update on static data for all viewers.
+ * Should be done manually whenever something happens to
+ * change static data.
+ */
+/datum/proc/update_tgui_static_data_for_all_viewers()
+	for(var/datum/tgui/window as anything in SStgui.open_uis_by_src[REF(src)])
+		window.send_full_update()
+
+/**
+ * public
+ *
  * Called on a UI when the UI receieves a href.
  * Think of this as Topic().
  *
@@ -158,26 +169,6 @@
  * client/verb/uiclose(), which closes the ui window
  */
 /datum/proc/tgui_close(mob/user)
-
-/**
- * verb
- *
- * Used by a client to fix broken TGUI windows caused by opening a UI window before assets load.
- * Probably not very performant and forcibly destroys a bunch of windows, so it has some warnings attached.
- * Conveniently, also allows devs to force a dev server reattach without relogging, since it yeets windows.
- */
-/client/verb/tgui_fix_white()
-	set desc = "Only use this if you have a broken TGUI window occupying your screen!"
-	set name = "Fix TGUI"
-	set category = "OOC"
-
-	if(alert(src, "Only use this verb if you have a white TGUI window stuck on your screen.", "Fix TGUI", "Continue", "Nevermind") != "Continue") // Not tgui_alert since we're fixing tgui
-		return
-
-	SStgui.close_user_uis(mob)
-	if(alert(src, "Did that fix the problem?", "Fix TGUI", "Yes", "No") == "No") // Not tgui_alert since we're fixing tgui
-		SStgui.force_close_all_windows(mob)
-		alert(src, "UIs should be fixed now. If not, please cry to your nearest coder.", "Fix TGUI") // Not tgui_alert since we're fixing tgui
 
 /**
  * verb

@@ -1,8 +1,8 @@
 /proc/count_drones()
 	var/drones = 0
-	for(var/mob/living/silicon/robot/drone/D in world)
-		if(D.key && D.client)
-			drones++
+	for(var/mob/living/silicon/robot/drone/D in GLOB.living_players)
+		drones++
+
 	return drones
 
 /obj/machinery/drone_fabricator
@@ -61,7 +61,7 @@
 /obj/machinery/drone_fabricator/examine(mob/user)
 	. = ..()
 	if(produce_drones && drone_progress >= 100 && isghost(user) && config.allow_drone_spawn && count_drones() < config.max_maint_drones)
-		to_chat(user, "<BR><B>A drone is prepared. Select 'Join As Drone' from the Ghost tab to spawn as a maintenance drone.</B>")
+		. += SPAN_NOTICE("<B>A drone is prepared. Select 'Join As Drone' from the Ghost tab to spawn as a maintenance drone.</B>")
 
 /obj/machinery/drone_fabricator/proc/create_drone(client/player)
 

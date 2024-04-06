@@ -75,6 +75,5 @@
 
 /obj/item/device/blackout/examine(mob/user)
 	. = ..()
-	if (isobserver(user) || (user.mind && user.mind.special_role != null) || user.skill_check(SKILL_DEVICES, SKILL_EXPERIENCED) || user.skill_check(SKILL_ELECTRICAL, SKILL_EXPERIENCED))
-		to_chat(user, "This device appears to be able to send a signal to overload the power grid. ")
-		return
+	if(isobserver(user) || (user.mind && user.mind.special_role != null) || user.skill_check(SKILL_DEVICES, SKILL_EXPERIENCED) || user.skill_check(SKILL_ELECTRICAL, SKILL_EXPERIENCED))
+		. += SPAN_NOTICE("This device appears to be able to send a signal to overload the power grid.")

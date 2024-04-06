@@ -20,7 +20,7 @@
 /obj/structure/displaycase/examine(mob/user)
 	. = ..()
 	if(length(contents))
-		to_chat(user, "Inside you see [english_list(contents)].")
+		. += SPAN_NOTICE("Inside you see [english_list(contents)].")
 
 /obj/structure/displaycase/ex_act(severity)
 	if (severity < EX_ACT_LIGHT)

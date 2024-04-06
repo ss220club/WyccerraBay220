@@ -182,10 +182,22 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 		return H.mind.role_alt_title
 	return H.mind.assigned_role
 
-#define GETTER_SETTER(PATH, KEY) /datum/computer_file/report/crew_record/proc/get_##KEY(){var/datum/report_field/F = locate(/datum/report_field/##PATH/##KEY) in fields; if(F) return F.get_value()} \
-/datum/computer_file/report/crew_record/proc/set_##KEY(given_value){var/datum/report_field/F = locate(/datum/report_field/##PATH/##KEY) in fields; if(F) F.set_value(given_value)}
-#define SETUP_FIELD(NAME, KEY, PATH, ACCESS, ACCESS_EDIT) GETTER_SETTER(PATH, KEY); /datum/report_field/##PATH/##KEY;\
-/datum/computer_file/report/crew_record/generate_fields(){..(); var/datum/report_field/##KEY = add_field(/datum/report_field/##PATH/##KEY, ##NAME);\
+#define GETTER_SETTER(PATH, KEY) \
+/datum/computer_file/report/crew_record/proc/get_##KEY(){ \
+var/datum/report_field/F = locate(/datum/report_field/##PATH/##KEY) in fields; \
+if(F) \
+	return F.get_value() \
+} \
+/datum/computer_file/report/crew_record/proc/set_##KEY(given_value){ \
+var/datum/report_field/F = locate(/datum/report_field/##PATH/##KEY) in fields; \
+if(F) \
+	F.set_value(given_value) \
+}
+#define SETUP_FIELD(NAME, KEY, PATH, ACCESS, ACCESS_EDIT) \
+GETTER_SETTER(PATH, KEY); /datum/report_field/##PATH/##KEY; \
+/datum/computer_file/report/crew_record/generate_fields(){ \
+..(); \
+var/datum/report_field/##KEY = add_field(/datum/report_field/##PATH/##KEY, ##NAME); \
 KEY.set_access(ACCESS, ACCESS_EDIT || ACCESS || access_bridge)}
 
 // Fear not the preprocessor, for it is a friend. To add a field, use one of these, depending on value type and if you need special access to see it.

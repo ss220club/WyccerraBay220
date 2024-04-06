@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;gear - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/gear.html#var">Var Details</a></header>
+<main>
+<h1>gear <aside>/<a href="datum.html">datum</a>/<a href="datum/gear.html">gear</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L1">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 1"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/gear.html#var/allowed_branches">allowed_branches</a></th><td>Service branches that can spawn with it</td></tr>
+            <tr><th><a href="datum/gear.html#var/allowed_roles">allowed_roles</a></th><td>Roles that can spawn with this item</td></tr>
+            <tr><th><a href="datum/gear.html#var/category">category</a></th><td>Category that will be used to properly group and sort gear.
+All available categories are located at <code>/code/modules/client/preference_setup/loadout/_defines.dm</code>.
+If you need to create gear of new category - create new define there.</td></tr>
+            <tr><th><a href="datum/gear.html#var/cost">cost</a></th><td>Number of points used. Items in general cost 1 point, storage/armor/gloves/special use costs 2 points</td></tr>
+            <tr><th><a href="datum/gear.html#var/custom_setup_proc">custom_setup_proc</a></th><td>Special tweak in New</td></tr>
+            <tr><th><a href="datum/gear.html#var/description">description</a></th><td>Description of this gear. If left blank will default to the description of the pathed item</td></tr>
+            <tr><th><a href="datum/gear.html#var/display_name">display_name</a></th><td>Name/index. Must be unique</td></tr>
+            <tr><th><a href="datum/gear.html#var/donation_tier">donation_tier</a></th><td>Donation tier the player should have to access this gear</td></tr>
+            <tr><th><a href="datum/gear.html#var/flags">flags</a></th><td>Special tweaks in New</td></tr>
+            <tr><th><a href="datum/gear.html#var/gear_tweaks">gear_tweaks</a></th><td>List of datums which will alter the item after it has been spawned</td></tr>
+            <tr><th><a href="datum/gear.html#var/path">path</a></th><td>Path to item</td></tr>
+            <tr><th><a href="datum/gear.html#var/required_factions">required_factions</a></th><td>Factions required to spawn with this item</td></tr>
+            <tr><th><a href="datum/gear.html#var/required_skills">required_skills</a></th><td>Skills required to spawn with this item</td></tr>
+            <tr><th><a href="datum/gear.html#var/slot">slot</a></th><td>Slot to equip to</td></tr>
+            <tr><th><a href="datum/gear.html#var/whitelisted">whitelisted</a></th><td>Term to check the whitelist for.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/allowed_branches"><aside class="declaration">var </aside>allowed_branches
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L15">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 15"/></a></h3>
+        <p>Service branches that can spawn with it</p><h3 id="var/allowed_roles"><aside class="declaration">var </aside>allowed_roles
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L13">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 13"/></a></h3>
+        <p>Roles that can spawn with this item</p><h3 id="var/category"><aside class="declaration">var </aside>category
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L25">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 25"/></a></h3>
+        <p>Category that will be used to properly group and sort gear.
+All available categories are located at <code>/code/modules/client/preference_setup/loadout/_defines.dm</code>.
+If you need to create gear of new category - create new define there.</p><h3 id="var/cost"><aside class="declaration">var </aside>cost
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L9">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 9"/></a></h3>
+        <p>Number of points used. Items in general cost 1 point, storage/armor/gloves/special use costs 2 points</p><h3 id="var/custom_setup_proc"><aside class="declaration">var </aside>custom_setup_proc
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L29">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 29"/></a></h3>
+        <p>Special tweak in New</p><h3 id="var/description"><aside class="declaration">var </aside>description
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L5">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 5"/></a></h3>
+        <p>Description of this gear. If left blank will default to the description of the pathed item</p><h3 id="var/display_name"><aside class="declaration">var </aside>display_name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L3">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 3"/></a></h3>
+        <p>Name/index. Must be unique</p><h3 id="var/donation_tier"><aside class="declaration">var </aside>donation_tier
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L31">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 31"/></a></h3>
+        <p>Donation tier the player should have to access this gear</p><h3 id="var/flags"><aside class="declaration">var </aside>flags
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L27">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 27"/></a></h3>
+        <p>Special tweaks in New</p><h3 id="var/gear_tweaks"><aside class="declaration">var </aside>gear_tweaks
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L33">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 33"/></a></h3>
+        <p>List of datums which will alter the item after it has been spawned</p><h3 id="var/path"><aside class="declaration">var </aside>path
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L7">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 7"/></a></h3>
+        <p>Path to item</p><h3 id="var/required_factions"><aside class="declaration">var </aside>required_factions
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L19">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 19"/></a></h3>
+        <p>Factions required to spawn with this item</p><h3 id="var/required_skills"><aside class="declaration">var </aside>required_skills
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L17">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 17"/></a></h3>
+        <p>Skills required to spawn with this item</p><h3 id="var/slot"><aside class="declaration">var </aside>slot
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 11"/></a></h3>
+        <p>Slot to equip to</p><h3 id="var/whitelisted"><aside class="declaration">var </aside>whitelisted
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/loadout/gear.dm#L21">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;loadout&#x2F;gear.dm 21"/></a></h3>
+        <p>Term to check the whitelist for.</p></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

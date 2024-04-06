@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;tgui - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/tgui.html#var">Var Details</a> - <a href="datum/tgui.html#proc">Proc Details</a></header>
+<main>
+<h1>tgui <aside>/<a href="datum.html">datum</a>/<a href="datum/tgui.html">tgui</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L10">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 10"/></a></h1>
+
+<p>tgui</p>
+<p>/tg/station user interface library</p>
+<p>tgui datum (represents a UI).</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/tgui.html#var/autoupdate">autoupdate</a></th><td>Update the UI every MC tick.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/children">children</a></th><td>Children of this UI</td></tr>
+            <tr><th><a href="datum/tgui.html#var/closing">closing</a></th><td>Stops further updates when close() was called.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/initialized">initialized</a></th><td>If the UI has been initialized yet.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/interface">interface</a></th><td>The interface (template) to be used for this UI.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/map_z_level">map_z_level</a></th><td>The map z-level to display.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/opened_at">opened_at</a></th><td>Time of opening the window.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/parent_ui">parent_ui</a></th><td>The Parent UI</td></tr>
+            <tr><th><a href="datum/tgui.html#var/refreshing">refreshing</a></th><td>Timed refreshing state</td></tr>
+            <tr><th><a href="datum/tgui.html#var/src_object">src_object</a></th><td>The object which owns the UI.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/state">state</a></th><td>Topic state used to determine status/interactability.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/status">status</a></th><td>The status/visibility of the UI.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/title">title</a></th><td>The title of te UI.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/user">user</a></th><td>The mob who opened/is using the UI.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/window">window</a></th><td>The window_id for browse() and onclose().</td></tr>
+            <tr><th><a href="datum/tgui.html#var/window_key">window_key</a></th><td>Key that is used for remembering the window geometry.</td></tr>
+            <tr><th><a href="datum/tgui.html#var/window_size">window_size</a></th><td>Deprecated: Window size.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/tgui.html#proc/New">New</a></th><td>public</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/close">close</a></th><td>public</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/get_payload">get_payload</a></th><td>private</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/on_message">on_message</a></th><td>private</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/open">open</a></th><td>public</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/process">process</a></th><td>private</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/process_status">process_status</a></th><td>private</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/send_asset">send_asset</a></th><td>public</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/send_full_update">send_full_update</a></th><td>public</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/send_update">send_update</a></th><td>public</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/set_autoupdate">set_autoupdate</a></th><td>public</td></tr>
+            <tr><th><a href="datum/tgui.html#proc/set_state">set_state</a></th><td>public</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/autoupdate"><aside class="declaration">var </aside>autoupdate
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L26">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 26"/></a></h3>
+        <p>Update the UI every MC tick.</p><h3 id="var/children"><aside class="declaration">var </aside>children
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L44">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 44"/></a></h3>
+        <p>Children of this UI</p><h3 id="var/closing"><aside class="declaration">var </aside>closing
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L32">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 32"/></a></h3>
+        <p>Stops further updates when close() was called.</p><h3 id="var/initialized"><aside class="declaration">var </aside>initialized
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L28">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 28"/></a></h3>
+        <p>If the UI has been initialized yet.</p><h3 id="var/interface"><aside class="declaration">var </aside>interface
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L24">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 24"/></a></h3>
+        <p>The interface (template) to be used for this UI.</p><h3 id="var/map_z_level"><aside class="declaration">var </aside>map_z_level
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L40">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 40"/></a></h3>
+        <p>The map z-level to display.</p><h3 id="var/opened_at"><aside class="declaration">var </aside>opened_at
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L30">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 30"/></a></h3>
+        <p>Time of opening the window.</p><h3 id="var/parent_ui"><aside class="declaration">var </aside>parent_ui
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/tgui.html">tgui</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L42">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 42"/></a></h3>
+        <p>The Parent UI</p><h3 id="var/refreshing"><aside class="declaration">var </aside>refreshing
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L36">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 36"/></a></h3>
+        <p>Timed refreshing state</p><h3 id="var/src_object"><aside class="declaration">var </aside>src_object
+            <aside>&ndash; /<a href="datum.html">datum</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L14">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 14"/></a></h3>
+        <p>The object which owns the UI.</p><h3 id="var/state"><aside class="declaration">var </aside>state
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/tgui_state.html">tgui_state</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L38">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 38"/></a></h3>
+        <p>Topic state used to determine status/interactability.</p><h3 id="var/status"><aside class="declaration">var </aside>status
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L34">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 34"/></a></h3>
+        <p>The status/visibility of the UI.</p><h3 id="var/title"><aside class="declaration">var </aside>title
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L16">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 16"/></a></h3>
+        <p>The title of te UI.</p><h3 id="var/user"><aside class="declaration">var </aside>user
+            <aside>&ndash; /<a href="mob.html">mob</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L12">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 12"/></a></h3>
+        <p>The mob who opened/is using the UI.</p><h3 id="var/window"><aside class="declaration">var </aside>window
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/tgui_window.html">tgui_window</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L18">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 18"/></a></h3>
+        <p>The window_id for browse() and onclose().</p><h3 id="var/window_key"><aside class="declaration">var </aside>window_key
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L20">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 20"/></a></h3>
+        <p>Key that is used for remembering the window geometry.</p><h3 id="var/window_size"><aside class="declaration">var </aside>window_size
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L22">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 22"/></a></h3>
+        <p>Deprecated: Window size.</p><h2 id="proc">Proc Details</h2><h3 id="proc/New">New<aside>(/<a href="mob.html">mob</a>/user, /<a href="datum.html">datum</a>/src_object, interface, title, /<a href="datum.html">datum</a>/<a href="datum/tgui.html">tgui</a>/parent_ui, ui_x, ui_y) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L61">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 61"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Create a new UI.</p>
+<p>required user mob The mob who opened/is using the UI.
+required src_object datum The object or datum which owns the UI.
+required interface string The interface used to render the UI.
+optional title string The title of the UI.
+optional parent_ui datum/tgui The parent of this UI.
+optional ui_x int Deprecated: Window width.
+optional ui_y int Deprecated: Window height.</p>
+<p>return datum/tgui The requested UI.</p><h3 id="proc/close"><aside class="declaration">proc </aside>close<aside>(can_be_suspended, logout) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L124">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 124"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Close the UI, and all its children.</p><h3 id="proc/get_payload"><aside class="declaration">proc </aside>get_payload<aside>(custom_data, with_data, with_static_data) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L219">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 219"/></a></aside>
+        </h3>
+        <p>private</p>
+<p>Package the data to send to the UI, as JSON.</p>
+<p>return list</p><h3 id="proc/on_message"><aside class="declaration">proc </aside>on_message<aside>(type, /list/payload, /list/href_list) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L315">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 315"/></a></aside>
+        </h3>
+        <p>private</p>
+<p>Handle clicks from the UI.
+Call the src_object's ui_act() if status is UI_INTERACTIVE.
+If the src_object's ui_act() returns 1, update all UIs attacked to it.</p><h3 id="proc/open"><aside class="declaration">proc </aside>open<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L78">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 78"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Open this UI (and initialize it with data).</p><h3 id="proc/process"><aside class="declaration">proc </aside>process<aside>(force) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L262">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 262"/></a></aside>
+        </h3>
+        <p>private</p>
+<p>Run an update cycle for this UI. Called internally by SStgui
+every second or so.</p><h3 id="proc/process_status"><aside class="declaration">proc </aside>process_status<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L298">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 298"/></a></aside>
+        </h3>
+        <p>private</p>
+<p>Updates the status, and returns TRUE if status has changed.</p><h3 id="proc/send_asset"><aside class="declaration">proc </aside>send_asset<aside>(/<a href="datum.html">datum</a>/asset/asset) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L173">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 173"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Makes an asset available to use in tgui.</p>
+<p>required asset datum/asset</p><h3 id="proc/send_full_update"><aside class="declaration">proc </aside>send_full_update<aside>(custom_data, force) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L186">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 186"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Send a full update to the client (includes static data).</p>
+<p>optional custom_data list Custom data to send instead of ui_data.
+optional force bool Send an update even if UI is not interactive.</p><h3 id="proc/send_update"><aside class="declaration">proc </aside>send_update<aside>(custom_data, force) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L204">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 204"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Send a partial update to the client (excludes static data).</p>
+<p>optional custom_data list Custom data to send instead of ui_data.
+optional force bool Send an update even if UI is not interactive.</p><h3 id="proc/set_autoupdate"><aside class="declaration">proc </aside>set_autoupdate<aside>(autoupdate) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L153">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 153"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Enable/disable auto-updating of the UI.</p>
+<p>required autoupdate bool Enable/disable auto-updating.</p><h3 id="proc/set_state"><aside class="declaration">proc </aside>set_state<aside>(/<a href="datum.html">datum</a>/<a href="datum/tgui_state.html">tgui_state</a>/state) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui.dm#L163">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui.dm 163"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Replace current ui.state with a new one.</p>
+<p>required state datum/ui_state/state Next state</p></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

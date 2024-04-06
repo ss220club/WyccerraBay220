@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>mods&#x2F;expanded_culture_descriptor&#x2F;README.md - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+</header>
+<main>
+<h1>mods/expanded_culture_descriptor/README.md 
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/expanded_culture_descriptor/README.md">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;expanded_culture_descriptor&#x2F;README.md"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><td colspan="2"><hh4 id="список-prов">Список PRов:</hh4>
+<ul>
+<li>https://github.com/SierraBay/SierraBay12/pull/1442</li>
+</ul>
+<!--
+  Ссылки на PRы, связанные с модом:
+  - Создание
+  - Большие изменения
+-->
+<!-- Название мода. Не важно на русском или на английском. -->
+<hh2 id="expanded-culture-descriptor">Expanded Culture Descriptor</hh2>
+<p>ID мода: EXPANDED_CULTURE_DESCRIPTOR</p>
+<!--
+  Название модпака прописными буквами, СОЕДИНЁННЫМИ_ПОДЧЁРКИВАНИЕМ,
+  которое ты будешь использовать для обозначения файлов.
+-->
+<hh3 id="описание-мода">Описание мода</hh3>
+<p>Мод включает в себя полный перевод редактора происхождения персонажа, 
+а также добавляет новые варианты происхождений на основании лора и 
+контента билда Infinity.</p>
+<ul>
+<li>Редактор бэкграунда персонажей полностью переведен, включая все культуры, происхождения, религии и фракции, существующие на SierraBay и в соседствующих модах;</li>
+<li>Для людей, унати и скреллов добавлены культуры, происхождения и фракции, что были доступны для них на Infinity, но не имелись в наличии на SierraBay;</li>
+<li>Добавлены языки, соответствующие новым культурам - мираниский, авалонский, лорриманский;</li>
+<li>Добавлена новая обложка для миранийского паспорта, улучшено описание авалонского паспорта, добавлены отдельные паспорта для фракций унати.</li>
+</ul>
+<!--
+  Что он делает, что добавляет: что, куда, зачем и почему - всё здесь.
+  А также любая полезная информация.
+-->
+<hh3 id="изменения-кор-кода">Изменения <em>кор кода</em></hh3>
+<ul>
+<li><code>code/__defines/culture.dm</code>:
+<ul>
+<li><code>#define TAG_CULTURE</code></li>
+<li><code>#define TAG_HOMEWORLD</code></li>
+<li><code>#define TAG_FACTION</code></li>
+<li><code>#define TAG_RELIGION</code></li>
+</ul>
+</li>
+<li><code>code/modules/client/preference_setup/background/01_culture.dm</code>: <code>/datum/category_item/player_setup_item/background/culture/content()</code></li>
+<li><code>code/modules/client/preference_setup/background/02_language.dm</code>:
+<ul>
+<li><code>/datum/category_item/player_setup_item/background/languages/content()</code></li>
+<li><code>/datum/category_item/player_setup_item/background/languages/OnTopic()</code></li>
+<li><code>/datum/category_item/player_setup_item/background/languages/proc/get_language_text()</code></li>
+</ul>
+</li>
+<li><code>code/modules/client/preference_setup/background/03_records.dm</code>:
+<ul>
+<li><code>/datum/category_item/player_setup_item/background/records/content()</code></li>
+<li><code>/datum/category_item/player_setup_item/background/records/OnTopic()</code></li>
+</ul>
+</li>
+<li><code>code/modules/culture_descriptor/culture/cultures_serpentid.dm</code>: <code>/singleton/cultural_info/culture/nabber/New()</code></li>
+<li><code>code/modules/culture_descriptor/location/_location.dm</code>: <code>/singleton/cultural_info/location/get_text_details()</code></li>
+<li><code>code/modules/species/species.dm</code>: <code>/datum/species/New()</code></li>
+</ul>
+<!--
+  Если вы редактировали какие-либо процедуры или переменные в кор коде,
+  они должны быть указаны здесь.
+  Нужно указать и файл, и процедуры/переменные.
+
+  Изменений нет - напиши "Отсутствуют"
+-->
+<hh3 id="оверрайды">Оверрайды</hh3>
+<ul>
+<li><code>mods/_master_files/code/modules/culture_descriptor/_culture.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/get_text_details()</code></li>
+<li><code>/singleton/cultural_info/get_description()</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_adherent.dm</code>: <code>/singleton/cultural_info/culture/adherent</code></li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_diona.dm</code>: <code>/singleton/cultural_info/culture/diona</code></li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_human.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/culture/generic</code></li>
+<li><code>/singleton/cultural_info/culture/human</code></li>
+<li><code>/singleton/cultural_info/culture/human/martian_surfacer</code></li>
+<li><code>/singleton/cultural_info/culture/human/martian_tunneller</code></li>
+<li><code>/singleton/cultural_info/culture/human/luna_poor</code></li>
+<li><code>/singleton/cultural_info/culture/human/luna_rich</code></li>
+<li><code>/singleton/cultural_info/culture/human/venusian_upper</code></li>
+<li><code>/singleton/cultural_info/culture/human/venusian_surfacer</code></li>
+<li><code>/singleton/cultural_info/culture/human/belter</code></li>
+<li><code>/singleton/cultural_info/culture/human/plutonian</code></li>
+<li><code>/singleton/cultural_info/culture/human/earthling</code></li>
+<li><code>/singleton/cultural_info/culture/human/ceti_north</code></li>
+<li><code>/singleton/cultural_info/culture/human/ceti_south</code></li>
+<li><code>/singleton/cultural_info/culture/human/ceti_interstate</code></li>
+<li><code>/singleton/cultural_info/culture/human/spacer_core</code></li>
+<li><code>/singleton/cultural_info/culture/human/spacer_frontier</code></li>
+<li><code>/singleton/cultural_info/culture/human/confederate</code></li>
+<li><code>/singleton/cultural_info/culture/human/gaia</code></li>
+<li><code>/singleton/cultural_info/culture/human/other</code></li>
+<li><code>/singleton/cultural_info/culture/human/vatgrown</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_ipc.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/culture/ipc</code></li>
+<li><code>/singleton/cultural_info/culture/ipc/gen2</code></li>
+<li><code>/singleton/cultural_info/culture/ipc/gen3</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_serpentid.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/culture/nabber</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/c</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/c/plus</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/b</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/b/minus</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/b/plus</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/a</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/a/minus</code></li>
+<li><code>/singleton/cultural_info/culture/nabber/a/plus</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_skrell.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/culture/skrell</code></li>
+<li><code>/singleton/cultural_info/culture/skrell/caste_malish</code></li>
+<li><code>/singleton/cultural_info/culture/skrell/caste_kanin</code></li>
+<li><code>/singleton/cultural_info/culture/skrell/caste_talum</code></li>
+<li><code>/singleton/cultural_info/culture/skrell/caste_raskinta</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_unathi.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/culture/unathi</code></li>
+<li><code>/singleton/cultural_info/culture/unathi_polar</code></li>
+<li><code>/singleton/cultural_info/culture/unathi_desert</code></li>
+<li><code>/singleton/cultural_info/culture/unathi_savannah</code></li>
+<li><code>/singleton/cultural_info/culture/unathi_salt_swamp</code></li>
+<li><code>/singleton/cultural_info/culture/unathi_space</code></li>
+<li><code>/singleton/cultural_info/culture/unathi_yeosa</code></li>
+<li><code>/singleton/cultural_info/culture/unathi_yeosa_abyss</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/culture/cultures_vox.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/culture/vox</code></li>
+<li><code>/singleton/cultural_info/culture/vox/salvager</code></li>
+<li><code>/singleton/cultural_info/culture/vox/raider</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/faction/factions_adherent.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/faction/adherent</code></li>
+<li><code>/singleton/cultural_info/faction/adherent/loyalists</code></li>
+<li><code>/singleton/cultural_info/faction/adherent/separatists</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/faction/factions_human.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/faction/scg</code></li>
+<li><code>/singleton/cultural_info/faction/scg/fleet</code></li>
+<li><code>/singleton/cultural_info/faction/torchco</code></li>
+<li><code>/singleton/cultural_info/faction/gcc</code></li>
+<li><code>/singleton/cultural_info/faction/remote</code></li>
+<li><code>/singleton/cultural_info/faction/remote/nanotrasen</code></li>
+<li><code>/singleton/cultural_info/faction/remote/xynergy</code></li>
+<li><code>/singleton/cultural_info/faction/remote/hephaestus</code></li>
+<li><code>/singleton/cultural_info/faction/free</code></li>
+<li><code>/singleton/cultural_info/faction/pcrc</code></li>
+<li><code>/singleton/cultural_info/faction/saare</code></li>
+<li><code>/singleton/cultural_info/faction/dais</code></li>
+<li><code>/singleton/cultural_info/faction/other</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/faction/factions_skrell.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/faction/skrell</code></li>
+<li><code>/singleton/cultural_info/faction/skrell/qalaoa</code></li>
+<li><code>/singleton/cultural_info/faction/skrell/yiitalana</code></li>
+<li><code>/singleton/cultural_info/faction/skrell/krrigli</code></li>
+<li><code>/singleton/cultural_info/faction/skrell/qonprri</code></li>
+<li><code>/singleton/cultural_info/faction/skrell/otherskrellfac</code></li>
+<li><code>/singleton/cultural_info/faction/skrell/othersdtf</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/faction/factions_unathi.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/faction/unathi</code></li>
+<li><code>/singleton/cultural_info/faction/unathi/ssen_uuma</code></li>
+<li><code>/singleton/cultural_info/faction/unathi/baask</code></li>
+<li><code>/singleton/cultural_info/faction/unathi/gresis</code></li>
+<li><code>/singleton/cultural_info/faction/unathi/rahzakeh</code></li>
+<li><code>/singleton/cultural_info/faction/unathi/kharza</code></li>
+<li><code>/singleton/cultural_info/faction/unathi/independent</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/faction/factions_vox.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/faction/vox</code></li>
+<li><code>/singleton/cultural_info/faction/vox/raider</code></li>
+<li><code>/singleton/cultural_info/faction/vox/apex</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/_location.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_adherent.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/adherent</code></li>
+<li><code>/singleton/cultural_info/location/adherent/monument</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_diona.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/epsilon</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_human.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/human</code></li>
+<li><code>/singleton/cultural_info/location/human/earth</code></li>
+<li><code>/singleton/cultural_info/location/human/luna</code></li>
+<li><code>/singleton/cultural_info/location/human/venus</code></li>
+<li><code>/singleton/cultural_info/location/human/ceres</code></li>
+<li><code>/singleton/cultural_info/location/human/pluto</code></li>
+<li><code>/singleton/cultural_info/location/human/cetiepsilon</code></li>
+<li><code>/singleton/cultural_info/location/human/eos</code></li>
+<li><code>/singleton/cultural_info/location/human/terra</code></li>
+<li><code>/singleton/cultural_info/location/human/saffar</code></li>
+<li><code>/singleton/cultural_info/location/human/tadmor</code></li>
+<li><code>/singleton/cultural_info/location/human/pirx</code></li>
+<li><code>/singleton/cultural_info/location/human/brahe</code></li>
+<li><code>/singleton/cultural_info/location/human/iolaus</code></li>
+<li><code>/singleton/cultural_info/location/human/gaia</code></li>
+<li><code>/singleton/cultural_info/location/human/magnitka</code></li>
+<li><code>/singleton/cultural_info/location/human/castilla</code></li>
+<li><code>/singleton/cultural_info/location/human/fosters</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_other.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/stateless</code></li>
+<li><code>/singleton/cultural_info/location/other</code></li>
+<li><code>/singleton/cultural_info/location/deep_space</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_serpentids.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/tauwilo</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_skrell.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/qerrbalak</code></li>
+<li><code>/singleton/cultural_info/location/talamira</code></li>
+<li><code>/singleton/cultural_info/location/roasora</code></li>
+<li><code>/singleton/cultural_info/location/mitorqi</code></li>
+<li><code>/singleton/cultural_info/location/skrellspace</code></li>
+<li><code>/singleton/cultural_info/location/otherskrell</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_unathi.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/moghes</code></li>
+<li><code>/singleton/cultural_info/location/ouere</code></li>
+<li><code>/singleton/cultural_info/location/offworld</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/location/locations_vox.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/location/vox</code></li>
+<li><code>/singleton/cultural_info/location/vox/shroud</code></li>
+<li><code>/singleton/cultural_info/location/vox/ship</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/religion/religions_human.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/religion/other</code></li>
+<li><code>/singleton/cultural_info/religion/unstated</code></li>
+<li><code>/singleton/cultural_info/religion/jewish</code> </li>
+<li><code>/singleton/cultural_info/religion/hindu</code> </li>
+<li><code>/singleton/cultural_info/religion/buddhist</code> </li>
+<li><code>/singleton/cultural_info/religion/jain</code> </li>
+<li><code>/singleton/cultural_info/religion/sikh</code> </li>
+<li><code>/singleton/cultural_info/religion/muslim</code> </li>
+<li><code>/singleton/cultural_info/religion/christian</code> </li>
+<li><code>/singleton/cultural_info/religion/bahai</code> </li>
+<li><code>/singleton/cultural_info/religion/agnostic</code> </li>
+<li><code>/singleton/cultural_info/religion/deist</code> </li>
+<li><code>/singleton/cultural_info/religion/atheist</code> </li>
+<li><code>/singleton/cultural_info/religion/thelemite</code> </li>
+<li><code>/singleton/cultural_info/religion/spiritualism</code> </li>
+<li><code>/singleton/cultural_info/religion/shinto</code> </li>
+<li><code>/singleton/cultural_info/religion/taoist</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/religion/religions_skrell.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/religion/warble</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/religion/religions_unathi.dm</code>:
+<ul>
+<li><code>/singleton/cultural_info/religion/unathi</code></li>
+<li><code>/singleton/cultural_info/religion/unathi_precursors</code></li>
+<li><code>/singleton/cultural_info/religion/unathi_strat</code></li>
+<li><code>/singleton/cultural_info/religion/unathi_lights</code></li>
+<li><code>/singleton/cultural_info/religion/unathi_markesh</code></li>
+<li><code>/singleton/cultural_info/religion/unathi_ancestor</code></li>
+<li><code>/singleton/cultural_info/religion/unathi_aga_eakhe</code></li>
+</ul>
+</li>
+<li><code>mods/_master_files/code/modules/culture_descriptor/religion/religions_vox.dm</code>: <code>/singleton/cultural_info/religion/vox</code></li>
+</ul>
+<!--
+  Если ты добавлял новый модульный оверрайд, его нужно указать здесь.
+  Здесь указываются оверрайды в твоём моде и папке `_master_files`
+
+  Изменений нет - напиши "Отсутствуют"
+-->
+<hh3 id="дефайны">Дефайны</hh3>
+<ul>
+<li><code>code/__defines/~mods/expanded_culture_descriptor.dm</code>:
+<ul>
+<li><code>HOME_SYSTEM_UNATHI_TERSTEN</code></li>
+<li><code>FACTION_UNATHI_TERSTEN</code></li>
+<li><code>CULTURE_UNATHI_TERSTEN</code></li>
+<li><code>FACTION_ZENG_HU</code></li>
+<li><code>FACTION_WARD_TAKAHASHI</code></li>
+<li><code>FACTION_GRAYSON</code></li>
+<li><code>FACTION_AERTHER</code></li>
+<li><code>FACTION_MAJOR_BILL</code></li>
+<li><code>FACTION_FOCAL_POINT</code></li>
+<li><code>FACTION_XION</code></li>
+<li><code>FACTION_VEY_MED</code></li>
+<li><code>FACTION_BISHOP</code></li>
+<li><code>FACTION_MORPHEUS</code></li>
+<li><code>FACTION_ZPCI</code></li>
+<li><code>FACTION_SEPTENERGO</code></li>
+<li><code>CULTURE_HUMAN_LORRIMAN</code></li>
+<li><code>CULTURE_HUMAN_AVANOBLE</code></li>
+<li><code>CULTURE_HUMAN_AVACOMMON</code></li>
+<li><code>CULTURE_HUMAN_LORDUP</code></li>
+<li><code>CULTURE_HUMAN_LORDLOW</code></li>
+<li><code>CULTURE_HUMAN_MIRANIAN</code></li>
+<li><code>CULTURE_HUMAN_NYXIAN</code></li>
+<li><code>HOME_SYSTEM_TERSTEN</code></li>
+<li><code>HOME_SYSTEM_AVALON</code></li>
+<li><code>HOME_SYSTEM_MIRANIA</code></li>
+<li><code>HOME_SYSTEM_NYX_BRINKBURN</code></li>
+<li><code>HOME_SYSTEM_NYX_KALDARK</code></li>
+<li><code>HOME_SYSTEM_NYX_ROANOK</code></li>
+<li><code>HOME_SYSTEM_NYX_YUKLIT</code></li>
+<li><code>HOME_SYSTEM_NYX_CASSER</code></li>
+<li><code>FACTION_SKRELL_MED</code></li>
+<li><code>FACTION_SKRELL_AIR</code></li>
+<li><code>FACTION_SKRELL_FOOD</code></li>
+<li><code>FACTION_POSITRONICS</code></li>
+<li><code>HOME_SYSTEM_ROOT</code></li>
+<li><code>LANGUAGE_HUMAN_LORRIMAN</code></li>
+<li><code>LANGUAGE_HUMAN_AVALON</code></li>
+<li><code>LANGUAGE_HUMAN_MIRANIAN</code></li>
+</ul>
+</li>
+<li><code>code/__defines/culture.dm</code>:
+<ul>
+<li><code>TAG_CULTURE</code></li>
+<li><code>TAG_HOMEWORLD</code></li>
+<li><code>TAG_FACTION</code></li>
+<li><code>TAG_RELIGION</code></li>
+</ul>
+</li>
+</ul>
+<!--
+  Если требовалось добавить какие-либо дефайны, укажи файлы,
+  в которые ты их добавил, а также перечисли имена.
+  И то же самое, если ты используешь дефайны, определённые другим модом.
+
+  Не используешь - напиши "Отсутствуют"
+-->
+<hh3 id="используемые-файлы-не-содержащиеся-в-модпаке">Используемые файлы, не содержащиеся в модпаке</hh3>
+<p>Отсутствуют</p>
+<!--
+  Будь то немодульный файл или модульный файл, который не содержится в папке,
+  принадлежащей этому конкретному моду, он должен быть упомянут здесь.
+  Хорошими примерами являются иконки или звуки, которые используются одновременно
+  несколькими модулями, или что-либо подобное.
+-->
+<hh3 id="авторы">Авторы:</hh3>
+<p>UEDHighCommand</p>
+<!--
+  Здесь находится твой никнейм
+  Если работал совместно - никнеймы тех, кто помогал.
+  В случае порта чего-либо должна быть ссылка на источник.
+--></td></tr></table></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

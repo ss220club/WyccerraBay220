@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;mob&#x2F;living - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="mob/living.html#var">Var Details</a> - <a href="mob/living.html#proc">Proc Details</a></header>
+<main>
+<h1>living <aside>/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/ai/ai_holder.dm#L30">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;ai&#x2F;ai_holder.dm 30"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="mob/living.html#var/can_be_buckled">can_be_buckled</a></th><td>Whether or not the mob can be buckled to things.</td></tr>
+            <tr><th><a href="mob/living.html#var/is_typing">is_typing</a></th><td>Whether this mob is currently typing, if piloted by a player.</td></tr>
+            <tr><th><a href="mob/living.html#var/jumping">jumping</a></th><td>For leaping and vaulting</td></tr>
+            <tr><th><a href="mob/living.html#var/traits">traits</a></th><td>An associative list of /singleton/trait and trait level - See individual traits for valid levels</td></tr>
+            <tr><th><a href="mob/living.html#var/typing_indicator">typing_indicator</a></th><td>If this mob is or was piloted by a player with typing indicators enabled, an instance of one.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="mob/living.html#proc/add_to_dead_mob_list">add_to_dead_mob_list</a></th><td>Death Handling</td></tr>
+            <tr><th><a href="mob/living.html#proc/aura_check">aura_check</a></th><td>Checks the mob for auras and interactions of the given type.</td></tr>
+            <tr><th><a href="mob/living.html#proc/can_centcom_reply">can_centcom_reply</a></th><td>new ban stuff
+new ban stuff
+<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>WARNING!</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>**
+The jobban stuff looks mangled and disgusting
+But it looks beautiful in-game
+-Nodrak
+**<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>WARNING!</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></td></tr>
+            <tr><th><a href="mob/living.html#proc/get_AI_stance">get_AI_stance</a></th><td>Helper proc to check for the AI's stance.
+Returns null if there's no AI holder, or the mob has a player and autopilot is not on.
+Otherwise returns the stance.</td></tr>
+            <tr><th><a href="mob/living.html#proc/has_AI">has_AI</a></th><td>Similar to <code>get_ai_stance()</code> but only returns 1 or 0.</td></tr>
+            <tr><th><a href="mob/living.html#proc/hit_with_weapon">hit_with_weapon</a></th><td>Called when the mob is hit with an item in combat. Returns the blocked result</td></tr>
+            <tr><th><a href="mob/living.html#proc/holster_verb">holster_verb</a></th><td>Verb to handle quick-holstering an item in the mob's active hand, or retrieving an item from this atom's holster
+extension.</td></tr>
+            <tr><th><a href="mob/living.html#proc/is_AI_busy">is_AI_busy</a></th><td>Set an AI's busy status. Stops the mob from performing any actions while true.</td></tr>
+            <tr><th><a href="mob/living.html#proc/resolve_right_click_attack">resolve_right_click_attack</a></th><td>Called when an unarmed attack performed with right click hasn't been stopped by the LIVING_UNARMED_ATTACK_BLOCKED macro.
+This will call a secondary attack proc that can vary from mob type to mob type on the target.
+Sometimes, a target is interacted differently when right_clicked, in that case the secondary attack proc should return
+a SECONDARY_ATTACK_* value that's not SECONDARY_ATTACK_CALL_NORMAL.
+Otherwise, it should just return SECONDARY_ATTACK_CALL_NORMAL. Failure to do so will result in an exception (runtime error).</td></tr>
+            <tr><th><a href="mob/living.html#proc/resolve_unarmed_attack">resolve_unarmed_attack</a></th><td>Called when the unarmed attack hasn't been stopped by the LIVING_UNARMED_ATTACK_BLOCKED macro or the right_click_attack_chain proc.
+This will call an attack proc that can vary from mob type to mob type on the target.</td></tr>
+            <tr><th><a href="mob/living.html#proc/right_click_attack_chain">right_click_attack_chain</a></th><td>Checks for RIGHT_CLICK in modifiers and runs resolve_right_click_attack if so. Returns TRUE if normal chain blocked.</td></tr>
+            <tr><th><a href="mob/living.html#proc/set_AI_busy">set_AI_busy</a></th><td>Helper proc to turn AI 'busy' mode on or off without having to check if there is an AI, to simplify writing code.</td></tr>
+            <tr><th><a href="mob/living.html#proc/set_stat">set_stat</a></th><td>Stat Handling</td></tr>
+            <tr><th><a href="mob/living.html#proc/shared_living_tgui_distance">shared_living_tgui_distance</a></th><td>public</td></tr>
+            <tr><th><a href="mob/living.html#proc/shared_living_tgui_distance_bigscreen">shared_living_tgui_distance_bigscreen</a></th><td>public</td></tr>
+            <tr><th><a href="mob/living.html#proc/taunt">taunt</a></th><td>'Taunts' the AI into attacking the taunter.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/can_be_buckled"><aside class="declaration">var </aside>can_be_buckled
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/living/living_defines.dm#L6">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;living_defines.dm 6"/></a></h3>
+        <p>Whether or not the mob can be buckled to things.</p><h3 id="var/is_typing"><aside class="declaration">var </aside>is_typing
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/controllers/subsystems/typing.dm#L203">
+        <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;typing.dm 203"/></a></h3>
+        <p>Whether this mob is currently typing, if piloted by a player.</p><h3 id="var/jumping"><aside class="declaration">var </aside>jumping
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/living/living_defines.dm#L59">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;living_defines.dm 59"/></a></h3>
+        <p>For leaping and vaulting</p><h3 id="var/traits"><aside class="declaration">var </aside>traits
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/living/living_health.dm#L1">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;living_health.dm 1"/></a></h3>
+        <p>An associative list of /singleton/trait and trait level - See individual traits for valid levels</p><h3 id="var/typing_indicator"><aside class="declaration">var </aside>typing_indicator
+            <aside>&ndash; /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/typing_indicator</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/controllers/subsystems/typing.dm#L199">
+        <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;typing.dm 199"/></a></h3>
+        <p>If this mob is or was piloted by a player with typing indicators enabled, an instance of one.</p><h2 id="proc">Proc Details</h2><h3 id="proc/add_to_dead_mob_list">add_to_dead_mob_list<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/observation/death.dm#L19">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;observation&#x2F;death.dm 19"/></a></aside>
+        </h3>
+        <p>Death Handling</p><h3 id="proc/aura_check"><aside class="declaration">proc </aside>aura_check<aside>(type) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/living/living_defense.dm#L82">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;living_defense.dm 82"/></a></aside>
+        </h3>
+        <p>Checks the mob for auras and interactions of the given type.</p>
+<p>Calls one of the <code>aura_check_*</code> procs for each aura in the mobs <code>auras</code> list, based on type provided.
+All parameters after <code>type</code> are passed on to the called proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>type</code> (String - One of <code>AURA_TYPE_*</code>) - The type of check to be performed any any found auras.</li>
+<li>Additional parameters depend on aura type:
+<ul>
+<li><code>AURA_TYPE_WEAPON (obj/item/weapon, mob/user, click_params)</code>:
+<ul>
+<li><code>weapon</code> - The item used to attack/interact with the mob.</li>
+<li><code>attacker</code> - The mob performing the attack/interaction.</li>
+<li><code>click_params</code> - List of click parameters.</li>
+</ul>
+</li>
+<li><code>AURA_TYPE_BULLET (obj/item/projectile/proj, def_zone)</code>:
+<ul>
+<li><code>proj</code> - Projectile impacting the mob.</li>
+<li><code>def_zone</code> - Impacted body part target zone.</li>
+</ul>
+</li>
+<li><code>AURA_TYPE_THROWN (atom/movable/thrown_atom, datum/thrownthing/thrown_datum)</code>:
+<ul>
+<li><code>thrown_atom</code> - Atom impacting the mob.</li>
+<li><code>thrown_datum</code> - thrownthing datum instance for the throw chain.</li>
+</ul>
+</li>
+<li><code>AURA_TYPE_LIFE</code> (No additional parameters)</li>
+</ul>
+</li>
+</ul>
+<p>Returns boolean - <code>TRUE</code> if no auras were found or if no auras passed <code>AURA_FALSE</code> in their checks.
+Generally, a <code>FALSE</code> return value means the aura blocks further interaction.</p><h3 id="proc/can_centcom_reply"><aside class="declaration">proc </aside>can_centcom_reply<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/topic.dm#L2175">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;topic.dm 2175"/></a></aside>
+        </h3>
+        <p>new ban stuff
+new ban stuff
+<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>WARNING!</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>**
+The jobban stuff looks mangled and disgusting
+But it looks beautiful in-game
+-Nodrak
+**<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>WARNING!</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><h3 id="proc/get_AI_stance"><aside class="declaration">proc </aside>get_AI_stance<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/ai/ai_holder.dm#L407">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;ai&#x2F;ai_holder.dm 407"/></a></aside>
+        </h3>
+        <p>Helper proc to check for the AI's stance.
+Returns null if there's no AI holder, or the mob has a player and autopilot is not on.
+Otherwise returns the stance.</p><h3 id="proc/has_AI"><aside class="declaration">proc </aside>has_AI<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/ai/ai_holder.dm#L415">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;ai&#x2F;ai_holder.dm 415"/></a></aside>
+        </h3>
+        <p>Similar to <code>get_ai_stance()</code> but only returns 1 or 0.</p><h3 id="proc/hit_with_weapon"><aside class="declaration">proc </aside>hit_with_weapon<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/I, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, effective_force, hit_zone) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/living/living_defense.dm#L135">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;living_defense.dm 135"/></a></aside>
+        </h3>
+        <p>Called when the mob is hit with an item in combat. Returns the blocked result</p><h3 id="proc/holster_verb"><aside class="declaration">verb </aside>holster_verb<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/extensions/holster/holster.dm#L115">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;extensions&#x2F;holster&#x2F;holster.dm 115"/></a></aside>
+        </h3>
+        <p>Verb to handle quick-holstering an item in the mob's active hand, or retrieving an item from this atom's holster
+extension.</p><h3 id="proc/is_AI_busy"><aside class="declaration">proc </aside>is_AI_busy<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/ai/ai_holder.dm#L397">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;ai&#x2F;ai_holder.dm 397"/></a></aside>
+        </h3>
+        <p>Set an AI's busy status. Stops the mob from performing any actions while true.</p><h3 id="proc/resolve_right_click_attack"><aside class="declaration">proc </aside>resolve_right_click_attack<aside>(/<a href="atom.html">atom</a>/target, /list/modifiers) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/other_mobs.dm#L135">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;other_mobs.dm 135"/></a></aside>
+        </h3>
+        <p>Called when an unarmed attack performed with right click hasn't been stopped by the LIVING_UNARMED_ATTACK_BLOCKED macro.
+This will call a secondary attack proc that can vary from mob type to mob type on the target.
+Sometimes, a target is interacted differently when right_clicked, in that case the secondary attack proc should return
+a SECONDARY_ATTACK_* value that's not SECONDARY_ATTACK_CALL_NORMAL.
+Otherwise, it should just return SECONDARY_ATTACK_CALL_NORMAL. Failure to do so will result in an exception (runtime error).</p><h3 id="proc/resolve_unarmed_attack"><aside class="declaration">proc </aside>resolve_unarmed_attack<aside>(/<a href="atom.html">atom</a>/attack_target, /list/modifiers) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/other_mobs.dm#L45">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;other_mobs.dm 45"/></a></aside>
+        </h3>
+        <p>Called when the unarmed attack hasn't been stopped by the LIVING_UNARMED_ATTACK_BLOCKED macro or the right_click_attack_chain proc.
+This will call an attack proc that can vary from mob type to mob type on the target.</p><h3 id="proc/right_click_attack_chain"><aside class="declaration">proc </aside>right_click_attack_chain<aside>(/<a href="atom.html">atom</a>/target, /list/modifiers) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/other_mobs.dm#L49">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;other_mobs.dm 49"/></a></aside>
+        </h3>
+        <p>Checks for RIGHT_CLICK in modifiers and runs resolve_right_click_attack if so. Returns TRUE if normal chain blocked.</p><h3 id="proc/set_AI_busy"><aside class="declaration">proc </aside>set_AI_busy<aside>(value) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/ai/ai_holder.dm#L392">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;ai&#x2F;ai_holder.dm 392"/></a></aside>
+        </h3>
+        <p>Helper proc to turn AI 'busy' mode on or off without having to check if there is an AI, to simplify writing code.</p><h3 id="proc/set_stat">set_stat<aside>(new_stat) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/observation/stat_set.dm#L20">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;observation&#x2F;stat_set.dm 20"/></a></aside>
+        </h3>
+        <p>Stat Handling</p><h3 id="proc/shared_living_tgui_distance"><aside class="declaration">proc </aside>shared_living_tgui_distance<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/src_object, viewcheck) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/states.dm#L107">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;states.dm 107"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Distance versus interaction check.</p>
+<p>required src_object atom/movable The object which owns the UI.</p>
+<p>return UI_state The state of the UI.</p><h3 id="proc/shared_living_tgui_distance_bigscreen"><aside class="declaration">proc </aside>shared_living_tgui_distance_bigscreen<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/src_object, viewcheck) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/states.dm#L130">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;states.dm 130"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Distance versus interaction check, with max'd update range.</p>
+<p>required src_object atom/movable The object which owns the UI.</p>
+<p>return UI_state The state of the UI.</p><h3 id="proc/taunt"><aside class="declaration">proc </aside>taunt<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/taunter, force_target_switch) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/ai/ai_holder.dm#L419">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;ai&#x2F;ai_holder.dm 419"/></a></aside>
+        </h3>
+        <p>'Taunts' the AI into attacking the taunter.</p></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

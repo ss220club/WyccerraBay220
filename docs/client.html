@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;client - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="client.html#var">Var Details</a> - <a href="client.html#proc">Proc Details</a></header>
+<main>
+<h1>client <aside>/<a href="client.html">client</a></aside><aside> inherits /<a href="datum.html">datum</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/hud/skybox.dm#L13">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;hud&#x2F;skybox.dm 13"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="client.html#var/admin_music_volume">admin_music_volume</a></th><td>Copyright (c) 2020 Aleksej Komarov
+SPDX-License-Identifier: MIT
+Admin music volume, from 0 to 1.</td></tr>
+            <tr><th><a href="client.html#var/completed_asset_jobs">completed_asset_jobs</a></th><td>List of all completed blocking send jobs awaiting acknowledgement by send_asset</td></tr>
+            <tr><th><a href="client.html#var/connection_realtime">connection_realtime</a></th><td>world.realtime they connected</td></tr>
+            <tr><th><a href="client.html#var/connection_time">connection_time</a></th><td>world.time they connected</td></tr>
+            <tr><th><a href="client.html#var/connection_timeofday">connection_timeofday</a></th><td>world.timeofday they connected</td></tr>
+            <tr><th><a href="client.html#var/key_combos_held">key_combos_held</a></th><td>A buffer for combinations such of modifiers + keys (ex: CtrlD, AltE, ShiftT). Format: <code>&quot;key&quot;</code> -&gt; <code>&quot;combo&quot;</code> (ex: <code>&quot;D&quot;</code> -&gt; <code>&quot;CtrlD&quot;</code>)</td></tr>
+            <tr><th><a href="client.html#var/keys_held">keys_held</a></th><td>A buffer of currently held keys.</td></tr>
+            <tr><th><a href="client.html#var/last_asset_job">last_asset_job</a></th><td>Last asset send job id.</td></tr>
+            <tr><th><a href="client.html#var/last_move_dir_pressed">last_move_dir_pressed</a></th><td>Movement dir of the most recently pressed movement key. Used in cardinal-only movement mode.</td></tr>
+            <tr><th><a href="client.html#var/movement_keys">movement_keys</a></th><td>Custom movement keys for this client</td></tr>
+            <tr><th><a href="client.html#var/movement_locked">movement_locked</a></th><td>Are we locking our movement input?</td></tr>
+            <tr><th><a href="client.html#var/next_ambience_time">next_ambience_time</a></th><td>The next threshold time for the client to be able to play basic ambience sounds.</td></tr>
+            <tr><th><a href="client.html#var/next_move_dir_add">next_move_dir_add</a></th><td>On next move, add this dir to the move that would otherwise be done</td></tr>
+            <tr><th><a href="client.html#var/next_move_dir_sub">next_move_dir_sub</a></th><td>On next move, subtract this dir from the move that would otherwise be done</td></tr>
+            <tr><th><a href="client.html#var/playing_vent_ambience">playing_vent_ambience</a></th><td>Whether or not the client is currently playing the &quot;ship hum&quot; ambience sound.</td></tr>
+            <tr><th><a href="client.html#var/selected_target">selected_target</a></th><td>List that stores the object and parameters related to the selected target during mouse events in the client. Allows the client to remember the target selected during a &quot;MouseDown&quot; event or update the selection during a &quot;MouseDrag&quot; event.</td></tr>
+            <tr><th><a href="client.html#var/tgui_cache_reloaded">tgui_cache_reloaded</a></th><td>global</td></tr>
+            <tr><th><a href="client.html#var/tgui_windows">tgui_windows</a></th><td>global</td></tr>
+            <tr><th><a href="client.html#var/tooltips">tooltips</a></th><td>datum that controls the displaying and hiding of tooltips</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="client.html#proc/asset_cache_confirm_arrival">asset_cache_confirm_arrival</a></th><td>Process asset cache client topic calls for &quot;asset_cache_confirm_arrival=[INT]&quot;</td></tr>
+            <tr><th><a href="client.html#proc/asset_cache_preload_data">asset_cache_preload_data</a></th><td>Process asset cache client topic calls for &quot;asset_cache_preload_data=[HTML+JSON_STRING]</td></tr>
+            <tr><th><a href="client.html#proc/asset_cache_update_json">asset_cache_update_json</a></th><td>Updates the client side stored html/json combo file used to keep track of what assets the client has between restarts/reconnects.</td></tr>
+            <tr><th><a href="client.html#proc/browse_queue_flush">browse_queue_flush</a></th><td>Blocks until all currently sending browser assets have been sent.
+Due to byond limitations, this proc will sleep for 1 client round trip even if the client has no pending asset sends.
+This proc will return an untrue value if it had to return before confirming the send, such as timeout or the client going away.</td></tr>
+            <tr><th><a href="client.html#proc/callproc">callproc</a></th><td>VERBS</td></tr>
+            <tr><th><a href="client.html#proc/fetch_bans">fetch_bans</a></th><td>Aliases to <code>_find_bans_in_connections()</code> with this client's <code>fetch_connections()</code> result.</td></tr>
+            <tr><th><a href="client.html#proc/fetch_connections">fetch_connections</a></th><td>Aliases to <code>_fetch_connections()</code> with this client's ckey, address, and CID.</td></tr>
+            <tr><th><a href="client.html#proc/fix_tgui_panel">fix_tgui_panel</a></th><td>tgui panel / chat troubleshooting verb</td></tr>
+            <tr><th><a href="client.html#proc/keyUp">keyUp</a></th><td>Check if the key is short enough to even be a real key</td></tr>
+            <tr><th><a href="client.html#proc/nanoclose">nanoclose</a></th><td>Called when a Nano UI window is closed
+This is how Nano handles closed windows
+It must be a verb so that it can be called using winset</td></tr>
+            <tr><th><a href="client.html#proc/reset_held_keys">reset_held_keys</a></th><td>Manually clears any held keys, in case due to lag or other undefined behavior a key gets stuck.</td></tr>
+            <tr><th><a href="client.html#proc/show_associated_bans">show_associated_bans</a></th><td>Aliases to <code>_show_associated_bans()</code> using this client's <code>fetch_bans()</code> result, ckey, IP address, and CID.</td></tr>
+            <tr><th><a href="client.html#proc/show_associated_connections">show_associated_connections</a></th><td>Aliases to <code>_show_associated_connections()</code> using this client's <code>fetch_connections()</code> result, ckey, IP address, and CID.</td></tr>
+            <tr><th><a href="client.html#proc/tguiclose">tguiclose</a></th><td>verb</td></tr>
+            <tr><th><a href="client.html#proc/update_special_keybinds">update_special_keybinds</a></th><td>Updates the keybinds for special keys</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/admin_music_volume"><aside class="declaration">var </aside>admin_music_volume
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui_panel/audio.dm#L7">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui_panel&#x2F;audio.dm 7"/></a></h3>
+        <p>Copyright (c) 2020 Aleksej Komarov
+SPDX-License-Identifier: MIT
+Admin music volume, from 0 to 1.</p><h3 id="var/completed_asset_jobs"><aside class="declaration">var </aside>completed_asset_jobs
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/asset_cache/asset_cache_client.dm#L5">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;asset_cache&#x2F;asset_cache_client.dm 5"/></a></h3>
+        <p>List of all completed blocking send jobs awaiting acknowledgement by send_asset</p><h3 id="var/connection_realtime"><aside class="declaration">var </aside>connection_realtime
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/client_defines.dm#L78">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;client_defines.dm 78"/></a></h3>
+        <p>world.realtime they connected</p><h3 id="var/connection_time"><aside class="declaration">var </aside>connection_time
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/client_defines.dm#L76">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;client_defines.dm 76"/></a></h3>
+        <p>world.time they connected</p><h3 id="var/connection_timeofday"><aside class="declaration">var </aside>connection_timeofday
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/client_helpers.dm#L1">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;client_helpers.dm 1"/></a></h3>
+        <p>world.timeofday they connected</p><h3 id="var/key_combos_held"><aside class="declaration">var </aside>key_combos_held
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L10">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 10"/></a></h3>
+        <p>A buffer for combinations such of modifiers + keys (ex: CtrlD, AltE, ShiftT). Format: <code>&quot;key&quot;</code> -&gt; <code>&quot;combo&quot;</code> (ex: <code>&quot;D&quot;</code> -&gt; <code>&quot;CtrlD&quot;</code>)</p><h3 id="var/keys_held"><aside class="declaration">var </aside>keys_held
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L8">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 8"/></a></h3>
+        <p>A buffer of currently held keys.</p><h3 id="var/last_asset_job"><aside class="declaration">var </aside>last_asset_job
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/asset_cache/asset_cache_client.dm#L7">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;asset_cache&#x2F;asset_cache_client.dm 7"/></a></h3>
+        <p>Last asset send job id.</p><h3 id="var/last_move_dir_pressed"><aside class="declaration">var </aside>last_move_dir_pressed
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L23">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 23"/></a></h3>
+        <p>Movement dir of the most recently pressed movement key. Used in cardinal-only movement mode.</p><h3 id="var/movement_keys"><aside class="declaration">var </aside>movement_keys
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L3">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 3"/></a></h3>
+        <p>Custom movement keys for this client</p><h3 id="var/movement_locked"><aside class="declaration">var </aside>movement_locked
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L5">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 5"/></a></h3>
+        <p>Are we locking our movement input?</p><h3 id="var/next_ambience_time"><aside class="declaration">var </aside>next_ambience_time
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/client_defines.dm#L39">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;client_defines.dm 39"/></a></h3>
+        <p>The next threshold time for the client to be able to play basic ambience sounds.</p><h3 id="var/next_move_dir_add"><aside class="declaration">var </aside>next_move_dir_add
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L16">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 16"/></a></h3>
+        <p>On next move, add this dir to the move that would otherwise be done</p><h3 id="var/next_move_dir_sub"><aside class="declaration">var </aside>next_move_dir_sub
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L18">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 18"/></a></h3>
+        <p>On next move, subtract this dir from the move that would otherwise be done</p><h3 id="var/playing_vent_ambience"><aside class="declaration">var </aside>playing_vent_ambience
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/client_defines.dm#L36">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;client_defines.dm 36"/></a></h3>
+        <p>Whether or not the client is currently playing the &quot;ship hum&quot; ambience sound.</p><h3 id="var/selected_target"><aside class="declaration">var </aside>selected_target
+            <aside>&ndash; /list/list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/client_defines.dm#L29">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;client_defines.dm 29"/></a></h3>
+        <p>List that stores the object and parameters related to the selected target during mouse events in the client. Allows the client to remember the target selected during a &quot;MouseDown&quot; event or update the selection during a &quot;MouseDrag&quot; event.</p><h3 id="var/tgui_cache_reloaded"><aside class="declaration">var </aside>tgui_cache_reloaded
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/external.dm#L163">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;external.dm 163"/></a></h3>
+        <p>global</p>
+<p>TRUE if cache was reloaded by tgui dev server at least once.</p><h3 id="var/tgui_windows"><aside class="declaration">var </aside>tgui_windows
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/external.dm#L156">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;external.dm 156"/></a></h3>
+        <p>global</p>
+<p>Tracks open windows for a user.</p><h3 id="var/tooltips"><aside class="declaration">var </aside>tooltips
+            <aside>&ndash; /<a href="datum.html">datum</a>/tooltip</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/client_defines.dm#L22">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;client_defines.dm 22"/></a></h3>
+        <p>datum that controls the displaying and hiding of tooltips</p><h2 id="proc">Proc Details</h2><h3 id="proc/asset_cache_confirm_arrival"><aside class="declaration">proc </aside>asset_cache_confirm_arrival<aside>(job_id) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/asset_cache/asset_cache_client.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;asset_cache&#x2F;asset_cache_client.dm 11"/></a></aside>
+        </h3>
+        <p>Process asset cache client topic calls for &quot;asset_cache_confirm_arrival=[INT]&quot;</p><h3 id="proc/asset_cache_preload_data"><aside class="declaration">proc </aside>asset_cache_preload_data<aside>(data) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/asset_cache/asset_cache_client.dm#L24">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;asset_cache&#x2F;asset_cache_client.dm 24"/></a></aside>
+        </h3>
+        <p>Process asset cache client topic calls for &quot;asset_cache_preload_data=[HTML+JSON_STRING]</p><h3 id="proc/asset_cache_update_json"><aside class="declaration">proc </aside>asset_cache_update_json<aside>(verify, /list/new_assets) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/asset_cache/asset_cache_client.dm#L36">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;asset_cache&#x2F;asset_cache_client.dm 36"/></a></aside>
+        </h3>
+        <p>Updates the client side stored html/json combo file used to keep track of what assets the client has between restarts/reconnects.</p><h3 id="proc/browse_queue_flush"><aside class="declaration">proc </aside>browse_queue_flush<aside>(timeout) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/asset_cache/asset_cache_client.dm#L47">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;asset_cache&#x2F;asset_cache_client.dm 47"/></a></aside>
+        </h3>
+        <p>Blocks until all currently sending browser assets have been sent.
+Due to byond limitations, this proc will sleep for 1 client round trip even if the client has no pending asset sends.
+This proc will return an untrue value if it had to return before confirming the send, such as timeout or the client going away.</p><h3 id="proc/callproc"><aside class="declaration">proc </aside>callproc<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/callproc/callproc.dm#L4">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;callproc&#x2F;callproc.dm 4"/></a></aside>
+        </h3>
+        <p>VERBS</p><h3 id="proc/fetch_bans"><aside class="declaration">proc </aside>fetch_bans<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/bancheck_functions.dm#L148">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;bancheck_functions.dm 148"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_find_bans_in_connections()</code> with this client's <code>fetch_connections()</code> result.</p>
+<p>Returns list of lists.</p><h3 id="proc/fetch_connections"><aside class="declaration">proc </aside>fetch_connections<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/connectioncheck_functions.dm#L82">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;connectioncheck_functions.dm 82"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_fetch_connections()</code> with this client's ckey, address, and CID.</p>
+<p>Returns list of lists.</p><h3 id="proc/fix_tgui_panel"><aside class="declaration">verb </aside>fix_tgui_panel<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/tgui_panel/tgui_panel_external.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;tgui_panel&#x2F;tgui_panel_external.dm 11"/></a></aside>
+        </h3>
+        <p>tgui panel / chat troubleshooting verb</p><h3 id="proc/keyUp"><aside class="declaration">verb </aside>keyUp<aside>(_key) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/bindings_client.dm#L70">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;bindings_client.dm 70"/></a></aside>
+        </h3>
+        <p>Check if the key is short enough to even be a real key</p><h3 id="proc/nanoclose"><aside class="declaration">verb </aside>nanoclose<aside>(uiref) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/nano/nanoexternal.dm#L10">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;nano&#x2F;nanoexternal.dm 10"/></a></aside>
+        </h3>
+        <p>Called when a Nano UI window is closed
+This is how Nano handles closed windows
+It must be a verb so that it can be called using winset</p>
+<p>@return nothing</p><h3 id="proc/reset_held_keys"><aside class="declaration">verb </aside>reset_held_keys<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/bindings_setup.dm#L67">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;bindings_setup.dm 67"/></a></aside>
+        </h3>
+        <p>Manually clears any held keys, in case due to lag or other undefined behavior a key gets stuck.</p>
+<p>Hardcoded to the ESC key.</p><h3 id="proc/show_associated_bans"><aside class="declaration">proc </aside>show_associated_bans<aside>(/<a href="mob.html">mob</a>/user, /list/bans) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/bancheck_functions.dm#L314">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;bancheck_functions.dm 314"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_show_associated_bans()</code> using this client's <code>fetch_bans()</code> result, ckey, IP address, and CID.</p>
+<p>Has no return value.</p><h3 id="proc/show_associated_connections"><aside class="declaration">proc </aside>show_associated_connections<aside>(/<a href="mob.html">mob</a>/user, /list/connections) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/connectioncheck_functions.dm#L261">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;connectioncheck_functions.dm 261"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_show_associated_connections()</code> using this client's <code>fetch_connections()</code> result, ckey, IP address, and CID.</p>
+<p>Has no return value.</p><h3 id="proc/tguiclose"><aside class="declaration">verb </aside>tguiclose<aside>(window_id) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/external.dm#L181">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;external.dm 181"/></a></aside>
+        </h3>
+        <p>verb</p>
+<p>Called by UIs when they are closed.
+Must be a verb so winset() can call it.</p>
+<p>required uiref ref The UI that was closed.</p><h3 id="proc/update_special_keybinds"><aside class="declaration">proc </aside>update_special_keybinds<aside>(/<a href="datum.html">datum</a>/<a href="datum/preferences.html">preferences</a>/direct_prefs) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/client.dm#L53">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;client.dm 53"/></a></aside>
+        </h3>
+        <p>Updates the keybinds for special keys</p>
+<p>Handles adding macros for the keys that need it
+And adding movement keys to the clients movement_keys list
+At the time of writing this, communication(OOC, Say, IC) require macros
+Arguments:</p>
+<ul>
+<li>direct_prefs - the preference we're going to get keybinds from</li>
+</ul></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

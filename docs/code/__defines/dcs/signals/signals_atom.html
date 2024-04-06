@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="code/__defines/dcs/signals/signals_atom.html#define">Define Details</a></header>
+<main>
+<h1>code/__defines/dcs/signals/signals_atom.dm 
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_ENTERED">COMSIG_ATOM_ENTERED</a></th><td>from base of atom/Entered(): (atom/movable/arrived, atom/old_loc, list/atom/old_locs)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_ENTERING">COMSIG_ATOM_ENTERING</a></th><td>Sent from the atom that just Entered src. From base of atom/Entered(): (/atom/destination, atom/old_loc, list/atom/old_locs)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_TTS_SEED_CHANGE">COMSIG_ATOM_TTS_SEED_CHANGE</a></th><td>from base of atom/change_tts_seed(): (mob/chooser, override, new_traits)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_TTS_CAST">COMSIG_ATOM_TTS_CAST</a></th><td>from base of atom/cast_tts: (mob/listener, message, atom/location, is_local, effect, traits, preSFX, postSFX)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_TTS_TRAIT_ADD">COMSIG_ATOM_TTS_TRAIT_ADD</a></th><td>from base of atom/tts_trait_add(): (trait)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_TTS_TRAIT_REMOVE">COMSIG_ATOM_TTS_TRAIT_REMOVE</a></th><td>from base of atom/tts_trait_remove(): (trait)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_ITEM_INTERACTION">COMSIG_ATOM_ITEM_INTERACTION</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is left-clicked on by a mob with an item
+Sent from the very beginning of the click chain, intended for generic atom-item interactions
+Args: (mob/living/user, obj/item/tool, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_ITEM_INTERACTION_SECONDARY">COMSIG_ATOM_ITEM_INTERACTION_SECONDARY</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is right-clicked on by a mob with an item
+Sent from the very beginning of the click chain, intended for generic atom-item interactions
+Args: (mob/living/user, obj/item/tool, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ITEM_INTERACTING_WITH_ATOM">COMSIG_ITEM_INTERACTING_WITH_ATOM</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, to an item clicking on an atom
+Args: (mob/living/user, atom/interacting_with, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ITEM_INTERACTING_WITH_ATOM_SECONDARY">COMSIG_ITEM_INTERACTING_WITH_ATOM_SECONDARY</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, to an item right-clicking on an atom
+Args: (mob/living/user, atom/interacting_with, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_TOOL_ACT">COMSIG_ATOM_TOOL_ACT</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is left-clicked on by a mob with a tool of a specific tool type
+Args: (mob/living/user, obj/item/tool)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_SECONDARY_TOOL_ACT">COMSIG_ATOM_SECONDARY_TOOL_ACT</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is right-clicked on by a mob with a tool of a specific tool type
+Args: (mob/living/user, obj/item/tool)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_TOOL_ACT_RESULT">COMSIG_ATOM_TOOL_ACT_RESULT</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when the interaction is complete. Use it as &quot;post-act&quot;
+Args: (mob/living/user, obj/item/tool, act_result)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_TOOL_ACT_EMPTY">COMSIG_ATOM_TOOL_ACT_EMPTY</a></th><td>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when the interaction has failed (no act_result)
+Args: (mob/living/user, obj/item/tool)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_TOOL_ATOM_ACTED_PRIMARY">COMSIG_TOOL_ATOM_ACTED_PRIMARY</a></th><td>Called from /atom/proc/tool_act (atom)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_TOOL_ATOM_ACTED_SECONDARY">COMSIG_TOOL_ATOM_ACTED_SECONDARY</a></th><td>Called from /atom/proc/tool_act (atom)</td></tr>
+        <tr><th><a href="code/__defines/dcs/signals/signals_atom.html#define/COMSIG_ATOM_EXAMINE">COMSIG_ATOM_EXAMINE</a></th><td>from base of atom/examine(): (/mob, list/examine_text)</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/COMSIG_ATOM_ENTERED"><aside class="declaration">#define </aside>COMSIG_ATOM_ENTERED
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 11"/></a>
+    </h3>
+    <p>from base of atom/Entered(): (atom/movable/arrived, atom/old_loc, list/atom/old_locs)</p><h3 id="define/COMSIG_ATOM_ENTERING"><aside class="declaration">#define </aside>COMSIG_ATOM_ENTERING
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L13">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 13"/></a>
+    </h3>
+    <p>Sent from the atom that just Entered src. From base of atom/Entered(): (/atom/destination, atom/old_loc, list/atom/old_locs)</p><h3 id="define/COMSIG_ATOM_EXAMINE"><aside class="declaration">#define </aside>COMSIG_ATOM_EXAMINE
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L67">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 67"/></a>
+    </h3>
+    <p>from base of atom/examine(): (/mob, list/examine_text)</p><h3 id="define/COMSIG_ATOM_ITEM_INTERACTION"><aside class="declaration">#define </aside>COMSIG_ATOM_ITEM_INTERACTION
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L28">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 28"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is left-clicked on by a mob with an item
+Sent from the very beginning of the click chain, intended for generic atom-item interactions
+Args: (mob/living/user, obj/item/tool, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_ATOM_ITEM_INTERACTION_SECONDARY"><aside class="declaration">#define </aside>COMSIG_ATOM_ITEM_INTERACTION_SECONDARY
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L33">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 33"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is right-clicked on by a mob with an item
+Sent from the very beginning of the click chain, intended for generic atom-item interactions
+Args: (mob/living/user, obj/item/tool, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_ATOM_SECONDARY_TOOL_ACT"><aside class="declaration">#define </aside>COMSIG_ATOM_SECONDARY_TOOL_ACT
+            <aside>(tooltype)</aside>
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L49">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 49"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is right-clicked on by a mob with a tool of a specific tool type
+Args: (mob/living/user, obj/item/tool)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_ATOM_TOOL_ACT"><aside class="declaration">#define </aside>COMSIG_ATOM_TOOL_ACT
+            <aside>(tooltype)</aside>
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L45">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 45"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when this atom is left-clicked on by a mob with a tool of a specific tool type
+Args: (mob/living/user, obj/item/tool)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_ATOM_TOOL_ACT_EMPTY"><aside class="declaration">#define </aside>COMSIG_ATOM_TOOL_ACT_EMPTY
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L57">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 57"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when the interaction has failed (no act_result)
+Args: (mob/living/user, obj/item/tool)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_ATOM_TOOL_ACT_RESULT"><aside class="declaration">#define </aside>COMSIG_ATOM_TOOL_ACT_RESULT
+            <aside>(tooltype)</aside>
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L53">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 53"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, when the interaction is complete. Use it as &quot;post-act&quot;
+Args: (mob/living/user, obj/item/tool, act_result)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_ATOM_TTS_CAST"><aside class="declaration">#define </aside>COMSIG_ATOM_TTS_CAST
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L18">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 18"/></a>
+    </h3>
+    <p>from base of atom/cast_tts: (mob/listener, message, atom/location, is_local, effect, traits, preSFX, postSFX)</p><h3 id="define/COMSIG_ATOM_TTS_SEED_CHANGE"><aside class="declaration">#define </aside>COMSIG_ATOM_TTS_SEED_CHANGE
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L16">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 16"/></a>
+    </h3>
+    <p>from base of atom/change_tts_seed(): (mob/chooser, override, new_traits)</p><h3 id="define/COMSIG_ATOM_TTS_TRAIT_ADD"><aside class="declaration">#define </aside>COMSIG_ATOM_TTS_TRAIT_ADD
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L20">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 20"/></a>
+    </h3>
+    <p>from base of atom/tts_trait_add(): (trait)</p><h3 id="define/COMSIG_ATOM_TTS_TRAIT_REMOVE"><aside class="declaration">#define </aside>COMSIG_ATOM_TTS_TRAIT_REMOVE
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L22">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 22"/></a>
+    </h3>
+    <p>from base of atom/tts_trait_remove(): (trait)</p><h3 id="define/COMSIG_ITEM_INTERACTING_WITH_ATOM"><aside class="declaration">#define </aside>COMSIG_ITEM_INTERACTING_WITH_ATOM
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L37">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 37"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, to an item clicking on an atom
+Args: (mob/living/user, atom/interacting_with, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_ITEM_INTERACTING_WITH_ATOM_SECONDARY"><aside class="declaration">#define </aside>COMSIG_ITEM_INTERACTING_WITH_ATOM_SECONDARY
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L41">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 41"/></a>
+    </h3>
+    <p>Sent from <a href="atom.html#proc/item_interaction" title="/atom">atom/proc/item_interaction</a>, to an item right-clicking on an atom
+Args: (mob/living/user, atom/interacting_with, list/modifiers)
+Return any ITEM_INTERACT_ flags as relevant (see tools.dm)</p><h3 id="define/COMSIG_TOOL_ATOM_ACTED_PRIMARY"><aside class="declaration">#define </aside>COMSIG_TOOL_ATOM_ACTED_PRIMARY
+            <aside>(tooltype)</aside>
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L62">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 62"/></a>
+    </h3>
+    <p>Called from /atom/proc/tool_act (atom)</p><h3 id="define/COMSIG_TOOL_ATOM_ACTED_SECONDARY"><aside class="declaration">#define </aside>COMSIG_TOOL_ATOM_ACTED_SECONDARY
+            <aside>(tooltype)</aside>
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/dcs/signals/signals_atom.dm#L64">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;dcs&#x2F;signals&#x2F;signals_atom.dm 64"/></a>
+    </h3>
+    <p>Called from /atom/proc/tool_act (atom)</p></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

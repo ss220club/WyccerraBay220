@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;preferences - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/preferences.html#var">Var Details</a> - <a href="datum/preferences.html#proc">Proc Details</a></header>
+<main>
+<h1>preferences <aside>/<a href="datum.html">datum</a>/<a href="datum/preferences.html">preferences</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preferences.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preferences.dm 11"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/preferences.html#var/background_icon_name">background_icon_name</a></th><td>Preview background currently set. Must be one of the keys from <code>character_preview_backgrounds</code> list</td></tr>
+            <tr><th><a href="datum/preferences.html#var/character_preview_backgrounds">character_preview_backgrounds</a></th><td>Pool of icons for character preview background</td></tr>
+            <tr><th><a href="datum/preferences.html#var/character_previews">character_previews</a></th><td>List of character preview as: dir =&gt; preview</td></tr>
+            <tr><th><a href="datum/preferences.html#var/key_bindings">key_bindings</a></th><td>Custom Keybindings</td></tr>
+            <tr><th><a href="datum/preferences.html#var/preview_backgrounds_cache">preview_backgrounds_cache</a></th><td>List of cached background icons, scaled for different sizes as: <code>size =&gt; list(icon_name =&gt; /icon)</code></td></tr>
+            <tr><th><a href="datum/preferences.html#var/preview_character_height">preview_character_height</a></th><td>Height of the icon on preview</td></tr>
+            <tr><th><a href="datum/preferences.html#var/preview_gear">preview_gear</a></th><td>Preference which defines whether to equip preview character with selected gear</td></tr>
+            <tr><th><a href="datum/preferences.html#var/preview_job">preview_job</a></th><td>Preference which defines whether to equip preview character with job equipment</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/preferences.html#proc/check_keybindings">check_keybindings</a></th><td>checks through keybindings for outdated unbound keys and updates them</td></tr>
+            <tr><th><a href="datum/preferences.html#proc/show_character_preview">show_character_preview</a></th><td>Due to how maps work in BYOND, we should have total height of preview icons multiples of <code>world.icon_size</code>.
+Otherwise part of the map will be empty.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/background_icon_name"><aside class="declaration">var </aside>background_icon_name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 11"/></a></h3>
+        <p>Preview background currently set. Must be one of the keys from <code>character_preview_backgrounds</code> list</p><h3 id="var/character_preview_backgrounds"><aside class="declaration">var </aside>character_preview_backgrounds
+            <aside>&ndash; /static/list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L17">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 17"/></a></h3>
+        <p>Pool of icons for character preview background</p><h3 id="var/character_previews"><aside class="declaration">var </aside>character_previews
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L13">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 13"/></a></h3>
+        <p>List of character preview as: dir =&gt; preview</p><h3 id="var/key_bindings"><aside class="declaration">var </aside>key_bindings
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/preference_setup.dm#L3">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;preference_setup.dm 3"/></a></h3>
+        <p>Custom Keybindings</p><h3 id="var/preview_backgrounds_cache"><aside class="declaration">var </aside>preview_backgrounds_cache
+            <aside>&ndash; /static/list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L15">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 15"/></a></h3>
+        <p>List of cached background icons, scaled for different sizes as: <code>size =&gt; list(icon_name =&gt; /icon)</code></p><h3 id="var/preview_character_height"><aside class="declaration">var </aside>preview_character_height
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L9">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 9"/></a></h3>
+        <p>Height of the icon on preview</p><h3 id="var/preview_gear"><aside class="declaration">var </aside>preview_gear
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L7">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 7"/></a></h3>
+        <p>Preference which defines whether to equip preview character with selected gear</p><h3 id="var/preview_job"><aside class="declaration">var </aside>preview_job
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L5">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 5"/></a></h3>
+        <p>Preference which defines whether to equip preview character with job equipment</p><h2 id="proc">Proc Details</h2><h3 id="proc/check_keybindings"><aside class="declaration">proc </aside>check_keybindings<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/ssinput/code/general/preferences.dm#L18">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;ssinput&#x2F;code&#x2F;general&#x2F;preferences.dm 18"/></a></aside>
+        </h3>
+        <p>checks through keybindings for outdated unbound keys and updates them</p><h3 id="proc/show_character_preview"><aside class="declaration">proc </aside>show_character_preview<aside>(/mutable_appearance/char_appearance) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/client/preference_setup/general/05_preview.dm#L116">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;client&#x2F;preference_setup&#x2F;general&#x2F;05_preview.dm 116"/></a></aside>
+        </h3>
+        <p>Due to how maps work in BYOND, we should have total height of preview icons multiples of <code>world.icon_size</code>.
+Otherwise part of the map will be empty.</p></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

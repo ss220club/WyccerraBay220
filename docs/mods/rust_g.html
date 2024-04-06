@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>mods&#x2F;rust_g&#x2F;README.md - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+</header>
+<main>
+<h1>mods/rust_g/README.md 
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/rust_g/README.md">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;rust_g&#x2F;README.md"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><td colspan="2"><hh4 id="список-prов">Список PRов:</hh4>
+<ul>
+<li>https://github.com/SierraBay/SierraBay12/pull/1467</li>
+</ul>
+<!--
+  Ссылки на PRы, связанные с модом:
+  - Создание
+  - Большие изменения
+-->
+<!-- Название мода. Не важно на русском или на английском. -->
+<hh2 id="rustg">RustG</hh2>
+<p>ID мода: RUST_G</p>
+<!--
+  Название модпака прописными буквами, СОЕДИНЁННЫМИ_ПОДЧЁРКИВАНИЕМ,
+  которое ты будешь использовать для обозначения файлов.
+-->
+<hh3 id="описание-мода">Описание мода</hh3>
+<p>Мод добавляет поддержку растижки - написанной на языке RUST библиотеки, которая
+позволяет заменить более быстрыми те функции BYOND'а, которые он делает медленно.</p>
+<!--
+  Что он делает, что добавляет: что, куда, зачем и почему - всё здесь.
+  А также любая полезная информация.
+-->
+<hh3 id="изменения-кор-кода">Изменения <em>кор кода</em></hh3>
+<ul>
+<li><code>code/_macros.dm</code>: <code>#define to_world_log</code></li>
+<li><code>code/_helpers/logging.dm</code>: <code>/proc/game_log()</code></li>
+<li><code>code/controllers/master.dm</code>: <code>/datum/controller/master/New()</code></li>
+<li><code>code/controllers/subsystems/garbage.dm</code>: <code>/datum/controller/subsystem/garbage/Shutdown()</code></li>
+<li><code>code/datums/helper_datums/getrev.dm</code>: <code>/datum/getrev/New()</code></li>
+<li><code>code/game/world.dm</code>:
+<ul>
+<li><code>/world/New()</code></li>
+<li><code>/world/Topic()</code></li>
+<li><code>/world/Reboot()</code></li>
+</ul>
+</li>
+<li><code>code/modules/persistence/persistence_datum.dm</code>: <code>/datum/persistent/proc/Shutdown()</code></li>
+</ul>
+<!--
+  Если вы редактировали какие-либо процедуры или переменные в кор коде,
+  они должны быть указаны здесь.
+  Нужно указать и файл, и процедуры/переменные.
+
+  Изменений нет - напиши "Отсутствуют"
+-->
+<hh3 id="оверрайды">Оверрайды</hh3>
+<ul>
+<li><code>mods/_master_files/code/game/world.dm</code>: <code>/world/save_mode()</code></li>
+<li><code>mods/_master_files/code/modules/client/preferences_persist.dm</code>: <code>/datum/preferences/save_pref_record()</code></li>
+</ul>
+<!--
+  Если ты добавлял новый модульный оверрайд, его нужно указать здесь.
+  Здесь указываются оверрайды в твоём моде и папке `_master_files`
+
+  Изменений нет - напиши "Отсутствуют"
+-->
+<hh3 id="дефайны">Дефайны</hh3>
+<ul>
+<li><code>code/__defines/~mods/rust_g.dm</code>:
+<ul>
+<li><code>RUST_G</code></li>
+<li><code>RUSTG_OVERRIDE_BUILTINS</code></li>
+<li><code>RUSTG_CALL</code></li>
+<li><code>rustg_setup_acreplace</code></li>
+<li><code>rustg_setup_acreplace_with_options</code></li>
+<li><code>rustg_acreplace</code></li>
+<li><code>rustg_acreplace_with_replacements</code></li>
+<li><code>rustg_cnoise_generate</code></li>
+<li><code>rustg_dmi_strip_metadata</code></li>
+<li><code>rustg_dmi_create_png</code></li>
+<li><code>rustg_dmi_resize_png</code></li>
+<li><code>rustg_dmi_icon_states</code></li>
+<li><code>rustg_file_read</code></li>
+<li><code>rustg_file_exists</code></li>
+<li><code>rustg_file_write</code></li>
+<li><code>rustg_file_append</code></li>
+<li><code>rustg_file_get_line_count</code></li>
+<li><code>rustg_file_seek_line</code></li>
+<li><code>rustg_git_revparse</code></li>
+<li><code>rustg_git_commit_date</code></li>
+<li><code>RUSTG_HTTP_METHOD_GET</code></li>
+<li><code>RUSTG_HTTP_METHOD_PUT</code></li>
+<li><code>RUSTG_HTTP_METHOD_DELETE</code></li>
+<li><code>RUSTG_HTTP_METHOD_PATCH</code></li>
+<li><code>RUSTG_HTTP_METHOD_HEAD</code></li>
+<li><code>RUSTG_HTTP_METHOD_POST</code></li>
+<li><code>rustg_http_request_blocking</code></li>
+<li><code>rustg_http_request_async</code></li>
+<li><code>rustg_http_check_request</code></li>
+<li><code>RUSTG_JOB_NO_RESULTS_YET</code></li>
+<li><code>RUSTG_JOB_NO_SUCH_JOB</code></li>
+<li><code>RUSTG_JOB_ERROR</code></li>
+<li><code>rustg_json_is_valid</code></li>
+<li><code>rustg_log_write</code></li>
+<li><code>rustg_log_write_formatted</code></li>
+<li><code>rustg_log_write_no_format</code></li>
+<li><code>rustg_noise_get_at_coordinates</code></li>
+<li><code>rustg_sql_connect_pool</code></li>
+<li><code>rustg_sql_query_async</code></li>
+<li><code>rustg_sql_query_blocking</code></li>
+<li><code>rustg_sql_connected</code></li>
+<li><code>rustg_sql_disconnect_pool</code></li>
+<li><code>rustg_sql_check_query</code></li>
+<li><code>rustg_time_microseconds</code></li>
+<li><code>rustg_time_milliseconds</code></li>
+<li><code>rustg_time_reset</code></li>
+<li><code>rustg_raw_read_toml_file</code></li>
+<li><code>rustg_raw_toml_encode</code></li>
+<li><code>rustg_url_encode</code></li>
+<li><code>rustg_url_decode</code></li>
+</ul>
+</li>
+</ul>
+<!--
+  Если требовалось добавить какие-либо дефайны, укажи файлы,
+  в которые ты их добавил, а также перечисли имена.
+  И то же самое, если ты используешь дефайны, определённые другим модом.
+
+  Не используешь - напиши "Отсутствуют"
+-->
+<hh3 id="используемые-файлы-не-содержащиеся-в-модпаке">Используемые файлы, не содержащиеся в модпаке</hh3>
+<ul>
+<li><code>scripts/install-rust_g.sh</code></li>
+</ul>
+<!--
+  Будь то немодульный файл или модульный файл, который не содержится в папке,
+  принадлежащей этому конкретному моду, он должен быть упомянут здесь.
+  Хорошими примерами являются иконки или звуки, которые используются одновременно
+  несколькими модулями, или что-либо подобное.
+-->
+<hh3 id="авторы">Авторы:</hh3>
+<p>SuhEugene</p>
+<!--
+  Здесь находится твой никнейм
+  Если работал совместно - никнеймы тех, кто помогал.
+  В случае порта чего-либо должна быть ссылка на источник.
+--></td></tr></table></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

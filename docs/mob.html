@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;mob - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="mob.html#var">Var Details</a> - <a href="mob.html#proc">Proc Details</a></header>
+<main>
+<h1>mob <aside>/<a href="mob.html">mob</a></aside><aside> inherits /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/hud/fullscreen.dm#L2">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;hud&#x2F;fullscreen.dm 2"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="mob.html#var/confused">confused</a></th><td>Positive Integer. The mob's current confusion level. Ticks down every <code>Fire()</code> in SSMobs. See <code>set_confused()</code>, <code>mod_confused()</code>, <code>clear_confused()</code>, and <code>is_confused()</code>.</td></tr>
+            <tr><th><a href="mob.html#var/do_unique_user_handle">do_unique_user_handle</a></th><td>Integer. Unique sequential ID from the <code>do_after</code> proc used to validate <code>DO_USER_UNIQUE_ACT</code> flag checks.</td></tr>
+            <tr><th><a href="mob.html#var/logout_time">logout_time</a></th><td>Integer or null. Stores the <code>world.time</code> value at the time of <code>Logout()</code>. If <code>null</code>, the mob is either considered logged in or has never logged out.</td></tr>
+            <tr><th><a href="mob.html#var/renderers">renderers</a></th><td>Renderers on /mob
+We attach renderers to mobs for their lifespan. Only mobs with clients get
+renderers, and they are removed again when the mob loses its client. Mobs
+get their own unique renderer instances but it would not be inconceivable
+to share them globally.
+The list of renderers associated with this mob.</td></tr>
+            <tr><th><a href="mob.html#var/see_black">see_black</a></th><td>Sight Set Handling</td></tr>
+            <tr><th><a href="mob.html#var/tgui_open_uis">tgui_open_uis</a></th><td>global</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="mob.html#proc/AltClickOn">AltClickOn</a></th><td>Called when the mob alt+clicks on an atom. By default, this calls the targeted atom's <code>on_click/alt</code> extension's <code>on_click()</code> proc, or the atom's <code>AltClick()</code> proc.</td></tr>
+            <tr><th><a href="mob.html#proc/AltShiftClickOn">AltShiftClickOn</a></th><td>Called when the mob alt+shift+clicks on an atom. By default, this calls the atom's <code>AltShiftClick()</code> proc.</td></tr>
+            <tr><th><a href="mob.html#proc/CreateRenderers">CreateRenderers</a></th><td>Creates the mob's renderers on /Login()</td></tr>
+            <tr><th><a href="mob.html#proc/CtrlAltClickOn">CtrlAltClickOn</a></th><td>Called when the mob ctrl+alt+clicks on an atom. By default, this calls the atom's <code>CtrlAltClick()</code> proc or calls the mob's <code>pointed()</code> proc.</td></tr>
+            <tr><th><a href="mob.html#proc/CtrlAltShiftClickOn">CtrlAltShiftClickOn</a></th><td>Called when the mob ctrl+alt+shift+clicks on an atom. By default, this calls the atom's <code>CtrlAltShiftClick()</code> proc.</td></tr>
+            <tr><th><a href="mob.html#proc/CtrlClickOn">CtrlClickOn</a></th><td>Called when the mob ctrl+clicks on an atom. By default, this calls the targeted atom's <code>CtrlClick()</code> proc.</td></tr>
+            <tr><th><a href="mob.html#proc/CtrlShiftClickOn">CtrlShiftClickOn</a></th><td>Called when the mob ctrl+shift+clicks on an atom. By default, calls the atom's <code>CtrlShiftClick()</code> proc.</td></tr>
+            <tr><th><a href="mob.html#proc/GetAllHeld">GetAllHeld</a></th><td>Fetches all held items of the given path.</td></tr>
+            <tr><th><a href="mob.html#proc/HandsEmpty">HandsEmpty</a></th><td>Whether or not the mob's hands or other holding slots are empty. Returns boolean.</td></tr>
+            <tr><th><a href="mob.html#proc/HasFreeHand">HasFreeHand</a></th><td>Whether or not the mob has any free hands/holding slots.</td></tr>
+            <tr><th><a href="mob.html#proc/IsHolding">IsHolding</a></th><td>Checks if a given item or path is in any of the mob's hands or other holding slots.</td></tr>
+            <tr><th><a href="mob.html#proc/MiddleClickOn">MiddleClickOn</a></th><td>Called when a mob middle-clicks on an object. By default, this is used only as a hotkey to call <code>swap_hand()</code>.</td></tr>
+            <tr><th><a href="mob.html#proc/RemoveRenderers">RemoveRenderers</a></th><td>Removes the mob's renderers on /Logout()</td></tr>
+            <tr><th><a href="mob.html#proc/RestrainedClickOn">RestrainedClickOn</a></th><td>Called when a mob attempts to interact with an atom while handcuffed or otherwise restrained. Not currently used.</td></tr>
+            <tr><th><a href="mob.html#proc/ShiftClickOn">ShiftClickOn</a></th><td>Called when the mob shift+clicks on an atom. By default, this calls the targeted atom's <code>ShiftClick()</code> proc.</td></tr>
+            <tr><th><a href="mob.html#proc/ShowMemories">ShowMemories</a></th><td>Verbs</td></tr>
+            <tr><th><a href="mob.html#proc/UnarmedAttack">UnarmedAttack</a></th><td>UnarmedAttack: The higest level of mob click chain discounting click itself.</td></tr>
+            <tr><th><a href="mob.html#proc/add_to_living_mob_list">add_to_living_mob_list</a></th><td>Life Handling</td></tr>
+            <tr><th><a href="mob.html#proc/attack_empty_hand">attack_empty_hand</a></th><td>Called when a mob attempts to use an empty hand on itself.</td></tr>
+            <tr><th><a href="mob.html#proc/blueswitch">blueswitch</a></th><td>Handles applying blueswitch effects to the mob and creating the clone.</td></tr>
+            <tr><th><a href="mob.html#proc/clear_confused">clear_confused</a></th><td>Sets a mob's confused value to <code>0</code>.</td></tr>
+            <tr><th><a href="mob.html#proc/create_chat_message">create_chat_message</a></th><td>Creates a message overlay at a defined location for a given speaker</td></tr>
+            <tr><th><a href="mob.html#proc/direct_machine_interface">direct_machine_interface</a></th><td>Whether or not the mob can directly interact with the machine regardless of screen and input status. Checked in <code>CanUseTopic()</code>.</td></tr>
+            <tr><th><a href="mob.html#proc/do_skilled">do_skilled</a></th><td>Performs a do_after timer, with a modifier applied to the delay time based on the user's skill in the given skill path.</td></tr>
+            <tr><th><a href="mob.html#proc/drop_item">drop_item</a></th><td>Drops the item in our active hand. TODO: rename this to drop_active_hand or something
+Make sure you are ABSOLUTELY CERTAIN you need to drop this and ignore unequip checks (For example, grabs can be &quot;dropped&quot; but only willingly)
+Else use unequip_item</td></tr>
+            <tr><th><a href="mob.html#proc/equip_to_appropriate_slot">equip_to_appropriate_slot</a></th><td>Place I into the first slot it fits in the order of slots_by_priority, returning the slot or falsy.</td></tr>
+            <tr><th><a href="mob.html#proc/equip_to_slot">equip_to_slot</a></th><td>UNSAFELY place I into this mob's inventory at slot if existentially possible. Generally, use the _if_possible version.</td></tr>
+            <tr><th><a href="mob.html#proc/equip_to_slot_if_possible">equip_to_slot_if_possible</a></th><td>Attempt to place I into this mob's inventory at slot. See TRYEQUIP_* flags for behavior modifiers.</td></tr>
+            <tr><th><a href="mob.html#proc/fetch_bans">fetch_bans</a></th><td>Aliases to <code>_find_bans_in_connections()</code> with this mob's <code>fetch_connections()</code> result.</td></tr>
+            <tr><th><a href="mob.html#proc/fetch_connections">fetch_connections</a></th><td>Aliases to <code>_fetch_connections()</code> with this mob's client, if present, or this mob's ckey/last ckey, last IP, and last CID.</td></tr>
+            <tr><th><a href="mob.html#proc/get_attack_speed">get_attack_speed</a></th><td>Used to get how fast a mob should attack, and influences click delay.
+This is just for inheritance.</td></tr>
+            <tr><th><a href="mob.html#proc/has_danger_grab">has_danger_grab</a></th><td>Checks if the target has a grab from the user</td></tr>
+            <tr><th><a href="mob.html#proc/isEquipped">isEquipped</a></th><td>Returns truthy when item is in the mobs inventory slots, or in slot if specified.</td></tr>
+            <tr><th><a href="mob.html#proc/is_confused">is_confused</a></th><td>Whether or not the mob's confusion level is at the threshhold.</td></tr>
+            <tr><th><a href="mob.html#proc/is_species">is_species</a></th><td>Determine if the mob is the supplied species by text name, species path, or species instance name</td></tr>
+            <tr><th><a href="mob.html#proc/mod_confused">mod_confused</a></th><td>Modifies a mob's confused value by <code>mod_amount</code>.</td></tr>
+            <tr><th><a href="mob.html#proc/ranged_attack">ranged_attack</a></th><td>Called when a mob attmepts to interact with an object that it is not adjacent to. For complex mobs, this includes interacting with an empty hand or empty module.</td></tr>
+            <tr><th><a href="mob.html#proc/remove_grabs_and_pulls">remove_grabs_and_pulls</a></th><td>Remove all grabs applied to target mob. Useful when mob is entering a compartment where they're not supposed to be grabbed.</td></tr>
+            <tr><th><a href="mob.html#proc/say_emphasis">say_emphasis</a></th><td>Scans the input sentence for speech emphasis modifiers, notably <code>_italics_</code> and <code>+bold+</code></td></tr>
+            <tr><th><a href="mob.html#proc/set_confused">set_confused</a></th><td>Sets a mob's confused value.</td></tr>
+            <tr><th><a href="mob.html#proc/set_see_in_dark">set_see_in_dark</a></th><td>See In Dark Set Handling</td></tr>
+            <tr><th><a href="mob.html#proc/set_see_invisible">set_see_invisible</a></th><td>See Invisible Set Handling</td></tr>
+            <tr><th><a href="mob.html#proc/shared_tgui_interaction">shared_tgui_interaction</a></th><td>public</td></tr>
+            <tr><th><a href="mob.html#proc/show_associated_bans">show_associated_bans</a></th><td>Aliases to <code>_show_associated_bans()</code> using this mob's <code>fetch_bans()</code> result, ckey, IP address, and CID.</td></tr>
+            <tr><th><a href="mob.html#proc/show_associated_connections">show_associated_connections</a></th><td>Aliases to <code>_show_associated_connections()</code> using this mob's <code>fetch_connections()</code> result, ckey, IP address, and CID.</td></tr>
+            <tr><th><a href="mob.html#proc/use_sanity_check">use_sanity_check</a></th><td>Validates the mob can perform general interactions. Primarily intended for use after inputs, sleeps, timers, etc to ensure the action can still be completed.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/confused"><aside class="declaration">var </aside>confused
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob_defines.dm#L95">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob_defines.dm 95"/></a></h3>
+        <p>Positive Integer. The mob's current confusion level. Ticks down every <code>Fire()</code> in SSMobs. See <code>set_confused()</code>, <code>mod_confused()</code>, <code>clear_confused()</code>, and <code>is_confused()</code>.</p><h3 id="var/do_unique_user_handle"><aside class="declaration">var </aside>do_unique_user_handle
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_helpers/mobs.dm#L109">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_helpers&#x2F;mobs.dm 109"/></a></h3>
+        <p>Integer. Unique sequential ID from the <code>do_after</code> proc used to validate <code>DO_USER_UNIQUE_ACT</code> flag checks.</p><h3 id="var/logout_time"><aside class="declaration">var </aside>logout_time
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/login.dm#L60">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;login.dm 60"/></a></h3>
+        <p>Integer or null. Stores the <code>world.time</code> value at the time of <code>Logout()</code>. If <code>null</code>, the mob is either considered logged in or has never logged out.</p><h3 id="var/renderers"><aside class="declaration">var </aside>renderers
+            <aside>&ndash; /list/atom/movable/renderer</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/_renderer.dm#L86">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;_renderer.dm 86"/></a></h3>
+        <p>Renderers on /mob
+We attach renderers to mobs for their lifespan. Only mobs with clients get
+renderers, and they are removed again when the mob loses its client. Mobs
+get their own unique renderer instances but it would not be inconceivable
+to share them globally.
+The list of renderers associated with this mob.</p><h3 id="var/see_black"><aside class="declaration">var </aside>see_black
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/observation/sight_set.dm#L21">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;observation&#x2F;sight_set.dm 21"/></a></h3>
+        <p>Sight Set Handling</p><h3 id="var/tgui_open_uis"><aside class="declaration">var </aside>tgui_open_uis
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/external.dm#L149">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;external.dm 149"/></a></h3>
+        <p>global</p>
+<p>Tracks open UIs for a user.</p><h2 id="proc">Proc Details</h2><h3 id="proc/AltClickOn"><aside class="declaration">proc </aside>AltClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L348">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 348"/></a></aside>
+        </h3>
+        <p>Called when the mob alt+clicks on an atom. By default, this calls the targeted atom's <code>on_click/alt</code> extension's <code>on_click()</code> proc, or the atom's <code>AltClick()</code> proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean. Whether or not the interaction was handled.</p><h3 id="proc/AltShiftClickOn"><aside class="declaration">proc </aside>AltShiftClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L433">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 433"/></a></aside>
+        </h3>
+        <p>Called when the mob alt+shift+clicks on an atom. By default, this calls the atom's <code>AltShiftClick()</code> proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean - Whether or not the interaction was handled.</p><h3 id="proc/CreateRenderers"><aside class="declaration">proc </aside>CreateRenderers<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/_renderer.dm#L90">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;_renderer.dm 90"/></a></aside>
+        </h3>
+        <p>Creates the mob's renderers on /Login()</p><h3 id="proc/CtrlAltClickOn"><aside class="declaration">proc </aside>CtrlAltClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L410">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 410"/></a></aside>
+        </h3>
+        <p>Called when the mob ctrl+alt+clicks on an atom. By default, this calls the atom's <code>CtrlAltClick()</code> proc or calls the mob's <code>pointed()</code> proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean. Whether or not the interaction was handled.</p><h3 id="proc/CtrlAltShiftClickOn"><aside class="declaration">proc </aside>CtrlAltShiftClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L457">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 457"/></a></aside>
+        </h3>
+        <p>Called when the mob ctrl+alt+shift+clicks on an atom. By default, this calls the atom's <code>CtrlAltShiftClick()</code> proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean - Whether or not the interaction was handled.</p><h3 id="proc/CtrlClickOn"><aside class="declaration">proc </aside>CtrlClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L320">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 320"/></a></aside>
+        </h3>
+        <p>Called when the mob ctrl+clicks on an atom. By default, this calls the targeted atom's <code>CtrlClick()</code> proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean - Whether or not the action was handled.</p><h3 id="proc/CtrlShiftClickOn"><aside class="declaration">proc </aside>CtrlShiftClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L388">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 388"/></a></aside>
+        </h3>
+        <p>Called when the mob ctrl+shift+clicks on an atom. By default, calls the atom's <code>CtrlShiftClick()</code> proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean. Whether or not the interaction was handled.</p><h3 id="proc/GetAllHeld"><aside class="declaration">proc </aside>GetAllHeld<aside>(item_path) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L224">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 224"/></a></aside>
+        </h3>
+        <p>Fetches all held items of the given path.</p>
+<p>If not passed any parameters, will simply fetch all held items.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>item_path</code> (path) - Path to the item type to fetch. Must be a type of <code>/obj/item</code>.</li>
+</ul>
+<p>Returns list of found instances, or null.</p><h3 id="proc/HandsEmpty"><aside class="declaration">proc </aside>HandsEmpty<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L248">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 248"/></a></aside>
+        </h3>
+        <p>Whether or not the mob's hands or other holding slots are empty. Returns boolean.</p><h3 id="proc/HasFreeHand"><aside class="declaration">proc </aside>HasFreeHand<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L253">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 253"/></a></aside>
+        </h3>
+        <p>Whether or not the mob has any free hands/holding slots.</p><h3 id="proc/IsHolding"><aside class="declaration">proc </aside>IsHolding<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/item) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L195">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 195"/></a></aside>
+        </h3>
+        <p>Checks if a given item or path is in any of the mob's hands or other holding slots.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>item</code> - The item to check for. Either a reference or a path. If a path, will check for any instance of path or its subtypes.</li>
+</ul>
+<p>Returns instance of <code>/obj/item</code> or <code>null</code>. the item found in the mob's hands.</p><h3 id="proc/MiddleClickOn"><aside class="declaration">proc </aside>MiddleClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L274">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 274"/></a></aside>
+        </h3>
+        <p>Called when a mob middle-clicks on an object. By default, this is used only as a hotkey to call <code>swap_hand()</code>.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean. Whether or not the interaction was handled.</p><h3 id="proc/RemoveRenderers"><aside class="declaration">proc </aside>RemoveRenderers<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/__defines/_renderer.dm#L108">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__defines&#x2F;_renderer.dm 108"/></a></aside>
+        </h3>
+        <p>Removes the mob's renderers on /Logout()</p><h3 id="proc/RestrainedClickOn"><aside class="declaration">proc </aside>RestrainedClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L262">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 262"/></a></aside>
+        </h3>
+        <p>Called when a mob attempts to interact with an atom while handcuffed or otherwise restrained. Not currently used.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on/interacted with.</li>
+</ul><h3 id="proc/ShiftClickOn"><aside class="declaration">proc </aside>ShiftClickOn<aside>(/<a href="atom.html">atom</a>/A) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L295">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 295"/></a></aside>
+        </h3>
+        <p>Called when the mob shift+clicks on an atom. By default, this calls the targeted atom's <code>ShiftClick()</code> proc.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on.</li>
+</ul>
+<p>Returns boolean. Whether or not the interaction was handled.</p><h3 id="proc/ShowMemories"><aside class="declaration">verb </aside>ShowMemories<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/mind/memory.dm#L181">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;mind&#x2F;memory.dm 181"/></a></aside>
+        </h3>
+        <p>Verbs</p><h3 id="proc/UnarmedAttack"><aside class="declaration">proc </aside>UnarmedAttack<aside>(/<a href="atom.html">atom</a>/target, proximity_flag, /list/modifiers) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L220">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 220"/></a></aside>
+        </h3>
+        <p>UnarmedAttack: The higest level of mob click chain discounting click itself.</p>
+<p>This handles, just &quot;clicking on something&quot; without an item. It translates
+into [atom/proc/attack_hand], <a href="atom.html#proc/attack_animal" title="/atom">atom/proc/attack_animal</a> etc.</p>
+<p>Note: proximity_flag here is used to distinguish between normal usage (flag=1),
+and usage when clicking on things telekinetically (flag=0).  This proc will
+not be called at ranged except with telekinesis.</p>
+<p>proximity_flag is not currently passed to attack_hand, and is instead used
+in human click code to allow glove touches only at melee range.</p>
+<p>modifiers is a lazy list of click modifiers this attack had,
+used for figuring out different properties of the click, mostly right vs left and such.</p><h3 id="proc/add_to_living_mob_list"><aside class="declaration">proc </aside>add_to_living_mob_list<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/observation/life.dm#L19">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;observation&#x2F;life.dm 19"/></a></aside>
+        </h3>
+        <p>Life Handling</p><h3 id="proc/attack_empty_hand"><aside class="declaration">proc </aside>attack_empty_hand<aside>(bp_hand) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/other_mobs.dm#L106">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;other_mobs.dm 106"/></a></aside>
+        </h3>
+        <p>Called when a mob attempts to use an empty hand on itself.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>bp_hand</code> (string, <code>BP_R_HAND</code> or <code>BP_L_HAND</code>) - The targeted and used hand's bodypart slot.</li>
+</ul><h3 id="proc/blueswitch"><aside class="declaration">proc </aside>blueswitch<aside>(/<a href="obj.html">obj</a>/bluegoast/ghost) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/gamemodes/endgame/bluespace_jump/bluespace_jump.dm#L155">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;gamemodes&#x2F;endgame&#x2F;bluespace_jump&#x2F;bluespace_jump.dm 155"/></a></aside>
+        </h3>
+        <p>Handles applying blueswitch effects to the mob and creating the clone.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>ghost</code> - The bluespace ghost triggering the switch.</li>
+</ul>
+<p>Returns instance of mob. The created bluespace clone, or null if no clone was created.</p><h3 id="proc/clear_confused"><aside class="declaration">proc </aside>clear_confused<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob.dm#L874">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob.dm 874"/></a></aside>
+        </h3>
+        <p>Sets a mob's confused value to <code>0</code>.</p>
+<p>Returns integer. The new value of <code>confused</code>.</p><h3 id="proc/create_chat_message"><aside class="declaration">proc </aside>create_chat_message<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/speaker, message, italics, /list/existing_extra_classes, audible) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/chat_message.dm#L285">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;chat_message.dm 285"/></a></aside>
+        </h3>
+        <p>Creates a message overlay at a defined location for a given speaker</p>
+<p>Arguments:</p>
+<ul>
+<li>speaker - The atom who is saying this message</li>
+<li>message - The text content of the message</li>
+<li>italics - Decides if this should be small or not, as generally italics text are for whisper/radio overhear</li>
+<li>existing_extra_classes - Additional classes to add to the message</li>
+</ul><h3 id="proc/direct_machine_interface"><aside class="declaration">proc </aside>direct_machine_interface<aside>(/<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/machine) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/machinery/_machines_base/machinery.dm#L194">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;_machines_base&#x2F;machinery.dm 194"/></a></aside>
+        </h3>
+        <p>Whether or not the mob can directly interact with the machine regardless of screen and input status. Checked in <code>CanUseTopic()</code>.</p><h3 id="proc/do_skilled"><aside class="declaration">proc </aside>do_skilled<aside>(base_delay, skill_path, /<a href="atom.html">atom</a>/target, factor, do_flags) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/skills/skillset.dm#L134">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;skills&#x2F;skillset.dm 134"/></a></aside>
+        </h3>
+        <p>Performs a do_after timer, with a modifier applied to the delay time based on the user's skill in the given skill path.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>base_delay</code> Integer (Seconds) - Base delay for the timer. This is added to the final delay time.</li>
+<li><code>skill_path</code> Path or list of paths (Subtypes of <code>/singleton/hierarchy/skill</code>; Any of <code>SKILL_*</code>) - The skill used to modify the delay time. If provided as a list, the skill that produces the smallest timer is used. Passed to <code>skill_delay_mult()</code>.</li>
+<li><code>target</code> (Default <code>null</code>) - The atom being interacted with. Passed directly to <code>do_after()</code>.</li>
+<li><code>factor</code> Float (Default <code>0.3</code>) - Modifier factor used to modify the delay applied to the action. Passed to <code>skill_delay_mult()</code>.</li>
+<li><code>do_flags</code> Bitflag (Any of <code>DO_*</code>; Default <code>DO_PUBLIC_UNIQUE</code>) - Flags passed on to <code>do_after()</code>.</li>
+</ul>
+<p>Returns boolean. Whether or not the do after check passed.</p><h3 id="proc/drop_item"><aside class="declaration">proc </aside>drop_item<aside>(/<a href="atom.html">atom</a>/Target) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L284">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 284"/></a></aside>
+        </h3>
+        <p>Drops the item in our active hand. TODO: rename this to drop_active_hand or something
+Make sure you are ABSOLUTELY CERTAIN you need to drop this and ignore unequip checks (For example, grabs can be &quot;dropped&quot; but only willingly)
+Else use unequip_item</p><h3 id="proc/equip_to_appropriate_slot"><aside class="declaration">proc </aside>equip_to_appropriate_slot<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/I, skip_storage, skip_timer) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L65">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 65"/></a></aside>
+        </h3>
+        <p>Place I into the first slot it fits in the order of slots_by_priority, returning the slot or falsy.</p><h3 id="proc/equip_to_slot"><aside class="declaration">proc </aside>equip_to_slot<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/I, slot) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L15">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 15"/></a></aside>
+        </h3>
+        <p>UNSAFELY place I into this mob's inventory at slot if existentially possible. Generally, use the _if_possible version.</p><h3 id="proc/equip_to_slot_if_possible"><aside class="declaration">proc </aside>equip_to_slot_if_possible<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/I, slot, equip_flags) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L20">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 20"/></a></aside>
+        </h3>
+        <p>Attempt to place I into this mob's inventory at slot. See TRYEQUIP_* flags for behavior modifiers.</p><h3 id="proc/fetch_bans"><aside class="declaration">proc </aside>fetch_bans<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/bancheck_functions.dm#L158">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;bancheck_functions.dm 158"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_find_bans_in_connections()</code> with this mob's <code>fetch_connections()</code> result.</p>
+<p>Returns list of lists.</p><h3 id="proc/fetch_connections"><aside class="declaration">proc </aside>fetch_connections<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/connectioncheck_functions.dm#L92">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;connectioncheck_functions.dm 92"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_fetch_connections()</code> with this mob's client, if present, or this mob's ckey/last ckey, last IP, and last CID.</p>
+<p>Returns list of lists.</p><h3 id="proc/get_attack_speed"><aside class="declaration">proc </aside>get_attack_speed<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/item) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/item_attack.dm#L531">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;item_attack.dm 531"/></a></aside>
+        </h3>
+        <p>Used to get how fast a mob should attack, and influences click delay.
+This is just for inheritance.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>item</code> - The item being used in the attack, if any.</li>
+</ul>
+<p>Returns a number indicating the determined attack cooldown/speed.</p><h3 id="proc/has_danger_grab"><aside class="declaration">proc </aside>has_danger_grab<aside>(/<a href="mob.html">mob</a>/user) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob_helpers.dm#L54">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob_helpers.dm 54"/></a></aside>
+        </h3>
+        <p>Checks if the target has a grab from the user</p><h3 id="proc/isEquipped"><aside class="declaration">proc </aside>isEquipped<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/item, slot) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/inventory.dm#L318">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;inventory.dm 318"/></a></aside>
+        </h3>
+        <p>Returns truthy when item is in the mobs inventory slots, or in slot if specified.</p><h3 id="proc/is_confused"><aside class="declaration">proc </aside>is_confused<aside>(threshhold) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob.dm#L887">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob.dm 887"/></a></aside>
+        </h3>
+        <p>Whether or not the mob's confusion level is at the threshhold.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>threshhold</code> (Positive Integer, default <code>1</code>) - The threshhold at which the mob should be considered confused.</li>
+</ul>
+<p>Returns boolean.</p><h3 id="proc/is_species"><aside class="declaration">proc </aside>is_species<aside>(/<a href="datum.html">datum</a>/<a href="datum/species.html">species</a>/S) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob_helpers.dm#L40">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob_helpers.dm 40"/></a></aside>
+        </h3>
+        <p>Determine if the mob is the supplied species by text name, species path, or species instance name</p><h3 id="proc/mod_confused"><aside class="declaration">proc </aside>mod_confused<aside>(mod_amount, floor, ceiling) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob.dm#L863">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob.dm 863"/></a></aside>
+        </h3>
+        <p>Modifies a mob's confused value by <code>mod_amount</code>.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>mod_amount</code> (Integer) - The amount to modify <code>confused</code> by. Allows negative values for subtraction. Decimal values are rounded.</li>
+<li><code>floor</code> (Positive Integer, default <code>0</code>) - The minimum value to set <code>confused</code> to. Decimal values are rounded.</li>
+<li><code>ceiling</code> (Positive Integer, default <code>CONFUSED_MAX</code>) - The maximum value to set <code>confused</code> to. Decimal values are rounded.</li>
+</ul>
+<p>Returns integer. The new value of <code>confused</code>.</p><h3 id="proc/ranged_attack"><aside class="declaration">proc </aside>ranged_attack<aside>(/<a href="atom.html">atom</a>/A, modifiers) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/click.dm#L242">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;click.dm 242"/></a></aside>
+        </h3>
+        <p>Called when a mob attmepts to interact with an object that it is not adjacent to. For complex mobs, this includes interacting with an empty hand or empty module.</p>
+<p>Exception: Telekinesis will call <code>UnarmedAttack([target], 0)</code> instead.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>A</code> - The atom that was clicked on/interacted with.</li>
+<li><code>modifiers</code> - List of click parameters. See BYOND's <code>CLick()</code> documentation.</li>
+</ul>
+<p>Returns boolean - Whether or not the mob was able to perform the interaction.</p><h3 id="proc/remove_grabs_and_pulls"><aside class="declaration">proc </aside>remove_grabs_and_pulls<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob_helpers.dm#L63">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob_helpers.dm 63"/></a></aside>
+        </h3>
+        <p>Remove all grabs applied to target mob. Useful when mob is entering a compartment where they're not supposed to be grabbed.</p><h3 id="proc/say_emphasis"><aside class="declaration">proc </aside>say_emphasis<aside>(input) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/../packs/sierra-tweaks/mob/say.dm#L7">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;..&#x2F;packs&#x2F;sierra-tweaks&#x2F;mob&#x2F;say.dm 7"/></a></aside>
+        </h3>
+        <p>Scans the input sentence for speech emphasis modifiers, notably <code>_italics_</code> and <code>+bold+</code></p><h3 id="proc/set_confused"><aside class="declaration">proc </aside>set_confused<aside>(amount, limit) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/mob/mob.dm#L848">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;mob&#x2F;mob.dm 848"/></a></aside>
+        </h3>
+        <p>Sets a mob's confused value.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>amount</code> (Positive Int) - The confused value to set. Decimal values are rounded.</li>
+<li><code>limit</code> (Positive Int, default <code>CONFUSED_MAX</code>) - The maximum value <code>confused</code> can be set to. Decimal values are rounded.</li>
+</ul>
+<p>Returns integer. The new value of <code>confused</code>.</p><h3 id="proc/set_see_in_dark"><aside class="declaration">proc </aside>set_see_in_dark<aside>(new_see_in_dark) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/observation/see_in_dark_set.dm#L21">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;observation&#x2F;see_in_dark_set.dm 21"/></a></aside>
+        </h3>
+        <p>See In Dark Set Handling</p><h3 id="proc/set_see_invisible"><aside class="declaration">proc </aside>set_see_invisible<aside>(new_see_invisible) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/datums/observation/see_invisible_set.dm#L21">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;observation&#x2F;see_invisible_set.dm 21"/></a></aside>
+        </h3>
+        <p>See Invisible Set Handling</p><h3 id="proc/shared_tgui_interaction"><aside class="declaration">proc </aside>shared_tgui_interaction<aside>(src_object) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/tgui/states.dm#L58">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;tgui&#x2F;states.dm 58"/></a></aside>
+        </h3>
+        <p>public</p>
+<p>Standard interaction/sanity checks. Different mob types may have overrides.</p>
+<p>return UI_state The state of the UI.</p><h3 id="proc/show_associated_bans"><aside class="declaration">proc </aside>show_associated_bans<aside>(/<a href="mob.html">mob</a>/user, /list/bans) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/bancheck_functions.dm#L325">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;bancheck_functions.dm 325"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_show_associated_bans()</code> using this mob's <code>fetch_bans()</code> result, ckey, IP address, and CID.</p>
+<p>Has no return value.</p><h3 id="proc/show_associated_connections"><aside class="declaration">proc </aside>show_associated_connections<aside>(/<a href="mob.html">mob</a>/user, /list/connections) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/admin/connectioncheck/connectioncheck_functions.dm#L272">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;admin&#x2F;connectioncheck&#x2F;connectioncheck_functions.dm 272"/></a></aside>
+        </h3>
+        <p>Aliases to <code>_show_associated_connections()</code> using this mob's <code>fetch_connections()</code> result, ckey, IP address, and CID.</p>
+<p>Has no return value.</p><h3 id="proc/use_sanity_check"><aside class="declaration">proc </aside>use_sanity_check<aside>(/<a href="atom.html">atom</a>/target, /<a href="atom.html">atom</a>/tool, flags) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/item_attack.dm#L194">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;item_attack.dm 194"/></a></aside>
+        </h3>
+        <p>Validates the mob can perform general interactions. Primarily intended for use after inputs, sleeps, timers, etc to ensure the action can still be completed.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>target</code> - The atom being interacted with.</li>
+<li><code>tool</code> - The item being used to interact. Optional. Defaults to <code>FALSE</code> to differentiate between a nulled reference and an empty parameter.</li>
+<li><code>flags</code> (Bitflag, any of <code>SANITY_CHECK_*</code>, default <code>SANITY_CHECK_DEFAULT</code>) - Bitflags of additional settings. See <code>code\__defines\misc.dm</code>.</li>
+</ul>
+<p>Returns boolean.</p></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

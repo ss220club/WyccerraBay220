@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;turf - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="turf.html#var">Var Details</a> - <a href="turf.html#proc">Proc Details</a></header>
+<main>
+<h1>turf <aside>/<a href="turf.html">turf</a></aside><aside> inherits /<a href="atom.html">atom</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L1">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 1"/></a></h1>
+
+<p>Do we have non-zero ambient light? Use [TURF_IS_AMBIENT_LIT] instead of reading this directly.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="turf.html#var/above">above</a></th><td>Reference to any open turf that might be above us to speed up atom Entered() updates.</td></tr>
+            <tr><th><a href="turf.html#var/added_to_area_cache">added_to_area_cache</a></th><td>Let me quote BYOND reference here (https://www.byond.com/docs/ref/#/turf):</td></tr>
+            <tr><th><a href="turf.html#var/ao_overlays">ao_overlays</a></th><td>Current ambient occlusion overlays. Tracked so we can reverse them without dropping all priority overlays.</td></tr>
+            <tr><th><a href="turf.html#var/dangerous_objects">dangerous_objects</a></th><td>List of 'dangerous' objs that the turf holds that can cause something bad to happen when stepped on, used for AI mobs.</td></tr>
+            <tr><th><a href="turf.html#var/decals_available">decals_available</a></th><td>Whether or not decals can be applied to turf</td></tr>
+            <tr><th><a href="turf.html#var/in_contents_of">in_contents_of</a></th><td>For the area_contents list unit test
+Allows us to know our area without needing to preassign it
+Sorry for the mess</td></tr>
+            <tr><th><a href="turf.html#var/mimic_above_copy">mimic_above_copy</a></th><td>If this is a delegate (non-overwrite) Z-turf with a z-turf above, this is the delegate copy that's copying us.</td></tr>
+            <tr><th><a href="turf.html#var/mimic_proxy">mimic_proxy</a></th><td>If we're a non-overwrite z-turf, this holds the appearance of the bottom-most Z-turf in the z-stack.</td></tr>
+            <tr><th><a href="turf.html#var/mimic_underlay">mimic_underlay</a></th><td>If we're at the bottom of the stack, a proxy used to fake a below space turf.</td></tr>
+            <tr><th><a href="turf.html#var/permit_starlight">permit_starlight</a></th><td>Whether or not we calculate starlight on specific turf</td></tr>
+            <tr><th><a href="turf.html#var/shadower">shadower</a></th><td>Overlay used to multiply color of all OO overlays at once.</td></tr>
+            <tr><th><a href="turf.html#var/starlit">starlit</a></th><td>If this turf is currently startlit or not</td></tr>
+            <tr><th><a href="turf.html#var/turf_fire">turf_fire</a></th><td>Reference to the turf fire on the turf</td></tr>
+            <tr><th><a href="turf.html#var/z_eventually_space">z_eventually_space</a></th><td>If this Z-turf leads to space, uninterrupted.</td></tr>
+            <tr><th><a href="turf.html#var/z_queued">z_queued</a></th><td>How many times this turf is currently queued - multiple queue occurrences are allowed to ensure update consistency.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="turf.html#proc/AdjacentQuick">AdjacentQuick</a></th><td>Quick adjacency (to turf):
+If you are in the same turf, always true
+If you are not adjacent, then false</td></tr>
+            <tr><th><a href="turf.html#proc/Adjacent_free_dir">Adjacent_free_dir</a></th><td>Similar to Adjacent, but checks if the path FROM src in an orthogonal direction THROUGH intermediate TO destination
+is free without considering src turf</td></tr>
+            <tr><th><a href="turf.html#proc/ClickCross">ClickCross</a></th><td>This checks if you there is uninterrupted airspace between that turf and this one.
+This is defined as any dense ATOM_FLAG_CHECKS_BORDER object, or any dense object without throwpass.
+The border_only flag allows you to not objects (for source and destination squares)</td></tr>
+            <tr><th><a href="turf.html#proc/_clear_signal_refs">_clear_signal_refs</a></th><td>WARNING WARNING
+Turfs DO NOT lose their signals when they get replaced, REMEMBER THIS
+It's possible because turfs are fucked, and if you have one in a list and it's replaced with another one, the list ref points to the new turf
+We do it because moving signals over was needlessly expensive, and bloated a very commonly used bit of code</td></tr>
+            <tr><th><a href="turf.html#proc/cleanup_zmimic">cleanup_zmimic</a></th><td>Cleans up Z-mimic objects for this turf. You shouldn't call this directly 99% of the time.</td></tr>
+            <tr><th><a href="turf.html#proc/disable_zmimic">disable_zmimic</a></th><td>Disables Z-mimic for a turf.</td></tr>
+            <tr><th><a href="turf.html#proc/enable_zmimic">enable_zmimic</a></th><td>Enables Z-mimic for a turf that didn't already have it enabled.</td></tr>
+            <tr><th><a href="turf.html#proc/force_change_turf">force_change_turf</a></th><td>Replaces current turf without additional checks and copying current turf's state
+Returns newly created turf, of itself, if invalid turf path passed</td></tr>
+            <tr><th><a href="turf.html#proc/is_safe_to_enter">is_safe_to_enter</a></th><td>Returns false if stepping into a tile would cause harm (e.g. open space while unable to fly, water tile while a slime, lava, etc).</td></tr>
+            <tr><th><a href="turf.html#proc/register_dangerous_object">register_dangerous_object</a></th><td>Tells the turf that it currently contains something that automated movement should consider if planning to enter the tile.
+This uses lazy list macros to reduce memory footprint since for 99% of turfs the list would've been empty anyway.</td></tr>
+            <tr><th><a href="turf.html#proc/setup_zmimic">setup_zmimic</a></th><td>Sets up Z-mimic for this turf. You shouldn't call this directly 99% of the time.</td></tr>
+            <tr><th><a href="turf.html#proc/unregister_dangerous_object">unregister_dangerous_object</a></th><td>Similar to <code>register_dangerous_object()</code>, for when the dangerous object stops being dangerous/gets deleted/moved/etc.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/above"><aside class="declaration">var </aside>above
+            <aside>&ndash; /<a href="turf.html">turf</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L2">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 2"/></a></h3>
+        <p>Reference to any open turf that might be above us to speed up atom Entered() updates.</p><h3 id="var/added_to_area_cache"><aside class="declaration">var </aside>added_to_area_cache
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L72">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 72"/></a></h3>
+        <p>Let me quote BYOND reference here (https://www.byond.com/docs/ref/#/turf):</p>
+<hr />
+<p>&quot;Turfs cannot be moved. They can only be created or destroyed by changing world.maxx, world.maxy, or world.maxz.
+When you create a new turf with new(), it always replaces the old one.&quot;</p>
+<hr />
+<p>I did testing of how turfs are replaced, and found out that they keep their <code>ref</code>,
+so there is no need to recache turf in area on replacement. We only need it on turf area change.
+To make turf cache consistent, we need to somehow keep a track if turf was already cached, or not.
+So there is this variable - we will set it to <code>TRUE</code> the first time turf is added to area cache
+and then provide it in <code>turf</code> constructor on <code>/turf/proc/ChangeTurf</code> to understand, the turf is cached or not.
+The alternative decision is to cache turf only where it's needed, but it's too much work to do with it.</p><h3 id="var/ao_overlays"><aside class="declaration">var </aside>ao_overlays
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf_ao.dm#L6">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf_ao.dm 6"/></a></h3>
+        <p>Current ambient occlusion overlays. Tracked so we can reverse them without dropping all priority overlays.</p><h3 id="var/dangerous_objects"><aside class="declaration">var </aside>dangerous_objects
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L42">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 42"/></a></h3>
+        <p>List of 'dangerous' objs that the turf holds that can cause something bad to happen when stepped on, used for AI mobs.</p><h3 id="var/decals_available"><aside class="declaration">var </aside>decals_available
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L48">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 48"/></a></h3>
+        <p>Whether or not decals can be applied to turf</p><h3 id="var/in_contents_of"><aside class="declaration">var </aside>in_contents_of
+            <aside>&ndash; /<a href="area.html">area</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/unit_tests/area_turfs_cache.dm#L4">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;unit_tests&#x2F;area_turfs_cache.dm 4"/></a></h3>
+        <p>For the area_contents list unit test
+Allows us to know our area without needing to preassign it
+Sorry for the mess</p><h3 id="var/mimic_above_copy"><aside class="declaration">var </aside>mimic_above_copy
+            <aside>&ndash; /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/openspace/turf_mimic</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L9">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 9"/></a></h3>
+        <p>If this is a delegate (non-overwrite) Z-turf with a z-turf above, this is the delegate copy that's copying us.</p><h3 id="var/mimic_proxy"><aside class="declaration">var </aside>mimic_proxy
+            <aside>&ndash; /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/openspace/turf_proxy</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L5">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 5"/></a></h3>
+        <p>If we're a non-overwrite z-turf, this holds the appearance of the bottom-most Z-turf in the z-stack.</p><h3 id="var/mimic_underlay"><aside class="declaration">var </aside>mimic_underlay
+            <aside>&ndash; /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/openspace/turf_proxy</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 11"/></a></h3>
+        <p>If we're at the bottom of the stack, a proxy used to fake a below space turf.</p><h3 id="var/permit_starlight"><aside class="declaration">var </aside>permit_starlight
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L54">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 54"/></a></h3>
+        <p>Whether or not we calculate starlight on specific turf</p><h3 id="var/shadower"><aside class="declaration">var </aside>shadower
+            <aside>&ndash; /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/openspace/multiplier</aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L7">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 7"/></a></h3>
+        <p>Overlay used to multiply color of all OO overlays at once.</p><h3 id="var/starlit"><aside class="declaration">var </aside>starlit
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L57">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 57"/></a></h3>
+        <p>If this turf is currently startlit or not</p><h3 id="var/turf_fire"><aside class="declaration">var </aside>turf_fire
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/turf_fire.html">turf_fire</a></aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L51">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 51"/></a></h3>
+        <p>Reference to the turf fire on the turf</p><h3 id="var/z_eventually_space"><aside class="declaration">var </aside>z_eventually_space
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L15">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 15"/></a></h3>
+        <p>If this Z-turf leads to space, uninterrupted.</p><h3 id="var/z_queued"><aside class="declaration">var </aside>z_queued
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L13">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 13"/></a></h3>
+        <p>How many times this turf is currently queued - multiple queue occurrences are allowed to ensure update consistency.</p><h2 id="proc">Proc Details</h2><h3 id="proc/AdjacentQuick"><aside class="declaration">proc </aside>AdjacentQuick<aside>(/<a href="atom.html">atom</a>/neighbor, /<a href="atom.html">atom</a>/target) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/adjacent.dm#L93">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;adjacent.dm 93"/></a></aside>
+        </h3>
+        <p>Quick adjacency (to turf):
+If you are in the same turf, always true
+If you are not adjacent, then false</p><h3 id="proc/Adjacent_free_dir"><aside class="declaration">proc </aside>Adjacent_free_dir<aside>(/<a href="atom.html">atom</a>/destination, path_dir) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/adjacent.dm#L64">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;adjacent.dm 64"/></a></aside>
+        </h3>
+        <p>Similar to Adjacent, but checks if the path FROM src in an orthogonal direction THROUGH intermediate TO destination
+is free without considering src turf</p><h3 id="proc/ClickCross"><aside class="declaration">proc </aside>ClickCross<aside>(target_dir, border_only, /<a href="atom.html">atom</a>/target_atom) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/_onclick/adjacent.dm#L133">
+        <img src="git.png" width="16" height="16" title="code&#x2F;_onclick&#x2F;adjacent.dm 133"/></a></aside>
+        </h3>
+        <p>This checks if you there is uninterrupted airspace between that turf and this one.
+This is defined as any dense ATOM_FLAG_CHECKS_BORDER object, or any dense object without throwpass.
+The border_only flag allows you to not objects (for source and destination squares)</p><h3 id="proc/_clear_signal_refs"><aside class="parent"><a title="/datum" href="datum.html#proc/_clear_signal_refs">&uarr;</a></aside>_clear_signal_refs<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L143">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 143"/></a></aside>
+        </h3>
+        <p>WARNING WARNING
+Turfs DO NOT lose their signals when they get replaced, REMEMBER THIS
+It's possible because turfs are fucked, and if you have one in a list and it's replaced with another one, the list ref points to the new turf
+We do it because moving signals over was needlessly expensive, and bloated a very commonly used bit of code</p><h3 id="proc/cleanup_zmimic"><aside class="declaration">proc </aside>cleanup_zmimic<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L91">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 91"/></a></aside>
+        </h3>
+        <p>Cleans up Z-mimic objects for this turf. You shouldn't call this directly 99% of the time.</p><h3 id="proc/disable_zmimic"><aside class="declaration">proc </aside>disable_zmimic<aside>() 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L49">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 49"/></a></aside>
+        </h3>
+        <p>Disables Z-mimic for a turf.</p><h3 id="proc/enable_zmimic"><aside class="declaration">proc </aside>enable_zmimic<aside>(additional_flags) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L40">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 40"/></a></aside>
+        </h3>
+        <p>Enables Z-mimic for a turf that didn't already have it enabled.</p><h3 id="proc/force_change_turf"><aside class="declaration">proc </aside>force_change_turf<aside>(/<a href="turf.html">turf</a>/replacement_turf_type) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf_changing.dm#L39">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf_changing.dm 39"/></a></aside>
+        </h3>
+        <p>Replaces current turf without additional checks and copying current turf's state
+Returns newly created turf, of itself, if invalid turf path passed</p><h3 id="proc/is_safe_to_enter"><aside class="declaration">proc </aside>is_safe_to_enter<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/L) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L420">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 420"/></a></aside>
+        </h3>
+        <p>Returns false if stepping into a tile would cause harm (e.g. open space while unable to fly, water tile while a slime, lava, etc).</p><h3 id="proc/register_dangerous_object"><aside class="declaration">proc </aside>register_dangerous_object<aside>(/<a href="obj.html">obj</a>/O) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L431">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 431"/></a></aside>
+        </h3>
+        <p>Tells the turf that it currently contains something that automated movement should consider if planning to enter the tile.
+This uses lazy list macros to reduce memory footprint since for 99% of turfs the list would've been empty anyway.</p><h3 id="proc/setup_zmimic"><aside class="declaration">proc </aside>setup_zmimic<aside>(mapload) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/modules/multiz/zmimic/mimic_turf.dm#L58">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;multiz&#x2F;zmimic&#x2F;mimic_turf.dm 58"/></a></aside>
+        </h3>
+        <p>Sets up Z-mimic for this turf. You shouldn't call this directly 99% of the time.</p><h3 id="proc/unregister_dangerous_object"><aside class="declaration">proc </aside>unregister_dangerous_object<aside>(/<a href="obj.html">obj</a>/O) 
+        
+    
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/code/game/turfs/turf.dm#L439">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;turfs&#x2F;turf.dm 439"/></a></aside>
+        </h3>
+        <p>Similar to <code>register_dangerous_object()</code>, for when the dangerous object stops being dangerous/gets deleted/moved/etc.</p></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

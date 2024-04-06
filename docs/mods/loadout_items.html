@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>mods&#x2F;loadout_items&#x2F;README.md - Space Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Space Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+</header>
+<main>
+<h1>mods/loadout_items/README.md 
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/1740c41627d743e11c38f6b5fde46bc36678044c/mods/loadout_items/README.md">
+        <img src="git.png" width="16" height="16" title="mods&#x2F;loadout_items&#x2F;README.md"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><td colspan="2"><hh4 id="список-prов">Список PRов:</hh4>
+<ul>
+<li>https://github.com/SierraBay/SierraBay12/pull/1562</li>
+<li>https://github.com/SierraBay/SierraBay12/pull/1643</li>
+<li>https://github.com/SierraBay/SierraBay12/pull/1650</li>
+<li>https://github.com/SierraBay/SierraBay12/pull/1761</li>
+</ul>
+<!--
+  Ссылки на PRы, связанные с модом:
+  - Создание
+  - Большие изменения
+-->
+<!-- Название мода. Не важно на русском или на английском. -->
+<hh2 id="предметы-лодаута">Предметы лодаута</hh2>
+<p>ID мода: LOADOUT_ITEMS</p>
+<!--
+  Название модпака прописными буквами, СОЕДИНЁННЫМИ_ПОДЧЁРКИВАНИЕМ,
+  которое ты будешь использовать для обозначения файлов.
+-->
+<hh3 id="описание-мода">Описание мода</hh3>
+<p>Модулярно добавленные в билд предметы для лодаута.</p>
+<!--
+  Что он делает, что добавляет: что, куда, зачем и почему - всё здесь.
+  А также любая полезная информация.
+-->
+<hh3 id="изменения-кор-кода">Изменения <em>кор кода</em></hh3>
+<ul>
+<li><code>code/controllers/subsystems/jobs.dm</code>:
+<ul>
+<li><code>/datum/controller/subsystem/jobs/proc/equip_custom_loadout</code></li>
+</ul>
+</li>
+</ul>
+<!--
+  Если вы редактировали какие-либо процедуры или переменные в кор коде,
+  они должны быть указаны здесь.
+  Нужно указать и файл, и процедуры/переменные.
+
+  Изменений нет - напиши "Отсутствуют"
+-->
+<hh3 id="оверрайды">Оверрайды</hh3>
+<ul>
+<li><code>mods/_master_files/code/modules/clothing/spacesuits/spacesuits.dm</code>:
+<ul>
+<li><code>/obj/item/clothing/suit/space/var/valid_accessory_slots</code></li>
+</ul>
+</li>
+</ul>
+<!--
+  Если ты добавлял новый модульный оверрайд, его нужно указать здесь.
+  Здесь указываются оверрайды в твоём моде и папке `_master_files`
+
+  Изменений нет - напиши "Отсутствуют"
+-->
+<hh3 id="дефайны">Дефайны</hh3>
+<ul>
+<li><code>code/__defines/~mods/~master_defines.dm</code>:
+<ul>
+<li><code>ACCESSORY_SLOT_OVER</code></li>
+</ul>
+</li>
+</ul>
+<!--
+  Если требовалось добавить какие-либо дефайны, укажи файлы,
+  в которые ты их добавил, а также перечисли имена.
+  И то же самое, если ты используешь дефайны, определённые другим модом.
+
+  Не используешь - напиши "Отсутствуют"
+-->
+<hh3 id="используемые-файлы-не-содержащиеся-в-модпаке">Используемые файлы, не содержащиеся в модпаке</hh3>
+<ul>
+<li><code>maps\sierra\loadout\loadout_gloves.dm</code></li>
+<li><code>maps\torch\icons\obj\obj_accessories_solgov.dmi</code></li>
+<li><code>maps\torch\icons\mob\unathi\onmob_accessories_solgov_unathi.dmi</code></li>
+<li><code>maps\torch\icons\mob\onmob_accessories_solgov.dmi</code></li>
+<li><code>maps\torch\icons\obj\obj_under_solgov.dmi</code></li>
+<li><code>maps\torch\icons\mob\onmob_under_solgov.dmi</code></li>
+<li><code>maps\torch\icons\mob\unathi\onmob_under_solgov_unathi.dmi</code></li>
+</ul>
+<!--
+  Будь то немодульный файл или модульный файл, который не содержится в папке,
+  принадлежащей этому конкретному моду, он должен быть упомянут здесь.
+  Хорошими примерами являются иконки или звуки, которые используются одновременно
+  несколькими модулями, или что-либо подобное.
+-->
+<hh3 id="авторы">Авторы:</hh3>
+<p>UEDHighCommand</p>
+<!--
+  Здесь находится твой никнейм
+  Если работал совместно - никнеймы тех, кто помогал.
+  В случае порта чего-либо должна быть ссылка на источник.
+--></td></tr></table></main>
+<footer>
+    baystation12.dme
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/1740c41627d743e11c38f6b5fde46bc36678044c">1740c41</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>

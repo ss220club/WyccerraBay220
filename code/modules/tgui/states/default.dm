@@ -2,7 +2,7 @@
  * tgui state: default_state
  *
  * Checks a number of things -- mostly physical distance for humans and view for robots.
- *\
+ */
 
 GLOBAL_DATUM_INIT(tgui_default_state, /datum/tgui_state/default, new)
 

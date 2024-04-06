@@ -48,7 +48,7 @@
  * @param ui_key string A string key to use for this UI. Allows for multiple unique UIs on one obj/mob (defaut value "main")
  *
  * @return data /list Data to be sent to the UI
- *\
+ */
 /datum/proc/ui_data(mob/user, ui_key = "main")
 	return list() // Not implemented.
 

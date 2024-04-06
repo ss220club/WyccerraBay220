@@ -30,7 +30,7 @@
 	var/current_status = STATE_DEFAULT
 	var/msg_line1 = ""
 	var/msg_line2 = ""
-	var/centcomm_message_cooldown = 0
+	var/centcom_message_cooldown = 0
 	var/announcment_cooldown = 0
 	var/datum/announcement/priority/crew_announcement = new
 	var/current_viewing_message_id = 0
@@ -154,7 +154,7 @@
 			if(href_list["target"] == "emagged")
 				if(program)
 					if(is_authenticated(user) && program.computer.emagged() && !issilicon(usr) && ntn_comm)
-						if(centcomm_message_cooldown)
+						if(centcom_message_cooldown)
 							to_chat(usr, SPAN_WARNING("Arrays recycling. Please stand by."))
 							SSnano.update_uis(src)
 							return
@@ -164,12 +164,12 @@
 						Syndicate_announce(input, usr)
 						to_chat(usr, SPAN_NOTICE("Message transmitted."))
 						log_say("[key_name(usr)] has made an illegal announcement: [input]")
-						centcomm_message_cooldown = 1
+						centcom_message_cooldown = 1
 						spawn(300)//30 second cooldown
-							centcomm_message_cooldown = 0
+							centcom_message_cooldown = 0
 			else if(href_list["target"] == "regular")
 				if(is_authenticated(user) && !issilicon(usr) && ntn_comm)
-					if(centcomm_message_cooldown)
+					if(centcom_message_cooldown)
 						to_chat(usr, SPAN_WARNING("Arrays recycling. Please stand by."))
 						SSnano.update_uis(src)
 						return
@@ -179,12 +179,12 @@
 					var/input = sanitize(input("Please choose a message to transmit to [GLOB.using_map.boss_short] via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination.  Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "") as null|text)
 					if(!input || !can_still_topic())
 						return
-					Centcomm_announce(input, usr)
+					Centcom_announce(input, usr)
 					to_chat(usr, SPAN_NOTICE("Message transmitted."))
 					log_say("[key_name(usr)] has made an IA [GLOB.using_map.boss_short] announcement: [input]")
-					centcomm_message_cooldown = 1
+					centcom_message_cooldown = 1
 					spawn(300) //30 second cooldown
-						centcomm_message_cooldown = 0
+						centcom_message_cooldown = 0
 		if("evac")
 			. = TOPIC_HANDLED
 			if(is_authenticated(user))

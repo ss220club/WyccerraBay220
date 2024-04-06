@@ -24,7 +24,7 @@
 	station_short = "Sierra"
 	dock_name     = "TBD"
 	boss_name     = "Central Command"
-	boss_short    = "Centcomm"
+	boss_short    = "Centcom"
 	company_name  = "Nanotrasen"
 	company_short = "NT"
 

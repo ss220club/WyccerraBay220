@@ -750,7 +750,7 @@
 /obj/machinery/button/windowtint/on_update_icon()
 	icon_state = "light[active]"
 
-//Centcomm windows
+//Centcom windows
 /obj/structure/window/reinforced/crescent
 	atom_flags = ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_CHECKS_BORDER | ATOM_FLAG_NO_TOOLS
 

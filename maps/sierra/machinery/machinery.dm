@@ -122,16 +122,16 @@
 	base_icon_state = "industrial"
 	islocked = 0
 
-/obj/machinery/photocopier/faxmachine/centcomm
+/obj/machinery/photocopier/faxmachine/centcom
 	req_access = list(access_cent_general)
 	department = "Office of Civil Investigation and Enforcement"
 
-/obj/machinery/photocopier/faxmachine/centcomm/Initialize()
+/obj/machinery/photocopier/faxmachine/centcom/Initialize()
 	. = ..()
 	destination = pick(GLOB.alldepartments)
 	department = "[GLOB.using_map.boss_name]"
 
-/obj/machinery/photocopier/faxmachine/centcomm/attack_hand(mob/user as mob)
+/obj/machinery/photocopier/faxmachine/centcom/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	var/dat = "Fax Machine<BR>"
 	var/scan_name
@@ -164,7 +164,7 @@
 	onclose(user, "copier")
 	return
 
-/obj/machinery/photocopier/faxmachine/centcomm/Topic(href, href_list)
+/obj/machinery/photocopier/faxmachine/centcom/Topic(href, href_list)
 	var/mob/user = usr
 	if(href_list["send"])
 		if(copyitem)

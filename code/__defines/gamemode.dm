@@ -65,7 +65,7 @@
 #define GHOSTCAST		FLAG(0)		//can a ghost cast it?
 #define NEEDSCLOTHES	FLAG(1)		//does it need the wizard garb to cast? Nonwizard spells should not have this
 #define NEEDSHUMAN		FLAG(2)		//does it require the caster to be human?
-#define Z2NOCAST		FLAG(3)		//if this is added, the spell can't be cast at centcomm
+#define Z2NOCAST		FLAG(3)		//if this is added, the spell can't be cast at centcom
 #define NO_SOMATIC		FLAG(4)	//spell will go off if the person is incapacitated or stunned
 #define IGNOREPREV		FLAG(5)	//if set, each new target does not overlap with the previous one
 //The following flags only affect different types of spell, and therefore overlap

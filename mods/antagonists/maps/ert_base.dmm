@@ -214,7 +214,7 @@
 "aE" = (
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Bluespace Drive Compartment"
 	},
@@ -432,7 +432,7 @@
 "bb" = (
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Commanding Officer";
 	dir = 4
@@ -748,7 +748,7 @@
 "bS" = (
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Bridge Access"
 	},

@@ -3199,7 +3199,7 @@
 	},
 /area/centcom/control)
 "awB" = (
-/obj/machinery/telecomms/server/presets/centcomm,
+/obj/machinery/telecomms/server/presets/centcom,
 /obj/floor_decal/corner/green{
 	dir = 5
 	},

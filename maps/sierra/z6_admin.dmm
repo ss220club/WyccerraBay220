@@ -10417,7 +10417,7 @@
 	},
 /area/centcom/living)
 "gzh" = (
-/obj/machinery/telecomms/server/presets/centcomm,
+/obj/machinery/telecomms/server/presets/centcom,
 /obj/floor_decal/borderfloorblack{
 	dir = 1
 	},
@@ -10897,7 +10897,7 @@
 	dir = 4
 	},
 /obj/structure/table/steel_reinforced,
-/obj/machinery/photocopier/faxmachine/centcomm{
+/obj/machinery/photocopier/faxmachine/centcom{
 	department = "Central Command";
 	desc = "Fax machine, called in honor of the legendary bureaucrat. It has small keyboard so you can write answers right there!";
 	name = "fox machine"
@@ -11342,7 +11342,7 @@
 /obj/machinery/button/blast_door{
 	dir = 8;
 	id_tag = "crescent_checkpoint_access";
-	name = "Centcomm Arivals";
+	name = "Centcom Arivals";
 	pixel_y = 3;
 	req_access = list("ACCESS_CARGO");
 	pixel_x = 23
@@ -12394,7 +12394,7 @@
 "jYR" = (
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Facility Access"
 	},
@@ -14727,7 +14727,7 @@
 "oGh" = (
 /turf/unsimulated/wall{
 	desc = "A secure airlock. Doesn't look like you can get through easily.";
-	icon = 'icons/obj/doors/centcomm/door.dmi';
+	icon = 'icons/obj/doors/centcom/door.dmi';
 	icon_state = "closed";
 	name = "Bridge";
 	dir = 4
@@ -17809,7 +17809,7 @@
 /obj/machinery/button/blast_door{
 	dir = 4;
 	id_tag = "crescent_checkpoint_access";
-	name = "Centcomm Arivals";
+	name = "Centcom Arivals";
 	pixel_x = -28;
 	pixel_y = 7;
 	req_access = list("ACCESS_CARGO")
@@ -18167,7 +18167,7 @@
 /obj/floor_decal/industrial/warning{
 	dir = 1
 	},
-/obj/machinery/photocopier/faxmachine/centcomm{
+/obj/machinery/photocopier/faxmachine/centcom{
 	department = "ICCGN PC Konigsberg Command Relay"
 	},
 /turf/unsimulated/floor/techfloor{
@@ -18262,7 +18262,7 @@
 /area/centcom/living)
 "uvl" = (
 /obj/structure/table/steel_reinforced,
-/obj/machinery/photocopier/faxmachine/centcomm{
+/obj/machinery/photocopier/faxmachine/centcom{
 	department = "SFV Stinger Command Departament"
 	},
 /obj/floor_decal/corner/blue/mono,

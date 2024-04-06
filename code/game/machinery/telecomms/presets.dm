@@ -30,7 +30,7 @@
 	network = "tcommsat"
 	produces_heat = 0
 	autolinkers = list("hub_cent", "c_relay", "s_relay", "m_relay", "r_relay",
-	 "centcomm", "receiverCent", "broadcasterCent")
+	 "centcom", "receiverCent", "broadcasterCent")
 
 //Receivers
 
@@ -127,7 +127,7 @@
 	network = "tcommsat"
 	freq_listening = list(ERT_FREQ, DTH_FREQ, ENT_FREQ)
 	produces_heat = 0
-	autolinkers = list("processorCent", "centcomm")
+	autolinkers = list("processorCent", "centcom")
 
 //Processors
 
@@ -265,12 +265,12 @@
 	channel_tags = list(list(SEC_FREQ, "Security", COMMS_COLOR_SECURITY))
 	autolinkers = list("security")
 
-/obj/machinery/telecomms/server/presets/centcomm
+/obj/machinery/telecomms/server/presets/centcom
 	id = "CentCom Server"
 	freq_listening = list(ERT_FREQ, DTH_FREQ)
 	channel_tags = list(list(ERT_FREQ, "Response Team", COMMS_COLOR_CENTCOMM), list(DTH_FREQ, "Special Ops", COMMS_COLOR_SYNDICATE))
 	produces_heat = 0
-	autolinkers = list("centcomm")
+	autolinkers = list("centcom")
 
 
 //Broadcasters

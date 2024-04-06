@@ -9,7 +9,7 @@ import { Box, Button, Flex, Icon, Section } from '../../components';
  * * `isAI` — Whether the user is an AI. If true, shows "Login as AI"
  * * `isRobot` — Whether the user is a robot. If true, shows "Login as Cyborg"
  * * `isAdmin` — Whether the user is an admin. If true, shows
- *               "Secure CentComm Login"
+ *               "Secure CentCom Login"
  *
  * Clicking the main button calls the `login_insert` TGUI act.
  * Clicking either the AI or normal login button calls
@@ -85,7 +85,7 @@ export const LoginScreen = (_properties, context) => {
           {!!isAdmin && (
             <Button
               icon="sign-in-alt"
-              content="CentComm Secure Login"
+              content="CentCom Secure Login"
               onClick={() =>
                 act('login_login', {
                   login_type: 4,

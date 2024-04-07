@@ -83,7 +83,7 @@
 
 	var/datum/comm_message_listener/l = obtain_message_listener()
 	data["messages"] = l.messages
-	data["message_deletion_allowed"] = l != global_message_listener
+	data["message_deletion_allowed"] = l != GLOB.global_message_listener
 	data["message_current_id"] = current_viewing_message_id
 	if(current_viewing_message)
 		data["message_current"] = current_viewing_message
@@ -117,7 +117,7 @@
 	if(program)
 		var/datum/computer_file/program/comm/P = program
 		return P.message_core
-	return global_message_listener
+	return GLOB.global_message_listener
 
 /datum/nano_module/program/comm/Topic(href, href_list)
 	if(..())
@@ -239,7 +239,7 @@
 				current_status = STATE_VIEWMESSAGE
 		if("delmessage")
 			. = TOPIC_HANDLED
-			if(is_authenticated(user) && ntn_comm && l != global_message_listener)
+			if(is_authenticated(user) && ntn_comm && l != GLOB.global_message_listener)
 				l.Remove(current_viewing_message)
 			current_status = STATE_MESSAGELIST
 		if("printmessage")

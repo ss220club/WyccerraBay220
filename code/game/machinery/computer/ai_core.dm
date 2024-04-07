@@ -331,7 +331,7 @@ GLOBAL_LIST_INIT(empty_playable_ai_cores, list())
 				spawn(0) // Don't block wrapping things up if the user doesn't select an option
 					var/open_for_latejoin = alert(user, "Would you like this core to be open for latejoining AIs?", "Latejoin", "Yes", "Yes", "No") == "Yes"
 					if (open_for_latejoin && !QDELETED(ai) && ((world.time - timecheck) <= 1 MINUTE))
-						empty_playable_ai_cores += ai
+						GLOB.empty_playable_ai_cores += ai
 			qdel_self()
 			return TRUE
 
@@ -415,7 +415,7 @@ GLOBAL_LIST_INIT(empty_playable_ai_cores, list())
 	obj_flags = OBJ_FLAG_ANCHORABLE
 
 /obj/structure/AIcore/deactivated/Destroy()
-	empty_playable_ai_cores -= src
+	GLOB.empty_playable_ai_cores -= src
 	. = ..()
 
 /obj/structure/AIcore/deactivated/proc/load_ai(mob/living/silicon/ai/transfer, obj/item/aicard/card, mob/user)
@@ -471,9 +471,9 @@ GLOBAL_LIST_INIT(empty_playable_ai_cores, list())
 	var/obj/structure/AIcore/deactivated/D = cores[id]
 	if(!D) return
 
-	if(D in empty_playable_ai_cores)
-		empty_playable_ai_cores -= D
+	if(D in GLOB.empty_playable_ai_cores)
+		GLOB.empty_playable_ai_cores -= D
 		to_chat(src, "[id] is now [SPAN_COLOR("#ff0000", "not available")] for latejoining AIs.")
 	else
-		empty_playable_ai_cores += D
+		GLOB.empty_playable_ai_cores += D
 		to_chat(src, "[id] is now [SPAN_COLOR("#008000", "available")] for latejoining AIs.")

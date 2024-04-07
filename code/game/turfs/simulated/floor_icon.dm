@@ -96,7 +96,7 @@ GLOBAL_LIST_INIT(flooring_cache, list())
 			F.update_icon()
 
 /turf/simulated/floor/proc/get_flooring_overlay(cache_key, icon_base, icon_dir = 0, external = FALSE)
-	if(!flooring_cache[cache_key])
+	if(!GLOB.flooring_cache[cache_key])
 		var/image/I = image(icon = flooring.icon, icon_state = icon_base, dir = icon_dir)
 		I.turf_decal_layerise()
 
@@ -113,17 +113,17 @@ GLOBAL_LIST_INIT(flooring_cache, list())
 				I.pixel_x = world.icon_size
 		I.layer = flooring.decal_layer
 
-		flooring_cache[cache_key] = I
-	return flooring_cache[cache_key]
+		GLOB.flooring_cache[cache_key] = I
+	return GLOB.flooring_cache[cache_key]
 
 /turf/simulated/floor/proc/get_damage_overlay(cache_key, blend)
-	if(!flooring_cache[cache_key])
+	if(!GLOB.flooring_cache[cache_key])
 		var/image/I = image(icon = 'icons/turf/flooring/damage.dmi', icon_state = cache_key)
 		if(blend)
 			I.blend_mode = blend
 		I.turf_decal_layerise()
-		flooring_cache[cache_key] = I
-	return flooring_cache[cache_key]
+		GLOB.flooring_cache[cache_key] = I
+	return GLOB.flooring_cache[cache_key]
 
 /singleton/flooring/proc/test_link(turf/origin, turf/T)
 	var/is_linked = FALSE

@@ -122,7 +122,7 @@ GLOBAL_DATUM_INIT(minor_announcement, /datum/announcement/priority, new(do_log =
 	GLOB.using_map.level_x_biohazard_announcement(7)
 
 /proc/ion_storm_announcement(list/affecting_z)
-	command_announcement.Announce("It has come to our attention that the [station_name()] passed through an ion storm.  Please monitor all electronic equipment for malfunctions.", "Anomaly Alert", zlevels = affecting_z)
+	GLOB.command_announcement.Announce("It has come to our attention that the [station_name()] passed through an ion storm.  Please monitor all electronic equipment for malfunctions.", "Anomaly Alert", zlevels = affecting_z)
 
 /proc/AnnounceArrival(mob/living/carbon/human/character, datum/job/job, join_message)
 	if(!istype(job) || !job.announced)
@@ -144,22 +144,22 @@ GLOBAL_DATUM_INIT(minor_announcement, /datum/announcement/priority, new(do_log =
 	if (security_state.current_security_level_is_same_or_higher_than(security_state.high_security_level))
 		return "Common"
 
-	if(job.department_flag & (COM | CIV | MSC))
+	if(job.department_flag & (GLOB.COM | GLOB.CIV | GLOB.MSC))
 		return "Common"
-	if(job.department_flag & SUP)
+	if(job.department_flag & GLOB.SUP)
 		return "Supply"
-	if(job.department_flag & SPT)
+	if(job.department_flag & GLOB.SPT)
 		return "Command"
-	if(job.department_flag & SEC)
+	if(job.department_flag & GLOB.SEC)
 		return "Security"
-	if(job.department_flag & ENG)
+	if(job.department_flag & GLOB.ENG)
 		return "Engineering"
-	if(job.department_flag & MED)
+	if(job.department_flag & GLOB.MED)
 		return "Medical"
-	if(job.department_flag & SCI)
+	if(job.department_flag & GLOB.SCI)
 		return "Science"
-	if(job.department_flag & SRV)
+	if(job.department_flag & GLOB.SRV)
 		return "Service"
-	if(job.department_flag & EXP)
+	if(job.department_flag & GLOB.EXP)
 		return "Exploration"
 	return "Common"

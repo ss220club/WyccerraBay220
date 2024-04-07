@@ -264,7 +264,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1
 
 //Ensure the frequency is within bounds of what it should be sending/recieving at
-/proc/sanitize_frequency(f, low = PUBLIC_LOW_FREQ, high = PUBLIC_HIGH_FREQ)
+/proc/sanitize_frequency(f, low = GLOB.PUBLIC_LOW_FREQ, high = GLOB.PUBLIC_HIGH_FREQ)
 	f = round(f)
 	f = max(low, f)
 	f = min(high, f)
@@ -960,7 +960,7 @@ GLOBAL_LIST_INIT(WALLITEMS, list(
 	))
 /proc/gotwallitem(loc, dir)
 	for(var/obj/O in loc)
-		for(var/item in WALLITEMS)
+		for(var/item in GLOB.WALLITEMS)
 			if(istype(O, item))
 				//Direction works sometimes
 				if(O.dir == dir)
@@ -984,7 +984,7 @@ GLOBAL_LIST_INIT(WALLITEMS, list(
 
 	//Some stuff is placed directly on the wallturf (signs)
 	for(var/obj/O in get_step(loc, dir))
-		for(var/item in WALLITEMS)
+		for(var/item in GLOB.WALLITEMS)
 			if(istype(O, item))
 				if(O.pixel_x == 0 && O.pixel_y == 0)
 					return 1
@@ -1025,7 +1025,7 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 
 /mob/dview/Destroy()
 	SHOULD_CALL_PARENT(FALSE)
-	return QDEL_HINT_LETMELIVE
+	return GLOB.QDEL_HINT_LETMELIVE
 
 /**
  * Sets the atom's color and light values to those of `origin`.

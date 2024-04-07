@@ -26,7 +26,7 @@ GLOBAL_LIST_INIT(nuke_disks, list())
 
 //checks if L has a nuke disk on their person
 /datum/game_mode/nuclear/proc/check_mob(mob/living/L)
-	for(var/obj/item/disk/nuclear/N in nuke_disks)
+	for(var/obj/item/disk/nuclear/N in GLOB.nuke_disks)
 		if(N.storage_depth(L) >= 0)
 			return TRUE
 	return FALSE

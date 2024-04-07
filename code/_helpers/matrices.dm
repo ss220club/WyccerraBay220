@@ -104,9 +104,9 @@ GLOBAL_LIST_INIT(delta_index, list(
 	else
 		x = value % 1
 		if(x == 0)
-			x = delta_index[value]
+			x = GLOB.delta_index[value]
 		else
-			x = delta_index[value] * (1-x) + delta_index[value+1] * x//use linear interpolation for more granularity.
+			x = GLOB.delta_index[value] * (1-x) + GLOB.delta_index[value+1] * x//use linear interpolation for more granularity.
 		x = x * 127 + 127
 
 	var/mult = x / 127

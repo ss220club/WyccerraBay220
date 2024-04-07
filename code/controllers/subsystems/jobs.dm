@@ -112,7 +112,7 @@ SUBSYSTEM_DEF(jobs)
 
 
 /datum/controller/subsystem/jobs/proc/guest_jobbans(job)
-	for(var/dept in list(COM, MSC, SEC))
+	for(var/dept in list(GLOB.COM, GLOB.MSC, GLOB.SEC))
 		if(job in titles_by_department(dept))
 			return TRUE
 	return FALSE
@@ -229,7 +229,7 @@ SUBSYSTEM_DEF(jobs)
 			continue
 		if(job.is_restricted(player.client.prefs))
 			continue
-		if(job.title in titles_by_department(COM)) //If you want a command position, select it!
+		if(job.title in titles_by_department(GLOB.COM)) //If you want a command position, select it!
 			continue
 		if(jobban_isbanned(player, job.title))
 			continue
@@ -245,7 +245,7 @@ SUBSYSTEM_DEF(jobs)
 ///This proc is called before the level loop of divide_occupations() and will try to select a head, ignoring ALL non-head preferences for every level until it locates a head or runs out of levels to check
 /datum/controller/subsystem/jobs/proc/fill_head_position(datum/game_mode/mode)
 	for (var/level = 1 to 3)
-		for (var/command_position as anything in titles_by_department(COM))
+		for (var/command_position as anything in titles_by_department(GLOB.COM))
 			var/datum/job/job = get_by_title(command_position)
 			if (!job)
 				continue
@@ -276,7 +276,7 @@ SUBSYSTEM_DEF(jobs)
 
 ///This proc is called at the start of the level loop of divide_occupations() and will cause head jobs to be checked before any other jobs of the same level
 /datum/controller/subsystem/jobs/proc/CheckHeadPositions(level, datum/game_mode/mode)
-	for(var/command_position in titles_by_department(COM))
+	for(var/command_position in titles_by_department(GLOB.COM))
 		var/datum/job/job = get_by_title(command_position)
 		if(!job)	continue
 		var/list/candidates = find_occupation_candidates(job, level)
@@ -346,7 +346,7 @@ SUBSYSTEM_DEF(jobs)
 	for(var/mob/new_player/player in unassigned_roundstart)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
 			var/datum/job/ass = DEFAULT_JOB_TYPE
-			if((GLOB.using_map.flags & MAP_HAS_BRANCH) && player.client.prefs.branches[initial(ass.title)])
+			if((GLOB.using_map.flags & GLOB.MAP_HAS_BRANCH) && player.client.prefs.branches[initial(ass.title)])
 				var/datum/mil_branch/branch = GLOB.mil_branches.get_branch(player.client.prefs.branches[initial(ass.title)])
 				ass = branch.assistant_job
 			assign_role(player, initial(ass.title), mode = mode)
@@ -425,9 +425,9 @@ SUBSYSTEM_DEF(jobs)
 
 	if(job)
 		if(H.client)
-			if(GLOB.using_map.flags & MAP_HAS_BRANCH)
+			if(GLOB.using_map.flags & GLOB.MAP_HAS_BRANCH)
 				H.char_branch = GLOB.mil_branches.get_branch(H.client.prefs.branches[rank])
-			if(GLOB.using_map.flags & MAP_HAS_RANK)
+			if(GLOB.using_map.flags & GLOB.MAP_HAS_RANK)
 				H.char_rank = GLOB.mil_branches.get_rank(H.client.prefs.branches[rank], H.client.prefs.ranks[rank])
 
 		// Transfers the skill settings for the job to the mob
@@ -451,7 +451,7 @@ SUBSYSTEM_DEF(jobs)
 			if (H.client.prefs.email_pass)
 				pass = H.client.prefs.email_pass
 			if(domain)
-				ntnet_global.create_email(H, addr, domain, rank, pass)
+				GLOB.ntnet_global.create_email(H, addr, domain, rank, pass)
 		// END EMAIL GENERATION
 
 		job.equip(H, H.mind ? H.mind.role_alt_title : "", H.char_branch, H.char_rank)
@@ -551,5 +551,5 @@ SUBSYSTEM_DEF(jobs)
 			continue
 		if(locate(/mob/living) in S.loc)
 			continue
-		empty_playable_ai_cores += new /obj/structure/AIcore/deactivated(get_turf(S))
+		GLOB.empty_playable_ai_cores += new /obj/structure/AIcore/deactivated(get_turf(S))
 	return 1

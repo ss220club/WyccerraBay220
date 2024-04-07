@@ -9,7 +9,7 @@
 	construct_state = /singleton/machine_construction/default/panel_closed
 	health_max = 200
 	health_min_damage = 10
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 
 	machine_name = "anomaly container"
 	machine_desc = "A container with an integrated suspension generator to keep anything inside in stasis for the sake of its own safety, and their surroundings."

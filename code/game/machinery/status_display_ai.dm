@@ -31,8 +31,8 @@ GLOBAL_LIST_INIT(ai_status_emotions, list(
 /proc/get_ai_emotions(ckey)
 	RETURN_TYPE(/list)
 	var/list/emotions = new
-	for(var/emotion_name in ai_status_emotions)
-		var/datum/ai_emotion/emotion = ai_status_emotions[emotion_name]
+	for(var/emotion_name in GLOB.ai_status_emotions)
+		var/datum/ai_emotion/emotion = GLOB.ai_status_emotions[emotion_name]
 		if(!emotion.ckey || emotion.ckey == ckey)
 			emotions += emotion_name
 
@@ -84,7 +84,7 @@ GLOBAL_LIST_INIT(ai_status_emotions, list(
 		if(0) //Blank
 			ClearOverlays()
 		if(1) // AI emoticon
-			var/datum/ai_emotion/ai_emotion = ai_status_emotions[emotion]
+			var/datum/ai_emotion/ai_emotion = GLOB.ai_status_emotions[emotion]
 			set_picture(ai_emotion.overlay)
 		if(2) // BSOD
 			set_picture("ai_bsod")

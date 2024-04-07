@@ -4,7 +4,7 @@
 
 /datum/computer_file/report/recipient/sec/New()
 	..()
-	set_access(access_security)
+	set_access(GLOB.access_security)
 	set_access(access_heads, override = 0)
 
 /datum/computer_file/report/recipient/sec/incident

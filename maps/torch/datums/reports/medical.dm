@@ -69,10 +69,10 @@
 	add_field(/datum/report_field/text_label/instruction, "By signing below, I affirm that all of the above is factually correct to the best of my knowledge.")
 	add_field(/datum/report_field/people/from_manifest, "Doctor")
 	add_field(/datum/report_field/signature, "Doctor's Signature")
-	set_access(access_morgue, GLOB.access_surgery)
+	set_access(GLOB.access_morgue, GLOB.access_surgery)
 
 	add_field(/datum/report_field/text_label/instruction, "By signing below, I affirm that I have reviewed all of the above and affirm it is factually correct to the best of my knowledge. If there is no Chief Medical Officer available, this signature may be skipped.")
 	var/datum/report_field/cmofield = add_field(/datum/report_field/people/from_manifest, "Chief Medical Officer")
-	cmofield.set_access(access_morgue, GLOB.access_cmo)
+	cmofield.set_access(GLOB.access_morgue, GLOB.access_cmo)
 	cmofield = add_field(/datum/report_field/signature, "Chief Medical Officer's Signature")
-	cmofield.set_access(access_morgue, GLOB.access_cmo)
+	cmofield.set_access(GLOB.access_morgue, GLOB.access_cmo)

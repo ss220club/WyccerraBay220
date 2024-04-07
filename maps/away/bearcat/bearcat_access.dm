@@ -1,12 +1,12 @@
 GLOBAL_VAR_CONST(access_bearcat, "ACCESS_BEARCAT") //998
 /datum/access/bearcat
-	id = access_bearcat
+	id = GLOB.access_bearcat
 	desc = "FTU Crewman"
 	region = ACCESS_REGION_NONE
 
 GLOBAL_VAR_CONST(access_bearcat_captain, "ACCESS_BEARCAT_CAPTAIN") //999
 /datum/access/bearcat_captain
-	id = access_bearcat_captain
+	id = GLOB.access_bearcat_captain
 	desc = "FTU Captain"
 	region = ACCESS_REGION_NONE
 
@@ -14,7 +14,7 @@ GLOBAL_VAR_CONST(access_bearcat_captain, "ACCESS_BEARCAT_CAPTAIN") //999
 	access = list(GLOB.access_bearcat)
 
 /obj/item/card/id/bearcat_captain
-	access = list(GLOB.access_bearcat, access_bearcat_captain)
+	access = list(GLOB.access_bearcat, GLOB.access_bearcat_captain)
 
 /obj/machinery/door/airlock/autoname/bearcat
 

@@ -93,7 +93,7 @@
 	add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Сотрудник, проводящий вскрытие, обязан обеспечить безопасную доставку личных и служебных вещей погибшего в Отдел Защиты Активов объекта, \
 	либо их хранение в морге объекта.")
-	set_access(access_morgue, GLOB.access_morgue)
+	set_access(GLOB.access_morgue, GLOB.access_morgue)
 
 /datum/computer_file/report/recipient/med/medical_services
 	logo = "\[sierralogo\]"

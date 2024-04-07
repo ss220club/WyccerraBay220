@@ -154,7 +154,7 @@
 
 GLOBAL_VAR_CONST(access_voxship, "ACCESS_VOXSHIP")
 /datum/access/vox
-	id = access_voxship
+	id = GLOB.access_voxship
 	desc = "Vox Ship"
 	region = ACCESS_REGION_NONE
 

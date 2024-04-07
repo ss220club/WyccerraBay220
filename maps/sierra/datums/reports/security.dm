@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/sec/generate_fields()
 	..()
-	set_access(access_security)
+	set_access(GLOB.access_security)
 
 /datum/computer_file/report/recipient/sec/report_detective
 	form_name = "NT-SEC-14"
@@ -76,7 +76,7 @@
 	add_field(/datum/report_field/text_label/instruction, "Для патрулирующего. Проведите полный осмотр назначенной палубы, включая тех. туннели.\
 	Отвечайте на вызовы с других палуб только при приказе. Вы ответственны за безопасность на закрепленной за вами палубе.")
 	add_field(/datum/report_field/signature, "Подпись", required = 1)
-	set_access(access_armory, GLOB.access_armory)
+	set_access(GLOB.access_armory, GLOB.access_armory)
 
 /datum/computer_file/report/recipient/sec/armory
 	form_name = "NT-SEC-05"
@@ -110,7 +110,7 @@
 	add_field(/datum/report_field/pencode_text, "Прочее оружие")
 	add_field(/datum/report_field/time, "Опись арсенала проведена в")
 	add_field(/datum/report_field/signature, "Подпись сотрудника проводившего опись", required = 1)
-	set_access(access_armory, GLOB.access_armory)
+	set_access(GLOB.access_armory, GLOB.access_armory)
 
 /datum/computer_file/report/recipient/weapon
 	form_name = "NT-SEC-15"

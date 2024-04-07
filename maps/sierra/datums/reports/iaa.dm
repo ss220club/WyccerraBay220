@@ -183,7 +183,7 @@
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел.")
 	for(var/datum/report_field/field in iaahop_fields)
 		field.set_access(access_edit = list(GLOB.access_hop, GLOB.access_iaa))
-	set_access(access_security, override = 0)
+	set_access(GLOB.access_security, override = 0)
 
 /datum/computer_file/report/recipient/iaa/audit
 	form_name = "HR-NTCO-03f"

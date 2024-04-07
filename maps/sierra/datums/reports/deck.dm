@@ -39,7 +39,7 @@
 	permission_fields += add_field(/datum/report_field/signature, "Для разрешения на вылет, поставьте подпись либо печать здесь", required = 1)
 	for(var/datum/report_field/field in permission_fields)
 		field.set_access(access_edit=list(list(GLOB.access_el, GLOB.access_qm, GLOB.access_heads)))
-	set_access(list(list(GLOB.access_guppy, access_expedition_shuttle, access_petrov)),list(list(GLOB.access_guppy, access_expedition_shuttle, access_petrov)))
+	set_access(list(list(GLOB.access_guppy, GLOB.access_expedition_shuttle, GLOB.access_petrov)),list(list(GLOB.access_guppy, GLOB.access_expedition_shuttle, GLOB.access_petrov)))
 
 /datum/computer_file/report/recipient/deck/docking
 	form_name = "NT-DEC-33"

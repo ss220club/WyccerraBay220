@@ -28,13 +28,13 @@
 	access = list(
 		GLOB.access_bridge,
 		access_torch_fax,
-		access_chief_steward,
+		GLOB.access_chief_steward,
 		access_solgov_crew,
 		access_radio_comm,
 		access_radio_serv,
 		GLOB.access_emergency_storage,
 		GLOB.access_janitor,
-		access_commissary,
+		GLOB.access_commissary,
 		GLOB.access_hydroponics,
 		GLOB.access_kitchen,
 		access_o_mess
@@ -137,7 +137,7 @@
 		SKILL_COOKING = SKILL_TRAINED
 	)
 	access = list(
-		access_commissary,
+		GLOB.access_commissary,
 		GLOB.access_hydroponics,
 		GLOB.access_kitchen,
 		access_radio_serv,

@@ -32,7 +32,7 @@
 
 	access = list(	GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
 			        GLOB.access_eva, GLOB.access_tech_storage, GLOB.access_atmospherics, GLOB.access_janitor, GLOB.access_construction,
-			        GLOB.access_tcomsat, access_seneng, access_hangar, GLOB.access_network)
+			        GLOB.access_tcomsat, GLOB.access_seneng, GLOB.access_hangar, GLOB.access_network)
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
@@ -93,7 +93,7 @@
 
 	access = list(	GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks,
 			       	GLOB.access_eva, GLOB.access_tech_storage, GLOB.access_atmospherics, GLOB.access_janitor,
-			        GLOB.access_construction, access_hangar, GLOB.access_emergency_storage)
+			        GLOB.access_construction, GLOB.access_hangar, GLOB.access_emergency_storage)
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
@@ -142,7 +142,7 @@
 
 	access = list(		GLOB.access_engine, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
 			            GLOB.access_eva, GLOB.access_janitor, GLOB.access_construction,
-			            access_hangar)
+			            GLOB.access_hangar)
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,

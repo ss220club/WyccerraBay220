@@ -32,7 +32,7 @@
 	access = list(
 		GLOB.access_security, GLOB.access_brig, GLOB.access_armory, GLOB.access_forensics_lockers,
 		GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
-		GLOB.access_eva, GLOB.access_sec_doors, access_solgov_crew, access_gun, access_torch_fax,
+		GLOB.access_eva, GLOB.access_sec_doors, access_solgov_crew, GLOB.access_gun, access_torch_fax,
 		access_radio_sec
 	)
 

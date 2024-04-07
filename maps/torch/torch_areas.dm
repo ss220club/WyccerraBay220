@@ -904,12 +904,12 @@
 /area/quartermaster/expedition/storage
 	name = "\improper Hangar Expedition Storage"
 	icon_state = "mining"
-	req_access = list(list(GLOB.access_mining, access_explorer, GLOB.access_xenoarch))
+	req_access = list(list(GLOB.access_mining, GLOB.access_explorer, GLOB.access_xenoarch))
 
 /area/quartermaster/expedition/atmos
 	name = "\improper Hangar Atmospheric Storage"
 	icon_state = "mining"
-	req_access = list(list(GLOB.access_mining, access_explorer, GLOB.access_xenoarch))
+	req_access = list(list(GLOB.access_mining, GLOB.access_explorer, GLOB.access_xenoarch))
 
 /area/quartermaster/exploration
 	name = "\improper Exploration Equipment"

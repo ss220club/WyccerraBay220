@@ -14,7 +14,7 @@ GLOBAL_VAR_CONST(NETWORK_FIFTH_DECK, "Fifth Deck")
 		if(NETWORK_BRIDGE)
 			return GLOB.access_heads
 		if(NETWORK_CHARON)
-			return access_expedition_shuttle
+			return GLOB.access_expedition_shuttle
 		if(NETWORK_HELMETS)
 			return access_solgov_crew
 	return get_shared_network_access(network) || ..()

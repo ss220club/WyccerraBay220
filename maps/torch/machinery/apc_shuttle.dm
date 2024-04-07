@@ -8,10 +8,10 @@
 	req_access = list(GLOB.access_engine_equip)
 
 /obj/machinery/power/apc/shuttle/charon
-	req_access = list(list(GLOB.access_engine_equip, access_expedition_shuttle_helm))
+	req_access = list(list(GLOB.access_engine_equip, GLOB.access_expedition_shuttle_helm))
 
 /obj/machinery/power/apc/high/shuttle/charon
-	req_access = list(list(GLOB.access_engine_equip, access_expedition_shuttle_helm))
+	req_access = list(list(GLOB.access_engine_equip, GLOB.access_expedition_shuttle_helm))
 
 /obj/machinery/power/apc/shuttle/aquila
 	req_access = list(list(GLOB.access_engine_equip, access_aquila_helm))
@@ -20,4 +20,4 @@
 	req_access = list(list(GLOB.access_engine_equip, access_aquila_helm))
 
 /obj/machinery/power/apc/hyper/shuttle/charon
-	req_access = list(list(GLOB.access_engine_equip, access_expedition_shuttle_helm))
+	req_access = list(list(GLOB.access_engine_equip, GLOB.access_expedition_shuttle_helm))

@@ -21,18 +21,18 @@
 	)
 
 	access = list(
-		access_chief_steward,
+		GLOB.access_chief_steward,
 		GLOB.access_emergency_storage,
 		GLOB.access_heads,
 		GLOB.access_janitor,
 		GLOB.access_kitchen,
-		access_bar,
-		access_actor,
+		GLOB.access_bar,
+		GLOB.access_actor,
 		GLOB.access_bridge,
 		GLOB.access_maint_tunnels,
 		GLOB.access_hydroponics,
 		GLOB.access_kitchen,
-		access_commissary,
+		GLOB.access_commissary,
 		GLOB.access_RC_announce
 	)
 
@@ -129,7 +129,7 @@
 		SKILL_BOTANY = SKILL_BASIC,
 		SKILL_CHEMISTRY = SKILL_BASIC
 	)
-	access = list(GLOB.access_maint_tunnels, GLOB.access_hydroponics, GLOB.access_kitchen, access_commissary)
+	access = list(GLOB.access_maint_tunnels, GLOB.access_hydroponics, GLOB.access_kitchen, GLOB.access_commissary)
 
 /datum/job/cook/get_description_blurb()
 	return "Вы - повар, чья миссия на этом корабле - спасти экипаж от поедания невкусной и отвратительной, с кулинарной точки зрения, еды из автоматов.\
@@ -185,7 +185,7 @@
 		/datum/mil_rank/civ/contractor,
 		/datum/mil_rank/civ/civ
 	)
-	access = list(GLOB.access_hydroponics, access_bar, access_commissary)
+	access = list(GLOB.access_hydroponics, GLOB.access_bar, GLOB.access_commissary)
 	min_skill = list(
 		SKILL_COOKING = SKILL_BASIC,
 		SKILL_BOTANY = SKILL_BASIC,

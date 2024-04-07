@@ -3,19 +3,19 @@
 ************/
 GLOBAL_VAR_CONST(access_hangar, "ACCESS_TORCH_HANGAR") //73
 /datum/access/hangar
-	id = access_hangar
+	id = GLOB.access_hangar
 	desc = "Hangar Deck"
 	region = ACCESS_REGION_GENERAL
 
 GLOBAL_VAR_CONST(access_guppy_helm, "ACCESS_TORCH_GUP_HELM") //76
 /datum/access/guppy_helm
-	id = access_guppy_helm
+	id = GLOB.access_guppy_helm
 	desc = "General Utility Pod Helm"
 	region = ACCESS_REGION_GENERAL
 
 GLOBAL_VAR_CONST(access_expedition_shuttle_helm, "ACCESS_EXPLO_HELM") //77
 /datum/access/exploration_shuttle_helm
-	id = access_expedition_shuttle_helm
+	id = GLOB.access_expedition_shuttle_helm
 	desc = "Charon Helm"
 	region = ACCESS_REGION_GENERAL
 
@@ -65,49 +65,49 @@ GLOBAL_VAR_CONST(access_representative, "ACCESS_TORCH_REPRESENTATIVE") //85
 
 GLOBAL_VAR_CONST(access_sec_guard, "ACCESS_TORCH_SECURITY_GUARD") //86
 /datum/access/sec_guard
-	id = access_sec_guard
+	id = GLOB.access_sec_guard
 	desc = "Corporate Security"
 	region = ACCESS_REGION_SERVICE
 
 GLOBAL_VAR_CONST(access_gun, "ACCESS_TORCH_CANNON") //87
 /datum/access/gun
-	id = access_gun
+	id = GLOB.access_gun
 	desc = "Gunnery"
 	region = ACCESS_REGION_COMMAND
 
 GLOBAL_VAR_CONST(access_expedition_shuttle, "ACCESS_TORCH_EXPLO") //88
 /datum/access/exploration_shuttle
-	id = access_expedition_shuttle
+	id = GLOB.access_expedition_shuttle
 	desc = "Charon"
 	region = ACCESS_REGION_GENERAL
 
 GLOBAL_VAR_CONST(access_guppy, "ACCESS_TORCH_GUP") //89
 /datum/access/guppy
-	id = access_guppy
+	id = GLOB.access_guppy
 	desc = "General Utility Pod"
 	region = ACCESS_REGION_GENERAL
 
 GLOBAL_VAR_CONST(access_seneng, "ACCESS_TORCH_SENIOR_ENG") //90
 /datum/access/seneng
-	id = access_seneng
+	id = GLOB.access_seneng
 	desc = "Senior Engineer"
 	region = ACCESS_REGION_ENGINEERING
 
 GLOBAL_VAR_CONST(access_senmed, "ACCESS_TORCH_SENIOR_MED") //91
 /datum/access/senmed
-	id = access_senmed
+	id = GLOB.access_senmed
 	desc = "Physician"
 	region = ACCESS_REGION_MEDBAY
 
 GLOBAL_VAR_CONST(access_senadv, "ACCESS_TORCH_SENIOR_ADVISOR") //92
 /datum/access/senadv
-	id = access_senadv
+	id = GLOB.access_senadv
 	desc = "Senior Enlisted Advisor"
 	region = ACCESS_REGION_COMMAND
 
 GLOBAL_VAR_CONST(access_explorer, "ACCESS_TORCH_EXPLORER") //93
 /datum/access/explorer
-	id = access_explorer
+	id = GLOB.access_explorer
 	desc = "Explorer"
 	region = ACCESS_REGION_GENERAL
 
@@ -119,13 +119,13 @@ GLOBAL_VAR_CONST(access_pathfinder, "ACCESS_TORCH_PATHFINDER") //94
 
 GLOBAL_VAR_CONST(access_commissary, "ACCESS_TORCH_SHOP") //96
 /datum/access/commissary
-	id = access_commissary
+	id = GLOB.access_commissary
 	desc = "Commissary"
 	region = ACCESS_REGION_GENERAL
 
 GLOBAL_VAR_CONST(access_chief_steward, "ACCESS_TORCH_CHIEF_STEWARD")
 /datum/access/chief_steward
-	id = access_chief_steward
+	id = GLOB.access_chief_steward
 	desc = "Chief Steward"
 	region = ACCESS_REGION_COMMAND
 
@@ -191,55 +191,55 @@ GLOBAL_VAR_CONST(access_torch_fax, "ACCESS_TORCH_FAX")
 *************/
 GLOBAL_VAR_CONST(access_petrov, "ACCESS_TORCH_PETROV") //200
 /datum/access/petrov
-	id = access_petrov
+	id = GLOB.access_petrov
 	desc = "Petrov"
 	region = ACCESS_REGION_GENERAL
 
 GLOBAL_VAR_CONST(access_petrov_helm, "ACCESS_TORCH_PETROV_HELM") //201
 /datum/access/petrov_helm
-	id = access_petrov_helm
+	id = GLOB.access_petrov_helm
 	desc = "Petrov Helm"
 	region = ACCESS_REGION_GENERAL
 
 GLOBAL_VAR_CONST(access_petrov_analysis, "ACCESS_TORCH_PETROV_ANALYSIS") //202
 /datum/access/petrov_analysis
-	id = access_petrov_analysis
+	id = GLOB.access_petrov_analysis
 	desc = "Petrov Analysis Lab"
 	region = ACCESS_REGION_RESEARCH
 
 GLOBAL_VAR_CONST(access_petrov_phoron, "ACCESS_TORCH_PETROV_PHORON") //203
 /datum/access/petrov_phoron
-	id = access_petrov_phoron
+	id = GLOB.access_petrov_phoron
 	desc = "Petrov Phoron Sublimation Lab"
 	region = ACCESS_REGION_RESEARCH
 
 GLOBAL_VAR_CONST(access_petrov_toxins, "ACCESS_TORCH_PETROV_TOXINS") //204
 /datum/access/petrov_toxins
-	id = access_petrov_toxins
+	id = GLOB.access_petrov_toxins
 	desc = "Petrov Toxins Lab"
 	region = ACCESS_REGION_RESEARCH
 
 GLOBAL_VAR_CONST(access_petrov_chemistry, "ACCESS_TORCH_PETROV_CHEMISTRY") //205
 /datum/access/petrov_chemistry
-	id = access_petrov_chemistry
+	id = GLOB.access_petrov_chemistry
 	desc = "Petrov Chemistry Lab"
 	region = ACCESS_REGION_RESEARCH
 
 GLOBAL_VAR_CONST(access_petrov_rd, "ACCESS_TORCH_PETROV_RD") //206
 /datum/access/petrov_rd
-	id = access_petrov_rd
+	id = GLOB.access_petrov_rd
 	desc = "Petrov Chief Science Officer's Office"
 	region = ACCESS_REGION_COMMAND
 
 GLOBAL_VAR_CONST(access_petrov_control, "ACCESS_TORCH_PETROV_CONTROL") //207
 /datum/access/petrov_control
-	id = access_petrov_control
+	id = GLOB.access_petrov_control
 	desc = "Petrov Control Room"
 	region = ACCESS_REGION_RESEARCH
 
 GLOBAL_VAR_CONST(access_petrov_maint, "ACCESS_TORCH_PETROV_MAINT") //208
 /datum/access/petrov_maint
-	id = access_petrov_maint
+	id = GLOB.access_petrov_maint
 	desc = "Petrov Maintenance"
 	region = ACCESS_REGION_GENERAL
 

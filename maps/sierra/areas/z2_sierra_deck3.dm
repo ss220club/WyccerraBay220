@@ -52,7 +52,7 @@
 /area/maintenance/cistern
 	name = "Third Deck - Water Cistern"
 	icon_state = "disposal"
-	req_access = list(list(GLOB.access_cargo, GLOB.access_engine, access_el))
+	req_access = list(list(GLOB.access_cargo, GLOB.access_engine, GLOB.access_el))
 
 /area/hydroponics/third_deck_storage
 	name = "Third Deck - Service - Hydroponics Storage"
@@ -72,7 +72,7 @@
 	name = "Third Deck - Service - Bar"
 	icon_state = "bar"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(list(GLOB.access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/bar/cobed

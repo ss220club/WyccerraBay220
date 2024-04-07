@@ -68,7 +68,7 @@ var/global/list/minor_air_alarms = list()
 		return TOPIC_REFRESH
 
 
-var/global/datum/topic_state/air_alarm_topic/air_alarm_topic = new()
+GLOBAL_DATUM_INIT(/datum/topic_state/air_alarm_topic/air_alarm_topic, new())
 
 /datum/topic_state/air_alarm_topic/href_list(mob/user)
 	var/list/extra_href = list()

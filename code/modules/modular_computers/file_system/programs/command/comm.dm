@@ -268,7 +268,7 @@
 General message handling stuff
 */
 var/global/list/comm_message_listeners = list() //We first have to initialize list then we can use it.
-var/global/datum/comm_message_listener/global_message_listener = new //May be used by admins
+GLOBAL_DATUM_INIT(global_message_listener, /datum/comm_message_listener, new) //May be used by admins
 var/global/last_message_id = 0
 
 /proc/get_comm_message_id()

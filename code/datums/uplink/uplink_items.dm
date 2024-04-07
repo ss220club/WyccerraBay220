@@ -1,4 +1,4 @@
-var/global/datum/uplink/uplink = new()
+GLOBAL_DATUM_INIT(/datum/uplink/uplink, new())
 
 /datum/uplink
 	var/list/items_assoc

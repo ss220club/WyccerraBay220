@@ -43,7 +43,7 @@ GLOBAL_DATUM_INIT(underwear, /datum/category_collection/underwear, new())
 
 // Visual nets
 var/global/list/datum/visualnet/visual_nets = list()
-var/global/datum/visualnet/camera/cameranet = new()
+GLOBAL_DATUM_INIT(/datum/visualnet/camera/cameranet, new())
 
 // Runes
 var/global/list/rune_list = new()

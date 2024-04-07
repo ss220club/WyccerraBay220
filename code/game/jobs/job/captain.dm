@@ -1,4 +1,4 @@
-var/global/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
+GLOBAL_DATUM_INIT(/datum/announcement/minor/captain_announcement, new(do_newscast = 1))
 
 /datum/job/captain
 	title = "Captain"

@@ -1,4 +1,4 @@
-var/global/datum/ntnet/ntnet_global = new()
+GLOBAL_DATUM_INIT(/datum/ntnet/ntnet_global, new())
 
 
 // This is the NTNet datum. There can be only one NTNet datum in game at once. Modular computers read data from this.

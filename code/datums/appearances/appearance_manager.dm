@@ -1,4 +1,4 @@
-var/global/singleton/appearance_manager/appearance_manager = new()
+GLOBAL_DATUM_INIT(singleton/appearance_manager/appearance_manager, new)
 
 /singleton/appearance_manager
 	var/list/appearances_

@@ -31,9 +31,9 @@ datum. For example:
 addTimer(CALLBACK(myMob, proc_ref(drop_l_hand())), 10 SECONDS)
 */
 
-var/global/const/GLOBAL_PROC = FALSE
+GLOBAL_VAR_CONST(GLOBAL_PROC, FALSE)
 
-var/global/const/Callback = /datum/callback
+GLOBAL_VAR_CONST(Callback, /datum/callback)
 
 
 /datum/callback

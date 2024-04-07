@@ -339,9 +339,9 @@ GLOBAL_VAR_CONST(NO_EMAG_ACT, -50)
 /mob/living/carbon/human/set_id_info(obj/item/card/id/id_card)
 	..()
 	id_card.age = age
-	if(GLOB.using_map.flags & GLOB.MAP_HAS_BRANCH)
+	if(GLOB.using_map.flags & MAP_HAS_BRANCH)
 		id_card.military_branch = char_branch
-	if(GLOB.using_map.flags & GLOB.MAP_HAS_RANK)
+	if(GLOB.using_map.flags & MAP_HAS_RANK)
 		id_card.military_rank = char_rank
 		if (char_rank)
 			var/singleton/rank_category/category = char_rank.rank_category()
@@ -355,9 +355,9 @@ GLOBAL_VAR_CONST(NO_EMAG_ACT, -50)
 	dat += text("Gender: []</A><BR>\n", sex)
 	dat += text("Age: []</A><BR>\n", age)
 
-	if(GLOB.using_map.flags & GLOB.MAP_HAS_BRANCH)
+	if(GLOB.using_map.flags & MAP_HAS_BRANCH)
 		dat += text("Branch: []</A><BR>\n", military_branch ? military_branch.name : "\[UNSET\]")
-	if(GLOB.using_map.flags & GLOB.MAP_HAS_RANK)
+	if(GLOB.using_map.flags & MAP_HAS_RANK)
 		dat += text("Rank: []</A><BR>\n", military_rank ? military_rank.name : "\[UNSET\]")
 
 	dat += text("Assignment: []</A><BR>\n", assignment)

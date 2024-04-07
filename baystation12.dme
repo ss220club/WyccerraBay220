@@ -69,6 +69,7 @@
 #include "code\__defines\lists.dm"
 #include "code\__defines\machinery.dm"
 #include "code\__defines\mapping.dm"
+#include "code\__defines\maps.dm"
 #include "code\__defines\materials.dm"
 #include "code\__defines\math_physics.dm"
 #include "code\__defines\MC.dm"

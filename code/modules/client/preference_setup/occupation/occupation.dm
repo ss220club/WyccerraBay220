@@ -335,7 +335,7 @@
 		if(istype(job))
 			var/datum/species/S = preference_species()
 			var/list/options = job.allowed_branches ? job.get_branch_rank(S) : GLOB.mil_branches.spawn_branches(S)
-			var/choice = input(user, "Choose your branch of service.", CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in options
+			var/choice = input(user, "Choose your branch of service.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in options
 			if(choice && CanUseTopic(user) && GLOB.mil_branches.is_spawn_branch(choice, S))
 				pref.branches[job.title] = choice
 				pref.ranks -= job.title
@@ -351,7 +351,7 @@
 			var/datum/species/S = preference_species()
 			var/list/branch_rank = job.allowed_branches ? job.get_branch_rank(S) : GLOB.mil_branches.spawn_branches(S)
 			var/list/options = branch_rank[branch.name] || GLOB.mil_branches.spawn_ranks(branch.name, S)
-			var/choice = input(user, "Choose your rank.", CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in options
+			var/choice = input(user, "Choose your rank.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in options
 			if(choice && CanUseTopic(user) && GLOB.mil_branches.is_spawn_rank(branch.name, choice, preference_species()))
 				pref.ranks[job.title] = choice
 				pref.skills_allocated = pref.sanitize_skills(pref.skills_allocated)		// Check our skillset is still valid

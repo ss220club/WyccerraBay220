@@ -155,7 +155,7 @@
 			if (health_fraction < 0 && !istype(src, /mob/living/silicon/robot/drone))
 				health_fraction = health / -config.health_threshold_dead
 			switch (health_fraction)
-				if (1 to POSITIVE_INFINITY)
+				if (1 to INFINITY)
 					healths.icon_state = "health0"
 				if (0.75 to 1)
 					healths.icon_state = "health1"

@@ -35,10 +35,10 @@
 /datum/movement_handler/mob/delay/exosuit/MayMove(mover, is_external)
 	var/mob/living/exosuit/exosuit = host
 	if(mover && (mover != exosuit) && (!(mover in exosuit.pilots)) && is_external)
-		return GLOB.MOVEMENT_PROCEED
+		return MOVEMENT_PROCEED
 	else if(world.time >= next_move)
-		return GLOB.MOVEMENT_PROCEED
-	return GLOB.MOVEMENT_STOP
+		return MOVEMENT_PROCEED
+	return MOVEMENT_STOP
 
 /datum/movement_handler/mob/delay/exosuit/DoMove(direction, mover, is_external) //Delay must be handled by other handlers.
 	return
@@ -59,26 +59,26 @@
 /datum/movement_handler/mob/exosuit/MayMove(mob/mover, is_external)
 	var/mob/living/exosuit/exosuit = host
 	if((!(mover in exosuit.pilots) && mover != exosuit) || exosuit.incapacitated() || mover.incapacitated())
-		return GLOB.MOVEMENT_STOP
+		return MOVEMENT_STOP
 	if(!exosuit.legs)
 		to_chat(mover, SPAN_WARNING("\The [exosuit] has no means of propulsion!"))
 		exosuit.SetMoveCooldown(3)
-		return GLOB.MOVEMENT_STOP
+		return MOVEMENT_STOP
 	if(!exosuit.legs.motivator || !exosuit.legs.motivator.is_functional())
 		to_chat(mover, SPAN_WARNING("Your motivators are damaged! You can't move!"))
 		exosuit.SetMoveCooldown(15)
-		return GLOB.MOVEMENT_STOP
+		return MOVEMENT_STOP
 	if(exosuit.maintenance_protocols)
 		to_chat(mover, SPAN_WARNING("Maintenance protocols are in effect."))
 		exosuit.SetMoveCooldown(3)
-		return GLOB.MOVEMENT_STOP
+		return MOVEMENT_STOP
 	var/obj/item/cell/C = exosuit.get_cell()
 	if(!C || !C.check_charge(exosuit.legs.power_use * CELLRATE))
 		to_chat(mover, SPAN_WARNING("The power indicator flashes briefly."))
 		exosuit.SetMoveCooldown(3) //On fast exosuits this got annoying fast
-		return GLOB.MOVEMENT_STOP
+		return MOVEMENT_STOP
 
-	return GLOB.MOVEMENT_PROCEED
+	return MOVEMENT_PROCEED
 
 /datum/movement_handler/mob/exosuit/DoMove(direction, mob/mover, is_external)
 	var/mob/living/exosuit/exosuit = host
@@ -109,20 +109,20 @@
 		var/turf/target_loc = get_step(exosuit, direction)
 		if(target_loc && exosuit.legs && exosuit.legs.can_move_on(exosuit.loc, target_loc) && exosuit.MayEnterTurf(target_loc))
 			exosuit.Move(target_loc)
-	return GLOB.MOVEMENT_HANDLED
+	return MOVEMENT_HANDLED
 /datum/movement_handler/mob/space/exosuit
 	expected_host_type = /mob/living/exosuit
 
 /datum/movement_handler/mob/space/exosuit/MayMove(mob/mover, is_external)
 	if((mover != host) && is_external)
-		return GLOB.MOVEMENT_PROCEED
+		return MOVEMENT_PROCEED
 
 	if(!mob.has_gravity())
 		allow_move = mob.Process_Spacemove(1)
 		if(!allow_move)
-			return GLOB.MOVEMENT_STOP
+			return MOVEMENT_STOP
 
-	return GLOB.MOVEMENT_PROCEED
+	return MOVEMENT_PROCEED
 
 /mob/living/exosuit/Check_Shoegrip()//mechs are always magbooting
 	return TRUE

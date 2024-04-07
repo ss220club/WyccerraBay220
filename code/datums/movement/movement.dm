@@ -67,13 +67,13 @@
 
 	for(var/mh in movement_handlers)
 		var/datum/movement_handler/movement_handler = mh
-		if(movement_handler.MayMove(mover, is_external) & GLOB.MOVEMENT_STOP)
-			return GLOB.MOVEMENT_HANDLED
+		if(movement_handler.MayMove(mover, is_external) & MOVEMENT_STOP)
+			return MOVEMENT_HANDLED
 
 		. = movement_handler.DoMove(direction, mover, is_external)
-		if(. & GLOB.MOVEMENT_REMOVE)
+		if(. & MOVEMENT_REMOVE)
 			REMOVE_AND_QDEL(movement_handler)
-		if(. & GLOB.MOVEMENT_HANDLED)
+		if(. & MOVEMENT_HANDLED)
 			return
 
 // is_external means that something else (not inside us) is asking if we may move
@@ -86,9 +86,9 @@
 	for(var/mh in movement_handlers)
 		var/datum/movement_handler/movement_handler = mh
 		var/may_move = movement_handler.MayMove(mover, is_external)
-		if(may_move & GLOB.MOVEMENT_STOP)
+		if(may_move & MOVEMENT_STOP)
 			return FALSE
-		if((may_move & (GLOB.MOVEMENT_PROCEED|GLOB.MOVEMENT_HANDLED)) == (GLOB.MOVEMENT_PROCEED|GLOB.MOVEMENT_HANDLED))
+		if((may_move & (MOVEMENT_PROCEED|MOVEMENT_HANDLED)) == (MOVEMENT_PROCEED|MOVEMENT_HANDLED))
 			return TRUE
 	return TRUE
 
@@ -115,7 +115,7 @@
 
 // Asks the handlers if the mob may move, ignoring destination, if attempting a DoMove()
 /datum/movement_handler/proc/MayMove(mob/mover, is_external)
-	return GLOB.MOVEMENT_PROCEED
+	return MOVEMENT_PROCEED
 
 /*******
 * /mob *

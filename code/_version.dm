@@ -21,7 +21,7 @@ Retain even if empty - the future exists
 	throw EXCEPTION("get_steps_to not available below 515")
 
 /proc/isinf(number)
-	return number == POSITIVE_INFINITY || number == NEGATIVE_INFINITY
+	return number == INFINITY || number == NEGATIVE_INFINITY
 
 /proc/isnan(number)
 	return isnum(number) && number != number

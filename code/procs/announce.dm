@@ -144,22 +144,22 @@ GLOBAL_DATUM_INIT(minor_announcement, /datum/announcement/priority, new(do_log =
 	if (security_state.current_security_level_is_same_or_higher_than(security_state.high_security_level))
 		return "Common"
 
-	if(job.department_flag & (GLOB.COM | GLOB.CIV | GLOB.MSC))
+	if(job.department_flag & (COM | CIV | MSC))
 		return "Common"
-	if(job.department_flag & GLOB.SUP)
+	if(job.department_flag & SUP)
 		return "Supply"
-	if(job.department_flag & GLOB.SPT)
+	if(job.department_flag & SPT)
 		return "Command"
-	if(job.department_flag & GLOB.SEC)
+	if(job.department_flag & SEC)
 		return "Security"
-	if(job.department_flag & GLOB.ENG)
+	if(job.department_flag & ENG)
 		return "Engineering"
-	if(job.department_flag & GLOB.MED)
+	if(job.department_flag & MED)
 		return "Medical"
-	if(job.department_flag & GLOB.SCI)
+	if(job.department_flag & SCI)
 		return "Science"
-	if(job.department_flag & GLOB.SRV)
+	if(job.department_flag & SRV)
 		return "Service"
-	if(job.department_flag & GLOB.EXP)
+	if(job.department_flag & EXP)
 		return "Exploration"
 	return "Common"

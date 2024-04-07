@@ -4,7 +4,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/eng
 	name = "Civilian Engineering"
-	departments = GLOB.ENG
+	departments = ENG
 
 	dress_hat = list(\
 		/obj/item/clothing/head/soft/yellow, /obj/item/clothing/head/hardhat)
@@ -16,7 +16,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/eng/head
 	name = "Civilian Engineering Head"
-	departments = GLOB.ENG|GLOB.COM
+	departments = ENG|COM
 
 	dress_hat = list(\
 		/obj/item/clothing/head/soft/yellow, /obj/item/clothing/head/hardhat/white, \
@@ -30,7 +30,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/sup
 	name = "Civilian Supply"
-	departments = GLOB.SUP
+	departments = SUP
 
 	dress_hat = list(\
 		/obj/item/clothing/head/soft/yellow, /obj/item/clothing/head/beret/infinity/cargo)
@@ -41,7 +41,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/sup/head
 	name = "Civilian Supply Head"
-	departments = GLOB.SUP|GLOB.COM
+	departments = SUP|COM
 
 	dress_hat = list(\
 		/obj/item/clothing/head/soft/yellow,
@@ -57,7 +57,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/sec
 	name = "Civilian Security"
-	departments = GLOB.SEC
+	departments = SEC
 
 	dress_hat = list(\
 		/obj/item/clothing/head/beret/sec/corporate/officer, /obj/item/clothing/head/beret/sec/navy/officer, \
@@ -74,7 +74,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/sec/head
 	name = "Civilian Security Head"
-	departments = GLOB.SEC|GLOB.COM
+	departments = SEC|COM
 
 	dress_hat = list(\
 		/obj/item/clothing/head/beret/sec/corporate/hos,
@@ -93,7 +93,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/med
 	name = "Civilian Medical"
-	departments = GLOB.MED
+	departments = MED
 
 	dress_hat = list(\
 		/obj/item/clothing/head/soft/mime, /obj/item/clothing/head/nursehat, \
@@ -119,7 +119,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/med/head
 	name = "Civilian Medical Head"
-	departments = GLOB.MED|GLOB.COM
+	departments = MED|COM
 
 	dress_hat = list(\
 		/obj/item/clothing/head/surgery, /obj/item/clothing/head/surgery/purple, \
@@ -142,7 +142,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/res
 	name = "Civilian Research"
-	departments = GLOB.SCI
+	departments = SCI
 
 	dress_hat = list(\
 		/obj/item/clothing/head/beret/infinity/science)
@@ -154,7 +154,7 @@
 
 /singleton/hierarchy/mil_uniform/civilian/res/head
 	name = "Civilian Research Head"
-	departments = GLOB.SCI|GLOB.COM
+	departments = SCI|COM
 
 	dress_hat = list(\
 		/obj/item/clothing/head/beret/infinity/science
@@ -170,7 +170,7 @@
  */
 /singleton/hierarchy/mil_uniform/civilian/exp
 	name = "Civilian Exploration"
-	departments = GLOB.EXP
+	departments = EXP
 
 	dress_hat = list(\
 		/obj/item/clothing/head/beret/infinity/exploration
@@ -182,4 +182,4 @@
 
 /singleton/hierarchy/mil_uniform/civilian/com
 	name = "Civilian Command"
-	departments = GLOB.COM
+	departments = COM

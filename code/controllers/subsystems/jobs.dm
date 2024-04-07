@@ -1,16 +1,3 @@
-GLOBAL_VAR_CONST(ENG, FLAG(0))
-GLOBAL_VAR_CONST(SEC, FLAG(1))
-GLOBAL_VAR_CONST(MED, FLAG(2))
-GLOBAL_VAR_CONST(SCI, FLAG(3))
-GLOBAL_VAR_CONST(CIV, FLAG(4))
-GLOBAL_VAR_CONST(COM, FLAG(5))
-GLOBAL_VAR_CONST(MSC, FLAG(6))
-GLOBAL_VAR_CONST(SRV, FLAG(7))
-GLOBAL_VAR_CONST(SUP, FLAG(8))
-GLOBAL_VAR_CONST(SPT, FLAG(9))
-GLOBAL_VAR_CONST(EXP, FLAG(10))
-GLOBAL_VAR_CONST(ROB, FLAG(11))
-
 GLOBAL_VAR(antag_code_phrase)
 GLOBAL_VAR(antag_code_response)
 
@@ -112,7 +99,7 @@ SUBSYSTEM_DEF(jobs)
 
 
 /datum/controller/subsystem/jobs/proc/guest_jobbans(job)
-	for(var/dept in list(GLOB.COM, GLOB.MSC, GLOB.SEC))
+	for(var/dept in list(COM, MSC, SEC))
 		if(job in titles_by_department(dept))
 			return TRUE
 	return FALSE
@@ -229,7 +216,7 @@ SUBSYSTEM_DEF(jobs)
 			continue
 		if(job.is_restricted(player.client.prefs))
 			continue
-		if(job.title in titles_by_department(GLOB.COM)) //If you want a command position, select it!
+		if(job.title in titles_by_department(COM)) //If you want a command position, select it!
 			continue
 		if(jobban_isbanned(player, job.title))
 			continue
@@ -245,7 +232,7 @@ SUBSYSTEM_DEF(jobs)
 ///This proc is called before the level loop of divide_occupations() and will try to select a head, ignoring ALL non-head preferences for every level until it locates a head or runs out of levels to check
 /datum/controller/subsystem/jobs/proc/fill_head_position(datum/game_mode/mode)
 	for (var/level = 1 to 3)
-		for (var/command_position as anything in titles_by_department(GLOB.COM))
+		for (var/command_position as anything in titles_by_department(COM))
 			var/datum/job/job = get_by_title(command_position)
 			if (!job)
 				continue
@@ -276,7 +263,7 @@ SUBSYSTEM_DEF(jobs)
 
 ///This proc is called at the start of the level loop of divide_occupations() and will cause head jobs to be checked before any other jobs of the same level
 /datum/controller/subsystem/jobs/proc/CheckHeadPositions(level, datum/game_mode/mode)
-	for(var/command_position in titles_by_department(GLOB.COM))
+	for(var/command_position in titles_by_department(COM))
 		var/datum/job/job = get_by_title(command_position)
 		if(!job)	continue
 		var/list/candidates = find_occupation_candidates(job, level)

@@ -1,15 +1,14 @@
 <div align="center">
 
 # SierraBay12
- [![CodeQL](https://github.com/SierraBay/SierraBay12/workflows/CodeQL/badge.svg)](https://github.com/SierraBay/SierraBay12/actions/workflows/codeql-analysis.yml) [![CI Status](https://github.com/SierraBay/SierraBay12/workflows/Run%20Tests/badge.svg)](https://github.com/SierraBay/SierraBay12/actions/workflows/test.yml) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
+ [![CodeQL](https://github.com/SierraBay/WyccerraBay220/workflows/CodeQL/badge.svg)](https://github.com/SierraBay/SierraBay12/actions/workflows/codeql-analysis.yml) [![CI Status](https://github.com/SierraBay/WyccerraBay220/workflows/Run%20Tests/badge.svg)](https://github.com/SierraBay/WyccerraBay220/actions/workflows/test.yml) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
 
 </div>
 
 <table>
 <tr><td align="center" width="2000"><b>
-<a href="https://github.com/baystation12/baystation12">Апстрим</a> • 
-<a href="https://discord.ss220.space">Discord</a> • 
-<a href="https://sierra.ss220.space">Wiki</a>
+<a href="[https://discord.ss220.space](https://discord.gg/ss220)">Discord</a> • 
+<a href="https://sierra.ss220.сдги">Wiki</a>
 </b></td></tr>
 <tr><td align="center" width="2000"><b>
 <a href="#рекомендации-для-контрибьюторов">Коллаборация</a> • 

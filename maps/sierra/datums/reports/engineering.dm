@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/eng/generate_fields()
 	..()
-	set_access(access_engine)
+	set_access(GLOB.access_engine)
 
 /datum/computer_file/report/recipient/construction_work
 	form_name = "NT-ENG-11"

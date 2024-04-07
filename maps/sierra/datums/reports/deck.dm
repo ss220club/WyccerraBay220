@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/deck/generate_fields()
 	..()
-	set_access(access_cargo)
+	set_access(GLOB.access_cargo)
 
 /datum/computer_file/report/recipient/deck/shuttle
 	form_name = "NT-DEC-32"

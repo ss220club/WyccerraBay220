@@ -114,17 +114,17 @@
 /datum/wires/camera/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(CAMERA_WIRE_FOCUS)
+		if(GLOB.CAMERA_WIRE_FOCUS)
 			sf = "Port A"
-		if(CAMERA_WIRE_POWER)
+		if(GLOB.CAMERA_WIRE_POWER)
 			sf = "Port B"
-		if(CAMERA_WIRE_LIGHT)
+		if(GLOB.CAMERA_WIRE_LIGHT)
 			sf = "Port C"
-		if(CAMERA_WIRE_ALARM)
+		if(GLOB.CAMERA_WIRE_ALARM)
 			sf = "Port D"
-		if(CAMERA_WIRE_NOTHING1)
+		if(GLOB.CAMERA_WIRE_NOTHING1)
 			sf = "Port E"
-		if(CAMERA_WIRE_NOTHING2)
+		if(GLOB.CAMERA_WIRE_NOTHING2)
 			sf = "Port F"
 
 	return sf
@@ -132,7 +132,7 @@
 /datum/wires/explosive/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(WIRE_EXPLODE)
+		if(GLOB.WIRE_EXPLODE)
 			sf = "explosive"
 
 	return sf
@@ -140,24 +140,24 @@
 /datum/wires/nuclearbomb/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(NUCLEARBOMB_WIRE_LIGHT)
+		if(GLOB.NUCLEARBOMB_WIRE_LIGHT)
 			sf = "Port A"
-		if(NUCLEARBOMB_WIRE_TIMING)
+		if(GLOB.NUCLEARBOMB_WIRE_TIMING)
 			sf = "Port B"
-		if(NUCLEARBOMB_WIRE_SAFETY)
+		if(GLOB.NUCLEARBOMB_WIRE_SAFETY)
 			sf = "Port C"
 	return sf
 
 /datum/wires/particle_acc/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(PARTICLE_TOGGLE_WIRE)
+		if(GLOB.PARTICLE_TOGGLE_WIRE)
 			sf = "Port A"
-		if(PARTICLE_STRENGTH_WIRE)
+		if(GLOB.PARTICLE_STRENGTH_WIRE)
 			sf = "Port B"
-		if(PARTICLE_INTERFACE_WIRE)
+		if(GLOB.PARTICLE_INTERFACE_WIRE)
 			sf = "Port C"
-		if(PARTICLE_LIMIT_POWER_WIRE)
+		if(GLOB.PARTICLE_LIMIT_POWER_WIRE)
 			sf = "Port D"
 
 	return sf
@@ -165,11 +165,11 @@
 /datum/wires/radio/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(WIRE_SIGNAL)
+		if(GLOB.WIRE_SIGNAL)
 			sf = "Port A"
-		if(WIRE_RECEIVE)
+		if(GLOB.WIRE_RECEIVE)
 			sf = "Port B"
-		if(WIRE_TRANSMIT)
+		if(GLOB.WIRE_TRANSMIT)
 			sf = "Port C"
 
 	return sf
@@ -177,13 +177,13 @@
 /datum/wires/robot/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(BORG_WIRE_LAWCHECK)
+		if(GLOB.BORG_WIRE_LAWCHECK)
 			sf = "Port A"
-		if(BORG_WIRE_MAIN_POWER)
+		if(GLOB.BORG_WIRE_MAIN_POWER)
 			sf = "Port B"
-		if(BORG_WIRE_LOCKED_DOWN)
+		if(GLOB.BORG_WIRE_LOCKED_DOWN)
 			sf = "Port C"
-		if(BORG_WIRE_AI_CONTROL)
+		if(GLOB.BORG_WIRE_AI_CONTROL)
 			sf = "Port D"
 
 	return sf
@@ -191,52 +191,52 @@
 /datum/wires/shield_generator/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(SHIELDGEN_WIRE_POWER)
+		if(GLOB.SHIELDGEN_WIRE_POWER)
 			sf = "Port A"
-		if(SHIELDGEN_WIRE_HACK)
+		if(GLOB.SHIELDGEN_WIRE_HACK)
 			sf = "Port B"
-		if(SHIELDGEN_WIRE_CONTROL)
+		if(GLOB.SHIELDGEN_WIRE_CONTROL)
 			sf = "Port C"
-		if(SHIELDGEN_WIRE_AICONTROL)
+		if(GLOB.SHIELDGEN_WIRE_AICONTROL)
 			sf = "Port D"
-		if(SHIELDGEN_WIRE_NOTHING)
+		if(GLOB.SHIELDGEN_WIRE_NOTHING)
 			sf = "Port E"
 	return sf
 
 /datum/wires/smartfridge/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(SMARTFRIDGE_WIRE_ELECTRIFY)
+		if(GLOB.SMARTFRIDGE_WIRE_ELECTRIFY)
 			sf = "Port A"
-		if(SMARTFRIDGE_WIRE_THROW)
+		if(GLOB.SMARTFRIDGE_WIRE_THROW)
 			sf = "Port B"
-		if(SMARTFRIDGE_WIRE_IDSCAN)
+		if(GLOB.SMARTFRIDGE_WIRE_IDSCAN)
 			sf = "Port C"
 	return sf
 
 /datum/wires/smes/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(SMES_WIRE_RCON)
+		if(GLOB.SMES_WIRE_RCON)
 			sf = "Port A"
-		if(SMES_WIRE_INPUT)
+		if(GLOB.SMES_WIRE_INPUT)
 			sf = "Port B"
-		if(SMES_WIRE_OUTPUT)
+		if(GLOB.SMES_WIRE_OUTPUT)
 			sf = "Port C"
-		if(SMES_WIRE_GROUNDING)
+		if(GLOB.SMES_WIRE_GROUNDING)
 			sf = "Port D"
-		if(SMES_WIRE_FAILSAFES)
+		if(GLOB.SMES_WIRE_FAILSAFES)
 			sf = "Port E"
 	return sf
 
 /datum/wires/suit_storage_unit/SolveWireFunction(function)
 	var/sf = ""
 	switch(function)
-		if(SUIT_STORAGE_WIRE_ELECTRIFY)
+		if(GLOB.SUIT_STORAGE_WIRE_ELECTRIFY)
 			sf = "Port A"
-		if(SUIT_STORAGE_WIRE_SAFETY)
+		if(GLOB.SUIT_STORAGE_WIRE_SAFETY)
 			sf = "Port B"
-		if(SUIT_STORAGE_WIRE_LOCKED)
+		if(GLOB.SUIT_STORAGE_WIRE_LOCKED)
 			sf = "Port C"
 	return sf
 

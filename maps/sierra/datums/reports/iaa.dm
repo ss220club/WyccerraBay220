@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/iaa/generate_fields()
 	..()
-	set_access(access_heads)
+	set_access(GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident
 	form_name = "IA-NTCO-01"

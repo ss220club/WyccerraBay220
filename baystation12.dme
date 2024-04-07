@@ -52,6 +52,7 @@
 #include "code\__defines\directions.dm"
 #include "code\__defines\dna.dm"
 #include "code\__defines\doors.dm"
+#include "code\__defines\emag.dm"
 #include "code\__defines\emissives.dm"
 #include "code\__defines\feedback.dm"
 #include "code\__defines\flags.dm"

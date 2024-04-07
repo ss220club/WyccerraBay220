@@ -252,4 +252,4 @@
 	id_card.access |= accesses
 
 /datum/computer_file/program/card_mod/proc/authorized(obj/item/card/id/id_card)
-	return id_card && (access_change_ids in id_card.access)
+	return id_card && (GLOB.access_change_ids in id_card.access)

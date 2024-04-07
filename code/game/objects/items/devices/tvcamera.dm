@@ -25,7 +25,7 @@
 	camera.status = FALSE
 	radio = new(src)
 	radio.listening = FALSE
-	radio.set_frequency(GLOB.ENT_FREQ)
+	radio.set_frequency(ENT_FREQ)
 	radio.power_usage = 0
 	. = ..()
 

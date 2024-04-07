@@ -125,8 +125,8 @@
 	if(has_cell && power_usage > 0)
 		var/charge = round(has_cell.percent())
 		data["charge"] = charge ? "[charge]%" : "NONE"
-	data["mic_cut"] = (wires.IsIndexCut(WIRE_TRANSMIT) || wires.IsIndexCut(WIRE_SIGNAL))
-	data["spk_cut"] = (wires.IsIndexCut(WIRE_RECEIVE) || wires.IsIndexCut(WIRE_SIGNAL))
+	data["mic_cut"] = (wires.IsIndexCut(GLOB.WIRE_TRANSMIT) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
+	data["spk_cut"] = (wires.IsIndexCut(GLOB.WIRE_RECEIVE) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
 
 	var/list/chanlist = list_channels(user)
 	if(islist(chanlist) && length(chanlist))
@@ -198,10 +198,10 @@
 		frequency = default_frequency
 
 /obj/item/device/radio/proc/ToggleBroadcast()
-	broadcasting = !broadcasting && !(wires.IsIndexCut(WIRE_TRANSMIT) || wires.IsIndexCut(WIRE_SIGNAL))
+	broadcasting = !broadcasting && !(wires.IsIndexCut(GLOB.WIRE_TRANSMIT) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
 
 /obj/item/device/radio/proc/ToggleReception()
-	listening = !listening && !(wires.IsIndexCut(WIRE_RECEIVE) || wires.IsIndexCut(WIRE_SIGNAL))
+	listening = !listening && !(wires.IsIndexCut(GLOB.WIRE_RECEIVE) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
 
 /obj/item/device/radio/proc/TogglePower()
 	if(!power_usage)
@@ -370,7 +370,7 @@
 
 	//  Uncommenting this. To the above comment:
 	// 	The permacell radios aren't suppose to be able to transmit, this isn't a bug and this "fix" is just making radio wires useless. -Giacom
-	if(wires.IsIndexCut(WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
+	if(wires.IsIndexCut(GLOB.WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
 		return 0
 
 	if(!radio_connection)
@@ -585,7 +585,7 @@
 	// returns: -1 if can't receive, range otherwise
 	if (!wires)
 		return -1
-	if (wires.IsIndexCut(WIRE_RECEIVE))
+	if (wires.IsIndexCut(GLOB.WIRE_RECEIVE))
 		return -1
 	if(!listening)
 		return -1
@@ -912,7 +912,7 @@
 /obj/item/device/radio/announcer/Destroy()
 	SHOULD_CALL_PARENT(FALSE)
 	crash_with("attempt to delete a [src.type] detected, and prevented.")
-	return QDEL_HINT_LETMELIVE
+	return GLOB.QDEL_HINT_LETMELIVE
 
 /obj/item/device/radio/announcer/Initialize()
 	. = ..()

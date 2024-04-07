@@ -55,7 +55,7 @@
 	..()
 	if (href_list["freq"])
 		var/new_frequency = frequency + text2num(href_list["freq"])
-		new_frequency = sanitize_frequency(new_frequency, GLOB.RADIO_LOW_FREQ, GLOB.RADIO_HIGH_FREQ)
+		new_frequency = sanitize_frequency(new_frequency, RADIO_LOW_FREQ, RADIO_HIGH_FREQ)
 		set_frequency(new_frequency)
 		interact(usr)
 	if (href_list["code"])
@@ -89,7 +89,7 @@
 /obj/item/implant/explosive/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_connection = radio_controller.add_object(src, frequency, GLOB.RADIO_CHAT)
+	radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/implant/explosive/hear_talk(mob/M as mob, msg)
 	hear(msg)

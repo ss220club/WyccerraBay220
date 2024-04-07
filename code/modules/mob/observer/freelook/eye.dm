@@ -17,7 +17,7 @@
 	see_in_dark = 7
 	invisibility = INVISIBILITY_EYE
 
-	ghost_image_flag = GHOST_IMAGE_ALL
+	ghost_image_flag = GLOB.GHOST_IMAGE_ALL
 	var/mob/owner = null
 	var/list/visibleChunks = list()
 

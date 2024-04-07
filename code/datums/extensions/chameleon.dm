@@ -389,9 +389,9 @@ GLOBAL_VAR_CONST(CHAMELEON_FLEXIBLE_OPTIONS_TYPE, 3)
 
 	var/chameleon_base_type
 	switch (chamelon_options)
-		if (CHAMELEON_FLEXIBLE_OPTIONS_EXTENSION) chameleon_base_type = best_found_expected_type
-		if (CHAMELEON_FLEXIBLE_OPTIONS_PARENT_TYPE) chameleon_base_type = ispath(parent_type, best_found_expected_type) ? parent_type : type
-		if (CHAMELEON_FLEXIBLE_OPTIONS_TYPE) chameleon_base_type = type
+		if (GLOB.CHAMELEON_FLEXIBLE_OPTIONS_EXTENSION) chameleon_base_type = best_found_expected_type
+		if (GLOB.CHAMELEON_FLEXIBLE_OPTIONS_PARENT_TYPE) chameleon_base_type = ispath(parent_type, best_found_expected_type) ? parent_type : type
+		if (GLOB.CHAMELEON_FLEXIBLE_OPTIONS_TYPE) chameleon_base_type = type
 		else CRASH("Invalid chameleon flexible option: [chamelon_options]")
 
 	if (best_found_extension)

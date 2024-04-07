@@ -86,13 +86,13 @@ if(LAZYLEN(movement_handlers) && ispath(movement_handlers[1])) { \
 
 	for(var/mh in movement_handlers)
 		var/datum/movement_handler/movement_handler = mh
-		if(movement_handler.MayMove(mover, is_external) & MOVEMENT_STOP)
-			return MOVEMENT_HANDLED
+		if(movement_handler.MayMove(mover, is_external) & GLOB.MOVEMENT_STOP)
+			return GLOB.MOVEMENT_HANDLED
 
 		. = movement_handler.DoMove(direction, mover, is_external)
-		if(. & MOVEMENT_REMOVE)
+		if(. & GLOB.MOVEMENT_REMOVE)
 			REMOVE_AND_QDEL(movement_handler)
-		if(. & MOVEMENT_HANDLED)
+		if(. & GLOB.MOVEMENT_HANDLED)
 			return
 
 // is_external means that something else (not inside us) is asking if we may move
@@ -105,9 +105,9 @@ if(LAZYLEN(movement_handlers) && ispath(movement_handlers[1])) { \
 	for(var/mh in movement_handlers)
 		var/datum/movement_handler/movement_handler = mh
 		var/may_move = movement_handler.MayMove(mover, is_external)
-		if(may_move & MOVEMENT_STOP)
+		if(may_move & GLOB.MOVEMENT_STOP)
 			return FALSE
-		if((may_move & (MOVEMENT_PROCEED|MOVEMENT_HANDLED)) == (MOVEMENT_PROCEED|MOVEMENT_HANDLED))
+		if((may_move & (GLOB.MOVEMENT_PROCEED|GLOB.MOVEMENT_HANDLED)) == (GLOB.MOVEMENT_PROCEED|GLOB.MOVEMENT_HANDLED))
 			return TRUE
 	return TRUE
 
@@ -134,7 +134,7 @@ if(LAZYLEN(movement_handlers) && ispath(movement_handlers[1])) { \
 
 // Asks the handlers if the mob may move, ignoring destination, if attempting a DoMove()
 /datum/movement_handler/proc/MayMove(mob/mover, is_external)
-	return MOVEMENT_PROCEED
+	return GLOB.MOVEMENT_PROCEED
 
 /*******
 * /mob *

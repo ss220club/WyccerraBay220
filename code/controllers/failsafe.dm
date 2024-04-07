@@ -39,7 +39,7 @@ var/global/datum/controller/failsafe/Failsafe
 /datum/controller/failsafe/Destroy()
 	running = FALSE
 	..()
-	return QDEL_HINT_HARDDEL_NOW
+	return GLOB.QDEL_HINT_HARDDEL_NOW
 
 /datum/controller/failsafe/proc/Loop()
 	while(running)

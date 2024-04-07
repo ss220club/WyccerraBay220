@@ -9,7 +9,7 @@ GLOBAL_VAR_CONST(STASISCAGE_WIRE_LOCK, 4)
 	icon_state = "stasis_cage"
 	density = TRUE
 	layer = ABOVE_OBJ_LAYER
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 	idle_power_usage = 0
 	active_power_usage = 5 KILOWATTS
 	use_power = POWER_USE_IDLE

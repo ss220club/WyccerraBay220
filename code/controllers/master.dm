@@ -88,7 +88,7 @@ var/global/datum/controller/master/Master = new
 /datum/controller/master/Destroy()
 	..()
 	// Tell qdel() to Del() this object.
-	return QDEL_HINT_HARDDEL_NOW
+	return GLOB.QDEL_HINT_HARDDEL_NOW
 
 /datum/controller/master/Shutdown()
 	processing = FALSE

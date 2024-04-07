@@ -3,7 +3,7 @@
 
 /datum/evacuation_predicate/Destroy()
 	SHOULD_CALL_PARENT(FALSE)
-	return QDEL_HINT_LETMELIVE
+	return GLOB.QDEL_HINT_LETMELIVE
 
 /datum/evacuation_predicate/proc/is_valid()
 	return FALSE

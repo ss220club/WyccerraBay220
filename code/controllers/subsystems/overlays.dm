@@ -191,14 +191,14 @@ SUBSYSTEM_DEF(overlays)
 
 
 /// Clears the atom's overlay cache(s) and queues an update if needed. Use CLEAR_TARGET_* flags.
-/atom/proc/ClearOverlays(cache_target = ATOM_ICON_CACHE_NORMAL)
+/atom/proc/ClearOverlays(cache_target = GLOB.ATOM_ICON_CACHE_NORMAL)
 	SHOULD_NOT_OVERRIDE(TRUE)
-	if (cache_target & ATOM_ICON_CACHE_PROTECTED)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_PROTECTED)
 		if (!atom_protected_overlay_cache)
 			return
 		LAZYCLEARLIST(atom_protected_overlay_cache)
 		QueueOverlayUpdate()
-	if (cache_target & ATOM_ICON_CACHE_NORMAL)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_NORMAL)
 		if (!atom_overlay_cache)
 			return
 		LAZYCLEARLIST(atom_overlay_cache)
@@ -218,14 +218,14 @@ SUBSYSTEM_DEF(overlays)
  *	- Or a list containing any of the above.
  * @param cache_target If ATOM_ICON_CACHE_PROTECTED, add to the protected cache instead of normal.
  */
-/atom/proc/AddOverlays(sources, cache_target = ATOM_ICON_CACHE_NORMAL)
+/atom/proc/AddOverlays(sources, cache_target = GLOB.ATOM_ICON_CACHE_NORMAL)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	if (!sources)
 		return
 	sources = SSoverlays.getAppearanceList(src, sources)
 	if (!length(sources))
 		return
-	if (cache_target & ATOM_ICON_CACHE_PROTECTED)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_PROTECTED)
 		if (atom_protected_overlay_cache)
 			atom_protected_overlay_cache += sources
 		else
@@ -243,7 +243,7 @@ SUBSYSTEM_DEF(overlays)
  * @param overlays The overlays to removed. See AddOverlays for legal source types.
  * @param cache_target A mask of ICON_CACHE_TARGET_*.
  */
-/atom/proc/CutOverlays(sources, cache_target = ATOM_ICON_CACHE_NORMAL)
+/atom/proc/CutOverlays(sources, cache_target = GLOB.ATOM_ICON_CACHE_NORMAL)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	if (!sources)
 		return
@@ -253,14 +253,14 @@ SUBSYSTEM_DEF(overlays)
 		return
 
 	var/update
-	if (cache_target & ATOM_ICON_CACHE_PROTECTED)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_PROTECTED)
 		var/outcome = CutCacheBehavior(sources, atom_protected_overlay_cache)
 		if (!isnull(outcome))
 			update = TRUE
 			if (outcome == TRUE)
 				atom_protected_overlay_cache = null
 
-	if (cache_target & ATOM_ICON_CACHE_NORMAL)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_NORMAL)
 		var/outcome = CutCacheBehavior(sources, atom_overlay_cache)
 		if (!isnull(outcome))
 			update = TRUE
@@ -272,7 +272,7 @@ SUBSYSTEM_DEF(overlays)
 
 
 /// AddOverlays with ClearOverlays first. See AddOverlays for behavior.
-/atom/proc/SetOverlays(sources, cache_target = ATOM_ICON_CACHE_NORMAL)
+/atom/proc/SetOverlays(sources, cache_target = GLOB.ATOM_ICON_CACHE_NORMAL)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	ClearOverlays(cache_target)
 	AddOverlays(sources, cache_target)
@@ -285,16 +285,16 @@ SUBSYSTEM_DEF(overlays)
  * @param clear If TRUE, clear before adding other's overlays.
  * @param cache_target A mask of ICON_CACHE_TARGET_* indicating what to copy.
  */
-/atom/proc/CopyOverlays(atom/other, clear, cache_target = ATOM_ICON_CACHE_NORMAL)
+/atom/proc/CopyOverlays(atom/other, clear, cache_target = GLOB.ATOM_ICON_CACHE_NORMAL)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	if (clear)
 		ClearOverlays(cache_target)
 	if (!istype(other))
 		return
-	if (cache_target & ATOM_ICON_CACHE_PROTECTED)
-		AddOverlays(other.atom_protected_overlay_cache, ATOM_ICON_CACHE_PROTECTED)
-	if (cache_target & ATOM_ICON_CACHE_NORMAL)
-		AddOverlays(other.atom_overlay_cache, ATOM_ICON_CACHE_NORMAL)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_PROTECTED)
+		AddOverlays(other.atom_protected_overlay_cache, GLOB.ATOM_ICON_CACHE_PROTECTED)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_NORMAL)
+		AddOverlays(other.atom_overlay_cache, GLOB.ATOM_ICON_CACHE_NORMAL)
 
 
 // Skin-deep API parity for images.
@@ -319,13 +319,13 @@ SUBSYSTEM_DEF(overlays)
 
 
 /// Copies the overlays from the atom other, clearing first if set, and using the caches indicated.
-/image/proc/CopyOverlays(atom/other, clear, cache_target = ATOM_ICON_CACHE_ALL)
+/image/proc/CopyOverlays(atom/other, clear, cache_target = GLOB.ATOM_ICON_CACHE_ALL)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	if (clear)
 		LIST_RESIZE(overlays, 0)
 	if (!istype(other))
 		return
-	if (cache_target & ATOM_ICON_CACHE_PROTECTED)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_PROTECTED)
 		overlays |= other.atom_protected_overlay_cache
-	if (cache_target & ATOM_ICON_CACHE_NORMAL)
+	if (cache_target & GLOB.ATOM_ICON_CACHE_NORMAL)
 		overlays |= other.atom_overlay_cache

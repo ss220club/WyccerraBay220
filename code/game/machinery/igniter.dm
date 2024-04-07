@@ -67,7 +67,7 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/igniter, ignite)
 
 /singleton/stock_part_preset/radio/receiver/igniter
-	frequency = BUTTON_FREQ
+	frequency = GLOB.BUTTON_FREQ
 	receive_and_call = list("button_active" = /singleton/public_access/public_method/igniter_toggle)
 
 // Wall mounted remote-control igniter.
@@ -151,7 +151,7 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/sparker, ignite)
 
 /singleton/stock_part_preset/radio/receiver/sparker
-	frequency = BUTTON_FREQ
+	frequency = GLOB.BUTTON_FREQ
 	receive_and_call = list("button_active" = /singleton/public_access/public_method/sparker_spark)
 
 /obj/machinery/button/ignition

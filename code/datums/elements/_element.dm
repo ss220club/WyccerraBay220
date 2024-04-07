@@ -42,7 +42,7 @@
 
 /datum/element/Destroy(force)
 	if(!force)
-		return QDEL_HINT_LETMELIVE
+		return GLOB.QDEL_HINT_LETMELIVE
 	SSdcs.elements_by_type -= type
 	return ..()
 

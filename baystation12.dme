@@ -29,6 +29,7 @@
 #include "code\__defines\_renderer.dm"
 #include "code\__defines\admin.dm"
 #include "code\__defines\ai.dm"
+#include "code\__defines\airlock.dm"
 #include "code\__defines\antagonists.dm"
 #include "code\__defines\ao.dm"
 #include "code\__defines\ao_misc.dm"

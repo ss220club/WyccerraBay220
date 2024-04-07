@@ -111,7 +111,7 @@
 		if (!access_list)
 			return
 
-		settings["access_list"] += list(GLOB.access_list)
+		settings["access_list"] += list(access_list)
 
 		. = TOPIC_HANDLED
 

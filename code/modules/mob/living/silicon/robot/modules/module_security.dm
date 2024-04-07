@@ -3,7 +3,7 @@
 		"Security" = TRUE
 	)
 	networks = list(
-		NETWORK_SECURITY
+		GLOB.NETWORK_SECURITY
 	)
 	subsystems = list(
 		/datum/nano_module/crew_monitor,

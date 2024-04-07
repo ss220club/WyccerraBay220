@@ -5,7 +5,7 @@
 		"Engineering" = 1
 	)
 	networks = list(
-		NETWORK_ENGINEERING
+		GLOB.NETWORK_ENGINEERING
 	)
 	subsystems = list(
 		/datum/nano_module/power_monitor,

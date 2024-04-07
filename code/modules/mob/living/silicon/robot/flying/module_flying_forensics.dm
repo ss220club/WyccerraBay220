@@ -2,7 +2,7 @@
 	name = "forensic drone module"
 	display_name = "Forensics"
 	channels = list("Security" = TRUE)
-	networks = list(NETWORK_SECURITY)
+	networks = list(GLOB.NETWORK_SECURITY)
 	subsystems = list(
 		/datum/nano_module/crew_monitor,
 		/datum/nano_module/program/digitalwarrant,

@@ -8,19 +8,19 @@
 		return
 
 	switch(network)
-		if(NETWORK_ENGINEERING, NETWORK_ALARM_ATMOS, NETWORK_ALARM_CAMERA, NETWORK_ALARM_FIRE, NETWORK_ALARM_POWER)
+		if(GLOB.NETWORK_ENGINEERING, NETWORK_ALARM_ATMOS, NETWORK_ALARM_CAMERA, NETWORK_ALARM_FIRE, NETWORK_ALARM_POWER)
 			return GLOB.access_engine
-		if(NETWORK_CRESCENT, NETWORK_ERT)
+		if(GLOB.NETWORK_CRESCENT, GLOB.NETWORK_ERT)
 			return GLOB.access_cent_specops
-		if(NETWORK_MEDICAL)
+		if(GLOB.NETWORK_MEDICAL)
 			return GLOB.access_medical
-		if(NETWORK_MINE)
+		if(GLOB.NETWORK_MINE)
 			return GLOB.access_mailsorting // Cargo office - all cargo staff should have access here.
-		if(NETWORK_RESEARCH)
+		if(GLOB.NETWORK_RESEARCH)
 			return GLOB.access_research
-		if(NETWORK_THUNDER)
+		if(GLOB.NETWORK_THUNDER)
 			return 0
-		if(NETWORK_HELMETS)
+		if(GLOB.NETWORK_HELMETS)
 			return GLOB.access_eva
 
 	return GLOB.access_security // Default for all other networks
@@ -199,8 +199,8 @@
 // The ERT variant has access to ERT and crescent cams, but still checks for accesses. ERT members should be able to use it.
 /datum/nano_module/camera_monitor/ert/modify_networks_list(list/networks)
 	..()
-	networks.Add(list(list("tag" = NETWORK_ERT, "has_access" = 1)))
-	networks.Add(list(list("tag" = NETWORK_CRESCENT, "has_access" = 1)))
+	networks.Add(list(list("tag" = GLOB.NETWORK_ERT, "has_access" = 1)))
+	networks.Add(list(list("tag" = GLOB.NETWORK_CRESCENT, "has_access" = 1)))
 	return networks
 
 /datum/nano_module/camera_monitor/apply_visual(mob/M)

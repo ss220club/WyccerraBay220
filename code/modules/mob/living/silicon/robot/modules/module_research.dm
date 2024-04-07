@@ -5,7 +5,7 @@
 		"Science" = TRUE
 	)
 	networks = list(
-		NETWORK_RESEARCH
+		GLOB.NETWORK_RESEARCH
 	)
 	sprites = list(
 		"Droid" = "droid-science"

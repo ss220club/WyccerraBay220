@@ -9,7 +9,7 @@
 		"Science" = TRUE
 	)
 	networks = list(
-		NETWORK_MINE
+		GLOB.NETWORK_MINE
 	)
 	sprites = list(
 		"Basic" = "Miner_old",

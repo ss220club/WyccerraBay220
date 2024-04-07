@@ -3,11 +3,6 @@
 	holder_type = /obj/machinery/gravity_generator/main
 	wire_count = 4
 
-GLOBAL_VAR_CONST(GRAVITY_GENERATOR_WIRE_BREAKER, 1)
-GLOBAL_VAR_CONST(GRAVITY_GENERATOR_WIRE_EMERGENCY_BUTTON, 2)
-GLOBAL_VAR_CONST(GRAVITY_GENERATOR_WIRE_POWER, 4)
-GLOBAL_VAR_CONST(GRAVITY_GENERATOR_WIRE_ANNOUNCER, 8)
-
 /datum/wires/gravity_generator/CanUse(mob/living/L)
 	var/obj/machinery/gravity_generator/main/GG = holder
 	if(GG.panel_open)

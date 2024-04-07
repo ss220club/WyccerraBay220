@@ -7,8 +7,8 @@
 
 <table>
 <tr><td align="center" width="2000"><b>
-<a href="[https://discord.ss220.space](https://discord.gg/ss220)">Discord</a> • 
-<a href="https://sierra.ss220.сдги">Wiki</a>
+<a href="https://discord.gg/ss220">Discord</a> • 
+<a href="https://sierra.ss220.club">Wiki</a>
 </b></td></tr>
 <tr><td align="center" width="2000"><b>
 <a href="#рекомендации-для-контрибьюторов">Коллаборация</a> • 

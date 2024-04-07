@@ -26,7 +26,7 @@
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/gear
 	containername = "robotics assembly crate"
-	access = access_robotics
+	access = GLOB.access_robotics
 
 /singleton/hierarchy/supply_pack/science/phoron
 	name = "Parts - Phoron device kit"
@@ -37,7 +37,7 @@
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/phoron
 	containername = "phoron assembly crate"
-	access = access_tox_storage
+	access = GLOB.access_tox_storage
 
 /singleton/hierarchy/supply_pack/science/scanner_module
 	name = "Electronics - Reagent scanner modules"
@@ -64,7 +64,7 @@
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure
 	containername = "shaft miner equipment crate"
-	access = access_mining
+	access = GLOB.access_mining
 
 /singleton/hierarchy/supply_pack/science/flamps
 	num_contained = 3

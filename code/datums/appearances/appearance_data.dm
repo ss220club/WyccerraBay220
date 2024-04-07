@@ -24,12 +24,12 @@
 	if(!istype(viewer))
 		return FALSE
 	viewers |= viewer
-	appearance_manager.add_appearance(viewer, src)
+	GLOB.appearance_manager.add_appearance(viewer, src)
 	return TRUE
 
 /datum/appearance_data/proc/RemoveViewer(mob/viewer, refresh_images = TRUE)
 	if(!(viewer in viewers))
 		return FALSE
 	viewers -= viewer
-	appearance_manager.remove_appearance(viewer, src, refresh_images)
+	GLOB.appearance_manager.remove_appearance(viewer, src, refresh_images)
 	return TRUE

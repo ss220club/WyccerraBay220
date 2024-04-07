@@ -80,7 +80,7 @@
 
 /singleton/stock_part_preset/radio/basic_transmitter/button
 	transmit_on_change = list("button_active" = /singleton/public_access/public_variable/button_active)
-	frequency = BUTTON_FREQ
+	frequency = GLOB.BUTTON_FREQ
 
 //alternate button with the same functionality, except has a lightswitch sprite instead
 /obj/machinery/button/switch
@@ -152,14 +152,14 @@
 		icon_state = "[initial(icon_state)]"
 
 /singleton/stock_part_preset/radio/basic_transmitter/button/door
-	frequency = AIRLOCK_FREQ
+	frequency = GLOB.AIRLOCK_FREQ
 	transmit_on_change = list("toggle_door" = /singleton/public_access/public_variable/button_active)
 
 /obj/machinery/button/alternate/door/bolts
 	stock_part_presets = list(/singleton/stock_part_preset/radio/basic_transmitter/button/airlock_bolt)
 
 /singleton/stock_part_preset/radio/basic_transmitter/button/airlock_bolt
-	frequency = AIRLOCK_FREQ
+	frequency = GLOB.AIRLOCK_FREQ
 	transmit_on_change = list("toggle_bolts" = /singleton/public_access/public_variable/button_active)
 
 // Valve control
@@ -176,5 +176,5 @@
 
 /singleton/stock_part_preset/radio/basic_transmitter/button/atmosia
 	transmit_on_change = list("valve_toggle" = /singleton/public_access/public_variable/button_active)
-	frequency = FUEL_FREQ
-	filter = RADIO_ATMOSIA
+	frequency = GLOB.FUEL_FREQ
+	filter = GLOB.RADIO_ATMOSIA

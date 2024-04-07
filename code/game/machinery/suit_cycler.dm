@@ -8,7 +8,7 @@
 	icon = 'icons/obj/machines/suitstorage.dmi'
 	icon_state = "close"
 
-	req_access = list(access_captain, access_bridge)
+	req_access = list(GLOB.access_captain, GLOB.access_bridge)
 
 	var/active = 0          // PLEASE HOLD.
 	var/safeties = 1        // The cycler won't start with a living thing inside it unless safeties are off.
@@ -287,7 +287,7 @@
 			locked = !locked
 			to_chat(usr, "You [locked ? "lock" : "unlock"] [src].")
 		else
-			FEEDBACK_ACCESS_DENIED(usr, src)
+			FEEDBACK_GLOB.access_DENIED(usr, src)
 
 	else if(href_list["begin_decontamination"])
 

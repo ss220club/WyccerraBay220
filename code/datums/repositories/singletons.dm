@@ -137,4 +137,4 @@ var/global/repository/singletons/Singletons = new
 /singleton/Destroy()
 	SHOULD_CALL_PARENT(FALSE)
 	crash_with("Prevented attempt to delete a singleton instance: [log_info_line(src)]")
-	return QDEL_HINT_LETMELIVE
+	return GLOB.QDEL_HINT_LETMELIVE

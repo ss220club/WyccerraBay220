@@ -135,7 +135,7 @@ GLOBAL_VAR_CONST(SEC_I_FREQ, 1475)
 
 // Away Site Channels
 var/global/list/AWAY_FREQS_UNASSIGNED = list(1491, 1493, 1495, 1497, 1499, 1501, 1503, 1505, 1507, 1509)
-var/global/list/AWAY_FREQS_ASSIGNED = list("Hailing" = HAIL_FREQ)
+var/global/list/AWAY_FREQS_ASSIGNED = list("Hailing" = GLOB.HAIL_FREQ)
 
 // Device signal frequencies
 GLOBAL_VAR_CONST(ATMOS_ENGINE_FREQ, 1438) // Used by atmos monitoring in the engine.
@@ -151,26 +151,26 @@ GLOBAL_VAR_CONST(AIRLOCK_AIR_FREQ, 1379) // Used by some airlocks for atmos devi
 GLOBAL_VAR_CONST(EXTERNAL_AIR_FREQ, 1380) // Used by some external airlocks.
 
 var/global/list/radiochannels = list(
-	"Common"		= PUB_FREQ,
-	"Hailing"		= HAIL_FREQ,
-	"Science"		= SCI_FREQ,
-	"Command"		= COMM_FREQ,
-	"Medical"		= MED_FREQ,
-	"Engineering"	= ENG_FREQ,
-	"Security" 		= SEC_FREQ,
-	"Response Team" = ERT_FREQ,
-	"Special Ops" 	= DTH_FREQ,
-	"Mercenary" 	= SYND_FREQ,
-	"Raider"		= RAID_FREQ,
-	"Vox Raider"	= V_RAID_FREQ,
-	"Exploration"	= EXP_FREQ,
-	"Supply" 		= SUP_FREQ,
-	"Service" 		= SRV_FREQ,
-	"AI Private"	= AI_FREQ,
-	"Entertainment" = ENT_FREQ,
-	"Medical (I)"	= MED_I_FREQ,
-	"Security (I)"	= SEC_I_FREQ,
-	"ICGNV Hound"   = ICCGN_FREQ
+	"Common"		= GLOB.PUB_FREQ,
+	"Hailing"		= GLOB.HAIL_FREQ,
+	"Science"		= GLOB.SCI_FREQ,
+	"Command"		= GLOB.COMM_FREQ,
+	"Medical"		= GLOB.MED_FREQ,
+	"Engineering"	= GLOB.ENG_FREQ,
+	"Security" 		= GLOB.SEC_FREQ,
+	"Response Team" = GLOB.ERT_FREQ,
+	"Special Ops" 	= GLOB.DTH_FREQ,
+	"Mercenary" 	= GLOB.SYND_FREQ,
+	"Raider"		= GLOB.RAID_FREQ,
+	"Vox Raider"	= GLOB.V_RAID_FREQ,
+	"Exploration"	= GLOB.EXP_FREQ,
+	"Supply" 		= GLOB.SUP_FREQ,
+	"Service" 		= GLOB.SRV_FREQ,
+	"AI Private"	= GLOB.AI_FREQ,
+	"Entertainment" = GLOB.ENT_FREQ,
+	"Medical (I)"	= GLOB.MED_I_FREQ,
+	"Security (I)"	= GLOB.SEC_I_FREQ,
+	"ICGNV Hound"   = GLOB.ICCGN_FREQ
 )
 
 var/global/list/channel_color_presets = list(
@@ -195,13 +195,13 @@ var/global/list/channel_color_presets = list(
 )
 
 // central command channels, i.e deathsquid & response teams
-var/global/list/CENT_FREQS = list(ERT_FREQ, DTH_FREQ)
+var/global/list/CENT_FREQS = list(GLOB.ERT_FREQ, GLOB.DTH_FREQ)
 
 // Antag channels, i.e. Syndicate
-var/global/list/ANTAG_FREQS = list(SYND_FREQ, RAID_FREQ, V_RAID_FREQ)
+var/global/list/ANTAG_FREQS = list(GLOB.SYND_FREQ, GLOB.RAID_FREQ, GLOB.V_RAID_FREQ)
 
 //Department channels, arranged lexically
-var/global/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FREQ, SCI_FREQ, SRV_FREQ, SUP_FREQ, EXP_FREQ, ENT_FREQ, MED_I_FREQ, SEC_I_FREQ)
+var/global/list/DEPT_FREQS = list(GLOB.AI_FREQ, GLOB.COMM_FREQ, GLOB.ENG_FREQ, GLOB.MED_FREQ, GLOB.SEC_FREQ, GLOB.SCI_FREQ, GLOB.SRV_FREQ, GLOB.SUP_FREQ, GLOB.EXP_FREQ, GLOB.ENT_FREQ, GLOB.MED_I_FREQ, GLOB.SEC_I_FREQ)
 
 #define TRANSMISSION_WIRE	0
 #define TRANSMISSION_RADIO	1
@@ -214,33 +214,33 @@ var/global/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FR
 	if(frequency in CENT_FREQS)
 		return "centradio"
 	// command channel
-	if(frequency == COMM_FREQ)
+	if(frequency == GLOB.COMM_FREQ)
 		return "comradio"
 	// AI private channel
-	if(frequency == AI_FREQ)
+	if(frequency == GLOB.AI_FREQ)
 		return "airadio"
 	// department radio formatting (poorly optimized, ugh)
-	if(frequency == SEC_FREQ)
+	if(frequency == GLOB.SEC_FREQ)
 		return "secradio"
-	if (frequency == ENG_FREQ)
+	if (frequency == GLOB.ENG_FREQ)
 		return "engradio"
-	if(frequency == SCI_FREQ)
+	if(frequency == GLOB.SCI_FREQ)
 		return "sciradio"
-	if(frequency == MED_FREQ)
+	if(frequency == GLOB.MED_FREQ)
 		return "medradio"
-	if(frequency == EXP_FREQ) // exploration
+	if(frequency == GLOB.EXP_FREQ) // exploration
 		return "EXPradio"
-	if(frequency == SUP_FREQ) // cargo
+	if(frequency == GLOB.SUP_FREQ) // cargo
 		return "supradio"
-	if(frequency == SRV_FREQ) // service
+	if(frequency == GLOB.SRV_FREQ) // service
 		return "srvradio"
-	if(frequency == ENT_FREQ) //entertainment
+	if(frequency == GLOB.ENT_FREQ) //entertainment
 		return "entradio"
-	if(frequency == MED_I_FREQ) // Medical intercom
+	if(frequency == GLOB.MED_I_FREQ) // Medical intercom
 		return "mediradio"
-	if(frequency == SEC_I_FREQ) // Security intercom
+	if(frequency == GLOB.SEC_I_FREQ) // Security intercom
 		return "seciradio"
-	if (frequency == HAIL_FREQ) // Hailing frequency
+	if (frequency == GLOB.HAIL_FREQ) // Hailing frequency
 		return "hailradio"
 	if(frequency in DEPT_FREQS)
 		return "deptradio"
@@ -362,7 +362,7 @@ var/global/datum/controller/radio/radio_controller
 			return 0
 	if (radio_filter)
 		send_to_filter(source, signal, radio_filter, start_point, range)
-		send_to_filter(source, signal, RADIO_DEFAULT, start_point, range)
+		send_to_filter(source, signal, GLOB.RADIO_DEFAULT, start_point, range)
 	else
 		//Broadcast the signal to everyone!
 		for (var/next_filter in devices)
@@ -389,7 +389,7 @@ var/global/datum/controller/radio/radio_controller
 
 /datum/radio_frequency/proc/add_listener(obj/device as obj, radio_filter as text|null)
 	if (!radio_filter)
-		radio_filter = RADIO_DEFAULT
+		radio_filter = GLOB.RADIO_DEFAULT
 	var/list/obj/devices_line = devices[radio_filter]
 	if (!devices_line)
 		devices_line = new

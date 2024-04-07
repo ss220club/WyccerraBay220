@@ -3,7 +3,7 @@
 	helmet = /obj/item/clothing/head/helmet/space/fishbowl
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_eva)
+	req_access = list(GLOB.access_eva)
 
 /obj/machinery/suit_storage_unit/atmos
 	name = "atmospherics voidsuit storage unit"
@@ -12,7 +12,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_atmospherics)
+	req_access = list(GLOB.access_atmospherics)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/atmos/alt
@@ -26,7 +26,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_construction)
+	req_access = list(GLOB.access_construction)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/engineering/unishi
@@ -50,7 +50,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_medical)
+	req_access = list(GLOB.access_medical)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/medical/alt
@@ -65,7 +65,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_mining)
+	req_access = list(GLOB.access_mining)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/mining/alt
@@ -80,7 +80,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_xenoarch)
+	req_access = list(GLOB.access_xenoarch)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/security
@@ -90,7 +90,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/security/alt
@@ -105,7 +105,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/retro

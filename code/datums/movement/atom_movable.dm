@@ -1,10 +1,10 @@
 // Static movement denial
 /datum/movement_handler/no_move/MayMove()
-	return MOVEMENT_STOP
+	return GLOB.MOVEMENT_STOP
 
 // Anchor check
 /datum/movement_handler/anchored/MayMove()
-	return host.anchored ? MOVEMENT_STOP : MOVEMENT_PROCEED
+	return host.anchored ? GLOB.MOVEMENT_STOP : GLOB.MOVEMENT_PROCEED
 
 // Movement relay
 /datum/movement_handler/move_relay/DoMove(direction, mover)
@@ -12,9 +12,9 @@
 	if(!istype(AM))
 		return
 	. = AM.DoMove(direction, mover, FALSE)
-	if(!(. & MOVEMENT_HANDLED) && !(direction & (UP|DOWN)))
+	if(!(. & GLOB.MOVEMENT_HANDLED) && !(direction & (UP|DOWN)))
 		AM.relaymove(mover, direction)
-	return MOVEMENT_HANDLED
+	return GLOB.MOVEMENT_HANDLED
 
 // Movement delay
 /datum/movement_handler/delay
@@ -29,9 +29,9 @@
 	next_move = world.time + delay
 
 /datum/movement_handler/delay/MayMove()
-	return world.time >= next_move ? MOVEMENT_PROCEED : MOVEMENT_STOP
+	return world.time >= next_move ? GLOB.MOVEMENT_PROCEED : GLOB.MOVEMENT_STOP
 
 // Relay self
 /datum/movement_handler/move_relay_self/DoMove(direction, mover)
 	host.relaymove(mover, direction)
-	return MOVEMENT_HANDLED
+	return GLOB.MOVEMENT_HANDLED

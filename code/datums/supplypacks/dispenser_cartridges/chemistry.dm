@@ -2,7 +2,7 @@
 	name = "Reagent refill - hydrazine"
 	containername = "hydrazine reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/hydrazine = 2
 	)
@@ -13,7 +13,7 @@
 	name = "Reagent refill - lithium"
 	containername = "lithium reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/lithium = 2
 	)
@@ -24,7 +24,7 @@
 	name = "Reagent refill - carbon"
 	containername = "carbon reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/carbon = 2
 	)
@@ -35,7 +35,7 @@
 	name = "Reagent refill - ammonia"
 	containername = "ammonia reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/ammonia = 2
 	)
@@ -46,7 +46,7 @@
 	name = "Reagent refill - acetone"
 	containername = "acetone reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/acetone = 2
 	)
@@ -57,7 +57,7 @@
 	name = "Reagent refill - sodium"
 	containername = "sodium reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/sodium = 2
 	)
@@ -68,7 +68,7 @@
 	name = "Reagent refill - aluminium"
 	containername = "aluminium reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/aluminium = 2
 	)
@@ -79,7 +79,7 @@
 	name = "Reagent refill - silicon"
 	containername = "silicon reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/silicon = 2
 	)
@@ -90,7 +90,7 @@
 	name = "Reagent refill - phosphorus"
 	containername = "phosphorus reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/phosphorus = 2
 	)
@@ -101,7 +101,7 @@
 	name = "Reagent refill - sulfur"
 	containername = "sulfur reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/sulfur = 2
 	)
@@ -112,7 +112,7 @@
 	name = "Reagent refill - hydrochloric"
 	containername = "hydrochloric reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/hydrochloric = 2
 	)
@@ -123,7 +123,7 @@
 	name = "Reagent refill - potassium"
 	containername = "potassium reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/potassium = 2
 	)
@@ -134,7 +134,7 @@
 	name = "Reagent refill - iron"
 	containername = "iron reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/iron = 2
 	)
@@ -145,7 +145,7 @@
 	name = "Reagent refill - copper"
 	containername = "copper reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/copper = 2
 	)
@@ -156,7 +156,7 @@
 	name = "Reagent refill - mercury"
 	containername = "mercury reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/mercury = 2
 	)
@@ -167,7 +167,7 @@
 	name = "Reagent refill - radium"
 	containername = "radium reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/radium = 2
 	)
@@ -178,7 +178,7 @@
 	name = "Reagent refill - ethanol"
 	containername = "ethanol reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/ethanol = 2
 	)
@@ -189,7 +189,7 @@
 	name = "Reagent refill - sulfuric acid"
 	containername = "acid reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/acid = 2
 	)
@@ -200,7 +200,7 @@
 	name = "Reagent refill - tungsten"
 	containername = "tungsten reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_chemistry)
+	access = list(GLOB.access_chemistry)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/tungsten = 2
 	)

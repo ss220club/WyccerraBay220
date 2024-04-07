@@ -54,7 +54,7 @@
 		var/new_frequency = input(user, "Select a new frequency:", "Frequency Selection", radio.frequency) as null|num
 		if(!new_frequency || (extension_status(user) != STATUS_INTERACTIVE))
 			return MT_NOACTION
-		new_frequency = sanitize_frequency(new_frequency, RADIO_LOW_FREQ, RADIO_HIGH_FREQ)
+		new_frequency = sanitize_frequency(new_frequency, GLOB.RADIO_LOW_FREQ, GLOB.RADIO_HIGH_FREQ)
 		if(new_frequency == radio.frequency)
 			return MT_NOACTION
 		radio.set_frequency(new_frequency, radio.filter)

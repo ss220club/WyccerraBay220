@@ -415,10 +415,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			clear_holo(user)
 			return 0
 
-		if((HOLOPAD_MODE == RANGE_BASED && (get_dist(user.eyeobj, src) > holo_range)))
+		if((GLOB.HOLOPAD_MODE == RANGE_BASED && (get_dist(user.eyeobj, src) > holo_range)))
 			clear_holo(user)
 
-		if(HOLOPAD_MODE == AREA_BASED)
+		if(GLOB.HOLOPAD_MODE == AREA_BASED)
 			var/area/holo_area = get_area(src)
 			var/area/hologram_area = get_area(H)
 			if(hologram_area != holo_area)

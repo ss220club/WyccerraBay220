@@ -12,7 +12,7 @@
 
 /datum/controller/Destroy()
 	SHOULD_CALL_PARENT(FALSE)
-	return QDEL_HINT_LETMELIVE
+	return GLOB.QDEL_HINT_LETMELIVE
 
 
 /datum/controller/proc/Initialize()

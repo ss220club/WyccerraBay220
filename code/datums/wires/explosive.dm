@@ -8,12 +8,12 @@ GLOBAL_VAR_CONST(WIRE_EXPLODE, 1)
 
 /datum/wires/explosive/UpdatePulsed(index)
 	switch(index)
-		if(WIRE_EXPLODE)
+		if(GLOB.WIRE_EXPLODE)
 			explode()
 
 /datum/wires/explosive/UpdateCut(index, mended)
 	switch(index)
-		if(WIRE_EXPLODE)
+		if(GLOB.WIRE_EXPLODE)
 			if(!mended)
 				explode()
 

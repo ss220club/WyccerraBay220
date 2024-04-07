@@ -3,9 +3,9 @@
 	random = 1
 	wire_count = 7
 	descriptions = list(
-		new /datum/wire_description(NUCLEARBOMB_WIRE_LIGHT, "This wire seems to connect to the small light on the device.", SKILL_EXPERIENCED),
-		new /datum/wire_description(NUCLEARBOMB_WIRE_TIMING, "This wire connects to the time display."),
-		new /datum/wire_description(NUCLEARBOMB_WIRE_SAFETY, "This wire connects to a safety override.")
+		new /datum/wire_description(GLOB.NUCLEARBOMB_WIRE_LIGHT, "This wire seems to connect to the small light on the device.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.NUCLEARBOMB_WIRE_TIMING, "This wire connects to the time display."),
+		new /datum/wire_description(GLOB.NUCLEARBOMB_WIRE_SAFETY, "This wire connects to a safety override.")
 	)
 
 GLOBAL_VAR_CONST(NUCLEARBOMB_WIRE_LIGHT, 1)
@@ -26,18 +26,18 @@ GLOBAL_VAR_CONST(NUCLEARBOMB_WIRE_SAFETY, 4)
 /datum/wires/nuclearbomb/UpdatePulsed(index)
 	var/obj/machinery/nuclearbomb/N = holder
 	switch(index)
-		if(NUCLEARBOMB_WIRE_LIGHT)
+		if(GLOB.NUCLEARBOMB_WIRE_LIGHT)
 			N.lighthack = !N.lighthack
 			N.update_icon()
 			spawn(100)
 				N.lighthack = !N.lighthack
 				N.update_icon()
-		if(NUCLEARBOMB_WIRE_TIMING)
+		if(GLOB.NUCLEARBOMB_WIRE_TIMING)
 			if(N.timing)
 				spawn
 					log_and_message_admins("pulsed a nuclear bomb's detonation wire, causing it to explode.")
 					N.explode()
-		if(NUCLEARBOMB_WIRE_SAFETY)
+		if(GLOB.NUCLEARBOMB_WIRE_SAFETY)
 			N.safety = !N.safety
 			spawn(100)
 				N.safety = !N.safety
@@ -50,14 +50,14 @@ GLOBAL_VAR_CONST(NUCLEARBOMB_WIRE_SAFETY, 4)
 /datum/wires/nuclearbomb/UpdateCut(index, mended)
 	var/obj/machinery/nuclearbomb/N = holder
 	switch(index)
-		if(NUCLEARBOMB_WIRE_SAFETY)
+		if(GLOB.NUCLEARBOMB_WIRE_SAFETY)
 			N.safety = mended
 			if(N.timing)
 				spawn
 					log_and_message_admins("cut a nuclear bomb's timing wire, causing it to explode.")
 					N.explode()
-		if(NUCLEARBOMB_WIRE_TIMING)
+		if(GLOB.NUCLEARBOMB_WIRE_TIMING)
 			N.secure_device()
-		if(NUCLEARBOMB_WIRE_LIGHT)
+		if(GLOB.NUCLEARBOMB_WIRE_LIGHT)
 			N.lighthack = !mended
 			N.update_icon()

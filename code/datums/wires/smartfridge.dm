@@ -2,9 +2,9 @@
 	holder_type = /obj/machinery/smartfridge
 	wire_count = 3
 	descriptions = list(
-		new /datum/wire_description(SMARTFRIDGE_WIRE_ELECTRIFY, "This wire seems to be carrying a heavy current."),
-		new /datum/wire_description(SMARTFRIDGE_WIRE_THROW, "This wire leads to the item dispensor force controls."),
-		new /datum/wire_description(SMARTFRIDGE_WIRE_IDSCAN, "This wire is connected to the ID scanning panel.", SKILL_EXPERIENCED)
+		new /datum/wire_description(GLOB.SMARTFRIDGE_WIRE_ELECTRIFY, "This wire seems to be carrying a heavy current."),
+		new /datum/wire_description(GLOB.SMARTFRIDGE_WIRE_THROW, "This wire leads to the item dispensor force controls."),
+		new /datum/wire_description(GLOB.SMARTFRIDGE_WIRE_IDSCAN, "This wire is connected to the ID scanning panel.", SKILL_EXPERIENCED)
 	)
 
 /datum/wires/smartfridge/secure
@@ -35,22 +35,22 @@ GLOBAL_VAR_CONST(SMARTFRIDGE_WIRE_IDSCAN, 4)
 /datum/wires/smartfridge/UpdatePulsed(index)
 	var/obj/machinery/smartfridge/S = holder
 	switch(index)
-		if(SMARTFRIDGE_WIRE_THROW)
+		if(GLOB.SMARTFRIDGE_WIRE_THROW)
 			S.shoot_inventory = !S.shoot_inventory
-		if(SMARTFRIDGE_WIRE_ELECTRIFY)
+		if(GLOB.SMARTFRIDGE_WIRE_ELECTRIFY)
 			S.seconds_electrified = 30
-		if(SMARTFRIDGE_WIRE_IDSCAN)
+		if(GLOB.SMARTFRIDGE_WIRE_IDSCAN)
 			S.scan_id = !S.scan_id
 
 /datum/wires/smartfridge/UpdateCut(index, mended)
 	var/obj/machinery/smartfridge/S = holder
 	switch(index)
-		if(SMARTFRIDGE_WIRE_THROW)
+		if(GLOB.SMARTFRIDGE_WIRE_THROW)
 			S.shoot_inventory = !mended
-		if(SMARTFRIDGE_WIRE_ELECTRIFY)
+		if(GLOB.SMARTFRIDGE_WIRE_ELECTRIFY)
 			if(mended)
 				S.seconds_electrified = 0
 			else
 				S.seconds_electrified = -1
-		if(SMARTFRIDGE_WIRE_IDSCAN)
+		if(GLOB.SMARTFRIDGE_WIRE_IDSCAN)
 			S.scan_id = 1

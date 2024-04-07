@@ -101,7 +101,7 @@
 	action_button_name = "Toggle MUI"
 	origin_tech = list(TECH_DATA = 5, TECH_ENGINEERING = 5)
 	var/active = FALSE
-	var/mob/observer/eye/GLOB.cameranet/eye
+	var/mob/observer/eyecameranet/eye
 
 /obj/item/clothing/mask/ai/New()
 	eye = new(src)

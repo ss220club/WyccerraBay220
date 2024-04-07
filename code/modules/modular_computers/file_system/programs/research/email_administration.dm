@@ -94,7 +94,7 @@
 
 	// High security - can only be operated when the user has an ID with access on them.
 	var/obj/item/card/id/I = user.GetIdCard()
-	if(!istype(I) || !(access_network_admin in I.access))
+	if(!istype(I) || !(GLOB.access_network_admin in I.access))
 		return TOPIC_HANDLED
 
 	if(href_list["back"])

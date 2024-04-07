@@ -119,7 +119,7 @@
 
 	else if(href_list["switch_network"])
 		// Either security access, or access to the specific camera network's department is required in order to access the network.
-		if(GLOB.access_network(usr, get_camera_access(href_list["switch_network"])))
+		if(can_access_network(usr, get_camera_access(href_list["switch_network"])))
 			current_network = href_list["switch_network"]
 		else
 			to_chat(usr, "\The [nano_host()] shows an \"Network Access Denied\" error message.")

@@ -350,11 +350,11 @@
 		return outfit.r_ear
 
 /// Grants the full set of chameleon selection options available to the extension.
-var/global/const/CHAMELEON_FLEXIBLE_OPTIONS_EXTENSION = 1 // Not flags
+GLOBAL_VAR_CONST(CHAMELEON_FLEXIBLE_OPTIONS_EXTENSION, 1) // Not flags
 /// Grants a (potential) subset of chameleon options available to the extension, based on the instance's `parent_type`. Falls back to `type` if not a valid type for the extension.
-var/global/const/CHAMELEON_FLEXIBLE_OPTIONS_PARENT_TYPE   = 2
+GLOBAL_VAR_CONST(CHAMELEON_FLEXIBLE_OPTIONS_PARENT_TYPE, 2)
 /// Grants a (potential) subset of chameleon options available to the extension, based on the instance's `type`.
-var/global/const/CHAMELEON_FLEXIBLE_OPTIONS_TYPE          = 3
+GLOBAL_VAR_CONST(CHAMELEON_FLEXIBLE_OPTIONS_TYPE, 3)
 
 /**
  * Call this proc to automatically setup the best suited chameleon extension for the instance, if one exists.

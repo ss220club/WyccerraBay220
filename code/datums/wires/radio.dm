@@ -7,9 +7,9 @@
 		new /datum/wire_description(WIRE_TRANSMIT, "This wire runs to the radio transmitter.")
 	)
 
-var/global/const/WIRE_SIGNAL = 1
-var/global/const/WIRE_RECEIVE = 2
-var/global/const/WIRE_TRANSMIT = 4
+GLOBAL_VAR_CONST(WIRE_SIGNAL, 1)
+GLOBAL_VAR_CONST(WIRE_RECEIVE, 2)
+GLOBAL_VAR_CONST(WIRE_TRANSMIT, 4)
 
 /datum/wires/radio/CanUse(mob/living/L)
 	var/obj/item/device/radio/R = holder

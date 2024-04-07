@@ -76,7 +76,7 @@ GLOBAL_LIST_INIT(tray_hit_sound,list('sound/items/trayhit1.ogg', 'sound/items/tr
 			if(T && T.z == turf_source.z && (!is_ambiance || M.get_preference_value(/datum/client_preference/play_ambiance) == GLOB.PREF_YES))
 				M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, is_global, extrarange)
 
-var/global/const/FALLOFF_SOUNDS = 0.5
+GLOBAL_VAR_CONST(FALLOFF_SOUNDS, 0.5)
 
 /mob/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, is_global, extrarange)
 	if (isnull(soundin))

@@ -9,11 +9,11 @@
 		new /datum/wire_description(AALARM_WIRE_AALARM, "This wire gives power to the actual alarm mechanism.")
 	)
 
-var/global/const/AALARM_WIRE_IDSCAN = 1
-var/global/const/AALARM_WIRE_POWER = 2
-var/global/const/AALARM_WIRE_SYPHON = 4
-var/global/const/AALARM_WIRE_AI_CONTROL = 8
-var/global/const/AALARM_WIRE_AALARM = 16
+GLOBAL_VAR_CONST(AALARM_WIRE_IDSCAN, 1)
+GLOBAL_VAR_CONST(AALARM_WIRE_POWER, 2)
+GLOBAL_VAR_CONST(AALARM_WIRE_SYPHON, 4)
+GLOBAL_VAR_CONST(AALARM_WIRE_AI_CONTROL, 8)
+GLOBAL_VAR_CONST(AALARM_WIRE_AALARM, 16)
 
 
 /datum/wires/alarm/CanUse(mob/living/L)

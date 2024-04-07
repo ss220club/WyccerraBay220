@@ -8,9 +8,9 @@
 		new /datum/wire_description(NUCLEARBOMB_WIRE_SAFETY, "This wire connects to a safety override.")
 	)
 
-var/global/const/NUCLEARBOMB_WIRE_LIGHT		= 1
-var/global/const/NUCLEARBOMB_WIRE_TIMING		= 2
-var/global/const/NUCLEARBOMB_WIRE_SAFETY		= 4
+GLOBAL_VAR_CONST(NUCLEARBOMB_WIRE_LIGHT, 1)
+GLOBAL_VAR_CONST(NUCLEARBOMB_WIRE_TIMING, 2)
+GLOBAL_VAR_CONST(NUCLEARBOMB_WIRE_SAFETY, 4)
 
 /datum/wires/nuclearbomb/CanUse(mob/living/L)
 	var/obj/machinery/nuclearbomb/N = holder

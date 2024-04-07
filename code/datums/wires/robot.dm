@@ -9,10 +9,10 @@
 		new /datum/wire_description(BORG_WIRE_AI_CONTROL, "This wire connects to automated control systems.")
 	)
 
-var/global/const/BORG_WIRE_LAWCHECK = 1
-var/global/const/BORG_WIRE_MAIN_POWER = 2 // The power wires do nothing whyyyyyyyyyyyyy
-var/global/const/BORG_WIRE_LOCKED_DOWN = 4
-var/global/const/BORG_WIRE_AI_CONTROL = 8
+GLOBAL_VAR_CONST(BORG_WIRE_LAWCHECK, 1)
+GLOBAL_VAR_CONST(BORG_WIRE_MAIN_POWER, 2) // The power wires do nothing whyyyyyyyyyyyyy
+GLOBAL_VAR_CONST(BORG_WIRE_LOCKED_DOWN, 4)
+GLOBAL_VAR_CONST(BORG_WIRE_AI_CONTROL, 8)
 
 /datum/wires/robot/GetInteractWindow(mob/user)
 

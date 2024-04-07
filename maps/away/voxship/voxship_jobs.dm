@@ -152,7 +152,7 @@
 	)
 	skill_points = 20
 
-var/global/const/access_voxship = "ACCESS_VOXSHIP"
+GLOBAL_VAR_CONST(access_voxship, "ACCESS_VOXSHIP")
 /datum/access/vox
 	id = access_voxship
 	desc = "Vox Ship"

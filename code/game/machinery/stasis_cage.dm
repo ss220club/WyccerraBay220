@@ -1,6 +1,6 @@
-var/global/const/STASISCAGE_WIRE_SAFETY    = 1
-var/global/const/STASISCAGE_WIRE_RELEASE   = 2
-var/global/const/STASISCAGE_WIRE_LOCK      = 4
+GLOBAL_VAR_CONST(STASISCAGE_WIRE_SAFETY, 1)
+GLOBAL_VAR_CONST(STASISCAGE_WIRE_RELEASE, 2)
+GLOBAL_VAR_CONST(STASISCAGE_WIRE_LOCK, 4)
 
 /obj/machinery/stasis_cage
 	name = "stasis cage"

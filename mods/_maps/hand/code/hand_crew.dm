@@ -34,9 +34,9 @@
  * =======
  */
 
-var/global/const/access_away_hand = "ACCESS_HAND"
-var/global/const/access_away_hand_med = "ACCESS_HAND_MED"
-var/global/const/access_away_hand_captain = "ACCESS_HAND_CAPTAIN"
+GLOBAL_VAR_CONST(access_away_hand, "ACCESS_HAND")
+GLOBAL_VAR_CONST(access_away_hand_med, "ACCESS_HAND_MED")
+GLOBAL_VAR_CONST(access_away_hand_captain, "ACCESS_HAND_CAPTAIN")
 
 /datum/access/access_away_hand_hand
 	id = access_away_hand

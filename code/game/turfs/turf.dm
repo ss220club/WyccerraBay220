@@ -227,7 +227,7 @@
 				return 0
 	return 1 //Nothing found to block so return success!
 
-var/global/const/enterloopsanity = 100
+GLOBAL_VAR_CONST(enterloopsanity, 100)
 /turf/Entered(atom/atom, atom/old_loc)
 
 	..()

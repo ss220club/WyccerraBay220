@@ -8,10 +8,10 @@
 		new /datum/wire_description(PARTICLE_LIMIT_POWER_WIRE, "This wire connects to the primary magnets.")
 	)
 
-var/global/const/PARTICLE_TOGGLE_WIRE = 1 // Toggles whether the PA is on or not.
-var/global/const/PARTICLE_STRENGTH_WIRE = 2 // Determines the strength of the PA.
-var/global/const/PARTICLE_INTERFACE_WIRE = 4 // Determines the interface showing up.
-var/global/const/PARTICLE_LIMIT_POWER_WIRE = 8 // Determines how strong the PA can be.
+GLOBAL_VAR_CONST(PARTICLE_TOGGLE_WIRE, 1) // Toggles whether the PA is on or not.
+GLOBAL_VAR_CONST(PARTICLE_STRENGTH_WIRE, 2) // Determines the strength of the PA.
+GLOBAL_VAR_CONST(PARTICLE_INTERFACE_WIRE, 4) // Determines the interface showing up.
+GLOBAL_VAR_CONST(PARTICLE_LIMIT_POWER_WIRE, 8) // Determines how strong the PA can be.
 //var/const/PARTICLE_NOTHING_WIRE = 16 // Blank wire
 
 /datum/wires/particle_acc/control_box/CanUse(mob/living/L)

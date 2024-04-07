@@ -51,7 +51,7 @@
 
 //Access + Loadout
 
-var/global/const/access_skrellscoutship = "ACCESS_SKRELLSCOUT"
+GLOBAL_VAR_CONST(access_skrellscoutship, "ACCESS_SKRELLSCOUT")
 
 /datum/access/skrellscoutship
 	id = access_skrellscoutship

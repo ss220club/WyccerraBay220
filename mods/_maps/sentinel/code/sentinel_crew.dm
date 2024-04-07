@@ -40,12 +40,12 @@
  * =======
  */
 
-var/global/const/access_away_cavalry = "ACCESS_CAVALRY"
-var/global/const/access_away_cavalry_fleet_armory = "ACCESS_CAVALRY_EMERG_ARMORY"
-var/global/const/access_away_cavalry_ops = "ACCESS_CAVALRY_OPS"
-var/global/const/access_away_cavalry_pilot = "ACCESS_CAVALRY_PILOT"
-var/global/const/access_away_cavalry_captain = "ACCESS_CAVALRY_CAPTAIN"
-var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
+GLOBAL_VAR_CONST(access_away_cavalry, "ACCESS_CAVALRY")
+GLOBAL_VAR_CONST(access_away_cavalry_fleet_armory, "ACCESS_CAVALRY_EMERG_ARMORY")
+GLOBAL_VAR_CONST(access_away_cavalry_ops, "ACCESS_CAVALRY_OPS")
+GLOBAL_VAR_CONST(access_away_cavalry_pilot, "ACCESS_CAVALRY_PILOT")
+GLOBAL_VAR_CONST(access_away_cavalry_captain, "ACCESS_CAVALRY_CAPTAIN")
+GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 
 /datum/access/access_away_cavalry_patrol
 	id = access_away_cavalry

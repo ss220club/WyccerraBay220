@@ -25,12 +25,12 @@
 	var/obj/machinery/camera/C = holder
 	return C.panel_open
 
-var/global/const/CAMERA_WIRE_FOCUS = 1
-var/global/const/CAMERA_WIRE_POWER = 2
-var/global/const/CAMERA_WIRE_LIGHT = 4
-var/global/const/CAMERA_WIRE_ALARM = 8
-var/global/const/CAMERA_WIRE_NOTHING1 = 16
-var/global/const/CAMERA_WIRE_NOTHING2 = 32
+GLOBAL_VAR_CONST(CAMERA_WIRE_FOCUS, 1)
+GLOBAL_VAR_CONST(CAMERA_WIRE_POWER, 2)
+GLOBAL_VAR_CONST(CAMERA_WIRE_LIGHT, 4)
+GLOBAL_VAR_CONST(CAMERA_WIRE_ALARM, 8)
+GLOBAL_VAR_CONST(CAMERA_WIRE_NOTHING1, 16)
+GLOBAL_VAR_CONST(CAMERA_WIRE_NOTHING2, 32)
 
 /datum/wires/camera/UpdateCut(index, mended)
 	var/obj/machinery/camera/C = holder

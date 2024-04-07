@@ -1,19 +1,19 @@
-var/global/const/NETWORK_CALYPSO     = "Charon"
-var/global/const/NETWORK_EXPEDITION  = "Expedition"
-var/global/const/NETWORK_POD         = "General Utility Pod"
-var/global/const/NETWORK_FIRST_DECK  = "First Deck"
-var/global/const/NETWORK_SECOND_DECK = "Second Deck"
-var/global/const/NETWORK_THIRD_DECK  = "Third Deck"
-var/global/const/NETWORK_FOURTH_DECK = "Fourth Deck"
-var/global/const/NETWORK_BRIDGE_DECK = "Bridge Deck"
-var/global/const/NETWORK_SUPPLY      = "Supply"
-var/global/const/NETWORK_HANGAR      = "Hangar"
-var/global/const/NETWORK_PETROV      = "Petrov"
+GLOBAL_VAR_CONST(NETWORK_CALYPSO, "Charon")
+GLOBAL_VAR_CONST(NETWORK_EXPEDITION, "Expedition")
+GLOBAL_VAR_CONST(NETWORK_POD, "General Utility Pod")
+GLOBAL_VAR_CONST(NETWORK_FIRST_DECK, "First Deck")
+GLOBAL_VAR_CONST(NETWORK_SECOND_DECK, "Second Deck")
+GLOBAL_VAR_CONST(NETWORK_THIRD_DECK, "Third Deck")
+GLOBAL_VAR_CONST(NETWORK_FOURTH_DECK, "Fourth Deck")
+GLOBAL_VAR_CONST(NETWORK_BRIDGE_DECK, "Bridge Deck")
+GLOBAL_VAR_CONST(NETWORK_SUPPLY, "Supply")
+GLOBAL_VAR_CONST(NETWORK_HANGAR, "Hangar")
+GLOBAL_VAR_CONST(NETWORK_PETROV, "Petrov")
 
 //Overrides
-var/global/const/NETWORK_COMMAND = "Command"
-var/global/const/NETWORK_ENGINE  = "Engine"
-var/global/const/NETWORK_ENGINEERING_OUTPOST = "Engineering Outpost"
+GLOBAL_VAR_CONST(NETWORK_COMMAND, "Command")
+GLOBAL_VAR_CONST(NETWORK_ENGINE, "Engine")
+GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 
 
 /datum/map/sierra/get_network_access(network)

@@ -249,9 +249,9 @@ var/global/list/wireColours = list("red", "blue", "green", "darkred", "orange", 
 /*
 
 var/global/const/BOLTED= 1
-var/global/const/SHOCKED = 2
-var/global/const/SAFETY = 4
-var/global/const/POWER = 8
+GLOBAL_VAR_CONST(SHOCKED, 2)
+GLOBAL_VAR_CONST(SAFETY, 4)
+GLOBAL_VAR_CONST(POWER, 8)
 
 /datum/wires/door/UpdateCut(index, mended)
 	var/obj/machinery/door/airlock/A = holder

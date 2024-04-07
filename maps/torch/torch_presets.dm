@@ -1,11 +1,11 @@
-var/global/const/NETWORK_AQUILA      = "Aquila"
-var/global/const/NETWORK_BRIDGE      = "Bridge"
-var/global/const/NETWORK_CHARON     = "Charon"
-var/global/const/NETWORK_FIRST_DECK  = "First Deck"
-var/global/const/NETWORK_FOURTH_DECK = "Fourth Deck"
-var/global/const/NETWORK_SECOND_DECK = "Second Deck"
-var/global/const/NETWORK_THIRD_DECK  = "Third Deck"
-var/global/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
+GLOBAL_VAR_CONST(NETWORK_AQUILA, "Aquila")
+GLOBAL_VAR_CONST(NETWORK_BRIDGE, "Bridge")
+GLOBAL_VAR_CONST(NETWORK_CHARON, "Charon")
+GLOBAL_VAR_CONST(NETWORK_FIRST_DECK, "First Deck")
+GLOBAL_VAR_CONST(NETWORK_FOURTH_DECK, "Fourth Deck")
+GLOBAL_VAR_CONST(NETWORK_SECOND_DECK, "Second Deck")
+GLOBAL_VAR_CONST(NETWORK_THIRD_DECK, "Third Deck")
+GLOBAL_VAR_CONST(NETWORK_FIFTH_DECK, "Fifth Deck")
 
 /datum/map/torch/get_network_access(network)
 	switch(network)
@@ -163,9 +163,9 @@ var/global/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
 	_output_on = TRUE
 	_fully_charged = TRUE
 
-var/global/const/NETWORK_COMMAND = "Command"
-var/global/const/NETWORK_ENGINE  = "Engine"
-var/global/const/NETWORK_ENGINEERING_OUTPOST = "Engineering Outpost"
+GLOBAL_VAR_CONST(NETWORK_COMMAND, "Command")
+GLOBAL_VAR_CONST(NETWORK_ENGINE, "Engine")
+GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 
 /datum/map/proc/get_shared_network_access(network)
 	switch(network)

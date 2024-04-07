@@ -7,9 +7,9 @@
 		new /datum/wire_description(SUIT_STORAGE_WIRE_LOCKED, "This wire is connected to the ID scanning panel.")
 	)
 
-var/global/const/SUIT_STORAGE_WIRE_ELECTRIFY	= 1
-var/global/const/SUIT_STORAGE_WIRE_SAFETY		= 2
-var/global/const/SUIT_STORAGE_WIRE_LOCKED		= 4
+GLOBAL_VAR_CONST(SUIT_STORAGE_WIRE_ELECTRIFY, 1)
+GLOBAL_VAR_CONST(SUIT_STORAGE_WIRE_SAFETY, 2)
+GLOBAL_VAR_CONST(SUIT_STORAGE_WIRE_LOCKED, 4)
 
 /datum/wires/suit_storage_unit/CanUse(mob/living/L)
 	var/obj/machinery/suit_cycler/S = holder

@@ -99,56 +99,56 @@ On the map:
 1455 for AI access
 */
 
-var/global/const/RADIO_LOW_FREQ	= 1200
-var/global/const/PUBLIC_LOW_FREQ	= 1441
-var/global/const/PUBLIC_HIGH_FREQ	= 1489
-var/global/const/RADIO_HIGH_FREQ	= 1600
+GLOBAL_VAR_CONST(RADIO_LOW_FREQ, 1200)
+GLOBAL_VAR_CONST(PUBLIC_LOW_FREQ, 1441)
+GLOBAL_VAR_CONST(PUBLIC_HIGH_FREQ, 1489)
+GLOBAL_VAR_CONST(RADIO_HIGH_FREQ, 1600)
 
-var/global/const/BOT_FREQ	= 1447
-var/global/const/COMM_FREQ = 1353
-var/global/const/ERT_FREQ	= 1345
-var/global/const/AI_FREQ	= 1343
-var/global/const/ENT_FREQ	= 1461 //entertainment frequency. This is not a diona exclusive frequency.
-var/global/const/ICCGN_FREQ = 1344
-var/global/const/SFV_FREQ = 1346
+GLOBAL_VAR_CONST(BOT_FREQ, 1447)
+GLOBAL_VAR_CONST(COMM_FREQ, 1353)
+GLOBAL_VAR_CONST(ERT_FREQ, 1345)
+GLOBAL_VAR_CONST(AI_FREQ, 1343)
+GLOBAL_VAR_CONST(ENT_FREQ, 1461) //entertainment frequency. This is not a diona exclusive frequency.
+GLOBAL_VAR_CONST(ICCGN_FREQ, 1344)
+GLOBAL_VAR_CONST(SFV_FREQ, 1346)
 
 //antagonist channels
-var/global/const/DTH_FREQ	= 1341
-var/global/const/SYND_FREQ = 1213
-var/global/const/RAID_FREQ	= 1277
-var/global/const/V_RAID_FREQ = 1245
+GLOBAL_VAR_CONST(DTH_FREQ, 1341)
+GLOBAL_VAR_CONST(SYND_FREQ, 1213)
+GLOBAL_VAR_CONST(RAID_FREQ, 1277)
+GLOBAL_VAR_CONST(V_RAID_FREQ, 1245)
 
 // department channels
-var/global/const/PUB_FREQ = 1459
-var/global/const/HAIL_FREQ = 1463
-var/global/const/SEC_FREQ = 1359
-var/global/const/ENG_FREQ = 1357
-var/global/const/MED_FREQ = 1355
-var/global/const/SCI_FREQ = 1351
-var/global/const/SRV_FREQ = 1349
-var/global/const/SUP_FREQ = 1347
-var/global/const/EXP_FREQ = 1361
+GLOBAL_VAR_CONST(PUB_FREQ, 1459)
+GLOBAL_VAR_CONST(HAIL_FREQ, 1463)
+GLOBAL_VAR_CONST(SEC_FREQ, 1359)
+GLOBAL_VAR_CONST(ENG_FREQ, 1357)
+GLOBAL_VAR_CONST(MED_FREQ, 1355)
+GLOBAL_VAR_CONST(SCI_FREQ, 1351)
+GLOBAL_VAR_CONST(SRV_FREQ, 1349)
+GLOBAL_VAR_CONST(SUP_FREQ, 1347)
+GLOBAL_VAR_CONST(EXP_FREQ, 1361)
 
 // internal department channels
-var/global/const/MED_I_FREQ = 1485
-var/global/const/SEC_I_FREQ = 1475
+GLOBAL_VAR_CONST(MED_I_FREQ, 1485)
+GLOBAL_VAR_CONST(SEC_I_FREQ, 1475)
 
 // Away Site Channels
 var/global/list/AWAY_FREQS_UNASSIGNED = list(1491, 1493, 1495, 1497, 1499, 1501, 1503, 1505, 1507, 1509)
 var/global/list/AWAY_FREQS_ASSIGNED = list("Hailing" = HAIL_FREQ)
 
 // Device signal frequencies
-var/global/const/ATMOS_ENGINE_FREQ = 1438 // Used by atmos monitoring in the engine.
-var/global/const/PUMP_FREQ         = 1439 // Used by air alarms and their progeny.
-var/global/const/FUEL_FREQ         = 1447 // Used by fuel atmos stuff, and currently default for digital valves
-var/global/const/ATMOS_TANK_FREQ   = 1441 // Used for gas tank sensors and monitoring.
-var/global/const/ATMOS_DIST_FREQ   = 1443 // Alternative atmos frequency.
-var/global/const/BUTTON_FREQ       = 1301 // Used by generic buttons controlling stuff
-var/global/const/BLAST_DOORS_FREQ  = 1303 // Used by blast doors, buttons controlling them, and mass drivers.
-var/global/const/AIRLOCK_FREQ      = 1305 // Used by airlocks and buttons controlling them.
-var/global/const/SHUTTLE_AIR_FREQ  = 1331 // Used by shuttles and shuttle-related atmos systems.
-var/global/const/AIRLOCK_AIR_FREQ  = 1379 // Used by some airlocks for atmos devices.
-var/global/const/EXTERNAL_AIR_FREQ = 1380 // Used by some external airlocks.
+GLOBAL_VAR_CONST(ATMOS_ENGINE_FREQ, 1438) // Used by atmos monitoring in the engine.
+GLOBAL_VAR_CONST(PUMP_FREQ, 1439) // Used by air alarms and their progeny.
+GLOBAL_VAR_CONST(FUEL_FREQ, 1447) // Used by fuel atmos stuff, and currently default for digital valves
+GLOBAL_VAR_CONST(ATMOS_TANK_FREQ, 1441) // Used for gas tank sensors and monitoring.
+GLOBAL_VAR_CONST(ATMOS_DIST_FREQ, 1443) // Alternative atmos frequency.
+GLOBAL_VAR_CONST(BUTTON_FREQ, 1301) // Used by generic buttons controlling stuff
+GLOBAL_VAR_CONST(BLAST_DOORS_FREQ, 1303) // Used by blast doors, buttons controlling them, and mass drivers.
+GLOBAL_VAR_CONST(AIRLOCK_FREQ, 1305) // Used by airlocks and buttons controlling them.
+GLOBAL_VAR_CONST(SHUTTLE_AIR_FREQ, 1331) // Used by shuttles and shuttle-related atmos systems.
+GLOBAL_VAR_CONST(AIRLOCK_AIR_FREQ, 1379) // Used by some airlocks for atmos devices.
+GLOBAL_VAR_CONST(EXTERNAL_AIR_FREQ, 1380) // Used by some external airlocks.
 
 var/global/list/radiochannels = list(
 	"Common"		= PUB_FREQ,
@@ -272,17 +272,17 @@ var/global/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FR
 //This is done for performance, so we don't send signals to lots of machines unnecessarily.
 
 //This filter is special because devices belonging to default also recieve signals sent to any other filter.
-var/global/const/RADIO_DEFAULT = "radio_default"
+GLOBAL_VAR_CONST(RADIO_DEFAULT, "radio_default")
 
-var/global/const/RADIO_TO_AIRALARM = "radio_airalarm" //air alarms
-var/global/const/RADIO_FROM_AIRALARM = "radio_airalarm_rcvr" //devices interested in recieving signals from air alarms
-var/global/const/RADIO_CHAT = "radio_telecoms"
-var/global/const/RADIO_ATMOSIA = "radio_atmos"
-var/global/const/RADIO_NAVBEACONS = "radio_navbeacon"
-var/global/const/RADIO_AIRLOCK = "radio_airlock"
-var/global/const/RADIO_SECBOT = "radio_secbot"
-var/global/const/RADIO_MULEBOT = "radio_mulebot"
-var/global/const/RADIO_MAGNETS = "radio_magnet"
+GLOBAL_VAR_CONST(RADIO_TO_AIRALARM, "radio_airalarm") //air alarms
+GLOBAL_VAR_CONST(RADIO_FROM_AIRALARM, "radio_airalarm_rcvr") //devices interested in recieving signals from air alarms
+GLOBAL_VAR_CONST(RADIO_CHAT, "radio_telecoms")
+GLOBAL_VAR_CONST(RADIO_ATMOSIA, "radio_atmos")
+GLOBAL_VAR_CONST(RADIO_NAVBEACONS, "radio_navbeacon")
+GLOBAL_VAR_CONST(RADIO_AIRLOCK, "radio_airlock")
+GLOBAL_VAR_CONST(RADIO_SECBOT, "radio_secbot")
+GLOBAL_VAR_CONST(RADIO_MULEBOT, "radio_mulebot")
+GLOBAL_VAR_CONST(RADIO_MAGNETS, "radio_magnet")
 
 // These are exposed to players, by name.
 GLOBAL_LIST_INIT(all_selectable_radio_filters, list(

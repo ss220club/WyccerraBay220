@@ -1,4 +1,4 @@
-var/global/const/SAFETY_COOLDOWN = 100
+GLOBAL_VAR_CONST(SAFETY_COOLDOWN, 100)
 
 /obj/machinery/recycler
 	name = "recycler"

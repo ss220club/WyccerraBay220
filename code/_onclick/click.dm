@@ -524,7 +524,7 @@ GLOBAL_LIST_INIT(click_catchers, create_click_catcher())
 
 /obj/screen/click_catcher/Destroy()
 	SHOULD_CALL_PARENT(FALSE)
-	return GLOB.QDEL_HINT_LETMELIVE
+	return QDEL_HINT_LETMELIVE
 
 /proc/create_click_catcher()
 	RETURN_TYPE(/list)

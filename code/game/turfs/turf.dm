@@ -134,7 +134,7 @@
 		QDEL_NULL(mimic_proxy)
 
 	..()
-	return GLOB.QDEL_HINT_LETMELIVE
+	return QDEL_HINT_LETMELIVE
 
 /// WARNING WARNING
 /// Turfs DO NOT lose their signals when they get replaced, REMEMBER THIS

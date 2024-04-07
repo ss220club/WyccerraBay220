@@ -1025,7 +1025,7 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 
 /mob/dview/Destroy()
 	SHOULD_CALL_PARENT(FALSE)
-	return GLOB.QDEL_HINT_LETMELIVE
+	return QDEL_HINT_LETMELIVE
 
 /**
  * Sets the atom's color and light values to those of `origin`.

@@ -30,7 +30,7 @@
 /datum/graph/Destroy()
 	if(length(nodes) || LAZYLEN(pending_connections) || LAZYLEN(pending_disconnections))
 		crash_with("Prevented attempt to delete a network that still has nodes: [length(nodes)] - [LAZYLEN(pending_connections)] - [LAZYLEN(pending_disconnections)]")
-		return GLOB.QDEL_HINT_LETMELIVE
+		return QDEL_HINT_LETMELIVE
 	. = ..()
 
 /datum/graph/proc/Connect(datum/node/node, list/neighbours, queue = TRUE)

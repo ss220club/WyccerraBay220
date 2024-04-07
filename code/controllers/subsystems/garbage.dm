@@ -1,23 +1,3 @@
-/// Destroy() return value. Queue the instance for eventual hard deletion.
-GLOBAL_VAR_CONST(QDEL_HINT_QUEUE, 0)
-
-/// Destroy() return value. Do not queue the instance for hard deletion. Does not expect to be refcount GCd.
-GLOBAL_VAR_CONST(QDEL_HINT_LETMELIVE, 1)
-
-/// Destroy() return value. Same as QDEL_HINT_LETMELIVE but the instance expects to refcount GC without help.
-GLOBAL_VAR_CONST(QDEL_HINT_IWILLGC, 2)
-
-/// Destroy() return value. Queue this instance for hard deletion regardless of its refcount GC state.
-GLOBAL_VAR_CONST(QDEL_HINT_HARDDEL, 3)
-
-/// Destroy() return value. Immediately hard delete the instance.
-GLOBAL_VAR_CONST(QDEL_HINT_HARDDEL_NOW, 4)
-
-
-/// datum.gc_destroyed signal value
-GLOBAL_VAR_CONST(GC_CURRENTLY_BEING_QDELETED, -1)
-
-
 SUBSYSTEM_DEF(garbage)
 	name = "Garbage"
 	priority = FIRE_PRIORITY_GARBAGE
@@ -222,7 +202,7 @@ SUBSYSTEM_DEF(garbage)
 			if(SEND_SIGNAL(datum, COMSIG_PREQDELETED)) // Gives any signal listener a chance to prevent atom qdel
 				return
 
-			datum.gc_destroyed = GLOB.GC_CURRENTLY_BEING_QDELETED
+			datum.gc_destroyed = GC_CURRENTLY_BEING_QDELETED
 			var/start_time = world.time
 			var/start_tick = world.tick_usage
 			SEND_SIGNAL(datum, COMSIG_QDELETING) // Leting signal listeners know, that datum is being qdeleted
@@ -232,7 +212,7 @@ SUBSYSTEM_DEF(garbage)
 			else
 				details.destroy_time += (world.tick_usage - start_tick) * world.tick_lag
 			switch (hint)
-				if (GLOB.QDEL_HINT_QUEUE)
+				if (QDEL_HINT_QUEUE)
 					if (ismovable(datum))
 						var/atom/movable/movable = datum
 						if (movable.loc)
@@ -240,11 +220,11 @@ SUBSYSTEM_DEF(garbage)
 							movable.forceMove(null)
 					datum.gc_destroyed = world.time
 					collection_queue["\ref[datum]"] = world.time
-				if (GLOB.QDEL_HINT_IWILLGC)
+				if (QDEL_HINT_IWILLGC)
 					datum.gc_destroyed = world.time
-				if (GLOB.QDEL_HINT_LETMELIVE)
+				if (QDEL_HINT_LETMELIVE)
 					datum.gc_destroyed = null
-				if (GLOB.QDEL_HINT_HARDDEL)
+				if (QDEL_HINT_HARDDEL)
 					if (ismovable(datum))
 						var/atom/movable/movable = datum
 						if (movable.loc)
@@ -252,13 +232,13 @@ SUBSYSTEM_DEF(garbage)
 							movable.forceMove(null)
 					datum.gc_destroyed = world.time
 					deletion_queue[datum] = world.time
-				if (GLOB.QDEL_HINT_HARDDEL_NOW)
+				if (QDEL_HINT_HARDDEL_NOW)
 					SSgarbage.HardDelete(datum)
 				else
 					++details.no_hint
 					datum.gc_destroyed = world.time
 					collection_queue["\ref[datum]"] = world.time
-		if (GLOB.GC_CURRENTLY_BEING_QDELETED)
+		if (GC_CURRENTLY_BEING_QDELETED)
 			crash_with("GC_CURRENTLY_BEING_QDELETED: [datum.type] Destroy() called more than once.")
 		else
 			++details.extra_qdels

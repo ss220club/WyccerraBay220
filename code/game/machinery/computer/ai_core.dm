@@ -1,4 +1,4 @@
-var/global/list/empty_playable_ai_cores = list()
+GLOBAL_LIST_INIT(empty_playable_ai_cores, list())
 
 /obj/structure/AIcore
 	density = TRUE

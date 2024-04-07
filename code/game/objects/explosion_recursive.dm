@@ -2,7 +2,7 @@
 
 
 
-var/global/list/explosion_turfs = list()
+GLOBAL_LIST_INIT(explosion_turfs, list())
 
 var/global/explosion_in_progress = 0
 

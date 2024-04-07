@@ -950,14 +950,14 @@ GLOBAL_LIST_INIT(duplicate_object_disallowed_vars, list(
 /*
 Checks if that loc and dir has a item on the wall
 */
-var/global/list/WALLITEMS = list(
+GLOBAL_LIST_INIT(WALLITEMS, list(
 	/obj/machinery/power/apc, /obj/machinery/alarm, /obj/item/device/radio/intercom,
 	/obj/structure/extinguisher_cabinet, /obj/structure/reagent_dispensers/peppertank,
 	/obj/machinery/status_display, /obj/machinery/requests_console, /obj/machinery/light_switch, /obj/structure/sign,
 	/obj/machinery/newscaster, /obj/machinery/firealarm, /obj/structure/noticeboard,
 	/obj/item/storage/secure/safe, /obj/machinery/door_timer, /obj/machinery/flasher, /obj/machinery/keycard_auth,
 	/obj/item/storage/mirror, /obj/structure/fireaxecabinet, /obj/structure/filingcabinet/wallcabinet
-	)
+	))
 /proc/gotwallitem(loc, dir)
 	for(var/obj/O in loc)
 		for(var/item in WALLITEMS)

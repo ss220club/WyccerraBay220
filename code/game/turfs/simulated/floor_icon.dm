@@ -1,4 +1,4 @@
-var/global/list/flooring_cache = list()
+GLOBAL_LIST_INIT(flooring_cache, list())
 
 /turf/simulated/floor/on_update_icon(update_neighbors)
 

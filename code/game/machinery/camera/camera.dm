@@ -327,7 +327,7 @@
 	GLOB.camera_alarm.triggerAlarm(loc, src, duration)
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
-	if(wires.IsIndexCut(CAMERA_WIRE_ALARM))
+	if(wires.IsIndexCut(GLOB.CAMERA_WIRE_ALARM))
 		return
 
 	alarm_on = 0

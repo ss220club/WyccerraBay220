@@ -345,9 +345,9 @@ GLOBAL_VAR_CONST(STASISCAGE_WIRE_LOCK, 4)
 	wire_count = 3
 	window_y = 500
 	descriptions = list(
-		new /datum/wire_description(STASISCAGE_WIRE_SAFETY, "This wire is connected to the internal biometric sensors.", SKILL_EXPERIENCED),
-		new /datum/wire_description(STASISCAGE_WIRE_RELEASE, "This wire is connected to the automated lid latches.", SKILL_TRAINED),
-		new /datum/wire_description(STASISCAGE_WIRE_LOCK, "This wire is connected to the lid motors.", SKILL_TRAINED)
+		new /datum/wire_description(GLOB.STASISCAGE_WIRE_SAFETY, "This wire is connected to the internal biometric sensors.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.STASISCAGE_WIRE_RELEASE, "This wire is connected to the automated lid latches.", SKILL_TRAINED),
+		new /datum/wire_description(GLOB.STASISCAGE_WIRE_LOCK, "This wire is connected to the lid motors.", SKILL_TRAINED)
 	)
 
 
@@ -363,9 +363,9 @@ GLOBAL_VAR_CONST(STASISCAGE_WIRE_LOCK, 4)
 	. += "<ul>"
 	. += "<li>The panel is powered.</li>"
 	if (user.skill_check(SKILL_ELECTRICAL, SKILL_BASIC))
-		. += "<li>The biometric safety sensors are [IsIndexCut(STASISCAGE_WIRE_SAFETY) ? "disconnected" : "connected"].</li>"
-		. += "<li>The cage's emergency auto-release mechanism is [IsIndexCut(STASISCAGE_WIRE_RELEASE) ? "disabled" : "enabled"].</li>"
-		. += "<li>The cage lid motors are [IsIndexCut(STASISCAGE_WIRE_LOCK) ? "overriden" : "nominal"].</li>"
+		. += "<li>The biometric safety sensors are [IsIndexCut(GLOB.STASISCAGE_WIRE_SAFETY) ? "disconnected" : "connected"].</li>"
+		. += "<li>The cage's emergency auto-release mechanism is [IsIndexCut(GLOB.STASISCAGE_WIRE_RELEASE) ? "disabled" : "enabled"].</li>"
+		. += "<li>The cage lid motors are [IsIndexCut(GLOB.STASISCAGE_WIRE_LOCK) ? "overriden" : "nominal"].</li>"
 	else
 		. += "<li>There are lights and wires here, but you don't know how the wiring works.</li>"
 	. += "</ul>"
@@ -374,13 +374,13 @@ GLOBAL_VAR_CONST(STASISCAGE_WIRE_LOCK, 4)
 /datum/wires/stasis_cage/UpdateCut(index, mended)
 	var/obj/machinery/stasis_cage/stasis_cage = holder
 	switch (index)
-		if (STASISCAGE_WIRE_SAFETY)
+		if (GLOB.STASISCAGE_WIRE_SAFETY)
 			if (!mended)
 				stasis_cage.safety = FALSE
-		if (STASISCAGE_WIRE_RELEASE)
+		if (GLOB.STASISCAGE_WIRE_RELEASE)
 			if (stasis_cage.contained && !mended)
 				stasis_cage.release()
-		if (STASISCAGE_WIRE_LOCK)
+		if (GLOB.STASISCAGE_WIRE_LOCK)
 			if (!mended)
 				playsound(stasis_cage.loc, 'sound/machines/BoltsDown.ogg', 60)
 				holder.visible_message(
@@ -393,7 +393,7 @@ GLOBAL_VAR_CONST(STASISCAGE_WIRE_LOCK, 4)
 /datum/wires/stasis_cage/UpdatePulsed(index)
 	var/obj/machinery/stasis_cage/stasis_cage = holder
 	switch (index)
-		if (STASISCAGE_WIRE_SAFETY)
+		if (GLOB.STASISCAGE_WIRE_SAFETY)
 			if (stasis_cage.contained)
 				if (prob(20) && usr.skill_check(SKILL_ELECTRICAL, SKILL_BASIC))
 					holder.visible_message(

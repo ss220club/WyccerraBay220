@@ -164,7 +164,7 @@
 		if(!UWC)
 			return TOPIC_NOACTION
 
-		var/datum/category_item/underwear/selected_underwear = tgui_input_list(user, "Choose underwear", CHARACTER_PREFERENCE_INPUT_TITLE, UWC.items, pref.all_underwear[UWC.name])
+		var/datum/category_item/underwear/selected_underwear = tgui_input_list(user, "Choose underwear", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, UWC.items, pref.all_underwear[UWC.name])
 		if(selected_underwear && CanUseTopic(user))
 			pref.all_underwear[UWC.name] = selected_underwear.name
 			return TOPIC_REFRESH_UPDATE_PREVIEW
@@ -185,7 +185,7 @@
 			return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["change_backpack"])
-		var/new_backpack = tgui_input_list(user, "Choose backpack style", CHARACTER_PREFERENCE_INPUT_TITLE, backpacks_by_name, pref.backpack)
+		var/new_backpack = tgui_input_list(user, "Choose backpack style", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, backpacks_by_name, pref.backpack)
 		if(!isnull(new_backpack) && CanUseTopic(user))
 			pref.backpack = backpacks_by_name[new_backpack]
 			return TOPIC_REFRESH_UPDATE_PREVIEW

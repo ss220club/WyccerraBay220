@@ -116,7 +116,7 @@
 				set_extension(src, armor_type, armor, armor_degradation_speed)
 				break
 	if (item_flags & ITEM_FLAG_IS_CHAMELEON_ITEM)
-		SetupChameleonExtension(CHAMELEON_FLEXIBLE_OPTIONS_EXTENSION, FALSE, TRUE)
+		SetupChameleonExtension(GLOB.CHAMELEON_FLEXIBLE_OPTIONS_EXTENSION, FALSE, TRUE)
 
 /obj/item/Destroy()
 	QDEL_NULL(hidden_uplink)

@@ -24,7 +24,7 @@
 		var/datum/uplink_random_item/RI = pick(items)
 		if(!prob(RI.keep_probability))
 			continue
-		var/datum/uplink_item/I = uplink.items_assoc[RI.uplink_item]
+		var/datum/uplink_item/I = GLOB.uplink.items_assoc[RI.uplink_item]
 		if(I.cost(telecrystals, U) > telecrystals)
 			continue
 		if(bought_items && (I in bought_items) && !prob(RI.reselect_probability))
@@ -32,7 +32,7 @@
 		if(U && !I.can_buy(U))
 			continue
 		return I
-	return uplink.items_assoc[/datum/uplink_item/item/stealthy_weapons/soap]
+	return GLOB.uplink.items_assoc[/datum/uplink_item/item/stealthy_weapons/soap]
 
 var/global/list/uplink_random_selections_
 /proc/get_uplink_random_selection_by_type(uplist_selection_type)
@@ -123,13 +123,13 @@ var/global/list/uplink_random_selections_
 		var/datum/uplink_random_item/RI = pick(items)
 		if(!prob(RI.keep_probability))
 			continue
-		var/datum/uplink_item/I = uplink.items_assoc[RI.uplink_item]
+		var/datum/uplink_item/I = GLOB.uplink.items_assoc[RI.uplink_item]
 		if(I.cost(telecrystals, U) > telecrystals)
 			continue
 		if(bought_items && (I in bought_items) && !prob(RI.reselect_probability))
 			continue
 		return I
-	return uplink.items_assoc[/datum/uplink_item/item/stealthy_weapons/soap]
+	return GLOB.uplink.items_assoc[/datum/uplink_item/item/stealthy_weapons/soap]
 
 #ifdef DEBUG
 /proc/debug_uplink_purchage_log()
@@ -138,7 +138,7 @@ var/global/list/uplink_random_selections_
 		A.print_player_summary()
 
 /proc/debug_uplink_item_assoc_list()
-	for(var/key in uplink.items_assoc)
-		log_debug("[key] - [uplink.items_assoc[key]]")
+	for(var/key in GLOB.uplink.items_assoc)
+		log_debug("[key] - [GLOB.uplink.items_assoc[key]]")
 
 #endif

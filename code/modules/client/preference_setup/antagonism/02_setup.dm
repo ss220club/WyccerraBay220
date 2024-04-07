@@ -58,7 +58,7 @@
 
 /datum/category_item/player_setup_item/antagonism/basic/OnTopic(href,list/href_list, mob/user)
 	if(href_list["add_source"])
-		var/source_selection = input(user, "Select Uplink Source to Add", CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in (list_values(uplink_sources_by_name) - pref.uplink_sources)
+		var/source_selection = input(user, "Select Uplink Source to Add", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE) as null|anything in (list_values(uplink_sources_by_name) - pref.uplink_sources)
 		if(source_selection && CanUseTopic(user))
 			pref.uplink_sources |= source_selection
 			return TOPIC_REFRESH

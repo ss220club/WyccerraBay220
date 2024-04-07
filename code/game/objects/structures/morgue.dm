@@ -443,7 +443,7 @@
 	desc = "Burn baby burn!"
 	icon = 'icons/obj/structures/buttons.dmi'
 	icon_state = "blastctrl"
-	req_access = list(access_crematorium)
+	req_access = list(GLOB.access_crematorium)
 	id_tag = 1
 
 /obj/machinery/button/crematorium/activate(mob/user)

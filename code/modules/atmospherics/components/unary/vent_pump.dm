@@ -408,8 +408,8 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/atmospherics/unary/vent_pump, purge)
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_pump
-	frequency = GLOB.PUMP_FREQ
-	filter = GLOB.RADIO_TO_AIRALARM
+	frequency = PUMP_FREQ
+	filter = RADIO_TO_AIRALARM
 	event = /singleton/public_access/public_variable/input_toggle
 	transmit_on_event = list(
 		"area" = /singleton/public_access/public_variable/area_uid,
@@ -424,8 +424,8 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_pump
-	frequency = GLOB.PUMP_FREQ
-	filter = GLOB.RADIO_FROM_AIRALARM
+	frequency = PUMP_FREQ
+	filter = RADIO_FROM_AIRALARM
 	receive_and_call = list(
 		"power_toggle" = /singleton/public_access/public_method/toggle_power,
 		"purge" = /singleton/public_access/public_method/purge_pump,
@@ -441,12 +441,12 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_pump/tank
-	frequency = GLOB.ATMOS_TANK_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = ATMOS_TANK_FREQ
+	filter = RADIO_ATMOSIA
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_pump/tank
-	frequency = GLOB.ATMOS_TANK_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = ATMOS_TANK_FREQ
+	filter = RADIO_ATMOSIA
 
 /obj/machinery/atmospherics/unary/vent_pump/tank
 	controlled = FALSE
@@ -463,11 +463,11 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_pump/external_air
-	frequency = GLOB.EXTERNAL_AIR_FREQ
+	frequency = EXTERNAL_AIR_FREQ
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_pump/external_air
-	frequency = GLOB.EXTERNAL_AIR_FREQ
-	filter = GLOB.RADIO_AIRLOCK
+	frequency = EXTERNAL_AIR_FREQ
+	filter = RADIO_AIRLOCK
 
 /obj/machinery/atmospherics/unary/vent_pump/high_volume/external_air
 	controlled = FALSE
@@ -477,11 +477,11 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_pump/shuttle
-	frequency = GLOB.SHUTTLE_AIR_FREQ
+	frequency = SHUTTLE_AIR_FREQ
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_pump/shuttle
-	frequency = GLOB.SHUTTLE_AIR_FREQ
-	filter = GLOB.RADIO_AIRLOCK
+	frequency = SHUTTLE_AIR_FREQ
+	filter = RADIO_AIRLOCK
 
 /obj/machinery/atmospherics/unary/vent_pump/high_volume/shuttle
 	controlled = FALSE
@@ -491,7 +491,7 @@
 	)
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_pump/shuttle/aux
-	filter = GLOB.RADIO_TO_AIRALARM
+	filter = RADIO_TO_AIRALARM
 
 // This is intended for hybrid airlock-room setups, where unlike the above, this one is controlled by the air alarm and attached to the internal atmos system.
 /obj/machinery/atmospherics/unary/vent_pump/shuttle_auxiliary
@@ -501,11 +501,11 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_pump/airlock
-	frequency = GLOB.AIRLOCK_AIR_FREQ
+	frequency = AIRLOCK_AIR_FREQ
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_pump/airlock
-	frequency = GLOB.AIRLOCK_AIR_FREQ
-	filter = GLOB.RADIO_AIRLOCK
+	frequency = AIRLOCK_AIR_FREQ
+	filter = RADIO_AIRLOCK
 
 /obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock
 	controlled = FALSE
@@ -515,12 +515,12 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_pump/engine
-	frequency = GLOB.ATMOS_ENGINE_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = ATMOS_ENGINE_FREQ
+	filter = RADIO_ATMOSIA
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_pump/engine
-	frequency = GLOB.ATMOS_ENGINE_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = ATMOS_ENGINE_FREQ
+	filter = RADIO_ATMOSIA
 
 /obj/machinery/atmospherics/unary/vent_pump/engine
 	name = "Engine Core Vent"

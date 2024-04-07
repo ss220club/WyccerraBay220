@@ -264,7 +264,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1
 
 //Ensure the frequency is within bounds of what it should be sending/recieving at
-/proc/sanitize_frequency(f, low = GLOB.PUBLIC_LOW_FREQ, high = GLOB.PUBLIC_HIGH_FREQ)
+/proc/sanitize_frequency(f, low = PUBLIC_LOW_FREQ, high = PUBLIC_HIGH_FREQ)
 	f = round(f)
 	f = max(low, f)
 	f = min(high, f)

@@ -138,5 +138,5 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/flasher, flash)
 
 /singleton/stock_part_preset/radio/receiver/flasher
-	frequency = GLOB.BUTTON_FREQ
+	frequency = BUTTON_FREQ
 	receive_and_call = list("button_active" = /singleton/public_access/public_method/flasher_flash)

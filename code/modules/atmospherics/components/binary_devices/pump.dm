@@ -196,8 +196,8 @@ Thus, the two variables affect pump operation are set in New():
 		machine.target_pressure = new_value
 
 /singleton/stock_part_preset/radio/event_transmitter/pump
-	frequency = GLOB.PUMP_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = PUMP_FREQ
+	filter = RADIO_ATMOSIA
 	event = /singleton/public_access/public_variable/input_toggle
 	transmit_on_event = list(
 		"device" = /singleton/public_access/public_variable/identifier,
@@ -206,8 +206,8 @@ Thus, the two variables affect pump operation are set in New():
 	)
 
 /singleton/stock_part_preset/radio/receiver/pump
-	frequency = GLOB.PUMP_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = PUMP_FREQ
+	filter = RADIO_ATMOSIA
 	receive_and_call = list(
 		"power_toggle" = /singleton/public_access/public_method/toggle_power,
 		"status" = /singleton/public_access/public_method/refresh

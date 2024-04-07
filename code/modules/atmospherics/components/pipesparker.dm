@@ -32,7 +32,7 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/atmospherics/pipe/cap/sparker, ignite)
 
 /singleton/stock_part_preset/radio/receiver/sparker/pipe
-	frequency = GLOB.BUTTON_FREQ
+	frequency = BUTTON_FREQ
 	receive_and_call = list("button_active" = /singleton/public_access/public_method/pipe_sparker_spark)
 
 /obj/machinery/atmospherics/pipe/cap/sparker/visible

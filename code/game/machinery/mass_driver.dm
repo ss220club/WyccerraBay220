@@ -65,7 +65,7 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/mass_driver, delayed_drive)
 
 /singleton/stock_part_preset/radio/receiver/driver
-	frequency = GLOB.BLAST_DOORS_FREQ
+	frequency = BLAST_DOORS_FREQ
 	receive_and_call = list("button_active" = /singleton/public_access/public_method/driver_drive_delayed)
 
 /obj/machinery/button/mass_driver
@@ -78,4 +78,4 @@
 		"button_active" = /singleton/public_access/public_variable/button_active,
 		"close_door_delayed" = /singleton/public_access/public_variable/button_active
 	)
-	frequency = GLOB.BLAST_DOORS_FREQ
+	frequency = BLAST_DOORS_FREQ

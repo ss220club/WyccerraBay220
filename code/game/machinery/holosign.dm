@@ -54,7 +54,7 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/holosign, toggle)
 
 /singleton/stock_part_preset/radio/receiver/holosign
-	frequency = GLOB.BUTTON_FREQ
+	frequency = BUTTON_FREQ
 	receive_and_call = list("button_active" = /singleton/public_access/public_method/holosign_toggle)
 
 /obj/machinery/holosign/surgery

@@ -62,115 +62,34 @@ datum/signal
 */
 
 /*
-Frequency range: 1200 to 1600
-Radiochat range: 1441 to 1489 (most devices refuse to be tune to other frequency, even during mapmaking)
-
-Radio:
-1459 - standard radio chat
-1351 - Science
-1353 - Command
-1355 - Medical
-1357 - Engineering
-1359 - Security
-1341 - deathsquad
-1443 - Confession Intercom
-1347 - Cargo techs
-1349 - Service people
-
-1491-1509 - Away sites
-
-Devices:
-1451 - tracking implant
-1457 - RSD default
-
-On the map:
-1311 for prison shuttle console (in fact, it is not used)
-1435 for status displays
-1437 for atmospherics/fire alerts
-1438 for engine components
-1439 for air pumps, air scrubbers, atmo control
-1441 for atmospherics - supply tanks
-1443 for atmospherics - distribution loop/mixed air tank
-1445 for bot nav beacons
-1447 for mulebot, secbot and ed209 control
-1449 for airlock controls, electropack, magnets
-1451 for toxin lab access
-1453 for engineering access
-1455 for AI access
+Here was a frequency list, but it got outdated. Check code\__defines\radio.dm instead.
 */
-
-GLOBAL_VAR_CONST(RADIO_LOW_FREQ, 1200)
-GLOBAL_VAR_CONST(PUBLIC_LOW_FREQ, 1441)
-GLOBAL_VAR_CONST(PUBLIC_HIGH_FREQ, 1489)
-GLOBAL_VAR_CONST(RADIO_HIGH_FREQ, 1600)
-
-GLOBAL_VAR_CONST(BOT_FREQ, 1447)
-GLOBAL_VAR_CONST(COMM_FREQ, 1353)
-GLOBAL_VAR_CONST(ERT_FREQ, 1345)
-GLOBAL_VAR_CONST(AI_FREQ, 1343)
-GLOBAL_VAR_CONST(ENT_FREQ, 1461) //entertainment frequency. This is not a diona exclusive frequency.
-GLOBAL_VAR_CONST(ICCGN_FREQ, 1344)
-GLOBAL_VAR_CONST(SFV_FREQ, 1346)
-
-//antagonist channels
-GLOBAL_VAR_CONST(DTH_FREQ, 1341)
-GLOBAL_VAR_CONST(SYND_FREQ, 1213)
-GLOBAL_VAR_CONST(RAID_FREQ, 1277)
-GLOBAL_VAR_CONST(V_RAID_FREQ, 1245)
-
-// department channels
-GLOBAL_VAR_CONST(PUB_FREQ, 1459)
-GLOBAL_VAR_CONST(HAIL_FREQ, 1463)
-GLOBAL_VAR_CONST(SEC_FREQ, 1359)
-GLOBAL_VAR_CONST(ENG_FREQ, 1357)
-GLOBAL_VAR_CONST(MED_FREQ, 1355)
-GLOBAL_VAR_CONST(SCI_FREQ, 1351)
-GLOBAL_VAR_CONST(SRV_FREQ, 1349)
-GLOBAL_VAR_CONST(SUP_FREQ, 1347)
-GLOBAL_VAR_CONST(EXP_FREQ, 1361)
-
-// internal department channels
-GLOBAL_VAR_CONST(MED_I_FREQ, 1485)
-GLOBAL_VAR_CONST(SEC_I_FREQ, 1475)
 
 // Away Site Channels
 var/global/list/AWAY_FREQS_UNASSIGNED = list(1491, 1493, 1495, 1497, 1499, 1501, 1503, 1505, 1507, 1509)
-var/global/list/AWAY_FREQS_ASSIGNED = list("Hailing" = GLOB.HAIL_FREQ)
-
-// Device signal frequencies
-GLOBAL_VAR_CONST(ATMOS_ENGINE_FREQ, 1438) // Used by atmos monitoring in the engine.
-GLOBAL_VAR_CONST(PUMP_FREQ, 1439) // Used by air alarms and their progeny.
-GLOBAL_VAR_CONST(FUEL_FREQ, 1447) // Used by fuel atmos stuff, and currently default for digital valves
-GLOBAL_VAR_CONST(ATMOS_TANK_FREQ, 1441) // Used for gas tank sensors and monitoring.
-GLOBAL_VAR_CONST(ATMOS_DIST_FREQ, 1443) // Alternative atmos frequency.
-GLOBAL_VAR_CONST(BUTTON_FREQ, 1301) // Used by generic buttons controlling stuff
-GLOBAL_VAR_CONST(BLAST_DOORS_FREQ, 1303) // Used by blast doors, buttons controlling them, and mass drivers.
-GLOBAL_VAR_CONST(AIRLOCK_FREQ, 1305) // Used by airlocks and buttons controlling them.
-GLOBAL_VAR_CONST(SHUTTLE_AIR_FREQ, 1331) // Used by shuttles and shuttle-related atmos systems.
-GLOBAL_VAR_CONST(AIRLOCK_AIR_FREQ, 1379) // Used by some airlocks for atmos devices.
-GLOBAL_VAR_CONST(EXTERNAL_AIR_FREQ, 1380) // Used by some external airlocks.
+var/global/list/AWAY_FREQS_ASSIGNED = list("Hailing" = HAIL_FREQ)
 
 var/global/list/radiochannels = list(
-	"Common"		= GLOB.PUB_FREQ,
-	"Hailing"		= GLOB.HAIL_FREQ,
-	"Science"		= GLOB.SCI_FREQ,
-	"Command"		= GLOB.COMM_FREQ,
-	"Medical"		= GLOB.MED_FREQ,
-	"Engineering"	= GLOB.ENG_FREQ,
-	"Security" 		= GLOB.SEC_FREQ,
-	"Response Team" = GLOB.ERT_FREQ,
-	"Special Ops" 	= GLOB.DTH_FREQ,
-	"Mercenary" 	= GLOB.SYND_FREQ,
-	"Raider"		= GLOB.RAID_FREQ,
-	"Vox Raider"	= GLOB.V_RAID_FREQ,
-	"Exploration"	= GLOB.EXP_FREQ,
-	"Supply" 		= GLOB.SUP_FREQ,
-	"Service" 		= GLOB.SRV_FREQ,
-	"AI Private"	= GLOB.AI_FREQ,
-	"Entertainment" = GLOB.ENT_FREQ,
-	"Medical (I)"	= GLOB.MED_I_FREQ,
-	"Security (I)"	= GLOB.SEC_I_FREQ,
-	"ICGNV Hound"   = GLOB.ICCGN_FREQ
+	"Common"		= PUB_FREQ,
+	"Hailing"		= HAIL_FREQ,
+	"Science"		= SCI_FREQ,
+	"Command"		= COMM_FREQ,
+	"Medical"		= MED_FREQ,
+	"Engineering"	= ENG_FREQ,
+	"Security" 		= SEC_FREQ,
+	"Response Team" = ERT_FREQ,
+	"Special Ops" 	= DTH_FREQ,
+	"Mercenary" 	= SYND_FREQ,
+	"Raider"		= RAID_FREQ,
+	"Vox Raider"	= V_RAID_FREQ,
+	"Exploration"	= EXP_FREQ,
+	"Supply" 		= SUP_FREQ,
+	"Service" 		= SRV_FREQ,
+	"AI Private"	= AI_FREQ,
+	"Entertainment" = ENT_FREQ,
+	"Medical (I)"	= MED_I_FREQ,
+	"Security (I)"	= SEC_I_FREQ,
+	"ICGNV Hound"   = ICCGN_FREQ
 )
 
 var/global/list/channel_color_presets = list(
@@ -195,13 +114,13 @@ var/global/list/channel_color_presets = list(
 )
 
 // central command channels, i.e deathsquid & response teams
-var/global/list/CENT_FREQS = list(GLOB.ERT_FREQ, GLOB.DTH_FREQ)
+var/global/list/CENT_FREQS = list(ERT_FREQ, DTH_FREQ)
 
 // Antag channels, i.e. Syndicate
-var/global/list/ANTAG_FREQS = list(GLOB.SYND_FREQ, GLOB.RAID_FREQ, GLOB.V_RAID_FREQ)
+var/global/list/ANTAG_FREQS = list(SYND_FREQ, RAID_FREQ, V_RAID_FREQ)
 
 //Department channels, arranged lexically
-var/global/list/DEPT_FREQS = list(GLOB.AI_FREQ, GLOB.COMM_FREQ, GLOB.ENG_FREQ, GLOB.MED_FREQ, GLOB.SEC_FREQ, GLOB.SCI_FREQ, GLOB.SRV_FREQ, GLOB.SUP_FREQ, GLOB.EXP_FREQ, GLOB.ENT_FREQ, GLOB.MED_I_FREQ, GLOB.SEC_I_FREQ)
+var/global/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FREQ, SCI_FREQ, SRV_FREQ, SUP_FREQ, EXP_FREQ, ENT_FREQ, MED_I_FREQ, SEC_I_FREQ)
 
 #define TRANSMISSION_WIRE	0
 #define TRANSMISSION_RADIO	1
@@ -214,33 +133,33 @@ var/global/list/DEPT_FREQS = list(GLOB.AI_FREQ, GLOB.COMM_FREQ, GLOB.ENG_FREQ, G
 	if(frequency in CENT_FREQS)
 		return "centradio"
 	// command channel
-	if(frequency == GLOB.COMM_FREQ)
+	if(frequency == COMM_FREQ)
 		return "comradio"
 	// AI private channel
-	if(frequency == GLOB.AI_FREQ)
+	if(frequency == AI_FREQ)
 		return "airadio"
 	// department radio formatting (poorly optimized, ugh)
-	if(frequency == GLOB.SEC_FREQ)
+	if(frequency == SEC_FREQ)
 		return "secradio"
-	if (frequency == GLOB.ENG_FREQ)
+	if (frequency == ENG_FREQ)
 		return "engradio"
-	if(frequency == GLOB.SCI_FREQ)
+	if(frequency == SCI_FREQ)
 		return "sciradio"
-	if(frequency == GLOB.MED_FREQ)
+	if(frequency == MED_FREQ)
 		return "medradio"
-	if(frequency == GLOB.EXP_FREQ) // exploration
+	if(frequency == EXP_FREQ) // exploration
 		return "EXPradio"
-	if(frequency == GLOB.SUP_FREQ) // cargo
+	if(frequency == SUP_FREQ) // cargo
 		return "supradio"
-	if(frequency == GLOB.SRV_FREQ) // service
+	if(frequency == SRV_FREQ) // service
 		return "srvradio"
-	if(frequency == GLOB.ENT_FREQ) //entertainment
+	if(frequency == ENT_FREQ) //entertainment
 		return "entradio"
-	if(frequency == GLOB.MED_I_FREQ) // Medical intercom
+	if(frequency == MED_I_FREQ) // Medical intercom
 		return "mediradio"
-	if(frequency == GLOB.SEC_I_FREQ) // Security intercom
+	if(frequency == SEC_I_FREQ) // Security intercom
 		return "seciradio"
-	if (frequency == GLOB.HAIL_FREQ) // Hailing frequency
+	if (frequency == HAIL_FREQ) // Hailing frequency
 		return "hailradio"
 	if(frequency in DEPT_FREQS)
 		return "deptradio"
@@ -266,23 +185,7 @@ var/global/list/DEPT_FREQS = list(GLOB.AI_FREQ, GLOB.COMM_FREQ, GLOB.ENG_FREQ, G
 	return freq
 
 
-/* filters */
-//When devices register with the radio controller, they might register under a certain filter.
-//Other devices can then choose to send signals to only those devices that belong to a particular filter.
-//This is done for performance, so we don't send signals to lots of machines unnecessarily.
 
-//This filter is special because devices belonging to default also recieve signals sent to any other filter.
-GLOBAL_VAR_CONST(RADIO_DEFAULT, "radio_default")
-
-GLOBAL_VAR_CONST(RADIO_TO_AIRALARM, "radio_airalarm") //air alarms
-GLOBAL_VAR_CONST(RADIO_FROM_AIRALARM, "radio_airalarm_rcvr") //devices interested in recieving signals from air alarms
-GLOBAL_VAR_CONST(RADIO_CHAT, "radio_telecoms")
-GLOBAL_VAR_CONST(RADIO_ATMOSIA, "radio_atmos")
-GLOBAL_VAR_CONST(RADIO_NAVBEACONS, "radio_navbeacon")
-GLOBAL_VAR_CONST(RADIO_AIRLOCK, "radio_airlock")
-GLOBAL_VAR_CONST(RADIO_SECBOT, "radio_secbot")
-GLOBAL_VAR_CONST(RADIO_MULEBOT, "radio_mulebot")
-GLOBAL_VAR_CONST(RADIO_MAGNETS, "radio_magnet")
 
 // These are exposed to players, by name.
 GLOBAL_LIST_INIT(all_selectable_radio_filters, list(
@@ -362,7 +265,7 @@ var/global/datum/controller/radio/radio_controller
 			return 0
 	if (radio_filter)
 		send_to_filter(source, signal, radio_filter, start_point, range)
-		send_to_filter(source, signal, GLOB.RADIO_DEFAULT, start_point, range)
+		send_to_filter(source, signal, RADIO_DEFAULT, start_point, range)
 	else
 		//Broadcast the signal to everyone!
 		for (var/next_filter in devices)
@@ -389,7 +292,7 @@ var/global/datum/controller/radio/radio_controller
 
 /datum/radio_frequency/proc/add_listener(obj/device as obj, radio_filter as text|null)
 	if (!radio_filter)
-		radio_filter = GLOB.RADIO_DEFAULT
+		radio_filter = RADIO_DEFAULT
 	var/list/obj/devices_line = devices[radio_filter]
 	if (!devices_line)
 		devices_line = new

@@ -37,7 +37,7 @@
 /area/ship/farfleet/crew/comms
 	name = "Communication Relay"
 	icon_state = "teleporter"
-	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_captain)
+	req_access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_captain)
 
 /area/ship/farfleet/crew/toilet
 	name = "\improper Toilet"
@@ -65,7 +65,7 @@
 /area/ship/farfleet/crew/brig/emergency_armory
 	name = "\improper Emergency Armory"
 	icon_state = "red"
-	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_captain)
+	req_access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_captain)
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
 
 /area/ship/farfleet/crew/brig/css
@@ -127,13 +127,13 @@
 /area/ship/farfleet/barracks
 	name = "\improper Droptroops Section"
 	icon_state = "locker"
-	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops)
+	req_access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_droptroops)
 	holomap_color = HOLOMAP_AREACOLOR_EXPLORATION
 
 /area/ship/farfleet/barracks/armory
 	name = "\improper Droptroops Armory"
 	icon_state = "red"
-	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant)
+	req_access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_droptroops, GLOB.access_away_iccgn_sergeant)
 	holomap_color = HOLOMAP_AREACOLOR_EXPLORATION
 
 

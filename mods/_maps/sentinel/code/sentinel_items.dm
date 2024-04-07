@@ -8,12 +8,12 @@
 	icon_state = "base"
 	color = "#b10309c2"
 	detail_color = "#000000"
-	access = list(GLOB.access_away_cavalry, access_away_cavalry_ops)
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops)
 
 /obj/item/card/id/awaycavalry/ops/captain
 	desc = "An identification card issued to SolGov crewmembers aboard the Sol Patrol Craft."
 	icon_state = "base"
-	access = list(GLOB.access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_fleet_armory, access_away_cavalry_captain)
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops, GLOB.access_away_cavalry_fleet_armory, GLOB.access_away_cavalry_captain)
 	extra_details = list("goldstripe")
 
 /obj/item/card/id/awaycavalry/fleet
@@ -24,12 +24,12 @@
 	access = list(GLOB.access_away_cavalry)
 
 /obj/item/card/id/awaycavalry/fleet/pilot
-	access = list(GLOB.access_away_cavalry, access_away_cavalry_pilot, access_away_cavalry_fleet_armory)
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_pilot, GLOB.access_away_cavalry_fleet_armory)
 
 /obj/item/card/id/awaycavalry/fleet/commander
 	desc = "An identification card issued to SolGov crewmembers aboard the Sol Patrol Craft."
 	icon_state = "base"
-	access = list(GLOB.access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_pilot, access_away_cavalry_fleet_armory, access_away_cavalry_commander) //TODO: беды с доступами
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops, GLOB.access_away_cavalry_pilot, GLOB.access_away_cavalry_fleet_armory, GLOB.access_away_cavalry_commander) //TODO: беды с доступами
 	extra_details = list("goldstripe")
 
 /* RADIOHEADS

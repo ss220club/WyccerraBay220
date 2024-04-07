@@ -6,12 +6,12 @@
 /obj/item/card/id/farfleet/droptroops
 	desc = "An identification card issued to ICCG crewmembers aboard the Farfleet Recon Craft."
 	icon_state = "base"
-	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops)
+	access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_droptroops)
 
 /obj/item/card/id/farfleet/droptroops/sergeant
 	desc = "An identification card issued to ICCG crewmembers aboard the Farfleet Recon Craft."
 	icon_state = "base"
-	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant)
+	access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_droptroops, GLOB.access_away_iccgn_sergeant)
 
 /obj/item/card/id/farfleet/fleet
 	desc = "An identification card issued to ICCG crewmembers aboard the Farfleet Recon Craft."
@@ -21,7 +21,7 @@
 /obj/item/card/id/farfleet/fleet/captain
 	desc = "An identification card issued to ICCG crewmembers aboard the Farfleet Recon Craft."
 	icon_state = "base"
-	access = list(GLOB.access_away_iccgn, access_away_iccgn_captain)
+	access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_captain)
 
 /* CLOTHING
  * ========

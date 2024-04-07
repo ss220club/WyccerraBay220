@@ -38,18 +38,18 @@ GLOBAL_VAR_CONST(access_away_hand, "ACCESS_HAND")
 GLOBAL_VAR_CONST(access_away_hand_med, "ACCESS_HAND_MED")
 GLOBAL_VAR_CONST(access_away_hand_captain, "ACCESS_HAND_CAPTAIN")
 
-/datum/access/access_away_hand_hand
-	id = access_away_hand
+/datum/access/GLOB.access_away_hand_hand
+	id = GLOB.access_away_hand
 	desc = "Salvage Vessel Main"
 	region = ACCESS_REGION_NONE
 
-/datum/access/access_away_hand_med
-	id = access_away_hand_med
+/datum/access/GLOB.access_away_hand_med
+	id = GLOB.access_away_hand_med
 	desc = "Salvage Vessel Medic"
 	region = ACCESS_REGION_NONE
 
-/datum/access/access_away_hand_captain
-	id = access_away_hand_captain
+/datum/access/GLOB.access_away_hand_captain
+	id = GLOB.access_away_hand_captain
 	desc = "Salvage Vessel Captain"
 	region = ACCESS_REGION_NONE
 
@@ -129,7 +129,7 @@ GLOBAL_VAR_CONST(access_away_hand_captain, "ACCESS_HAND_CAPTAIN")
 		SKILL_PILOT   = SKILL_TRAINED,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(GLOB.access_away_hand, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, GLOB.access_away_hand_captain)
 
 /* TO DO: Make this doable
 /datum/job/submap/hand/captain/equip(mob/living/carbon/human/H)
@@ -179,7 +179,7 @@ GLOBAL_VAR_CONST(access_away_hand_captain, "ACCESS_HAND_CAPTAIN")
 		SKILL_CHEMISTRY = SKILL_BASIC,
 		SKILL_EVA       = SKILL_BASIC
 	)
-	access = list(GLOB.access_away_hand, access_away_hand_med, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, GLOB.access_away_hand_med, GLOB.access_away_hand_captain)
 
 /* OUTFITS
  * =======

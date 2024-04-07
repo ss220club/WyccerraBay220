@@ -49,7 +49,7 @@
 
 /area/ship/patrol/crew/comms
 	name = "Communication Relay"
-	req_access = list(GLOB.access_away_cavalry, access_away_cavalry_commander)
+	req_access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_commander)
 
 /area/ship/patrol/crew/toilet
 	name = "\improper Head"
@@ -79,7 +79,7 @@
 /area/ship/patrol/crew/brig/emergency_armory
 	name = "Emergency Armory"
 	icon_state = "locker"
-	req_access = list(GLOB.access_away_cavalry, access_away_cavalry_fleet_armory)
+	req_access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_fleet_armory)
 
 /area/ship/patrol/engineering/hallway
 	name = "\improper Engineering Hallway"
@@ -117,12 +117,12 @@
 /area/ship/patrol/barracks
 	name = "\improper Troops Section"
 	icon_state = "locker"
-	req_access = list(GLOB.access_away_cavalry, access_away_cavalry_ops)
+	req_access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops)
 
 /area/ship/patrol/barracks/armory
 	name = "\improper Troops Armory"
 	icon_state = "locker"
-	req_access = list(GLOB.access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_captain)
+	req_access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops, GLOB.access_away_cavalry_captain)
 
 
 

@@ -13,7 +13,7 @@
 	color = COLOR_GRAY40
 	extra_details = list("goldstripe")
 	detail_color = COLOR_COMMAND_BLUE
-	access = list(GLOB.access_away_hand, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, GLOB.access_away_hand_captain)
 
 /obj/item/card/id/hand/captain/ftu
 	desc = "An identification card issued to Free Trade Union personnel."
@@ -26,19 +26,19 @@
 	extra_details = null
 	color = COLOR_GRAY40
 	detail_color = "#447ab1"
-	access = list(GLOB.access_away_hand, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, GLOB.access_away_hand_captain)
 
 /obj/item/card/id/hand/medic
 	desc = "An identification card issued to corporate medical personnel across countless frontier facilities and vessels."
 	icon_state = "base"
 	detail_color = COLOR_PALE_BLUE_GRAY
-	access = list(GLOB.access_away_hand, access_away_hand_med, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, GLOB.access_away_hand_med, GLOB.access_away_hand_captain)
 
 /obj/item/card/id/hand/medic/fifth_fleet
 	desc = "An identification card issued to corporate medical personnel across countless frontier facilities and vessels."
 	icon_state = "base"
 	detail_color = COLOR_PALE_BLUE_GRAY
-	access = list(GLOB.access_away_hand, access_away_hand_med, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, GLOB.access_away_hand_med, GLOB.access_away_hand_captain)
 
 /* CLOTHING
  * ========

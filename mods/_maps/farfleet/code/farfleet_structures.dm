@@ -165,7 +165,7 @@
 /obj/structure/closet/secure_closet/farfleet/fleet_cpt
 	name = "captain cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet
-	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_captain)
+	req_access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_captain)
 
 /obj/structure/closet/secure_closet/farfleet/fleet_cpt/WillContain()
 	return list(
@@ -185,7 +185,7 @@
 /obj/structure/closet/secure_closet/farfleet/css
 	name = "CSS cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet
-	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_captain)
+	req_access = list(GLOB.access_away_iccgn, GLOB.access_away_iccgn_captain)
 
 /obj/structure/closet/secure_closet/farfleet/css/WillContain()
 	return list(

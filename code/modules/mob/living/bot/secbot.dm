@@ -11,8 +11,8 @@
 	layer = MOB_LAYER
 	maxHealth = 50
 	health = 50
-	req_access = list(list(access_security, GLOB.access_forensics_lockers))
-	botcard_access = list(access_security, GLOB.access_sec_doors, GLOB.access_forensics_lockers, GLOB.access_morgue, GLOB.access_maint_tunnels)
+	req_access = list(list(GLOB.access_security, GLOB.access_forensics_lockers))
+	botcard_access = list(GLOB.access_security, GLOB.access_sec_doors, GLOB.access_forensics_lockers, GLOB.access_morgue, GLOB.access_maint_tunnels)
 
 	patrol_speed = 2
 	target_speed = 3

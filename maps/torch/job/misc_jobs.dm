@@ -71,7 +71,7 @@ Civilian
 		/datum/mil_rank/alien
 	)
 	latejoin_at_spawnpoints = 1
-	access = list(access_merchant)
+	access = list(GLOB.access_merchant)
 	announced = FALSE
 	min_skill = list(   SKILL_FINANCE = SKILL_TRAINED,
 	                    SKILL_PILOT	  = SKILL_BASIC)

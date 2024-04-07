@@ -131,14 +131,14 @@
 /obj/machinery/computer/shuttle_control/explore/aquila
 	name = "aquila control console"
 	shuttle_tag = "Aquila"
-	req_access = list(access_aquila_helm)
+	req_access = list(GLOB.access_aquila_helm)
 
 /obj/machinery/computer/shuttle_control/explore/exploration_shuttle
 	name = "shuttle control console"
 	shuttle_tag = "Charon"
-	req_access = list(access_expedition_shuttle_helm)
+	req_access = list(GLOB.access_expedition_shuttle_helm)
 
 /obj/machinery/computer/shuttle_control/explore/guppy
 	name = "guppy control console"
 	shuttle_tag = "Guppy"
-	req_access = list(access_guppy_helm)
+	req_access = list(GLOB.access_guppy_helm)

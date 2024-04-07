@@ -49,9 +49,9 @@
 			access = list(access)
 		override ? (src.access = list(access)) : (src.access += list(access))  //Note that this is a list of lists.
 	if(access_edit)
-		if(!islist(access_edit))
-			access_edit = list(access_edit)
-		override ? (src.access_edit = list(access_edit)) : (src.access_edit += list(access_edit))
+		if(!islist(GLOB.access_edit))
+			access_edit = list(GLOB.access_edit)
+		override ? (src.access_edit = list(GLOB.access_edit)) : (src.access_edit += list(GLOB.access_edit))
 	if(recursive)
 		for(var/datum/report_field/field in fields)
 			field.set_access(access, access_edit, override)

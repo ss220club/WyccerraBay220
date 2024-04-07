@@ -89,7 +89,7 @@ GLOBAL_VAR_CONST(access_away_hand_captain, "ACCESS_HAND_CAPTAIN")
 		SKILL_ELECTRICAL   = SKILL_TRAINED,
 		SKILL_CONSTRUCTION = SKILL_TRAINED,
 	)
-	access = list(access_away_hand)
+	access = list(GLOB.access_away_hand)
 
 /datum/job/submap/hand/captain
 	title = "Corporate Vessel Captain"
@@ -129,7 +129,7 @@ GLOBAL_VAR_CONST(access_away_hand_captain, "ACCESS_HAND_CAPTAIN")
 		SKILL_PILOT   = SKILL_TRAINED,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(access_away_hand, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, access_away_hand_captain)
 
 /* TO DO: Make this doable
 /datum/job/submap/hand/captain/equip(mob/living/carbon/human/H)
@@ -179,7 +179,7 @@ GLOBAL_VAR_CONST(access_away_hand_captain, "ACCESS_HAND_CAPTAIN")
 		SKILL_CHEMISTRY = SKILL_BASIC,
 		SKILL_EVA       = SKILL_BASIC
 	)
-	access = list(access_away_hand, access_away_hand_med, access_away_hand_captain)
+	access = list(GLOB.access_away_hand, access_away_hand_med, access_away_hand_captain)
 
 /* OUTFITS
  * =======

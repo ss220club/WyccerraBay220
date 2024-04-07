@@ -3,7 +3,7 @@
 */
 /obj/structure/closet/secure_closet/hos/sierra
 	name = "head of security's cabinet"
-	req_access = list(access_hos)
+	req_access = list(GLOB.access_hos)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/security/hos
 
 /obj/structure/closet/secure_closet/hos/sierra/WillContain()
@@ -42,7 +42,7 @@
 
 /obj/structure/closet/secure_closet/warden/sierra
 	name = "warden's locker"
-	req_access = list(access_warden)
+	req_access = list(GLOB.access_warden)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/security/warden
 
 /obj/structure/closet/secure_closet/warden/sierra/WillContain()
@@ -82,7 +82,7 @@
 
 /obj/structure/closet/secure_closet/cabinet/forensics
 	name = "forensics technician's locker"
-	req_access = list(access_forensics_lockers)
+	req_access = list(GLOB.access_forensics_lockers)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/security/forensics
 
 
@@ -117,7 +117,7 @@
 
 /obj/structure/closet/secure_closet/security/sierra
 	name = "security guard's locker"
-	req_access = list(access_guard)
+	req_access = list(GLOB.access_guard)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/security
 
 /obj/structure/closet/secure_closet/security/sierra/WillContain()
@@ -151,7 +151,7 @@
 
 /obj/structure/closet/secure_closet/security/sierra/cadet
 	name = "cadet's locker"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/security
 
 /obj/structure/closet/secure_closet/security/sierra/cadet/WillContain()
@@ -173,7 +173,7 @@
 
 /obj/structure/closet/secure_closet/security/sierra/science
 	name = "research guard locker"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	closet_appearance = /singleton/closet_appearance/secure_closet/security
 
 /obj/structure/closet/secure_closet/security/sierra/science/WillContain()

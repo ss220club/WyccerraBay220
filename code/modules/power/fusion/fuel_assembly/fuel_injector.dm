@@ -4,7 +4,7 @@
 	icon_state = "injector"
 	density = TRUE
 	anchored = FALSE
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	idle_power_usage = 10
 	active_power_usage = 500
 	construct_state = /singleton/machine_construction/default/panel_closed

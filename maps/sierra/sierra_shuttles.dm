@@ -355,10 +355,10 @@ SIERRA_ESCAPE_POD(11)
 	for(var/area/A in shuttle_area)
 		for(var/obj/machinery/alarm/alarm in A)
 			if(alarm.req_access)
-				alarm.req_access = list(list(access_engine, access_field_eng))  // engineering OR field eng
+				alarm.req_access = list(list(GLOB.access_engine, access_field_eng))  // engineering OR field eng
 		for(var/obj/machinery/power/apc/apc in A)
 			if(apc.req_access)
-				apc.req_access = list(list(access_engine, access_field_eng))  // engineering OR field eng
+				apc.req_access = list(list(GLOB.access_engine, access_field_eng))  // engineering OR field eng
 
 /obj/shuttle_landmark/sierra/hangar/exploration_shuttle
 	name = "Charon Hangar"
@@ -484,7 +484,7 @@ SIERRA_ESCAPE_POD(11)
 
 //Makes the deck management program use hangar access
 /datum/nano_module/deck_management
-	default_access = list(access_hangar, GLOB.access_cargo, GLOB.access_heads)
+	default_access = list(GLOB.access_hangar, GLOB.access_cargo, GLOB.access_heads)
 
 // away transit
 

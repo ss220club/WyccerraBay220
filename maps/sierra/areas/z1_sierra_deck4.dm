@@ -1,7 +1,7 @@
 /area/hallway/primary/fourthdeck/fore
 	name = "Fourth Deck - Hallway - Fore"
 	icon_state = "hallF"
-	req_access = list(list(access_engine, GLOB.access_medical, GLOB.access_security))
+	req_access = list(list(GLOB.access_engine, GLOB.access_medical, GLOB.access_security))
 	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
 
 /area/hallway/primary/fourthdeck/center
@@ -54,7 +54,7 @@
 /area/maintenance/waterstore
 	name = "Fourth Deck - Water Cistern"
 	icon_state = "disposal"
-	req_access = list(list(access_cargo, GLOB.access_engine, access_el))
+	req_access = list(list(GLOB.access_cargo, GLOB.access_engine, access_el))
 
 /area/crew_quarters/visitors
 	name = "Fourth Deck - Visitors"
@@ -63,7 +63,7 @@
 /area/crew_quarters/commissary
 	name = "Fourth Deck - Commissary"
 	icon_state = "crew_quarters"
-	req_access = list(access_commissary)
+	req_access = list(GLOB.access_commissary)
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/docking
@@ -78,7 +78,7 @@
 /area/command/exploration_leader
 	name = "Fourth Deck - Expedition - Leader's Office"
 	icon_state = "heads_sea"
-	req_access = list(access_el)
+	req_access = list(GLOB.access_el)
 	holomap_color = HOLOMAP_AREACOLOR_EXPLORATION
 
 /* ENGINEERING AREAS
@@ -93,11 +93,11 @@
 /area/storage/auxillary/port
 	name = "Fourth Deck - Supply - Auxillary Warehouse"
 	icon_state = "auxstorage"
-	req_access = list(access_cargo)
+	req_access = list(GLOB.access_cargo)
 	holomap_color = HOLOMAP_AREACOLOR_CARGO
 /area/storage/airlock_canisters
 	name = "Fourth Deck - Supply - Central Airlock's Canisters"
-	req_access = list(list(access_cargo, GLOB.access_engine))
+	req_access = list(list(GLOB.access_cargo, GLOB.access_engine))
 	holomap_color = HOLOMAP_AREACOLOR_CARGO
 
 // Thusters
@@ -116,7 +116,7 @@
 	name = "Vacant Area"
 	icon_state = "construction"
 	area_flags = AREA_FLAG_RAD_SHIELDED
-	req_access = list(access_maint_tunnels)
+	req_access = list(GLOB.access_maint_tunnels)
 
 /area/vacant/infirmary
 	name = "Fourth Deck - Abandoned - Infirmary"
@@ -142,20 +142,20 @@
 	name = "Fourth Deck - Hangar - Canister Storage"
 	icon_state = "toxstorage"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_tox_storage)
+	req_access = list(GLOB.access_tox_storage)
 	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 
 /* SUPPLY AREAS
  * ============
  */
 /area/quartermaster
-	req_access = list(access_cargo)
+	req_access = list(GLOB.access_cargo)
 	holomap_color = HOLOMAP_AREACOLOR_CARGO
 
 /area/quartermaster/office
 	name = "Fourth Deck - Supply"
 	icon_state = "quartoffice"
-	req_access = list(access_mailsorting, GLOB.access_cargo)
+	req_access = list(GLOB.access_mailsorting, GLOB.access_cargo)
 
 /area/quartermaster/office/post
 	name = "Fourth Deck - Supply - Mail Delivery"
@@ -163,7 +163,7 @@
 /area/quartermaster/suplocker_room
 	name = "Fourth Deck - Supply - Locker room"
 	icon_state = "quartoffice"
-	req_access = list(access_mailsorting, GLOB.access_cargo)
+	req_access = list(GLOB.access_mailsorting, GLOB.access_cargo)
 
 /area/quartermaster/storage
 	name = "Fourth Deck - Supply - Warehouse"
@@ -173,12 +173,12 @@
 /area/quartermaster/deckofficer
 	name = "Fourth Deck - Supply - Quartermaster"
 	icon_state = "quart"
-	req_access = list(access_qm)
+	req_access = list(GLOB.access_qm)
 
 /area/quartermaster/expedition
 	name = "Fourth Deck - Exploration - Locker Room"
 	icon_state = "mining"
-	req_access = list(list(access_mining, GLOB.access_xenoarch))
+	req_access = list(list(GLOB.access_mining, GLOB.access_xenoarch))
 
 /area/quartermaster/expedition/eva
 	name = "Fourth Deck - Exploration - EVA"
@@ -191,7 +191,7 @@
 /area/quartermaster/exploration
 	name = "Fourth Deck - Expedition - Locker Room"
 	icon_state = "exploration"
-	req_access = list(access_explorer)
+	req_access = list(GLOB.access_explorer)
 	holomap_color = HOLOMAP_AREACOLOR_EXPLORATION
 
 /area/quartermaster/exploration/eva
@@ -207,13 +207,13 @@
 	name = "Fourth Deck - Hangar - Fuel Bay"
 	icon_state = "toxstorage"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(list(access_cargo, access_expedition_shuttle_helm, access_guppy_helm))
+	req_access = list(list(GLOB.access_cargo, access_expedition_shuttle_helm, access_guppy_helm))
 
 /area/quartermaster/hangar
 	name = "Fourth Deck - Hangar"
 	icon_state = "hangar"
 	sound_env = LARGE_ENCLOSED
-	req_access = list(access_hangar)
+	req_access = list(GLOB.access_hangar)
 	ambience = list(
 		'maps/sierra/sound/ambience/hangar1.ogg',
 		'maps/sierra/sound/ambience/hangar2.ogg',
@@ -237,4 +237,4 @@
 /area/security/sierra/dockcheck
 	name = "Fourth Deck - Security - Fore Docks Checkpoint"
 	icon_state = "checkpoint1"
-	req_access = list(list(access_security, GLOB.access_forensics_lockers))
+	req_access = list(list(GLOB.access_security, GLOB.access_forensics_lockers))

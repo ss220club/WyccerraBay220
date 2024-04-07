@@ -67,7 +67,7 @@
 	)
 	min_skill = list(SKILL_BUREAUCRACY = SKILL_BASIC)
 
-	access = list(access_chapel_office)
+	access = list(GLOB.access_chapel_office)
 
 /datum/job/chaplain/get_description_blurb()
 	return "Свещеник отвечает за все процедуры связанные с религиозными службами,а также проводением похоронных церемоний."
@@ -96,7 +96,7 @@
 		/datum/mil_rank/civ/civ
 	)
 	min_skill = list(SKILL_HAULING = SKILL_BASIC)
-	access = list(access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_janitor)
+	access = list(GLOB.access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_janitor)
 
 /datum/job/janitor/get_description_blurb()
 	return "Уборщик отвечает за чистоту и порядок на корабле. В основном Ваша задача будет состоять в уборке различного вида мусора, такого как: различные пустые пачки от фастфуда, алюминиевые банки из-под газировки, осколки от стекла и т.п.\
@@ -129,7 +129,7 @@
 		SKILL_BOTANY = SKILL_BASIC,
 		SKILL_CHEMISTRY = SKILL_BASIC
 	)
-	access = list(access_maint_tunnels, GLOB.access_hydroponics, GLOB.access_kitchen, access_commissary)
+	access = list(GLOB.access_maint_tunnels, GLOB.access_hydroponics, GLOB.access_kitchen, access_commissary)
 
 /datum/job/cook/get_description_blurb()
 	return "Вы - повар, чья миссия на этом корабле - спасти экипаж от поедания невкусной и отвратительной, с кулинарной точки зрения, еды из автоматов.\
@@ -158,7 +158,7 @@
 		SKILL_BOTANY = SKILL_BASIC,
 		SKILL_CHEMISTRY = SKILL_BASIC
 	)
-	access = list(access_hydroponics, GLOB.access_kitchen)
+	access = list(GLOB.access_hydroponics, GLOB.access_kitchen)
 
 /datum/job/steward/get_description_blurb()
 	return "Стюарды исполняют роль младшего повара, помощника бармена, а так же вы ответственны за состояние и чистоту кафетерия.\
@@ -185,7 +185,7 @@
 		/datum/mil_rank/civ/contractor,
 		/datum/mil_rank/civ/civ
 	)
-	access = list(access_hydroponics, access_bar, access_commissary)
+	access = list(GLOB.access_hydroponics, access_bar, access_commissary)
 	min_skill = list(
 		SKILL_COOKING = SKILL_BASIC,
 		SKILL_BOTANY = SKILL_BASIC,
@@ -218,7 +218,7 @@
 		/datum/mil_rank/civ/civ
 	)
 
-	access = list(access_actor)
+	access = list(GLOB.access_actor)
 
 /datum/job/actor/get_description_blurb()
 	return "Актёр развлекает экипаж и старается сделать его смену более разнообразной."

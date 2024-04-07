@@ -6,7 +6,7 @@
 	anchored = TRUE
 	density = TRUE
 	opacity = FALSE
-	req_access = list(list(access_psychiatrist, GLOB.access_captain, GLOB.access_cmo, GLOB.access_hos))
+	req_access = list(list(GLOB.access_psychiatrist, GLOB.access_captain, GLOB.access_cmo, GLOB.access_hos))
 
 	var/list/psi_violations = list()
 	var/show_violations = FALSE

@@ -3,7 +3,7 @@
 	desc = "A deployable barrier."
 	icon = 'icons/obj/security_barriers.dmi'
 	icon_state = "barrier0"
-	req_access = list(access_brig)
+	req_access = list(GLOB.access_brig)
 	density = TRUE
 	health_max = 200
 	health_min_damage = 7

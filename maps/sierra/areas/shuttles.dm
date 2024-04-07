@@ -80,7 +80,7 @@
 	requires_power = 1
 	dynamic_lighting = 1
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED
-	req_access = list(access_guppy)
+	req_access = list(GLOB.access_guppy)
 	holomap_color = HOLOMAP_AREACOLOR_CARGO
 
 /area/crucian_hangar/start
@@ -89,14 +89,14 @@
 	requires_power = 1
 	dynamic_lighting = 1
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED
-	req_access = list(access_guppy)
+	req_access = list(GLOB.access_guppy)
 
 /area/shuttle/petrov
 	name = "Shuttle - Petrov"
 	requires_power = 1
 	dynamic_lighting = 1
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED
-	req_access = list(access_petrov)
+	req_access = list(GLOB.access_petrov)
 	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 
 /area/shuttle/petrov/ship
@@ -224,7 +224,7 @@
 	icon_state = "shuttle"
 	dynamic_lighting = 1
 	area_flags = AREA_FLAG_ION_SHIELDED
-	req_access = list(access_maint_tunnels)
+	req_access = list(GLOB.access_maint_tunnels)
 
 /area/turbolift/sierra_top
 	name = "Elevator - Bridge"

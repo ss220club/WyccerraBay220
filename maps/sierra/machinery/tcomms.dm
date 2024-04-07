@@ -6,19 +6,19 @@
 /datum/map/sierra/default_internal_channels()
 	return list(
 		num2text(PUB_FREQ)   = list(),
-		num2text(AI_FREQ)    = list(access_synth),
+		num2text(AI_FREQ)    = list(GLOB.access_synth),
 		num2text(ENT_FREQ)   = list(),
-		num2text(ERT_FREQ)   = list(access_cent_specops),
-		num2text(COMM_FREQ)  = list(access_heads),
-		num2text(ENG_FREQ)   = list(access_engine_equip, GLOB.access_atmospherics),
-		num2text(MED_FREQ)   = list(access_medical_equip),
-		num2text(MED_I_FREQ) = list(access_medical_equip),
-		num2text(SEC_FREQ)   = list(access_security),
-		num2text(SEC_I_FREQ) = list(access_security),
-		num2text(SCI_FREQ)   = list(access_tox, GLOB.access_robotics, GLOB.access_xenobiology, access_el),
-		num2text(SUP_FREQ)   = list(access_cargo),
-		num2text(SRV_FREQ)   = list(access_janitor, GLOB.access_hydroponics),
-		num2text(EXP_FREQ)   = list(access_explorer, GLOB.access_rd)
+		num2text(ERT_FREQ)   = list(GLOB.access_cent_specops),
+		num2text(COMM_FREQ)  = list(GLOB.access_heads),
+		num2text(ENG_FREQ)   = list(GLOB.access_engine_equip, GLOB.access_atmospherics),
+		num2text(MED_FREQ)   = list(GLOB.access_medical_equip),
+		num2text(MED_I_FREQ) = list(GLOB.access_medical_equip),
+		num2text(SEC_FREQ)   = list(GLOB.access_security),
+		num2text(SEC_I_FREQ) = list(GLOB.access_security),
+		num2text(SCI_FREQ)   = list(GLOB.access_tox, GLOB.access_robotics, GLOB.access_xenobiology, access_el),
+		num2text(SUP_FREQ)   = list(GLOB.access_cargo),
+		num2text(SRV_FREQ)   = list(GLOB.access_janitor, GLOB.access_hydroponics),
+		num2text(EXP_FREQ)   = list(GLOB.access_explorer, GLOB.access_rd)
 	)
 
 /obj/machinery/telecomms/hub/preset

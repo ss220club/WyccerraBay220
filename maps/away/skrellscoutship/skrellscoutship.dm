@@ -61,7 +61,7 @@ GLOBAL_VAR_CONST(access_skrellscoutship, "ACCESS_SKRELLSCOUT")
 /obj/item/card/id/skrellscoutship
 	color = COLOR_GRAY40
 	detail_color = "#7331c4"
-	access = list(access_skrellscoutship)
+	access = list(GLOB.access_skrellscoutship)
 
 /datum/job/submap/skrellscoutship_crew/leader
 	title = "Qrri-Vuxix"
@@ -174,10 +174,10 @@ GLOBAL_VAR_CONST(access_skrellscoutship, "ACCESS_SKRELLSCOUT")
 	name = "NULL"
 
 /obj/machinery/power/apc/skrell
-	req_access = list(access_skrellscoutship)
+	req_access = list(GLOB.access_skrellscoutship)
 
 /obj/machinery/alarm/skrell
-	req_access = list(access_skrellscoutship)
+	req_access = list(GLOB.access_skrellscoutship)
 	target_temperature = T0C+40
 
 /obj/machinery/alarm/skrell/Initialize()
@@ -203,11 +203,11 @@ GLOBAL_VAR_CONST(access_skrellscoutship, "ACCESS_SKRELLSCOUT")
 	_fully_charged = TRUE
 
 /obj/machinery/vending/medical/skrell
-	req_access = list(access_skrellscoutship)
+	req_access = list(GLOB.access_skrellscoutship)
 
 /obj/machinery/power/apc/debug/skrell
 	cell_type = /obj/item/cell/infinite
-	req_access = list(access_skrellscoutship)
+	req_access = list(GLOB.access_skrellscoutship)
 
 #undef WEBHOOK_SUBMAP_LOADED_SKRELL
 

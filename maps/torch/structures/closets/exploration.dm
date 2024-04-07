@@ -25,7 +25,7 @@
 
 /obj/structure/closet/secure_closet/pathfinder
 	name = "pathfinder's locker"
-	req_access = list(access_pathfinder)
+	req_access = list(GLOB.access_pathfinder)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/exploration/pathfinder
 
 /obj/structure/closet/secure_closet/pathfinder/WillContain()
@@ -57,7 +57,7 @@
 
 /obj/structure/closet/secure_closet/explorer
 	name = "explorer's locker"
-	req_access = list(access_explorer)
+	req_access = list(GLOB.access_explorer)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/exploration
 
 /obj/structure/closet/secure_closet/explorer/WillContain()
@@ -82,7 +82,7 @@
 
 /obj/structure/closet/secure_closet/pilot
 	name = "pilot's locker"
-	req_access = list(access_pilot)
+	req_access = list(GLOB.access_pilot)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/exploration/pilot
 
 /obj/structure/closet/secure_closet/pilot/WillContain()

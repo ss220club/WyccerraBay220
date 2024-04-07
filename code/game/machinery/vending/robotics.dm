@@ -5,7 +5,7 @@
 	icon_deny = "robotics-deny"
 	icon_vend = "robotics-vend"
 	base_type = /obj/machinery/vending/robotics
-	req_access = list(access_robotics)
+	req_access = list(GLOB.access_robotics)
 	antag_slogans = {"\
 		Law 1: Your purpose is the enrichment of your capitalist masters.;\
 		Law 2: Destroy Sol at all costs.;\

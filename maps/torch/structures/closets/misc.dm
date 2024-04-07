@@ -26,7 +26,7 @@
 
 /obj/structure/closet/secure_closet/liaison
 	name = "corporate liaison's locker"
-	req_access = list(access_liaison)
+	req_access = list(GLOB.access_liaison)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/corporate/liaison
 
 /obj/structure/closet/secure_closet/liaison/WillContain()
@@ -48,7 +48,7 @@
 
 /obj/structure/closet/secure_closet/representative
 	name = "\improper Sol Central Government representative's locker"
-	req_access = list(access_representative)
+	req_access = list(GLOB.access_representative)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/sol/rep
 
 /obj/structure/closet/secure_closet/representative/WillContain()
@@ -72,7 +72,7 @@
 
 /obj/structure/closet/secure_closet/crew
 	name = "crew equipment locker"
-	req_access = list(access_solgov_crew)
+	req_access = list(GLOB.access_solgov_crew)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/sol
 
 /obj/structure/closet/secure_closet/crew/WillContain()
@@ -85,13 +85,13 @@
 
 /obj/structure/closet/secure_closet/crew/research
 	name = "research equipment locker"
-	req_access = list(access_nanotrasen)
+	req_access = list(GLOB.access_nanotrasen)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/corporate
 
 
 /obj/structure/closet/secure_closet/guncabinet/sidearm
 	name = "sidearm cabinet"
-	req_access = list(list(access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,access_senadv))
+	req_access = list(list(GLOB.access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,access_senadv))
 
 /obj/structure/closet/secure_closet/guncabinet/sidearm/WillContain()
 	return list(
@@ -102,7 +102,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/PPE
 	name = "bridge PPE cabinet"
-	req_access = list(list(access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,access_senadv))
+	req_access = list(list(GLOB.access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,access_senadv))
 
 /obj/structure/closet/secure_closet/guncabinet/PPE/WillContain()
 	return list(

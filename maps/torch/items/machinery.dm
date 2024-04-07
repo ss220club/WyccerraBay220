@@ -1,7 +1,7 @@
 //Shouldn't be a lot in here, only torch versions of existing machines that need a different access req or something along those lines.
 
 /obj/machinery/vending/medical/torch
-	req_access = list(access_medical)
+	req_access = list(GLOB.access_medical)
 
 /obj/machinery/drone_fabricator/torch
 	fabricator_tag = "SEV Torch Maintenance"
@@ -48,7 +48,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_explorer)
+	req_access = list(GLOB.access_explorer)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/pilot
@@ -58,7 +58,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_pilot)
+	req_access = list(GLOB.access_pilot)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/command
@@ -68,12 +68,12 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_bridge, GLOB.access_keycard_auth)
+	req_access = list(GLOB.access_bridge, GLOB.access_keycard_auth)
 	islocked = 1
 
 /obj/machinery/suit_cycler/torch
 	name = "suit cycler unit"
-	req_access = list(access_bridge)
+	req_access = list(GLOB.access_bridge)
 	available_modifications = list(
 		/singleton/item_modifier/space_suit/sol/atmos,
 		/singleton/item_modifier/space_suit/sol/command,
@@ -91,14 +91,14 @@
 /obj/machinery/suit_cycler/exploration
 	name = "exploration suit cycler"
 	model_text = "Exploration"
-	req_access = list(access_explorer)
+	req_access = list(GLOB.access_explorer)
 	available_modifications = list(/singleton/item_modifier/space_suit/sol/explorer)
 	species = list(SPECIES_HUMAN,SPECIES_SKRELL,SPECIES_UNATHI)
 
 /obj/machinery/suit_cycler/command
 	name = "command suit cycler"
 	model_text = "Command"
-	req_access = list(access_bridge)
+	req_access = list(GLOB.access_bridge)
 	available_modifications = list(/singleton/item_modifier/space_suit/sol/command)
 	species = list(SPECIES_HUMAN,SPECIES_SKRELL)
 

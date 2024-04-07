@@ -27,7 +27,7 @@
 	                    SKILL_FORENSICS   = SKILL_MAX)
 	skill_points = 25
 
-	access = list(access_seceva, access_guard, GLOB.access_security, GLOB.access_brig, GLOB.access_armory, GLOB.access_forensics_lockers,
+	access = list(GLOB.access_seceva, access_guard, GLOB.access_security, GLOB.access_brig, GLOB.access_armory, GLOB.access_forensics_lockers,
 			            GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
 			            GLOB.access_eva, GLOB.access_sec_doors, access_gun, access_hangar, access_warden
 			            )
@@ -77,7 +77,7 @@
 	                    SKILL_FORENSICS   = SKILL_MAX)
 	skill_points = 22
 
-	access = list(access_seceva, GLOB.access_security, GLOB.access_brig, GLOB.access_forensics_lockers,
+	access = list(GLOB.access_seceva, GLOB.access_security, GLOB.access_brig, GLOB.access_forensics_lockers,
 			            GLOB.access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_eva,
 			            GLOB.access_sec_doors, GLOB.access_morgue, access_hangar)
 
@@ -118,7 +118,7 @@
 	max_skill = list(   SKILL_COMBAT      = SKILL_MAX,
 	                    SKILL_WEAPONS     = SKILL_MAX)
 
-	access = list(access_seceva, access_guard, GLOB.access_security, GLOB.access_brig, GLOB.access_maint_tunnels,
+	access = list(GLOB.access_seceva, access_guard, GLOB.access_security, GLOB.access_brig, GLOB.access_maint_tunnels,
 						GLOB.access_external_airlocks, GLOB.access_emergency_storage,
 			            GLOB.access_eva, GLOB.access_sec_doors, access_hangar)
 
@@ -159,7 +159,7 @@
 			/datum/mil_rank/civ/nt
 		)
 
-	access = list(access_seceva, GLOB.access_security, GLOB.access_brig, GLOB.access_maint_tunnels,
+	access = list(GLOB.access_seceva, GLOB.access_security, GLOB.access_brig, GLOB.access_maint_tunnels,
 						GLOB.access_external_airlocks, GLOB.access_emergency_storage,
 			            GLOB.access_eva, GLOB.access_sec_doors, access_hangar)
 

@@ -15,7 +15,7 @@
 	var/progress = 0
 	var/target_progress = 300
 	var/datum/access/target_access = null
-	var/list/restricted_access_codes = list(access_change_ids) // access codes that are not hackable due to balance reasons
+	var/list/restricted_access_codes = list(GLOB.access_change_ids) // access codes that are not hackable due to balance reasons
 	var/list/skill_restricted_access_codes = list(
 		GLOB.access_network = SKILL_EXPERIENCED,
 		GLOB.access_network_admin = SKILL_MASTER

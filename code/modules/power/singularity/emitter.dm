@@ -11,7 +11,7 @@
 	obj_flags = OBJ_FLAG_ROTATABLE | OBJ_FLAG_ANCHORABLE
 
 	/// Access required to lock or unlock the emitter. Separate variable to prevent `req_access` from blocking use of the emitter while unlocked.
-	var/list/req_lock_access = list(access_engine_equip)
+	var/list/req_lock_access = list(GLOB.access_engine_equip)
 	var/efficiency = 0.3	// Energy efficiency. 30% at this time, so 100kW load means 30kW laser pulses.
 	var/active = FALSE
 	var/powered = FALSE

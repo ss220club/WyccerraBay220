@@ -13,7 +13,7 @@
 
 /obj/machinery/computer/shuttle_control/explore/away_farfleet/snz
 	name = "SNZ Shuttle control console"
-	req_access = list(access_away_iccgn)
+	req_access = list(GLOB.access_away_iccgn)
 	shuttle_tag = "SNZ Speedboat"
 
 /obj/overmap/visitable/ship/landable/snz
@@ -32,7 +32,7 @@
 	requires_power = 1
 	dynamic_lighting = 1
 	area_flags = AREA_FLAG_RAD_SHIELDED
-	req_access = list(access_away_iccgn)
+	req_access = list(GLOB.access_away_iccgn)
 
 /obj/shuttle_landmark/snz/start
 	name = "SNZ Hangar"

@@ -4,7 +4,7 @@
 
 /obj/structure/closet/secure_closet/el
 	name = "exploration leader's locker"
-	req_access = list(access_el)
+	req_access = list(GLOB.access_el)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/exploration/leader
 
 /obj/structure/closet/secure_closet/el/WillContain()
@@ -37,7 +37,7 @@
 
 /obj/structure/closet/secure_closet/explorer
 	name = "explorer's locker"
-	req_access = list(access_explorer)
+	req_access = list(GLOB.access_explorer)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/exploration
 
 /obj/structure/closet/secure_closet/explorer/WillContain()
@@ -60,7 +60,7 @@
 
 /obj/structure/closet/secure_closet/explorer/pilot
 	name = "expeditionary pilot's locker"
-	req_access = list(access_explorer, list(access_el, access_expedition_shuttle_helm))
+	req_access = list(GLOB.access_explorer, list(GLOB.access_el, access_expedition_shuttle_helm))
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/exploration/pilot
 
 /obj/structure/closet/secure_closet/explorer/pilot/WillContain()
@@ -85,7 +85,7 @@
 
 /obj/structure/closet/secure_closet/explorer/medic
 	name = "field medic's locker"
-	req_access = list(access_explorer, list(access_el, access_field_med))
+	req_access = list(GLOB.access_explorer, list(GLOB.access_el, access_field_med))
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/exploration/med
 
 /obj/structure/closet/secure_closet/explorer/medic/WillContain()
@@ -111,7 +111,7 @@
 
 /obj/structure/closet/secure_closet/explorer/engineer
 	name = "field engineer's locker"
-	req_access = list(access_explorer, list(access_el, access_field_eng))
+	req_access = list(GLOB.access_explorer, list(GLOB.access_el, access_field_eng))
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/exploration/eng
 
 /obj/structure/closet/secure_closet/explorer/engineer/WillContain()

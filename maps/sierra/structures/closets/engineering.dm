@@ -4,7 +4,7 @@
 
 /obj/structure/closet/secure_closet/engineering_chief_sierra
 	name = "chief engineer's locker"
-	req_access = list(access_ce)
+	req_access = list(GLOB.access_ce)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/engineering/ce
 
 /obj/structure/closet/secure_closet/engineering_chief_sierra/WillContain()
@@ -39,7 +39,7 @@
 
 /obj/structure/closet/secure_closet/engineering_senior
 	name = "senior engineer's locker"
-	req_access = list(access_seneng)
+	req_access = list(GLOB.access_seneng)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/engineering/senior
 
 /obj/structure/closet/secure_closet/engineering_senior/WillContain()
@@ -66,7 +66,7 @@
 
 /obj/structure/closet/secure_closet/engineering_sierra
 	name = "engineer's locker"
-	req_access = list(access_engine_equip)
+	req_access = list(GLOB.access_engine_equip)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/engineering
 
 /obj/structure/closet/secure_closet/engineering_sierra/WillContain()
@@ -90,7 +90,7 @@
 
 /obj/structure/closet/secure_closet/engineering_sierra/junior
 	name = " junior engineer's locker"
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/engineering/junior
 
 /obj/structure/closet/secure_closet/engineering_sierra/junior/WillContain()
@@ -111,7 +111,7 @@
 
 /obj/structure/closet/secure_closet/atmos_sierra
 	name = "atmospherics equipment locker"
-	req_access = list(access_atmospherics)
+	req_access = list(GLOB.access_atmospherics)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/engineering/atmos
 
 /obj/structure/closet/secure_closet/atmos_sierra/WillContain()
@@ -134,7 +134,7 @@
 
 /obj/structure/closet/secure_closet/infotech_sierra
 	name = "information technician locker"
-	req_access = list(access_network_admin)
+	req_access = list(GLOB.access_network_admin)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/engineering/infotech
 
 /obj/structure/closet/secure_closet/infotech_sierra/WillContain()

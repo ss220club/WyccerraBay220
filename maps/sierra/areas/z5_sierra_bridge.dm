@@ -44,11 +44,11 @@
 	name = "Bridge - Command - Captain's Office"
 	icon_state = "heads_cap"
 	sound_env = MEDIUM_SOFTFLOOR
-	req_access = list(access_captain)
+	req_access = list(GLOB.access_captain)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/crew_quarters/heads/captain
-	req_access = list(access_captain)
+	req_access = list(GLOB.access_captain)
 	icon_state = "heads_cap"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
@@ -62,7 +62,7 @@
 /area/bridge
 	name = "Bridge Deck - Bridge"
 	icon_state = "bridge"
-	req_access = list(access_bridge)
+	req_access = list(GLOB.access_bridge)
 	ambience = list('maps/sierra/sound/ambience/bridge.wav')
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
@@ -91,18 +91,18 @@
 
 /area/bridge/storage
 	name = "Bridge - Storage"
-	req_access = list(access_bridge)
+	req_access = list(GLOB.access_bridge)
 
 /area/teleporter
 	name = "Bridge - Teleporter"
 	icon_state = "teleporter"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_teleporter)
+	req_access = list(GLOB.access_teleporter)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 // AI
 /area/turret_protected
-	req_access = list(access_ai_upload)
+	req_access = list(GLOB.access_ai_upload)
 	ambience = list(
 		'maps/sierra/sound/ambience/aimalf.ogg',
 		'maps/sierra/sound/ambience/aiservers.wav',
@@ -138,31 +138,31 @@
 /area/crew_quarters/heads/office/rd/cobed
 	icon_state = "heads_rd"
 	name = "Bridge - Command - RD's Quarters"
-	req_access = list(access_rd)
+	req_access = list(GLOB.access_rd)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/crew_quarters/heads/office/cmo/cobed
 	icon_state = "heads_cmo"
 	name = "Bridge - Command - CMO's Quarters"
-	req_access = list(access_cmo)
+	req_access = list(GLOB.access_cmo)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/crew_quarters/heads/office/ce/cobed
 	icon_state = "heads_ce"
 	name = "Bridge - Command - CE's Quarters"
-	req_access = list(access_ce)
+	req_access = list(GLOB.access_ce)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/crew_quarters/heads/office/hos/cobed
 	icon_state = "heads_hos"
 	name = "Bridge - Command - HoS's Quarters"
-	req_access = list(access_hos)
+	req_access = list(GLOB.access_hos)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/crew_quarters/heads/office/hop
 	name = "Bridge - Command - HoP's Office"
 	icon_state = "heads_hop"
-	req_access = list(access_hop)
+	req_access = list(GLOB.access_hop)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/crew_quarters/heads/office/hop/cobed
@@ -172,7 +172,7 @@
 /area/crew_quarters/heads/office/iaa
 	icon_state = "heads_cl"
 	name = "Bridge - Command - IAA's Office"
-	req_access = list(access_iaa)
+	req_access = list(GLOB.access_iaa)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/crew_quarters/heads/office/iaa/high_sec
@@ -230,5 +230,5 @@
 	name = "Bridge - Engineering - Atmospherics Suppliment"
 	icon_state = "atmos_storage"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_atmospherics)
+	req_access = list(GLOB.access_atmospherics)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING

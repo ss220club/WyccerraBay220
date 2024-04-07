@@ -6,7 +6,7 @@
 		slot_l_hand_str = 'icons/mob/onmob/items/lefthand_guns_secure.dmi',
 		slot_r_hand_str = 'icons/mob/onmob/items/righthand_guns_secure.dmi'
 		)
-	req_access = list(list(access_brig, GLOB.access_bridge))
+	req_access = list(list(GLOB.access_brig, GLOB.access_bridge))
 	authorized_modes = list(ALWAYS_AUTHORIZED, AUTHORIZED)
 
 /obj/item/gun/energy/stunrevolver/secure
@@ -20,7 +20,7 @@
 		slot_r_hand_str = 'icons/mob/onmob/items/righthand_guns_secure.dmi'
 		)
 	item_state = null
-	req_access = list(list(access_brig, GLOB.access_bridge))
+	req_access = list(list(GLOB.access_brig, GLOB.access_bridge))
 
 /obj/item/gun/energy/gun/secure
 	name = "smartgun"
@@ -31,7 +31,7 @@
 		slot_r_hand_str = 'icons/mob/onmob/items/righthand_guns_secure.dmi'
 		)
 	item_state = null	//so the human update icon uses the icon_state instead.
-	req_access = list(list(access_brig, GLOB.access_bridge))
+	req_access = list(list(GLOB.access_brig, GLOB.access_bridge))
 	authorized_modes = list(ALWAYS_AUTHORIZED, AUTHORIZED)
 
 /obj/item/gun/energy/gun/secure/preauthorized
@@ -54,7 +54,7 @@
 		list(mode_name="shock", projectile_type=/obj/item/projectile/beam/stun/shock, modifystate="energyrevolvershock"),
 		list(mode_name="kill", projectile_type=/obj/item/projectile/beam, modifystate="energyrevolverkill")
 		)
-	req_access = list(list(access_brig, GLOB.access_heads))
+	req_access = list(list(GLOB.access_brig, GLOB.access_heads))
 	authorized_modes = list(ALWAYS_AUTHORIZED, AUTHORIZED)
 
 /obj/item/gun/energy/revolver/secure/preauthorized
@@ -81,4 +81,4 @@
 	name = "laser carbine"
 	desc = "A Hephaestus Industries G40E carbine, designed to kill with concentrated energy blasts. Fitted with an NT1019 chip to make sure killcount is tracked appropriately."
 	icon_state = "lasersec"
-	req_access = list(list(access_brig, GLOB.access_bridge))
+	req_access = list(list(GLOB.access_brig, GLOB.access_bridge))

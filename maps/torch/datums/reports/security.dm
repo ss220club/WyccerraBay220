@@ -63,9 +63,9 @@
 	add_field(/datum/report_field/pencode_text, "List of items in custody/evidence lockup")
 	set_access(access_edit = GLOB.access_security)
 	temp_field = add_field(/datum/report_field/signature, "Brig Chief's signature")
-	temp_field.set_access(access_edit = list(access_security, GLOB.access_armory))
+	temp_field.set_access(access_edit = list(GLOB.access_security, GLOB.access_armory))
 	temp_field = add_field(/datum/report_field/signature, "Forensic Technician's signature")
-	temp_field.set_access(access_edit = list(access_security, GLOB.access_forensics_lockers))
+	temp_field.set_access(access_edit = list(GLOB.access_security, GLOB.access_forensics_lockers))
 
 /datum/computer_file/report/recipient/sec/statement
 	form_name = "SCG-SEC-02c"

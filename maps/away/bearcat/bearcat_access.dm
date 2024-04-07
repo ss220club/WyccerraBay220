@@ -11,10 +11,10 @@ GLOBAL_VAR_CONST(access_bearcat_captain, "ACCESS_BEARCAT_CAPTAIN") //999
 	region = ACCESS_REGION_NONE
 
 /obj/item/card/id/bearcat
-	access = list(access_bearcat)
+	access = list(GLOB.access_bearcat)
 
 /obj/item/card/id/bearcat_captain
-	access = list(access_bearcat, access_bearcat_captain)
+	access = list(GLOB.access_bearcat, access_bearcat_captain)
 
 /obj/machinery/door/airlock/autoname/bearcat
 
@@ -23,19 +23,19 @@ GLOBAL_VAR_CONST(access_bearcat_captain, "ACCESS_BEARCAT_CAPTAIN") //999
 /obj/machinery/door/airlock/autoname/command/bearcat
 
 /obj/structure/closet/secure_closet/engineering_electrical/bearcat
-	req_access = list(access_bearcat)
+	req_access = list(GLOB.access_bearcat)
 
 /obj/structure/closet/secure_closet/engineering_welding/bearcat
-	req_access = list(access_bearcat)
+	req_access = list(GLOB.access_bearcat)
 
 /obj/machinery/vending/engineering/bearcat
-	req_access = list(access_bearcat)
+	req_access = list(GLOB.access_bearcat)
 
 /obj/machinery/vending/tool/bearcat
-	req_access = list(access_bearcat)
+	req_access = list(GLOB.access_bearcat)
 
 /obj/machinery/suit_storage_unit/engineering/salvage/bearcat
-	req_access = list(access_bearcat)
+	req_access = list(GLOB.access_bearcat)
 
 /obj/machinery/suit_cycler/salvage/bearcat
-	req_access = list(access_bearcat)
+	req_access = list(GLOB.access_bearcat)

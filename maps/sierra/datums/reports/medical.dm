@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/med/generate_fields()
 	..()
-	set_access (list(list(access_medical_equip, GLOB.access_psychiatrist)))
+	set_access (list(list(GLOB.access_medical_equip, GLOB.access_psychiatrist)))
 
 /datum/computer_file/report/recipient/med/recipe
 	form_name = "NT-MED-01"

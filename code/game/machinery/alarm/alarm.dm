@@ -75,7 +75,7 @@
 	idle_power_usage = 80
 	active_power_usage = 1000 //For heating/cooling rooms. 1000 joules equates to about 1 degree every 2 seconds for a single tile of air.
 	power_channel = ENVIRON
-	req_access = list(list(access_atmospherics, GLOB.access_engine_equip))
+	req_access = list(list(GLOB.access_atmospherics, GLOB.access_engine_equip))
 	clicksound = "button"
 	clickvol = 30
 
@@ -968,7 +968,7 @@
 
 /obj/machinery/alarm/server/Initialize()
 	. = ..()
-	req_access = list(access_rd, GLOB.access_atmospherics, GLOB.access_engine_equip)
+	req_access = list(GLOB.access_rd, GLOB.access_atmospherics, GLOB.access_engine_equip)
 	TLV["temperature"] = list(T0C-26, T0C, T0C+30, T0C+40)
 	target_temperature = T0C + 10
 

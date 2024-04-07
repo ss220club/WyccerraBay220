@@ -22,7 +22,7 @@
 	var/hatch_open = FALSE
 	wires = /datum/wires/sealgen
 
-	req_access = list(access_engine_equip)
+	req_access = list(GLOB.access_engine_equip)
 
 	var/locked = TRUE
 

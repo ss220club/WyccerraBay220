@@ -2,7 +2,7 @@
 	name = "\improper Skrellian Ship"
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED
 	base_turf = /turf/space
-	req_access = list(access_skrellscoutship)
+	req_access = list(GLOB.access_skrellscoutship)
 
 /area/ship/skrellscoutship/solars
 	name = "\improper Solar Area"
@@ -51,7 +51,7 @@
 	icon_state = "bridge"
 	base_turf = /turf/simulated/floor/plating
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED
-	req_access = list(access_skrellscoutship)
+	req_access = list(GLOB.access_skrellscoutship)
 
 //New Ship Areas
 

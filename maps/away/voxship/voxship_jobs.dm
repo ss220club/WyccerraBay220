@@ -159,7 +159,7 @@ GLOBAL_VAR_CONST(access_voxship, "ACCESS_VOXSHIP")
 	region = ACCESS_REGION_NONE
 
 /obj/item/card/id/voxship
-	access = list(access_voxship)
+	access = list(GLOB.access_voxship)
 
 /obj/machinery/door/airlock/hatch/voxship
 

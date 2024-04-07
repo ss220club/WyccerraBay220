@@ -7,7 +7,7 @@
 		"NOTICE: Requires network operator or admin access. Use by non-admins is logged."
 	)
 	pattern = "^log"
-	req_access = list(list(access_network, GLOB.access_network_admin))
+	req_access = list(list(GLOB.access_network, GLOB.access_network_admin))
 	skill_needed = SKILL_EXPERIENCED
 
 /datum/terminal_command/log/proper_input_entered(text, mob/user, datum/terminal/terminal)
@@ -25,6 +25,6 @@
 	M.source = S.login
 	if(!S.send_mail(argument, M))
 		return "[name]: Error; could not send email to '[argument]'."
-	if(!has_access(list(access_network_admin), user.GetAccess()))
+	if(!has_access(list(GLOB.access_network_admin), user.GetAccess()))
 		terminal.computer.add_log("Network log sent to: [argument]")
 	return "[name]: Network log sent to [argument]."

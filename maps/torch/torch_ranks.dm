@@ -253,7 +253,7 @@
 
 /singleton/rank_category/commissioned
 	name = "Commissioned"
-	add_accesses = list(access_o_mess)
+	add_accesses = list(GLOB.access_o_mess)
 
 /*
  *  Fleet

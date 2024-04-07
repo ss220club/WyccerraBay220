@@ -5,7 +5,7 @@
 	icon_deny = "med-deny"
 	icon_vend = "med-vend"
 	base_type = /obj/machinery/vending/medical
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 	idle_power_usage = 200
 	product_ads = {"\
 		Go save some lives!;\

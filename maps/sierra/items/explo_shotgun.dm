@@ -4,7 +4,7 @@
 	icon = 'maps/torch/icons/obj/explshotgun.dmi'
 	icon_state = "expshotgun0"
 	starts_loaded = 0
-	req_access = list(list(access_hop, GLOB.access_hos))
+	req_access = list(list(GLOB.access_hop, GLOB.access_hos))
 	authorized_modes = list(UNAUTHORIZED)
 	firemodes = list(
 		list(mode_name="fire"),
@@ -118,7 +118,7 @@
 /obj/structure/closet/walllocker/secure_closet/explo_gun
 	name = "gun locker"
 	desc = "Wall locker holding the boomstick."
-	req_access = list(access_expedition_shuttle_helm)
+	req_access = list(GLOB.access_expedition_shuttle_helm)
 	icon_state = "walllocker"
 	//icon_door = "walllocker_secure"
 	density = FALSE

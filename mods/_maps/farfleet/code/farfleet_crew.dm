@@ -74,23 +74,23 @@ GLOBAL_VAR_CONST(access_away_iccgn_captain, "ACCESS_ICCGN_CAPTAIN")
 /obj/item/card/id/awayiccgn/fleet
 	color = COLOR_GRAY40
 	detail_color = "#447ab1"
-	access = list(access_away_iccgn, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, GLOB.access_engine_equip)
 
 /obj/item/card/id/awayiccgn/droptroops
 	color = COLOR_GRAY40
 	detail_color = "#0018a0"
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, GLOB.access_engine_equip)
 
 /obj/item/card/id/awayiccgn/droptroops/sergeant
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant)
 	extra_details = list("goldstripe")
 
 /obj/item/card/id/awayiccgn/fleet/captain
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
 	extra_details = list("goldstripe")
 
 /obj/item/card/id/awayiccgn/fleet/iccgn_pawn
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
 	color = COLOR_SURGERY_BLUE
 	extra_details = list("goldstripe")
 
@@ -121,7 +121,7 @@ GLOBAL_VAR_CONST(access_away_iccgn_captain, "ACCESS_ICCGN_CAPTAIN")
 					SKILL_MEDICAL = SKILL_BASIC,
 					SKILL_EVA = SKILL_BASIC)
 
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, GLOB.access_engine_equip)
 
 /datum/job/submap/away_iccgn_farfleet/iccgn_sergeant
 	title = "Pioneer Corps Starszy Bosman"
@@ -148,7 +148,7 @@ GLOBAL_VAR_CONST(access_away_iccgn_captain, "ACCESS_ICCGN_CAPTAIN")
 					SKILL_EVA = SKILL_BASIC)
 
 
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, GLOB.access_engine_equip)
 
 /datum/job/submap/away_iccgn_farfleet/iccgn_captain
 	title = "Pioneer Corps Captain"
@@ -177,7 +177,7 @@ GLOBAL_VAR_CONST(access_away_iccgn_captain, "ACCESS_ICCGN_CAPTAIN")
 					SKILL_PILOT = SKILL_TRAINED,
 					SKILL_EVA = SKILL_BASIC)
 
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
 
 
 /datum/job/submap/away_iccgn_farfleet/iccgn_medic
@@ -208,7 +208,7 @@ GLOBAL_VAR_CONST(access_away_iccgn_captain, "ACCESS_ICCGN_CAPTAIN")
 
 
 
-	access = list(access_away_iccgn, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, GLOB.access_engine_equip)
 
 /datum/job/submap/away_iccgn_farfleet/iccgn_gunner
 	title = "Pioneer Corps Technician"
@@ -241,7 +241,7 @@ GLOBAL_VAR_CONST(access_away_iccgn_captain, "ACCESS_ICCGN_CAPTAIN")
 					SKILL_ENGINES = SKILL_TRAINED,
 					SKILL_DEVICES = SKILL_BASIC)
 
-	access = list(access_away_iccgn, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, GLOB.access_engine_equip)
 
 /datum/job/submap/away_iccgn_farfleet/iccgn_pawn
 	title = "CSS Field Operative"
@@ -270,7 +270,7 @@ GLOBAL_VAR_CONST(access_away_iccgn_captain, "ACCESS_ICCGN_CAPTAIN")
 					SKILL_PILOT = SKILL_TRAINED,
 					SKILL_EVA = SKILL_BASIC)
 
-	access = list(access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
+	access = list(GLOB.access_away_iccgn, access_away_iccgn_droptroops, access_away_iccgn_sergeant, access_away_iccgn_captain, GLOB.access_engine_equip)
 
 
 /* OUTFITS

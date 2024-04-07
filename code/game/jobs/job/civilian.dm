@@ -5,7 +5,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the head of personnel"
-	access = list(access_hydroponics, GLOB.access_kitchen)
+	access = list(GLOB.access_hydroponics, GLOB.access_kitchen)
 	alt_titles = list("Cook")
 	outfit_type = /singleton/hierarchy/outfit/job/service/chef
 
@@ -16,7 +16,7 @@
 	total_positions = 2
 	spawn_positions = 1
 	supervisors = "the head of personnel"
-	access = list(access_hydroponics, GLOB.access_kitchen)
+	access = list(GLOB.access_hydroponics, GLOB.access_kitchen)
 	alt_titles = list("Hydroponicist")
 	outfit_type = /singleton/hierarchy/outfit/job/service/gardener
 
@@ -29,7 +29,7 @@
 	spawn_positions = 1
 	supervisors = "the head of personnel"
 	economic_power = 5
-	access = list(access_maint_tunnels, GLOB.access_mailsorting, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mining, GLOB.access_mining_station)
+	access = list(GLOB.access_maint_tunnels, GLOB.access_mailsorting, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mining, GLOB.access_mining_station)
 	minimal_player_age = 3
 	ideal_character_age = 40
 	outfit_type = /singleton/hierarchy/outfit/job/cargo/qm
@@ -41,7 +41,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the quartermaster and the head of personnel"
-	access = list(access_maint_tunnels, GLOB.access_mailsorting, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mining, GLOB.access_mining_station)
+	access = list(GLOB.access_maint_tunnels, GLOB.access_mailsorting, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mining, GLOB.access_mining_station)
 	outfit_type = /singleton/hierarchy/outfit/job/cargo/cargo_tech
 
 /datum/job/mining
@@ -52,7 +52,7 @@
 	spawn_positions = 3
 	supervisors = "the quartermaster and the head of personnel"
 	economic_power = 5
-	access = list(access_maint_tunnels, GLOB.access_mailsorting, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mining, GLOB.access_mining_station)
+	access = list(GLOB.access_maint_tunnels, GLOB.access_mailsorting, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mining, GLOB.access_mining_station)
 	alt_titles = list("Drill Technician","Prospector")
 	outfit_type = /singleton/hierarchy/outfit/job/cargo/mining
 
@@ -63,7 +63,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
-	access = list(access_janitor, GLOB.access_maint_tunnels, GLOB.access_engine, GLOB.access_research, GLOB.access_sec_doors, GLOB.access_medical)
+	access = list(GLOB.access_janitor, GLOB.access_maint_tunnels, GLOB.access_engine, GLOB.access_research, GLOB.access_sec_doors, GLOB.access_medical)
 	alt_titles = list("Custodian","Sanitation Technician")
 	outfit_type = /singleton/hierarchy/outfit/job/service/janitor
 
@@ -75,7 +75,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
-	access = list(access_library, GLOB.access_maint_tunnels)
+	access = list(GLOB.access_library, GLOB.access_maint_tunnels)
 	alt_titles = list("Journalist")
 	outfit_type = /singleton/hierarchy/outfit/job/librarian
 
@@ -87,7 +87,7 @@
 	spawn_positions = 2
 	supervisors = "company officials and Corporate Regulations"
 	economic_power = 7
-	access = list(access_lawyer, GLOB.access_sec_doors, GLOB.access_maint_tunnels, GLOB.access_bridge)
+	access = list(GLOB.access_lawyer, GLOB.access_sec_doors, GLOB.access_maint_tunnels, GLOB.access_bridge)
 	minimal_player_age = 10
 	outfit_type = /singleton/hierarchy/outfit/job/internal_affairs_agent
 

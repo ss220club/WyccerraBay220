@@ -25,9 +25,9 @@
 			access = list(access)
 		override ? (src.access = list(access)) : (src.access += list(access))
 	if(access_edit)
-		if(!islist(access_edit))
-			access_edit = list(access_edit)
-		override ? (src.access_edit = list(access_edit)) : (src.access_edit += list(access_edit))
+		if(!islist(GLOB.access_edit))
+			access_edit = list(GLOB.access_edit)
+		override ? (src.access_edit = list(GLOB.access_edit)) : (src.access_edit += list(GLOB.access_edit))
 
 /datum/report_field/proc/verify_access(given_access)
 	return has_access_pattern(access, given_access)

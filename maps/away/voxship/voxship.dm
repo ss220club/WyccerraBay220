@@ -55,7 +55,7 @@
 /obj/machinery/computer/shuttle_control/explore/vox_ship
 	name = "landing control console"
 	shuttle_tag = "Vox Scavenger Ship"
-	req_access = list(access_voxship)
+	req_access = list(GLOB.access_voxship)
 
 /obj/overmap/visitable/ship/landable/vox_ship
 	name = "Alien Vessel"
@@ -90,7 +90,7 @@
 /obj/machinery/computer/shuttle_control/explore/vox_lander
 	name = "landing control console"
 	shuttle_tag = "Vox Scavenger Shuttle"
-	req_access = list(access_voxship)
+	req_access = list(GLOB.access_voxship)
 
 /obj/overmap/visitable/ship/landable/vox_scavshuttle
 	name = "Unmarked shuttle"
@@ -106,7 +106,7 @@
 //shuttle APC terminal kept being deleted by z level changes
 /obj/machinery/power/apc/debug/vox
 	cell_type = /obj/item/cell/infinite
-	req_access = list(access_voxship)
+	req_access = list(GLOB.access_voxship)
 
 /obj/submap_landmark/joinable_submap/voxship/scavship/New()
 	var/datum/language/vox/pidgin = all_languages[LANGUAGE_VOX]

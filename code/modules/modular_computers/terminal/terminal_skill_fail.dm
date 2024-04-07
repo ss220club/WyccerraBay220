@@ -54,7 +54,7 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 	message = "Accessing network operator resources!"
 
 /datum/terminal_skill_fail/antag/can_run(mob/user, datum/terminal/terminal)
-	if(!has_access(list(list(access_network, GLOB.access_network_admin)), user.GetAccess()))
+	if(!has_access(list(list(GLOB.access_network, GLOB.access_network_admin)), user.GetAccess()))
 		return
 	return ..()
 
@@ -108,7 +108,7 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 	message = "Updating admin privileges!"
 
 /datum/terminal_skill_fail/admin/can_run(mob/user, datum/terminal/terminal)
-	if(!has_access(list(access_network_admin), user.GetAccess()))
+	if(!has_access(list(GLOB.access_network_admin), user.GetAccess()))
 		return
 	return ..()
 

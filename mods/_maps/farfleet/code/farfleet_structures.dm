@@ -4,7 +4,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/farfleet
 	name = "heavy armory cabinet"
-	req_access = list(access_away_iccgn_droptroops)
+	req_access = list(GLOB.access_away_iccgn_droptroops)
 
 /obj/structure/closet/secure_closet/guncabinet/farfleet/antitank/WillContain()
 	return list(
@@ -58,7 +58,7 @@
 /obj/structure/closet/secure_closet/farfleet
 	name = "pioneer locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet/two
-	req_access = list(access_away_iccgn_droptroops)
+	req_access = list(GLOB.access_away_iccgn_droptroops)
 
 /obj/structure/closet/secure_closet/farfleet/WillContain()
 	return list(
@@ -82,7 +82,7 @@
 /obj/structure/closet/secure_closet/farfleet/sergeant
 	name = "pioneer sergeant locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet/two
-	req_access = list(access_away_iccgn_sergeant)
+	req_access = list(GLOB.access_away_iccgn_sergeant)
 
 /obj/structure/closet/secure_closet/farfleet/sergeant/WillContain()
 	return list(
@@ -110,7 +110,7 @@
 /obj/structure/closet/secure_closet/farfleet/fleet
 	name = "crew cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet
-	req_access = list(access_away_iccgn)
+	req_access = list(GLOB.access_away_iccgn)
 
 /obj/structure/closet/secure_closet/farfleet/fleet/WillContain()
 	return list(
@@ -125,7 +125,7 @@
 /obj/structure/closet/secure_closet/farfleet/fleet/engi
 	name = "corps technician cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet
-	req_access = list(access_away_iccgn)
+	req_access = list(GLOB.access_away_iccgn)
 
 /obj/structure/closet/secure_closet/farfleet/fleet/engi/WillContain()
 	return list(
@@ -143,7 +143,7 @@
 /obj/structure/closet/secure_closet/farfleet/fleet/med
 	name = "pioneer corpsman cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet
-	req_access = list(access_away_iccgn)
+	req_access = list(GLOB.access_away_iccgn)
 
 /obj/structure/closet/secure_closet/farfleet/fleet/med/WillContain()
 	return list(
@@ -165,7 +165,7 @@
 /obj/structure/closet/secure_closet/farfleet/fleet_cpt
 	name = "captain cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet
-	req_access = list(access_away_iccgn, access_away_iccgn_captain)
+	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_captain)
 
 /obj/structure/closet/secure_closet/farfleet/fleet_cpt/WillContain()
 	return list(
@@ -185,7 +185,7 @@
 /obj/structure/closet/secure_closet/farfleet/css
 	name = "CSS cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/farfleet
-	req_access = list(access_away_iccgn, access_away_iccgn_captain)
+	req_access = list(GLOB.access_away_iccgn, access_away_iccgn_captain)
 
 /obj/structure/closet/secure_closet/farfleet/css/WillContain()
 	return list(
@@ -240,7 +240,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_away_iccgn)
+	req_access = list(GLOB.access_away_iccgn)
 	islocked = 1
 
 /obj/structure/sign/farfleetplaque

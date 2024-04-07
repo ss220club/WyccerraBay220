@@ -6,7 +6,7 @@
 	icon_state = "grinder"
 	density = TRUE
 	anchored = TRUE
-	req_access = list(access_kitchen,GLOB.access_morgue)
+	req_access = list(GLOB.access_kitchen,GLOB.access_morgue)
 	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0

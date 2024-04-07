@@ -35,7 +35,7 @@
 	var/datum/announcement/priority/crew_announcement = new
 	var/current_viewing_message_id = 0
 	var/current_viewing_message = null
-	var/admin_access = list(access_bridge)
+	var/admin_access = list(GLOB.access_bridge)
 
 /datum/nano_module/program/comm/New()
 	..()

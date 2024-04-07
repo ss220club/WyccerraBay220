@@ -1,8 +1,8 @@
 /obj/machinery/power/apc/charon
-	req_access = list(list(access_expedition_shuttle_helm, GLOB.access_engine)) //for pilot, EL and field/regular engineers
+	req_access = list(list(GLOB.access_expedition_shuttle_helm, GLOB.access_engine)) //for pilot, EL and field/regular engineers
 
 /obj/machinery/power/apc/merchant
-	req_access = list(access_merchant)
+	req_access = list(GLOB.access_merchant)
 
 /obj/machinery/power/apc/bsa
 	cell_type = /obj/item/cell/high

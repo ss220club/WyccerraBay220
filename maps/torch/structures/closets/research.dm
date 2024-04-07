@@ -18,7 +18,7 @@
 
 /obj/structure/closet/secure_closet/RD_torch
 	name = "chief science officer's locker"
-	req_access = list(access_rd)
+	req_access = list(GLOB.access_rd)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/science/cso
 
 /obj/structure/closet/secure_closet/RD_torch/WillContain()
@@ -45,7 +45,7 @@
 
 /obj/structure/closet/secure_closet/secure_closet/xenoarchaeologist_torch
 	name = "xenoarchaeologist's locker"
-	req_access = list(access_xenoarch)
+	req_access = list(GLOB.access_xenoarch)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/science
 
 /obj/structure/closet/secure_closet/secure_closet/xenoarchaeologist_torch/WillContain()
@@ -72,7 +72,7 @@
 
 /obj/structure/closet/secure_closet/scientist_torch
 	name = "researcher's locker"
-	req_access = list(access_research_storage)
+	req_access = list(GLOB.access_research_storage)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/science
 
 /obj/structure/closet/secure_closet/scientist_torch/WillContain()

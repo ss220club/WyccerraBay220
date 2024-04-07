@@ -55,7 +55,7 @@
 		SKILL_HAULING     = SKILL_BASIC
 	)
 
-	access = list(access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_cargo, access_guppy_helm, access_commissary,
+	access = list(GLOB.access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_cargo, access_guppy_helm, access_commissary,
 						GLOB.access_cargo_bot, GLOB.access_mining_office, GLOB.access_mailsorting, access_expedition_shuttle, access_guppy, access_hangar)
 
 
@@ -97,7 +97,7 @@
 	allowed_branches = list(/datum/mil_branch/employee, /datum/mil_branch/contractor)
 	allowed_ranks = list(/datum/mil_rank/civ/nt, /datum/mil_rank/civ/contractor)
 
-	access = list(access_mining, GLOB.access_mining_office, GLOB.access_mining_station,
+	access = list(GLOB.access_mining, GLOB.access_mining_office, GLOB.access_mining_station,
 						access_expedition_shuttle, access_guppy, access_hangar, access_guppy_helm)
 
 
@@ -125,7 +125,7 @@
 		SKILL_HAULING     = SKILL_BASIC
 	)
 
-	access = list(access_maint_tunnels, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_mining_office, GLOB.access_mailsorting, access_hangar, access_guppy, access_guppy_helm, access_commissary)
+	access = list(GLOB.access_maint_tunnels, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_mining_office, GLOB.access_mailsorting, access_hangar, access_guppy, access_guppy_helm, access_commissary)
 
 
 

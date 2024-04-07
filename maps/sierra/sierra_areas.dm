@@ -33,7 +33,7 @@
 	name = "Substation"
 	icon_state = "substation"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	// Sounds for Substation rooms. Just electrical sounds, really.
 	ambience =  list(
 		'maps/sierra/sound/ambience/substation1.ogg',
@@ -53,21 +53,21 @@
 	icon_state = "heads"
 
 /area/engineering
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	icon_state = "engineering"
 
 /area/shield
 	name = "Engineering - Shield Generator"
 	icon_state = "engineering"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_engine, GLOB.access_atmospherics)
+	req_access = list(GLOB.access_engine, GLOB.access_atmospherics)
 
 /area/security/sierra/
 	icon_state = "security"
 
 /area/thruster
 	icon_state = "thruster"
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 
 /area/crew_quarters/safe_room
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED

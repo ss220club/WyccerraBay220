@@ -7,7 +7,7 @@
 		"NOTICE: Requires network admin access."
 	)
 	pattern = "^ssh"
-	req_access = list(access_network_admin)
+	req_access = list(GLOB.access_network_admin)
 	skill_needed = SKILL_EXPERIENCED
 
 /datum/terminal_command/check_access(mob/user, datum/terminal/terminal)

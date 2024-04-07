@@ -12,7 +12,7 @@
 
 /obj/machinery/computer/shuttle_control/explore/away_scg_patrol/reaper
 	name = "Reaper Shuttle control console"
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 	shuttle_tag = "Reaper Gunboat"
 
 /obj/overmap/visitable/ship/landable/reaper

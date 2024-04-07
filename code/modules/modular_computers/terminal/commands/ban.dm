@@ -9,7 +9,7 @@
 		"NOTICE: Requires network operator access for viewing, and admin access for modification"
 	)
 	pattern = "^banned"
-	req_access = list(list(access_network, GLOB.access_network_admin))
+	req_access = list(list(GLOB.access_network, GLOB.access_network_admin))
 	skill_needed = SKILL_TRAINED
 
 /datum/terminal_command/banned/proper_input_entered(text, mob/user, datum/terminal/terminal)
@@ -24,7 +24,7 @@
 		else
 			return "[name]: There are no banned network ids."
 	else if(length(arguments) == 2)
-		if(!has_access(list(access_network_admin), user.GetAccess()))
+		if(!has_access(list(GLOB.access_network_admin), user.GetAccess()))
 			return "[name]: ACCESS DENIED"
 		var/nid = text2num(arguments[2])
 		if(arguments[1] == "-b")

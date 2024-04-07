@@ -43,13 +43,13 @@
 	)
 
 	access_modify_region = list(
-		ACCESS_REGION_SECURITY = list(access_hos, GLOB.access_change_ids),
-		ACCESS_REGION_MEDBAY = list(access_cmo, GLOB.access_change_ids),
-		ACCESS_REGION_RESEARCH = list(access_rd, GLOB.access_change_ids),
-		ACCESS_REGION_ENGINEERING = list(access_ce, GLOB.access_change_ids),
-		ACCESS_REGION_COMMAND = list(access_change_ids),
-		ACCESS_REGION_GENERAL = list(access_hop, GLOB.access_change_ids),
-		ACCESS_REGION_SUPPLY = list(access_qm, GLOB.access_change_ids),
+		ACCESS_REGION_SECURITY = list(GLOB.access_hos, GLOB.access_change_ids),
+		ACCESS_REGION_MEDBAY = list(GLOB.access_cmo, GLOB.access_change_ids),
+		ACCESS_REGION_RESEARCH = list(GLOB.access_rd, GLOB.access_change_ids),
+		ACCESS_REGION_ENGINEERING = list(GLOB.access_ce, GLOB.access_change_ids),
+		ACCESS_REGION_COMMAND = list(GLOB.access_change_ids),
+		ACCESS_REGION_GENERAL = list(GLOB.access_hop, GLOB.access_change_ids),
+		ACCESS_REGION_SUPPLY = list(GLOB.access_qm, GLOB.access_change_ids),
 	)
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GAS JOBS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

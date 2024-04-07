@@ -4,7 +4,7 @@
 	icon_state = "fridge_dark"
 	icon_deny = "fridge_dark-deny"
 	base_type = /obj/machinery/vending/boozeomat
-	req_access = list(access_kitchen)
+	req_access = list(GLOB.access_kitchen)
 	idle_power_usage = 200
 	product_slogans = {"\
 		I hope nobody asks me for a bloody cup o' tea...;\

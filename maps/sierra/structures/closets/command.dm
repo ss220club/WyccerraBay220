@@ -5,7 +5,7 @@
 
 /obj/structure/closet/secure_closet/captains/sierra
 	name = "captain's cabinet"
-	req_access = list(access_captain)
+	req_access = list(GLOB.access_captain)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/command/captain
 
 /obj/structure/closet/secure_closet/captains/sierra/WillContain()
@@ -41,7 +41,7 @@
 	)
 /obj/structure/closet/secure_closet/hop/sierra
 	name = "head of personnel's locker"
-	req_access = list(access_hop)
+	req_access = list(GLOB.access_hop)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/command/hop
 
 /obj/structure/closet/secure_closet/hop2
@@ -71,7 +71,7 @@
 
 /obj/structure/closet/secure_closet/adjutant
 	name = "adjutant's locker"
-	req_access = list(access_bridge)
+	req_access = list(GLOB.access_bridge)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/command/adjutant
 
 /obj/structure/closet/secure_closet/adjutant/WillContain()

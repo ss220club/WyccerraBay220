@@ -118,9 +118,9 @@
 	add_field(/datum/report_field/pencode_text, "Меморандум", required = 1)
 	capiaa_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел или капитана.")
-	set_access(list(list(access_captain, access_iaa)), list(list(access_captain, access_iaa)))
+	set_access(list(list(GLOB.access_captain, access_iaa)), list(list(GLOB.access_captain, access_iaa)))
 	for(var/datum/report_field/field in capiaa_fields)
-		field.set_access(access_edit = list(list(access_captain, access_iaa)))
+		field.set_access(access_edit = list(list(GLOB.access_captain, access_iaa)))
 
 /datum/computer_file/report/recipient/iaa/work_visa
 	form_name = "HR-NTCO-03b"
@@ -161,7 +161,7 @@
 	iaahop_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел.")
 	for(var/datum/report_field/field in iaahop_fields)
-		field.set_access(access_edit = list(list(access_hop, access_iaa)))
+		field.set_access(access_edit = list(list(GLOB.access_hop, access_iaa)))
 
 /datum/computer_file/report/recipient/iaa/check_citizenship
 	form_name = "HR-NTCO-02a"
@@ -182,7 +182,7 @@
 	iaahop_fields += add_field(/datum/report_field/options/yes_no, "Данная форма была одобрена/отклонена")
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел.")
 	for(var/datum/report_field/field in iaahop_fields)
-		field.set_access(access_edit = list(access_hop, access_iaa))
+		field.set_access(access_edit = list(GLOB.access_hop, access_iaa))
 	set_access(access_security, override = 0)
 
 /datum/computer_file/report/recipient/iaa/audit
@@ -206,4 +206,4 @@
 	capiaa_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи или печати.")
 	for(var/datum/report_field/field in capiaa_fields)
-		field.set_access(access_edit = list(list(access_captain, access_iaa)))
+		field.set_access(access_edit = list(list(GLOB.access_captain, access_iaa)))

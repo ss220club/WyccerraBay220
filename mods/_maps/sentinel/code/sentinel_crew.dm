@@ -96,7 +96,7 @@ GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 					SKILL_HAULING = SKILL_BASIC,
 					SKILL_MEDICAL = SKILL_BASIC,
 					SKILL_EVA = SKILL_BASIC)
-	access = list(access_away_cavalry, access_away_cavalry_ops)
+	access = list(GLOB.access_away_cavalry, access_away_cavalry_ops)
 
 /datum/job/submap/patrol/captain
 	title = "Army SCGSO Leader"
@@ -127,7 +127,7 @@ GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 		SKILL_MEDICAL = SKILL_BASIC,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_fleet_armory, access_away_cavalry_captain)
+	access = list(GLOB.access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_fleet_armory, access_away_cavalry_captain)
 
 /datum/job/submap/patrol/commander
 	title = "Fleet Commander"
@@ -154,7 +154,7 @@ GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 		SKILL_PILOT   = SKILL_TRAINED,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_pilot, access_away_cavalry_fleet_armory, access_away_cavalry_commander)
+	access = list(GLOB.access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_pilot, access_away_cavalry_fleet_armory, access_away_cavalry_commander)
 
 /datum/job/submap/patrol/pilot1
 	title = "Fleet Pilot"
@@ -181,7 +181,7 @@ GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 		SKILL_PILOT   = SKILL_TRAINED,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(access_away_cavalry, access_away_cavalry_pilot, access_away_cavalry_fleet_armory)
+	access = list(GLOB.access_away_cavalry, access_away_cavalry_pilot, access_away_cavalry_fleet_armory)
 
 /datum/job/submap/patrol/surgeon
 	title = "Fleet Corpsman"
@@ -210,7 +210,7 @@ GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 		SKILL_CHEMISTRY = SKILL_BASIC,
 		SKILL_EVA       = SKILL_BASIC
 	)
-	access = list(access_away_cavalry)
+	access = list(GLOB.access_away_cavalry)
 
 /datum/job/submap/patrol/engineer
 	title = "Fleet Technician"
@@ -241,7 +241,7 @@ GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 		SKILL_ELECTRICAL   = SKILL_TRAINED,
 		SKILL_CONSTRUCTION = SKILL_TRAINED,
 	)
-	access = list(access_away_cavalry)
+	access = list(GLOB.access_away_cavalry)
 
 
 /* BRANCH & RANKS

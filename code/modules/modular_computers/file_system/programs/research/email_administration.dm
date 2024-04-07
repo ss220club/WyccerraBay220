@@ -9,7 +9,7 @@
 	requires_ntnet = TRUE
 	available_on_ntnet = TRUE
 	nanomodule_path = /datum/nano_module/program/email_administration
-	required_access = access_network_admin
+	required_access = GLOB.access_network_admin
 	category = PROG_ADMIN
 
 /datum/nano_module/program/email_administration

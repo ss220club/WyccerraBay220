@@ -1,7 +1,7 @@
 /area/hallway/primary/fourthdeck/fore
 	name = "Fourth Deck - Hallway - Fore"
 	icon_state = "hallF"
-	req_access = list(list(access_engine, access_medical, access_security))
+	req_access = list(list(access_engine, GLOB.access_medical, GLOB.access_security))
 	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
 
 /area/hallway/primary/fourthdeck/center
@@ -54,7 +54,7 @@
 /area/maintenance/waterstore
 	name = "Fourth Deck - Water Cistern"
 	icon_state = "disposal"
-	req_access = list(list(access_cargo, access_engine, access_el))
+	req_access = list(list(access_cargo, GLOB.access_engine, access_el))
 
 /area/crew_quarters/visitors
 	name = "Fourth Deck - Visitors"
@@ -97,7 +97,7 @@
 	holomap_color = HOLOMAP_AREACOLOR_CARGO
 /area/storage/airlock_canisters
 	name = "Fourth Deck - Supply - Central Airlock's Canisters"
-	req_access = list(list(access_cargo, access_engine))
+	req_access = list(list(access_cargo, GLOB.access_engine))
 	holomap_color = HOLOMAP_AREACOLOR_CARGO
 
 // Thusters
@@ -155,7 +155,7 @@
 /area/quartermaster/office
 	name = "Fourth Deck - Supply"
 	icon_state = "quartoffice"
-	req_access = list(access_mailsorting, access_cargo)
+	req_access = list(access_mailsorting, GLOB.access_cargo)
 
 /area/quartermaster/office/post
 	name = "Fourth Deck - Supply - Mail Delivery"
@@ -163,7 +163,7 @@
 /area/quartermaster/suplocker_room
 	name = "Fourth Deck - Supply - Locker room"
 	icon_state = "quartoffice"
-	req_access = list(access_mailsorting, access_cargo)
+	req_access = list(access_mailsorting, GLOB.access_cargo)
 
 /area/quartermaster/storage
 	name = "Fourth Deck - Supply - Warehouse"
@@ -178,7 +178,7 @@
 /area/quartermaster/expedition
 	name = "Fourth Deck - Exploration - Locker Room"
 	icon_state = "mining"
-	req_access = list(list(access_mining, access_xenoarch))
+	req_access = list(list(access_mining, GLOB.access_xenoarch))
 
 /area/quartermaster/expedition/eva
 	name = "Fourth Deck - Exploration - EVA"
@@ -237,4 +237,4 @@
 /area/security/sierra/dockcheck
 	name = "Fourth Deck - Security - Fore Docks Checkpoint"
 	icon_state = "checkpoint1"
-	req_access = list(list(access_security, access_forensics_lockers))
+	req_access = list(list(access_security, GLOB.access_forensics_lockers))

@@ -236,14 +236,14 @@
 /area/security/sierra/interrogation
 	name = "First Deck - Security - Interrogation"
 	icon_state = "detective"
-	req_access = list(list(access_forensics_lockers, access_security))
+	req_access = list(list(access_forensics_lockers, GLOB.access_security))
 
 /area/security/sierra/interrogation/second
 
 /area/security/sierra/evidence
 	name = "First Deck - Security - Evidence Storage"
 	icon_state = "detective"
-	req_access = list(list(access_forensics_lockers, access_security))
+	req_access = list(list(access_forensics_lockers, GLOB.access_security))
 
 /area/security/sierra/brig
 	name = "First Deck - Security - Brig"
@@ -330,7 +330,7 @@
 /area/medical/staging
 	name = "First Deck - Infirmary Staging"
 	icon_state = "patients"
-	req_access = list(list(access_medical, access_research))
+	req_access = list(list(access_medical, GLOB.access_research))
 
 /area/medical/office
 	name = "First Deck - Infirmary - Office"

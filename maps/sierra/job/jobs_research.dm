@@ -20,10 +20,10 @@
 	allowed_ranks = list(/datum/mil_rank/civ/nt)
 
 	access = list(
-			access_tox,					access_tox_storage,	access_research,	access_mining,		access_mining_office,
-			access_mining_station,		access_xenobiology,	access_xenoarch,	access_robotics,	access_guppy_helm,
+			GLOB.access_tox,					GLOB.access_tox_storage,	GLOB.access_research,	GLOB.access_mining,		GLOB.access_mining_office,
+			GLOB.access_mining_station,		GLOB.access_xenobiology,	GLOB.access_xenoarch,	GLOB.access_robotics,	access_guppy_helm,
 			access_expedition_shuttle,	access_guppy,		access_hangar,		access_petrov,		access_petrov_helm,
-			access_research_storage
+			GLOB.access_research_storage
 		)
 
 
@@ -94,9 +94,9 @@
 		)
 
 	access = list(
-			access_tox,				access_tox_storage,			access_research,	access_petrov,		access_petrov_helm,
-			access_mining_office,	access_mining_station,		access_xenobiology,	access_guppy_helm, 	access_hangar,
-			access_xenoarch,		access_expedition_shuttle,	access_guppy, access_research_storage
+			GLOB.access_tox,				GLOB.access_tox_storage,			GLOB.access_research,	access_petrov,		access_petrov_helm,
+			GLOB.access_mining_office,	GLOB.access_mining_station,		GLOB.access_xenobiology,	access_guppy_helm, 	access_hangar,
+			GLOB.access_xenoarch,		access_expedition_shuttle,	access_guppy, GLOB.access_research_storage
 		)
 
 
@@ -156,10 +156,10 @@
 	skill_points = 22
 
 	access = list(
-			access_robotics,
-			access_research,
-			access_tech_storage,
-			access_research_storage
+			GLOB.access_robotics,
+			GLOB.access_research,
+			GLOB.access_tech_storage,
+			GLOB.access_research_storage
 		)
 
 
@@ -205,10 +205,10 @@
 		)
 
 	access = list(
-			access_research,	access_mining_office,
+			GLOB.access_research,	GLOB.access_mining_office,
 			access_petrov,		access_expedition_shuttle,
 			access_guppy,		access_hangar,
-			access_research_storage
+			GLOB.access_research_storage
 		)
 
 

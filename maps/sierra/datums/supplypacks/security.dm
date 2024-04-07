@@ -1,6 +1,6 @@
 /singleton/hierarchy/supply_pack/security
 	name = "Security"
-	access = access_security
+	access = GLOB.access_security
 	cost = 15
 
 /singleton/hierarchy/supply_pack/security/nanoarmor
@@ -114,7 +114,7 @@
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "pistol rubber ammunition crate"
-	access = access_security
+	access = GLOB.access_security
 
 /singleton/hierarchy/supply_pack/security/pistolammo
 	name = "Ammunition - pistol magazines"
@@ -122,7 +122,7 @@
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = "pistol ammunition crate"
-	access = access_security
+	access = GLOB.access_security
 	security_level = SUPPLY_SECURITY_ELEVATED
 
 /singleton/hierarchy/supply_pack/security/tacticalarmor
@@ -138,5 +138,5 @@
 	cost = 45
 	containertype = /obj/structure/closet/crate/secure
 	containername = "tactical armor crate"
-	access = access_armory
+	access = GLOB.access_armory
 	security_level = SUPPLY_SECURITY_ELEVATED

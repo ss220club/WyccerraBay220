@@ -368,7 +368,7 @@
 	name = "\improper Refrigerated Medicine Storage"
 	desc = "A refrigerated storage unit for storing medicine and chemicals."
 	icon_contents = "chem"
-	req_access = list(list(access_medical,access_chemistry))
+	req_access = list(list(access_medical,GLOB.access_chemistry))
 	accepted_types = list(
 		/obj/item/reagent_containers/glass,
 		/obj/item/storage/pill_bottle,

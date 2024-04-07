@@ -17,4 +17,4 @@
 	xo_fields += add_field(/datum/report_field/signature, "Executive Officer's signature")
 	xo_fields += add_field(/datum/report_field/options/yes_no, "Approved")
 	for(var/datum/report_field/field in xo_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)

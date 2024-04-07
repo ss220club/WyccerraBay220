@@ -21,9 +21,9 @@
 
 	skill_points = 14
 
-	access = list(		access_maint_tunnels, access_emergency_storage, access_tech_storage,  access_cargo, access_guppy_helm,
-						access_cargo_bot, access_qm, access_mailsorting, access_expedition_shuttle, access_guppy, access_hangar,
-						access_mining, access_mining_office, access_mining_station, access_commissary, access_external_airlocks)
+	access = list(		GLOB.access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_tech_storage,  GLOB.access_cargo, access_guppy_helm,
+						GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mailsorting, access_expedition_shuttle, access_guppy, access_hangar,
+						GLOB.access_mining, GLOB.access_mining_office, GLOB.access_mining_station, access_commissary, GLOB.access_external_airlocks)
 
 
 
@@ -55,8 +55,8 @@
 		SKILL_HAULING     = SKILL_BASIC
 	)
 
-	access = list(access_maint_tunnels, access_emergency_storage, access_cargo, access_guppy_helm, access_commissary,
-						access_cargo_bot, access_mining_office, access_mailsorting, access_expedition_shuttle, access_guppy, access_hangar)
+	access = list(access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_cargo, access_guppy_helm, access_commissary,
+						GLOB.access_cargo_bot, GLOB.access_mining_office, GLOB.access_mailsorting, access_expedition_shuttle, access_guppy, access_hangar)
 
 
 
@@ -97,7 +97,7 @@
 	allowed_branches = list(/datum/mil_branch/employee, /datum/mil_branch/contractor)
 	allowed_ranks = list(/datum/mil_rank/civ/nt, /datum/mil_rank/civ/contractor)
 
-	access = list(access_mining, access_mining_office, access_mining_station,
+	access = list(access_mining, GLOB.access_mining_office, GLOB.access_mining_station,
 						access_expedition_shuttle, access_guppy, access_hangar, access_guppy_helm)
 
 
@@ -125,7 +125,7 @@
 		SKILL_HAULING     = SKILL_BASIC
 	)
 
-	access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mining_office, access_mailsorting, access_hangar, access_guppy, access_guppy_helm, access_commissary)
+	access = list(access_maint_tunnels, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_mining_office, GLOB.access_mailsorting, access_hangar, access_guppy, access_guppy_helm, access_commissary)
 
 
 

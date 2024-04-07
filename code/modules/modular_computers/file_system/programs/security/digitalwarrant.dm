@@ -12,7 +12,7 @@ LEGACY_RECORD_STRUCTURE(all_warrants, warrant)
 	program_menu_icon = "star"
 	requires_ntnet = TRUE
 	available_on_ntnet = TRUE
-	required_access = access_security
+	required_access = GLOB.access_security
 	nanomodule_path = /datum/nano_module/program/digitalwarrant
 	category = PROG_SEC
 

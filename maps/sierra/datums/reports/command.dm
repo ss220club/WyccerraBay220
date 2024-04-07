@@ -27,7 +27,7 @@
 	hop_fields += add_field(/datum/report_field/signature, "Подпись Исполнителя (Глава Персонала/Капитан)", required = 1)
 	hop_fields += add_field(/datum/report_field/options/yes_no, "Одобрено")
 	for(var/datum/report_field/field in hop_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)
 
 /datum/computer_file/report/recipient/command/access_modification
 	form_name = "AMA-NTF-02"
@@ -51,7 +51,7 @@
 	hop_fields += add_field(/datum/report_field/signature, "Подпись Исполнителя (Глава Персонала/Капитан)", required = 1)
 	hop_fields += add_field(/datum/report_field/options/yes_no, "Одобрено")
 	for(var/datum/report_field/field in hop_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)
 
 /datum/computer_file/report/recipient/command/fire
 	form_name = "D-NTF-01"
@@ -75,7 +75,7 @@
 	hop_fields += add_field(/datum/report_field/signature, "Подпись Исполнителя (Глава Персонала/Капитан)", required = 1)
 	hop_fields += add_field(/datum/report_field/options/yes_no, "Одобрено")
 	for(var/datum/report_field/field in hop_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)
 
 /datum/computer_file/report/recipient/command/decree
 	form_name = "DEC-NTF"

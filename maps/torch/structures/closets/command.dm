@@ -108,7 +108,7 @@
 
 /obj/structure/closet/secure_closet/bridgeofficer
 	name = "bridge officer's locker"
-	req_access = list(access_bridge, access_keycard_auth)
+	req_access = list(access_bridge, GLOB.access_keycard_auth)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/command/bo
 
 /obj/structure/closet/secure_closet/bridgeofficer/WillContain()

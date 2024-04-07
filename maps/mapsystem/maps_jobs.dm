@@ -9,9 +9,9 @@
 
 	/// List of default access flags provided to all robots on top of their module's flags
 	var/list/synth_access = list(
-		access_synth,
-		access_maint_tunnels,
-		access_teleporter
+		GLOB.access_synth,
+		GLOB.access_maint_tunnels,
+		GLOB.access_teleporter
 	)
 
 

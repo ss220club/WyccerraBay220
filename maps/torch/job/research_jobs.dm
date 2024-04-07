@@ -22,11 +22,11 @@
 	)
 
 	access = list(
-		access_tox, access_tox_storage, access_maint_tunnels, access_research, access_mining_office,
-		access_mining_station, access_xenobiology, access_xenoarch, access_nanotrasen, access_solgov_crew,
+		GLOB.access_tox, GLOB.access_tox_storage, GLOB.access_maint_tunnels, GLOB.access_research, GLOB.access_mining_office,
+		GLOB.access_mining_station, GLOB.access_xenobiology, GLOB.access_xenoarch, access_nanotrasen, access_solgov_crew,
 		access_expedition_shuttle, access_guppy, access_hangar, access_petrov, access_petrov_helm, access_guppy_helm,
 		access_petrov_analysis, access_petrov_phoron, access_petrov_toxins, access_petrov_chemistry, access_petrov_control,
-		access_petrov_maint, access_torch_fax, access_radio_sci, access_radio_exp, access_research_storage
+		access_petrov_maint, access_torch_fax, access_radio_sci, access_radio_exp, GLOB.access_research_storage
 	)
 
 	min_skill = list(   SKILL_BUREAUCRACY = SKILL_BASIC,
@@ -81,11 +81,11 @@
 	)
 
 	access = list(
-		access_tox, access_tox_storage, access_research, access_petrov, access_petrov_helm,
-		access_mining_office, access_mining_station, access_xenobiology, access_guppy_helm,
-		access_xenoarch, access_nanotrasen, access_solgov_crew, access_expedition_shuttle, access_guppy, access_hangar,
+		GLOB.access_tox, GLOB.access_tox_storage, GLOB.access_research, access_petrov, access_petrov_helm,
+		GLOB.access_mining_office, GLOB.access_mining_station, GLOB.access_xenobiology, access_guppy_helm,
+		GLOB.access_xenoarch, access_nanotrasen, access_solgov_crew, access_expedition_shuttle, access_guppy, access_hangar,
 		access_petrov_analysis, access_petrov_phoron, access_petrov_toxins, access_petrov_chemistry, access_petrov_control, access_torch_fax,
-		access_petrov_maint, access_radio_sci, access_radio_exp, access_research_storage
+		access_petrov_maint, access_radio_sci, access_radio_exp, GLOB.access_research_storage
 	)
 	skill_points = 20
 	possible_goals = list(/datum/goal/achievement/notslimefodder)
@@ -124,10 +124,10 @@
 	                    SKILL_SCIENCE     = SKILL_MAX)
 
 	access = list(
-		access_tox, access_tox_storage, access_research, access_petrov,
-		access_mining_office, access_mining_station, access_xenobiology, access_guppy_helm,
-		access_xenoarch, access_nanotrasen, access_solgov_crew, access_expedition_shuttle, access_guppy, access_hangar,
+		GLOB.access_tox, GLOB.access_tox_storage, GLOB.access_research, access_petrov,
+		GLOB.access_mining_office, GLOB.access_mining_station, GLOB.access_xenobiology, access_guppy_helm,
+		GLOB.access_xenoarch, access_nanotrasen, access_solgov_crew, access_expedition_shuttle, access_guppy, access_hangar,
 		access_petrov_analysis, access_petrov_phoron, access_petrov_toxins, access_petrov_chemistry, access_petrov_control,
-		access_radio_sci, access_radio_exp, access_research_storage
+		access_radio_sci, access_radio_exp, GLOB.access_research_storage
 	)
 	possible_goals = list(/datum/goal/achievement/notslimefodder)

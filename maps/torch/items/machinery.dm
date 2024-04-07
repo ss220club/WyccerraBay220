@@ -68,7 +68,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_bridge, access_keycard_auth)
+	req_access = list(access_bridge, GLOB.access_keycard_auth)
 	islocked = 1
 
 /obj/machinery/suit_cycler/torch

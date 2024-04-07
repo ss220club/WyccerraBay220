@@ -5,7 +5,7 @@
 	icon_deny = "engivend-deny"
 	icon_vend = "engivend-vend"
 	base_type = /obj/machinery/vending/engivend
-	req_access = list(list(access_atmospherics,access_engine_equip))
+	req_access = list(list(access_atmospherics,GLOB.access_engine_equip))
 	antag_slogans = {"\
 		Equipment only 75% guaranteed to not blow up in your face!;\
 		This vendor proudly supplied the electronics for 9 out of 10 ships involved in crashes!;\

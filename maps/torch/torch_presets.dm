@@ -12,7 +12,7 @@ GLOBAL_VAR_CONST(NETWORK_FIFTH_DECK, "Fifth Deck")
 		if(NETWORK_AQUILA)
 			return access_aquila
 		if(NETWORK_BRIDGE)
-			return access_heads
+			return GLOB.access_heads
 		if(NETWORK_CHARON)
 			return access_expedition_shuttle
 		if(NETWORK_HELMETS)
@@ -170,9 +170,9 @@ GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 /datum/map/proc/get_shared_network_access(network)
 	switch(network)
 		if(NETWORK_COMMAND)
-			return access_heads
+			return GLOB.access_heads
 		if(NETWORK_ENGINE, NETWORK_ENGINEERING_OUTPOST)
-			return access_engine
+			return GLOB.access_engine
 
 /datum/map/torch/default_internal_channels()
 	return list(

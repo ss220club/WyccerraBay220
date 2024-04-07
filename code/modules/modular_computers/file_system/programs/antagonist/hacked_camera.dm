@@ -29,7 +29,7 @@
 	name = "Hacked Camera Monitoring Program"
 	available_to_ai = FALSE
 
-/datum/nano_module/camera_monitor/hacked/can_access_network(mob/user, network_access)
+/datum/nano_module/camera_monitor/hacked/can_GLOB.access_network(mob/user, network_access)
 	return TRUE
 
 // The hacked variant has access to all commonly used networks.

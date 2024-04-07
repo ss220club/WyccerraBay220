@@ -22,7 +22,7 @@
 	name = "Security Lockdown"
 	desc = "That looks like it doesn't open easily. \
 	But that one has NFC sign. May be my ID can help?"
-	req_access = list(list(access_sec_doors, access_engine, access_medical))
+	req_access = list(list(access_sec_doors, GLOB.access_engine, GLOB.access_medical))
 	begins_closed = FALSE
 	icon_state = "pdoor0"
 	health_min_damage = 50

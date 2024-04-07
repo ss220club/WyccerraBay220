@@ -30,9 +30,9 @@
 	skill_points = 20
 
 	access = list(
-		access_security, access_brig, access_armory, access_forensics_lockers,
-		access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_eva, access_sec_doors, access_solgov_crew, access_gun, access_torch_fax,
+		GLOB.access_security, GLOB.access_brig, GLOB.access_armory, GLOB.access_forensics_lockers,
+		GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_eva, GLOB.access_sec_doors, access_solgov_crew, access_gun, access_torch_fax,
 		access_radio_sec
 	)
 
@@ -81,10 +81,10 @@
 	skill_points = 20
 
 	access = list(
-		access_security, access_brig, access_forensics_lockers,
-		access_maint_tunnels, access_emergency_storage,
-		access_sec_doors, access_solgov_crew, access_morgue,
-		access_torch_fax, access_network, access_radio_sec
+		GLOB.access_security, GLOB.access_brig, GLOB.access_forensics_lockers,
+		GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_sec_doors, access_solgov_crew, GLOB.access_morgue,
+		access_torch_fax, GLOB.access_network, access_radio_sec
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/digitalwarrant,
@@ -122,9 +122,9 @@
 	                    SKILL_FORENSICS   = SKILL_EXPERIENCED)
 
 	access = list(
-		access_security, access_brig, access_maint_tunnels,
-		access_external_airlocks, access_emergency_storage,
-		access_eva, access_sec_doors, access_solgov_crew,
+		GLOB.access_security, GLOB.access_brig, GLOB.access_maint_tunnels,
+		GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_eva, GLOB.access_sec_doors, access_solgov_crew,
 		access_radio_sec
 	)
 

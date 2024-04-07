@@ -19,7 +19,7 @@
 	latejoin_at_spawnpoints = TRUE
 
 	access = list(
-		access_merchant
+		GLOB.access_merchant
 	)
 
 	announced = FALSE
@@ -67,7 +67,7 @@
 
 	latejoin_at_spawnpoints = TRUE
 	access = list(
-		access_merchant
+		GLOB.access_merchant
 	)
 	announced = FALSE
 	min_skill = list(

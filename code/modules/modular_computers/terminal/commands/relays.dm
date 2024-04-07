@@ -7,7 +7,7 @@
 		"NOTICE: Requires network operator or admin access."
 	)
 	pattern = "^relays$"
-	req_access = list(list(access_network, access_network_admin))
+	req_access = list(list(access_network, GLOB.access_network_admin))
 	skill_needed = SKILL_EXPERIENCED
 
 /datum/terminal_command/relays/proper_input_entered(text, mob/user, datum/terminal/terminal)

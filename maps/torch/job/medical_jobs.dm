@@ -36,9 +36,9 @@
 	skill_points = 20
 
 	access = list(
-		access_medical, access_morgue, access_virology, access_maint_tunnels, access_emergency_storage,
-		access_crematorium, access_chemistry, access_surgery,
-		access_medical_equip, access_solgov_crew, access_senmed, access_radio_med
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_virology, GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_crematorium, GLOB.access_chemistry, GLOB.access_surgery,
+		GLOB.access_medical_equip, access_solgov_crew, access_senmed, access_radio_med
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/suit_sensors,
@@ -79,9 +79,9 @@
 	skill_points = 16
 
 	access = list(
-		access_medical, access_morgue, access_virology, access_maint_tunnels, access_emergency_storage,
-		access_crematorium, access_chemistry, access_surgery,
-		access_medical_equip, access_solgov_crew, access_senmed, access_radio_med
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_virology, GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_crematorium, GLOB.access_chemistry, GLOB.access_surgery,
+		GLOB.access_medical_equip, access_solgov_crew, access_senmed, access_radio_med
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/suit_sensors,
@@ -122,9 +122,9 @@
 	                    SKILL_CHEMISTRY   = SKILL_MAX)
 
 	access = list(
-		access_medical, access_morgue, access_maint_tunnels,
-		access_external_airlocks, access_emergency_storage,
-		access_eva, access_surgery, access_medical_equip,
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_maint_tunnels,
+		GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_eva, GLOB.access_surgery, GLOB.access_medical_equip,
 		access_solgov_crew, access_hangar, access_radio_med
 	)
 
@@ -168,9 +168,9 @@
 	                    SKILL_CHEMISTRY   = SKILL_MAX)
 
 	access = list(
-		access_medical, access_morgue, access_maint_tunnels,
-		access_external_airlocks, access_emergency_storage,
-		access_surgery, access_medical_equip, access_solgov_crew,
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_maint_tunnels,
+		GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_surgery, GLOB.access_medical_equip, access_solgov_crew,
 		access_radio_med
 	)
 
@@ -207,9 +207,9 @@
 	skill_points = 16
 
 	access = list(
-		access_medical, access_maint_tunnels, access_emergency_storage,
-		access_medical_equip, access_solgov_crew, access_chemistry,
-		access_virology, access_morgue, access_crematorium, access_radio_med
+		GLOB.access_medical, GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_medical_equip, access_solgov_crew, GLOB.access_chemistry,
+		GLOB.access_virology, GLOB.access_morgue, GLOB.access_crematorium, access_radio_med
 	)
 
 /datum/job/chemist/get_description_blurb()
@@ -248,8 +248,8 @@
 		SKILL_ANATOMY = SKILL_TRAINED
 	)
 	access = list(
-		access_medical, access_psychiatrist,
-		access_solgov_crew, access_medical_equip, access_radio_med
+		GLOB.access_medical, GLOB.access_psychiatrist,
+		access_solgov_crew, GLOB.access_medical_equip, access_radio_med
 	)
 
 	software_on_spawn = list(

@@ -96,7 +96,7 @@
 				channel = null
 			return TOPIC_HANDLED
 		var/mob/living/user = usr
-		if(can_run(usr, TRUE, access_network_admin))
+		if(can_run(usr, TRUE, GLOB.access_network_admin))
 			if(channel)
 				var/response = alert(user, "Really engage admin-mode? You will be disconnected from your current channel!", "NTNRC Admin mode", "Yes", "No")
 				if(response == "Yes")

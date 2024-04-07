@@ -24,7 +24,7 @@
 	density = FALSE
 
 /obj/machinery/computer/atmoscontrol/laptop/research
-	req_access = list(list(access_research, access_atmospherics, access_engine_equip))
+	req_access = list(list(access_research, GLOB.access_atmospherics, GLOB.access_engine_equip))
 
 /obj/machinery/computer/atmoscontrol/interface_interact(user)
 	ui_interact(user)

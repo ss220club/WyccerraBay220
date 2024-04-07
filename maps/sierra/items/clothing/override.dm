@@ -13,7 +13,7 @@
  */
 
 /obj/item/clothing/accessory/badge/holo/NT
-	badge_access = access_security
+	badge_access = GLOB.access_security
 
 /obj/item/clothing/accessory/badge/holo/cord
 	name = "neck holobadge"

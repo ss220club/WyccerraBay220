@@ -37,9 +37,9 @@
 						SKILL_ENGINES      = SKILL_MAX)
 
 	access = list(
-		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_teleporter, access_eva, access_tech_storage, access_atmospherics, access_janitor, access_construction,
-		access_tcomsat, access_solgov_crew, access_seneng, access_hangar, access_network, access_network_admin, access_radio_eng
+		GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_teleporter, GLOB.access_eva, GLOB.access_tech_storage, GLOB.access_atmospherics, GLOB.access_janitor, GLOB.access_construction,
+		GLOB.access_tcomsat, access_solgov_crew, access_seneng, access_hangar, GLOB.access_network, GLOB.access_network_admin, access_radio_eng
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
@@ -96,9 +96,9 @@
 	skill_points = 20
 
 	access = list(
-		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_teleporter, access_eva, access_tech_storage, access_atmospherics, access_janitor, access_construction,
-		access_solgov_crew, access_hangar, access_network, access_radio_eng
+		GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_teleporter, GLOB.access_eva, GLOB.access_tech_storage, GLOB.access_atmospherics, GLOB.access_janitor, GLOB.access_construction,
+		access_solgov_crew, access_hangar, GLOB.access_network, access_radio_eng
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
@@ -150,8 +150,8 @@
 	                    SKILL_ENGINES      = SKILL_MAX)
 
 	access = list(
-		access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_eva, access_tech_storage, access_janitor, access_construction,
+		GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_eva, GLOB.access_tech_storage, GLOB.access_janitor, GLOB.access_construction,
 		access_solgov_crew, access_hangar, access_radio_eng
 	)
 
@@ -209,7 +209,7 @@
 	skill_points = 20
 
 	access = list(
-		access_robotics, access_engine, access_solgov_crew, access_network, access_radio_eng
+		GLOB.access_robotics, GLOB.access_engine, access_solgov_crew, GLOB.access_network, access_radio_eng
 	)
 
 /datum/job/roboticist/get_description_blurb()

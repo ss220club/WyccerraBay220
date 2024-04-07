@@ -39,7 +39,7 @@
 	add_field(/datum/report_field/text_label/instruction, "(П-Поврежденный, У-Улика, Пр-Потерянный, В-Восстановленный, Ук-Украденный)")
 	add_field(/datum/report_field/pencode_text, "Полное описание происшествия", required = 1)
 	add_field(/datum/report_field/signature, "Подпись офицера, составившего отчет", required = 1)
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)
 
 /datum/computer_file/report/recipient/sec/report_evidence
 	form_name = "NT-SEC-02b"
@@ -56,9 +56,9 @@
 	add_field(/datum/report_field/pencode_text, "Список конфискованных предметов", required = 1)
 	add_field(/datum/report_field/signature, "Подпись офицера проводившего конфискацию", required = 1)
 	det_fields += add_field(/datum/report_field/signature, "Подпись Смотрителя брига/Главы Службы Безопасности", required = 1)
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)
 	for(var/datum/report_field/field in det_fields)
-		field.set_access(access_edit = access_armory)
+		field.set_access(access_edit = GLOB.access_armory)
 
 /datum/computer_file/report/recipient/sec/patrol
 	form_name = "NT-SEC-04"
@@ -76,7 +76,7 @@
 	add_field(/datum/report_field/text_label/instruction, "Для патрулирующего. Проведите полный осмотр назначенной палубы, включая тех. туннели.\
 	Отвечайте на вызовы с других палуб только при приказе. Вы ответственны за безопасность на закрепленной за вами палубе.")
 	add_field(/datum/report_field/signature, "Подпись", required = 1)
-	set_access(access_armory, access_armory)
+	set_access(access_armory, GLOB.access_armory)
 
 /datum/computer_file/report/recipient/sec/armory
 	form_name = "NT-SEC-05"
@@ -110,7 +110,7 @@
 	add_field(/datum/report_field/pencode_text, "Прочее оружие")
 	add_field(/datum/report_field/time, "Опись арсенала проведена в")
 	add_field(/datum/report_field/signature, "Подпись сотрудника проводившего опись", required = 1)
-	set_access(access_armory, access_armory)
+	set_access(access_armory, GLOB.access_armory)
 
 /datum/computer_file/report/recipient/weapon
 	form_name = "NT-SEC-15"
@@ -128,10 +128,10 @@
 	add_field(/datum/report_field/simple_text, "Комплектация")
 	add_field(/datum/report_field/simple_text, "Производство")
 	temp_field = add_field(/datum/report_field/simple_text, "Серийный номер")
-	temp_field.set_access(access = access_security, access_edit = access_security)
+	temp_field.set_access(access = GLOB.access_security, access_edit = GLOB.access_security)
 	temp_field.set_access(access_heads, override = 0)
 	temp_field = add_field(/datum/report_field/pencode_text, "Дополнительно")
-	temp_field.set_access(access = access_security, access_edit = access_security)
+	temp_field.set_access(access = GLOB.access_security, access_edit = GLOB.access_security)
 	temp_field.set_access(access_heads, override = 0)
 	add_field(/datum/report_field/text_label/header, "Носитель")
 	add_field(/datum/report_field/people/from_manifest, "Имя и должность")
@@ -142,7 +142,7 @@
 	add_field(/datum/report_field/text_label/instruction, "Место для подписей")
 	add_field(/datum/report_field/signature, "Подпись заявителя")
 	temp_field = add_field(/datum/report_field/signature, "Подпись ревизора")
-	temp_field.set_access(access_edit = access_security)
+	temp_field.set_access(access_edit = GLOB.access_security)
 	temp_field.required = TRUE
 
 /datum/computer_file/report/recipient/sec/penalty
@@ -163,4 +163,4 @@
 	add_field(/datum/report_field/signature, "Подпись сотрудника, назначившего выплату штрафа", required = 1)
 	add_field(/datum/report_field/date, "Дата")
 	add_field(/datum/report_field/time, "Время")
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)

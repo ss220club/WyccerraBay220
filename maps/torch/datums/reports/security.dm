@@ -28,7 +28,7 @@
 	add_field(/datum/report_field/pencode_text, "Description of Items/Property")
 	add_field(/datum/report_field/pencode_text, "Narrative")
 	add_field(/datum/report_field/signature, "Reporting Security Personnel's signature")
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)
 
 /datum/computer_file/report/recipient/sec/investigation
 	form_name = "SCG-SEC-02"
@@ -46,7 +46,7 @@
 	add_field(/datum/report_field/pencode_text, "Summary")
 	add_field(/datum/report_field/pencode_text, "Observations")
 	add_field(/datum/report_field/signature, "Signature")
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)
 
 /datum/computer_file/report/recipient/sec/evidence
 	form_name = "SCG-SEC-02b"
@@ -61,11 +61,11 @@
 	add_field(/datum/report_field/time, "Time")
 	add_field(/datum/report_field/people/from_manifest, "Confiscated from")
 	add_field(/datum/report_field/pencode_text, "List of items in custody/evidence lockup")
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)
 	temp_field = add_field(/datum/report_field/signature, "Brig Chief's signature")
-	temp_field.set_access(access_edit = list(access_security, access_armory))
+	temp_field.set_access(access_edit = list(access_security, GLOB.access_armory))
 	temp_field = add_field(/datum/report_field/signature, "Forensic Technician's signature")
-	temp_field.set_access(access_edit = list(access_security, access_forensics_lockers))
+	temp_field.set_access(access_edit = list(access_security, GLOB.access_forensics_lockers))
 
 /datum/computer_file/report/recipient/sec/statement
 	form_name = "SCG-SEC-02c"
@@ -88,7 +88,7 @@
 	add_field(/datum/report_field/pencode_text, "Narrative")
 	add_field(/datum/report_field/text_label/instruction, "By submitting this form, I understand this is considered a formal security report. I understand that all information written above is truthful and accurate. I understand that intentionally filing a fraudulent security report is a criminal offense that will be prosecuted to the fullest extent of the law.  As this is a binding legal document, I understand that by filing this form that any intentionally false information may warrant disciplinary action against myself. This statement was given on my own volition to assist with documenting the above summarized incident.")
 	add_field(/datum/report_field/signature, "Signature")
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)
 
 /datum/computer_file/report/recipient/sec/arrest
 	form_name = "SCG-SEC-03"
@@ -120,7 +120,7 @@
 	add_field(/datum/report_field/simple_text, "IF YES, what injuries are pre-existing?")
 	add_field(/datum/report_field/text_label/instruction, "This document MUST be submitted to, and reviewed by, the Chief of Security or Brig Chief.")
 	add_field(/datum/report_field/signature, "Reporting Security Personnel's signature")
-	set_access(access_edit = access_security)
+	set_access(access_edit = GLOB.access_security)
 
 /datum/computer_file/report/recipient/sec/restraining
 	form_name = "SCG-SEC-04"
@@ -137,7 +137,7 @@
 	add_field(/datum/report_field/time, "Time Effective")
 	add_field(/datum/report_field/text_label/instruction, "THE DEFENDANT IS ORDERED TO: 1) Not to abuse Plaintiff(s) by physically harming them, attempting to physically harm them, place them in fear of imminent physical harm; 2) Stop harassing them by any wilfull and malicious conduct aimed at them and intended to cause fear, intimidation, abuse, or damage to property; 3) Not to contact Plaintiff(s) unless authorized to do so by the CO, XO, COS or their appointee; 4) Remain out of the Plaintiff(s) workplace, 5) Remain no less than 20M away from Plaintiff. Violation of this legal order will result in arrest for Endangerment and any other applicable charges, including any applicable SCUJ violations.")
 	add_field(/datum/report_field/signature, "Submitting Officer's signature")
-	set_access(access_edit = access_hos)
+	set_access(access_edit = GLOB.access_hos)
 
 /datum/computer_file/report/recipient/sec/ltc
 	form_name = "SCG-SEC-05"
@@ -155,4 +155,4 @@
 	add_field(/datum/report_field/simple_text, "Authorized for Possession Of")
 	add_field(/datum/report_field/text_label/instruction, "THIS LICENSE IS ISSUED 'AT-WILL' AND MAY BE REVOKED AT ANY TIME FOR ANY REASON BY THE COMMANDING OFFICER, EXECUTIVE OFFICER, OR THE CHIEF OF SECURITY. IN THE EVENT OF ILLEGAL CONDUCT, THIS LICENSE MAY BE REVOKED BY ANY LAW ENFORCEMENT OFFICER ACTING IN THE COURSE OF THEIR NORMAL DUTIES. ALL LICENSEES ARE REQUIRED TO ABIDE BY LOCAL LAWS AND REGULATIONS AT ALL TIMES. OPEN CARRY OF LICENSED ITEMS IS GENERALLY NOT PERMITTED UNLESS EXPLICITLY DENOTED. THIS DOCUMENT MUST BE CARRIED BY THE LICENSED PARTY WHEN THEY ARE IN DIRECT OR CONSTRUCTIVE POSSESSION OF THE AFORMENTIONED ITEMS OR WEAPONS THAT THEY ARE AUTHORIZED FOR. COPIES OF THIS DOCUMENT WILL BE FORWARDED TO THE COMMANDING OFFICER, EXECUTIVE OFFICER, CHIEF OF SECURITY, AND BRIG OFFICER FOR REFERENCE.")
 	add_field(/datum/report_field/signature, "Submitting Officer's signature")
-	set_access(access_edit = access_hos)
+	set_access(access_edit = GLOB.access_hos)

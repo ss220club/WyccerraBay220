@@ -17,8 +17,8 @@
 	var/datum/access/target_access = null
 	var/list/restricted_access_codes = list(access_change_ids) // access codes that are not hackable due to balance reasons
 	var/list/skill_restricted_access_codes = list(
-		access_network = SKILL_EXPERIENCED,
-		access_network_admin = SKILL_MASTER
+		GLOB.access_network = SKILL_EXPERIENCED,
+		GLOB.access_network_admin = SKILL_MASTER
 	)
 
 /datum/computer_file/program/access_decrypter/on_shutdown(forced)

@@ -23,7 +23,7 @@ GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 		if(NETWORK_POD)
 			return access_guppy
 		if(NETWORK_SUPPLY)
-			return access_mailsorting
+			return GLOB.access_mailsorting
 		if(NETWORK_HANGAR)
 			return access_hangar
 		if(NETWORK_PETROV)
@@ -142,9 +142,9 @@ GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 /datum/map/proc/get_shared_network_access(network)
 	switch(network)
 		if(NETWORK_COMMAND)
-			return access_heads
+			return GLOB.access_heads
 		if(NETWORK_ENGINE, NETWORK_ENGINEERING_OUTPOST)
-			return access_engine
+			return GLOB.access_engine
 
 /datum/computer_file/program/merchant
 

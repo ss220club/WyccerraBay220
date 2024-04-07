@@ -52,7 +52,7 @@
 /area/maintenance/cistern
 	name = "Third Deck - Water Cistern"
 	icon_state = "disposal"
-	req_access = list(list(access_cargo, access_engine, access_el))
+	req_access = list(list(access_cargo, GLOB.access_engine, access_el))
 
 /area/hydroponics/third_deck_storage
 	name = "Third Deck - Service - Hydroponics Storage"
@@ -117,7 +117,7 @@
 /area/engineering/engine_eva
 	name = "Third Deck - Engineering - EVA"
 	icon_state = "engine_eva"
-	req_access = list(list(access_eva, access_external_airlocks), access_engine)
+	req_access = list(list(access_eva, GLOB.access_external_airlocks), GLOB.access_engine)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/engine_monitoring
@@ -167,14 +167,14 @@
 /area/engineering/gravitaional_generator
 	name = "Third Deck - Gravitational Generator"
 	icon_state = "engine_monitoring"
-	req_access = list(list(access_engine_equip, access_heads), list(access_seneng, access_engine_equip))
+	req_access = list(list(access_engine_equip, GLOB.access_heads), list(access_seneng, GLOB.access_engine_equip))
 	sound_env = SMALL_ENCLOSED
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/bluespace
 	name = "Third Deck - Engineering - BlueSpace Drive"
 	icon_state = "engine_monitoring"
-	req_access = list(list(access_engine_equip, access_heads), access_engine, access_maint_tunnels)
+	req_access = list(list(access_engine_equip, GLOB.access_heads), GLOB.access_engine, GLOB.access_maint_tunnels)
 	sound_env = SMALL_ENCLOSED
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
@@ -313,12 +313,12 @@
 	name = "Third Deck - Compactor"
 	icon_state = "disposal"
 	sound_env = STANDARD_STATION
-	req_access = list(list(access_cargo, access_maint_tunnels))
+	req_access = list(list(access_cargo, GLOB.access_maint_tunnels))
 
 /area/maintenance/incinerator
 	name = "Third Deck - Incinerator"
 	icon_state = "disposal"
-	req_access = list(list(access_engine, access_medical, access_cargo))
+	req_access = list(list(access_engine, GLOB.access_medical, GLOB.access_cargo))
 
 //Vacant
 

@@ -61,19 +61,19 @@
 	skill_points = 30
 
 	access = list(
-		access_security, access_brig, access_armory, access_forensics_lockers, access_heads, access_medical, access_morgue, access_tox, access_tox_storage,
-		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage, access_change_ids,
-		access_ai_upload, access_teleporter, access_eva, access_bridge, access_all_personal_lockers, access_chapel_office, access_tech_storage,
-		access_atmospherics, access_janitor, access_crematorium, access_kitchen, access_robotics, access_cargo, access_construction,
-		access_chemistry, access_cargo_bot, access_hydroponics, access_manufacturing, access_library, access_lawyer, access_virology, access_cmo,
-		access_qm, access_network, access_network_admin, access_surgery, access_research, access_mining, access_mining_office, access_mailsorting, access_heads_vault,
-		access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce, access_keycard_auth, access_tcomsat,
-		access_gateway, access_sec_doors, access_psychiatrist, access_xenoarch, access_medical_equip, access_heads, access_hangar, access_guppy_helm,
+		GLOB.access_security, GLOB.access_brig, GLOB.access_armory, GLOB.access_forensics_lockers, GLOB.access_heads, GLOB.access_medical, GLOB.access_morgue, GLOB.access_tox, GLOB.access_tox_storage,
+		GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage, GLOB.access_change_ids,
+		GLOB.access_ai_upload, GLOB.access_teleporter, GLOB.access_eva, GLOB.access_bridge, GLOB.access_all_personal_lockers, GLOB.access_chapel_office, GLOB.access_tech_storage,
+		GLOB.access_atmospherics, GLOB.access_janitor, GLOB.access_crematorium, GLOB.access_kitchen, GLOB.access_robotics, GLOB.access_cargo, GLOB.access_construction,
+		GLOB.access_chemistry, GLOB.access_cargo_bot, GLOB.access_hydroponics, GLOB.access_manufacturing, GLOB.access_library, GLOB.access_lawyer, GLOB.access_virology, GLOB.access_cmo,
+		GLOB.access_qm, GLOB.access_network, GLOB.access_network_admin, GLOB.access_surgery, GLOB.access_research, GLOB.access_mining, GLOB.access_mining_office, GLOB.access_mailsorting, GLOB.access_heads_vault,
+		GLOB.access_mining_station, GLOB.access_xenobiology, GLOB.access_ce, GLOB.access_hop, GLOB.access_hos, GLOB.access_RC_announce, GLOB.access_keycard_auth, GLOB.access_tcomsat,
+		GLOB.access_gateway, GLOB.access_sec_doors, GLOB.access_psychiatrist, GLOB.access_xenoarch, GLOB.access_medical_equip, GLOB.access_heads, access_hangar, access_guppy_helm,
 		access_expedition_shuttle_helm, access_aquila, access_aquila_helm, access_solgov_crew, access_nanotrasen, access_chief_steward,
 		access_emergency_armory, access_sec_guard, access_gun, access_expedition_shuttle, access_guppy, access_seneng, access_senmed, access_senadv,
-		access_explorer, access_pathfinder, access_pilot, access_commissary, access_petrov, access_petrov_helm, access_petrov_analysis, access_petrov_phoron,
-		access_petrov_toxins, access_petrov_chemistry, access_petrov_control, access_petrov_maint, access_rd, access_petrov_rd, access_torch_fax, access_torch_helm,
-		access_radio_comm, access_radio_eng, access_radio_med, access_radio_sec, access_radio_sup, access_radio_serv, access_radio_exp, access_radio_sci, access_research_storage
+		access_explorer, access_pathfinder, GLOB.access_pilot, access_commissary, access_petrov, access_petrov_helm, access_petrov_analysis, access_petrov_phoron,
+		access_petrov_toxins, access_petrov_chemistry, access_petrov_control, access_petrov_maint, GLOB.access_rd, access_petrov_rd, access_torch_fax, access_torch_helm,
+		access_radio_comm, access_radio_eng, access_radio_med, access_radio_sec, access_radio_sup, access_radio_serv, access_radio_exp, access_radio_sci, GLOB.access_research_storage
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
@@ -113,14 +113,14 @@
 	skill_points = 30
 
 	access = list(
-		access_tox, access_tox_storage, access_emergency_storage, access_teleporter, access_bridge, access_rd,
-		access_research, access_mining, access_mining_office, access_mining_station, access_xenobiology, access_aquila,
-		access_RC_announce, access_keycard_auth, access_xenoarch, access_nanotrasen, access_sec_guard, access_heads,
+		GLOB.access_tox, GLOB.access_tox_storage, GLOB.access_emergency_storage, GLOB.access_teleporter, GLOB.access_bridge, GLOB.access_rd,
+		GLOB.access_research, GLOB.access_mining, GLOB.access_mining_office, GLOB.access_mining_station, GLOB.access_xenobiology, access_aquila,
+		GLOB.access_RC_announce, GLOB.access_keycard_auth, GLOB.access_xenoarch, access_nanotrasen, access_sec_guard, GLOB.access_heads,
 		access_expedition_shuttle, access_guppy, access_hangar, access_petrov, access_petrov_helm, access_guppy_helm,
 		access_petrov_analysis, access_petrov_phoron, access_petrov_toxins, access_petrov_chemistry, access_petrov_rd,
-		access_petrov_control, access_petrov_maint, access_pathfinder, access_explorer, access_eva, access_solgov_crew,
-		access_expedition_shuttle, access_expedition_shuttle_helm, access_maint_tunnels, access_torch_fax, access_radio_comm,
-		access_radio_sci, access_radio_exp, access_research_storage
+		access_petrov_control, access_petrov_maint, access_pathfinder, access_explorer, GLOB.access_eva, access_solgov_crew,
+		access_expedition_shuttle, access_expedition_shuttle_helm, GLOB.access_maint_tunnels, access_torch_fax, access_radio_comm,
+		access_radio_sci, access_radio_exp, GLOB.access_research_storage
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
@@ -160,11 +160,11 @@
 	skill_points = 26
 
 	access = list(
-		access_medical, access_morgue, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_teleporter, access_eva, access_bridge, access_heads,
-		access_chapel_office, access_crematorium, access_chemistry, access_virology, access_aquila,
-		access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_psychiatrist,
-		access_medical_equip, access_solgov_crew, access_senmed, access_hangar, access_torch_fax, access_radio_comm,
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_teleporter, GLOB.access_eva, GLOB.access_bridge, GLOB.access_heads,
+		GLOB.access_chapel_office, GLOB.access_crematorium, GLOB.access_chemistry, GLOB.access_virology, access_aquila,
+		GLOB.access_cmo, GLOB.access_surgery, GLOB.access_RC_announce, GLOB.access_keycard_auth, GLOB.access_psychiatrist,
+		GLOB.access_medical_equip, access_solgov_crew, access_senmed, access_hangar, access_torch_fax, access_radio_comm,
 		access_radio_med
 	)
 
@@ -211,10 +211,10 @@
 						SKILL_DEVICES = SKILL_EXPERIENCED)
 
 	access = list(
-		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_ai_upload, access_teleporter, access_eva, access_bridge, access_heads,
-		access_tech_storage, access_robotics, access_atmospherics, access_janitor, access_construction,
-		access_network, access_network_admin, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat,
+		GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_ai_upload, GLOB.access_teleporter, GLOB.access_eva, GLOB.access_bridge, GLOB.access_heads,
+		GLOB.access_tech_storage, GLOB.access_robotics, GLOB.access_atmospherics, GLOB.access_janitor, GLOB.access_construction,
+		GLOB.access_network, GLOB.access_network_admin, GLOB.access_ce, GLOB.access_RC_announce, GLOB.access_keycard_auth, GLOB.access_tcomsat,
 		access_solgov_crew, access_aquila, access_seneng, access_hangar, access_torch_fax, access_torch_helm, access_radio_comm,
 		access_radio_eng
 		)
@@ -262,10 +262,10 @@
 	skill_points = 28
 
 	access = list(
-		access_security, access_brig, access_armory, access_forensics_lockers,
-		access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_teleporter, access_eva, access_bridge, access_heads, access_aquila,
-		access_hos, access_RC_announce, access_keycard_auth, access_sec_doors,
+		GLOB.access_security, GLOB.access_brig, GLOB.access_armory, GLOB.access_forensics_lockers,
+		GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_teleporter, GLOB.access_eva, GLOB.access_bridge, GLOB.access_heads, access_aquila,
+		GLOB.access_hos, GLOB.access_RC_announce, GLOB.access_keycard_auth, GLOB.access_sec_doors,
 		access_solgov_crew, access_gun, access_emergency_armory, access_hangar, access_torch_fax,
 		access_radio_comm, access_radio_sec
 	)
@@ -297,8 +297,8 @@
 	minimum_character_age = list(SPECIES_HUMAN = 27)
 
 	access = list(
-		access_representative, access_security, access_medical,
-		access_bridge, access_cargo, access_solgov_crew,
+		access_representative, GLOB.access_security, GLOB.access_medical,
+		GLOB.access_bridge, GLOB.access_cargo, access_solgov_crew,
 		access_hangar, access_torch_fax, access_radio_comm
 	)
 
@@ -343,9 +343,9 @@
 
 
 	access = list(
-		access_security, access_medical, access_engine, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_teleporter, access_eva, access_bridge, access_all_personal_lockers, access_janitor,
-		access_kitchen, access_cargo, access_RC_announce, access_keycard_auth, access_aquila, access_guppy_helm,
+		GLOB.access_security, GLOB.access_medical, GLOB.access_engine, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_teleporter, GLOB.access_eva, GLOB.access_bridge, GLOB.access_all_personal_lockers, GLOB.access_janitor,
+		GLOB.access_kitchen, GLOB.access_cargo, GLOB.access_RC_announce, GLOB.access_keycard_auth, access_aquila, access_guppy_helm,
 		access_solgov_crew, access_gun, access_expedition_shuttle, access_guppy, access_senadv, access_hangar, access_torch_fax,
 		access_radio_comm, access_radio_eng, access_radio_med, access_radio_sec, access_radio_serv, access_radio_sup, access_radio_exp
 		)
@@ -385,10 +385,10 @@
 
 
 	access = list(
-		access_security, access_medical, access_engine, access_maint_tunnels, access_emergency_storage,
-		access_bridge, access_janitor, access_kitchen, access_cargo, access_mailsorting, access_RC_announce, access_keycard_auth,
-		access_solgov_crew, access_aquila, access_aquila_helm, access_guppy, access_guppy_helm, access_external_airlocks,
-		access_eva, access_hangar, access_cent_creed, access_explorer, access_expedition_shuttle, access_expedition_shuttle_helm, access_teleporter,
+		GLOB.access_security, GLOB.access_medical, GLOB.access_engine, GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_bridge, GLOB.access_janitor, GLOB.access_kitchen, GLOB.access_cargo, GLOB.access_mailsorting, GLOB.access_RC_announce, GLOB.access_keycard_auth,
+		access_solgov_crew, access_aquila, access_aquila_helm, access_guppy, access_guppy_helm, GLOB.access_external_airlocks,
+		GLOB.access_eva, access_hangar, GLOB.access_cent_creed, access_explorer, access_expedition_shuttle, access_expedition_shuttle_helm, GLOB.access_teleporter,
 		access_torch_fax, access_torch_helm, access_radio_comm, access_radio_eng, access_radio_exp, access_radio_serv, access_radio_sci, access_radio_sup
 	)
 

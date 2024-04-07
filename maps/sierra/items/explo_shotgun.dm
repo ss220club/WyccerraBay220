@@ -4,7 +4,7 @@
 	icon = 'maps/torch/icons/obj/explshotgun.dmi'
 	icon_state = "expshotgun0"
 	starts_loaded = 0
-	req_access = list(list(access_hop, access_hos))
+	req_access = list(list(access_hop, GLOB.access_hos))
 	authorized_modes = list(UNAUTHORIZED)
 	firemodes = list(
 		list(mode_name="fire"),

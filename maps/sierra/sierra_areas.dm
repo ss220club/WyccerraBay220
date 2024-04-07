@@ -60,7 +60,7 @@
 	name = "Engineering - Shield Generator"
 	icon_state = "engineering"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_engine, access_atmospherics)
+	req_access = list(access_engine, GLOB.access_atmospherics)
 
 /area/security/sierra/
 	icon_state = "security"

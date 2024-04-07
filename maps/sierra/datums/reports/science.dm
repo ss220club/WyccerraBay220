@@ -37,9 +37,9 @@
 	sci_fields += add_field(/datum/report_field/signature, "Подпись ответственного", required = 1)
 	add_field(/datum/report_field/signature, "Подпись добровольца", required = 1)
 	for(var/datum/report_field/field in rd_fields)
-		field.set_access(access_edit = access_rd)
+		field.set_access(access_edit = GLOB.access_rd)
 	for(var/datum/report_field/field in sci_fields)
-		field.set_access(access_edit = access_research)
+		field.set_access(access_edit = GLOB.access_research)
 
 /datum/computer_file/report/recipient/sci/volunteer_denied
 	form_name = "HR-NTCO-02b-D"
@@ -76,9 +76,9 @@
 	add_field(/datum/report_field/text_label/instruction, "При необходимости - вписать дополнительные пункты в списке. Пустые графы заполнить, как N/A")
 	rd_fields += add_field(/datum/report_field/signature, "Подпись Директора Исследований")
 	for(var/datum/report_field/field in sci_fields)
-		field.set_access(access_edit = access_research)
+		field.set_access(access_edit = GLOB.access_research)
 	for(var/datum/report_field/field in rd_fields)
-		field.set_access(access_edit = access_rd)
+		field.set_access(access_edit = GLOB.access_rd)
 
 /datum/computer_file/report/recipient/sci/augmentations
 	form_name = "AG17-N1"
@@ -105,6 +105,6 @@
 	add_field(/datum/report_field/signature, "Подпись главы отдела аугментированного")
 	set_access(access_robotics)
 	for(var/datum/report_field/field in rd_fields)
-		field.set_access(access_edit = access_rd)
+		field.set_access(access_edit = GLOB.access_rd)
 	for(var/datum/report_field/field in sci_fields)
-		field.set_access(access_edit = access_robotics)
+		field.set_access(access_edit = GLOB.access_robotics)

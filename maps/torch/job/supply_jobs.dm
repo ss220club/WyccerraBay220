@@ -31,9 +31,9 @@
 	skill_points = 18
 
 	access = list(
-		access_maint_tunnels, access_bridge, access_emergency_storage, access_tech_storage,  access_cargo, access_guppy_helm,
-		access_cargo_bot, access_qm, access_mailsorting, access_solgov_crew, access_expedition_shuttle, access_guppy, access_hangar,
-		access_mining, access_mining_office, access_mining_station, access_commissary, access_teleporter, access_eva, access_torch_fax,
+		GLOB.access_maint_tunnels, GLOB.access_bridge, GLOB.access_emergency_storage, GLOB.access_tech_storage,  GLOB.access_cargo, access_guppy_helm,
+		GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mailsorting, access_solgov_crew, access_expedition_shuttle, access_guppy, access_hangar,
+		GLOB.access_mining, GLOB.access_mining_office, GLOB.access_mining_station, access_commissary, GLOB.access_teleporter, GLOB.access_eva, access_torch_fax,
 		access_radio_sup, access_radio_exp, access_radio_comm
 	)
 
@@ -71,8 +71,8 @@
 	max_skill = list(   SKILL_PILOT       = SKILL_MAX)
 
 	access = list(
-		access_maint_tunnels, access_emergency_storage, access_cargo, access_guppy_helm,
-		access_cargo_bot, access_mailsorting, access_solgov_crew, access_expedition_shuttle,
+		GLOB.access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_cargo, access_guppy_helm,
+		GLOB.access_cargo_bot, GLOB.access_mailsorting, access_solgov_crew, access_expedition_shuttle,
 		access_guppy, access_hangar, access_commissary, access_radio_sup
 	)
 
@@ -104,8 +104,8 @@
 	allowed_ranks = list(/datum/mil_rank/civ/contractor)
 
 	access = list(
-		access_mining, access_mining_office, access_mining_station,
+		GLOB.access_mining, GLOB.access_mining_office, GLOB.access_mining_station,
 		access_expedition_shuttle, access_guppy, access_hangar,
-		access_guppy_helm, access_solgov_crew, access_eva,
+		access_guppy_helm, access_solgov_crew, GLOB.access_eva,
 		access_radio_exp, access_radio_sup
 	)

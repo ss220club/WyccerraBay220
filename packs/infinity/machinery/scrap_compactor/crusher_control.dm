@@ -4,7 +4,7 @@
 	extended_desc = "Application to Control the Crusher"
 	program_icon_state = "supply"
 	size = 8
-	required_access = access_cargo
+	required_access = GLOB.access_cargo
 	usage_flags = PROGRAM_TELESCREEN | PROGRAM_CONSOLE
 	nanomodule_path = /datum/nano_module/program/crushercontrol/
 

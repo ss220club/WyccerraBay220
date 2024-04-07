@@ -22,18 +22,18 @@
 
 	access = list(
 		access_chief_steward,
-		access_emergency_storage,
-		access_heads,
-		access_janitor,
-		access_kitchen,
+		GLOB.access_emergency_storage,
+		GLOB.access_heads,
+		GLOB.access_janitor,
+		GLOB.access_kitchen,
 		access_bar,
 		access_actor,
-		access_bridge,
-		access_maint_tunnels,
-		access_hydroponics,
-		access_kitchen,
+		GLOB.access_bridge,
+		GLOB.access_maint_tunnels,
+		GLOB.access_hydroponics,
+		GLOB.access_kitchen,
 		access_commissary,
-		access_RC_announce
+		GLOB.access_RC_announce
 	)
 
 /datum/job/chief_steward/get_description_blurb()
@@ -96,7 +96,7 @@
 		/datum/mil_rank/civ/civ
 	)
 	min_skill = list(SKILL_HAULING = SKILL_BASIC)
-	access = list(access_maint_tunnels, access_emergency_storage, access_janitor)
+	access = list(access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_janitor)
 
 /datum/job/janitor/get_description_blurb()
 	return "Уборщик отвечает за чистоту и порядок на корабле. В основном Ваша задача будет состоять в уборке различного вида мусора, такого как: различные пустые пачки от фастфуда, алюминиевые банки из-под газировки, осколки от стекла и т.п.\
@@ -129,7 +129,7 @@
 		SKILL_BOTANY = SKILL_BASIC,
 		SKILL_CHEMISTRY = SKILL_BASIC
 	)
-	access = list(access_maint_tunnels, access_hydroponics, access_kitchen, access_commissary)
+	access = list(access_maint_tunnels, GLOB.access_hydroponics, GLOB.access_kitchen, access_commissary)
 
 /datum/job/cook/get_description_blurb()
 	return "Вы - повар, чья миссия на этом корабле - спасти экипаж от поедания невкусной и отвратительной, с кулинарной точки зрения, еды из автоматов.\
@@ -158,7 +158,7 @@
 		SKILL_BOTANY = SKILL_BASIC,
 		SKILL_CHEMISTRY = SKILL_BASIC
 	)
-	access = list(access_hydroponics, access_kitchen)
+	access = list(access_hydroponics, GLOB.access_kitchen)
 
 /datum/job/steward/get_description_blurb()
 	return "Стюарды исполняют роль младшего повара, помощника бармена, а так же вы ответственны за состояние и чистоту кафетерия.\

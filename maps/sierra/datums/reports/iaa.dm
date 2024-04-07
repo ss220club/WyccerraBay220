@@ -21,7 +21,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident_staff
 	form_name = "HR-NTCO-01a"
@@ -43,7 +43,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident_assets
 	form_name = "HR-NTCO-01b"
@@ -67,7 +67,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident_repstaff
 	form_name = "HR-NTCO-01e"
@@ -90,7 +90,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/archive
 	form_name = "HR-NTCO-04a"

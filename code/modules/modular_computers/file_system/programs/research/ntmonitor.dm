@@ -7,7 +7,7 @@
 	extended_desc = "This program monitors the local NTNet network, provides access to logging systems, and allows for configuration changes"
 	size = 12
 	requires_ntnet = TRUE
-	required_access = access_network_admin
+	required_access = GLOB.access_network_admin
 	network_destination = "NTNet Statistics & Configuration" // This triggers logging when the program is opened and closed
 	available_on_ntnet = TRUE
 	nanomodule_path = /datum/nano_module/program/computer_ntnetmonitor

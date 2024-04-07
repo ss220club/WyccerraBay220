@@ -198,7 +198,7 @@ GETTER_SETTER(PATH, KEY); /datum/report_field/##PATH/##KEY; \
 /datum/computer_file/report/crew_record/generate_fields(){ \
 ..(); \
 var/datum/report_field/##KEY = add_field(/datum/report_field/##PATH/##KEY, ##NAME); \
-KEY.set_access(ACCESS, ACCESS_EDIT || ACCESS || access_bridge)}
+KEY.set_access(ACCESS, ACCESS_EDIT || ACCESS || GLOB.access_bridge)}
 
 // Fear not the preprocessor, for it is a friend. To add a field, use one of these, depending on value type and if you need special access to see it.
 // It will also create getter/setter procs for record datum, named like /get_[key here]() /set_[key_here](value) e.g. get_name() set_name(value)
@@ -211,39 +211,39 @@ KEY.set_access(ACCESS, ACCESS_EDIT || ACCESS || access_bridge)}
 /datum/report_field/options/crew_record/##KEY/get_options(){return OPTIONS}
 
 // GENERIC RECORDS
-FIELD_SHORT("Name", name, null, access_change_ids)
-FIELD_SHORT("Formal Name", formal_name, null, access_change_ids)
-FIELD_SHORT("Job", job, null, access_change_ids)
-FIELD_LIST("Pronouns", sex, record_pronouns(), null, access_change_ids)
-FIELD_NUM("Age", age, null, access_change_ids)
-FIELD_LIST_EDIT("Status", status, GLOB.physical_statuses, null, access_medical)
+FIELD_SHORT("Name", name, null, GLOB.access_change_ids)
+FIELD_SHORT("Formal Name", formal_name, null, GLOB.access_change_ids)
+FIELD_SHORT("Job", job, null, GLOB.access_change_ids)
+FIELD_LIST("Pronouns", sex, record_pronouns(), null, GLOB.access_change_ids)
+FIELD_NUM("Age", age, null, GLOB.access_change_ids)
+FIELD_LIST_EDIT("Status", status, GLOB.physical_statuses, null, GLOB.access_medical)
 
-FIELD_SHORT("Species",species, null, access_change_ids)
-FIELD_LIST("Branch", branch, record_branches(), null, access_change_ids)
-FIELD_LIST("Rank", rank, record_ranks(), null, access_change_ids)
-FIELD_SHORT("Religion", religion, access_chapel_office, access_change_ids)
+FIELD_SHORT("Species",species, null, GLOB.access_change_ids)
+FIELD_LIST("Branch", branch, record_branches(), null, GLOB.access_change_ids)
+FIELD_LIST("Rank", rank, record_ranks(), null, GLOB.access_change_ids)
+FIELD_SHORT("Religion", religion, GLOB.access_chapel_office, GLOB.access_change_ids)
 
-FIELD_LONG("General Notes (Public)", public_record, null, access_bridge)
+FIELD_LONG("General Notes (Public)", public_record, null, GLOB.access_bridge)
 
 // MEDICAL RECORDS
-FIELD_LIST("Blood Type", bloodtype, GLOB.blood_types, access_medical, access_medical)
-FIELD_LONG("Medical Record", medRecord, access_medical, access_medical)
-FIELD_LONG("Known Implants", implants, access_medical, access_medical)
+FIELD_LIST("Blood Type", bloodtype, GLOB.blood_types, GLOB.access_medical, GLOB.access_medical)
+FIELD_LONG("Medical Record", medRecord, GLOB.access_medical, GLOB.access_medical)
+FIELD_LONG("Known Implants", implants, GLOB.access_medical, GLOB.access_medical)
 
 // SECURITY RECORDS
-FIELD_LIST("Criminal Status", criminalStatus, GLOB.security_statuses, access_security, access_security)
-FIELD_LONG("Security Record", secRecord, access_security, access_security)
-FIELD_SHORT("DNA", dna, access_security, access_security)
-FIELD_SHORT("Fingerprint", fingerprint, access_security, access_security)
+FIELD_LIST("Criminal Status", criminalStatus, GLOB.security_statuses, GLOB.access_security, GLOB.access_security)
+FIELD_LONG("Security Record", secRecord, GLOB.access_security, GLOB.access_security)
+FIELD_SHORT("DNA", dna, GLOB.access_security, GLOB.access_security)
+FIELD_SHORT("Fingerprint", fingerprint, GLOB.access_security, GLOB.access_security)
 
 // EMPLOYMENT RECORDS
-FIELD_LONG("Employment Record", emplRecord, access_bridge, access_bridge)
-FIELD_SHORT("Home System", homeSystem, access_bridge, access_change_ids)
-FIELD_LONG("Qualifications", skillset, access_bridge, access_bridge)
+FIELD_LONG("Employment Record", emplRecord, GLOB.access_bridge, GLOB.access_bridge)
+FIELD_SHORT("Home System", homeSystem, GLOB.access_bridge, GLOB.access_change_ids)
+FIELD_LONG("Qualifications", skillset, GLOB.access_bridge, GLOB.access_bridge)
 
 // ANTAG RECORDS
-FIELD_SHORT("Faction", faction, access_syndicate, access_syndicate)
-FIELD_LONG("Exploitable Information", antagRecord, access_syndicate, access_syndicate)
+FIELD_SHORT("Faction", faction, GLOB.access_syndicate, GLOB.access_syndicate)
+FIELD_LONG("Exploitable Information", antagRecord, GLOB.access_syndicate, GLOB.access_syndicate)
 
 //Options builderes
 /datum/report_field/options/crew_record/rank/proc/record_ranks()

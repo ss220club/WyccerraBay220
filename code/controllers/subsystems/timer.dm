@@ -1,19 +1,3 @@
-/// Looping timers automatically re-queue themselves after firing, assuming they are still valid
-GLOBAL_VAR_CONST(TIMER_LOOP, FLAG(0))
-
-/// Stoppable timers produce a hash that can be given to deltimer() to unqueue them
-GLOBAL_VAR_CONST(TIMER_STOPPABLE, FLAG(1))
-
-/// Two of the same timer signature cannot be queued at once when they are unique
-GLOBAL_VAR_CONST(TIMER_UNIQUE, FLAG(2))
-
-/// Attempting to add a unique timer will re-queue the event instead of being ignored
-GLOBAL_VAR_CONST(TIMER_OVERRIDE, FLAG(3))
-
-/// Skips adding the wait to the timer hash, allowing for uniques with variable wait times
-GLOBAL_VAR_CONST(TIMER_NO_HASH_WAIT, FLAG(4))
-
-
 /datum/timer
 	var/datum/callback/callback
 	var/wait
@@ -55,7 +39,7 @@ SUBSYSTEM_DEF(timer)
 		target = timer.callback.target
 		if (target ==GLOB.GLOBAL_PROC || !QDELETED(target))
 			invoke_async(timer.callback)
-			if (timer.flags & GLOB.TIMER_LOOP)
+			if (timer.flags & TIMER_LOOP)
 				_addtimer(timer, subsystem = src)
 		else if (timer.hash)
 			timers_by_hash -= timer.hash
@@ -85,15 +69,15 @@ SUBSYSTEM_DEF(timer)
 		timer.wait = wait
 		timer.flags = flags
 		timer.source = source
-		if (flags & (GLOB.TIMER_STOPPABLE | GLOB.TIMER_UNIQUE))
+		if (flags & (TIMER_STOPPABLE | TIMER_UNIQUE))
 			var/hash = "[flags][callback.identity]"
-			if (!(flags & GLOB.TIMER_NO_HASH_WAIT))
+			if (!(flags & TIMER_NO_HASH_WAIT))
 				hash = "[hash][wait]"
 			hash = sha1(hash)
-			if (flags & GLOB.TIMER_UNIQUE)
+			if (flags & TIMER_UNIQUE)
 				var/datum/timer/match = subsystem.timers_by_hash[hash]
 				if (match)
-					if (!(flags & GLOB.TIMER_OVERRIDE))
+					if (!(flags & TIMER_OVERRIDE))
 						return
 					subsystem.timers_by_hash[hash] = timer
 					subsystem.queue -= match

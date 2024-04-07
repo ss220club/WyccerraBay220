@@ -62,17 +62,17 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 	message = "Attempting to brute force network admin credentials... unsuccesful. Attempt logged."
 
 /datum/terminal_skill_fail/antag/access/execute(datum/terminal/terminal)
-	ntnet_global.add_log_with_ids_check("Unauthorised access attempt to primary keycode database.", terminal.computer.get_component(PART_NETWORK))
+	GLOB.ntnet_global.add_log_with_ids_check("Unauthorised access attempt to primary keycode database.", terminal.computer.get_component(PART_NETWORK))
 	return ..()
 
 /datum/terminal_skill_fail/antag/dos
 	message = "Sending content of dev/random to relay... Connection denied due to excess traffic."
 
 /datum/terminal_skill_fail/antag/dos/execute(datum/terminal/terminal)
-	var/obj/machinery/ntnet_relay/R = pick(ntnet_global.relays)
+	var/obj/machinery/ntnet_relay/R = pick(GLOB.ntnet_global.relays)
 	if (!istype(R))
 		return "Unable to locate Quantum Relay to attack."
-	ntnet_global.add_log_with_ids_check("Excess traffic flood targeting Quantum Relay ([R.uid]) detected from 1 device\s: [terminal.computer.get_network_tag()]")
+	GLOB.ntnet_global.add_log_with_ids_check("Excess traffic flood targeting Quantum Relay ([R.uid]) detected from 1 device\s: [terminal.computer.get_network_tag()]")
 	return ..()
 
 /datum/terminal_skill_fail/antag/camera
@@ -82,7 +82,7 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 	var/network = pick(GLOB.using_map.station_networks)
 	if (!network)
 		return "Unable to locate camera network to access."
-	ntnet_global.add_log_with_ids_check("Unauthorised access detected to camera network [network].", terminal.computer.get_component(PART_NETWORK))
+	GLOB.ntnet_global.add_log_with_ids_check("Unauthorised access detected to camera network [network].", terminal.computer.get_component(PART_NETWORK))
 	return ..()
 
 /datum/terminal_skill_fail/antag/email_logs
@@ -90,7 +90,7 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 	message = "System log backup successful. Chosen method: email attachment. Recipients: all."
 
 /datum/terminal_skill_fail/antag/email_logs/execute(datum/terminal/terminal)
-	var/datum/computer_file/data/email_account/S = ntnet_global.find_email_by_name(EMAIL_SYSADMIN)
+	var/datum/computer_file/data/email_account/S = GLOB.ntnet_global.find_email_by_name(EMAIL_SYSADMIN)
 	if(!istype(S))
 		return list()
 	var/datum/computer_file/data/email_message/M = new()
@@ -116,17 +116,17 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 	message = "Entered id successfully banned!"
 
 /datum/terminal_skill_fail/admin/random_ban/execute(datum/terminal/terminal)
-	var/id = pick(ntnet_global.registered_nids)
-	if (!id || (id in ntnet_global.banned_nids))
+	var/id = pick(GLOB.ntnet_global.registered_nids)
+	if (!id || (id in GLOB.ntnet_global.banned_nids))
 		return "Unable to locate network id to ban."
-	LAZYADD(ntnet_global.banned_nids, id)
+	LAZYADD(GLOB.ntnet_global.banned_nids, id)
 	return ..()
 
 /datum/terminal_skill_fail/admin/random_unban
 	message = "Entered id successfully unbanned!"
 
 /datum/terminal_skill_fail/admin/random_unban/execute(datum/terminal/terminal)
-	var/id = pick_n_take(ntnet_global.banned_nids)
+	var/id = pick_n_take(GLOB.ntnet_global.banned_nids)
 	if(!id)
 		return "Unable to locate network id to unban."
 	return ..()
@@ -136,7 +136,7 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 
 /datum/terminal_skill_fail/admin/purge/execute(datum/terminal/terminal)
 	terminal.computer.add_log("Network packet sent to NTNet Statistics & Configuration")
-	ntnet_global.purge_logs()
+	GLOB.ntnet_global.purge_logs()
 	return ..()
 
 /datum/terminal_skill_fail/admin/alarm_reset
@@ -144,5 +144,5 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 
 /datum/terminal_skill_fail/admin/alarm_reset/execute(datum/terminal/terminal)
 	terminal.computer.add_log("Network packet sent to NTNet Statistics & Configuration")
-	ntnet_global.resetIDS()
+	GLOB.ntnet_global.resetIDS()
 	return ..()

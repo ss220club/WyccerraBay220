@@ -35,7 +35,7 @@
 			else
 				if(nid)
 					result = "target NID [nid]... failed. Target device not responding."
-					var/datum/extension/interactive/ntos/comp = ntnet_global.get_os_by_nid(nid)
+					var/datum/extension/interactive/ntos/comp = GLOB.ntnet_global.get_os_by_nid(nid)
 					if(comp && comp.get_ntnet_status_incoming())
 						result = "target NID [nid]... success."
 				else

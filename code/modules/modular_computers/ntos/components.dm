@@ -63,7 +63,7 @@
 
 /// Returns TRUE if the connection supports a specific capability, otherwise FALSE
 /datum/extension/interactive/ntos/proc/get_ntnet_capability(specific_action)
-	if(ntnet_global)
+	if(GLOB.ntnet_global)
 		return TRUE
 	return FALSE
 

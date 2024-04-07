@@ -57,7 +57,7 @@
 		data["messagecount"] = length(all_messages)
 	else
 		var/list/all_accounts = list()
-		for(var/datum/computer_file/data/email_account/account in ntnet_global.email_accounts)
+		for(var/datum/computer_file/data/email_account/account in GLOB.ntnet_global.email_accounts)
 			if(!account.can_login)
 				continue
 			all_accounts.Add(list(list(
@@ -137,7 +137,7 @@
 		return TOPIC_HANDLED
 
 	if(href_list["viewaccount"])
-		for(var/datum/computer_file/data/email_account/email_account in ntnet_global.email_accounts)
+		for(var/datum/computer_file/data/email_account/email_account in GLOB.ntnet_global.email_accounts)
 			if(email_account.uid == text2num(href_list["viewaccount"]))
 				current_account = email_account
 				break
@@ -152,7 +152,7 @@
 			return TOPIC_HANDLED
 
 		var/complete_login = "[newlogin]@[newdomain]"
-		if(ntnet_global.find_email_by_name(complete_login))
+		if(GLOB.ntnet_global.find_email_by_name(complete_login))
 			error = "Error creating account: An account with same address already exists."
 			return TOPIC_HANDLED
 

@@ -21,7 +21,7 @@
 		return "[name]: Error; invalid network id."
 	if(!has_access(list(GLOB.access_network_admin), user.GetAccess()))
 		terminal.computer.add_log("'[name]' command executed against network id '[nid]'")
-	var/datum/extension/interactive/ntos/T = ntnet_global.get_os_by_nid(nid)
+	var/datum/extension/interactive/ntos/T = GLOB.ntnet_global.get_os_by_nid(nid)
 	if(!istype(T) || !T.get_ntnet_status_incoming()) // Target device only need a direct connection to NTNet
 		return "[name]: Error; can not locate target device. Try ping for diagnostics."
 	var/area/A = get_area(T.get_physical_host())

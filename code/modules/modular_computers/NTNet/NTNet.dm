@@ -40,8 +40,8 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 
 // If new NTNet datum is spawned, it replaces the old one.
 /datum/ntnet/New()
-	if(ntnet_global && (ntnet_global != src))
-		ntnet_global = src // There can be only one.
+	if(GLOB.ntnet_global && (GLOB.ntnet_global != src))
+		GLOB.ntnet_global = src // There can be only one.
 	for(var/obj/machinery/ntnet_relay/R as anything in SSmachines.get_machinery_of_type(/obj/machinery/ntnet_relay))
 		relays += R
 	build_software_lists()
@@ -74,7 +74,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 				break
 
 	// Log entries are backed up on portable drives in every relay, if present.
-	for(var/obj/machinery/ntnet_relay/R in ntnet_global.relays)
+	for(var/obj/machinery/ntnet_relay/R in GLOB.ntnet_global.relays)
 		var/obj/item/stock_parts/computer/hard_drive/portable/P = R.get_component_of_type(/obj/item/stock_parts/computer/hard_drive/portable)
 		if(istype(P))
 			P.update_data_file("ntnet_log", "[log_text]\[br\]", /datum/computer_file/data/logfile)
@@ -224,7 +224,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 
 /// Returns email account matching login. Otherwise null
 /datum/ntnet/proc/find_email_by_name(login)
-	for(var/datum/computer_file/data/email_account/A in ntnet_global.email_accounts)
+	for(var/datum/computer_file/data/email_account/A in GLOB.ntnet_global.email_accounts)
 		if(A.login == login)
 			return A
 
@@ -281,6 +281,6 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 		return
 	var/old_email = mind.initial_email_login["login"]
 	if(!old_email)
-		ntnet_global.create_email(src, newname, domain)
+		GLOB.ntnet_global.create_email(src, newname, domain)
 	else
-		ntnet_global.rename_email(src, old_email, newname, domain)
+		GLOB.ntnet_global.rename_email(src, old_email, newname, domain)

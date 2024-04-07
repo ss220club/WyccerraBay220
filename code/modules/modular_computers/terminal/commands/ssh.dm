@@ -30,7 +30,7 @@
 	if(!nid)
 		. += "[name]: Error; invalid network id."
 		return
-	var/datum/extension/interactive/ntos/T = ntnet_global.get_os_by_nid(nid)
+	var/datum/extension/interactive/ntos/T = GLOB.ntnet_global.get_os_by_nid(nid)
 	if(!istype(T) || !T.get_ntnet_status_incoming()) // Target device only need a direct connection to NTNet
 		. += "[name]: Error; cannot locate target device. Try ping for diagnostics."
 		return

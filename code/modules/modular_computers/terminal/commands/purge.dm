@@ -11,9 +11,9 @@
 	skill_needed = SKILL_MASTER
 
 /datum/terminal_command/purge/proper_input_entered(text, mob/user, datum/terminal/terminal)
-	if(!ntnet_global || !terminal.computer.get_ntnet_status())
+	if(!GLOB.ntnet_global || !terminal.computer.get_ntnet_status())
 		return network_error()
 	terminal.computer.add_log("Network packet sent to NTNet Statistics & Configuration")
-	ntnet_global.resetIDS()
-	ntnet_global.purge_logs()
+	GLOB.ntnet_global.resetIDS()
+	GLOB.ntnet_global.purge_logs()
 	return list("[name]: NTNet intrusion alarm and log purge complete.")

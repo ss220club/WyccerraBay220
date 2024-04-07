@@ -11,8 +11,8 @@
 	skill_needed = SKILL_EXPERIENCED
 
 /datum/terminal_command/relays/proper_input_entered(text, mob/user, datum/terminal/terminal)
-	. = list("[name]: Number of relays found: [length(ntnet_global.relays)]")
-	for(var/obj/machinery/ntnet_relay/R in ntnet_global.relays)
+	. = list("[name]: Number of relays found: [length(GLOB.ntnet_global.relays)]")
+	for(var/obj/machinery/ntnet_relay/R in GLOB.ntnet_global.relays)
 		. += "Quantum relay ([R.uid]) status: [(R.operable() ? "Reachable" : "Unreachable")]"
 		if(R.operable())
 			if(!!R.get_component_of_type(/obj/item/stock_parts/computer/hard_drive/portable))

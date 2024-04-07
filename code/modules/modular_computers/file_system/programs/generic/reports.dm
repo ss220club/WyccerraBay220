@@ -36,7 +36,7 @@
 			data["printer"] = program.computer.has_component(PART_PRINTER)
 		if(REPORTS_DOWNLOAD)
 			var/list/L = list()
-			for(var/datum/computer_file/report/report in ntnet_global.fetch_reports(get_access(user)))
+			for(var/datum/computer_file/report/report in GLOB.ntnet_global.fetch_reports(get_access(user)))
 				var/M = list()
 				M["name"] = report.display_name()
 				M["uid"] = report.uid
@@ -184,7 +184,7 @@
 	if(href_list["get_report"])
 		. = TOPIC_HANDLED
 		var/uid = text2num(href_list["report"])
-		for(var/datum/computer_file/report/report in ntnet_global.fetch_reports(get_access(user)))
+		for(var/datum/computer_file/report/report in GLOB.ntnet_global.fetch_reports(get_access(user)))
 			if(report.uid == uid)
 				selected_report = report.clone()
 				can_view_only = FALSE

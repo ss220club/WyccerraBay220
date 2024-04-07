@@ -57,7 +57,7 @@
 			target_access = get_access_by_id(pick(valid_access_values))
 		RFID.stored_card.access |= target_access.id
 		if (!prob(get_sneak_chance()))
-			ntnet_global.add_log_with_ids_check("Unauthorised access to primary keycode database - downloaded access codes for: [target_access.desc].", computer.get_component(PART_NETWORK))
+			GLOB.ntnet_global.add_log_with_ids_check("Unauthorised access to primary keycode database - downloaded access codes for: [target_access.desc].", computer.get_component(PART_NETWORK))
 		message = "Successfully decrypted and saved operational key codes. Downloaded access codes for: [target_access.desc]."
 		target_access = null
 		reset()
@@ -96,7 +96,7 @@
 		running = TRUE
 
 		if (!prob(get_sneak_chance()))
-			ntnet_global.add_log_with_ids_check("Unauthorised access attempt to primary keycode database.", computer.get_component(PART_NETWORK))
+			GLOB.ntnet_global.add_log_with_ids_check("Unauthorised access attempt to primary keycode database.", computer.get_component(PART_NETWORK))
 		return TOPIC_HANDLED
 
 /datum/computer_file/program/access_decrypter/proc/get_sneak_chance()
@@ -111,7 +111,7 @@
 	name = "NTNet Access Decrypter"
 
 /datum/nano_module/program/access_decrypter/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/topic_state/state = GLOB.default_state)
-	if(!ntnet_global)
+	if(!GLOB.ntnet_global)
 		return
 	var/datum/computer_file/program/access_decrypter/PRG = program
 	var/list/data = list()

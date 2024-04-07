@@ -16,7 +16,7 @@
 		return syntax_error()
 	if(!terminal.computer.get_ntnet_status())
 		return network_error()
-	var/datum/computer_file/data/email_account/S = ntnet_global.find_email_by_name(EMAIL_SYSADMIN)
+	var/datum/computer_file/data/email_account/S = GLOB.ntnet_global.find_email_by_name(EMAIL_SYSADMIN)
 	if(!istype(S))
 		return "[name]: Error; unable to send email. [EMAIL_SYSADMIN] unavailable or missing."
 	var/datum/computer_file/data/email_message/M = new()

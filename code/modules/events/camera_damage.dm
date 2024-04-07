@@ -23,12 +23,12 @@
 					cam.wires.CutWireIndex(CAMERA_WIRE_ALARM)
 
 /datum/event/camera_damage/proc/acquire_random_camera(remaining_attempts = 5)
-	if(!length(cameranet.cameras))
+	if(!length(GLOB.cameranet.cameras))
 		return
 	if(!remaining_attempts)
 		return
 
-	var/obj/machinery/camera/C = pick(cameranet.cameras)
+	var/obj/machinery/camera/C = pick(GLOB.cameranet.cameras)
 	if(is_valid_camera(C))
 		return C
 	return acquire_random_camera(remaining_attempts-1)

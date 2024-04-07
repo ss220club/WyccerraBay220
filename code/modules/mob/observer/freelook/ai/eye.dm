@@ -3,14 +3,14 @@
 // A mob that the AI controls to look around the station with.
 // It streams chunks as it moves around, which will show it what the AI can and cannot see.
 
-/mob/observer/eye/cameranet
+/mob/observer/eye/GLOB.cameranet
 	name = "Inactive Camera Eye"
 	name_sufix = "Camera Eye"
 
 
-/mob/observer/eye/cameranet/Initialize(mapload)
+/mob/observer/eye/GLOB.cameranet/Initialize(mapload)
 	. = ..()
-	visualnet = cameranet
+	visualnet = GLOB.cameranet
 
 
 /mob/observer/eye/aiEye
@@ -21,7 +21,7 @@
 
 /mob/observer/eye/aiEye/Initialize(mapload)
 	. = ..()
-	visualnet = cameranet
+	visualnet = GLOB.cameranet
 
 
 /mob/observer/eye/aiEye/setLoc(T, cancel_tracking = 1)

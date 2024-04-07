@@ -43,7 +43,7 @@ GLOBAL_DATUM_INIT(tgui_default_state, /datum/tgui_state/default, new)
 	var/can_see = (src_object in view(client.view, src))
 	if(!can_see)
 		if(is_in_chassis())
-			can_see = cameranet && cameranet.is_turf_visible(get_turf(src_object))
+			can_see = GLOB.cameranet && GLOB.cameranet.is_turf_visible(get_turf(src_object))
 		else
 			can_see = get_dist(src_object, src) <= get_lesser_view_size_component(client.view)
 

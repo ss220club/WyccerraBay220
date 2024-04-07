@@ -75,7 +75,7 @@
 /spell/hand/duration/cast(list/targets, mob/user)
 	. = ..()
 	if(.)
-		hand_timer = addtimer(CALLBACK(src, PROC_REF(cancel_hand)), hand_duration, GLOB.TIMER_STOPPABLE|GLOB.TIMER_UNIQUE|GLOB.TIMER_NO_HASH_WAIT|GLOB.TIMER_OVERRIDE)
+		hand_timer = addtimer(CALLBACK(src, PROC_REF(cancel_hand)), hand_duration, TIMER_STOPPABLE|TIMER_UNIQUE|TIMER_NO_HASH_WAIT|TIMER_OVERRIDE)
 
 /spell/hand/duration/cancel_hand()
 	deltimer(hand_timer)

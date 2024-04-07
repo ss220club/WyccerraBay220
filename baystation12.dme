@@ -93,6 +93,7 @@
 #include "code\__defines\temperature.dm"
 #include "code\__defines\text.dm"
 #include "code\__defines\tgui.dm"
+#include "code\__defines\timers.dm"
 #include "code\__defines\tools.dm"
 #include "code\__defines\topic.dm"
 #include "code\__defines\turfs.dm"

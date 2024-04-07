@@ -165,7 +165,7 @@
 			deltimer(active_timer)
 			active_timer = null
 	else
-		active_timer = addtimer(CALLBACK(src, PROC_REF(clear_target)), 1 MINUTE, GLOB.TIMER_UNIQUE | GLOB.TIMER_OVERRIDE | GLOB.TIMER_STOPPABLE)
+		active_timer = addtimer(CALLBACK(src, PROC_REF(clear_target)), 1 MINUTE, TIMER_UNIQUE | TIMER_OVERRIDE | TIMER_STOPPABLE)
 
 
 /obj/machinery/computer/teleporter/proc/get_targets()

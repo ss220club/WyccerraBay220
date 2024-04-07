@@ -331,7 +331,7 @@
 			napalm_liquid.touch_turf(A, TRUE)
 	var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
 	s.set_up(3, 1, target)
-	addtimer(CALLBACK(s, TYPE_PROC_REF(/datum/effect, start)), 0.1 SECONDS | GLOB.TIMER_STOPPABLE)
+	addtimer(CALLBACK(s, TYPE_PROC_REF(/datum/effect, start)), 0.1 SECONDS | TIMER_STOPPABLE)
 
 /obj/structure/ship_munition/disperser_charge/emp/military
 	name = "M850-EM"

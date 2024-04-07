@@ -2,7 +2,7 @@
 	name = "repair drone module"
 	display_name = "Repair"
 	channels = list ("Engineering" = TRUE)
-	networks = list(NETWORK_ENGINEERING)
+	networks = list(GLOB.NETWORK_ENGINEERING)
 	subsystems = list(
 		/datum/nano_module/power_monitor,
 		/datum/nano_module/supermatter_monitor

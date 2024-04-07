@@ -3,7 +3,7 @@
 	hide_on_manifest = 1
 	no_slip = 1
 	networks = list(
-		NETWORK_ENGINEERING
+		GLOB.NETWORK_ENGINEERING
 	)
 	languages = list(
 		LANGUAGE_HUMAN_EURO = FALSE

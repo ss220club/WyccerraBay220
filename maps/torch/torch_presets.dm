@@ -15,7 +15,7 @@ GLOBAL_VAR_CONST(NETWORK_FIFTH_DECK, "Fifth Deck")
 			return GLOB.access_heads
 		if(NETWORK_CHARON)
 			return GLOB.access_expedition_shuttle
-		if(NETWORK_HELMETS)
+		if(GLOB.NETWORK_HELMETS)
 			return access_solgov_crew
 	return get_shared_network_access(network) || ..()
 
@@ -23,24 +23,24 @@ GLOBAL_VAR_CONST(NETWORK_FIFTH_DECK, "Fifth Deck")
 	// Networks that will show up as options in the camera monitor program
 	station_networks = list(
 		NETWORK_BRIDGE,
-		NETWORK_FIRST_DECK,
-		NETWORK_SECOND_DECK,
-		NETWORK_THIRD_DECK,
-		NETWORK_FOURTH_DECK,
+		GLOB.NETWORK_FIRST_DECK,
+		GLOB.NETWORK_SECOND_DECK,
+		GLOB.NETWORK_THIRD_DECK,
+		GLOB.NETWORK_FOURTH_DECK,
 		NETWORK_FIFTH_DECK,
-		NETWORK_ENGINEERING,
-		NETWORK_MEDICAL,
-		NETWORK_RESEARCH,
-		NETWORK_SECURITY,
+		GLOB.NETWORK_ENGINEERING,
+		GLOB.NETWORK_MEDICAL,
+		GLOB.NETWORK_RESEARCH,
+		GLOB.NETWORK_SECURITY,
 		NETWORK_AQUILA,
 		NETWORK_CHARON,
-		NETWORK_HELMETS,
+		GLOB.NETWORK_HELMETS,
 		NETWORK_ALARM_ATMOS,
 		NETWORK_ALARM_CAMERA,
 		NETWORK_ALARM_FIRE,
 		NETWORK_ALARM_MOTION,
 		NETWORK_ALARM_POWER,
-		NETWORK_THUNDER,
+		GLOB.NETWORK_THUNDER,
 	)
 
 //
@@ -58,29 +58,29 @@ GLOBAL_VAR_CONST(NETWORK_FIFTH_DECK, "Fifth Deck")
 	network = list(NETWORK_CHARON)
 
 /obj/machinery/camera/network/first_deck
-	network = list(NETWORK_FIRST_DECK)
+	network = list(GLOB.NETWORK_FIRST_DECK)
 
 /obj/machinery/camera/network/fourth_deck
-	network = list(NETWORK_FOURTH_DECK)
+	network = list(GLOB.NETWORK_FOURTH_DECK)
 
 /obj/machinery/camera/network/fifth_deck
 	network = list(NETWORK_FIFTH_DECK)
 
 /obj/machinery/camera/network/second_deck
-	network = list(NETWORK_SECOND_DECK)
+	network = list(GLOB.NETWORK_SECOND_DECK)
 
 /obj/machinery/camera/network/third_deck
-	network = list(NETWORK_THIRD_DECK)
+	network = list(GLOB.NETWORK_THIRD_DECK)
 
 /obj/machinery/camera/network/crescent
-	network = list(NETWORK_CRESCENT)
+	network = list(GLOB.NETWORK_CRESCENT)
 
 /obj/machinery/camera/network/engineering_outpost
-	network = list(NETWORK_ENGINEERING_OUTPOST)
+	network = list(GLOB.NETWORK_ENGINEERING_OUTPOST)
 
 // Motion
 /obj/machinery/camera/motion/engineering_outpost
-	network = list(NETWORK_ENGINEERING_OUTPOST)
+	network = list(GLOB.NETWORK_ENGINEERING_OUTPOST)
 
 // All Upgrades
 /obj/machinery/camera/all/command
@@ -169,9 +169,9 @@ GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 
 /datum/map/proc/get_shared_network_access(network)
 	switch(network)
-		if(NETWORK_COMMAND)
+		if(GLOB.NETWORK_COMMAND)
 			return GLOB.access_heads
-		if(NETWORK_ENGINE, NETWORK_ENGINEERING_OUTPOST)
+		if(GLOB.NETWORK_ENGINE, GLOB.NETWORK_ENGINEERING_OUTPOST)
 			return GLOB.access_engine
 
 /datum/map/torch/default_internal_channels()

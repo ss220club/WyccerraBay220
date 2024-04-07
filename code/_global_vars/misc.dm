@@ -5,9 +5,9 @@ GLOBAL_VAR_INIT(defer_powernet_rebuild, FALSE)
 
 // Those networks can only be accessed by pre-existing terminals. AIs and new terminals can't use them.
 GLOBAL_LIST_INIT(restricted_camera_networks, list(\
-	NETWORK_ERT,\
-	NETWORK_MERCENARY,\
-	NETWORK_CRESCENT,\
+	GLOB.NETWORK_ERT,\
+	GLOB.NETWORK_MERCENARY,\
+	GLOB.NETWORK_CRESCENT,\
 	"Secret"\
 ))
 

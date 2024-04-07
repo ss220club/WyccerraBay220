@@ -37,7 +37,7 @@
 	. = ITEM_INTERACT_SUCCESS
 	if(state != ASSEMBLY_WIRED)
 		return
-	var/input = sanitize(input(user, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : NETWORK_EXODUS))
+	var/input = sanitize(input(user, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: Exodus,Security,Secret", "Set Network", camera_network ? camera_network : GLOB.NETWORK_EXODUS))
 	if(!input)
 		return
 	var/list/tempnetwork = splittext(input, ",")

@@ -16,7 +16,7 @@
 		"Entertainment" = TRUE
 	)
 	networks = list(
-		NETWORK_THUNDER
+		GLOB.NETWORK_THUNDER
 	)
 	equipment = list(
 		/obj/item/boombox,

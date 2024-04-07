@@ -13,11 +13,11 @@
 	if(istype(M))
 		var/level = M.get_preference_value(/datum/client_preference/exposurelevel)
 		var/alpha = 255
-		if(level == GLOB.PREF_OFF)
+		if(level == PREF_OFF)
 			alpha *= 0
-		else if(level == GLOB.PREF_LOW)
+		else if(level == PREF_LOW)
 			alpha *= 0.33
-		else if(level == GLOB.PREF_MEDIUM)
+		else if(level == PREF_MEDIUM)
 			alpha *= 0.66
 
 		filters += filter(
@@ -25,7 +25,7 @@
 			color = rgb(255, 255, 255, alpha)
 		)
 
-		if(level == GLOB.PREF_OFF)
+		if(level == PREF_OFF)
 			return
 
 	filters += filter(
@@ -57,15 +57,15 @@
 	var/mob/M = owner
 	if(istype(M))
 		var/level = M.get_preference_value(/datum/client_preference/bloomlevel)
-		if(level == GLOB.PREF_OFF)
+		if(level == PREF_OFF)
 			return
-		else if(level == GLOB.PREF_LOW)
+		else if(level == PREF_LOW)
 			bloomsize = 2
 			bloomoffset = 1
-		else if(level == GLOB.PREF_MED)
+		else if(level == PREF_MED)
 			bloomsize = 3
 			bloomoffset = 2
-		else if(level == GLOB.PREF_HIGH)
+		else if(level == PREF_HIGH)
 			bloomsize = 5
 			bloomoffset = 3
 
@@ -98,7 +98,7 @@
 	var/mob/M = owner
 	if(istype(M))
 		var/enabled = M.get_preference_value(/datum/client_preference/glare)
-		if(enabled == GLOB.PREF_NO)
+		if(enabled == PREF_NO)
 			filters += filter(
 				type = "color",
 				color = "#00000000"

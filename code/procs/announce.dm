@@ -43,7 +43,7 @@ GLOBAL_DATUM_INIT(minor_announcement, /datum/announcement/priority, new(do_log =
 
 	for(var/mob/M in GLOB.player_list)
 		if(M.client && (get_z(M) in (zlevels | GLOB.using_map.admin_levels)) && !istype(M,/mob/new_player) && !isdeaf(M))
-			if(message_sound && M.client.get_preference_value(/datum/client_preference/play_announcement_sfx) == GLOB.PREF_YES)
+			if(message_sound && M.client.get_preference_value(/datum/client_preference/play_announcement_sfx) == PREF_YES)
 				sound_to(M, message_sound)
 
 	if(do_newscast)

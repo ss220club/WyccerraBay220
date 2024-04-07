@@ -94,7 +94,7 @@
 			for(var/mob/new_player/player in GLOB.player_list)
 				var/highjob
 				if (player.client)
-					var/show_ready = player.client.get_preference_value(/datum/client_preference/show_ready) == GLOB.PREF_SHOW
+					var/show_ready = player.client.get_preference_value(/datum/client_preference/show_ready) == PREF_SHOW
 					if (player.client.prefs?.job_high)
 						highjob = " as [player.client.prefs.job_high]"
 					if (!player.is_stealthed())
@@ -163,7 +163,7 @@
 				to_chat(src, SPAN_DANGER("Could not locate an observer spawn point. Use the Teleport verb to jump to the map."))
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
-			var/should_announce = client.get_preference_value(/datum/client_preference/announce_ghost_join) == GLOB.PREF_YES
+			var/should_announce = client.get_preference_value(/datum/client_preference/announce_ghost_join) == PREF_YES
 
 			if(isnull(client.holder) && should_announce)
 				announce_ghost_joinleave(src)
@@ -595,7 +595,7 @@
 	set name = "Play Different Lobby Track"
 	set category = "OOC"
 
-	if(get_preference_value(/datum/client_preference/play_lobby_music) == GLOB.PREF_NO)
+	if(get_preference_value(/datum/client_preference/play_lobby_music) == PREF_NO)
 		return
 	var/singleton/audio/track/track = GLOB.using_map.get_lobby_track(GLOB.using_map.lobby_track.type)
 	sound_to(src, track.get_sound())

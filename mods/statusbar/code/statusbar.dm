@@ -1,10 +1,10 @@
 /datum/client_preference/show_statusbar
 	description = "Statusbar"
 	key = "show_statusbar"
-	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
+	options = list(PREF_SHOW, PREF_HIDE)
 
 /datum/client_preference/show_statusbar/changed(mob/preference_mob, new_value)
-	if (new_value == GLOB.PREF_HIDE)
+	if (new_value == PREF_HIDE)
 		winset(preference_mob, "mapwindow.statusbar", "is-visible=false")
 	else
 		winset(preference_mob, "mapwindow.statusbar", "is-visible=true")

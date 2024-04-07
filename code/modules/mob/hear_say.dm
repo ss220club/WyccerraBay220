@@ -76,7 +76,7 @@
 		hear_sleep(display_message)
 		return
 
-	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES)
+	if(get_preference_value(/datum/client_preference/tts_enabled) == PREF_YES)
 		speaker.cast_tts(src, display_message)
 
 	if (italics)
@@ -88,13 +88,13 @@
 	if (is_ghost)
 		if (display_name != speaker.real_name && speaker.real_name)
 			display_name = "[speaker.real_name] ([display_name])"
-		if (in_view && get_preference_value(/datum/client_preference/ghost_ears) == GLOB.PREF_ALL_SPEECH)
+		if (in_view && get_preference_value(/datum/client_preference/ghost_ears) == PREF_ALL_SPEECH)
 			display_message = "<b>[display_message]</b>"
 		var/control_preference = get_preference_value(/datum/client_preference/ghost_follow_link_length)
 		switch (control_preference)
-			if (GLOB.PREF_SHORT)
+			if (PREF_SHORT)
 				display_controls = "([ghost_follow_link(speaker, src)])"
-			if (GLOB.PREF_LONG)
+			if (PREF_LONG)
 				display_controls = "([ghost_follow_link(speaker, src, short_links = FALSE)])"
 
 	var/display_verb = verb
@@ -103,17 +103,17 @@
 	else
 		var/hint_preference = get_preference_value(/datum/client_preference/language_display)
 		if (is_ghost)
-			if (hint_preference != GLOB.PREF_OFF)
-				if (get_preference_value(/datum/client_preference/ghost_language_hide) == GLOB.PREF_YES)
-					hint_preference = GLOB.PREF_OFF
+			if (hint_preference != PREF_OFF)
+				if (get_preference_value(/datum/client_preference/ghost_language_hide) == PREF_YES)
+					hint_preference = PREF_OFF
 		else if (say_understands(speaker, language) && isliving(src))
 			var/mob/living/living = src
 			if (living.default_language == language)
-				hint_preference = GLOB.PREF_OFF
+				hint_preference = PREF_OFF
 		switch (hint_preference)
-			if (GLOB.PREF_FULL)
+			if (PREF_FULL)
 				display_verb = "[verb] in [language.name]"
-			if (GLOB.PREF_SHORTHAND)
+			if (PREF_SHORTHAND)
 				display_verb = "[verb] ([language.shorthand])"
 		display_message = language.format_message(display_message, display_verb)
 
@@ -173,7 +173,7 @@
 			else // Used for compression
 				message = RadioChat(null, message, 80, 1+(hard_to_hear/10))
 
-	if(get_preference_value(/datum/client_preference/tts_enabled) == GLOB.PREF_YES && (src != speaker || isrobot(src) || isAI(src)) && speaker.name != AUTO_ANNOUNCER_NAME)
+	if(get_preference_value(/datum/client_preference/tts_enabled) == PREF_YES && (src != speaker || isrobot(src) || isAI(src)) && speaker.name != AUTO_ANNOUNCER_NAME)
 		speaker.cast_tts(src, message, is_local = FALSE, effect = /singleton/sound_effect/radio, postSFX = 'mods/~_ss220/text2speech/code/sound/radio_chatter.ogg')
 
 	var/speaker_name = vname ? vname : speaker.name
@@ -254,11 +254,11 @@
 				skip = L.default_language == language
 			if (!skip)
 				switch(src.get_preference_value(/datum/client_preference/language_display))
-					if (GLOB.PREF_FULL)
+					if (PREF_FULL)
 						nverb = "[verb] in [language.name]"
-					if(GLOB.PREF_SHORTHAND)
+					if(PREF_SHORTHAND)
 						nverb = "[verb] ([language.shorthand])"
-					if(GLOB.PREF_OFF)
+					if(PREF_OFF)
 						nverb = verb
 		formatted = language.format_message_radio(message, nverb)
 	else
@@ -299,11 +299,11 @@
 	if(say_understands(speaker, language))
 		var/nverb = null
 		switch(src.get_preference_value(/datum/client_preference/language_display))
-			if(GLOB.PREF_FULL) // Full language name
+			if(PREF_FULL) // Full language name
 				nverb = "[verb] in [language.name]"
-			if(GLOB.PREF_SHORTHAND) //Shorthand codes
+			if(PREF_SHORTHAND) //Shorthand codes
 				nverb = "[verb] ([language.shorthand])"
-			if(GLOB.PREF_OFF)//Regular output
+			if(PREF_OFF)//Regular output
 				nverb = verb
 		runechat_message = message
 		message = "<B>[speaker]</B> [nverb], \"[message]\""

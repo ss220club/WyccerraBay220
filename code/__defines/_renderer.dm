@@ -306,7 +306,7 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 		if(gas_cold_object)
 			vis_contents -= gas_cold_object
 
-		if (quality == GLOB.PREF_LOW)
+		if (quality == PREF_LOW)
 			QDEL_NULL(gas_heat_object)
 			gas_heat_object = new /obj/heat(null)
 
@@ -316,9 +316,9 @@ GLOBAL_LIST_EMPTY(zmimic_renderers)
 			QDEL_NULL(gas_heat_object)
 			QDEL_NULL(gas_cold_object)
 			gas_cold_object = new /obj/particle_emitter/mist/gas(null)
-			if (quality == GLOB.PREF_MED)
+			if (quality == PREF_MED)
 				gas_heat_object = new /obj/particle_emitter/heat(null)
-			else if (quality == GLOB.PREF_HIGH)
+			else if (quality == PREF_HIGH)
 				gas_heat_object = new /obj/particle_emitter/heat/high(null)
 
 		vis_contents += gas_heat_object

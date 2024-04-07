@@ -106,7 +106,7 @@ SUBSYSTEM_DEF(typing)
 	var/list/entry = status[ckey]
 	if (!entry)
 		entry = new (MAX_INDEX)
-		entry[INDEX_PREFERENCE] = client.get_preference_value(/datum/client_preference/show_typing_indicator) == GLOB.PREF_SHOW
+		entry[INDEX_PREFERENCE] = client.get_preference_value(/datum/client_preference/show_typing_indicator) == PREF_SHOW
 		entry[INDEX_INFLIGHT] = FALSE
 		entry[INDEX_TIMEOUT] = world.time
 		entry[INDEX_INPUT_STATE] = FALSE

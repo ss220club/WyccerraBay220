@@ -29,7 +29,7 @@
 		return tgui_input_list(user, message, title, buttons, timeout)
 
 	// Client does NOT have tgui_input on: Returns regular input
-	if(user.get_preference_value(/datum/client_preference/tgui_input) == GLOB.PREF_NO)
+	if(user.get_preference_value(/datum/client_preference/tgui_input) == PREF_NO)
 		if(length(buttons) == 2)
 			return alert(user, message, title, buttons[1], buttons[2])
 		if(length(buttons) == 3)

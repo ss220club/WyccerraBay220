@@ -29,7 +29,7 @@
 		return
 
 	// Client does NOT have tgui_input on: Returns regular input
-	if(user.get_preference_value(/datum/client_preference/tgui_input) == GLOB.PREF_NO)
+	if(user.get_preference_value(/datum/client_preference/tgui_input) == PREF_NO)
 		if(encode)
 			if(multiline)
 				return stripped_multiline_input(user, message, title, default, max_length)

@@ -68,7 +68,7 @@
 	if (!user.HasFreeHand())
 		to_chat(user, SPAN_WARNING("You need an empty hand to draw \the [holstered]!"))
 		return 0
-	var/using_intent_preference = user.client ? user.client.get_preference_value(/datum/client_preference/holster_on_intent) == GLOB.PREF_YES : FALSE
+	var/using_intent_preference = user.client ? user.client.get_preference_value(/datum/client_preference/holster_on_intent) == PREF_YES : FALSE
 	if(avoid_intent || (using_intent_preference && user.a_intent != I_HELP))
 		var/sound_vol = 25
 		if(user.a_intent == I_HURT)

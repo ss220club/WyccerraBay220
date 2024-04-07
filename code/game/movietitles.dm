@@ -10,7 +10,7 @@ GLOBAL_LIST(end_titles)
 /client/proc/RollCredits()
 	set waitfor = FALSE
 
-	if(get_preference_value(/datum/client_preference/show_credits) != GLOB.PREF_YES)
+	if(get_preference_value(/datum/client_preference/show_credits) != PREF_YES)
 		return
 
 	if(!GLOB.end_titles)
@@ -22,12 +22,12 @@ GLOBAL_LIST(end_titles)
 		mob.overlay_fullscreen("fishbed",/obj/screen/fullscreen/fishbed)
 		mob.overlay_fullscreen("fadeout",/obj/screen/fullscreen/fadeout)
 
-		if(mob.get_preference_value(/datum/client_preference/play_lobby_music) == GLOB.PREF_YES)
+		if(mob.get_preference_value(/datum/client_preference/play_lobby_music) == PREF_YES)
 			sound_to(mob, sound(null, channel = GLOB.lobby_sound_channel))
 			if(isnull(GLOB.end_credits_song))
 				var/title_song = pick('sound/music/THUNDERDOME.ogg', 'sound/music/europa/Chronox_-_03_-_In_Orbit.ogg', 'sound/music/europa/asfarasitgets.ogg')
 				sound_to(mob, sound(title_song, wait = 0, volume = 40, channel = GLOB.lobby_sound_channel))
-			else if(get_preference_value(/datum/client_preference/play_admin_midis) == GLOB.PREF_YES)
+			else if(get_preference_value(/datum/client_preference/play_admin_midis) == PREF_YES)
 				sound_to(mob, sound(GLOB.end_credits_song, wait = 0, volume = 40, channel = GLOB.lobby_sound_channel))
 	sleep(50)
 	var/list/_credits = credits
@@ -133,7 +133,7 @@ GLOBAL_LIST(end_titles)
 				used_name = "[rank.name_short] [used_name]"
 		var/showckey = 0
 		if(H.ckey && H.client)
-			if(H.client.get_preference_value(/datum/client_preference/show_ckey_credits) == GLOB.PREF_SHOW)
+			if(H.client.get_preference_value(/datum/client_preference/show_ckey_credits) == PREF_SHOW)
 				showckey = 1
 		var/singleton/cultural_info/actor_culture = SSculture.get_culture(H.get_cultural_value(TAG_CULTURE))
 		if(!actor_culture || !(H.species.spawn_flags & SPECIES_CAN_JOIN) || prob(10))

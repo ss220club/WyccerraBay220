@@ -90,13 +90,13 @@
 				line += " - Playing"
 			if(C.is_stealthed())
 				line += " (Stealthed)"
-			if(C.get_preference_value(/datum/client_preference/show_ooc) == GLOB.PREF_HIDE)
+			if(C.get_preference_value(/datum/client_preference/show_ooc) == PREF_HIDE)
 				line += " [SPAN_COLOR("#002eb8", "<b><s>(OOC)</s></b>")]"
-			if(C.get_preference_value(/datum/client_preference/show_looc) == GLOB.PREF_HIDE)
+			if(C.get_preference_value(/datum/client_preference/show_looc) == PREF_HIDE)
 				line += " [SPAN_COLOR("#3a7496", "<b><s>(LOOC)</s></b>")]"
-			if(C.get_preference_value(/datum/client_preference/show_aooc) == GLOB.PREF_HIDE)
+			if(C.get_preference_value(/datum/client_preference/show_aooc) == PREF_HIDE)
 				line += " [SPAN_COLOR("#960018", "<b><s>(AOOC)</s></b>")]"
-			if(C.get_preference_value(/datum/client_preference/show_dsay) == GLOB.PREF_HIDE)
+			if(C.get_preference_value(/datum/client_preference/show_dsay) == PREF_HIDE)
 				line += " [SPAN_COLOR("#530fad", "<b><s>(DSAY)</s></b>")]"
 		line = jointext(line,null)
 		if(check_rights(R_ADMIN,0,C))

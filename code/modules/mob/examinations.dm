@@ -9,7 +9,7 @@
 			for (var/mob/M in viewers(4, user))
 				if (M == user)
 					continue
-				if (M.client && M.client.get_preference_value(/datum/client_preference/examine_messages) == GLOB.PREF_SHOW)
+				if (M.client && M.client.get_preference_value(/datum/client_preference/examine_messages) == PREF_SHOW)
 					if (M.is_blind() || user.is_invisible_to(M))
 						continue
 					to_chat(M, SPAN_SUBTLE("<b>\The [user]</b> looks at \the [A]."))

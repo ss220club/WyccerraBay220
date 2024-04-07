@@ -252,7 +252,7 @@
 /area/proc/play_ambience(mob/living/living)
 	if (!living?.client)
 		return
-	if (living.get_preference_value(/datum/client_preference/play_ambiance) != GLOB.PREF_YES)
+	if (living.get_preference_value(/datum/client_preference/play_ambiance) != PREF_YES)
 		return
 	var/turf/turf = get_turf(living)
 	if (!turf)

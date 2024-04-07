@@ -139,7 +139,7 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 	text = replacetext(text, span_check, "")
 
 	// Clip message
-	var/extra_length = owned_by.get_preference_value(/datum/client_preference/runechat_messages_length) == GLOB.PREF_LONG
+	var/extra_length = owned_by.get_preference_value(/datum/client_preference/runechat_messages_length) == PREF_LONG
 	var/maxlen = extra_length ? CHAT_MESSAGE_EXT_LENGTH : CHAT_MESSAGE_LENGTH
 	var/msgwidth = extra_length ? CHAT_MESSAGE_EXT_WIDTH : CHAT_MESSAGE_WIDTH
 	if (length_char(text) > maxlen)
@@ -290,9 +290,9 @@ GLOBAL_LIST_EMPTY(runechat_image_cache)
 		return
 
 	// Doesn't want to hear
-	if(ismob(speaker) && client.get_preference_value(/datum/client_preference/runechat_mob) != GLOB.PREF_YES)
+	if(ismob(speaker) && client.get_preference_value(/datum/client_preference/runechat_mob) != PREF_YES)
 		return
-	if(isobj(speaker) && client.get_preference_value(/datum/client_preference/runechat_obj) != GLOB.PREF_YES)
+	if(isobj(speaker) && client.get_preference_value(/datum/client_preference/runechat_obj) != PREF_YES)
 		return
 
 	// Incapable of receiving

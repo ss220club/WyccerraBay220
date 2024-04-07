@@ -1,5 +1,5 @@
 /datum/client_preference/tts_enabled
-	default_value = GLOB.PREF_YES
+	default_value = PREF_YES
 	description = "Toggle TTS"
 	key = "TTS_ENABLED"
 

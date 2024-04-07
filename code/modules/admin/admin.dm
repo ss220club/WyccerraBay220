@@ -21,7 +21,7 @@ var/global/floorIsLava = 0
 	var/rendered = SPAN_CLASS("log_message", "[SPAN_CLASS("prefix", "ATTACK:")] [SPAN_CLASS("message", text)]")
 	for(var/client/C as anything in GLOB.admins)
 		if(check_rights(R_INVESTIGATE, 0, C))
-			if(C.get_preference_value(/datum/client_preference/staff/show_attack_logs) == GLOB.PREF_SHOW)
+			if(C.get_preference_value(/datum/client_preference/staff/show_attack_logs) == PREF_SHOW)
 				var/msg = rendered
 				to_chat(C, msg)
 /proc/admin_notice(message, rights)

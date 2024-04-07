@@ -51,7 +51,7 @@
 /mob/proc/send_staffwarn(client/C, action, noise = 1)
 	if(check_rights((R_ADMIN|R_MOD),0,C))
 		to_chat(C,"[SPAN_CLASS("staffwarn", "StaffWarn: [client.ckey] [action]")]<br>[SPAN_NOTICE("[client.staffwarn]")]")
-		if(noise && C.get_preference_value(/datum/client_preference/staff/play_adminhelp_ping) == GLOB.PREF_HEAR)
+		if(noise && C.get_preference_value(/datum/client_preference/staff/play_adminhelp_ping) == PREF_HEAR)
 			sound_to(C, sound('sound/ui/pm-notify.ogg', volume = 25))
 
 /mob

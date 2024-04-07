@@ -17,7 +17,7 @@
 	if (!show_preference_setting)
 		return FALSE
 	// If you're trying to see the channel, you can't ignore it
-	return C.get_preference_value(show_preference_setting) != GLOB.PREF_SHOW
+	return C.get_preference_value(show_preference_setting) != PREF_SHOW
 
 
 /*

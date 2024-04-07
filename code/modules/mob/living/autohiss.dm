@@ -5,7 +5,7 @@
 	return message // no autohiss at this level
 
 /mob/living/carbon/human/handle_autohiss(message, datum/language/L)
-	if(!client || get_preference_value(/datum/client_preference/autohiss) == GLOB.PREF_OFF) // no need to process if there's no client or they have autohiss off
+	if(!client || get_preference_value(/datum/client_preference/autohiss) == PREF_OFF) // no need to process if there's no client or they have autohiss off
 		return message
 	return species.handle_autohiss(message, L, get_preference_value(/datum/client_preference/autohiss))
 
@@ -33,7 +33,7 @@
 		return message
 
 	var/map = autohiss_basic_map.Copy()
-	if(mode == GLOB.PREF_FULL && autohiss_extra_map)
+	if(mode == PREF_FULL && autohiss_extra_map)
 		map |= autohiss_extra_map
 
 	. = list()

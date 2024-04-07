@@ -1,8 +1,8 @@
 /datum/client_preference/exposurelevel
 	description = "Exposure strength"
 	key = "EXPOSURELEVEL"
-	options = list(GLOB.PREF_OFF, GLOB.PREF_LOW, GLOB.PREF_MED, GLOB.PREF_HIGH)
-	default_value = GLOB.PREF_HIGH
+	options = list(PREF_OFF, PREF_LOW, PREF_MED, PREF_HIGH)
+	default_value = PREF_HIGH
 
 /datum/client_preference/exposurelevel/changed(mob/preference_mob, new_value)
 	if(!preference_mob?.client)
@@ -14,8 +14,8 @@
 /datum/client_preference/bloomlevel
 	description = "Bloom strength"
 	key = "BLOOMLEVEL"
-	options = list(GLOB.PREF_OFF, GLOB.PREF_LOW, GLOB.PREF_MED, GLOB.PREF_HIGH)
-	default_value = GLOB.PREF_MED
+	options = list(PREF_OFF, PREF_LOW, PREF_MED, PREF_HIGH)
+	default_value = PREF_MED
 
 /datum/client_preference/bloomlevel/changed(mob/preference_mob, new_value)
 	if(!preference_mob?.client)
@@ -27,8 +27,8 @@
 /datum/client_preference/glare
 	description = "Show lamp glare"
 	key = "GLARE"
-	options = list(GLOB.PREF_YES, GLOB.PREF_NO)
-	default_value = GLOB.PREF_YES
+	options = list(PREF_YES, PREF_NO)
+	default_value = PREF_YES
 
 /datum/client_preference/glare/changed(mob/preference_mob, new_value)
 	if(!preference_mob?.client)

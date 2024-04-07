@@ -2218,5 +2218,5 @@
 
 /client/get_admin_jump_link(atom/target, delimiter, prefix, sufix)
 	if(holder)
-		var/short_links = get_preference_value(/datum/client_preference/ghost_follow_link_length) == GLOB.PREF_SHORT
+		var/short_links = get_preference_value(/datum/client_preference/ghost_follow_link_length) == PREF_SHORT
 		return admin_jump_link(target, src, delimiter, prefix, sufix, short_links)

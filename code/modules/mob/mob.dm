@@ -174,7 +174,7 @@
 	ASSERT(istype(M))
 
 	var/remote = ""
-	if(M.get_preference_value(/datum/client_preference/ghost_sight) == GLOB.PREF_ALL_EMOTES && !(src in view(M)))
+	if(M.get_preference_value(/datum/client_preference/ghost_sight) == PREF_ALL_EMOTES && !(src in view(M)))
 		remote = "\[R\]"
 
 	var/track = "([ghost_follow_link(src, M)])"
@@ -184,7 +184,7 @@
 
 /mob/proc/ghost_skip_message(mob/observer/ghost/M)
 	ASSERT(istype(M))
-	if(M.get_preference_value(/datum/client_preference/ghost_sight) == GLOB.PREF_ALL_EMOTES && !(src in view(M)))
+	if(M.get_preference_value(/datum/client_preference/ghost_sight) == PREF_ALL_EMOTES && !(src in view(M)))
 		if(!client)
 			return TRUE
 	return FALSE

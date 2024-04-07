@@ -508,14 +508,14 @@ Helpers
 	to_world("<br>")
 
 	for(var/mob/living/silicon/ai/aiPlayer in SSmobs.mob_list)
-		var/show_ai_key = aiPlayer.get_preference_value(/datum/client_preference/show_ckey_credits) == GLOB.PREF_SHOW
+		var/show_ai_key = aiPlayer.get_preference_value(/datum/client_preference/show_ckey_credits) == PREF_SHOW
 		to_world("<b>[aiPlayer.name][show_ai_key ? " (played by [aiPlayer.key])" : ""]'s laws at the [aiPlayer.stat == 2 ? "time of their deactivation" : "end of round"] were:</b>")
 		aiPlayer.show_laws(1)
 
 		if (length(aiPlayer.connected_robots))
 			var/minions = "<b>[aiPlayer.name]'s loyal minions were:</b>"
 			for(var/mob/living/silicon/robot/robo in aiPlayer.connected_robots)
-				var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == GLOB.PREF_SHOW
+				var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == PREF_SHOW
 				minions += " [robo.name][show_robot_key ? "(played by: [robo.key])" : ""][robo.stat ? " (deactivated)" : ""],"
 			to_world(minions)
 
@@ -528,7 +528,7 @@ Helpers
 			continue
 
 		if (!robo.connected_ai)
-			var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == GLOB.PREF_SHOW
+			var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == PREF_SHOW
 			to_world("<b>[robo.name][show_robot_key ? " (played by [robo.key])" : ""]'s individual laws at the [robo.stat == 2 ? "time of their deactivation" : "end of round"] were:</b>")
 
 			if(robo) //How the hell do we lose robo between here and the world messages directly above this?

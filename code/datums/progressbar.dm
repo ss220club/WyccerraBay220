@@ -27,7 +27,7 @@
 	src.actor = actor
 	src.max_progress = max_progress
 	client = actor.client
-	visible = actor.get_preference_value(/datum/client_preference/show_progress_bar) == GLOB.PREF_SHOW
+	visible = actor.get_preference_value(/datum/client_preference/show_progress_bar) == PREF_SHOW
 	if (!visible)
 		return
 	bar = image('icons/effects/progessbar.dmi', display_on_actor ? actor : actee, "priv_prog_bar_0", HUD_ABOVE_ITEM_LAYER)

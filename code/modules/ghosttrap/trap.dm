@@ -82,7 +82,7 @@ var/global/list/ghost_traps
 		unregister_target(target)
 
 	for(var/mob/observer/ghost/O in GLOB.player_list)
-		if (O.client.get_preference_value(/datum/client_preference/notify_ghost_trap) == GLOB.PREF_NO)
+		if (O.client.get_preference_value(/datum/client_preference/notify_ghost_trap) == PREF_NO)
 			return
 		if(!assess_candidate(O, target, FALSE))
 			continue

@@ -1,4 +1,4 @@
-GLOBAL_DATUM_INIT(/datum/repository/crew/crew_repository, new())
+GLOBAL_DATUM_INIT(crew_repository, /datum/repository/crew, new)
 
 /datum/repository/crew
 	var/list/cache_data

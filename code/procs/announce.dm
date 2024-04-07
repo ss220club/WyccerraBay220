@@ -1,6 +1,6 @@
-GLOBAL_DATUM_INIT(/datum/announcement/priority/priority_announcement, new(do_log = 0))
-GLOBAL_DATUM_INIT(/datum/announcement/priority/command/command_announcement, new(do_log = 0, do_newscast = 1))
-GLOBAL_DATUM_INIT(/datum/announcement/minor/minor_announcement, new(new_sound = ANNOUNCER_COMMANDREPORT,))
+GLOBAL_DATUM_INIT(priority_announcement, /datum/announcement/priority/command, new(do_log = 0, do_newscast = 1))
+GLOBAL_DATUM_INIT(command_announcement, /datum/announcement/minor, new(new_sound = ANNOUNCER_COMMANDREPORT,))
+GLOBAL_DATUM_INIT(minor_announcement, /datum/announcement/priority, new(do_log = 0))
 
 /datum/announcement
 	var/title = "Attention"

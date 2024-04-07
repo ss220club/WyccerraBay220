@@ -41,7 +41,7 @@
 	data["ntnetlogs"] = GLOB.ntnet_global.logs
 	data["ntnetmaxlogs"] = GLOB.ntnet_global.setting_maxlogcount
 
-	data["banned_nids"] = list(ntnet_global.banned_nids)
+	data["banned_nids"] = list(GLOB.ntnet_global.banned_nids)
 
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)

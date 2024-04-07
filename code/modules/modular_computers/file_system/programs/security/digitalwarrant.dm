@@ -201,7 +201,7 @@ LEGACY_RECORD_STRUCTURE(all_warrants, warrant)
 		// access-granting is only available for arrest warrants
 		if(activewarrant.fields["arrestsearch"] == "search")
 			return
-		if(!(access_change_ids in I.access))
+		if(!(GLOB.access_change_ids in I.access))
 			to_chat(user, "Authentication error: Unable to locate ID with appropriate access to allow this operation.")
 			return
 

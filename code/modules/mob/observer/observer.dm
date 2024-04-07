@@ -14,7 +14,7 @@ GLOBAL_VAR_CONST(GHOST_IMAGE_ALL, ~GHOST_IMAGE_NONE)
 	stat = DEAD
 	status_flags = GODMODE
 	shift_to_open_context_menu = FALSE
-	var/ghost_image_flag = GHOST_IMAGE_DARKNESS
+	var/ghost_image_flag = GLOB.GHOST_IMAGE_DARKNESS
 	var/image/ghost_image = null //this mobs ghost image, for deleting and stuff
 
 /mob/observer/Initialize(mapload)
@@ -24,9 +24,9 @@ GLOBAL_VAR_CONST(GHOST_IMAGE_ALL, ~GHOST_IMAGE_NONE)
 	ghost_image.layer = layer
 	ghost_image.appearance = src
 	ghost_image.appearance_flags = DEFAULT_APPEARANCE_FLAGS | RESET_ALPHA
-	if(ghost_image_flag & GHOST_IMAGE_DARKNESS)
+	if(ghost_image_flag & GLOB.GHOST_IMAGE_DARKNESS)
 		ghost_darkness_images |= ghost_image //so ghosts can see the eye when they disable darkness
-	if(ghost_image_flag & GHOST_IMAGE_SIGHTLESS)
+	if(ghost_image_flag & GLOB.GHOST_IMAGE_SIGHTLESS)
 		ghost_sightless_images |= ghost_image //so ghosts can see the eye when they disable ghost sight
 	SSghost_images.queue_global_image_update()
 

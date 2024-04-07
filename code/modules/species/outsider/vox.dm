@@ -123,7 +123,7 @@
 
 	ingest_amount = 20
 
-	traits = list(/singleton/trait/general/nonpermeable_skin = TRAIT_LEVEL_EXISTS)
+	traits = list(/singleton/trait/general/nonpermeable_skin = GLOB.TRAIT_LEVEL_EXISTS)
 
 /datum/species/vox/equip_survival_gear(mob/living/carbon/human/H)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/vox(H), slot_wear_mask)

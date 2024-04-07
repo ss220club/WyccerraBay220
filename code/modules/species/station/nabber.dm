@@ -156,7 +156,7 @@
 
 	ingest_amount = 6
 
-	traits = list(/singleton/trait/general/serpentid_adapted = TRAIT_LEVEL_EXISTS)
+	traits = list(/singleton/trait/general/serpentid_adapted = GLOB.TRAIT_LEVEL_EXISTS)
 	tts_trait = TTS_TRAIT_ROBOTIZE
 
 /datum/species/nabber/New()

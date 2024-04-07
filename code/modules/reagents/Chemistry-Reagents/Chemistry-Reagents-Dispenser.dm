@@ -74,7 +74,7 @@
 	value = DISPENSER_REAGENT_VALUE
 
 /datum/reagent/carbon/affect_ingest(mob/living/carbon/M, removed)
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	var/datum/reagents/ingested = M.get_ingested_reagents()
 	if (ingested && length(ingested.reagent_list) > 1) // Need to have at least 2 reagents - cabon and something to remove
@@ -428,7 +428,7 @@
 
 	glass_name = "sugar"
 	glass_desc = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
-	glass_icon = DRINK_ICON_NOISY
+	glass_icon = GLOB.DRINK_ICON_NOISY
 	value = DISPENSER_REAGENT_VALUE
 
 /datum/reagent/sugar/affect_blood(mob/living/carbon/human/M, removed)

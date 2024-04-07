@@ -221,10 +221,10 @@
 	ingest_amount = 15
 
 	traits = list(
-		/singleton/trait/boon/clear_mind = TRAIT_LEVEL_MINOR,
-		/singleton/trait/malus/animal_protein = TRAIT_LEVEL_MAJOR,
-		/singleton/trait/malus/ethanol = TRAIT_LEVEL_MODERATE,
-		/singleton/trait/general/permeable_skin = TRAIT_LEVEL_MINOR
+		/singleton/trait/boon/clear_mind = GLOB.TRAIT_LEVEL_MINOR,
+		/singleton/trait/malus/animal_protein = GLOB.TRAIT_LEVEL_MAJOR,
+		/singleton/trait/malus/ethanol = GLOB.TRAIT_LEVEL_MODERATE,
+		/singleton/trait/general/permeable_skin = GLOB.TRAIT_LEVEL_MINOR
 	)
 
 	bodyfall_sound = 'sound/effects/bodyfall_skrell.ogg'
@@ -337,9 +337,9 @@
 	)
 
 	traits = list(
-		/singleton/trait/boon/clear_mind = TRAIT_LEVEL_MAJOR,
-		/singleton/trait/general/metabolically_inert = TRAIT_LEVEL_MODERATE,
-		/singleton/trait/general/nonpermeable_skin = TRAIT_LEVEL_EXISTS
+		/singleton/trait/boon/clear_mind = GLOB.TRAIT_LEVEL_MAJOR,
+		/singleton/trait/general/metabolically_inert = GLOB.TRAIT_LEVEL_MODERATE,
+		/singleton/trait/general/nonpermeable_skin = GLOB.TRAIT_LEVEL_EXISTS
 	)
 
 /proc/spawn_diona_nymph(turf/target)

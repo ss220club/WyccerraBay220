@@ -45,9 +45,9 @@
 	)
 
 	traits = list(
-		/singleton/trait/boon/clear_mind = TRAIT_LEVEL_MAJOR,
-		/singleton/trait/general/metabolically_inert = TRAIT_LEVEL_MAJOR,
-		/singleton/trait/general/nonpermeable_skin = TRAIT_LEVEL_EXISTS
+		/singleton/trait/boon/clear_mind = GLOB.TRAIT_LEVEL_MAJOR,
+		/singleton/trait/general/metabolically_inert = GLOB.TRAIT_LEVEL_MAJOR,
+		/singleton/trait/general/nonpermeable_skin = GLOB.TRAIT_LEVEL_EXISTS
 	)
 
 /datum/species/golem/handle_post_spawn(mob/living/carbon/human/H)

@@ -21,7 +21,7 @@
 		return "[name]: Error; unable to send email. [EMAIL_SYSADMIN] unavailable or missing."
 	var/datum/computer_file/data/email_message/M = new()
 	M.title = "!SENSITIVE! - NTNet System log backup"
-	M.stored_data = jointext(ntnet_global.logs, "<br>")
+	M.stored_data = jointext(GLOB.ntnet_global.logs, "<br>")
 	M.source = S.login
 	if(!S.send_mail(argument, M))
 		return "[name]: Error; could not send email to '[argument]'."

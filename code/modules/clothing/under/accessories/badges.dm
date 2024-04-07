@@ -125,7 +125,7 @@
 /obj/item/clothing/accessory/badge/holo/emag_act(remaining_charges, mob/user)
 	if (emagged)
 		to_chat(user, SPAN_DANGER("\The [src] is already cracked."))
-		return GLOB.NO_EMAG_ACT
+		return NO_EMAG_ACT
 	emagged = TRUE
 	to_chat(user, SPAN_DANGER("You crack the security checks on \the [src]."))
 	return 1

@@ -129,9 +129,9 @@
 	)
 
 	traits = list(
-		/singleton/trait/boon/filtered_blood = TRAIT_LEVEL_EXISTS,
-		/singleton/trait/boon/cast_iron_stomach = TRAIT_LEVEL_EXISTS,
-		/singleton/trait/malus/sugar = TRAIT_LEVEL_MAJOR
+		/singleton/trait/boon/filtered_blood = GLOB.TRAIT_LEVEL_EXISTS,
+		/singleton/trait/boon/cast_iron_stomach = GLOB.TRAIT_LEVEL_EXISTS,
+		/singleton/trait/malus/sugar = GLOB.TRAIT_LEVEL_MAJOR
 	)
 
 /datum/say_list/monkey

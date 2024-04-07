@@ -199,7 +199,7 @@
 
 	glass_name = "ice"
 	glass_desc = "Generally, you're supposed to put something else in there too..."
-	glass_icon = DRINK_ICON_NOISY
+	glass_icon = GLOB.DRINK_ICON_NOISY
 
 	heating_message = "cracks and melts."
 	heating_products = list(/datum/reagent/water)

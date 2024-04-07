@@ -95,7 +95,7 @@ GLOBAL_LIST_INIT(terminal_fails, init_subtypes(/datum/terminal_skill_fail))
 		return list()
 	var/datum/computer_file/data/email_message/M = new()
 	M.title = "!SENSITIVE! - NTNet System log backup"
-	M.stored_data = jointext(ntnet_global.logs, "<br>")
+	M.stored_data = jointext(GLOB.ntnet_global.logs, "<br>")
 	M.source = S.login
 	if(!S.send_mail(EMAIL_BROADCAST, M))
 		return list()

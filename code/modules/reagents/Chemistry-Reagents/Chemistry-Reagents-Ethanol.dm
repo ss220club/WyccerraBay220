@@ -71,7 +71,7 @@
 
 /datum/reagent/ethanol/beer/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.jitteriness = max(M.jitteriness - 3, 0)
 
@@ -159,7 +159,7 @@
 
 /datum/reagent/ethanol/deadrum/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.dizziness +=5
 
@@ -189,7 +189,7 @@
 	overdose = 45
 
 /datum/reagent/ethanol/coffee/affect_ingest(mob/living/carbon/M, removed)
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	..()
 	M.dizziness = max(0, M.dizziness - 5)
@@ -309,7 +309,7 @@
 
 /datum/reagent/ethanol/thirteenloko/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.drowsyness = max(0, M.drowsyness - 7)
 	if (M.bodytemperature > 310)
@@ -571,7 +571,7 @@
 
 /datum/reagent/ethanol/drifter/affect_ingest(mob/living/carbon/M, removed)
 	. = ..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	var/sleep_chance = M.GetTraitLevel(/singleton/trait/malus/ethanol) || 1
 	if (prob(sleep_chance))
@@ -900,7 +900,7 @@
 
 	glass_name = "iced beer"
 	glass_desc = "A beer so frosty, the air around it freezes."
-	glass_special = list(DRINK_ICE)
+	glass_special = list(GLOB.DRINK_ICE)
 
 /datum/reagent/ethanol/irishslammer
 	name = "Irish Slammer"
@@ -1108,7 +1108,7 @@
 
 	glass_name = "Neurotoxin"
 	glass_desc = "A drink that is guaranteed to knock you silly."
-	glass_icon = DRINK_ICON_NOISY
+	glass_icon = GLOB.DRINK_ICON_NOISY
 	glass_special = list("neuroright")
 
 /datum/reagent/ethanol/neurotoxin/affect_ingest(mob/living/carbon/M, removed)

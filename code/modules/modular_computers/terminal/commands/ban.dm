@@ -20,7 +20,7 @@
 		return network_error()
 	if(!length(arguments))
 		if (length(GLOB.ntnet_global.banned_nids))
-			return list("[name]: The following network ids are banned:", jointext(ntnet_global.banned_nids, ", "))
+			return list("[name]: The following network ids are banned:", jointext(GLOB.ntnet_global.banned_nids, ", "))
 		else
 			return "[name]: There are no banned network ids."
 	else if(length(arguments) == 2)

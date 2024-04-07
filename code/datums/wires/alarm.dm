@@ -9,13 +9,6 @@
 		new /datum/wire_description(AALARM_WIRE_AALARM, "This wire gives power to the actual alarm mechanism.")
 	)
 
-GLOBAL_VAR_CONST(AALARM_WIRE_IDSCAN, 1)
-GLOBAL_VAR_CONST(AALARM_WIRE_POWER, 2)
-GLOBAL_VAR_CONST(AALARM_WIRE_SYPHON, 4)
-GLOBAL_VAR_CONST(AALARM_WIRE_AI_CONTROL, 8)
-GLOBAL_VAR_CONST(AALARM_WIRE_AALARM, 16)
-
-
 /datum/wires/alarm/CanUse(mob/living/L)
 	var/obj/machinery/alarm/A = holder
 	if(A.wiresexposed && A.buildstage == 2)

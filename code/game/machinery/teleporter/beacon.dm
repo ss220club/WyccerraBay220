@@ -110,7 +110,7 @@
 		return
 
 	if (user.skill_check(SKILL_DEVICES, SKILL_TRAINED))
-		if (wires.IsIndexCut(TELEBEACON_WIRE_SIGNALLER))
+		if (wires.IsIndexCut(GLOB.TELEBEACON_WIRE_SIGNALLER))
 			. += SPAN_WARNING("The signal lights appear to be disabled.")
 		else if (LAZYLEN(connected_computers))
 			. += SPAN_WARNING("The signal lights indicate it has an active teleporter connection.")
@@ -129,7 +129,7 @@
 	. = ..()
 	if (!.)
 		return
-	if (power_cut || wires.IsIndexCut(TELEBEACON_WIRE_POWER))
+	if (power_cut || wires.IsIndexCut(GLOB.TELEBEACON_WIRE_POWER))
 		return FALSE
 
 
@@ -141,7 +141,7 @@
 	if (panel_open)
 		icon_state += "_open"
 	else if (functioning())
-		if (wires.IsIndexCut(TELEBEACON_WIRE_RELAY) || wires.IsIndexCut(TELEBEACON_WIRE_SIGNALLER))
+		if (wires.IsIndexCut(GLOB.TELEBEACON_WIRE_RELAY) || wires.IsIndexCut(GLOB.TELEBEACON_WIRE_SIGNALLER))
 			icon_state += "_offline"
 		else if (LAZYLEN(connected_computers))
 			icon_state += "_locked"
@@ -168,7 +168,7 @@
 
 /// Connects the beacon to a computer that's locking onto it. Returns TRUE on connection, FALSE if the connection fails.
 /obj/machinery/tele_beacon/proc/connect_computer(obj/machinery/computer/teleporter/computer)
-	if (wires.IsIndexCut(TELEBEACON_WIRE_RELAY))
+	if (wires.IsIndexCut(GLOB.TELEBEACON_WIRE_RELAY))
 		return FALSE
 
 	LAZYDISTINCTADD(connected_computers, computer)
@@ -180,7 +180,7 @@
 
 /// Plays the 'new connection' beep.
 /obj/machinery/tele_beacon/proc/notify_connection()
-	if (wires.IsIndexCut(TELEBEACON_WIRE_SIGNALLER))
+	if (wires.IsIndexCut(GLOB.TELEBEACON_WIRE_SIGNALLER))
 		return
 	audible_message(SPAN_NOTICE("\The [src] beeps as a new teleporter links to it."))
 	playsound(loc, 'sound/machines/twobeep.ogg', 75, 1)
@@ -255,9 +255,9 @@
 	wire_count = 3
 	window_y = 500
 	descriptions = list(
-		new /datum/wire_description(TELEBEACON_WIRE_POWER, "This wire is connected to the power supply unit.", SKILL_EXPERIENCED),
-		new /datum/wire_description(TELEBEACON_WIRE_RELAY, "This wire is connected to the remote relay device.", SKILL_MASTER),
-		new /datum/wire_description(TELEBEACON_WIRE_SIGNALLER, "This wire is connected to a speaker and several indicator lights.", SKILL_EXPERIENCED)
+		new /datum/wire_description(GLOB.TELEBEACON_WIRE_POWER, "This wire is connected to the power supply unit.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.TELEBEACON_WIRE_RELAY, "This wire is connected to the remote relay device.", SKILL_MASTER),
+		new /datum/wire_description(GLOB.TELEBEACON_WIRE_SIGNALLER, "This wire is connected to a speaker and several indicator lights.", SKILL_EXPERIENCED)
 	)
 
 
@@ -277,8 +277,8 @@
 	else
 		. += "<li>The panel is powered.</li>"
 		if (user.skill_check(SKILL_ELECTRICAL, SKILL_TRAINED))
-			. += "<li>The remote relay chip is [IsIndexCut(TELEBEACON_WIRE_RELAY) ? "disconnected" : "connected"].</li>"
-			. += "<li>The connection signaller circuitry is [IsIndexCut(TELEBEACON_WIRE_SIGNALLER) ? "disconnected" : "connected"].</li>"
+			. += "<li>The remote relay chip is [IsIndexCut(GLOB.TELEBEACON_WIRE_RELAY) ? "disconnected" : "connected"].</li>"
+			. += "<li>The connection signaller circuitry is [IsIndexCut(GLOB.TELEBEACON_WIRE_SIGNALLER) ? "disconnected" : "connected"].</li>"
 		else
 			. += "<li>There are lights and wires here, but you don't know how the wiring works.</li>"
 	. += "</ul>"
@@ -288,29 +288,29 @@
 	var/obj/machinery/tele_beacon/tele_beacon = holder
 	switch (index)
 		// TELEBEACON_WIRE_SIGNALLER - Enable (mended) or disable (cut) the 'connected computer' beep. Handled in `connect_computer()`
-		if (TELEBEACON_WIRE_POWER) // Enable (mended) or disable (cut) power. Has a shock risk.
+		if (GLOB.TELEBEACON_WIRE_POWER) // Enable (mended) or disable (cut) power. Has a shock risk.
 			tele_beacon.set_power_cut(!mended)
 			tele_beacon.shock(usr, 50)
-		if (TELEBEACON_WIRE_RELAY) // Allow (mended) or disallow (cut) teleporter connections. Handled in `connect_computer()`
+		if (GLOB.TELEBEACON_WIRE_RELAY) // Allow (mended) or disallow (cut) teleporter connections. Handled in `connect_computer()`
 			tele_beacon.disconnect_computers()
 
 /datum/wires/tele_beacon/UpdatePulsed(index)
 	var/obj/machinery/tele_beacon/tele_beacon = holder
 	switch (index)
-		if (TELEBEACON_WIRE_POWER)
+		if (GLOB.TELEBEACON_WIRE_POWER)
 			tele_beacon.set_power_cut()
-			addtimer(CALLBACK(src, PROC_REF(ResetPulsed)), rand(15 SECONDS, 45 SECONDS), TELEBEACON_WIRE_POWER)
-		if (TELEBEACON_WIRE_RELAY)
+			addtimer(CALLBACK(src, PROC_REF(ResetPulsed)), rand(15 SECONDS, 45 SECONDS), GLOB.TELEBEACON_WIRE_POWER)
+		if (GLOB.TELEBEACON_WIRE_RELAY)
 			tele_beacon.disconnect_computers()
-		if (TELEBEACON_WIRE_SIGNALLER)
+		if (GLOB.TELEBEACON_WIRE_SIGNALLER)
 			tele_beacon.notify_connection()
 
 
 /datum/wires/tele_beacon/ResetPulsed(index)
 	var/obj/machinery/tele_beacon/tele_beacon = holder
 	switch (index)
-		if (TELEBEACON_WIRE_POWER)
-			if (IsIndexCut(TELEBEACON_WIRE_POWER))
+		if (GLOB.TELEBEACON_WIRE_POWER)
+			if (IsIndexCut(GLOB.TELEBEACON_WIRE_POWER))
 				return
 			tele_beacon.set_power_cut(FALSE)
 

@@ -1,5 +1,5 @@
 /datum/click_handler/build_mode
-	flags = GLOB.CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT | GLOB.CLICK_HANDLER_REMOVE_IF_NOT_TOP
+	flags = CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT | CLICK_HANDLER_REMOVE_IF_NOT_TOP
 	var/dir
 
 	var/list/build_modes

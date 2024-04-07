@@ -41,6 +41,7 @@
 #include "code\__defines\chat.dm"
 #include "code\__defines\chat_boxes.dm"
 #include "code\__defines\chemistry.dm"
+#include "code\__defines\click.dm"
 #include "code\__defines\client.dm"
 #include "code\__defines\colors.dm"
 #include "code\__defines\combat.dm"

@@ -13,11 +13,6 @@ if(!click_handlers) { \
 	QDEL_NULL_LIST(click_handlers)
 	return ..()
 
-GLOBAL_VAR_CONST(CLICK_HANDLER_NONE, EMPTY_BITFIELD)
-GLOBAL_VAR_CONST(CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT, FLAG(0))
-GLOBAL_VAR_CONST(CLICK_HANDLER_REMOVE_IF_NOT_TOP, FLAG(1))
-GLOBAL_VAR_CONST(CLICK_HANDLER_ALL, ( CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT | CLICK_HANDLER_REMOVE_IF_NOT_TOP) )
-
 /datum/click_handler
 	var/mob/user
 	var/flags = 0
@@ -25,11 +20,11 @@ GLOBAL_VAR_CONST(CLICK_HANDLER_ALL, ( CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT | CLICK
 /datum/click_handler/New(mob/user)
 	..()
 	src.user = user
-	if(flags & (GLOB.CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT))
+	if(flags & (CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT))
 		GLOB.logged_out_event.register(user, src, TYPE_PROC_REF(/datum/click_handler, OnMobLogout))
 
 /datum/click_handler/Destroy()
-	if(flags & (GLOB.CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT))
+	if(flags & (CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT))
 		GLOB.logged_out_event.unregister(user, src, TYPE_PROC_REF(/datum/click_handler, OnMobLogout))
 	user = null
 	. = ..()
@@ -93,7 +88,7 @@ GLOBAL_VAR_CONST(CLICK_HANDLER_ALL, ( CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT | CLICK
 	// No manipulation of the default click handler
 	if(new_click_handler_type == /datum/click_handler/default)
 		return FALSE
-	if((initial(new_click_handler_type.flags) & GLOB.CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT) && !client)
+	if((initial(new_click_handler_type.flags) & CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT) && !client)
 		return FALSE
 	SETUP_CLICK_HANDLERS
 
@@ -102,7 +97,7 @@ GLOBAL_VAR_CONST(CLICK_HANDLER_ALL, ( CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT | CLICK
 		return FALSE // If the top click handler is already the same as the desired one, bow out
 
 	click_handler.Exit()
-	if(click_handler.flags & GLOB.CLICK_HANDLER_REMOVE_IF_NOT_TOP)
+	if(click_handler.flags & CLICK_HANDLER_REMOVE_IF_NOT_TOP)
 		click_handlers.Remove(click_handler)
 		qdel(click_handler)
 

@@ -54,7 +54,7 @@
 GLOBAL_VAR_CONST(access_skrellscoutship, "ACCESS_SKRELLSCOUT")
 
 /datum/access/skrellscoutship
-	id = access_skrellscoutship
+	id = GLOB.access_skrellscoutship
 	desc = "SSV Crewman"
 	region = ACCESS_REGION_NONE
 

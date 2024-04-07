@@ -4,7 +4,7 @@
 
 /datum/computer_file/report/recipient/command/generate_fields()
 	..()
-	set_access(access_heads)
+	set_access(GLOB.access_heads)
 
 /datum/computer_file/report/recipient/command/crew_transfer
 	form_name = "CTA-NTF-01"

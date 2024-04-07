@@ -47,6 +47,6 @@
 
 	data["crewmembers"] = list()
 	for(var/zlevel in map_levels)
-		data["crewmembers"] += crew_repository.health_data(zlevel)
+		data["crewmembers"] += GLOB.crew_repository.health_data(zlevel)
 
 	return data

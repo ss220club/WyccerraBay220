@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/exp/generate_fields()
 	..()
-	set_access(access_explorer)
+	set_access(GLOB.access_explorer)
 
 /datum/computer_file/report/recipient/exp/planet
 	form_name = "NT-EXP-19p"

@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/sci/generate_fields()
 	..()
-	set_access(access_research)
+	set_access(GLOB.access_research)
 
 /datum/computer_file/report/recipient/sci/anomaly
 	form_name = "NT-SCI-05"
@@ -103,7 +103,7 @@
 	При необходимости - вписать дополнительные пункты в списке. Пустые графы заполнить, как N/A.")
 	rd_fields += add_field(/datum/report_field/signature, "Подпись Директора Исследований")
 	add_field(/datum/report_field/signature, "Подпись главы отдела аугментированного")
-	set_access(access_robotics)
+	set_access(GLOB.access_robotics)
 	for(var/datum/report_field/field in rd_fields)
 		field.set_access(access_edit = GLOB.access_rd)
 	for(var/datum/report_field/field in sci_fields)

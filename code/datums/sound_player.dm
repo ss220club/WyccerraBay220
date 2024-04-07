@@ -193,7 +193,7 @@ GLOBAL_DATUM_INIT(sound_player, /singleton/sound_player, new)
 /datum/sound_token/proc/PrivAddListener(atom/listener)
 	if(isvirtualmob(listener))
 		var/mob/observer/virtual/v = listener
-		if(!(v.abilities & GLOB.VIRTUAL_ABILITY_HEAR))
+		if(!(v.abilities & VIRTUAL_ABILITY_HEAR))
 			return
 		listener = v.host
 	if(listener in listeners)

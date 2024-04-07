@@ -81,7 +81,7 @@
 		ks1type = encryption_key
 		default_frequency = assign_away_freq(preset_name)
 		if (use_common)
-			frequency = GLOB.PUB_FREQ
+			frequency = PUB_FREQ
 		else
 			frequency = default_frequency
 	. = ..()
@@ -97,7 +97,7 @@
 
 /obj/item/device/radio/headset/syndicate/Initialize()
 	. = ..()
-	set_frequency(GLOB.SYND_FREQ)
+	set_frequency(SYND_FREQ)
 
 /obj/item/device/radio/headset/raider
 	origin_tech = list(TECH_ESOTERIC = 2)
@@ -106,14 +106,14 @@
 
 /obj/item/device/radio/headset/raider/Initialize()
 	. = ..()
-	set_frequency(GLOB.RAID_FREQ)
+	set_frequency(RAID_FREQ)
 
 /obj/item/device/radio/headset/vox_raider
 	ks1type = /obj/item/device/encryptionkey/vox_raider
 
 /obj/item/device/radio/headset/vox_raider/Initialize()
 	. = ..()
-	set_frequency(GLOB.V_RAID_FREQ)
+	set_frequency(V_RAID_FREQ)
 
 /obj/item/device/radio/headset/binary
 	origin_tech = list(TECH_ESOTERIC = 3)
@@ -194,7 +194,7 @@
 /obj/item/device/radio/headset/merchant
 	name = "merchant headset"
 	desc = "A headset utilizing the universal hailing frequency."
-	frequency = GLOB.HAIL_FREQ
+	frequency = HAIL_FREQ
 	ks1type = /obj/item/device/encryptionkey/merchant
 
 /obj/item/device/radio/headset/heads/captain
@@ -385,7 +385,7 @@
 		if(!radio_controller)
 			src.SetName("broken radio headset")
 			return
-		secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  GLOB.RADIO_CHAT)
+		secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  RADIO_CHAT)
 
 	if(setDescription)
 		setupRadioDescription()

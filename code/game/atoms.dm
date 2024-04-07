@@ -517,7 +517,7 @@
  * emag will be passed on to other interaction checks.
  */
 /atom/proc/emag_act(remaining_charges, mob/user, emag_source)
-	return NO_EMAG_ACT
+	return GLOB.NO_EMAG_ACT
 
 /**
  * Called when fire affects the atom.

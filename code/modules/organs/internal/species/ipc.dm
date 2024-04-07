@@ -24,7 +24,7 @@
 	var/searching = null
 	var/last_search = 0
 
-	req_access = list(access_robotics)
+	req_access = list(GLOB.access_robotics)
 
 	var/list/shackled_verbs = list(
 		/obj/item/organ/internal/posibrain/proc/show_laws_brain,
@@ -98,7 +98,7 @@
 	if (!protected)
 		var/datum/ghosttrap/T = get_ghost_trap("positronic brain")
 		T.request_player(brainmob, "Someone is requesting a personality for a positronic brain.", 60 SECONDS)
-	searching = addtimer(CALLBACK(src, PROC_REF(cancel_search)), 60 SECONDS, TIMER_UNIQUE | TIMER_STOPPABLE)
+	searching = addtimer(CALLBACK(src, PROC_REF(cancel_search)), 60 SECONDS, GLOB.TIMER_UNIQUE | GLOB.TIMER_STOPPABLE)
 	icon_state = "posibrain-searching"
 
 /obj/item/organ/internal/posibrain/proc/cancel_search()

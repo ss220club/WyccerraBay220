@@ -74,8 +74,8 @@
 
 	if (href_list["freq"])
 		var/new_frequency = (frequency + text2num(href_list["freq"]))
-		if(new_frequency < RADIO_LOW_FREQ || new_frequency > RADIO_HIGH_FREQ)
-			new_frequency = sanitize_frequency(new_frequency, RADIO_LOW_FREQ, RADIO_HIGH_FREQ)
+		if(new_frequency < GLOB.RADIO_LOW_FREQ || new_frequency > GLOB.RADIO_HIGH_FREQ)
+			new_frequency = sanitize_frequency(new_frequency, GLOB.RADIO_LOW_FREQ, GLOB.RADIO_HIGH_FREQ)
 		set_frequency(new_frequency)
 
 	if(href_list["code"])
@@ -139,7 +139,7 @@
 		return
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
+	radio_connection = radio_controller.add_object(src, frequency, GLOB.RADIO_CHAT)
 	return
 
 /obj/item/device/assembly/signaler/Process()

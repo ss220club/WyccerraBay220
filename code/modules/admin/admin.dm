@@ -698,7 +698,7 @@ var/global/floorIsLava = 0
 
 	// Print the header with category selection buttons.
 	var/dat = "<B>The first rule of adminbuse is: you don't talk about the adminbuse.</B><HR>"
-	for(var/datum/admin_secret_category/category in admin_secrets.categories)
+	for(var/datum/admin_secret_category/category in GLOB.admin_secrets.categories)
 		if(!category.can_view(usr))
 			continue
 		if(active_category == category)

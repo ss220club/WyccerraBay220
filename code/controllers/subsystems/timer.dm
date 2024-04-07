@@ -53,9 +53,9 @@ SUBSYSTEM_DEF(timer)
 				queue.Cut(1, i)
 			return
 		target = timer.callback.target
-		if (target == GLOBAL_PROC || !QDELETED(target))
+		if (target ==GLOB.GLOBAL_PROC || !QDELETED(target))
 			invoke_async(timer.callback)
-			if (timer.flags & TIMER_LOOP)
+			if (timer.flags & GLOB.TIMER_LOOP)
 				_addtimer(timer, subsystem = src)
 		else if (timer.hash)
 			timers_by_hash -= timer.hash
@@ -85,15 +85,15 @@ SUBSYSTEM_DEF(timer)
 		timer.wait = wait
 		timer.flags = flags
 		timer.source = source
-		if (flags & (TIMER_STOPPABLE | TIMER_UNIQUE))
+		if (flags & (GLOB.TIMER_STOPPABLE | GLOB.TIMER_UNIQUE))
 			var/hash = "[flags][callback.identity]"
-			if (!(flags & TIMER_NO_HASH_WAIT))
+			if (!(flags & GLOB.TIMER_NO_HASH_WAIT))
 				hash = "[hash][wait]"
 			hash = sha1(hash)
-			if (flags & TIMER_UNIQUE)
+			if (flags & GLOB.TIMER_UNIQUE)
 				var/datum/timer/match = subsystem.timers_by_hash[hash]
 				if (match)
-					if (!(flags & TIMER_OVERRIDE))
+					if (!(flags & GLOB.TIMER_OVERRIDE))
 						return
 					subsystem.timers_by_hash[hash] = timer
 					subsystem.queue -= match

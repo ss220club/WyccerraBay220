@@ -134,7 +134,7 @@
 		QDEL_NULL(mimic_proxy)
 
 	..()
-	return QDEL_HINT_LETMELIVE
+	return GLOB.QDEL_HINT_LETMELIVE
 
 /// WARNING WARNING
 /// Turfs DO NOT lose their signals when they get replaced, REMEMBER THIS
@@ -246,7 +246,7 @@ GLOBAL_VAR_CONST(enterloopsanity, 100)
 	var/objects = 0
 	if(A && (A.movable_flags & MOVABLE_FLAG_PROXMOVE))
 		for(var/atom/movable/thing in range(1))
-			if(objects > enterloopsanity) break
+			if(objects > GLOB.enterloopsanity) break
 			objects++
 			spawn(0)
 				if(A)

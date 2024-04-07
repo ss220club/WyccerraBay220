@@ -4,7 +4,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/patrol
 	name = "tempest group cabinet"
-	req_access = list(access_away_cavalry_captain)
+	req_access = list(GLOB.access_away_cavalry_captain)
 
 /obj/structure/closet/secure_closet/guncabinet/patrol/energy/WillContain()
 	return list(
@@ -51,7 +51,7 @@
 /obj/structure/closet/secure_closet/patrol
 	name = "trooper locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/sol/two/dark
-	req_access = list(access_away_cavalry_ops)
+	req_access = list(GLOB.access_away_cavalry_ops)
 
 /obj/structure/closet/secure_closet/patrol/WillContain()
 	return list(
@@ -75,7 +75,7 @@
 /obj/structure/closet/secure_closet/patrol/marine_lead
 	name = "squad leader locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/sol/two/dark
-	req_access = list(access_away_cavalry_captain)
+	req_access = list(GLOB.access_away_cavalry_captain)
 
 
 /obj/structure/closet/secure_closet/patrol/marine_lead/WillContain()
@@ -105,7 +105,7 @@
 /obj/structure/closet/secure_closet/patrol/fleet
 	name = "fleet pilot cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/sol
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 
 /obj/structure/closet/secure_closet/patrol/fleet/WillContain()
 	return list(
@@ -121,7 +121,7 @@
 /obj/structure/closet/secure_closet/patrol/fleet/engi
 	name = "fleet technician cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/sol
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 
 /obj/structure/closet/secure_closet/patrol/fleet/engi/WillContain()
 	return list(
@@ -142,7 +142,7 @@
 /obj/structure/closet/secure_closet/patrol/fleet/med
 	name = "fleet corpsman cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/sol
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 
 /obj/structure/closet/secure_closet/patrol/fleet/med/WillContain()
 	return list(
@@ -167,7 +167,7 @@
 /obj/structure/closet/secure_closet/patrol/fleet_com
 	name = "fleet commander cabinet"
 	closet_appearance = /singleton/closet_appearance/secure_closet/sol
-	req_access = list(access_away_cavalry, access_away_cavalry_commander)
+	req_access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_commander)
 
 /obj/structure/closet/secure_closet/patrol/fleet_com/WillContain()
 	return list(
@@ -235,13 +235,13 @@
 	////////
 
 /obj/machinery/door/airlock/autoname/command
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 
 /obj/machinery/door/airlock/autoname/engineering
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 
 /obj/machinery/door/airlock/autoname/marine
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 
 /obj/machinery/vending/away_solpatrol_uniform
 	name = "Fleet uniform dispenser"
@@ -250,7 +250,7 @@
 	icon_state = "uniform_fleet"
 	icon_deny = "uniform_fleet-deny"
 	icon_vend = "uniform_fleet-vend"
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 	products = list(/obj/item/clothing/head/beret/solgov/fleet/branch/fifth = 5,
 					/obj/item/clothing/head/soft/solgov/fleet = 5,
 					/obj/item/clothing/head/ushanka/solgov/fleet = 5,
@@ -277,7 +277,7 @@
 	suit= /obj/item/clothing/suit/space/void/medical/alt/sol/prepared
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/away_cavalry_eng
@@ -285,7 +285,7 @@
 	suit= /obj/item/clothing/suit/space/void/engineering/alt/sol/prepared
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/away_cavalry_com
@@ -293,7 +293,7 @@
 	suit= /obj/item/clothing/suit/space/void/command/prepared
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
-	req_access = list(access_away_cavalry, access_away_cavalry_commander)
+	req_access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_commander)
 	islocked = 1
 
 /obj/machinery/suit_storage_unit/away_cavalry_fly
@@ -301,7 +301,7 @@
 	suit= /obj/item/clothing/suit/space/void/pilot/sol/prepared
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
-	req_access = list(access_away_cavalry)
+	req_access = list(GLOB.access_away_cavalry)
 	islocked = 1
 
 // BOSNIAN ARTILLERY SECTION //
@@ -331,7 +331,7 @@
 			napalm_liquid.touch_turf(A, TRUE)
 	var/datum/effect/spark_spread/s = new /datum/effect/spark_spread
 	s.set_up(3, 1, target)
-	addtimer(CALLBACK(s, TYPE_PROC_REF(/datum/effect, start)), 0.1 SECONDS | TIMER_STOPPABLE)
+	addtimer(CALLBACK(s, TYPE_PROC_REF(/datum/effect, start)), 0.1 SECONDS | GLOB.TIMER_STOPPABLE)
 
 /obj/structure/ship_munition/disperser_charge/emp/military
 	name = "M850-EM"

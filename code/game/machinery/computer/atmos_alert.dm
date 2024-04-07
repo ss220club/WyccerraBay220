@@ -64,7 +64,7 @@ var/global/list/minor_air_alarms = list()
 				var/obj/machinery/alarm/air_alarm = alarm_source.source
 				if(istype(air_alarm))
 					var/list/new_ref = list("atmos_reset" = 1)
-					air_alarm.Topic(air_alarm, new_ref, state = air_alarm_topic)
+					air_alarm.Topic(air_alarm, new_ref, state = GLOB.air_alarm_topic)
 		return TOPIC_REFRESH
 
 

@@ -37,7 +37,7 @@ SUBSYSTEM_DEF(timer)
 				queue.Cut(1, i)
 			return
 		target = timer.callback.target
-		if (target ==GLOB.GLOBAL_PROC || !QDELETED(target))
+		if (target ==GLOBAL_PROC || !QDELETED(target))
 			invoke_async(timer.callback)
 			if (timer.flags & TIMER_LOOP)
 				_addtimer(timer, subsystem = src)

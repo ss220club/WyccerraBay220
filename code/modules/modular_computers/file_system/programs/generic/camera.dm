@@ -59,7 +59,7 @@
 	for(var/network in GLOB.using_map.station_networks)
 		all_networks.Add(list(list(
 							"tag" = network,
-							"has_access" = can_GLOB.access_network(user, get_camera_access(network))
+							"has_access" = can_access_network(user, get_camera_access(network))
 							)))
 
 	all_networks = modify_networks_list(all_networks)
@@ -86,7 +86,7 @@
 /datum/nano_module/camera_monitor/proc/modify_networks_list(list/networks)
 	return networks
 
-/datum/nano_module/camera_monitor/proc/can_GLOB.access_network(mob/user, network_access)
+/datum/nano_module/camera_monitor/proc/can_access_network(mob/user, network_access)
 	// No access passed, or 0 which is considered no access requirement. Allow it.
 	if(!network_access)
 		return 1

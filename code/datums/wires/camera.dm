@@ -5,10 +5,10 @@
 	holder_type = /obj/machinery/camera
 	wire_count = 6
 	descriptions = list(
-		new /datum/wire_description(CAMERA_WIRE_FOCUS, "This wire runs to the camera's lens adjustment motors."),
-		new /datum/wire_description(CAMERA_WIRE_POWER, "This wire seems to be carrying a heavy current."),
-		new /datum/wire_description(CAMERA_WIRE_LIGHT, "This wire seems connected to the built-in light.", SKILL_EXPERIENCED),
-		new /datum/wire_description(CAMERA_WIRE_ALARM, "This wire is connected to a remote signaling device of some sort.")
+		new /datum/wire_description(GLOB.CAMERA_WIRE_FOCUS, "This wire runs to the camera's lens adjustment motors."),
+		new /datum/wire_description(GLOB.CAMERA_WIRE_POWER, "This wire seems to be carrying a heavy current."),
+		new /datum/wire_description(GLOB.CAMERA_WIRE_LIGHT, "This wire seems connected to the built-in light.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.CAMERA_WIRE_ALARM, "This wire is connected to a remote signaling device of some sort.")
 	)
 
 /datum/wires/camera/GetInteractWindow(mob/user)
@@ -36,18 +36,18 @@ GLOBAL_VAR_CONST(CAMERA_WIRE_NOTHING2, 32)
 	var/obj/machinery/camera/C = holder
 
 	switch(index)
-		if(CAMERA_WIRE_FOCUS)
+		if(GLOB.CAMERA_WIRE_FOCUS)
 			var/range = (mended ? initial(C.view_range) : C.short_range)
 			C.setViewRange(range)
 
-		if(CAMERA_WIRE_POWER)
+		if(GLOB.CAMERA_WIRE_POWER)
 			if(C.status && !mended || !C.status && mended)
 				C.deactivate(usr, 1)
 
-		if(CAMERA_WIRE_LIGHT)
+		if(GLOB.CAMERA_WIRE_LIGHT)
 			C.light_disabled = !mended
 
-		if(CAMERA_WIRE_ALARM)
+		if(GLOB.CAMERA_WIRE_ALARM)
 			if(!mended)
 				C.triggerCameraAlarm()
 			else
@@ -59,19 +59,19 @@ GLOBAL_VAR_CONST(CAMERA_WIRE_NOTHING2, 32)
 	if(IsIndexCut(index))
 		return
 	switch(index)
-		if(CAMERA_WIRE_FOCUS)
+		if(GLOB.CAMERA_WIRE_FOCUS)
 			var/new_range = (C.view_range == initial(C.view_range) ? C.short_range : initial(C.view_range))
 			C.setViewRange(new_range)
 
-		if(CAMERA_WIRE_LIGHT)
+		if(GLOB.CAMERA_WIRE_LIGHT)
 			C.light_disabled = !C.light_disabled
 
-		if(CAMERA_WIRE_ALARM)
+		if(GLOB.CAMERA_WIRE_ALARM)
 			C.visible_message("[icon2html(C,viewers(get_turf(C)))] *beep*", "[icon2html(C, viewers(get_turf(C)))] *beep*")
 	return
 
 /datum/wires/camera/proc/CanDeconstruct()
-	if(IsIndexCut(CAMERA_WIRE_POWER) && IsIndexCut(CAMERA_WIRE_FOCUS) && IsIndexCut(CAMERA_WIRE_LIGHT) && IsIndexCut(CAMERA_WIRE_NOTHING1) && IsIndexCut(CAMERA_WIRE_NOTHING2))
+	if(IsIndexCut(GLOB.CAMERA_WIRE_POWER) && IsIndexCut(GLOB.CAMERA_WIRE_FOCUS) && IsIndexCut(GLOB.CAMERA_WIRE_LIGHT) && IsIndexCut(GLOB.CAMERA_WIRE_NOTHING1) && IsIndexCut(GLOB.CAMERA_WIRE_NOTHING2))
 		return 1
 	else
 		return 0

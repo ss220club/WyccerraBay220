@@ -23,4 +23,4 @@
 	else
 		announcement = "A large migration of unknown biological entities has been detected in the vicinity of the [location_name()]. Caution is advised."
 
-	command_announcement.Announce(announcement, "[location_name()] Sensor Array", zlevels = affecting_z)
+	GLOB.command_announcement.Announce(announcement, "[location_name()] Sensor Array", zlevels = affecting_z)

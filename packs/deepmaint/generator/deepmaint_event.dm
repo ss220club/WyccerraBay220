@@ -28,11 +28,11 @@
 		qdel(L)
 	LAZYCLEARLIST(spawned_ladders)
 	LAZYCLEARLIST(free_ladders)
-	command_announcement.Announce("All subspace distortions have ceased. All personnel and/or assets not present onboard should be considered lost.")
+	GLOB.command_announcement.Announce("All subspace distortions have ceased. All personnel and/or assets not present onboard should be considered lost.")
 
 
 /datum/event/deepmaint/announce()
-	command_announcement.Announce("Extreme subspace anomalies detected. Ensure all persons and assets are accounted for.", "[location_name()] Spooky Sensor Network", zlevels = affecting_z)
+	GLOB.command_announcement.Announce("Extreme subspace anomalies detected. Ensure all persons and assets are accounted for.", "[location_name()] Spooky Sensor Network", zlevels = affecting_z)
 
 /datum/event/deepmaint/proc/create_deepmaint_ladder_connection()
 	var/area/location = pick_area(list(GLOBAL_PROC_REF(is_not_space_area), GLOBAL_PROC_REF(is_station_area), GLOBAL_PROC_REF(is_maint_area)))

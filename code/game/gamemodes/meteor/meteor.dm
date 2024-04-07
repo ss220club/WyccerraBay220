@@ -53,11 +53,11 @@
 
 /datum/game_mode/meteor/proc/on_meteor_warn()
 	alert_sent = 1
-	command_announcement.Announce(alert_text, alert_title)
+	GLOB.command_announcement.Announce(alert_text, alert_title)
 
 /datum/game_mode/meteor/proc/on_enter_field()
 	alert_sent = 2
-	command_announcement.Announce(start_text, alert_title)
+	GLOB.command_announcement.Announce(start_text, alert_title)
 	for(var/obj/machinery/shield_diffuser/SD as anything in SSmachines.get_machinery_of_type(/obj/machinery/shield_diffuser))
 		SD.meteor_alarm(INFINITY)
 	if(GLOB.using_map.use_overmap)

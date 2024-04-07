@@ -26,13 +26,13 @@
 /datum/event/bsd_instability/announce()
 	switch (severity)
 		if (EVENT_LEVEL_MODERATE)
-			command_announcement.Announce(
+			GLOB.command_announcement.Announce(
 				"Warning: Bluespace Drive instability detected. Navigation and teleportation systems may be compromised.",
 				"[location_name()] Bluespace Drive Monitoring",
 				zlevels = affecting_z
 			)
 		if (EVENT_LEVEL_MAJOR)
-			command_announcement.Announce(
+			GLOB.command_announcement.Announce(
 				"WARNING: BLUESPACE DRIVE CONTAINMENT FAILURE IMMINENT. ENGAGING REPAIR MODULES. AVOID ALL AN#*!&A#%!!_ ZZZT ----  ",
 				"[location_name()] Bluespace Drive Monitoring",
 				zlevels = affecting_z
@@ -86,7 +86,7 @@
 				mobs += bluespace_ghost
 	if (!should_do_pulse || activeFor != (endWhen - 30))
 		return
-	command_announcement.Announce(
+	GLOB.command_announcement.Announce(
 		"PRIORITY ALERT: System flush required to disperse esoteric hyper-particle buildup. Brace for chrono-phasic sweep.",
 		"[location_name()] Bluespace Drive Monitoring",
 		zlevels = affecting_z
@@ -118,12 +118,12 @@
 	for (var/obj/structure/ladder/ladder in ladders)
 		ladder.bluespace_affected = FALSE
 	if (should_do_pulse)
-		command_announcement.Announce(
+		GLOB.command_announcement.Announce(
 			"Particle flush complete, containment fields restablished. All systems nominal.",
 			"[location_name()] Bluespace Drive Monitoring"
 		)
 	else
-		command_announcement.Announce(
+		GLOB.command_announcement.Announce(
 			"Containment fields re-modulated. All systems nominal.",
 			"[location_name()] Bluespace Drive Monitoring"
 		)

@@ -574,11 +574,11 @@ GLOBAL_LIST_EMPTY(all_maps)
 
 /datum/map/proc/make_maint_all_access(radstorm = 0) // parameter used by torch
 	maint_all_access = TRUE
-	priority_announcement.Announce("The maintenance access requirement has been revoked on all maintenance airlocks.", "Attention!")
+	GLOB.priority_announcement.Announce("The maintenance access requirement has been revoked on all maintenance airlocks.", "Attention!")
 
 /datum/map/proc/revoke_maint_all_access(radstorm = 0) // parameter used by torch
 	maint_all_access = FALSE
-	priority_announcement.Announce("The maintenance access requirement has been readded on all maintenance airlocks.", "Attention!")
+	GLOB.priority_announcement.Announce("The maintenance access requirement has been readded on all maintenance airlocks.", "Attention!")
 
 // Access check is of the type requires one. These have been carefully selected to avoid allowing the janitor to see channels he shouldn't
 // This list needs to be purged but people insist on adding more cruft to the radio.

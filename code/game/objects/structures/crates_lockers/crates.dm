@@ -282,7 +282,7 @@
 	desc = "A heavy cart with extensive sealing. You shouldn't eat things you find in it."
 	open_sound = 'sound/items/Deconstruct.ogg'
 	close_sound = 'sound/items/Deconstruct.ogg'
-	req_access = list(access_xenobiology)
+	req_access = list(GLOB.access_xenobiology)
 	closet_appearance = /singleton/closet_appearance/cart/biohazard
 	storage_capacity = 2 * MOB_LARGE
 	storage_types = CLOSET_STORAGE_ITEMS|CLOSET_STORAGE_MOBS|CLOSET_STORAGE_STRUCTURES
@@ -299,7 +299,7 @@
 /obj/structure/closet/crate/secure/biohazard/alt
 	name = "biowaste disposal cart"
 	desc = "A heavy cart used for organ disposal with markings indicating the things inside are probably gross."
-	req_access = list(access_surgery)
+	req_access = list(GLOB.access_surgery)
 	closet_appearance = /singleton/closet_appearance/cart/biohazard/alt
 
 /obj/structure/closet/crate/paper_refill

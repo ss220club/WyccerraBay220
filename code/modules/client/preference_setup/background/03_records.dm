@@ -74,7 +74,7 @@
 	if (href_list["set_public_record"])
 		// [SIERRA-EDIT] - EXPANDED_CULTURE_DESCRIPTOR - Перевод
 		// var/new_public = sanitize(input(user,"Enter general public record information here.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.public_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0) // SIERRA-EDIT - ORIGINAL
-		var/new_public = sanitize(input(user,"Введите публично доступную информацию о персонаже.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.public_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
+		var/new_public = sanitize(input(user,"Введите публично доступную информацию о персонаже.",GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.public_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
 		// [/SIERRA-EDIT]
 		if (!isnull(new_public) && !jobban_isbanned(user, "Records") && CanUseTopic(user))
 			pref.public_record = new_public
@@ -83,7 +83,7 @@
 	else if(href_list["set_medical_records"])
 		// [SIERRA-EDIT] - EXPANDED_CULTURE_DESCRIPTOR - Перевод
 		// var/new_medical = sanitize(input(user,"Enter medical information here.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.med_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0) // SIERRA-EDIT - ORIGINAL
-		var/new_medical = sanitize(input(user,"Введите записи о персонаже для отдела здравоохранения.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.med_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
+		var/new_medical = sanitize(input(user,"Введите записи о персонаже для отдела здравоохранения.",GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.med_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
 		// [/SIERRA-EDIT]
 		if(!isnull(new_medical) && !jobban_isbanned(user, "Records") && CanUseTopic(user))
 			pref.med_record = new_medical
@@ -92,7 +92,7 @@
 	else if(href_list["set_general_records"])
 		// [SIERRA-EDIT] - EXPANDED_CULTURE_DESCRIPTOR - Перевод
 		// var/new_general = sanitize(input(user,"Enter employment information here.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.gen_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0) // SIERRA-EDIT - ORIGINAL
-		var/new_general = sanitize(input(user,"Введите записи по трудоустройству персонажа.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.gen_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
+		var/new_general = sanitize(input(user,"Введите записи по трудоустройству персонажа.",GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.gen_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
 		// [/SIERRA-EDIT]
 		if(!isnull(new_general) && !jobban_isbanned(user, "Records") && CanUseTopic(user))
 			pref.gen_record = new_general
@@ -101,7 +101,7 @@
 	else if(href_list["set_security_records"])
 		// [SIERRA-EDIT] - EXPANDED_CULTURE_DESCRIPTOR - Перевод
 		// var/sec_medical = sanitize(input(user,"Enter security information here.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.sec_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0) // SIERRA-EDIT - ORIGINAL
-		var/sec_medical = sanitize(input(user,"Введите записи отдела защиты активов о персонаже.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.sec_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
+		var/sec_medical = sanitize(input(user,"Введите записи отдела защиты активов о персонаже.",GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.sec_record)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
 		// [/SIERRA-EDIT]
 		if(!isnull(sec_medical) && !jobban_isbanned(user, "Records") && CanUseTopic(user))
 			pref.sec_record = sec_medical
@@ -110,7 +110,7 @@
 	else if(href_list["set_memory"])
 		// [SIERRA-EDIT] - EXPANDED_CULTURE_DESCRIPTOR - Перевод
 		// var/memes = sanitize(input(user,"Enter memorized information here.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.memory)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0) // SIERRA-EDIT - ORIGINAL
-		var/memes = sanitize(input(user,"Введите информацию, которая хранится в памяти персонажа.",CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.memory)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
+		var/memes = sanitize(input(user,"Введите информацию, которая хранится в памяти персонажа.",GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, html_decode(pref.memory)) as message|null, MAX_PAPER_MESSAGE_LEN, extra = 0)
 		// [/SIERRA-EDIT]
 		if(!isnull(memes) && CanUseTopic(user))
 			pref.memory = memes

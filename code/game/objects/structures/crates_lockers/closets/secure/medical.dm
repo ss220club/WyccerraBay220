@@ -16,7 +16,7 @@
 	name = "medical equipment closet"
 	desc = "Filled with medical junk."
 	closet_appearance = /singleton/closet_appearance/secure_closet/medical
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 
 /obj/structure/closet/secure_closet/medical1/WillContain()
 	return list(
@@ -34,7 +34,7 @@
 /obj/structure/closet/secure_closet/medical2
 	name = "anesthetics closet"
 	desc = "Used to knock people out."
-	req_access = list(access_surgery)
+	req_access = list(GLOB.access_surgery)
 
 /obj/structure/closet/secure_closet/medical2/WillContain()
 	return list(
@@ -44,7 +44,7 @@
 
 /obj/structure/closet/secure_closet/medical3
 	name = "medical doctor's locker"
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 	closet_appearance = /singleton/closet_appearance/secure_closet/medical/alt
 
 /obj/structure/closet/secure_closet/medical3/WillContain()
@@ -70,7 +70,7 @@
 	name = "paramedic locker"
 	desc = "Supplies for a first responder."
 	closet_appearance = /singleton/closet_appearance/secure_closet/medical
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 
 /obj/structure/closet/secure_closet/paramedic/WillContain()
 	return list(
@@ -97,7 +97,7 @@
 
 /obj/structure/closet/secure_closet/CMO
 	name = "chief medical officer's locker"
-	req_access = list(access_cmo)
+	req_access = list(GLOB.access_cmo)
 	closet_appearance = /singleton/closet_appearance/secure_closet/cmo
 
 /obj/structure/closet/secure_closet/CMO/WillContain()
@@ -122,7 +122,7 @@
 	name = "chemical closet"
 	desc = "Store dangerous chemicals in here."
 	closet_appearance = /singleton/closet_appearance/secure_closet/medical
-	req_access = list(access_chemistry)
+	req_access = list(GLOB.access_chemistry)
 
 /obj/structure/closet/secure_closet/chemical/WillContain()
 	return list(
@@ -139,12 +139,12 @@
 	density = FALSE
 	wall_mounted = TRUE
 	storage_types = CLOSET_STORAGE_ITEMS
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 
 /obj/structure/closet/secure_closet/counselor
 	name = "counselor's locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/medical
-	req_access = list(access_psychiatrist)
+	req_access = list(GLOB.access_psychiatrist)
 
 /obj/structure/closet/secure_closet/counselor/WillContain()
 	return list(
@@ -168,7 +168,7 @@
 	name = "virologist's locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/medical/virology
 
-	req_access = list(access_virology)
+	req_access = list(GLOB.access_virology)
 
 /obj/structure/closet/secure_closet/virology/WillContain()
 	return list(
@@ -194,7 +194,7 @@
 	name = "Psychiatrist's locker"
 	desc = "Everything you need to keep the lunatics at bay."
 	closet_appearance = /singleton/closet_appearance/secure_closet/medical/alt
-	req_access = list(access_psychiatrist)
+	req_access = list(GLOB.access_psychiatrist)
 
 /obj/structure/closet/secure_closet/psychiatry/WillContain()
 	return list(

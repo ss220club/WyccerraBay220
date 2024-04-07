@@ -82,7 +82,7 @@ GLOBAL_LIST_EMPTY(radio_jammers)
 /obj/item/device/radio_jammer/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_controller.add_object(src, frequency, RADIO_CHAT)
+	radio_controller.add_object(src, frequency, GLOB.RADIO_CHAT)
 
 /obj/item/device/radio_jammer/receive_signal(datum/signal/signal)
 	if(signal?.encryption == code)
@@ -117,7 +117,7 @@ GLOBAL_LIST_EMPTY(radio_jammers)
 		var/adj = text2num(href_list["frequency"])
 		if(!adj)
 			var/temp = input("Set a four digit radio frequency without decimals","Radio activation") as num
-			set_frequency(sanitize_frequency(temp, RADIO_LOW_FREQ, RADIO_HIGH_FREQ))
+			set_frequency(sanitize_frequency(temp, GLOB.RADIO_LOW_FREQ, GLOB.RADIO_HIGH_FREQ))
 		if (QDELETED(src) || CanUseTopic(user, state, href_list) == STATUS_INTERACTIVE)
 			return TOPIC_HANDLED
 		return TOPIC_REFRESH

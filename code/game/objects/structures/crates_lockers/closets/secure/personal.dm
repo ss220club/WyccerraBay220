@@ -1,7 +1,7 @@
 /obj/structure/closet/secure_closet/personal
 	name = "personal closet"
 	desc = "It's a secure locker for personnel."
-	req_access = list(access_all_personal_lockers)
+	req_access = list(GLOB.access_all_personal_lockers)
 	locked = FALSE
 	var/registered_name = null
 

@@ -298,8 +298,8 @@
 		icon_state = "valve[open]nopower"
 
 /singleton/stock_part_preset/radio/receiver/valve
-	frequency = GLOB.FUEL_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = FUEL_FREQ
+	filter = RADIO_ATMOSIA
 	receive_and_call = list(
 		"valve_open" = /singleton/public_access/public_method/open_valve,
 		"valve_close" = /singleton/public_access/public_method/close_valve,

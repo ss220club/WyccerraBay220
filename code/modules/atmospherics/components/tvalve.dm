@@ -307,8 +307,8 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/atmospherics/tvalve, toggle)
 
 /singleton/stock_part_preset/radio/receiver/tvalve
-	frequency = GLOB.FUEL_FREQ
-	filter = GLOB.RADIO_ATMOSIA
+	frequency = FUEL_FREQ
+	filter = RADIO_ATMOSIA
 	receive_and_call = list(
 		"valve_open" = /singleton/public_access/public_method/tvalve_go_side,
 		"valve_close" = /singleton/public_access/public_method/tvalve_go_straight,

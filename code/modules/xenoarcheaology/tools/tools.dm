@@ -223,7 +223,7 @@
 /obj/item/pinpointer/radio
 	name = "locator device"
 	desc = "Used to scan and locate signals on a particular frequency."
-	var/tracking_freq = GLOB.PUB_FREQ
+	var/tracking_freq = PUB_FREQ
 	matter = list(MATERIAL_ALUMINIUM = 1000, MATERIAL_GLASS = 500)
 
 /obj/item/pinpointer/radio/acquire_target()

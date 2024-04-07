@@ -298,8 +298,8 @@
 	call_proc = TYPE_PROC_REF(/obj/machinery/atmospherics/unary/vent_scrubber, set_scrub_gas)
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_scrubber
-	frequency = GLOB.PUMP_FREQ
-	filter = GLOB.RADIO_TO_AIRALARM
+	frequency = PUMP_FREQ
+	filter = RADIO_TO_AIRALARM
 	event = /singleton/public_access/public_variable/input_toggle
 	transmit_on_event = list(
 		"area" = /singleton/public_access/public_variable/area_uid,
@@ -311,8 +311,8 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_scrubber
-	frequency = GLOB.PUMP_FREQ
-	filter = GLOB.RADIO_FROM_AIRALARM
+	frequency = PUMP_FREQ
+	filter = RADIO_FROM_AIRALARM
 	receive_and_call = list(
 		"power_toggle" = /singleton/public_access/public_method/toggle_power,
 		"toggle_panic_siphon" = /singleton/public_access/public_method/toggle_panic_siphon,
@@ -327,10 +327,10 @@
 	)
 
 /singleton/stock_part_preset/radio/receiver/vent_scrubber/shuttle
-	frequency = GLOB.SHUTTLE_AIR_FREQ
+	frequency = SHUTTLE_AIR_FREQ
 
 /singleton/stock_part_preset/radio/event_transmitter/vent_scrubber/shuttle
-	frequency = GLOB.SHUTTLE_AIR_FREQ
+	frequency = SHUTTLE_AIR_FREQ
 
 // Similar to the vent of the same name, for hybrid airlock-rooms
 /obj/machinery/atmospherics/unary/vent_scrubber/on/shuttle_auxiliary

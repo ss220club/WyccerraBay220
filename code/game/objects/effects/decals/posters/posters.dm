@@ -7,7 +7,7 @@
 	var/poster_type
 	var/ruined = 0
 	var/random_poster_base_type = /singleton/poster
-	var/excluded_poster_flags = GLOB.POSTER_FLAG_CONTRABAND
+	var/excluded_poster_flags = POSTER_FLAG_CONTRABAND
 
 /obj/structure/sign/poster/bay_9
 	poster_type = /singleton/poster/bay_9
@@ -99,7 +99,7 @@
 	// Description suffix
 	var/desc=""
 	var/icon_state=""
-	var/poster_flags = GLOB.POSTER_FLAG_RANDOM_PICK
+	var/poster_flags = POSTER_FLAG_RANDOM_PICK
 	abstract_type = /singleton/poster
 
 /// Picks and returns a random (sub)type of the provided random_poster_base_type which:
@@ -113,7 +113,7 @@
 			continue
 
 		var/poster_flags = initial(poster_type.poster_flags)
-		if ((poster_flags & GLOB.POSTER_FLAG_RANDOM_PICK) && (!excluded_flags || !(poster_flags & excluded_flags)))
+		if ((poster_flags & POSTER_FLAG_RANDOM_PICK) && (!excluded_flags || !(poster_flags & excluded_flags)))
 			valid_posters += poster_type
 
 	return pick(valid_posters)

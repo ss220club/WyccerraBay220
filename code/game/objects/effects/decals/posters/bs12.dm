@@ -349,7 +349,7 @@
 	name = "Contraband Poster"
 	desc = "You probably shouldn't be seeing this."
 	abstract_type = /singleton/poster/contraband_only
-	poster_flags = GLOB.POSTER_FLAG_RANDOM_PICK | GLOB.POSTER_FLAG_CONTRABAND
+	poster_flags = POSTER_FLAG_RANDOM_PICK | POSTER_FLAG_CONTRABAND
 
 /singleton/poster/contraband_only/unusual_gas
 	icon_state = "unusual_gas"

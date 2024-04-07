@@ -93,19 +93,19 @@
 /datum/game_mode/meteor/proc/get_meteor_types()
 	switch(meteor_severity)
 		if(1 to 9)
-			return meteors_dust
+			return GLOB.meteors_dust
 		if(10 to 19)
-			return meteors_normal
+			return GLOB.meteors_normal
 		if(20 to 29)
-			return meteors_threatening
+			return GLOB.meteors_threatening
 		if(30 to 34)
-			return meteors_catastrophic
+			return GLOB.meteors_catastrophic
 		if(35 to 39)
-			return meteors_armageddon
+			return GLOB.meteors_armageddon
 		if(40 to INFINITY)
-			return meteors_cataclysm
+			return GLOB.meteors_cataclysm
 	// Just in case we /somehow/ get here (looking at you, varedit)
-	return meteors_normal
+	return GLOB.meteors_normal
 
 
 #undef METEOR_FAILSAFE_THRESHOLD

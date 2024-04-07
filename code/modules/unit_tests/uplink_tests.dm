@@ -9,7 +9,7 @@
 		success = is_valid_uplink_item(ui, "Uplink items") && success
 
 	for(var/item in GLOB.uplink.items_assoc)
-		var/datum/uplink_item/ui = uplink.items_assoc[item]
+		var/datum/uplink_item/ui = GLOB.uplink.items_assoc[item]
 		success = is_valid_uplink_item(ui, "Uplink assoc items") && success
 
 	var/datum/uplink_random_selection/uplink_selection = get_uplink_random_selection_by_type(/datum/uplink_random_selection/blacklist)

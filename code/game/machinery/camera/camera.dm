@@ -11,7 +11,7 @@
 	health_max = 40
 	health_min_damage = 5
 
-	var/list/network = list(NETWORK_EXODUS)
+	var/list/network = list(GLOB.NETWORK_EXODUS)
 	var/c_tag = null
 	var/c_tag_order = 999
 	var/number = 0 //camera number in area
@@ -327,7 +327,7 @@
 	GLOB.camera_alarm.triggerAlarm(loc, src, duration)
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
-	if(wires.IsIndexCut(CAMERA_WIRE_ALARM))
+	if(wires.IsIndexCut(GLOB.CAMERA_WIRE_ALARM))
 		return
 
 	alarm_on = 0

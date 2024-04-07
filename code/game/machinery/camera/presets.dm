@@ -1,29 +1,29 @@
 /obj/machinery/camera/network/engineering
-	network = list(NETWORK_ENGINEERING)
+	network = list(GLOB.NETWORK_ENGINEERING)
 
 /obj/machinery/camera/network/ert
-	network = list(NETWORK_ERT)
+	network = list(GLOB.NETWORK_ERT)
 
 /obj/machinery/camera/network/medbay
-	network = list(NETWORK_MEDICAL)
+	network = list(GLOB.NETWORK_MEDICAL)
 
 /obj/machinery/camera/network/mercenary
-	network = list(NETWORK_MERCENARY)
+	network = list(GLOB.NETWORK_MERCENARY)
 
 /obj/machinery/camera/network/mining
-	network = list(NETWORK_MINE)
+	network = list(GLOB.NETWORK_MINE)
 
 /obj/machinery/camera/network/research
-	network = list(NETWORK_RESEARCH)
+	network = list(GLOB.NETWORK_RESEARCH)
 
 /obj/machinery/camera/network/security
-	network = list(NETWORK_SECURITY)
+	network = list(GLOB.NETWORK_SECURITY)
 
 /obj/machinery/camera/network/thunder
-	network = list(NETWORK_THUNDER)
+	network = list(GLOB.NETWORK_THUNDER)
 
 /obj/machinery/camera/network/helmet
-	network = list(NETWORK_HELMETS)
+	network = list(GLOB.NETWORK_HELMETS)
 
 // EMP
 

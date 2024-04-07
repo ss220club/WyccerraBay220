@@ -33,7 +33,7 @@
 	cost = 120
 	containername = "\improper Exploration voidsuit crate"
 	containertype = /obj/structure/closet/crate/secure/large
-	access = access_explorer
+	access = GLOB.access_explorer
 
 /singleton/hierarchy/supply_pack/medical/blood
 	name = "Refills - 4 Nanoblood Packs"

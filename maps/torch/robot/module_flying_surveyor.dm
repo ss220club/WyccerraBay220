@@ -53,11 +53,11 @@
 	access = list(
 		GLOB.access_emergency_storage,
 		GLOB.access_eva,
-		access_expedition_shuttle,
-		access_explorer,
-		access_guppy,
-		access_hangar,
-		access_petrov,
+		GLOB.access_expedition_shuttle,
+		GLOB.access_explorer,
+		GLOB.access_guppy,
+		GLOB.access_hangar,
+		GLOB.access_petrov,
 		GLOB.access_research,
 		access_radio_exp,
 		access_radio_sci

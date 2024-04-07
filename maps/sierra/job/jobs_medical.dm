@@ -41,7 +41,7 @@
 		GLOB.access_medical, GLOB.access_morgue, GLOB.access_virology,
 		GLOB.access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_crematorium,
 		GLOB.access_surgery, GLOB.access_eva, GLOB.access_external_airlocks,
-		GLOB.access_medical_equip, access_senmed, access_hangar,
+		GLOB.access_medical_equip, GLOB.access_senmed, GLOB.access_hangar,
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/suit_sensors,
@@ -93,7 +93,7 @@
 		GLOB.access_medical, GLOB.access_morgue, GLOB.access_virology,
 		GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
 		GLOB.access_eva, GLOB.access_surgery, GLOB.access_medical_equip,
-		access_hangar
+		GLOB.access_hangar
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/suit_sensors,
@@ -140,7 +140,7 @@
 	access = list(
 		GLOB.access_medical, GLOB.access_morgue, GLOB.access_surgery,
 		GLOB.access_medical_equip, GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
-		GLOB.access_external_airlocks, access_hangar
+		GLOB.access_external_airlocks, GLOB.access_hangar
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/suit_sensors,

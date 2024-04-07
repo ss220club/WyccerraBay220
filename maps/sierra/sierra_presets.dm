@@ -19,17 +19,17 @@ GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 /datum/map/sierra/get_network_access(network)
 	switch(network)
 		if(NETWORK_CALYPSO)
-			return access_expedition_shuttle
+			return GLOB.access_expedition_shuttle
 		if(NETWORK_POD)
-			return access_guppy
+			return GLOB.access_guppy
 		if(NETWORK_SUPPLY)
 			return GLOB.access_mailsorting
 		if(NETWORK_HANGAR)
-			return access_hangar
+			return GLOB.access_hangar
 		if(NETWORK_PETROV)
-			return access_petrov
+			return GLOB.access_petrov
 		if(NETWORK_EXPEDITION)
-			return access_expedition_shuttle
+			return GLOB.access_expedition_shuttle
 	return get_shared_network_access(network) || ..()
 
 /datum/map/sierra

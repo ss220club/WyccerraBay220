@@ -176,19 +176,19 @@
 /area/crew_quarters/galley
 	name = "Second Deck - Service - Galley"
 	icon_state = "kitchen"
-	req_access = list(list(GLOB.access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/galley/backroom
 	name = "Second Deck - Service - Galley Backroom"
 	icon_state = "kitchen"
-	req_access = list(list(GLOB.access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/galley/freezer
 	name = "Second Deck - Service - Galley Cold Storage"
 	icon_state = "kitchen"
-	req_access = list(list(GLOB.access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/cafe/upper

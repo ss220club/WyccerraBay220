@@ -91,7 +91,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/sidearm
 	name = "sidearm cabinet"
-	req_access = list(list(GLOB.access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,access_senadv))
+	req_access = list(list(GLOB.access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,GLOB.access_senadv))
 
 /obj/structure/closet/secure_closet/guncabinet/sidearm/WillContain()
 	return list(
@@ -102,7 +102,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/PPE
 	name = "bridge PPE cabinet"
-	req_access = list(list(GLOB.access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,access_senadv))
+	req_access = list(list(GLOB.access_armory,access_emergency_armory,GLOB.access_hos,GLOB.access_hop,GLOB.access_ce,GLOB.access_cmo,GLOB.access_rd,GLOB.access_senadv))
 
 /obj/structure/closet/secure_closet/guncabinet/PPE/WillContain()
 	return list(

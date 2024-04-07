@@ -144,7 +144,7 @@ Unique items
 	interact(user)
 
 /obj/item/tape/research
-	req_access = list(list(GLOB.access_research, access_explorer))
+	req_access = list(list(GLOB.access_research, GLOB.access_explorer))
 
 /******
 Passports

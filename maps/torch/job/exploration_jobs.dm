@@ -27,10 +27,10 @@
 	skill_points = 22
 
 	access = list(
-		access_pathfinder, access_explorer, GLOB.access_eva, GLOB.access_maint_tunnels, GLOB.access_bridge, GLOB.access_emergency_storage,
-		access_guppy_helm, access_solgov_crew, access_expedition_shuttle, access_expedition_shuttle_helm,
-		access_guppy, access_hangar, access_petrov, access_petrov_helm, access_petrov_analysis, access_petrov_phoron,
-		access_petrov_toxins, access_petrov_chemistry, access_petrov_maint, GLOB.access_tox, GLOB.access_tox_storage, GLOB.access_research,
+		access_pathfinder, GLOB.access_explorer, GLOB.access_eva, GLOB.access_maint_tunnels, GLOB.access_bridge, GLOB.access_emergency_storage,
+		GLOB.access_guppy_helm, access_solgov_crew, GLOB.access_expedition_shuttle, GLOB.access_expedition_shuttle_helm,
+		GLOB.access_guppy, GLOB.access_hangar, GLOB.access_petrov, GLOB.access_petrov_helm, GLOB.access_petrov_analysis, GLOB.access_petrov_phoron,
+		GLOB.access_petrov_toxins, GLOB.access_petrov_chemistry, GLOB.access_petrov_maint, GLOB.access_tox, GLOB.access_tox_storage, GLOB.access_research,
 		GLOB.access_xenobiology, GLOB.access_xenoarch, access_torch_fax, access_radio_comm, access_radio_exp, access_radio_sci, GLOB.access_research_storage
 	)
 
@@ -66,9 +66,9 @@
 	)
 
 	access = list(
-		GLOB.access_mining_office, access_petrov, access_petrov_helm, access_petrov_maint, GLOB.access_mining_station,
-		access_expedition_shuttle, access_expedition_shuttle_helm, access_guppy, access_hangar, access_guppy_helm,
-		GLOB.access_mining, GLOB.access_pilot, access_solgov_crew, GLOB.access_eva, access_explorer, GLOB.access_research,
+		GLOB.access_mining_office, GLOB.access_petrov, GLOB.access_petrov_helm, GLOB.access_petrov_maint, GLOB.access_mining_station,
+		GLOB.access_expedition_shuttle, GLOB.access_expedition_shuttle_helm, GLOB.access_guppy, GLOB.access_hangar, GLOB.access_guppy_helm,
+		GLOB.access_mining, GLOB.access_pilot, access_solgov_crew, GLOB.access_eva, GLOB.access_explorer, GLOB.access_research,
 		access_radio_exp, access_radio_sci, access_radio_sup, GLOB.access_maint_tunnels, GLOB.access_emergency_storage
 	)
 	min_skill = list(	SKILL_EVA   = SKILL_BASIC,
@@ -102,9 +102,9 @@
 	                    SKILL_WEAPONS     = SKILL_EXPERIENCED)
 
 	access = list(
-		access_explorer, GLOB.access_maint_tunnels, GLOB.access_eva, GLOB.access_emergency_storage,
-		access_guppy_helm, access_solgov_crew, access_expedition_shuttle, access_guppy, access_hangar,
-		access_petrov, access_petrov_maint, GLOB.access_research, access_radio_exp
+		GLOB.access_explorer, GLOB.access_maint_tunnels, GLOB.access_eva, GLOB.access_emergency_storage,
+		GLOB.access_guppy_helm, access_solgov_crew, GLOB.access_expedition_shuttle, GLOB.access_guppy, GLOB.access_hangar,
+		GLOB.access_petrov, GLOB.access_petrov_maint, GLOB.access_research, access_radio_exp
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/deck_management)

@@ -54,7 +54,7 @@
 /area/maintenance/waterstore
 	name = "Fourth Deck - Water Cistern"
 	icon_state = "disposal"
-	req_access = list(list(GLOB.access_cargo, GLOB.access_engine, access_el))
+	req_access = list(list(GLOB.access_cargo, GLOB.access_engine, GLOB.access_el))
 
 /area/crew_quarters/visitors
 	name = "Fourth Deck - Visitors"
@@ -207,7 +207,7 @@
 	name = "Fourth Deck - Hangar - Fuel Bay"
 	icon_state = "toxstorage"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(list(GLOB.access_cargo, access_expedition_shuttle_helm, access_guppy_helm))
+	req_access = list(list(GLOB.access_cargo, GLOB.access_expedition_shuttle_helm, GLOB.access_guppy_helm))
 
 /area/quartermaster/hangar
 	name = "Fourth Deck - Hangar"

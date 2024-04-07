@@ -15,7 +15,7 @@
 		num2text(MED_I_FREQ) = list(GLOB.access_medical_equip),
 		num2text(SEC_FREQ)   = list(GLOB.access_security),
 		num2text(SEC_I_FREQ) = list(GLOB.access_security),
-		num2text(SCI_FREQ)   = list(GLOB.access_tox, GLOB.access_robotics, GLOB.access_xenobiology, access_el),
+		num2text(SCI_FREQ)   = list(GLOB.access_tox, GLOB.access_robotics, GLOB.access_xenobiology, GLOB.access_el),
 		num2text(SUP_FREQ)   = list(GLOB.access_cargo),
 		num2text(SRV_FREQ)   = list(GLOB.access_janitor, GLOB.access_hydroponics),
 		num2text(EXP_FREQ)   = list(GLOB.access_explorer, GLOB.access_rd)

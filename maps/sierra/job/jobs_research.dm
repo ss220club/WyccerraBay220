@@ -21,8 +21,8 @@
 
 	access = list(
 			GLOB.access_tox,					GLOB.access_tox_storage,	GLOB.access_research,	GLOB.access_mining,		GLOB.access_mining_office,
-			GLOB.access_mining_station,		GLOB.access_xenobiology,	GLOB.access_xenoarch,	GLOB.access_robotics,	access_guppy_helm,
-			access_expedition_shuttle,	access_guppy,		access_hangar,		access_petrov,		access_petrov_helm,
+			GLOB.access_mining_station,		GLOB.access_xenobiology,	GLOB.access_xenoarch,	GLOB.access_robotics,	GLOB.access_guppy_helm,
+			GLOB.access_expedition_shuttle,	GLOB.access_guppy,		GLOB.access_hangar,		GLOB.access_petrov,		GLOB.access_petrov_helm,
 			GLOB.access_research_storage
 		)
 
@@ -94,9 +94,9 @@
 		)
 
 	access = list(
-			GLOB.access_tox,				GLOB.access_tox_storage,			GLOB.access_research,	access_petrov,		access_petrov_helm,
-			GLOB.access_mining_office,	GLOB.access_mining_station,		GLOB.access_xenobiology,	access_guppy_helm, 	access_hangar,
-			GLOB.access_xenoarch,		access_expedition_shuttle,	access_guppy, GLOB.access_research_storage
+			GLOB.access_tox,				GLOB.access_tox_storage,			GLOB.access_research,	GLOB.access_petrov,		GLOB.access_petrov_helm,
+			GLOB.access_mining_office,	GLOB.access_mining_station,		GLOB.access_xenobiology,	GLOB.access_guppy_helm, 	GLOB.access_hangar,
+			GLOB.access_xenoarch,		GLOB.access_expedition_shuttle,	GLOB.access_guppy, GLOB.access_research_storage
 		)
 
 
@@ -206,8 +206,8 @@
 
 	access = list(
 			GLOB.access_research,	GLOB.access_mining_office,
-			access_petrov,		access_expedition_shuttle,
-			access_guppy,		access_hangar,
+			GLOB.access_petrov,		GLOB.access_expedition_shuttle,
+			GLOB.access_guppy,		GLOB.access_hangar,
 			GLOB.access_research_storage
 		)
 

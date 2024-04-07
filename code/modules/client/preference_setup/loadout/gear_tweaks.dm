@@ -40,7 +40,7 @@
 /datum/gear_tweak/color/get_default()
 	return valid_colors ? valid_colors[1] : COLOR_WHITE
 
-/datum/gear_tweak/color/get_metadata(user, metadata, title = GLOB.CHARACTER_PREFERENCE_INPUT_TITLE)
+/datum/gear_tweak/color/get_metadata(user, metadata, title = CHARACTER_PREFERENCE_INPUT_TITLE)
 	if(valid_colors)
 		return tgui_input_list(user, "Choose a color.", title, metadata, valid_colors)
 	return input(user, "Choose a color.", title, metadata) as color|null
@@ -97,7 +97,7 @@
 	return valid_paths[1]
 
 /datum/gear_tweak/path/get_metadata(user, metadata, title)
-	return tgui_input_list(user, "Choose a type.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, valid_paths, metadata)
+	return tgui_input_list(user, "Choose a type.", CHARACTER_PREFERENCE_INPUT_TITLE, valid_paths, metadata)
 
 /datum/gear_tweak/path/tweak_gear_data(metadata, datum/gear_data/gear_data)
 	if(!(metadata in valid_paths))
@@ -134,7 +134,7 @@
 	for(var/i = length(metadata) to (length(valid_contents) - 1))
 		metadata += "Random"
 	for(var/i = 1 to length(valid_contents))
-		var/entry = tgui_input_list(user, "Choose an entry.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, valid_contents[i] + list("Random", "None"), metadata[i])
+		var/entry = tgui_input_list(user, "Choose an entry.", CHARACTER_PREFERENCE_INPUT_TITLE, valid_contents[i] + list("Random", "None"), metadata[i])
 		if(entry)
 			. += entry
 		else
@@ -177,7 +177,7 @@
 	return "Random"
 
 /datum/gear_tweak/reagents/get_metadata(user, list/metadata, title)
-	. = tgui_input_list(user, "Choose an entry.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, valid_reagents + list("Random", "None"), metadata)
+	. = tgui_input_list(user, "Choose an entry.", CHARACTER_PREFERENCE_INPUT_TITLE, valid_reagents + list("Random", "None"), metadata)
 	if(!.)
 		return metadata
 
@@ -318,7 +318,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	var/entry = tgui_input_list(user, "Choose a processor.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, names)
+	var/entry = tgui_input_list(user, "Choose a processor.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -332,7 +332,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = tgui_input_list(user, "Choose a battery.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, names)
+	entry = tgui_input_list(user, "Choose a battery.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -346,7 +346,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = tgui_input_list(user, "Choose a hard drive.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, names)
+	entry = tgui_input_list(user, "Choose a hard drive.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -360,7 +360,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = tgui_input_list(user, "Choose a network card.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, names)
+	entry = tgui_input_list(user, "Choose a network card.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -374,7 +374,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = tgui_input_list(user, "Choose a nanoprinter.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, names)
+	entry = tgui_input_list(user, "Choose a nanoprinter.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -388,7 +388,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = tgui_input_list(user, "Choose a card slot.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, names)
+	entry = tgui_input_list(user, "Choose a card slot.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 	names = list()
@@ -402,7 +402,7 @@ Custom Description
 
 	if (!user || !user.client)
 		return
-	entry = tgui_input_list(user, "Choose a tesla link.", GLOB.CHARACTER_PREFERENCE_INPUT_TITLE, names)
+	entry = tgui_input_list(user, "Choose a tesla link.", CHARACTER_PREFERENCE_INPUT_TITLE, names)
 	. += names[entry]
 
 /datum/gear_tweak/tablet/get_default()

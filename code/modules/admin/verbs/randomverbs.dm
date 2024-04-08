@@ -1012,7 +1012,7 @@ Ccomp's first proc.
 			shuttle.name = name
 			break
 
-	for (var/obj/shuttle_landmark/ship/S in landmarks_list)
+	for (var/obj/shuttle_landmark/ship/S in GLOB.landmarks_list)
 		if (S.name == original_name)
 			S.shuttle_name = name
 		if (istype(S, /obj/overmap/visitable/ship/landable))

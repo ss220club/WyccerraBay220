@@ -40,7 +40,7 @@ var/global/hadevent    = 0
 	GLOB.using_map.radiation_detected_announcement()
 
 /proc/carp_migration() // -- Darem
-	for(var/obj/landmark/C in landmarks_list)
+	for(var/obj/landmark/C in GLOB.landmarks_list)
 		if(C.name == "carpspawn")
 			new /mob/living/simple_animal/hostile/carp(C.loc)
 	//sleep(100)
@@ -56,7 +56,7 @@ var/global/hadevent    = 0
 
 		for(var/i=1,i<=lightsoutAmount,i++)
 			var/list/possibleEpicentres = list()
-			for(var/obj/landmark/newEpicentre in landmarks_list)
+			for(var/obj/landmark/newEpicentre in GLOB.landmarks_list)
 				if(newEpicentre.name == "lightsout" && !(newEpicentre in epicentreList))
 					possibleEpicentres += newEpicentre
 			if(length(possibleEpicentres))

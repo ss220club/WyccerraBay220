@@ -347,7 +347,7 @@
 	var/safe_landmarks = 0
 	var/space_landmarks = 0
 
-	for(var/lm in landmarks_list)
+	for(var/lm in GLOB.landmarks_list)
 		var/obj/landmark/landmark = lm
 		if(istype(landmark, /obj/landmark/test/safe_turf))
 			log_debug("Safe landmark found: [log_info_line(landmark)]")

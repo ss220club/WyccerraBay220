@@ -129,8 +129,8 @@
 
 		else if(task == "rank")
 			var/new_rank
-			if(length(admin_ranks))
-				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in (admin_ranks|"*New Rank*")
+			if(length(GLOB.admin_ranks))
+				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in (GLOB.admin_ranks|"*New Rank*")
 			else
 				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in list("Game Master","Game Admin", "Trial Admin", "Admin Observer","*New Rank*")
 
@@ -147,15 +147,15 @@
 						to_chat(usr, SPAN_COLOR("red", "Error: Topic 'editrights': Invalid rank"))
 						return
 					if(config.admin_legacy_system)
-						if(length(admin_ranks))
-							if(new_rank in admin_ranks)
-								rights = admin_ranks[new_rank]		//we typed a rank which already exists, use its rights
+						if(length(GLOB.admin_ranks))
+							if(new_rank in GLOB.admin_ranks)
+								rights = GLOB.admin_ranks[new_rank]		//we typed a rank which already exists, use its rights
 							else
-								admin_ranks[new_rank] = 0			//add the new rank to admin_ranks
+								GLOB.admin_ranks[new_rank] = 0			//add the new rank to admin_ranks
 				else
 					if(config.admin_legacy_system)
 						new_rank = ckeyEx(new_rank)
-						rights = admin_ranks[new_rank]				//we input an existing rank, use its rights
+						rights = GLOB.admin_ranks[new_rank]				//we input an existing rank, use its rights
 
 			if(D)
 				D.disassociate()								//remove adminverbs and unlink from client
@@ -1477,13 +1477,13 @@
 		if(alert(src.owner, "Are you sure you wish to hit [key_name(M)] with Blue Space Artillery?",  "Confirm Firing?" , "Yes" , "No") != "Yes")
 			return
 
-		if(BSACooldown)
+		if(GLOB.BSACooldown)
 			to_chat(src.owner, "Standby!  Reload cycle in progress!  Gunnary crews ready in five seconds!")
 			return
 
-		BSACooldown = 1
+		GLOB.BSACooldown = 1
 		spawn(50)
-			BSACooldown = 0
+			GLOB.BSACooldown = 0
 
 		to_chat(M, "You've been hit by bluespace artillery!")
 		log_admin("[key_name(M)] has been hit by Bluespace Artillery fired by [src.owner]")

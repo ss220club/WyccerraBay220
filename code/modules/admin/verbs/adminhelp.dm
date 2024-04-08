@@ -1,6 +1,6 @@
 
 //This is a list of words which are ignored by the parser when comparing message contents for names. MUST BE IN LOWER CASE!
-var/global/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","alien","as")
+GLOBAL_LIST_INIT(adminhelp_ignored_words, list("unknown","the","a","an","of","monkey","alien","as"))
 
 /proc/generate_ahelp_key_words(mob/mob, msg)
 	var/list/surnames = list()
@@ -38,7 +38,7 @@ var/global/list/adminhelp_ignored_words = list("unknown","the","a","an","of","mo
 	for(var/original_word in msglist)
 		var/word = ckey(original_word)
 		if(word)
-			if(!(word in adminhelp_ignored_words))
+			if(!(word in GLOB.adminhelp_ignored_words))
 				if(word == "ai" && !ai_found)
 					ai_found = 1
 					msg += "<b>[original_word] <A HREF='?_src_=holder;adminchecklaws=\ref[mob]'>(CL)</A></b> "

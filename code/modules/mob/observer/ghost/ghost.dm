@@ -279,8 +279,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Teleport"
 	set desc= "Teleport to a location"
 
-	var/A = tgui_input_list(usr, "Выберите зону.", "Выбор зоны", area_repository.get_areas_by_z_level())
-	var/area/thearea = area_repository.get_areas_by_z_level()[A]
+	var/A = tgui_input_list(usr, "Выберите зону.", "Выбор зоны", GLOB.area_repository.get_areas_by_z_level())
+	var/area/thearea = GLOB.area_repository.get_areas_by_z_level()[A]
 	if(!thearea)
 		to_chat(src, "No area available.")
 		return

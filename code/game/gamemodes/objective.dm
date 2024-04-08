@@ -1,5 +1,5 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-var/global/list/all_objectives = list()
+GLOBAL_LIST_INIT(all_objectives, list())
 
 /datum/objective
 	//Who owns the objective.
@@ -12,13 +12,13 @@ var/global/list/all_objectives = list()
 	var/target_amount = 0
 
 /datum/objective/New(text)
-	all_objectives |= src
+	GLOB.all_objectives |= src
 	if(text)
 		explanation_text = text
 	..()
 
 /datum/objective/Destroy()
-	all_objectives -= src
+	GLOB.all_objectives -= src
 	..()
 
 /datum/objective/proc/find_target()

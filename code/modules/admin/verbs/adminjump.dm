@@ -5,7 +5,7 @@
 	stop_following()
 	..()
 
-/client/proc/Jump(selected_area in area_repository.get_areas_by_z_level())
+/client/proc/Jump(selected_area in GLOB.area_repository.get_areas_by_z_level())
 	set name = "Jump to Area"
 	set desc = "Area to jump to"
 	set category = "Admin"
@@ -14,7 +14,7 @@
 	if(!config.allow_admin_jump)
 		return alert("Admin jumping disabled")
 
-	var/list/areas = area_repository.get_areas_by_z_level()
+	var/list/areas = GLOB.area_repository.get_areas_by_z_level()
 	var/area/A = areas[selected_area]
 	mob.jumpTo(pick(get_area_turfs(A)))
 	log_and_message_admins("jumped to [A]")
@@ -137,7 +137,7 @@
 		alert("Admin jumping disabled")
 		return
 
-	var/list/areas = area_repository.get_areas_by_name()
+	var/list/areas = GLOB.area_repository.get_areas_by_name()
 	var/area/A = input(usr, "Pick an area.", "Pick an area") as null|anything in areas
 	A = A ? areas[A] : A
 	if(A)

@@ -27,9 +27,9 @@
 	var/message = alert("Would you like to show station areas?\nNote: it can take up to 5 minutes for the away sites to load in and show up.",, "Yes", "No")
 	switch(message)
 		if("Yes")
-			select_areas = stationlocs
+			select_areas = GLOB.stationlocs
 		if("No")
-			select_areas = (stationlocs) ^ (wizportallocs)
+			select_areas = (GLOB.stationlocs) ^ (GLOB.wizportallocs)
 
 	thearea = input("Area to teleport to", "Teleport") as null|anything in select_areas
 	if(!thearea) return

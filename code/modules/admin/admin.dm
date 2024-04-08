@@ -1,6 +1,5 @@
-
-var/global/BSACooldown = 0
-var/global/floorIsLava = 0
+GLOBAL_VAR(BSACooldown)
+GLOBAL_VAR(floorIsLava)
 
 
 ////////////////////////////////

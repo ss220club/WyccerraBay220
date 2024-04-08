@@ -17,9 +17,9 @@
 #define RCS_MESSAUTH 7	// Authentication before sending
 #define RCS_ANNOUNCE 8	// Send announcement
 
-var/global/req_console_assistance = list()
-var/global/req_console_supplies = list()
-var/global/req_console_information = list()
+GLOBAL_LIST_INIT(req_console_assistance, list())
+GLOBAL_LIST_INIT(req_console_supplies, list())
+GLOBAL_LIST_INIT(req_console_information, list())
 var/global/list/obj/machinery/requests_console/allConsoles = list()
 
 /obj/machinery/requests_console
@@ -70,11 +70,11 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	name = "[department] requests console"
 	allConsoles += src
 	if (departmentType & RC_ASSIST)
-		req_console_assistance |= department
+		GLOB.req_console_assistance |= department
 	if (departmentType & RC_SUPPLY)
-		req_console_supplies |= department
+		GLOB.req_console_supplies |= department
 	if (departmentType & RC_INFO)
-		req_console_information |= department
+		GLOB.req_console_information |= department
 
 	set_light(1)
 
@@ -87,11 +87,11 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 			break
 	if(lastDeptRC)
 		if (departmentType & RC_ASSIST)
-			req_console_assistance -= department
+			GLOB.req_console_assistance -= department
 		if (departmentType & RC_SUPPLY)
-			req_console_supplies -= department
+			GLOB.req_console_supplies -= department
 		if (departmentType & RC_INFO)
-			req_console_information -= department
+			GLOB.req_console_information -= department
 	. = ..()
 
 /obj/machinery/requests_console/interface_interact(mob/user)
@@ -108,9 +108,9 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	data["silent"] = silent
 	data["announcementConsole"] = announcementConsole
 
-	data["assist_dept"] = req_console_assistance
-	data["supply_dept"] = req_console_supplies
-	data["info_dept"]   = req_console_information
+	data["assist_dept"] = GLOB.req_console_assistance
+	data["supply_dept"] = GLOB.req_console_supplies
+	data["info_dept"]   = GLOB.req_console_information
 
 	data["message"] = message
 	data["recipient"] = recipient

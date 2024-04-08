@@ -260,7 +260,7 @@
 /obj/item/summoning_stone/proc/use_type(type, mob/user)
 	new /obj/cleanable/spellbound(get_turf(src),type)
 	if(prob(20))
-		var/list/base_areas = maintlocs //Have to do it this way as its a macro
+		var/list/base_areas = GLOB.maintlocs //Have to do it this way as its a macro
 		var/list/pareas = base_areas.Copy()
 		while(length(pareas))
 			var/a = pick(pareas)

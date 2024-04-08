@@ -422,7 +422,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 /proc/get_follow_targets()
 	RETURN_TYPE(/list)
-	return follow_repository.get_follow_targets()
+	return GLOB.follow_repository.get_follow_targets()
 
 //Orders mobs by type then by name
 /proc/sortmobs()

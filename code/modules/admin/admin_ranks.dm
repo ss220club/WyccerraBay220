@@ -1,8 +1,8 @@
-var/global/list/admin_ranks = list()								//list of all ranks with associated rights
+GLOBAL_LIST_INIT(admin_ranks, list())								//list of all ranks with associated rights
 
 //load our rank - > rights associations
 /proc/load_admin_ranks()
-	admin_ranks.Cut()
+	GLOB.admin_ranks.Cut()
 
 	var/previous_rights = 0
 
@@ -46,7 +46,7 @@ var/global/list/admin_ranks = list()								//list of all ranks with associated 
 				if("mod")						rights |= R_MOD
 				if("xeno")						rights |= R_XENO
 
-		admin_ranks[rank] = rights
+		GLOB.admin_ranks[rank] = rights
 		previous_rights = rights
 
 
@@ -91,7 +91,7 @@ var/global/list/admin_ranks = list()								//list of all ranks with associated 
 				rank = ckeyEx(List[2])
 
 			//load permissions associated with this rank
-			var/rights = admin_ranks[rank]
+			var/rights = GLOB.admin_ranks[rank]
 
 			//create the admin datum and store it for later use
 			var/datum/admins/D = new /datum/admins(rank, rights, ckey)

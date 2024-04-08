@@ -1,4 +1,4 @@
-var/global/repository/area/area_repository = new()
+GLOBAL_DATUM_INIT(area_repository, /repository/area, new())
 
 /repository/area
 	var/list/by_name_coords_cache_data

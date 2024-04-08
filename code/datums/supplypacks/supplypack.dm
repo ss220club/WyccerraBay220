@@ -51,14 +51,14 @@
 //NEW NOTE: Do NOT set the price of any crates below 7 points. Doing so allows infinite points.
 */
 
-var/global/list/supply_methods_
+GLOBAL_LIST_EMPTY(supply_methods_)
 /proc/get_supply_method(method_type)
-	if(!supply_methods_)
-		supply_methods_ = list()
-	. = supply_methods_[method_type]
+	if(!GLOB.supply_methods_)
+		GLOB.supply_methods_ = list()
+	. = GLOB.supply_methods_[method_type]
 	if(!.)
 		. = new method_type()
-		supply_methods_[method_type] = .
+		GLOB.supply_methods_[method_type] = .
 
 /singleton/supply_method/proc/spawn_contents(singleton/hierarchy/supply_pack/sp, location)
 	if(!sp || !location)

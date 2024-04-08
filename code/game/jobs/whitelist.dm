@@ -1,7 +1,7 @@
 #define WHITELISTFILE "data/whitelist.txt"
 #define ALIEN_WHITELIST_FILE "config/alienwhitelist.json"
 
-var/global/list/whitelist = list()
+GLOBAL_LIST_INIT(whitelist, list())
 
 /hook/startup/proc/loadWhitelist()
 	if(config.usewhitelist)
@@ -10,16 +10,16 @@ var/global/list/whitelist = list()
 	return TRUE
 
 /proc/load_whitelist()
-	whitelist = file2list(WHITELISTFILE)
-	if(!length(whitelist))
-		whitelist = null
+	GLOB.whitelist = file2list(WHITELISTFILE)
+	if(!length(GLOB.whitelist))
+		GLOB.whitelist = null
 
 /proc/check_whitelist(mob/M)
-	if(!whitelist)
+	if(!GLOB.whitelist)
 		return FALSE
-	return ("[M.ckey]" in whitelist)
+	return ("[M.ckey]" in GLOB.whitelist)
 
-var/global/list/alien_whitelist = list()
+GLOBAL_LIST_INIT(alien_whitelist, list())
 
 /hook/startup/proc/loadAlienWhitelist()
 	if(!config.usealienwhitelist)
@@ -42,10 +42,10 @@ var/global/list/alien_whitelist = list()
 	for(var/ckey in ckey_to_whitelisted_races)
 		var/list/whitelisted_races = ckey_to_whitelisted_races[ckey]
 		for(var/race in whitelisted_races)
-			if(islist(alien_whitelist[ckey]))
-				alien_whitelist[ckey][race] = TRUE
+			if(islist(GLOB.alien_whitelist[ckey]))
+				GLOB.alien_whitelist[ckey][race] = TRUE
 			else
-				alien_whitelist[ckey] = list(race = TRUE)
+				GLOB.alien_whitelist[ckey] = list(race = TRUE)
 
 	return TRUE
 
@@ -60,10 +60,10 @@ var/global/list/alien_whitelist = list()
 
 		var/ckey = row["ckey"]
 		var/race = row["race"]
-		if(islist(alien_whitelist[ckey]))
-			alien_whitelist[ckey][race] = TRUE
+		if(islist(GLOB.alien_whitelist[ckey]))
+			GLOB.alien_whitelist[ckey][race] = TRUE
 		else
-			alien_whitelist[ckey] = list(race = TRUE)
+			GLOB.alien_whitelist[ckey] = list(race = TRUE)
 
 	return TRUE
 
@@ -102,6 +102,6 @@ var/global/list/alien_whitelist = list()
 	return FALSE
 
 /proc/whitelist_lookup(item, ckey)
-	return alien_whitelist?[ckey]?[lowertext(item)]
+	return GLOB.alien_whitelist?[ckey]?[lowertext(item)]
 
 #undef WHITELISTFILE

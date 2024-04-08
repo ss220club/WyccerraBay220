@@ -81,7 +81,7 @@
 			stat("Game Mode:", "[SSticker.mode ? SSticker.mode.name : SSticker.master_mode] ([SSticker.master_mode])")
 		else
 			stat("Game Mode:", PUBLIC_GAME_MODE)
-		var/extra_antags = list2params(additional_antag_types)
+		var/extra_antags = list2params(GLOB.additional_antag_types)
 		stat("Added Antagonists:", extra_antags ? extra_antags : "None")
 		stat("Initial Continue Vote:", "[config.vote_autotransfer_initial] minutes")
 		stat("Additional Vote Every:", "[config.vote_autotransfer_interval] minutes")

@@ -62,13 +62,13 @@
 /datum/event/meteor_wave/proc/get_meteors()
 	switch(severity)
 		if(EVENT_LEVEL_MAJOR)
-			return meteors_major
+			return GLOB.meteors_major
 		if(EVENT_LEVEL_MODERATE)
-			return meteors_moderate
+			return GLOB.meteors_moderate
 		else
-			return meteors_minor
+			return GLOB.meteors_minor
 
-var/global/list/meteors_minor = list(
+GLOBAL_LIST_INIT(meteors_minor, list(
 	/obj/meteor/medium     = 80,
 	/obj/meteor/dust       = 30,
 	/obj/meteor/irradiated = 30,
@@ -76,9 +76,9 @@ var/global/list/meteors_minor = list(
 	/obj/meteor/flaming    = 10,
 	/obj/meteor/golden     = 10,
 	/obj/meteor/silver     = 10,
-)
+))
 
-var/global/list/meteors_moderate = list(
+GLOBAL_LIST_INIT(meteors_moderate, list(
 	/obj/meteor/medium     = 80,
 	/obj/meteor/big        = 30,
 	/obj/meteor/dust       = 30,
@@ -87,9 +87,9 @@ var/global/list/meteors_moderate = list(
 	/obj/meteor/golden     = 10,
 	/obj/meteor/silver     = 10,
 	/obj/meteor/emp        = 10,
-)
+))
 
-var/global/list/meteors_major = list(
+GLOBAL_LIST_INIT(meteors_major, list(
 	/obj/meteor/medium     = 80,
 	/obj/meteor/big        = 30,
 	/obj/meteor/dust       = 30,
@@ -99,7 +99,7 @@ var/global/list/meteors_major = list(
 	/obj/meteor/golden     = 10,
 	/obj/meteor/silver     = 10,
 	/obj/meteor/tunguska   = 1,
-)
+))
 
 /datum/event/meteor_wave/overmap
 	next_meteor_lower = 5

@@ -1,23 +1,23 @@
-var/global/list/outfits_singletons_
-var/global/list/outfits_singletons_root_
-var/global/list/outfits_singletons_by_type_
+GLOBAL_LIST_EMPTY(outfits_singletons_)
+GLOBAL_LIST_EMPTY(outfits_singletons_root_)
+GLOBAL_LIST_EMPTY(outfits_singletons_by_type_)
 
 /proc/outfit_by_type(outfit_type)
-	if(!outfits_singletons_root_)
+	if(!GLOB.outfits_singletons_root_)
 		init_outfit_singletons()
-	return outfits_singletons_by_type_[outfit_type]
+	return GLOB.outfits_singletons_by_type_[outfit_type]
 
 /proc/outfits()
-	if(!outfits_singletons_root_)
+	if(!GLOB.outfits_singletons_root_)
 		init_outfit_singletons()
-	return outfits_singletons_
+	return GLOB.outfits_singletons_
 
 /proc/init_outfit_singletons()
-	if(outfits_singletons_root_)
+	if(GLOB.outfits_singletons_root_)
 		return
-	outfits_singletons_ = list()
-	outfits_singletons_by_type_ = list()
-	outfits_singletons_root_ = GET_SINGLETON(/singleton/hierarchy/outfit)
+	GLOB.outfits_singletons_ = list()
+	GLOB.outfits_singletons_by_type_ = list()
+	GLOB.outfits_singletons_root_ = GET_SINGLETON(/singleton/hierarchy/outfit)
 
 /singleton/hierarchy/outfit
 	name = "Naked"
@@ -60,8 +60,8 @@ var/global/list/outfits_singletons_by_type_
 
 	if(is_hidden_category())
 		return
-	outfits_singletons_by_type_[type] = src
-	dd_insertObjectList(outfits_singletons_, src)
+	GLOB.outfits_singletons_by_type_[type] = src
+	dd_insertObjectList(GLOB.outfits_singletons_, src)
 
 /singleton/hierarchy/outfit/proc/pre_equip(mob/living/carbon/human/H)
 	if(flags & OUTFIT_RESET_EQUIPMENT)

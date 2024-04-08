@@ -333,7 +333,7 @@
 			return 1
 		var/place = selected_shuttle.name
 		if(alert(user, "Would you like to choose a custom gathering point, or just use [place]?", "Announcement Creation", "Default", "Custom") == "Custom")
-			var/list/areas = area_repository.get_areas_by_name()
+			var/list/areas = GLOB.area_repository.get_areas_by_name()
 			var/area/A = input(user, "Pick a custom location from the list.", "Announcement Creation") as null|anything in areas
 			if(A)
 				place = A

@@ -55,15 +55,15 @@
 			delete_me = 1
 			return
 		if("endgame_exit")
-			endgame_safespawns += loc
+			GLOB.endgame_safespawns += loc
 			delete_me = 1
 			return
 		if("bluespacerift")
-			endgame_exits += loc
+			GLOB.endgame_exits += loc
 			delete_me = 1
 			return
 
-	landmarks_list += src
+	GLOB.landmarks_list += src
 	return 1
 
 /obj/landmark/proc/delete()
@@ -75,7 +75,7 @@
 		return INITIALIZE_HINT_QDEL
 
 /obj/landmark/Destroy()
-	landmarks_list -= src
+	GLOB.landmarks_list -= src
 	return ..()
 
 /obj/landmark/start

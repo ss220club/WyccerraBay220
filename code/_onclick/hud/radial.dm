@@ -1,7 +1,7 @@
 #define NEXT_PAGE_ID "__next__"
 #define DEFAULT_CHECK_DELAY 20
 
-var/global/list/radial_menus = list()
+GLOBAL_LIST_INIT(radial_menus, list())
 
 /obj/screen/radial/Destroy()
 	parent = null
@@ -316,14 +316,14 @@ var/global/list/radial_menus = list()
 		for(var/atom/thing in check_locs)
 			check_locs[thing] = thing.loc
 
-	if(global.radial_menus[uniqueid])
+	if(GLOB.radial_menus[uniqueid])
 		if(!no_repeat_close)
-			var/datum/radial_menu/menu = global.radial_menus[uniqueid]
+			var/datum/radial_menu/menu = GLOB.radial_menus[uniqueid]
 			menu.finished = TRUE
 		return
 
 	var/datum/radial_menu/menu = new
-	global.radial_menus[uniqueid] = menu
+	GLOB.radial_menus[uniqueid] = menu
 	if(radius)
 		menu.radius = radius
 	if(istype(custom_check))
@@ -335,7 +335,7 @@ var/global/list/radial_menus = list()
 	menu.wait(user, anchor, require_near, check_locs)
 	var/answer = menu.selected_choice
 	qdel(menu)
-	global.radial_menus -= uniqueid
+	GLOB.radial_menus -= uniqueid
 	return answer
 
 #define RADIAL_INPUT(user, choices) show_radial_menu(user, user, choices)

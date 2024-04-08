@@ -482,7 +482,7 @@ Helpers
 	delay_notified = 1
 
 /datum/controller/subsystem/ticker/proc/handle_tickets()
-	for(var/datum/ticket/ticket in tickets)
+	for(var/datum/ticket/ticket in GLOB.tickets)
 		if(ticket.is_active())
 			if(!delay_notified)
 				message_staff(SPAN_WARNING("<b>Automatically delaying restart due to active tickets.</b>"))

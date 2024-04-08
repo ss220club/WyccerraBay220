@@ -30,7 +30,7 @@ GLOBAL_LIST(hazard_overlays)
 			use_after(airlock, null)
 		return INITIALIZE_HINT_QDEL
 
-var/global/list/tape_roll_applications = list()
+GLOBAL_LIST_INIT(tape_roll_applications, list())
 
 /obj/item/tape
 	name = "tape"
@@ -300,17 +300,17 @@ var/global/list/tape_roll_applications = list()
 		var/turf/F = A
 		var/direction = user.loc == F ? user.dir : turn(user.dir, 180)
 		var/hazard_overlay = GLOB.hazard_overlays["[direction]"]
-		if(isnull(tape_roll_applications[F]))
-			tape_roll_applications[F] = 0
+		if(isnull(GLOB.tape_roll_applications[F]))
+			GLOB.tape_roll_applications[F] = 0
 
-		if(tape_roll_applications[F] & direction)
+		if(GLOB.tape_roll_applications[F] & direction)
 			user.visible_message("\The [user] uses the adhesive of \the [src] to remove area markings from \the [F].", "You use the adhesive of \the [src] to remove area markings from \the [F].")
 			F.CutOverlays(hazard_overlay)
-			tape_roll_applications[F] &= ~direction
+			GLOB.tape_roll_applications[F] &= ~direction
 		else
 			user.visible_message("\The [user] applied \the [src] on \the [F] to create area markings.", "You apply \the [src] on \the [F] to create area markings.")
 			F.AddOverlays(hazard_overlay)
-			tape_roll_applications[F] |= direction
+			GLOB.tape_roll_applications[F] |= direction
 		return TRUE
 
 	return ..()

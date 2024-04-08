@@ -1,5 +1,5 @@
-var/global/list/tickets = list()
-var/global/list/ticket_panels = list()
+GLOBAL_LIST_INIT(tickets, list())
+GLOBAL_LIST_INIT(ticket_panels, list())
 
 /datum/ticket
 	var/datum/client_lite/owner
@@ -14,8 +14,8 @@ var/global/list/ticket_panels = list()
 
 /datum/ticket/New(datum/client_lite/owner)
 	src.owner = owner
-	tickets |= src
-	id = length(tickets)
+	GLOB.tickets |= src
+	id = length(GLOB.tickets)
 	opened_time = world.time
 	addtimer(CALLBACK(src, PROC_REF(timeoutcheck)), 5 MINUTES, TIMER_STOPPABLE)
 
@@ -102,7 +102,7 @@ var/global/list/ticket_panels = list()
 
 /proc/get_open_ticket_by_client(datum/client_lite/owner)
 	RETURN_TYPE(/datum/ticket)
-	for(var/datum/ticket/ticket in tickets)
+	for(var/datum/ticket/ticket in GLOB.tickets)
 		if(ticket.owner.ckey == owner.ckey && (ticket.status == TICKET_OPEN || ticket.status == TICKET_ASSIGNED))
 			return ticket // there should only be one open ticket by a client at a time, so no need to keep looking
 
@@ -145,8 +145,8 @@ var/global/list/ticket_panels = list()
 	var/list/dat = list()
 
 	var/list/ticket_dat = list()
-	for(var/id = length(tickets), id >= 1, id--)
-		var/datum/ticket/ticket = tickets[id]
+	for(var/id = length(GLOB.tickets), id >= 1, id--)
+		var/datum/ticket/ticket = GLOB.tickets[id]
 		if(C.holder || ticket.owner.ckey == C.ckey)
 			var/client/owner_client = client_by_ckey(ticket.owner.ckey)
 			var/open = 0
@@ -209,10 +209,10 @@ var/global/list/ticket_panels = list()
 /datum/ticket_panel/Topic(href, href_list)
 	if(usr && usr.client && usr != ticket_panel_window.user)
 		if(href_list["close"]) // catch the case where a user switches mobs, then closes the window that was linked to the old mob
-			ticket_panels -= usr.client
+			GLOB.ticket_panels -= usr.client
 		else
 			usr.client.view_tickets()
-			var/datum/ticket_panel/new_panel = ticket_panels[usr.client]
+			var/datum/ticket_panel/new_panel = GLOB.ticket_panels[usr.client]
 			new_panel.open_ticket = open_ticket
 			new_panel.Topic(href, href_list)
 			return
@@ -220,7 +220,7 @@ var/global/list/ticket_panels = list()
 	..()
 
 	if(href_list["close"])
-		ticket_panels -= usr.client
+		GLOB.ticket_panels -= usr.client
 
 	switch(href_list["action"])
 		if("unview")
@@ -264,15 +264,15 @@ var/global/list/ticket_panels = list()
 	set category = "Admin"
 
 	var/datum/ticket_panel/ticket_panel = new()
-	ticket_panels[src] = ticket_panel
+	GLOB.ticket_panels[src] = ticket_panel
 	ticket_panel.ticket_panel_window = new(src.mob, "ticketpanel", "Ticket Manager", 1024, 768, ticket_panel)
 
 	ticket_panel.ticket_panel_window.set_content(ticket_panel.get_dat())
 	ticket_panel.ticket_panel_window.open()
 
 /proc/update_ticket_panels()
-	for(var/client/C in ticket_panels)
-		var/datum/ticket_panel/ticket_panel = ticket_panels[C]
+	for(var/client/C in GLOB.ticket_panels)
+		var/datum/ticket_panel/ticket_panel = GLOB.ticket_panels[C]
 		if(C.mob != ticket_panel.ticket_panel_window.user)
 			C.view_tickets()
 		else

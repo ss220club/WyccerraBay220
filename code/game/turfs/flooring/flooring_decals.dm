@@ -1,7 +1,7 @@
 // These are objects that destroy themselves and add themselves to the
 // decal list of the floor under them. Use them rather than distinct icon_states
 // when mapping in interesting floor designs.
-var/global/list/floor_decals = list()
+GLOBAL_LIST_INIT(floor_decals, list())
 
 /obj/floor_decal
 	name = "floor decal"
@@ -38,7 +38,7 @@ var/global/list/floor_decals = list()
 
 	layer = turf_to_modify.is_plating() ? DECAL_PLATING_LAYER : DECAL_LAYER
 	var/cache_key = "[alpha]-[color]-[dir]-[icon_state]-[plane]-[layer]-[detail_overlay]-[detail_color]"
-	if(!floor_decals[cache_key])
+	if(!GLOB.floor_decals[cache_key])
 		var/image/I = image(icon = src.icon, icon_state = src.icon_state, dir = src.dir)
 		I.layer = layer
 		I.appearance_flags = DEFAULT_APPEARANCE_FLAGS | appearance_flags
@@ -48,9 +48,9 @@ var/global/list/floor_decals = list()
 			var/image/B = overlay_image(icon, "[detail_overlay]", flags=RESET_COLOR)
 			B.color = detail_color
 			I.AddOverlays(B)
-		floor_decals[cache_key] = I
+		GLOB.floor_decals[cache_key] = I
 
-	LAZYADD(turf_to_modify.decals, floor_decals[cache_key])
+	LAZYADD(turf_to_modify.decals, GLOB.floor_decals[cache_key])
 	turf_to_modify.queue_icon_update()
 
 /obj/floor_decal/reset

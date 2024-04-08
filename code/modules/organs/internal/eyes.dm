@@ -26,23 +26,23 @@
 
 /obj/item/organ/internal/eyes/proc/get_onhead_icon()
 	var/cache_key = get_eye_cache_key()
-	if(!human_icon_cache[cache_key])
+	if(!GLOB.human_icon_cache[cache_key])
 		var/icon/eyes_icon = icon(icon = eye_icon, icon_state = "")
 		if(apply_eye_colour)
 			eyes_icon.Blend(last_cached_eye_colour, ICON_ADD)
-		human_icon_cache[cache_key] = eyes_icon
-	return human_icon_cache[cache_key]
+		GLOB.human_icon_cache[cache_key] = eyes_icon
+	return GLOB.human_icon_cache[cache_key]
 
 /obj/item/organ/internal/eyes/proc/get_special_overlay()
 	var/icon/I = get_onhead_icon()
 	if(I)
 		var/cache_key = "[last_eye_cache_key]-glow"
-		if(!human_icon_cache[cache_key])
+		if(!GLOB.human_icon_cache[cache_key])
 			var/image/eye_glow = image(I)
 			eye_glow.layer = EYE_GLOW_LAYER
 			eye_glow.plane = EFFECTS_ABOVE_LIGHTING_PLANE
-			human_icon_cache[cache_key] = eye_glow
-		return human_icon_cache[cache_key]
+			GLOB.human_icon_cache[cache_key] = eye_glow
+		return GLOB.human_icon_cache[cache_key]
 
 /obj/item/organ/internal/eyes/proc/change_eye_color()
 	set name = "Change Eye Color"

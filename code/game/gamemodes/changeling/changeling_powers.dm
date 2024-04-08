@@ -65,12 +65,12 @@ var/global/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","E
 
 	var/lesser_form = !ishuman(src)
 
-	if(!length(powerinstances))
-		for(var/P in powers)
-			powerinstances += new P()
+	if(!length(GLOB.powerinstances))
+		for(var/P in GLOB.powers)
+			GLOB.powerinstances += new P()
 
 	// Code to auto-purchase free powers.
-	for(var/datum/power/changeling/P in powerinstances)
+	for(var/datum/power/changeling/P in GLOB.powerinstances)
 		if(!P.genomecost) // Is it free?
 			if(!(P in mind.changeling.purchasedpowers)) // Do we not have it already?
 				mind.changeling.purchasePower(mind, P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.

@@ -1,5 +1,5 @@
-var/global/list/image/ghost_darkness_images = list() //this is a list of images for things ghosts should still be able to see when they toggle darkness
-var/global/list/image/ghost_sightless_images = list() //this is a list of images for things ghosts should still be able to see even without ghost sight
+GLOBAL_LIST_EMPTY(ghost_darkness_images) //this is a list of images for things ghosts should still be able to see when they toggle darkness
+GLOBAL_LIST_EMPTY(ghost_sightless_images) //this is a list of images for things ghosts should still be able to see even without ghost sight
 
 /mob/observer/ghost
 	name = "ghost"
@@ -510,14 +510,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/observer/ghost/proc/updateghostimages()
 	if (!client)
 		return
-	client.images -= ghost_sightless_images
-	client.images -= ghost_darkness_images
+	client.images -= GLOB.ghost_sightless_images
+	client.images -= GLOB.ghost_darkness_images
 	if(!seedarkness)
-		client.images |= ghost_sightless_images
+		client.images |= GLOB.ghost_sightless_images
 		if(ghostvision)
-			client.images |= ghost_darkness_images
+			client.images |= GLOB.ghost_darkness_images
 	else if(seedarkness && !ghostvision)
-		client.images |= ghost_sightless_images
+		client.images |= GLOB.ghost_sightless_images
 	client.images -= ghost_image //remove ourself
 
 /mob/observer/ghost/MayRespawn(feedback = 0, respawn_time = 0)

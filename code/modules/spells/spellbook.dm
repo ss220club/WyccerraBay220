@@ -6,7 +6,7 @@
 
 //spells/spellbooks have a variable for this but as artefacts are literal items they do not.
 //so we do this instead.
-var/global/list/artefact_feedback = list(/obj/structure/closet/wizard/armor = 		"HS",
+GLOBAL_LIST_INIT(artefact_feedback, list(/obj/structure/closet/wizard/armor = 		"HS",
 								/obj/item/gun/energy/staff/focus = 	"MF",
 								/obj/item/summoning_stone = 			"ST",
 								/obj/item/magic_rock = 				"RA",
@@ -16,7 +16,7 @@ var/global/list/artefact_feedback = list(/obj/structure/closet/wizard/armor = 		
 								/obj/item/teleportation_scroll = 	"TS",
 								/obj/item/gun/energy/staff = 		"ST",
 								/obj/item/gun/energy/staff/animate =	"SA",
-								/obj/item/dice/d20/cursed = 			"DW")
+								/obj/item/dice/d20/cursed = 			"DW"))
 
 /obj/item/spellbook
 	name = "master spell book"

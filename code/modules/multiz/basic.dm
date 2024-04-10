@@ -1,5 +1,5 @@
 // If you add a more comprehensive system, just untick this file.
-var/global/list/z_levels = list()// Each bit re... haha just kidding this is a list of bools now
+GLOBAL_LIST_INIT(z_levels, list())// Each bit re... haha just kidding this is a list of bools now
 
 // If the height is more than 1, we mark all contained levels as connected.
 /obj/landmark/map_data/New(turf/loc, _height)
@@ -9,23 +9,23 @@ var/global/list/z_levels = list()// Each bit re... haha just kidding this is a l
 	if(_height)
 		height = _height
 	for(var/i = (loc.z - height + 1) to (loc.z-1))
-		if (length(z_levels) <i)
-			LIST_RESIZE(z_levels, i)
-		z_levels[i] = TRUE
+		if (length(GLOB.z_levels) <i)
+			LIST_RESIZE(GLOB.z_levels, i)
+		GLOB.z_levels[i] = TRUE
 
 /obj/landmark/map_data/Initialize()
 	..()
 	return INITIALIZE_HINT_QDEL
 
 /proc/HasAbove(z)
-	if(z >= world.maxz || z < 1 || z > length(z_levels))
+	if(z >= world.maxz || z < 1 || z > length(GLOB.z_levels))
 		return 0
-	return z_levels[z]
+	return GLOB.z_levels[z]
 
 /proc/HasBelow(z)
-	if(z > world.maxz || z < 2 || (z-1) > length(z_levels))
+	if(z > world.maxz || z < 2 || (z-1) > length(GLOB.z_levels))
 		return 0
-	return z_levels[z-1]
+	return GLOB.z_levels[z-1]
 
 // Thankfully, no bitwise magic is needed here.
 /proc/GetAbove(atom/atom)

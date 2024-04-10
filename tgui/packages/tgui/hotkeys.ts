@@ -102,14 +102,14 @@ const handlePassthrough = (key: KeyEvent) => {
   // Key_Down
   if (key.isDown() && !keyState[byondKeyCode]) {
     keyState[byondKeyCode] = true;
-    const command = `Key_Down "${byondKeyCode}"`;
+    const command = `keyDown "${byondKeyCode}"`;
     logger.debug(command);
     return Byond.command(command);
   }
   // Key_Up
   if (key.isUp() && keyState[byondKeyCode]) {
     keyState[byondKeyCode] = false;
-    const command = `Key_Up "${byondKeyCode}"`;
+    const command = `keyUp "${byondKeyCode}"`;
     logger.debug(command);
     return Byond.command(command);
   }
@@ -138,7 +138,7 @@ export const releaseHeldKeys = () => {
     if (keyState[byondKeyCode]) {
       keyState[byondKeyCode] = false;
       logger.log(`releasing key "${byondKeyCode}"`);
-      Byond.command(`Key_Up "${byondKeyCode}"`);
+      Byond.command(`keyUp "${byondKeyCode}"`);
     }
   }
 };

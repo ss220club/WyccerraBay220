@@ -32,8 +32,8 @@
 
 	var/list/kb_categories = list()
 	// Group keybinds by category
-	for (var/name in global.keybindings_by_name)
-		var/datum/keybinding/kb = global.keybindings_by_name[name]
+	for (var/name in GLOB.keybindings_by_name)
+		var/datum/keybinding/kb = GLOB.keybindings_by_name[name]
 		kb_categories[kb.category] += list(kb)
 
 	. += "<center>"
@@ -56,11 +56,11 @@
 				. += "</tr>"
 			else
 				var/bound_key = user_binds[kb.name][1]
-				var/normal_name = _kbMap_reverse[bound_key] ? _kbMap_reverse[bound_key] : bound_key
+				var/normal_name = GLOB.keybindings_map_reverse[bound_key] ? GLOB.keybindings_map[bound_key] : bound_key
 				. += "<tr><td width='40%'>[kb.full_name]</td><td width='15%'><a class='fluid' href ='?src=\ref[src];preference=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[pretty_keybinding_name(normal_name)]</a></td>"
 				for(var/bound_key_index in 2 to length(user_binds[kb.name]))
 					bound_key = user_binds[kb.name][bound_key_index]
-					normal_name = _kbMap_reverse[bound_key] ? _kbMap_reverse[bound_key] : bound_key
+					normal_name = GLOB.keybindings_map_reverse[bound_key] ? GLOB.keybindings_map_reverse[bound_key] : bound_key
 					. += "<td width='15%'><a class='fluid' href ='?src=\ref[src];preference=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[pretty_keybinding_name(normal_name)]</a></td>"
 				if(length(user_binds[kb.name]) < MAX_KEYS_PER_KEYBIND)
 					. += "<td width='15%'><a class='fluid' href ='?src=\ref[src];preference=keybindings_capture;keybinding=[kb.name]'>None</a></td>"
@@ -81,7 +81,7 @@
 /datum/category_item/player_setup_item/controls/keybindings/OnTopic(href, list/href_list, mob/user)
 	switch(href_list["preference"])
 		if("keybindings_capture")
-			var/datum/keybinding/kb = global.keybindings_by_name[href_list["keybinding"]]
+			var/datum/keybinding/kb = GLOB.keybindings_by_name[href_list["keybinding"]]
 			var/old_key = href_list["old_key"]
 			capture_keybinding(user, kb, old_key)
 			return TOPIC_REFRESH
@@ -115,8 +115,8 @@
 				close_browser(user, "window=capturekeypress")
 				return TOPIC_REFRESH
 
-			if(global._kbMap[new_key])
-				new_key = global._kbMap[new_key]
+			if(GLOB.keybindings_map[new_key])
+				new_key = GLOB.keybindings_map[new_key]
 
 			var/full_key
 			switch(new_key)
@@ -142,7 +142,7 @@
 			return TOPIC_REFRESH
 
 		if("keybindings_reset")
-			pref.key_bindings = deepCopyList(global.hotkey_keybinding_list_by_key)
+			pref.key_bindings = deepCopyList(GLOB.hotkey_keybinding_list_by_key)
 			user.client.set_macros()
 			return TOPIC_REFRESH
 
@@ -157,7 +157,7 @@
 				if(!length(pref.key_bindings[old_key]))
 					pref.key_bindings -= old_key
 
-			var/datum/keybinding/kb = global.keybindings_by_name[kb_name]
+			var/datum/keybinding/kb = GLOB.keybindings_by_name[kb_name]
 			for(var/key in kb.hotkey_keys)
 				pref.key_bindings[key] += list(kb_name)
 				pref.key_bindings[key] = sortTim(pref.key_bindings[key], GLOBAL_PROC_REF(cmp_text_asc))

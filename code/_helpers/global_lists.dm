@@ -82,11 +82,11 @@ var/global/list/string_slot_flags = list(
 	"holster" = SLOT_HOLSTER
 )
 
-var/global/list/hotkey_keybinding_list_by_key = list()
-var/global/list/keybindings_by_name = list()
+GLOBAL_LIST_EMPTY(hotkey_keybinding_list_by_key)
+GLOBAL_LIST_EMPTY(keybindings_by_name)
 
 /// This is a mapping from JS keys to Byond - ref: https://keycode.info/
-var/global/list/_kbMap = list(
+GLOBAL_LIST_INIT(keybindings_map, list(
 	"UP" = "North",
 	"RIGHT" = "East",
 	"DOWN" = "South",
@@ -107,10 +107,10 @@ var/global/list/_kbMap = list(
 	"SUBTRACT" = "Subtract",
 	"DECIMAL" = "Decimal",
 	"CLEAR" = "Center"
-)
+))
 
 /// Without alt, shift, ctrl and etc because its not necessary
-var/global/list/_kbMap_reverse = list(
+GLOBAL_LIST_INIT(keybindings_map_reverse, list(
 	"North" = "Up",
 	"East" = "Right",
 	"South" = "Down",
@@ -119,7 +119,7 @@ var/global/list/_kbMap_reverse = list(
 	"Northeast" = "PageUp",
 	"Southwest" = "End",
 	"Southeast" = "PageDown",
-)
+))
 
 //////////////////////////
 /////Initial Building/////
@@ -228,10 +228,10 @@ var/global/list/_kbMap_reverse = list(
 		if(!initial(keybinding.name))
 			continue
 		var/datum/keybinding/instance = new keybinding
-		global.keybindings_by_name[instance.name] = instance
+		GLOB.keybindings_by_name[instance.name] = instance
 		if(length(instance.hotkey_keys))
 			for(var/bound_key in instance.hotkey_keys)
-				global.hotkey_keybinding_list_by_key[bound_key] += list(instance.name)
+				GLOB.hotkey_keybinding_list_by_key[bound_key] += list(instance.name)
 
 	return TRUE
 

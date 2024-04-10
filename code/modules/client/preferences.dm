@@ -50,7 +50,7 @@
 	..()
 
 /datum/preferences/proc/setup()
-	key_bindings = deepCopyList(global.hotkey_keybinding_list_by_key)
+	key_bindings = deepCopyList(GLOB.hotkey_keybinding_list_by_key)
 	if(!length(GLOB.skills))
 		GET_SINGLETON(/singleton/hierarchy/skill)
 	player_setup = new(src)
@@ -501,15 +501,15 @@
 	// When loading from savefile key_binding can be null
 	// This happens when player had savefile created before new kb system, but hotkeys was not saved
 	if(!length(key_bindings))
-		key_bindings = deepCopyList(global.hotkey_keybinding_list_by_key) // give them default keybinds too
+		key_bindings = deepCopyList(GLOB.hotkey_keybinding_list_by_key) // give them default keybinds too
 
 	var/list/user_binds = list()
 	for (var/key in key_bindings)
 		for(var/kb_name in key_bindings[key])
 			user_binds[kb_name] += list(key)
 	var/list/notadded = list()
-	for (var/name in global.keybindings_by_name)
-		var/datum/keybinding/kb = global.keybindings_by_name[name]
+	for (var/name in GLOB.keybindings_by_name)
+		var/datum/keybinding/kb = GLOB.keybindings_by_name[name]
 		if(length(user_binds[kb.name]))
 			continue // key is unbound and or bound to something
 		var/addedbind = FALSE

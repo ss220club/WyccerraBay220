@@ -78,7 +78,7 @@
 	var/keycount = 0
 	for(var/kb_name in prefs.key_bindings[full_key])
 		keycount++
-		var/datum/keybinding/kb = global.keybindings_by_name[kb_name]
+		var/datum/keybinding/kb = GLOB.keybindings_by_name[kb_name]
 		if(kb.can_use(src) && kb.down(src) && keycount >= MAX_COMMANDS_PER_KEY)
 			break
 
@@ -107,7 +107,7 @@
 	// We don't do full key for release, because for mod keys you
 	// can hold different keys and releasing any should be handled by the key binding specifically
 	for (var/kb_name in prefs.key_bindings[_key])
-		var/datum/keybinding/kb = global.keybindings_by_name[kb_name]
+		var/datum/keybinding/kb = GLOB.keybindings_by_name[kb_name]
 		if(kb.can_use(src) && kb.up(src))
 			break
 	holder?.key_up(_key, src)
@@ -140,11 +140,11 @@
 	update_special_keybinds()
 
 /client/proc/reset_macros(skip_alert = FALSE)
-	var/ans
+	var/answer
 	if(!skip_alert)
-		ans = alert(src, "Change your keyboard language to ENG", "Reset macros")
+		answer = tgui_alert(src, "Change your keyboard language to ENG", "Reset macros")
 
-	if(skip_alert || ans)
+	if(skip_alert || answer)
 		set_macros()
 		to_chat(src, SPAN_NOTICE("Keybindings were fixed.")) // not yet but set_macros works fast enough
 

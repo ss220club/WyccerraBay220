@@ -40,7 +40,7 @@
 	name = "pixel_shift"
 	full_name = "Pixel Shift"
 	description = "Hold to pixel shift with movement keys"
-	hotkey_keys = list("V")
+	hotkey_keys = list("B")
 
 /datum/keybinding/living/pixel_shift/down(client/user)
 	if(!(SEND_SIGNAL(user.mob, COMSIG_KB_MOB_PIXEL_SHIFT_DOWN) & COMSIG_KB_ACTIVATED))

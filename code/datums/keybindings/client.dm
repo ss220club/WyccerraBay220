@@ -15,7 +15,7 @@
 	name = "screenshot"
 	full_name = "Screenshot"
 	description = "Take a screenshot"
-	hotkey_keys = list("F10")
+	hotkey_keys = list()
 
 /datum/keybinding/client/screenshot/down(client/user)
 	winset(user, null, "command=.screenshot [!user.keys_held[SHIFT_CLICK] ? "auto" : ""]")

@@ -57,7 +57,7 @@
 		T.date = "[num2text(rand(1, 31))] [pick("January","February","March","April","May","June","July","August","September","October","November","December")], [GLOB.using_map.game_year-rand(8, 18)]"
 		T.time = "[rand(0,24)]:[rand(11,59)]"
 
-		M.account_number = random_id("station_account_number", 111111, 999999)
+		M.account_number = GLOB.random_id("station_account_number", 111111, 999999)
 	else
 		M.account_number = next_account_number
 		next_account_number += rand(1,25)

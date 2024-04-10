@@ -1,4 +1,4 @@
-var/global/obj/screen/robot_inventory
+GLOBAL_VAR(obj/screen/robot_inventory)
 
 /mob/living/silicon/robot
 	hud_type = /datum/hud/robot
@@ -97,11 +97,11 @@ var/global/obj/screen/robot_inventory
 	mymob.throw_icon.screen_loc = ui_borg_store
 
 	//Inventory
-	robot_inventory = new /obj/screen()
-	robot_inventory.SetName("inventory")
-	robot_inventory.icon = 'icons/mob/screen1_robot.dmi'
-	robot_inventory.icon_state = "inventory"
-	robot_inventory.screen_loc = ui_borg_inventory
+	GLOB.robot_inventory = new /obj/screen()
+	GLOB.robot_inventory.SetName("inventory")
+	GLOB.robot_inventory.icon = 'icons/mob/screen1_robot.dmi'
+	GLOB.robot_inventory.icon_state = "inventory"
+	GLOB.robot_inventory.screen_loc = ui_borg_inventory
 
 	//Temp
 	mymob.bodytemp = new /obj/screen()
@@ -141,7 +141,7 @@ var/global/obj/screen/robot_inventory
 	mymob.radio_use_icon = new /obj/screen/gun/radio(null)
 
 	mymob.client.screen = list()
-	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, robot_inventory, mymob.gun_setting_icon)
+	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, GLOB.robot_inventory, mymob.gun_setting_icon)
 	mymob.client.screen += src.adding + src.other
 
 /datum/hud/proc/toggle_show_robot_modules()

@@ -204,17 +204,17 @@ ranks - ec
 
 /obj/item/clothing/accessory/necklace/collar/shock/New()
 	..()
-	radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT) // Makes it so you don't need to change the frequency off of default for it to work.
+	radio_connection = GLOB.radio_controller.add_object(src, frequency, RADIO_CHAT) // Makes it so you don't need to change the frequency off of default for it to work.
 
 /obj/item/clothing/accessory/necklace/collar/shock/Destroy() //Clean up your toys when you're done.
-	radio_controller.remove_object(src, frequency)
+	GLOB.radio_controller.remove_object(src, frequency)
 	radio_connection = null //Don't delete this, this is a shared object.
 	return ..()
 
 /obj/item/clothing/accessory/necklace/collar/shock/proc/set_frequency(new_frequency)
-	radio_controller.remove_object(src, frequency)
+	GLOB.radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
+	radio_connection = GLOB.radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/clothing/accessory/necklace/collar/shock/Topic(href, href_list)
 	if(usr.stat || usr.restrained())

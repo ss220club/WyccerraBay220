@@ -72,7 +72,7 @@
 		mission.name = name
 	else
 		mission.name = "[shuttle_name]: Mission [length(missions)+1]"
-	mission.ID = sequential_id(type)
+	mission.ID = GLOB.sequential_id(type)
 	mission.shuttle_name = shuttle_name
 	queued_missions += mission
 	process_queue()

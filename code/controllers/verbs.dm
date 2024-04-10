@@ -24,7 +24,7 @@
 
 	switch(controller)
 		if("Radio")
-			debug_variables(radio_controller)
+			debug_variables(GLOB.radio_controller)
 		if("Evacuation")
 			debug_variables(GLOB.evacuation_controller)
 		if("Configuration")

@@ -124,7 +124,7 @@ GLOBAL_LIST_INIT(switch_small_sound, list(
 		if(ispath(tape))
 			tape = new tape(src)
 
-		sound_id = "[/obj/item/music_player]_[sequential_id(/obj/item/music_player)]"
+		sound_id = "[/obj/item/music_player]_[GLOB.sequential_id(/obj/item/music_player)]"
 		serial_number = "[rand(1,999)]"
 		desc = desc + "<br> You see \"#[serial_number]\" on the cover."
 		GLOB.music_players += src

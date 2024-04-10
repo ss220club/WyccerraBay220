@@ -42,7 +42,7 @@
 		return INITIALIZE_HINT_QDEL
 
 	if(scannable)
-		unknown_id = "[pick(GLOB.phonetic_alphabet)]-[random_id(/obj/overmap, 100, 999)]"
+		unknown_id = "[pick(GLOB.phonetic_alphabet)]-[GLOB.random_id(/obj/overmap, 100, 999)]"
 
 	if(requires_contact)
 		invisibility = INVISIBILITY_OVERMAP // Effects that require identification have their images cast to the client via sensors.

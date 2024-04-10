@@ -314,7 +314,7 @@ GLOBAL_LIST_INIT(debug_verbs, list (
 
 /proc/get_zas_image(turf/T, icon_state)
 	RETURN_TYPE(/image)
-	return image_repository.atom_image(T, 'icons/misc/debug_group.dmi', icon_state, plane = DEFAULT_PLANE, layer = ABOVE_TILE_LAYER)
+	return GLOB.image_repository.atom_image(T, 'icons/misc/debug_group.dmi', icon_state, plane = DEFAULT_PLANE, layer = ABOVE_TILE_LAYER)
 
 //Special for Cakey
 /client/proc/find_leaky_pipes()

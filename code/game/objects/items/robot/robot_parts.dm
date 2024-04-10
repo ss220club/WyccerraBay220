@@ -136,7 +136,7 @@
 				return
 			var/name = sanitizeSafe(input(user,"Set a name for the new prosthetic."), MAX_NAME_LEN)
 			if(!name)
-				SetName("prosthetic ([random_id("prosthetic_id", 1, 999)])")
+				SetName("prosthetic ([GLOB.random_id("prosthetic_id", 1, 999)])")
 
 			// Create a new, nonliving human.
 			var/mob/living/carbon/human/H = new /mob/living/carbon/human(get_turf(loc))

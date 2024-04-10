@@ -27,7 +27,7 @@
 
 /obj/machinery/computer/teleporter/Initialize()
 	. = ..()
-	id = "[random_id(/obj/machinery/computer/teleporter, 1000, 9999)]"
+	id = "[GLOB.random_id(/obj/machinery/computer/teleporter, 1000, 9999)]"
 	update_refs()
 
 

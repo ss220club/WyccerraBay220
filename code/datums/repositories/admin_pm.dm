@@ -1,4 +1,4 @@
-var/global/repository/admin_pm/admin_pm_repository = new()
+GLOBAL_DATUM_INIT(admin_pm_repository, /repository/admin_pm, new)
 
 /repository/admin_pm
 	var/list/admin_pms_

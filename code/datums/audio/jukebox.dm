@@ -27,7 +27,7 @@
 	for (var/path in GLOB.jukebox_tracks)
 		var/singleton/audio/track/track = GET_SINGLETON(path)
 		AddTrack(track.display || track.title, track.source)
-	sound_id = "[/jukebox]_[sequential_id(/jukebox)]"
+	sound_id = "[/jukebox]_[GLOB.sequential_id(/jukebox)]"
 	template = _template
 	ui_title = _ui_title
 	ui_width = _ui_width

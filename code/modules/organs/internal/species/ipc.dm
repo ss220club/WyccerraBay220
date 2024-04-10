@@ -182,7 +182,7 @@
 	..()
 
 /obj/item/organ/internal/posibrain/proc/PickName()
-	src.brainmob.SetName("[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[random_id(type,100,999)]")
+	src.brainmob.SetName("[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[GLOB.random_id(type,100,999)]")
 	src.brainmob.real_name = src.brainmob.name
 
 /obj/item/organ/internal/posibrain/proc/shackle(given_lawset)

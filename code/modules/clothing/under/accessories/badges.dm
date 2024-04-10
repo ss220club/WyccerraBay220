@@ -105,7 +105,7 @@
 
 /obj/item/clothing/accessory/badge/holo/set_name(new_name)
 	..()
-	badge_number = random_id(type, 1000, 9999)
+	badge_number = GLOB.random_id(type, 1000, 9999)
 	name = "[name] ([badge_number])"
 
 

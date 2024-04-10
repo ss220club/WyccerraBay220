@@ -112,7 +112,7 @@
 
 
 /obj/shuttle_landmark/automatic/Initialize()
-	landmark_tag += "-[x]-[y]-[z]-[random_id("landmarks",1,9999)]"
+	landmark_tag += "-[x]-[y]-[z]-[GLOB.random_id("landmarks",1,9999)]"
 	return ..()
 
 

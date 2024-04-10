@@ -314,7 +314,7 @@ GLOBAL_LIST_INIT(additional_antag_types, list())
 		antag.print_player_summary()
 	sleep(2)
 
-	uplink_purchase_repository.print_entries()
+	GLOB.uplink_purchase_repository.print_entries()
 
 	sleep(2)
 

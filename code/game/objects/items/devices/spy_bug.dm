@@ -159,7 +159,7 @@
 
 /obj/machinery/camera/spy/New()
 	..()
-	name = "DV-136ZB #[random_id(/obj/machinery/camera/spy, 1000,9999)]"
+	name = "DV-136ZB #[GLOB.random_id(/obj/machinery/camera/spy, 1000,9999)]"
 	c_tag = name
 
 /obj/machinery/camera/spy/check_eye(mob/user as mob)

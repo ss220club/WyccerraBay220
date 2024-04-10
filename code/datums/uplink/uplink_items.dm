@@ -107,7 +107,7 @@ GLOBAL_DATUM_INIT(uplink, /datum/uplink, new)
 /datum/uplink_item/proc/purchase_log(obj/item/device/uplink/U, mob/user, cost)
 	log_and_message_admins("used \the [U.loc] to buy \a [src]")
 	if(user)
-		uplink_purchase_repository.add_entry(user.mind, src, cost)
+		GLOB.uplink_purchase_repository.add_entry(user.mind, src, cost)
 
 /datum/uplink_item/dd_SortValue()
 	return cost(INFINITY, null)

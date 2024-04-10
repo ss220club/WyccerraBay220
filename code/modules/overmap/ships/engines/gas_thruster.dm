@@ -105,7 +105,7 @@
 /obj/machinery/atmospherics/unary/engine/on_update_icon()
 	ClearOverlays()
 	if(is_on())
-		AddOverlays(image_repository.overlay_image(icon, "nozzle_idle", plane = EFFECTS_ABOVE_LIGHTING_PLANE, layer = ABOVE_LIGHTING_LAYER))
+		AddOverlays(GLOB.image_repository.overlay_image(icon, "nozzle_idle", plane = EFFECTS_ABOVE_LIGHTING_PLANE, layer = ABOVE_LIGHTING_LAYER))
 
 /obj/machinery/atmospherics/unary/engine/proc/get_status()
 	. = list()

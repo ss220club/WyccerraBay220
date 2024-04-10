@@ -107,7 +107,7 @@
 
 	robot_modules_background = new()
 	robot_modules_background.icon_state = "block"
-	ident = random_id(/mob/living/silicon/robot, 1, 999)
+	ident = GLOB.random_id(/mob/living/silicon/robot, 1, 999)
 	module_sprites["Basic"] = "robot"
 	icontype = "Basic"
 	updatename(modtype)

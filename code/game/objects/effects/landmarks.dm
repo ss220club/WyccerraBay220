@@ -247,7 +247,7 @@
 	var/datum/map_template/ruin/ruin_template
 
 /obj/landmark/ruin/New(loc, my_ruin_template)
-	name = "ruin_[sequential_id(/obj/landmark/ruin)]"
+	name = "ruin_[GLOB.sequential_id(/obj/landmark/ruin)]"
 	..(loc)
 	ruin_template = my_ruin_template
 	GLOB.ruin_landmarks |= src

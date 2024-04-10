@@ -85,7 +85,7 @@
 	verbs += /mob/living/proc/ventcrawl
 
 	colour = _colour
-	number = random_id(/mob/living/carbon/slime, 1, 1000)
+	number = GLOB.random_id(/mob/living/carbon/slime, 1, 1000)
 	SetName("[colour] [is_adult ? "adult" : "baby"] slime ([number])")
 	real_name = name
 	mutation_chance = rand(25, 35)

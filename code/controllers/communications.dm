@@ -201,10 +201,10 @@ GLOBAL_LIST_INIT(all_selectable_radio_filters, list(
 	RADIO_MAGNETS
 ))
 
-var/global/datum/controller/radio/radio_controller
+GLOBAL_DATUM(radio_controller, /datum/controller/radio)
 
 /hook/startup/proc/createRadioController()
-	radio_controller = new /datum/controller/radio()
+	GLOB.radio_controller = new /datum/controller/radio()
 	return 1
 
 //callback used by objects to react to incoming radio signals

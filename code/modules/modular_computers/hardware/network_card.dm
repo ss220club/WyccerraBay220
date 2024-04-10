@@ -51,7 +51,7 @@
 
 /obj/item/stock_parts/computer/network_card/Initialize()
 	. = ..()
-	identification_id = random_id("network_card_id", 1, 999)
+	identification_id = GLOB.random_id("network_card_id", 1, 999)
 
 /obj/item/stock_parts/computer/network_card/Destroy()
 	GLOB.ntnet_global.unregister(identification_id)

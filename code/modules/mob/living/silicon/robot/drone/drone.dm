@@ -159,7 +159,7 @@ GLOBAL_LIST_INIT(mob_hat_cache, list())
 	SetName(real_name)
 
 /mob/living/silicon/robot/drone/updatename()
-	real_name = "[initial(name)] ([random_id(type,100,999)])"
+	real_name = "[initial(name)] ([GLOB.random_id(type,100,999)])"
 	SetName(real_name)
 
 /mob/living/silicon/robot/drone/on_update_icon()

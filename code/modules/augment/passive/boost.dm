@@ -23,7 +23,7 @@
 
 /obj/item/organ/internal/augment/boost/Initialize()
 	. = ..()
-	id = "[/obj/item/organ/internal/augment/boost]_[sequential_id(/obj/item/organ/internal/augment/boost)]"
+	id = "[/obj/item/organ/internal/augment/boost]_[GLOB.sequential_id(/obj/item/organ/internal/augment/boost)]"
 
 
 /obj/item/organ/internal/augment/boost/onInstall()

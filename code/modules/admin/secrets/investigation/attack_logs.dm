@@ -18,7 +18,7 @@
 	dat += "<table border='1' style='width:100%;border-collapse:collapse;'>"
 	dat += "<tr><th style='text-align:left;'>Time</th><th style='text-align:left;'>Attacker</th><th style='text-align:left;'>Intent</th><th style='text-align:left;'>Zone Sel</th><th style='text-align:left;'>Victim</th></tr>"
 
-	for(var/log in attack_log_repository.attack_logs_)
+	for(var/log in GLOB.attack_log_repository.attack_logs_)
 		var/datum/attack_log/al = log
 		if(filter_log(user, al))
 			continue
@@ -185,7 +185,7 @@
 
 /attack_filter/must_be_given_ckey/proc/get_ckeys()
 	. = list()
-	for(var/log in attack_log_repository.attack_logs_)
+	for(var/log in GLOB.attack_log_repository.attack_logs_)
 		var/datum/attack_log/al = log
 		if(check_attacker && al.attacker && al.attacker.client.ckey != NO_CLIENT_CKEY)
 			. |= al.attacker.client.ckey

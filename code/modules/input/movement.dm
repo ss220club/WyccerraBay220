@@ -3,7 +3,6 @@
 
 // You might be wondering why this isn't client level. If focus is null, we don't want you to move.
 // Only way to do that is to tie the behavior into the focus's keyLoop().
-
 /atom/movable/keyLoop(client/user)
 	var/movement_dir = 0
 	for(var/_key in user.keys_held)
@@ -28,7 +27,6 @@
 
 	user.next_move_dir_add = 0
 	user.next_move_dir_sub = 0
-
 
 /**
 * A wrapper for setDir that should only be able to fail by living mobs.

@@ -1,3 +1,13 @@
+#define CATEGORY_CLIENT "CLIENT"
+#define CATEGORY_EMOTE "EMOTE"
+#define CATEGORY_ADMIN "ADMIN"
+#define CATEGORY_CARBON "CARBON"
+#define CATEGORY_HUMAN "HUMAN"
+#define CATEGORY_ROBOT "ROBOT"
+#define CATEGORY_MISC "MISC"
+#define CATEGORY_MOVEMENT "MOVEMENT"
+#define CATEGORY_COMMUNICATION "COMMUNICATION"
+
 /// Max length of a keypress command before it's considered to be a forged packet/bogus command
 #define MAX_KEYPRESS_COMMANDLENGTH 16
 /// Maximum keys that can be bound to one button

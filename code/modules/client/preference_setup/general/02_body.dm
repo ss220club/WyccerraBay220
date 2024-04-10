@@ -213,9 +213,9 @@ GLOBAL_LIST_INIT(valid_bloodtypes, list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if ("mechanical")
 				alt_organs += "[organ_name == BP_BRAIN ? "Positronic" : "Synthetic"] [organ_name]"
 			if ("cyborg")
-				var/datum/robolimb/limb = basic_robolimb
-				if (pref.rlimb_data[name] && all_robolimbs[pref.rlimb_data[name]])
-					limb = all_robolimbs[pref.rlimb_data[name]]
+				var/datum/robolimb/limb = GLOB.basic_robolimb
+				if (pref.rlimb_data[name] && GLOB.all_robolimbs[pref.rlimb_data[name]])
+					limb = GLOB.all_robolimbs[pref.rlimb_data[name]]
 				alt_organs += "[limb.company] [organ_name] prosthesis"
 			if ("assisted")
 				switch (organ_name)
@@ -546,8 +546,8 @@ GLOBAL_LIST_INIT(valid_bloodtypes, list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				var/datum/species/temp_species = pref.species ? all_species[pref.species] : all_species[SPECIES_HUMAN]
 				var/tmp_species = temp_species.get_bodytype(user)
 				var/list/usable_manufacturers = list()
-				for(var/company in chargen_robolimbs)
-					var/datum/robolimb/M = chargen_robolimbs[company]
+				for(var/company in GLOB.chargen_robolimbs)
+					var/datum/robolimb/M = GLOB.chargen_robolimbs[company]
 					if(tmp_species in M.species_cannot_use)
 						continue
 					if(length(M.restricted_to) && !(tmp_species in M.restricted_to))

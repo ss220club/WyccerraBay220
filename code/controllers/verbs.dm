@@ -26,7 +26,7 @@
 		if("Radio")
 			debug_variables(radio_controller)
 		if("Evacuation")
-			debug_variables(evacuation_controller)
+			debug_variables(GLOB.evacuation_controller)
 		if("Configuration")
 			debug_variables(config)
 		if("pAI")

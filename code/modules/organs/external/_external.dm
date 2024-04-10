@@ -1106,11 +1106,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 
 	if(company)
-		var/datum/robolimb/R = all_robolimbs[company]
+		var/datum/robolimb/R = GLOB.all_robolimbs[company]
 		if(!istype(R) || (species && (species.name in R.species_cannot_use)) || \
 		(species && !(species.get_bodytype(owner) in R.allowed_bodytypes)) || \
 		(length(R.applies_to_part) && !(organ_tag in R.applies_to_part)))
-			R = basic_robolimb
+			R = GLOB.basic_robolimb
 		else
 			model = company
 			force_icon = R.icon

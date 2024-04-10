@@ -66,10 +66,10 @@
 		if("Unbolt All Saferooms")
 			GLOB.using_map.unbolt_saferooms()
 		if("Evacuate")
-			if(!evacuation_controller)
+			if(!GLOB.evacuation_controller)
 				to_chat(usr, SPAN_DANGER("Unable to initiate evacuation!"))
 				return
-			for (var/datum/evacuation_option/EO in evacuation_controller.available_evac_options())
+			for (var/datum/evacuation_option/EO in GLOB.evacuation_controller.available_evac_options())
 				if(EO.abandon_ship)
-					evacuation_controller.handle_evac_option(EO.option_target, usr, TRUE)
+					GLOB.evacuation_controller.handle_evac_option(EO.option_target, usr, TRUE)
 					return

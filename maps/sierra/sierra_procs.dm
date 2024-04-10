@@ -16,7 +16,7 @@
 
 		if(Player.stat != DEAD)
 			var/turf/playerTurf = get_turf(Player)
-			if(evacuation_controller.round_over() && evacuation_controller.emergency_evacuation)
+			if(GLOB.evacuation_controller.round_over() && GLOB.evacuation_controller.emergency_evacuation)
 				if(isNotAdminLevel(playerTurf.z))
 					to_chat(Player, "<font color='blue'><b>Вам удалось выжить, но вы были брошены на [station_name()], [Player.real_name]...</b></font>")
 				else

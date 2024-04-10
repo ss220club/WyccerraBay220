@@ -57,11 +57,11 @@
 	//END: ECS SHIT
 	GLOB.destroyed_event && GLOB.destroyed_event.raise_event(src)
 	cleanup_events(src)
-	var/list/machines = global.state_machines["\ref[src]"]
+	var/list/machines = GLOB.state_machines["\ref[src]"]
 	if (length(machines))
 		for (var/base_type in machines)
 			qdel(machines[base_type])
-		global.state_machines -= "\ref[src]"
+		GLOB.state_machines -= "\ref[src]"
 	if (instance_pool?.ReturnInstance(src))
 		return QDEL_HINT_IWILLGC
 	instance_configurator = null

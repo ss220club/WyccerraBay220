@@ -635,7 +635,7 @@ GLOBAL_LIST_EMPTY(all_maps)
 		if(Player.mind && !isnewplayer(Player))
 			if(Player.stat != DEAD)
 				var/turf/playerTurf = get_turf(Player)
-				if(evacuation_controller.round_over() && evacuation_controller.emergency_evacuation)
+				if(GLOB.evacuation_controller.round_over() && GLOB.evacuation_controller.emergency_evacuation)
 					if(isStationLevel(playerTurf.z))
 						to_chat(Player, SPAN_INFO("<b>You managed to survive, but were left behind on [station_name()] as [Player.real_name]...</b>"))
 					else if (isEscapeLevel(playerTurf.z))
@@ -682,9 +682,9 @@ GLOBAL_LIST_EMPTY(all_maps)
 						data["escaped_total"]++
 						if(ishuman(M))
 							data["escaped_humans"]++
-					if (evacuation_controller.emergency_evacuation && !isEscapeLevel(A.z)) //left behind after evac
+					if (GLOB.evacuation_controller.emergency_evacuation && !isEscapeLevel(A.z)) //left behind after evac
 						data["left_behind_total"]++
-					if (!evacuation_controller.emergency_evacuation && isNotStationLevel(A.z))
+					if (!GLOB.evacuation_controller.emergency_evacuation && isNotStationLevel(A.z))
 						data["left_behind_total"]++
 				else
 					data["offship_players"]++

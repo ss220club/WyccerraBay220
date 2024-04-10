@@ -54,9 +54,9 @@ GLOBAL_LIST_INIT(narsie_list, list())
 		GLOB.narsie_cometh = 1
 
 		spawn(10 SECONDS)
-			if(evacuation_controller)
-				evacuation_controller.call_evacuation(null, TRUE, 1)
-				evacuation_controller.evac_no_return = 0 // Cannot recall
+			if(GLOB.evacuation_controller)
+				GLOB.evacuation_controller.call_evacuation(null, TRUE, 1)
+				GLOB.evacuation_controller.evac_no_return = 0 // Cannot recall
 
 /obj/singularity/narsie/Process()
 	eat()

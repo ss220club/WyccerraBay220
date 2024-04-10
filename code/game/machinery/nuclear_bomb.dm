@@ -515,14 +515,14 @@ var/global/bomb_set
 	..()
 	visible_message(SPAN_WARNING("Warning. The self-destruct sequence override will be disabled [self_destruct_cutoff/10] seconds before detonation."))
 	if(evacuate)
-		if(!evacuation_controller)
+		if(!GLOB.evacuation_controller)
 			visible_message(SPAN_DANGER("Warning. Unable to initiate evacuation procedures."))
 			return
-		for (var/datum/evacuation_option/EO in evacuation_controller.available_evac_options())
+		for (var/datum/evacuation_option/EO in GLOB.evacuation_controller.available_evac_options())
 			if(EO.abandon_ship)
-				evacuation_controller.evac_prep_delay = timeleft - world.time - 2 MINUTES
-				evacuation_controller.evac_launch_delay = 1.75 MINUTES //Escape pods take time to arm and eject appart from this delay. Take into account.
-				evacuation_controller.handle_evac_option(EO.option_target, usr)
+				GLOB.evacuation_controller.evac_prep_delay = timeleft - world.time - 2 MINUTES
+				GLOB.evacuation_controller.evac_launch_delay = 1.75 MINUTES //Escape pods take time to arm and eject appart from this delay. Take into account.
+				GLOB.evacuation_controller.handle_evac_option(EO.option_target, usr)
 
 /obj/machinery/nuclearbomb/station/secure_device()
 	if(timing && timeleft - world.time <= self_destruct_cutoff)
@@ -530,11 +530,11 @@ var/global/bomb_set
 		return
 	..()
 	announced = FALSE
-	for (var/datum/evacuation_option/EO in evacuation_controller.available_evac_options())
+	for (var/datum/evacuation_option/EO in GLOB.evacuation_controller.available_evac_options())
 		if(EO.option_target == "cancel_abandon_ship")
-			evacuation_controller.handle_evac_option(EO.option_target, usr)
-			evacuation_controller.evac_prep_delay = 5 MINUTES
-			evacuation_controller.evac_launch_delay = 3 MINUTES
+			GLOB.evacuation_controller.handle_evac_option(EO.option_target, usr)
+			GLOB.evacuation_controller.evac_prep_delay = 5 MINUTES
+			GLOB.evacuation_controller.evac_launch_delay = 3 MINUTES
 
 /obj/machinery/nuclearbomb/station/Process()
 	..()

@@ -40,7 +40,7 @@
 
 /obj/machinery/pipedispenser/proc/build_quantity(datum/pipe/P, quantity)
 	for(var/I = quantity;I > 0;I -= 1)
-		P.Build(P, loc, pipe_colors[pipe_color])
+		P.Build(P, loc, GLOB.pipe_colors[pipe_color])
 		use_power_oneoff(500)
 
 /obj/machinery/pipedispenser/Topic(href, href_list)
@@ -56,7 +56,7 @@
 		var/datum/pipe/P = locate(href_list["buildten"])
 		build_quantity(P, 10)
 	if(href_list["color"])
-		var/choice = input(usr, "What color do you want pipes to have?") as null|anything in pipe_colors
+		var/choice = input(usr, "What color do you want pipes to have?") as null|anything in GLOB.pipe_colors
 		if(!choice)
 			return 1
 		pipe_color = choice

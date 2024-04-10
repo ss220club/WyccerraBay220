@@ -88,8 +88,8 @@
 				for(var/checklang in culture.secondary_langs)
 					allowed_languages[checklang] = TRUE
 
-	for(var/thing in all_languages)
-		var/datum/language/lang = all_languages[thing]
+	for(var/thing in GLOB.all_languages)
+		var/datum/language/lang = GLOB.all_languages[thing]
 		if(user.has_admin_rights() || (!(lang.flags & RESTRICTED) && (lang.flags & WHITELISTED) && is_any_alien_whitelisted(user, lang)))
 			allowed_languages[thing] = TRUE
 
@@ -106,7 +106,7 @@
 	var/preference_mob = preference_mob()
 	rebuild_language_cache(preference_mob)
 	for(var/L in pref.alternate_languages)
-		var/datum/language/lang = all_languages[L]
+		var/datum/language/lang = GLOB.all_languages[L]
 		if(!lang || !is_allowed_language(preference_mob, lang))
 			pref.alternate_languages -= L
 	if(LAZYLEN(free_languages))
@@ -131,7 +131,7 @@
 			else
 				// [SIERRA-EDIT] - EXPANDED_CULTURE_DESCRIPTOR - Перевод
 				// LAZYADD(., "- [lang] <a href='?src=\ref[src];remove_language=[i]'>Remove.</a> <span style='color:#ff0000;font-style:italic;'>[all_languages[lang].warning]</span><br>") // SIERRA-EDIT - ORIGINAL
-				LAZYADD(., "- [lang] <a href='?src=\ref[src];remove_language=[i]'>Убрать.</a> <span style='color:#ff0000;font-style:italic;'>[all_languages[lang].warning]</span><br>")
+				LAZYADD(., "- [lang] <a href='?src=\ref[src];remove_language=[i]'>Убрать.</a> <span style='color:#ff0000;font-style:italic;'>[GLOB.all_languages[lang].warning]</span><br>")
 				// [/SIERRA-EDIT]
 	if(length(pref.alternate_languages) < MAX_LANGUAGES)
 		var/remaining_langs = MAX_LANGUAGES - length(pref.alternate_languages)

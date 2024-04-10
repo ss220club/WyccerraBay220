@@ -1,4 +1,4 @@
-var/global/list/tank_gauge_cache = list()
+GLOBAL_LIST_INIT(tank_gauge_cache, list())
 
 /obj/item/tank
 	name = "tank"
@@ -384,9 +384,9 @@ var/global/list/tank_gauge_cache = list()
 				gauge_pressure = round((gauge_pressure/TANK_IDEAL_PRESSURE)*gauge_cap)
 		if(override || (previous_gauge_pressure != gauge_pressure))
 			var/indicator = "[gauge_icon][(gauge_pressure == -1) ? "overload" : gauge_pressure]"
-			if(!tank_gauge_cache[indicator])
-				tank_gauge_cache[indicator] = image(icon, indicator)
-			LAZYADD(overlays_to_add, tank_gauge_cache[indicator])
+			if(!GLOB.tank_gauge_cache[indicator])
+				GLOB.tank_gauge_cache[indicator] = image(icon, indicator)
+			LAZYADD(overlays_to_add, GLOB.tank_gauge_cache[indicator])
 		previous_gauge_pressure = gauge_pressure
 
 	SetOverlays(overlays_to_add)

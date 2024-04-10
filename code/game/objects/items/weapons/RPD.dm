@@ -119,7 +119,7 @@ GLOBAL_LIST_INIT(rpd_pipe_selection_skilled, list(
 		if(prob(10)) src.spark_system.start()
 		return TOPIC_HANDLED
 	if(href_list["color"])
-		var/choice = input(user, "What color do you want pipes to have?") as null|anything in pipe_colors
+		var/choice = input(user, "What color do you want pipes to have?") as null|anything in GLOB.pipe_colors
 		if(!choice || !CanPhysicallyInteract(user))
 			return TOPIC_HANDLED
 		pipe_color = choice
@@ -150,7 +150,7 @@ GLOBAL_LIST_INIT(rpd_pipe_selection_skilled, list(
 				return TRUE
 			playsound (get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
 
-		P.Build(P, T, pipe_colors[pipe_color])
+		P.Build(P, T, GLOB.pipe_colors[pipe_color])
 		if (prob(20))
 			spark_system.start()
 		return TRUE

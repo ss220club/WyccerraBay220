@@ -5,9 +5,9 @@
 
 #define MAX_FLAG 65535
 
-var/global/list/same_wires = list()
+GLOBAL_LIST_INIT(same_wires, list())
 // 14 colours, if you're adding more than 14 wires then add more colours here
-var/global/list/wireColours = list("red", "blue", "green", "darkred", "orange", "brown", "gold", "gray", "cyan", "navy", "purple", "pink", "black", "yellow")
+GLOBAL_LIST_INIT(wireColours, list("red", "blue", "green", "darkred", "orange", "brown", "gold", "gray", "cyan", "navy", "purple", "pink", "black", "yellow"))
 
 /datum/wires
 
@@ -43,11 +43,11 @@ var/global/list/wireColours = list("red", "blue", "green", "darkred", "orange", 
 	// Get the same wires
 	else
 		// We don't have any wires to copy yet, generate some and then copy it.
-		if(!same_wires[holder_type])
+		if(!GLOB.same_wires[holder_type])
 			GenerateWires()
-			same_wires[holder_type] = src.wires.Copy()
+			GLOB.same_wires[holder_type] = src.wires.Copy()
 		else
-			var/list/wires = same_wires[holder_type]
+			var/list/wires = GLOB.same_wires[holder_type]
 			src.wires = wires // Reference the wires list.
 
 /datum/wires/Destroy()
@@ -65,7 +65,7 @@ var/global/list/wireColours = list("red", "blue", "green", "darkred", "orange", 
 	.["Wirecutters"] = "<p>While the wire panel is accessible, allows cutting and mending wires by clicking the Cut and Mend buttons in the panel UI.</p>"
 
 /datum/wires/proc/GenerateWires()
-	var/list/colours_to_pick = wireColours.Copy() // Get a copy, not a reference.
+	var/list/colours_to_pick = GLOB.wireColours.Copy() // Get a copy, not a reference.
 	var/list/indexes_to_pick = list()
 	//Generate our indexes
 	for(var/i = 1; i < MAX_FLAG && i < SHIFTL(1, wire_count); i += i)

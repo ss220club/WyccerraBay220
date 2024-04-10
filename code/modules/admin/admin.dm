@@ -252,8 +252,8 @@ GLOBAL_VAR(floorIsLava)
 	// language toggles
 	body += "<br><br><b>Languages:</b><br>"
 	var/f = 1
-	for(var/k in all_languages)
-		var/datum/language/L = all_languages[k]
+	for(var/k in GLOB.all_languages)
+		var/datum/language/L = GLOB.all_languages[k]
 		if(!(L.flags & INNATE))
 			if(!f) body += " | "
 			else f = 0
@@ -418,7 +418,7 @@ GLOBAL_VAR(floorIsLava)
 		to_chat(usr, "Error: you are not an admin!")
 		return
 
-	var/datum/feed_network/torch_network = news_network[1] //temp change until the UI can be updated to support switching networks.
+	var/datum/feed_network/torch_network = GLOB.news_network[1] //temp change until the UI can be updated to support switching networks.
 
 	var/dat
 	dat = text("<HEAD><TITLE>Admin Newscaster</TITLE></HEAD><H3>Admin Newscaster Unit</H3>")

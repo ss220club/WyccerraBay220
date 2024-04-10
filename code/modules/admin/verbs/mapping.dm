@@ -119,7 +119,7 @@ var/global/intercom_range_display_status = 0
 			if(!(F in atoms_in_view))
 				qdel(F)
 
-var/global/list/debug_verbs = list (
+GLOBAL_LIST_INIT(debug_verbs, list (
 		/client/proc/do_not_use_these
 		,/client/proc/camera_view
 		,/client/proc/sec_camera_report
@@ -149,7 +149,7 @@ var/global/list/debug_verbs = list (
 		,/client/proc/spawn_tanktransferbomb
 		,/client/proc/find_leaky_pipes
 		,/client/proc/analyze_openturf
-	)
+	))
 
 
 /client/proc/enable_debug_verbs()
@@ -158,7 +158,7 @@ var/global/list/debug_verbs = list (
 
 	if(!check_rights(R_DEBUG)) return
 
-	verbs += debug_verbs
+	verbs += GLOB.debug_verbs
 
 /client/proc/hide_debug_verbs()
 	set category = "Debug"
@@ -166,7 +166,7 @@ var/global/list/debug_verbs = list (
 
 	if(!check_rights(R_DEBUG)) return
 
-	verbs -= debug_verbs
+	verbs -= GLOB.debug_verbs
 
 
 /client/var/list/testZAScolors_turfs = list()

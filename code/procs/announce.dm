@@ -89,7 +89,7 @@ GLOBAL_DATUM_INIT(minor_announcement, /datum/announcement/priority, new(do_log =
 	if (!message || !islist(zlevels))
 		return
 	var/datum/feed_network/network
-	for (var/datum/feed_network/candidate as anything in news_network)
+	for (var/datum/feed_network/candidate as anything in GLOB.news_network)
 		if (zlevels[1] in candidate.z_levels)
 			network = candidate
 			break

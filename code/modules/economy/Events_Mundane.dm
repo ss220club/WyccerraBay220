@@ -122,7 +122,7 @@
 				"a huge new ARG by a popular entertainment company","a secret tour by popular artiste [random_name(pick(MALE,FEMALE))]")]. \
 				Nyx Daily is offering discount tickets for two to see [random_name(pick(MALE,FEMALE))] live in return for eyewitness reports and up to the minute coverage."
 
-	for (var/datum/feed_network/N in news_network)
+	for (var/datum/feed_network/N in GLOB.news_network)
 		N.SubmitArticle(body, author, channel, null, 1)
 
 /datum/event/trivial_news
@@ -211,5 +211,5 @@
 	"If Tin Whistles Are Made Of Tin, What Do They Make Foghorns Out Of?",\
 	"Broccoli discovered to be colonies of tiny aliens with murder on their minds"\
 	)
-	for (var/datum/feed_network/N in news_network)
+	for (var/datum/feed_network/N in GLOB.news_network)
 		N.SubmitArticle(body, author, channel, null, 1)

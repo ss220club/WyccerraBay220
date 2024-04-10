@@ -66,10 +66,10 @@ Here was a frequency list, but it got outdated. Check code\__defines\radio.dm in
 */
 
 // Away Site Channels
-var/global/list/AWAY_FREQS_UNASSIGNED = list(1491, 1493, 1495, 1497, 1499, 1501, 1503, 1505, 1507, 1509)
-var/global/list/AWAY_FREQS_ASSIGNED = list("Hailing" = HAIL_FREQ)
+GLOBAL_LIST_INIT(AWAY_FREQS_UNASSIGNED, list(1491, 1493, 1495, 1497, 1499, 1501, 1503, 1505, 1507, 1509))
+GLOBAL_LIST_INIT(AWAY_FREQS_ASSIGNED, list("Hailing" = HAIL_FREQ))
 
-var/global/list/radiochannels = list(
+GLOBAL_LIST_INIT(radiochannels, list(
 	"Common"		= PUB_FREQ,
 	"Hailing"		= HAIL_FREQ,
 	"Science"		= SCI_FREQ,
@@ -90,9 +90,9 @@ var/global/list/radiochannels = list(
 	"Medical (I)"	= MED_I_FREQ,
 	"Security (I)"	= SEC_I_FREQ,
 	"ICGNV Hound"   = ICCGN_FREQ
-)
+))
 
-var/global/list/channel_color_presets = list(
+GLOBAL_LIST_INIT(channel_color_presets, list(
 	"Bemoaning Brown" = COMMS_COLOR_SUPPLY,
 	"Bitchin' Blue" = COMMS_COLOR_COMMAND,
 	"Bold Brass" = COMMS_COLOR_EXPLORER,
@@ -111,26 +111,26 @@ var/global/list/channel_color_presets = list(
 	"Spectacular Silver" = COMMS_COLOR_ENTERTAIN,
 	"Tantalizing Turquoise" = COMMS_COLOR_MEDICAL,
 	"Viewable Violet" = COMMS_COLOR_SKRELL
-)
+))
 
 // central command channels, i.e deathsquid & response teams
-var/global/list/CENT_FREQS = list(ERT_FREQ, DTH_FREQ)
+GLOBAL_LIST_INIT(CENT_FREQS, list(ERT_FREQ, DTH_FREQ))
 
 // Antag channels, i.e. Syndicate
-var/global/list/ANTAG_FREQS = list(SYND_FREQ, RAID_FREQ, V_RAID_FREQ)
+GLOBAL_LIST_INIT(ANTAG_FREQS, list(SYND_FREQ, RAID_FREQ, V_RAID_FREQ))
 
 //Department channels, arranged lexically
-var/global/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FREQ, SCI_FREQ, SRV_FREQ, SUP_FREQ, EXP_FREQ, ENT_FREQ, MED_I_FREQ, SEC_I_FREQ)
+GLOBAL_LIST_INIT(DEPT_FREQS, list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FREQ, SCI_FREQ, SRV_FREQ, SUP_FREQ, EXP_FREQ, ENT_FREQ, MED_I_FREQ, SEC_I_FREQ))
 
 #define TRANSMISSION_WIRE	0
 #define TRANSMISSION_RADIO	1
 
 /proc/frequency_span_class(frequency)
 	// Antags!
-	if (frequency in ANTAG_FREQS)
+	if (frequency in GLOB.ANTAG_FREQS)
 		return "syndradio"
 	// centcom channels (deathsquid and ert)
-	if(frequency in CENT_FREQS)
+	if(frequency in GLOB.CENT_FREQS)
 		return "centradio"
 	// command channel
 	if(frequency == COMM_FREQ)
@@ -161,27 +161,27 @@ var/global/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FR
 		return "seciradio"
 	if (frequency == HAIL_FREQ) // Hailing frequency
 		return "hailradio"
-	if(frequency in DEPT_FREQS)
+	if(frequency in GLOB.DEPT_FREQS)
 		return "deptradio"
 
 	// Away site channels
-	for (var/channel in AWAY_FREQS_ASSIGNED)
-		if (AWAY_FREQS_ASSIGNED[channel] == frequency)
+	for (var/channel in GLOB.AWAY_FREQS_ASSIGNED)
+		if (GLOB.AWAY_FREQS_ASSIGNED[channel] == frequency)
 			return "[lowertext(channel)]radio"
 
 	return "radio"
 
 
 /proc/assign_away_freq(channel)
-	if (!length(AWAY_FREQS_UNASSIGNED))
+	if (!length(GLOB.AWAY_FREQS_UNASSIGNED))
 		return FALSE
 
-	if (channel in AWAY_FREQS_ASSIGNED)
-		return AWAY_FREQS_ASSIGNED[channel]
+	if (channel in GLOB.AWAY_FREQS_ASSIGNED)
+		return GLOB.AWAY_FREQS_ASSIGNED[channel]
 
-	var/freq = pick_n_take(AWAY_FREQS_UNASSIGNED)
-	AWAY_FREQS_ASSIGNED[channel] = freq
-	radiochannels[channel] = freq
+	var/freq = pick_n_take(GLOB.AWAY_FREQS_UNASSIGNED)
+	GLOB.AWAY_FREQS_ASSIGNED[channel] = freq
+	GLOB.radiochannels[channel] = freq
 	return freq
 
 

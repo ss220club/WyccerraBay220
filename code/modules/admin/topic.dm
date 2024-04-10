@@ -101,7 +101,7 @@
 		if(task == "add")
 			var/new_ckey = ckey(input(usr,"New admin's ckey","Admin ckey", null) as text|null)
 			if(!new_ckey)	return
-			if(new_ckey in admin_datums)
+			if(new_ckey in GLOB.admin_datums)
 				to_chat(usr, SPAN_COLOR("red", "Error: Topic 'editrights': [new_ckey] is already an admin"))
 				return
 			adm_ckey = new_ckey
@@ -112,12 +112,12 @@
 				to_chat(usr, SPAN_COLOR("red", "Error: Topic 'editrights': No valid ckey"))
 				return
 
-		var/datum/admins/D = admin_datums[adm_ckey]
+		var/datum/admins/D = GLOB.admin_datums[adm_ckey]
 
 		if(task == "remove")
 			if(alert("Are you sure you want to remove [adm_ckey]?","Message","Yes","Cancel") == "Yes")
 				if(!D)	return
-				admin_datums -= adm_ckey
+				GLOB.admin_datums -= adm_ckey
 				D.disassociate()
 
 				message_admins("[key_name_admin(usr)] removed [adm_ckey] from the admins list")
@@ -1800,7 +1800,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_submit_new_channel"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/check = 0
 		for(var/datum/feed_channel/FC in torch_network.network_channels)
 			if(FC.channel_name == src.admincaster_feed_channel.channel_name)
@@ -1817,7 +1817,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_receiving"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/list/available_channels = list()
 		for(var/datum/feed_channel/F in torch_network.network_channels)
 			available_channels += F.channel_name
@@ -1829,7 +1829,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_submit_new_message"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		if(src.admincaster_feed_message.body =="" || src.admincaster_feed_message.body =="\[REDACTED\]" || src.admincaster_feed_channel.channel_name == "" )
 			src.admincaster_screen = 6
 		else
@@ -1856,7 +1856,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_menu_wanted"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/already_wanted = 0
 		if(torch_network.wanted_issue)
 			already_wanted = 1
@@ -1876,7 +1876,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_submit_wanted"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/input_param = text2num(href_list["ac_submit_wanted"])
 		if(src.admincaster_feed_message.author == "" || src.admincaster_feed_message.body == "")
 			src.admincaster_screen = 16
@@ -1891,7 +1891,7 @@
 					WANTED.backup_author = src.admincaster_signature                  //Submitted by
 					WANTED.is_admin_message = 1
 					torch_network.wanted_issue = WANTED
-					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+					for(var/obj/machinery/newscaster/NEWSCASTER in GLOB.allCasters)
 						NEWSCASTER.newsAlert()
 						NEWSCASTER.update_icon()
 					src.admincaster_screen = 15
@@ -1904,11 +1904,11 @@
 		src.access_news_network()
 
 	else if(href_list["ac_cancel_wanted"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/choice = alert("Please confirm Wanted Issue removal","Network Security Handler","Confirm","Cancel")
 		if(choice=="Confirm")
 			torch_network.wanted_issue = null
-			for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+			for(var/obj/machinery/newscaster/NEWSCASTER in GLOB.allCasters)
 				NEWSCASTER.update_icon()
 			src.admincaster_screen=17
 		src.access_news_network()
@@ -1999,7 +1999,7 @@
 				to_chat(usr, "[M] is illegal type, must be /mob!")
 				return
 			var/lang2toggle = href_list["lang"]
-			var/datum/language/L = all_languages[lang2toggle]
+			var/datum/language/L = GLOB.all_languages[lang2toggle]
 
 			if(L in M.languages)
 				if(!M.remove_language(lang2toggle))

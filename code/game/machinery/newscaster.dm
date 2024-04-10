@@ -107,9 +107,9 @@
 	for(var/datum/nano_module/program/newscast/program in news_programs)
 		program.news_alert(annoncement)
 
-var/global/list/datum/feed_network/news_network = list()     //The global news-network, which is coincidentally a global list.
+GLOBAL_LIST_EMPTY(news_network)     //The global news-network, which is coincidentally a global list.
 
-var/global/list/obj/machinery/newscaster/allCasters = list() //Global list that will contain reference to all newscasters in existence.
+GLOBAL_LIST_EMPTY(allCasters) //Global list that will contain reference to all newscasters in existence.
 
 
 /obj/machinery/newscaster
@@ -167,7 +167,7 @@ var/global/list/obj/machinery/newscaster/allCasters = list() //Global list that 
 /obj/machinery/newscaster/Initialize()
 	. = ..()
 
-	for (var/datum/feed_network/G in news_network)
+	for (var/datum/feed_network/G in GLOB.news_network)
 		if (src.z in G.z_levels)
 			G.newscasters += src
 			connected_group = G
@@ -180,7 +180,7 @@ var/global/list/obj/machinery/newscaster/allCasters = list() //Global list that 
 		G.z_levels = GetConnectedZlevels(src.z)
 
 		connected_group = G
-		LAZYADD(news_network, G)
+		LAZYADD(GLOB.news_network, G)
 
 	src.paper_remaining = 15            // Will probably change this to something better
 	for (var/obj/machinery/newscaster/NEWSCASTER in connected_group.newscasters) // Let's give it an appropriate unit number

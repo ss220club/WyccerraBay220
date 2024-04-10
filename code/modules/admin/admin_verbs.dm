@@ -351,7 +351,7 @@ GLOBAL_LIST_INIT(admin_verbs_mod, list(
 		GLOB.admin_verbs_rejuv,
 		GLOB.admin_verbs_sounds,
 		GLOB.admin_verbs_spawn,
-		debug_verbs
+		GLOB.debug_verbs
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
@@ -496,7 +496,7 @@ GLOBAL_LIST_INIT(admin_verbs_mod, list(
 		return
 	if(!warned_ckey || !istext(warned_ckey))
 		return
-	if(warned_ckey in admin_datums)
+	if(warned_ckey in GLOB.admin_datums)
 		to_chat(usr, SPAN_COLOR("red", "Error: warn(): You can't warn admins."))
 		return
 	var/datum/preferences/D

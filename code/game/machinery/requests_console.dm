@@ -20,7 +20,7 @@
 GLOBAL_LIST_INIT(req_console_assistance, list())
 GLOBAL_LIST_INIT(req_console_supplies, list())
 GLOBAL_LIST_INIT(req_console_information, list())
-var/global/list/obj/machinery/requests_console/allConsoles = list()
+GLOBAL_LIST_EMPTY(allConsoles)
 
 /obj/machinery/requests_console
 	name = "requests console"
@@ -68,7 +68,7 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	announcement.newscast = 1
 
 	name = "[department] requests console"
-	allConsoles += src
+	GLOB.allConsoles += src
 	if (departmentType & RC_ASSIST)
 		GLOB.req_console_assistance |= department
 	if (departmentType & RC_SUPPLY)
@@ -79,9 +79,9 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	set_light(1)
 
 /obj/machinery/requests_console/Destroy()
-	allConsoles -= src
+	GLOB.allConsoles -= src
 	var/lastDeptRC = 1
-	for (var/obj/machinery/requests_console/Console in allConsoles)
+	for (var/obj/machinery/requests_console/Console in GLOB.allConsoles)
 		if (Console.department == department)
 			lastDeptRC = 0
 			break
@@ -173,7 +173,7 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 		if(tempScreen == RCS_ANNOUNCE && !announcementConsole)
 			return
 		if(tempScreen == RCS_VIEWMSGS)
-			for (var/obj/machinery/requests_console/Console in allConsoles)
+			for (var/obj/machinery/requests_console/Console in GLOB.allConsoles)
 				if (Console.department == department)
 					Console.newmessagepriority = 0
 					Console.icon_state = "req_comp0"

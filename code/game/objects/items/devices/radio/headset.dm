@@ -54,7 +54,7 @@
 /obj/item/device/radio/headset/handle_message_mode(mob/living/M as mob, message, channel)
 	if (channel == "special")
 		if (translate_binary)
-			var/datum/language/binary = all_languages[LANGUAGE_ROBOT_GLOBAL]
+			var/datum/language/binary = GLOB.all_languages[LANGUAGE_ROBOT_GLOBAL]
 			binary.broadcast(M, message)
 		return null
 
@@ -343,7 +343,7 @@
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
 	for(var/channel_name in channels)
-		radio_controller.remove_object(src, radiochannels[channel_name])
+		radio_controller.remove_object(src, GLOB.radiochannels[channel_name])
 		secure_radio_connections[channel_name] = null
 	for(var/obj/key as anything in encryption_keys)
 		key.dropInto(get_turf(user))
@@ -385,7 +385,7 @@
 		if(!radio_controller)
 			src.SetName("broken radio headset")
 			return
-		secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  RADIO_CHAT)
+		secure_radio_connections[ch_name] = radio_controller.add_object(src, GLOB.radiochannels[ch_name],  RADIO_CHAT)
 
 	if(setDescription)
 		setupRadioDescription()

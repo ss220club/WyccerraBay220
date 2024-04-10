@@ -14,7 +14,7 @@
 			return emote(copytext(message,2))
 
 		if(copytext_char(message,1,2) == get_prefix_key(/singleton/prefix/radio_main_channel))
-			var/datum/language/L = all_languages[LANGUAGE_DRONE_GLOBAL]
+			var/datum/language/L = GLOB.all_languages[LANGUAGE_DRONE_GLOBAL]
 			if(istype(L))
 				return L.broadcast(src,trimtext(copytext(message,2)))
 

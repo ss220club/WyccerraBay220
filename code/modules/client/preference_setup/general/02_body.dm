@@ -1,4 +1,4 @@
-var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+GLOBAL_LIST_INIT(valid_bloodtypes, list("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"))
 
 /datum/preferences
 	var/species = SPECIES_HUMAN
@@ -279,7 +279,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["blood_type"])
-		var/new_b_type = tgui_input_list(user, "Choose your character's blood-type", CHARACTER_PREFERENCE_INPUT_TITLE, valid_bloodtypes)
+		var/new_b_type = tgui_input_list(user, "Choose your character's blood-type", CHARACTER_PREFERENCE_INPUT_TITLE, GLOB.valid_bloodtypes)
 		if(new_b_type && CanUseTopic(user))
 			pref.b_type = new_b_type
 			return TOPIC_REFRESH

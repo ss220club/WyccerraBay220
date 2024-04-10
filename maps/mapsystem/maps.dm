@@ -541,7 +541,7 @@ GLOBAL_LIST_EMPTY(all_maps)
 //	SIERRA TGUI /*
 
 /datum/map/proc/setup_economy()
-	for (var/datum/feed_network/N in news_network)
+	for (var/datum/feed_network/N in GLOB.news_network)
 		N.CreateFeedChannel("Nyx Daily", "SolGov Minister of Information", 1, 1)
 		N.CreateFeedChannel("The Gibson Gazette", "Editor Mike Hammers", 1, 1)
 

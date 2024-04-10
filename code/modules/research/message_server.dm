@@ -153,7 +153,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 		authmsg += "[stamp]<br>"
 	. = FALSE
 	var/list/good_z = GetConnectedZlevels(z)
-	for (var/obj/machinery/requests_console/Console in allConsoles)
+	for (var/obj/machinery/requests_console/Console in GLOB.allConsoles)
 		if(!(Console.z in good_z))
 			continue
 		if (ckey(Console.department) == ckey(recipient))

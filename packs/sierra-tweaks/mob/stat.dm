@@ -5,4 +5,4 @@
 		return
 
 	if(statpanel("Status"))
-		stat("Round ID", game_id)
+		stat("Round ID", GLOB.game_id)

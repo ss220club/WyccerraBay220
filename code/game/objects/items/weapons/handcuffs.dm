@@ -100,10 +100,10 @@
 	target.equip_to_slot(cuffs,slot_handcuffed)
 	return 1
 
-var/global/last_chew = 0
+GLOBAL_VAR_INIT(last_chew, 0)
 /mob/living/carbon/human/RestrainedClickOn(atom/A)
 	if (A != src) return ..()
-	if (last_chew + 26 > world.time)
+	if (GLOB.last_chew + 26 > world.time)
 		to_chat(src, SPAN_WARNING("You need a break from chewing your own hand off, the pain is too much!"))
 		return
 
@@ -129,7 +129,7 @@ var/global/last_chew = 0
 	admin_attacker_log(H, "chewed on their [O.name]!")
 
 	O.take_external_damage(3,0, DAMAGE_FLAG_SHARP|DAMAGE_FLAG_EDGE ,"teeth marks")
-	last_chew = world.time
+	GLOB.last_chew = world.time
 
 /obj/item/handcuffs/cable
 	name = "cable restraints"

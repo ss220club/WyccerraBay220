@@ -1,10 +1,10 @@
 //STRIKE TEAMS
 //Thanks to Kilakk for the admin-button portion of this code.
 
-var/global/send_emergency_team = 0 // Used for automagic response teams
+GLOBAL_VAR_INIT(send_emergency_team, 0) // Used for automagic response teams
 								   // 'admin_emergency_team' for admin-spawned response teams
-var/global/ert_base_chance = 10 // Default base chance. Will be incremented by increment ERT chance.
-var/global/can_call_ert
+GLOBAL_VAR_INIT(ert_base_chance, 10) // Default base chance. Will be incremented by increment ERT chance.
+GLOBAL_VAR(can_call_ert)
 
 /client/proc/response_team()
 	set name = "Dispatch Emergency Response Team"
@@ -17,7 +17,7 @@ var/global/can_call_ert
 	if(GAME_STATE < RUNLEVEL_GAME)
 		to_chat(usr, SPAN_DANGER("The game hasn't started yet!"))
 		return
-	if(send_emergency_team)
+	if(GLOB.send_emergency_team)
 		to_chat(usr, SPAN_DANGER("[GLOB.using_map.boss_name] has already dispatched an emergency response team!"))
 		return
 	if(alert("Do you want to dispatch an Emergency Response Team?",,"Yes","No") != "Yes")
@@ -34,7 +34,7 @@ var/global/can_call_ert
 	if(!reason && alert("You did not input a reason. Continue anyway?",,"Yes", "No") != "Yes")
 		return
 
-	if(send_emergency_team)
+	if(GLOB.send_emergency_team)
 		to_chat(usr, SPAN_DANGER("Looks like someone beat you to it!"))
 		return
 
@@ -56,7 +56,7 @@ var/global/can_call_ert
 		return
 
 	if(isghost(usr) || isnewplayer(usr))
-		if(!send_emergency_team)
+		if(!GLOB.send_emergency_team)
 			to_chat(usr, "No emergency response team is currently being sent.")
 			return
 		if(jobban_isbanned(usr, MODE_ERT) || jobban_isbanned(usr, "Security Officer"))
@@ -96,20 +96,20 @@ var/global/can_call_ert
 // Increments the ERT chance automatically, so that the later it is in the round,
 // the more likely an ERT is to be able to be called.
 /proc/increment_ert_chance()
-	while(send_emergency_team == 0) // There is no ERT at the time.
+	while(GLOB.send_emergency_team == 0) // There is no ERT at the time.
 		var/singleton/security_state/security_state = GET_SINGLETON(GLOB.using_map.security_state)
 		var/index = security_state.all_security_levels.Find(security_state.current_security_level)
-		ert_base_chance += 2**index
+		GLOB.ert_base_chance += 2**index
 		sleep(600 * 3) // Minute * Number of Minutes
 
 
 /proc/trigger_armed_response_team(force = 0, reason = "")
-	if(!can_call_ert && !force)
+	if(!GLOB.can_call_ert && !force)
 		return
-	if(send_emergency_team)
+	if(GLOB.send_emergency_team)
 		return
 
-	var/send_team_chance = ert_base_chance // Is incremented by increment_ert_chance.
+	var/send_team_chance = GLOB.ert_base_chance // Is incremented by increment_ert_chance.
 	send_team_chance += 2*percentage_dead() // the more people are dead, the higher the chance
 	send_team_chance += percentage_antagonists() // the more antagonists, the higher the chance
 	send_team_chance = min(send_team_chance, 100)
@@ -119,7 +119,7 @@ var/global/can_call_ert
 	// there's only a certain chance a team will be sent
 	if(!prob(send_team_chance))
 		GLOB.command_announcement.Announce("It would appear that an emergency response team was requested for [station_name()]. Unfortunately, we were unable to send one at this time.", "[GLOB.using_map.boss_name]")
-		can_call_ert = 0 // Only one call per round, ladies.
+		GLOB.can_call_ert = 0 // Only one call per round, ladies.
 		return
 
 	GLOB.command_announcement.Announce("It would appear that an emergency response team was requested for [station_name()]. We will prepare and send one as soon as possible.", "[GLOB.using_map.boss_name]")
@@ -127,11 +127,11 @@ var/global/can_call_ert
 
 	GLOB.ert.reason = reason //Set it even if it's blank to clear a reason from a previous ERT
 
-	can_call_ert = 0 // Only one call per round, gentleman.
-	send_emergency_team = 1
+	GLOB.can_call_ert = 0 // Only one call per round, gentleman.
+	GLOB.send_emergency_team = 1
 
 	sleep(600 * 5)
-	send_emergency_team = 0 // Can no longer join the ERT.
+	GLOB.send_emergency_team = 0 // Can no longer join the ERT.
 
 /datum/evacuation_predicate/ert
 	var/prevent_until

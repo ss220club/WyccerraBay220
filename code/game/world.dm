@@ -5,7 +5,7 @@
 
 
 
-var/global/game_id = randhex(8)
+GLOBAL_VAR_INIT(game_id, randhex(8))
 
 GLOBAL_VAR(href_logfile)
 
@@ -81,7 +81,7 @@ GLOBAL_VAR(href_logfile)
 
 	SetupLogs()
 	var/date_string = time2text(world.realtime, "YYYY/MM/DD")
-	rustg_log_write_formatted("[GLOB.log_directory]/game.log", "Starting up. (ID: [game_id])")
+	rustg_log_write_formatted("[GLOB.log_directory]/game.log", "Starting up. (ID: [GLOB.game_id])")
 	rustg_log_write_formatted("[GLOB.log_directory]/game.log", "---------------------------")
 
 
@@ -89,8 +89,8 @@ GLOBAL_VAR(href_logfile)
 		if (config.server_name)
 			name = "[config.server_name]"
 		if (config.log_runtime)
-			log = "data/logs/runtime/[date_string]_[time2text(world.timeofday, "hh:mm")]_[game_id].log"
-			to_world_log("Game [game_id] starting up at [time2text(world.timeofday, "hh:mm.ss")]")
+			log = "data/logs/runtime/[date_string]_[time2text(world.timeofday, "hh:mm")]_[GLOB.game_id].log"
+			to_world_log("Game [GLOB.game_id] starting up at [time2text(world.timeofday, "hh:mm.ss")]")
 		if (config.log_hrefs)
 			GLOB.href_logfile = file("data/logs/[date_string] hrefs.htm")
 
@@ -207,8 +207,8 @@ GLOBAL_LIST_EMPTY(world_topic_handlers)
 
 /world/proc/SetupLogs()
 	GLOB.log_directory = "data/logs/[time2text(world.realtime, "YYYY/MM/DD")]/round-"
-	if(game_id)
-		GLOB.log_directory += "[game_id]"
+	if(GLOB.game_id)
+		GLOB.log_directory += "[GLOB.game_id]"
 	else
 		GLOB.log_directory += "[replacetext(time_stamp(), ":", ".")]"
 

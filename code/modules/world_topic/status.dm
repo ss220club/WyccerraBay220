@@ -26,7 +26,7 @@
 	status_info["players"] = player_count
 	status_info["admins"] = admin_count
 	status_info["map_name"] = "Sierra"
-	status_info["round_id"] = game_id
+	status_info["round_id"] = GLOB.game_id
 
 	// Export performance metrics
 	status_info["perfmetrics"] = list(

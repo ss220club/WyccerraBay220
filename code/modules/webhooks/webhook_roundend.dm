@@ -21,7 +21,7 @@
 			desc += "There were **no survivors** ([data["ghosts"]] ghosts)."
 
 	.["embeds"] = list(list(
-		"title" = "Round [game_id] is ending.",
+		"title" = "Round [GLOB.game_id] is ending.",
 		"description" = desc,
 		"color" = COLOR_WEBHOOK_DEFAULT
 	))

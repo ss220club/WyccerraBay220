@@ -28,7 +28,7 @@
 	var/day_loc = findtext(full_date, time2text(world.timeofday, "DD"))
 
 	var/datum/player_info/P = new
-	P.game_id = game_id
+	P.game_id = GLOB.game_id
 	if (ismob(user))
 		P.author = user.key
 		P.rank = user.client.holder.rank

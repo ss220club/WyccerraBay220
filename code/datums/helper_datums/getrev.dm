@@ -32,5 +32,5 @@ GLOBAL_DATUM_INIT(revdata, /datum/getrev, new)
 		to_chat(src, "<b>Server Revision:</b> [server_revision] - [GLOB.revdata.branch] - [GLOB.revdata.date]")
 	else
 		to_chat(src, "<b>Server Revision:</b> Revision Unknown")
-	to_chat(src, "Game ID: <b>[game_id]</b>")
+	to_chat(src, "Game ID: <b>[GLOB.game_id]</b>")
 	to_chat(src, "Current map: [GLOB.using_map.full_name]")

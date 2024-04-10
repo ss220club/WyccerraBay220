@@ -39,7 +39,7 @@
 				params["server_age"] = client.player_age
 			params["ip"] = client.address
 			params["clientid"] = client.computer_id
-			params["roundid"] = game_id
+			params["roundid"] = GLOB.game_id
 			params["name"] = real_name || name
 			world.Export("[config.login_export_addr]?[list2params(params)]", null, 1)
 

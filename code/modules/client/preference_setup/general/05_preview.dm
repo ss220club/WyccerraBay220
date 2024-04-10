@@ -34,7 +34,7 @@
 	var/list/loadout_taken_slots = list()
 	var/list/accessories = list()
 	for(var/gear_name in gears)
-		var/datum/gear/gear_to_try = gear_datums[gear_name]
+		var/datum/gear/gear_to_try = GLOB.gear_datums[gear_name]
 		if(!gear_to_try?.slot)
 			continue
 

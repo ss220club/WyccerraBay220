@@ -474,10 +474,10 @@ GLOBAL_LIST_EMPTY(all_maps)
 
 // Used to apply various post-compile procedural effects to the map.
 /datum/map/proc/refresh_mining_turfs(zlevel)
-	for(var/turf/simulated/mineral/mineral_turf as anything in mining_walls["[zlevel]"])
+	for(var/turf/simulated/mineral/mineral_turf as anything in GLOB.mining_walls["[zlevel]"])
 		mineral_turf.update_icon()
 
-	for(var/thing in mining_floors["[zlevel]"])
+	for(var/thing in GLOB.mining_floors["[zlevel]"])
 		var/turf/simulated/floor/asteroid/M = thing
 		if(istype(M))
 			M.updateMineralOverlays()
@@ -534,7 +534,7 @@ GLOBAL_LIST_EMPTY(all_maps)
 
 /proc/get_overmap_sector(z)
 	if(GLOB.using_map.use_overmap)
-		return map_sectors["[z]"]
+		return GLOB.map_sectors["[z]"]
 	else
 		return null
 
@@ -547,8 +547,8 @@ GLOBAL_LIST_EMPTY(all_maps)
 
 	for(var/loc_type in typesof(/datum/trade_destination) - /datum/trade_destination)
 		var/datum/trade_destination/D = new loc_type
-		weighted_randomevent_locations[D] = length(D.viable_random_events)
-		weighted_mundaneevent_locations[D] = length(D.viable_mundane_events)
+		GLOB.weighted_randomevent_locations[D] = length(D.viable_random_events)
+		GLOB.weighted_mundaneevent_locations[D] = length(D.viable_mundane_events)
 
 	if(!station_account)
 		station_account = create_account("[station_name()] Primary Account", "[station_name()]", starting_money, ACCOUNT_TYPE_DEPARTMENT)
@@ -560,10 +560,10 @@ GLOBAL_LIST_EMPTY(all_maps)
 			station_departments |= dept
 
 	for(var/department in station_departments)
-		department_accounts[department] = create_account("[department] Account", "[department]", department_money, ACCOUNT_TYPE_DEPARTMENT)
+		GLOB.department_accounts[department] = create_account("[department] Account", "[department]", department_money, ACCOUNT_TYPE_DEPARTMENT)
 
-	department_accounts["Vendor"] = create_account("Vendor Account", "Vendor", 0, ACCOUNT_TYPE_DEPARTMENT)
-	vendor_account = department_accounts["Vendor"]
+	GLOB.department_accounts["Vendor"] = create_account("Vendor Account", "Vendor", 0, ACCOUNT_TYPE_DEPARTMENT)
+	vendor_account = GLOB.department_accounts["Vendor"]
 
 /datum/map/proc/map_info(client/victim)
 	to_chat(victim, "<h2>Current map information</h2>")

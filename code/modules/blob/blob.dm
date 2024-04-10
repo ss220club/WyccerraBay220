@@ -218,7 +218,7 @@
 
 /obj/blob/core/Initialize()
 	. = ..()
-	var/obj/overmap/visitable/visitable = map_sectors["[get_z(src)]"]
+	var/obj/overmap/visitable/visitable = GLOB.map_sectors["[get_z(src)]"]
 	if (!visitable)
 		return
 	if (++visitable.blob_count == 1)
@@ -226,7 +226,7 @@
 
 
 /obj/blob/core/Destroy()
-	var/obj/overmap/visitable/visitable = map_sectors["[get_z(src)]"]
+	var/obj/overmap/visitable/visitable = GLOB.map_sectors["[get_z(src)]"]
 	if (visitable && --visitable.blob_count == 0)
 		visitable.remove_scan_data("blob")
 	return ..()

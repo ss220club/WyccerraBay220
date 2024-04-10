@@ -240,7 +240,7 @@
 /obj/item/blueprints/outpost/get_area_type(area/A = get_area(src))
 	if(istype(A, /area/exoplanet))
 		return AREA_SPACE
-	var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
+	var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[z]"]
 	if(istype(E))
 		return AREA_STATION
 	return AREA_SPECIAL

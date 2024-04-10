@@ -199,7 +199,7 @@
 /datum/gear_slot/proc/get_total_gear_cost()
 	var/total_cost = 0
 	for(var/gear_name in gear_entries)
-		var/datum/gear/gear_datum = gear_datums[gear_name]
+		var/datum/gear/gear_datum = GLOB.gear_datums[gear_name]
 		if(!gear_datum)
 			continue
 

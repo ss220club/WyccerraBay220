@@ -4,7 +4,7 @@
 #define BLOOD_SIZE_BIG       3
 #define BLOOD_SIZE_NO_MERGE -1
 
-var/global/list/image/splatter_cache=list()
+GLOBAL_LIST_EMPTY(splatter_cache)
 
 /obj/decal/cleanable/blood
 	name = "blood"

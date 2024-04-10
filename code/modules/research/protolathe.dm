@@ -22,7 +22,7 @@
 	var/speed = 1
 
 /obj/machinery/r_n_d/protolathe/New()
-	materials = default_material_composition.Copy()
+	materials = GLOB.default_material_composition.Copy()
 	..()
 
 /obj/machinery/r_n_d/protolathe/Process()

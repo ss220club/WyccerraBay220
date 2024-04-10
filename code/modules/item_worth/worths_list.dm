@@ -2,7 +2,7 @@
 //Mainly used so that stuff inside them can also add to their value, and other things like material,
 //stuff like that.
 
-var/global/list/worths = list(
+GLOBAL_LIST_INIT(worths, list(
 //ROBOT ASSEMBLIES,
 					/obj/item/device/bot_kit = 300,
 //REAGENT CONTAINERS,
@@ -715,4 +715,4 @@ var/global/list/worths = list(
 					/obj/machinery/libraryscanner = -1000,
 					/obj/machinery/bookbinder = -1200,
 					/obj/machinery = -1000,
-					) //Must be in descending order. Child before parents, otherwise it doesn't work.,
+					)) //Must be in descending order. Child before parents, otherwise it doesn't work.,

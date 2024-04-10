@@ -22,9 +22,9 @@
 	welcome_text += "Результаты сканирования показали следующие потенциальные объекты для исследования:<br />"
 
 	var/list/space_things = list()
-	var/obj/overmap/sierra = map_sectors["1"]
-	for(var/zlevel in map_sectors)
-		var/obj/overmap/visitable/O = map_sectors[zlevel]
+	var/obj/overmap/sierra = GLOB.map_sectors["1"]
+	for(var/zlevel in GLOB.map_sectors)
+		var/obj/overmap/visitable/O = GLOB.map_sectors[zlevel]
 		if(O.name == sierra.name)
 			continue
 		if(istype(O, /obj/overmap/visitable/ship/landable)) //Don't show shuttles

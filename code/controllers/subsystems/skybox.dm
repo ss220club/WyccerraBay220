@@ -51,7 +51,7 @@ SUBSYSTEM_DEF(skybox)
 	if (!skybox_cache["[z]"])
 		skybox_cache["[z]"] = generate_skybox(z)
 		if (GLOB.using_map.use_overmap)
-			var/obj/overmap/visitable/O = map_sectors["[z]"]
+			var/obj/overmap/visitable/O = GLOB.map_sectors["[z]"]
 			if (istype(O))
 				for (var/zlevel in O.map_z)
 					skybox_cache["[zlevel]"] = skybox_cache["[z]"]
@@ -66,7 +66,7 @@ SUBSYSTEM_DEF(skybox)
 		base.AddOverlays(stars)
 	res.AddOverlays(base)
 	if (GLOB.using_map.use_overmap && use_overmap_details)
-		var/obj/overmap/visitable/O = map_sectors["[z]"]
+		var/obj/overmap/visitable/O = GLOB.map_sectors["[z]"]
 		if (istype(O))
 			var/image/overmap = image(skybox_icon)
 			overmap.AddOverlays(O.generate_skybox())

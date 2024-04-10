@@ -45,7 +45,7 @@
 		to_chat(user, SPAN_WARNING("A small red light flashes on \the [src]."))
 		return
 
-	var/obj/overmap/visitable/O = map_sectors["[get_z(src)]"]
+	var/obj/overmap/visitable/O = GLOB.map_sectors["[get_z(src)]"]
 	if(!O)
 		to_chat(user, SPAN_WARNING("You cannot deploy \the [src] here."))
 		return
@@ -79,7 +79,7 @@
 			activate_distress()
 
 /obj/machinery/radio_beacon/proc/activate()
-	var/obj/overmap/visitable/O = map_sectors["[get_z(src)]"]
+	var/obj/overmap/visitable/O = GLOB.map_sectors["[get_z(src)]"]
 	var/message = sanitize(input("What should it broadcast?") as message|null)
 	if(!message)
 		return
@@ -99,7 +99,7 @@
 	update_icon()
 
 /obj/machinery/radio_beacon/proc/activate_distress()
-	var/obj/overmap/visitable/O = map_sectors["[get_z(src)]"]
+	var/obj/overmap/visitable/O = GLOB.map_sectors["[get_z(src)]"]
 
 	visible_message(SPAN_WARNING("\The [src] beeps urgently as it whirrs to life, sending out intermittent tones."))
 

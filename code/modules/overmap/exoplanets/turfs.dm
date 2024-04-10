@@ -15,7 +15,7 @@
 	if(!GLOB.using_map.use_overmap)
 		return
 
-	var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
+	var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[z]"]
 	if(!istype(E))
 		return
 
@@ -162,7 +162,7 @@
 /turf/simulated/floor/exoplanet/grass/Initialize(mapload, added_to_area_cache)
 	. = ..()
 	if(GLOB.using_map.use_overmap)
-		var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
+		var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[z]"]
 		if(istype(E) && E.grass_color)
 			color = E.grass_color
 	if(!resources)
@@ -237,7 +237,7 @@
 
 /turf/simulated/planet_edge/Initialize(mapload, added_to_area_cache)
 	. = ..()
-	var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
+	var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[z]"]
 	if(!istype(E))
 		return
 	var/nx = x
@@ -264,7 +264,7 @@
 
 /turf/simulated/planet_edge/Bumped(atom/movable/A)
 	. = ..()
-	var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
+	var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[z]"]
 	if(!istype(E))
 		return
 

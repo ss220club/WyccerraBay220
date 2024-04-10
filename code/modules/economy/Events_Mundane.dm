@@ -3,7 +3,7 @@
 	endWhen = 10
 
 /datum/event/mundane_news/announce()
-	var/datum/trade_destination/affected_dest = pickweight(weighted_mundaneevent_locations)
+	var/datum/trade_destination/affected_dest = pickweight(GLOB.weighted_mundaneevent_locations)
 	var/event_type = 0
 	if(length(affected_dest.viable_mundane_events))
 		event_type = pick(affected_dest.viable_mundane_events)
@@ -132,7 +132,7 @@
 	var/author = "Editor Mike Hammers"
 	var/channel = "The Gibson Gazette"
 
-	var/datum/trade_destination/affected_dest = pick(weighted_mundaneevent_locations)
+	var/datum/trade_destination/affected_dest = pick(GLOB.weighted_mundaneevent_locations)
 	var/body = pick(
 	"Armadillos want aardvarks removed from dictionary claims 'here first'.",\
 	"Angel found dancing on pinhead ordered to stop; cited for public nuisance.",\

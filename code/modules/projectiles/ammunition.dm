@@ -227,17 +227,17 @@
 
 
 //magazine icon state caching
-var/global/list/magazine_icondata_keys = list()
-var/global/list/magazine_icondata_states = list()
+GLOBAL_LIST_INIT(magazine_icondata_keys, list())
+GLOBAL_LIST_INIT(magazine_icondata_states, list())
 
 
 /proc/initialize_magazine_icondata(obj/item/ammo_magazine/M)
 	var/typestr = "[M.type]"
-	if(!(typestr in magazine_icondata_keys) || !(typestr in magazine_icondata_states))
+	if(!(typestr in GLOB.magazine_icondata_keys) || !(typestr in GLOB.magazine_icondata_states))
 		magazine_icondata_cache_add(M)
 
-	M.icon_keys = magazine_icondata_keys[typestr]
-	M.ammo_states = magazine_icondata_states[typestr]
+	M.icon_keys = GLOB.magazine_icondata_keys[typestr]
+	M.ammo_states = GLOB.magazine_icondata_states[typestr]
 
 
 /proc/magazine_icondata_cache_add(obj/item/ammo_magazine/M)
@@ -250,5 +250,5 @@ var/global/list/magazine_icondata_states = list()
 			ammo_states += ammo_state
 
 
-	magazine_icondata_keys["[M.type]"] = icon_keys
-	magazine_icondata_states["[M.type]"] = ammo_states
+	GLOB.magazine_icondata_keys["[M.type]"] = icon_keys
+	GLOB.magazine_icondata_states["[M.type]"] = ammo_states

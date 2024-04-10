@@ -90,7 +90,7 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 			if (M.stat != DEAD && (get_z(M) in GetConnectedZlevels(A.z)))
 				players += M
 				chosen_area = A
-				chosen_planet = map_sectors["[A.z]"]
+				chosen_planet = GLOB.map_sectors["[A.z]"]
 				affecting_z = GetConnectedZlevels(A.z)
 
 		if (length(players) >= required_players_count)
@@ -104,7 +104,7 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 		return
 
 	chosen_area = pick(sites)
-	chosen_planet = map_sectors["[chosen_area.z]"]
+	chosen_planet = GLOB.map_sectors["[chosen_area.z]"]
 	affecting_z = GetConnectedZlevels(chosen_area.z)
 
 	if (!chosen_area)

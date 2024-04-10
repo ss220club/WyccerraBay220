@@ -18,7 +18,7 @@ GLOBAL_LIST_INIT(landmarks_list, list())				//list of all landmarks created
 //Languages/species/whitelist.
 var/global/list/all_species[0]
 GLOBAL_LIST_EMPTY(all_languages)
-GLOBAL_LIST(language_keys)					// Table of say codes for all languages
+var/global/list/language_keys[0]					// Table of say codes for all languages
 GLOBAL_LIST_INIT(playable_species, list())    // A list of ALL playable species, whitelisted, latejoin or otherwise.
 
 
@@ -132,7 +132,7 @@ GLOBAL_LIST_INIT(string_slot_flags, list(
 	for (var/language_name in GLOB.all_languages)
 		var/datum/language/L = GLOB.all_languages[language_name]
 		if(!(L.flags & NONGLOBAL))
-			GLOB.language_keys[lowertext(L.key)] = L
+			language_keys[lowertext(L.key)] = L
 
 	var/rkey = 0
 	paths = typesof(/datum/species)

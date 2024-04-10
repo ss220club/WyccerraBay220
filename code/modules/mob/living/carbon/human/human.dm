@@ -1099,7 +1099,7 @@
 		var/turf/T= get_turf(src)
 
 		if(T.is_outside())// They're outside and hopefully on a planet.
-			var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[T.z]"]
+			var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[T.z]"]
 			if (!istype(E))
 				to_chat(usr, SPAN_NOTICE("You see... things, it's hard to put into words what you're seeing specifically."))
 				return

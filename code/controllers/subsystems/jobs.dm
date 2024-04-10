@@ -378,7 +378,7 @@ SUBSYSTEM_DEF(jobs)
 	var/list/loadout_taken_slots = list()
 	var/list/failed_to_equip_gear = list()
 	for(var/gear_name as anything in gear_to_equip)
-		var/datum/gear/gear_item = gear_datums[gear_name]
+		var/datum/gear/gear_item = GLOB.gear_datums[gear_name]
 		if(!gear_item)
 			stack_trace("Non-existing gear: `gear_name`")
 			continue
@@ -473,7 +473,7 @@ SUBSYSTEM_DEF(jobs)
 	// If they're head, give them the account info for their department
 	if(H.mind && job.head_position)
 		var/remembered_info = ""
-		var/datum/money_account/department_account = department_accounts[job.department]
+		var/datum/money_account/department_account = GLOB.department_accounts[job.department]
 
 		if(department_account)
 			remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"

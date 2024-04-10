@@ -267,7 +267,7 @@
 /*
 General message handling stuff
 */
-var/global/list/comm_message_listeners = list() //We first have to initialize list then we can use it.
+GLOBAL_LIST_INIT(comm_message_listeners, list()) //We first have to initialize list then we can use it.
 GLOBAL_DATUM_INIT(global_message_listener, /datum/comm_message_listener, new) //May be used by admins
 var/global/last_message_id = 0
 
@@ -281,7 +281,7 @@ var/global/last_message_id = 0
 	message["title"] = message_title
 	message["contents"] = message_text
 
-	for (var/datum/comm_message_listener/l in comm_message_listeners)
+	for (var/datum/comm_message_listener/l in GLOB.comm_message_listeners)
 		l.Add(message)
 
 /datum/comm_message_listener
@@ -290,7 +290,7 @@ var/global/last_message_id = 0
 /datum/comm_message_listener/New()
 	..()
 	messages = list()
-	comm_message_listeners.Add(src)
+	GLOB.comm_message_listeners.Add(src)
 
 /datum/comm_message_listener/proc/Add(list/message)
 	messages[LIST_PRE_INC(messages)] = message

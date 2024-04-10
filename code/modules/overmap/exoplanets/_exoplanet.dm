@@ -138,7 +138,7 @@ GLOBAL_VAR(planet_repopulation_disabled)
 
 	for (var/datum/exoplanet_theme/T as anything in themes)
 		T.after_map_generation(src)
-		
+
 	generate_landing(2)
 	update_biome()
 	generate_daycycle()
@@ -300,7 +300,7 @@ GLOBAL_VAR(planet_repopulation_disabled)
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/landmark/exoplanet_spawn/LateInitialize(mapload)
-	var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[z]"]
+	var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[z]"]
 	if (istype(E))
 		do_spawn(E)
 

@@ -77,7 +77,7 @@
 	. = ..()
 
 /obj/shuttle_landmark/ship/Destroy()
-	var/obj/overmap/visitable/ship/landable/ship = map_sectors["[z]"]
+	var/obj/overmap/visitable/ship/landable/ship = GLOB.map_sectors["[z]"]
 	if(istype(ship) && ship.landmark == src)
 		ship.landmark = null
 	. = ..()
@@ -141,7 +141,7 @@
 	halt()
 
 /obj/overmap/visitable/ship/landable/proc/on_landing(obj/shuttle_landmark/from, obj/shuttle_landmark/into)
-	var/obj/overmap/visitable/target = map_sectors["[into.z]"]
+	var/obj/overmap/visitable/target = GLOB.map_sectors["[into.z]"]
 	var/datum/shuttle/shuttle_datum = SSshuttle.shuttles[shuttle]
 	if(into.landmark_tag == shuttle_datum.motherdock) // If our motherdock is a landable ship, it won't be found properly here so we need to find it manually.
 		for(var/obj/overmap/visitable/ship/landable/landable in SSshuttle.ships)

@@ -4,10 +4,10 @@ GLOBAL_DATUM_INIT(dummy_lighting_corner, /datum/lighting_corner/dummy, new)
 // For the record: these should never ever ever be deleted, even if the turf doesn't have dynamic lighting.
 
 // This list is what the code that assigns corners listens to, the order in this list is the order in which corners are added to the /turf/corners list.
-var/global/list/LIGHTING_CORNER_DIAGONAL = list(NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST)
+GLOBAL_LIST_INIT(LIGHTING_CORNER_DIAGONAL, list(NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST))
 
 // This is the reverse of the above - the position in the array is a dir. Update this if the above changes.
-var/global/list/REVERSE_LIGHTING_CORNER_DIAGONAL = list(0, 0, 0, 0, 3, 4, 0, 0, 2, 1)
+GLOBAL_LIST_INIT(REVERSE_LIGHTING_CORNER_DIAGONAL, list(0, 0, 0, 0, 3, 4, 0, 0, 2, 1))
 
 /datum/lighting_corner
 	// t1 through t4 are our masters, in no particular order.
@@ -95,7 +95,7 @@ var/global/list/REVERSE_LIGHTING_CORNER_DIAGONAL = list(0, 0, 0, 0, 3, 4, 0, 0, 
 			T.corners = new(4)
 
 		t2 = T
-		t2i = REVERSE_LIGHTING_CORNER_DIAGONAL[diagonal]
+		t2i = GLOB.REVERSE_LIGHTING_CORNER_DIAGONAL[diagonal]
 		T.corners[t2i] = src
 		if (TURF_IS_AMBIENT_LIT_UNSAFE(T))
 			has_ambience = TRUE
@@ -107,7 +107,7 @@ var/global/list/REVERSE_LIGHTING_CORNER_DIAGONAL = list(0, 0, 0, 0, 3, 4, 0, 0, 
 			T.corners = new(4)
 
 		t3 = T
-		t3i = REVERSE_LIGHTING_CORNER_DIAGONAL[((T.x > x) ? EAST : WEST) | ((T.y > y) ? NORTH : SOUTH)] // Get the dir based on coordinates.
+		t3i = GLOB.REVERSE_LIGHTING_CORNER_DIAGONAL[((T.x > x) ? EAST : WEST) | ((T.y > y) ? NORTH : SOUTH)] // Get the dir based on coordinates.
 		T.corners[t3i] = src
 		if (TURF_IS_AMBIENT_LIT_UNSAFE(T))
 			has_ambience = TRUE
@@ -119,7 +119,7 @@ var/global/list/REVERSE_LIGHTING_CORNER_DIAGONAL = list(0, 0, 0, 0, 3, 4, 0, 0, 
 			T.corners = new(4)
 
 		t4 = T
-		t4i = REVERSE_LIGHTING_CORNER_DIAGONAL[((T.x > x) ? EAST : WEST) | ((T.y > y) ? NORTH : SOUTH)] // Get the dir based on coordinates.
+		t4i = GLOB.REVERSE_LIGHTING_CORNER_DIAGONAL[((T.x > x) ? EAST : WEST) | ((T.y > y) ? NORTH : SOUTH)] // Get the dir based on coordinates.
 		T.corners[t4i] = src
 		if (TURF_IS_AMBIENT_LIT_UNSAFE(T))
 			has_ambience = TRUE

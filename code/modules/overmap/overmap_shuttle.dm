@@ -36,7 +36,7 @@
 		return FALSE
 	if(moving_status == SHUTTLE_INTRANSIT)
 		return FALSE //already going somewhere, current_location may be an intransit location instead of in a sector
-	return get_dist(waypoint_sector(current_location), waypoint_sector(next_location)) <= range
+	return get_dist(GLOB.waypoint_sector(current_location), GLOB.waypoint_sector(next_location)) <= range
 
 /datum/shuttle/autodock/overmap/can_launch()
 	return ..() && can_go()
@@ -47,7 +47,7 @@
 /datum/shuttle/autodock/overmap/get_travel_time()
 	var/distance_mod = 0
 	if(current_location != next_location)
-		distance_mod = get_dist(waypoint_sector(current_location), waypoint_sector(next_location))
+		distance_mod = get_dist(GLOB.waypoint_sector(current_location), GLOB.waypoint_sector(next_location))
 
 	var/skill_mod = 0.2 * (skill_needed - operator_skill)
 	return move_time * (1 + distance_mod + skill_mod)
@@ -65,7 +65,7 @@
 
 /datum/shuttle/autodock/overmap/proc/get_possible_destinations()
 	var/list/res = list()
-	for (var/obj/overmap/visitable/S in range(get_turf(waypoint_sector(current_location)), range))
+	for (var/obj/overmap/visitable/S in range(get_turf(GLOB.waypoint_sector(current_location)), range))
 		var/list/waypoints = S.get_waypoints(name)
 		for(var/obj/shuttle_landmark/LZ in waypoints)
 			if(LZ.is_valid(src))
@@ -75,12 +75,12 @@
 /datum/shuttle/autodock/overmap/get_location_name()
 	if(moving_status == SHUTTLE_INTRANSIT)
 		return "In transit"
-	return "[waypoint_sector(current_location)] - [current_location]"
+	return "[GLOB.waypoint_sector(current_location)] - [current_location]"
 
 /datum/shuttle/autodock/overmap/get_destination_name()
 	if(!next_location)
 		return "None"
-	return "[waypoint_sector(next_location)] - [next_location]"
+	return "[GLOB.waypoint_sector(next_location)] - [next_location]"
 
 /datum/shuttle/autodock/overmap/proc/try_consume_fuel() //returns 1 if successful, returns 0 if error (like insufficient fuel)
 	if(!fuel_consumption)

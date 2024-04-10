@@ -95,7 +95,7 @@
 
 	if(length(message) >= 2)
 		var/channel_prefix = copytext_char(message, 1 ,3)
-		return department_radio_keys[channel_prefix]
+		return GLOB.department_radio_keys[channel_prefix]
 
 	return null
 
@@ -108,7 +108,7 @@
 
 	if(length(message) >= 2 && is_language_prefix(prefix))
 		var/language_prefix = lowertext(copytext_char(message, 2 ,3))
-		var/datum/language/L = GLOB.language_keys[language_prefix]
+		var/datum/language/L = language_keys[language_prefix]
 		if (can_speak(L))
 			return L
 

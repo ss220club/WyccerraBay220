@@ -88,7 +88,7 @@
 
 	//add the account
 	T.perform()
-	all_money_accounts.Add(M)
+	GLOB.all_money_accounts.Add(M)
 
 	return M
 
@@ -101,6 +101,6 @@
 
 /proc/get_account(account_number)
 	RETURN_TYPE(/datum/money_account)
-	for(var/datum/money_account/D in all_money_accounts)
+	for(var/datum/money_account/D in GLOB.all_money_accounts)
 		if(D.account_number == account_number)
 			return D

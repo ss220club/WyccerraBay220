@@ -213,8 +213,8 @@
 		return FALSE
 	else
 		//Overmap travel necessary?
-		var/obj/overmap/visitable/other = map_sectors["[target.z]"]
-		var/obj/overmap/visitable/self = map_sectors["[src.z]"]
+		var/obj/overmap/visitable/other = GLOB.map_sectors["[target.z]"]
+		var/obj/overmap/visitable/self = GLOB.map_sectors["[src.z]"]
 		//Start animation
 		pickup_animation(target)
 

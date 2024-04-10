@@ -1,30 +1,25 @@
 /datum/keybinding/human
-	category = CATEGORY_HUMAN
-
+	category = KEYBIND_CATEGORY_HUMAN
 
 /datum/keybinding/human/can_use(client/user)
 	return ishuman(user.mob)
 
-
 /datum/keybinding/human/quick_equip
-	hotkey_keys = list("E")
 	name = "quick_equip"
 	full_name = "Quick Equip"
 	description = "Quickly puts an item in the best slot available"
-
+	hotkey_keys = list("E")
 
 /datum/keybinding/human/quick_equip/down(client/user)
 	var/mob/living/carbon/human/H = user.mob
 	H.quick_equip()
 	return TRUE
 
-
 /datum/keybinding/human/holster
-	hotkey_keys = list("H")
 	name = "holster"
 	full_name = "Holster"
 	description = "Draw or holster weapon"
-
+	hotkey_keys = list("H")
 
 /datum/keybinding/human/holster/down(client/user)
 	var/mob/living/carbon/human/H = user.mob
@@ -60,26 +55,22 @@
 
 	return TRUE
 
-
 /datum/keybinding/human/give
-	hotkey_keys = list("None")
 	name = "give_item"
 	full_name = "Give Item"
 	description = "Give the item you're currently holding"
-
+	hotkey_keys = list("V")
 
 /datum/keybinding/human/give/down(client/user)
 	var/mob/living/carbon/human/H = user.mob
 	H.give()
 	return TRUE
 
-
 /datum/keybinding/human/stop_pulling
-	hotkey_keys = list("C", "Delete")
 	name = "stop_pulling"
 	full_name = "Stop Pulling"
 	description = "Let go of the object and stop pulling"
-
+	hotkey_keys = list("C", "Delete")
 
 /datum/keybinding/human/stop_pulling/down(client/user)
 	var/mob/living/carbon/human/H = user.mob

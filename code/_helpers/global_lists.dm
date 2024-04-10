@@ -100,7 +100,13 @@ var/global/list/_kbMap = list(
 	"SPACEBAR" = "Space",
 	"ALT" = "Alt",
 	"SHIFT" = "Shift",
-	"CONTROL" = "Ctrl"
+	"CONTROL" = "Ctrl",
+	"DIVIDE" = "Divide",
+	"MULTIPLY" = "Multiply",
+	"ADD" = "Add",
+	"SUBTRACT" = "Subtract",
+	"DECIMAL" = "Decimal",
+	"CLEAR" = "Center"
 )
 
 /// Without alt, shift, ctrl and etc because its not necessary

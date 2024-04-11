@@ -82,6 +82,45 @@ var/global/list/string_slot_flags = list(
 	"holster" = SLOT_HOLSTER
 )
 
+GLOBAL_LIST_EMPTY(hotkey_keybinding_list_by_key)
+GLOBAL_LIST_EMPTY(keybindings_by_name)
+
+/// This is a mapping from JS keys to Byond - ref: https://keycode.info/
+GLOBAL_LIST_INIT(keybindings_map, list(
+	"UP" = "North",
+	"RIGHT" = "East",
+	"DOWN" = "South",
+	"LEFT" = "West",
+	"INSERT" = "Insert",
+	"HOME" = "Northwest",
+	"PAGEUP" = "Northeast",
+	"DEL" = "Delete",
+	"END" = "Southwest",
+	"PAGEDOWN" = "Southeast",
+	"SPACEBAR" = "Space",
+	"ALT" = "Alt",
+	"SHIFT" = "Shift",
+	"CONTROL" = "Ctrl",
+	"DIVIDE" = "Divide",
+	"MULTIPLY" = "Multiply",
+	"ADD" = "Add",
+	"SUBTRACT" = "Subtract",
+	"DECIMAL" = "Decimal",
+	"CLEAR" = "Center"
+))
+
+/// Without alt, shift, ctrl and etc because its not necessary
+GLOBAL_LIST_INIT(keybindings_map_reverse, list(
+	"North" = "Up",
+	"East" = "Right",
+	"South" = "Down",
+	"West" = "Left",
+	"Northwest" = "Home",
+	"Northeast" = "PageUp",
+	"Southwest" = "End",
+	"Southeast" = "PageDown",
+))
+
 //////////////////////////
 /////Initial Building/////
 //////////////////////////
@@ -184,6 +223,15 @@ var/global/list/string_slot_flags = list(
 			stack_trace("[wth.type] has the same topic key as [GLOB.world_topic_handlers[wth.topic_key]]! ([wth.topic_key])")
 			continue
 		GLOB.world_topic_handlers[wth.topic_key] = topic_handler_type
+
+	for(var/datum/keybinding/keybinding as anything in subtypesof(/datum/keybinding))
+		if(!initial(keybinding.name))
+			continue
+		var/datum/keybinding/instance = new keybinding
+		GLOB.keybindings_by_name[instance.name] = instance
+		if(length(instance.hotkey_keys))
+			for(var/bound_key in instance.hotkey_keys)
+				GLOB.hotkey_keybinding_list_by_key[bound_key] += list(instance.name)
 
 	return TRUE
 

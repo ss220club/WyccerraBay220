@@ -203,20 +203,21 @@
 		holder.callproc.waiting_for_click = 0
 		holder.callproc.do_args()
 
-// [SIERRA-REMOVE] - SSINPUT - Я не комментирую по правилам (/* */) чтобы точно вызвать конфликт. Он нам здесь нужен.
-// /client/Click(atom/A)
-// 	if(!user_acted(src))
-// 		return
-// 	if(holder && holder.callproc && holder.callproc.waiting_for_click)
-// 		if(alert("Do you want to select \the [A] as the [length(holder.callproc.arguments)+1]\th argument?",, "Yes", "No") == "Yes")
-// 			holder.callproc.arguments += A
+/client/Click(atom/A)
+	if(!user_acted(src))
+		return
 
-// 		holder.callproc.waiting_for_click = 0
-// 		verbs -= /client/proc/cancel_callproc_select
-// 		holder.callproc.do_args()
-// 	else
-// 		return ..()
-// [/SIERRA-REMOVE]
+	if(holder && holder.callproc && holder.callproc.waiting_for_click)
+		if(alert("Do you want to select \the [A] as the [length(holder.callproc.arguments)+1]\th argument?",, "Yes", "No") == "Yes")
+			holder.callproc.arguments += A
+
+		holder.callproc.waiting_for_click = 0
+		verbs -= /client/proc/cancel_callproc_select
+		holder.callproc.do_args()
+		return
+
+	update_hotkey_mode()
+	return ..()
 
 /datum/callproc/proc/finalise()
 	var/returnval

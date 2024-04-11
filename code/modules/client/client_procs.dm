@@ -47,7 +47,6 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		if(!asset_cache_job)
 			return
 
-
 	//search the href for script injection
 	if(findtext(href,"<script",1,0))
 		to_world_log("Attempted use of scripts within a topic call, by [src]")
@@ -456,8 +455,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	set category = "OOC"
 
 	fullscreen = !fullscreen
-
-	if (fullscreen)
+	if(fullscreen)
 		winset(usr, "mainwindow", "titlebar=false")
 		winset(usr, "mainwindow", "can-resize=false")
 		winset(usr, "mainwindow", "is-maximized=false")
@@ -516,6 +514,67 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 		pct += delta
 		winset(src, "mainwindow.mainvsplit", "splitter=[pct]")
+
+/client/verb/ToggleHotkeyMode()
+	set hidden = TRUE
+	prefs.hotkeys = !prefs.hotkeys
+	update_hotkey_mode()
+
+/client/proc/update_hotkey_mode()
+	if(prefs.hotkeys)
+		// If hotkey mode is enabled, then clicking the map will automatically
+		// unfocus the text bar. This removes the red color from the text bar
+		// so that the visual focus indicator matches reality.
+		winset(src, "mainwindow.mainwindow", "macro=default")
+		winset(src, "mapwindow.map", "focus=true")
+		winset(src, "outputwindow.hotkeytoggle", "is-checked=true")
+		winset(src, "outputwindow.input", " border=line")
+	else
+		winset(src, "mainwindow.mainwindow", "macro=macro")
+		winset(src, "outputwindow.hotkeytoggle", "is-checked=false")
+		winset(src, "outputwindow.input", "focus=true; border=sunken")
+
+/**
+ * Updates the keybinds for special keys
+ *
+ * Handles adding macros for the keys that need it
+ * And adding movement keys to the clients movement_keys list
+ * At the time of writing this, communication(OOC, Say, IC) require macros
+ * Arguments:
+ * * direct_prefs - the preference we're going to get keybinds from
+ */
+/client/proc/update_special_keybinds(datum/preferences/direct_prefs)
+	var/datum/preferences/D = prefs || direct_prefs
+	if(!D?.key_bindings)
+		return
+	movement_keys = list()
+	var/list/communication_hotkeys = list()
+	for(var/key in D.key_bindings)
+		for(var/kb_name in D.key_bindings[key])
+			switch(kb_name)
+				if("North")
+					movement_keys[key] = NORTH
+				if("East")
+					movement_keys[key] = EAST
+				if("West")
+					movement_keys[key] = WEST
+				if("South")
+					movement_keys[key] = SOUTH
+				if("Say")
+					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=say")
+					communication_hotkeys += key
+				if("OOC")
+					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=ooc")
+					communication_hotkeys += key
+				if("Me")
+					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=me")
+					communication_hotkeys += key
+
+	// winget() does not work for F1 and F2
+	for(var/key in communication_hotkeys)
+		if(!(key in list("F1","F2")) && !winget(src, "default-[REF(key)]", "command"))
+			to_chat(src, "You probably entered the game with a different keyboard layout.\n<a href='?src=[REF(src)];reset_macros=1'>Please switch to the English layout and click here to fix the communication hotkeys.</a>")
+			break
 
 /client/proc/set_right_click_menu_mode(shift_only)
 	if(shift_only)

@@ -16,7 +16,7 @@
 <h1>chemical_dispenser <aside>/<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/<a href="obj/machinery/chemical_dispenser.html">chemical_dispenser</a></aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L4">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L4">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 4"/></a></h1>
 
 <table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
@@ -35,43 +35,43 @@ For example, if user has low core skill, random reagents can be added on transfe
             <aside>&ndash; </aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L17">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L17">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 17"/></a></h3>
         <p>Determines if <code>/obj/item/reagent_containers/food</code> is accepted as <code>container</code></p><h3 id="var/amount_per_transfer"><aside class="declaration">var </aside>amount_per_transfer
             <aside>&ndash; </aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L19">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L19">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 19"/></a></h3>
         <p>Amount of reagent we want to move from cartridge to container per transfer</p><h3 id="var/can_contaminate"><aside class="declaration">var </aside>can_contaminate
             <aside>&ndash; </aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L22">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L22">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 22"/></a></h3>
         <p>Determines if low core skill affects transfered reagents.
 For example, if user has low core skill, random reagents can be added on transfer</p><h3 id="var/cartridges"><aside class="declaration">var </aside>cartridges
             <aside>&ndash; /list</aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L28">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L28">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 28"/></a></h3>
         <p>Associative, label -&gt; cartridge</p><h3 id="var/container"><aside class="declaration">var </aside>container
             <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/reagent_containers</aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L24">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L24">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 24"/></a></h3>
         <p>Reagent container currently inserted into chem dispanser</p><h3 id="var/spawn_cartridges"><aside class="declaration">var </aside>spawn_cartridges
             <aside>&ndash; /list</aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L26">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L26">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 26"/></a></h3>
         <p>Set to a list of types to spawn one of each on New()</p><h2 id="proc">Proc Details</h2><h3 id="proc/contaminate_container"><aside class="declaration">proc </aside>contaminate_container<aside>(/<a href="mob.html">mob</a>/user, cartridge_to_exclude_label) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L270">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L270">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 270"/></a></aside>
         </h3>
         <p>Add random amount of reagent from random amount of cartridges to current <code>container</code>, depending on user core skill level.</p>
@@ -82,7 +82,7 @@ cartridge_to_exclude_label - label of cartridge we don't want to use as contamin
 <p>Returns: amount of contaminant reagents added</p><h3 id="proc/dispense_from_cartridge"><aside class="declaration">proc </aside>dispense_from_cartridge<aside>(/<a href="mob.html">mob</a>/user, dispense_from_cartridge_label) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L245">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L245">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 245"/></a></aside>
         </h3>
         <p>Add random amount of reagent from random amount of cartridges, depending on user core skill level.</p>
@@ -93,7 +93,7 @@ cartridge_to_exclude_label - label of cartridge we don't want to use as contamin
 <p>Returns: amount of contaminant reagents added</p><h3 id="proc/remove_cartridge"><aside class="declaration">proc </aside>remove_cartridge<aside>(/<a href="mob.html">mob</a>/user, /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/screwdriver, cartridge_to_remove_label) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L220">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L220">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 220"/></a></aside>
         </h3>
         <p>Removes desired cartridge from chem dispanser.</p>
@@ -105,7 +105,7 @@ cartridge_to_remove_label - label of cartridge user wants to remove</li>
 </ul><h3 id="proc/set_amount_per_transfer"><aside class="declaration">proc </aside>set_amount_per_transfer<aside>(new_amount) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/c5f611c800ef5429af5e4fd5032d12d53f905370/code/modules/reagents/dispenser/chemical_dispenser.dm#L202">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/modules/reagents/dispenser/chemical_dispenser.dm#L202">
         <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;reagents&#x2F;dispenser&#x2F;chemical_dispenser.dm 202"/></a></aside>
         </h3>
         <p>Sets the amount per transfer.</p>
@@ -116,7 +116,7 @@ new_amount - amount per transfer we want to set</li>
 <p>Returns: TRUE if <code>amount_per_transfer</code> has changed to <code>new_amount</code>, FALSE otherwise</p></main>
 <footer>
     baystation12.dme
-    <a href="https://github.com/ss220club/WyccerraBay220/tree/c5f611c800ef5429af5e4fd5032d12d53f905370">c5f611c</a>
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/fe2c2bc139297b80a6f3f71921786a4de82da845">fe2c2bc</a>
         (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
 </body>
 </html>

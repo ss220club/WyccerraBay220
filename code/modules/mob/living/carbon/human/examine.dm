@@ -334,6 +334,10 @@
 			pose = addtext(pose,".") //Makes sure all emotes end with a period.
 		. += SPAN_NOTICE("[p_They()] [pose]")
 
+	var/descriptors = show_descriptors_to(user)
+	if(descriptors)
+		. += SPAN_NOTICE("[jointext(descriptors, "<br>")]")
+
 	SEND_SIGNAL(src, COMSIG_ATOM_EXAMINE, user, .)
 
 //Helper procedure. Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic() to determine HUD access to security and medical records.

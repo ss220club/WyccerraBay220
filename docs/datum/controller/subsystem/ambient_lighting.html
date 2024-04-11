@@ -16,7 +16,7 @@
 <h1>ambient_lighting <aside>/<a href="datum.html">datum</a>/<a href="datum/controller.html">controller</a>/<a href="datum/controller/subsystem.html">subsystem</a>/<a href="datum/controller/subsystem/ambient_lighting.html">ambient_lighting</a></aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L1">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L1">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 1"/></a></h1>
 
 <table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
@@ -32,37 +32,37 @@
             <aside>&ndash; </aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L11">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L11">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 11"/></a></h3>
         <p>A bitmap of free ambience group indexes.</p><h3 id="var/ambient_groups"><aside class="declaration">var </aside>ambient_groups
             <aside>&ndash; /list/list</aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L15">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L15">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 15"/></a></h3>
         <p>map of ambiient groups</p><h3 id="var/queued"><aside class="declaration">var </aside>queued
             <aside>&ndash; /list</aside>
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L8">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L8">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 8"/></a></h3>
         <p>List of turfs queued for ambient light evaluation</p><h2 id="proc">Proc Details</h2><h3 id="proc/add_space_ambient_group"><aside class="declaration">proc </aside>add_space_ambient_group<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L151">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L151">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 151"/></a></aside>
         </h3>
         <p>Adds the space ambient group if it doesn't currently exist</p><h3 id="proc/allocate_index"><aside class="declaration">proc </aside>allocate_index<aside>() 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L135">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L135">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 135"/></a></aside>
         </h3>
         <p>Find a valid index in the ambient group map for a new group</p>
 <p>Returns index or -1 if no indices are left</p><h3 id="proc/clean_turf"><aside class="declaration">proc </aside>clean_turf<aside>(/<a href="turf.html">turf</a>/target) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L188">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L188">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 188"/></a></aside>
         </h3>
         <p>Removes turf from all ambient groups it is part of (if any)</p>
@@ -72,7 +72,7 @@
 </ul><h3 id="proc/create_ambient_group"><aside class="declaration">proc </aside>create_ambient_group<aside>(color, multiplier) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L167">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L167">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 167"/></a></aside>
         </h3>
         <p>Removes turf from ambient group if it is part of it. Removes group's ambient light and flag from turf</p>
@@ -84,13 +84,13 @@
 <p>Returns index or -1 if no indices are left</p><h3 id="proc/fire">fire<aside>(resumed, no_mc_tick) 
         
     
-            <a href="https://github.com/ss220club/WyccerraBay220/blob/fe2c2bc139297b80a6f3f71921786a4de82da845/code/controllers/subsystems/ambient_lighting.dm#L205">
+            <a href="https://github.com/ss220club/WyccerraBay220/blob/8e0f9abca032a3e62624d4aed60ef3875f92b329/code/controllers/subsystems/ambient_lighting.dm#L205">
         <img src="git.png" width="16" height="16" title="code&#x2F;controllers&#x2F;subsystems&#x2F;ambient_lighting.dm 205"/></a></aside>
         </h3>
         <p>Go over turfs in queue, add them to space or planet ambient groups if valid, else remove them from all ambient groups</p></main>
 <footer>
     baystation12.dme
-    <a href="https://github.com/ss220club/WyccerraBay220/tree/fe2c2bc139297b80a6f3f71921786a4de82da845">fe2c2bc</a>
+    <a href="https://github.com/ss220club/WyccerraBay220/tree/8e0f9abca032a3e62624d4aed60ef3875f92b329">8e0f9ab</a>
         (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
 </body>
 </html>

@@ -56,3 +56,8 @@ package-lock.json
 
 # ignore local selected map
 /maps/using.dm
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/WyccerraBay220.iml

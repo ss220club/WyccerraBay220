@@ -101,7 +101,7 @@
 		if(task == "add")
 			var/new_ckey = ckey(input(usr,"New admin's ckey","Admin ckey", null) as text|null)
 			if(!new_ckey)	return
-			if(new_ckey in admin_datums)
+			if(new_ckey in GLOB.admin_datums)
 				to_chat(usr, SPAN_COLOR("red", "Error: Topic 'editrights': [new_ckey] is already an admin"))
 				return
 			adm_ckey = new_ckey
@@ -112,12 +112,12 @@
 				to_chat(usr, SPAN_COLOR("red", "Error: Topic 'editrights': No valid ckey"))
 				return
 
-		var/datum/admins/D = admin_datums[adm_ckey]
+		var/datum/admins/D = GLOB.admin_datums[adm_ckey]
 
 		if(task == "remove")
 			if(alert("Are you sure you want to remove [adm_ckey]?","Message","Yes","Cancel") == "Yes")
 				if(!D)	return
-				admin_datums -= adm_ckey
+				GLOB.admin_datums -= adm_ckey
 				D.disassociate()
 
 				message_admins("[key_name_admin(usr)] removed [adm_ckey] from the admins list")
@@ -129,8 +129,8 @@
 
 		else if(task == "rank")
 			var/new_rank
-			if(length(admin_ranks))
-				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in (admin_ranks|"*New Rank*")
+			if(length(GLOB.admin_ranks))
+				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in (GLOB.admin_ranks|"*New Rank*")
 			else
 				new_rank = input("Please select a rank", "New rank", null, null) as null|anything in list("Game Master","Game Admin", "Trial Admin", "Admin Observer","*New Rank*")
 
@@ -147,15 +147,15 @@
 						to_chat(usr, SPAN_COLOR("red", "Error: Topic 'editrights': Invalid rank"))
 						return
 					if(config.admin_legacy_system)
-						if(length(admin_ranks))
-							if(new_rank in admin_ranks)
-								rights = admin_ranks[new_rank]		//we typed a rank which already exists, use its rights
+						if(length(GLOB.admin_ranks))
+							if(new_rank in GLOB.admin_ranks)
+								rights = GLOB.admin_ranks[new_rank]		//we typed a rank which already exists, use its rights
 							else
-								admin_ranks[new_rank] = 0			//add the new rank to admin_ranks
+								GLOB.admin_ranks[new_rank] = 0			//add the new rank to admin_ranks
 				else
 					if(config.admin_legacy_system)
 						new_rank = ckeyEx(new_rank)
-						rights = admin_ranks[new_rank]				//we input an existing rank, use its rights
+						rights = GLOB.admin_ranks[new_rank]				//we input an existing rank, use its rights
 
 			if(D)
 				D.disassociate()								//remove adminverbs and unlink from client
@@ -193,7 +193,7 @@
 
 		if(!check_rights(R_ADMIN))	return
 
-		if(!SSticker.mode || !evacuation_controller)
+		if(!SSticker.mode || !GLOB.evacuation_controller)
 			return
 
 		if(SSticker.mode.name == "blob")
@@ -202,10 +202,10 @@
 
 		switch(href_list["call_shuttle"])
 			if("1")
-				if (evacuation_controller.call_evacuation(usr, TRUE))
+				if (GLOB.evacuation_controller.call_evacuation(usr, TRUE))
 					log_and_message_admins("called an evacuation.")
 			if("2")
-				if (evacuation_controller.cancel_evacuation())
+				if (GLOB.evacuation_controller.cancel_evacuation())
 					log_and_message_admins("cancelled an evacuation.")
 
 		href_list["secretsadmin"] = "check_antagonist"
@@ -1477,13 +1477,13 @@
 		if(alert(src.owner, "Are you sure you wish to hit [key_name(M)] with Blue Space Artillery?",  "Confirm Firing?" , "Yes" , "No") != "Yes")
 			return
 
-		if(BSACooldown)
+		if(GLOB.BSACooldown)
 			to_chat(src.owner, "Standby!  Reload cycle in progress!  Gunnary crews ready in five seconds!")
 			return
 
-		BSACooldown = 1
+		GLOB.BSACooldown = 1
 		spawn(50)
-			BSACooldown = 0
+			GLOB.BSACooldown = 0
 
 		to_chat(M, "You've been hit by bluespace artillery!")
 		log_admin("[key_name(M)] has been hit by Bluespace Artillery fired by [src.owner]")
@@ -1780,11 +1780,11 @@
 		return
 
 	else if(href_list["admin_secrets_panel"])
-		var/datum/admin_secret_category/AC = locate(href_list["admin_secrets_panel"]) in admin_secrets.categories
+		var/datum/admin_secret_category/AC = locate(href_list["admin_secrets_panel"]) in GLOB.admin_secrets.categories
 		src.Secrets(AC)
 
 	else if(href_list["admin_secrets"])
-		var/datum/admin_secret_item/item = locate(href_list["admin_secrets"]) in admin_secrets.items
+		var/datum/admin_secret_item/item = locate(href_list["admin_secrets"]) in GLOB.admin_secrets.items
 		item.execute(usr)
 
 	else if(href_list["ac_view_wanted"])            //Admin newscaster Topic() stuff be here
@@ -1800,7 +1800,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_submit_new_channel"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/check = 0
 		for(var/datum/feed_channel/FC in torch_network.network_channels)
 			if(FC.channel_name == src.admincaster_feed_channel.channel_name)
@@ -1817,7 +1817,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_receiving"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/list/available_channels = list()
 		for(var/datum/feed_channel/F in torch_network.network_channels)
 			available_channels += F.channel_name
@@ -1829,7 +1829,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_submit_new_message"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		if(src.admincaster_feed_message.body =="" || src.admincaster_feed_message.body =="\[REDACTED\]" || src.admincaster_feed_channel.channel_name == "" )
 			src.admincaster_screen = 6
 		else
@@ -1856,7 +1856,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_menu_wanted"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/already_wanted = 0
 		if(torch_network.wanted_issue)
 			already_wanted = 1
@@ -1876,7 +1876,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_submit_wanted"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/input_param = text2num(href_list["ac_submit_wanted"])
 		if(src.admincaster_feed_message.author == "" || src.admincaster_feed_message.body == "")
 			src.admincaster_screen = 16
@@ -1891,7 +1891,7 @@
 					WANTED.backup_author = src.admincaster_signature                  //Submitted by
 					WANTED.is_admin_message = 1
 					torch_network.wanted_issue = WANTED
-					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+					for(var/obj/machinery/newscaster/NEWSCASTER in GLOB.allCasters)
 						NEWSCASTER.newsAlert()
 						NEWSCASTER.update_icon()
 					src.admincaster_screen = 15
@@ -1904,11 +1904,11 @@
 		src.access_news_network()
 
 	else if(href_list["ac_cancel_wanted"])
-		var/datum/feed_network/torch_network = news_network[1]
+		var/datum/feed_network/torch_network = GLOB.news_network[1]
 		var/choice = alert("Please confirm Wanted Issue removal","Network Security Handler","Confirm","Cancel")
 		if(choice=="Confirm")
 			torch_network.wanted_issue = null
-			for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+			for(var/obj/machinery/newscaster/NEWSCASTER in GLOB.allCasters)
 				NEWSCASTER.update_icon()
 			src.admincaster_screen=17
 		src.access_news_network()
@@ -1999,7 +1999,7 @@
 				to_chat(usr, "[M] is illegal type, must be /mob!")
 				return
 			var/lang2toggle = href_list["lang"]
-			var/datum/language/L = all_languages[lang2toggle]
+			var/datum/language/L = GLOB.all_languages[lang2toggle]
 
 			if(L in M.languages)
 				if(!M.remove_language(lang2toggle))
@@ -2218,5 +2218,5 @@
 
 /client/get_admin_jump_link(atom/target, delimiter, prefix, sufix)
 	if(holder)
-		var/short_links = get_preference_value(/datum/client_preference/ghost_follow_link_length) == GLOB.PREF_SHORT
+		var/short_links = get_preference_value(/datum/client_preference/ghost_follow_link_length) == PREF_SHORT
 		return admin_jump_link(target, src, delimiter, prefix, sufix, short_links)

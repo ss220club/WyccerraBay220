@@ -14,10 +14,10 @@
 	ideal_character_age = 50
 
 
-	access = list(access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_heads,
-			            access_teleporter, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva,
-			            access_bridge, access_construction, access_sec_doors,
-			            access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload)
+	access = list(GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_tech_storage, GLOB.access_maint_tunnels, GLOB.access_heads,
+			            GLOB.access_teleporter, GLOB.access_external_airlocks, GLOB.access_atmospherics, GLOB.access_emergency_storage, GLOB.access_eva,
+			            GLOB.access_bridge, GLOB.access_construction, GLOB.access_sec_doors,
+			            GLOB.access_ce, GLOB.access_RC_announce, GLOB.access_keycard_auth, GLOB.access_tcomsat, GLOB.access_ai_upload)
 	minimal_player_age = 14
 	outfit_type = /singleton/hierarchy/outfit/job/engineering/chief_engineer
 
@@ -32,7 +32,7 @@
 	selection_color = "#5b4d20"
 	economic_power = 5
 	minimal_player_age = 7
-	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics, access_emergency_storage)
+	access = list(GLOB.access_eva, GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_tech_storage, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_construction, GLOB.access_atmospherics, GLOB.access_emergency_storage)
 	alt_titles = list("Maintenance Technician","Engine Technician","Electrician",
 		"Atmospheric Technician" = /singleton/hierarchy/outfit/job/engineering/atmos)
 	outfit_type = /singleton/hierarchy/outfit/job/engineering/engineer

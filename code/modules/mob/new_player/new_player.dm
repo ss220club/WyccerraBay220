@@ -81,7 +81,7 @@
 			stat("Game Mode:", "[SSticker.mode ? SSticker.mode.name : SSticker.master_mode] ([SSticker.master_mode])")
 		else
 			stat("Game Mode:", PUBLIC_GAME_MODE)
-		var/extra_antags = list2params(additional_antag_types)
+		var/extra_antags = list2params(GLOB.additional_antag_types)
 		stat("Added Antagonists:", extra_antags ? extra_antags : "None")
 		stat("Initial Continue Vote:", "[config.vote_autotransfer_initial] minutes")
 		stat("Additional Vote Every:", "[config.vote_autotransfer_interval] minutes")
@@ -94,7 +94,7 @@
 			for(var/mob/new_player/player in GLOB.player_list)
 				var/highjob
 				if (player.client)
-					var/show_ready = player.client.get_preference_value(/datum/client_preference/show_ready) == GLOB.PREF_SHOW
+					var/show_ready = player.client.get_preference_value(/datum/client_preference/show_ready) == PREF_SHOW
 					if (player.client.prefs?.job_high)
 						highjob = " as [player.client.prefs.job_high]"
 					if (!player.is_stealthed())
@@ -163,7 +163,7 @@
 				to_chat(src, SPAN_DANGER("Could not locate an observer spawn point. Use the Teleport verb to jump to the map."))
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
-			var/should_announce = client.get_preference_value(/datum/client_preference/announce_ghost_join) == GLOB.PREF_YES
+			var/should_announce = client.get_preference_value(/datum/client_preference/announce_ghost_join) == PREF_YES
 
 			if(isnull(client.holder) && should_announce)
 				announce_ghost_joinleave(src)
@@ -277,8 +277,8 @@
 		character = character.AIize(move=0) // AIize the character, but don't move them yet
 
 		// is_available for AI checks that there is an empty core available in this list
-		var/obj/structure/AIcore/deactivated/C = empty_playable_ai_cores[1]
-		empty_playable_ai_cores -= C
+		var/obj/structure/AIcore/deactivated/C = GLOB.empty_playable_ai_cores[1]
+		GLOB.empty_playable_ai_cores -= C
 
 		character.forceMove(C.loc)
 		var/mob/living/silicon/ai/A = character
@@ -323,10 +323,10 @@
 	header += "<b>Welcome, [name].<br></b>"
 	header += "Round Duration: [roundduration2text()]<br>"
 
-	if(evacuation_controller.has_evacuated())
+	if(GLOB.evacuation_controller.has_evacuated())
 		header += "[SPAN_COLOR("red", "<b>\The [station_name()] has been evacuated.</b>")]<br>"
-	else if(evacuation_controller.is_evacuating())
-		if(evacuation_controller.emergency_evacuation) // Emergency shuttle is past the point of no recall
+	else if(GLOB.evacuation_controller.is_evacuating())
+		if(GLOB.evacuation_controller.emergency_evacuation) // Emergency shuttle is past the point of no recall
 			header += "[SPAN_COLOR("red", "\The [station_name()] is currently undergoing evacuation procedures.")]<br>"
 		else                                           // Crew transfer initiated
 			header += "[SPAN_COLOR("red", "\The [station_name()] is currently undergoing crew transfer procedures.")]<br>"
@@ -595,7 +595,7 @@
 	set name = "Play Different Lobby Track"
 	set category = "OOC"
 
-	if(get_preference_value(/datum/client_preference/play_lobby_music) == GLOB.PREF_NO)
+	if(get_preference_value(/datum/client_preference/play_lobby_music) == PREF_NO)
 		return
 	var/singleton/audio/track/track = GLOB.using_map.get_lobby_track(GLOB.using_map.lobby_track.type)
 	sound_to(src, track.get_sound())

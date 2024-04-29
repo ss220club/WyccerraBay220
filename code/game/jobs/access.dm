@@ -33,7 +33,7 @@
 
 	if(GLOB.using_map?.maint_all_access)
 		L = L.Copy()
-		L |= access_maint_tunnels
+		L |= GLOB.access_maint_tunnels
 
 	return has_access(R, L)
 
@@ -69,54 +69,54 @@
 /proc/get_centcom_access(job)
 	switch(job)
 		if("VIP Guest")
-			return list(access_cent_general)
+			return list(GLOB.access_cent_general)
 		if("Custodian")
-			return list(access_cent_general, access_cent_living, access_cent_storage)
+			return list(GLOB.access_cent_general, GLOB.access_cent_living, GLOB.access_cent_storage)
 		if("Thunderdome Overseer")
-			return list(access_cent_general, access_cent_thunder)
+			return list(GLOB.access_cent_general, GLOB.access_cent_thunder)
 		if("Intel Officer")
-			return list(access_cent_general, access_cent_living)
+			return list(GLOB.access_cent_general, GLOB.access_cent_living)
 		if("Medical Officer")
-			return list(access_cent_general, access_cent_living, access_cent_medical)
+			return list(GLOB.access_cent_general, GLOB.access_cent_living, GLOB.access_cent_medical)
 		if("Death Commando")
-			return list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage)
+			return list(GLOB.access_cent_general, GLOB.access_cent_specops, GLOB.access_cent_living, GLOB.access_cent_storage)
 		if("Research Officer")
-			return list(access_cent_general, access_cent_specops, access_cent_medical, access_cent_teleporter, access_cent_storage)
+			return list(GLOB.access_cent_general, GLOB.access_cent_specops, GLOB.access_cent_medical, GLOB.access_cent_teleporter, GLOB.access_cent_storage)
 		if("BlackOps Commander")
-			return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_living, access_cent_storage, access_cent_creed)
+			return list(GLOB.access_cent_general, GLOB.access_cent_thunder, GLOB.access_cent_specops, GLOB.access_cent_living, GLOB.access_cent_storage, GLOB.access_cent_creed)
 		if("Supreme Commander")
 			return get_all_centcom_access()
 
-var/global/list/datum/access/priv_all_access_datums
+GLOBAL_LIST_EMPTY(priv_all_access_datums)
 /proc/get_all_access_datums()
 	RETURN_TYPE(/list)
-	if(!priv_all_access_datums)
-		priv_all_access_datums = init_subtypes(/datum/access)
-		priv_all_access_datums = dd_sortedObjectList(priv_all_access_datums)
+	if(!GLOB.priv_all_access_datums)
+		GLOB.priv_all_access_datums = init_subtypes(/datum/access)
+		GLOB.priv_all_access_datums = dd_sortedObjectList(GLOB.priv_all_access_datums)
 
-	return priv_all_access_datums.Copy()
+	return GLOB.priv_all_access_datums.Copy()
 
-var/global/list/datum/access/priv_all_access_datums_id
+GLOBAL_LIST_EMPTY(priv_all_access_datums_id)
 /proc/get_all_access_datums_by_id()
 	RETURN_TYPE(/list)
-	if(!priv_all_access_datums_id)
-		priv_all_access_datums_id = list()
+	if(!GLOB.priv_all_access_datums_id)
+		GLOB.priv_all_access_datums_id = list()
 		for(var/datum/access/A in get_all_access_datums())
-			priv_all_access_datums_id["[A.id]"] = A
+			GLOB.priv_all_access_datums_id["[A.id]"] = A
 
-	return priv_all_access_datums_id.Copy()
+	return GLOB.priv_all_access_datums_id.Copy()
 
-var/global/list/datum/access/priv_all_access_datums_region
+GLOBAL_LIST_EMPTY(priv_all_access_datums_region)
 /proc/get_all_access_datums_by_region()
 	RETURN_TYPE(/list)
-	if(!priv_all_access_datums_region)
-		priv_all_access_datums_region = list()
+	if(!GLOB.priv_all_access_datums_region)
+		GLOB.priv_all_access_datums_region = list()
 		for(var/datum/access/A in get_all_access_datums())
-			if(!priv_all_access_datums_region[A.region])
-				priv_all_access_datums_region[A.region] = list()
-			priv_all_access_datums_region[A.region] += A
+			if(!GLOB.priv_all_access_datums_region[A.region])
+				GLOB.priv_all_access_datums_region[A.region] = list()
+			GLOB.priv_all_access_datums_region[A.region] += A
 
-	return priv_all_access_datums_region.Copy()
+	return GLOB.priv_all_access_datums_region.Copy()
 
 /proc/get_access_ids(access_types = ACCESS_TYPE_ALL)
 	RETURN_TYPE(/list)
@@ -126,52 +126,52 @@ var/global/list/datum/access/priv_all_access_datums_region
 			L += A.id
 	return L
 
-var/global/list/priv_all_access
+GLOBAL_LIST_EMPTY(priv_all_access)
 /proc/get_all_accesses()
 	RETURN_TYPE(/list)
-	if(!priv_all_access)
-		priv_all_access = get_access_ids()
+	if(!GLOB.priv_all_access)
+		GLOB.priv_all_access = get_access_ids()
 
-	return priv_all_access.Copy()
+	return GLOB.priv_all_access.Copy()
 
-var/global/list/priv_station_access
+GLOBAL_LIST_EMPTY(priv_station_access)
 /proc/get_all_station_access()
 	RETURN_TYPE(/list)
-	if(!priv_station_access)
-		priv_station_access = get_access_ids(ACCESS_TYPE_STATION)
+	if(!GLOB.priv_station_access)
+		GLOB.priv_station_access = get_access_ids(ACCESS_TYPE_STATION)
 
-	return priv_station_access.Copy()
+	return GLOB.priv_station_access.Copy()
 
-var/global/list/priv_centcom_access
+GLOBAL_LIST_EMPTY(priv_centcom_access)
 /proc/get_all_centcom_access()
 	RETURN_TYPE(/list)
-	if(!priv_centcom_access)
-		priv_centcom_access = get_access_ids(ACCESS_TYPE_CENTCOM)
+	if(!GLOB.priv_centcom_access)
+		GLOB.priv_centcom_access = get_access_ids(ACCESS_TYPE_CENTCOM)
 
-	return priv_centcom_access.Copy()
+	return GLOB.priv_centcom_access.Copy()
 
-var/global/list/priv_syndicate_access
+GLOBAL_LIST_EMPTY(priv_syndicate_access)
 /proc/get_all_syndicate_access()
 	RETURN_TYPE(/list)
-	if(!priv_syndicate_access)
-		priv_syndicate_access = get_access_ids(ACCESS_TYPE_SYNDICATE)
+	if(!GLOB.priv_syndicate_access)
+		GLOB.priv_syndicate_access = get_access_ids(ACCESS_TYPE_SYNDICATE)
 
-	return priv_syndicate_access.Copy()
+	return GLOB.priv_syndicate_access.Copy()
 
-var/global/list/priv_region_access
+GLOBAL_LIST_EMPTY(priv_region_access)
 /proc/get_region_accesses(code)
 	RETURN_TYPE(/list)
 	if(code == ACCESS_REGION_ALL)
 		return get_all_station_access()
 
-	if(!priv_region_access)
-		priv_region_access = list()
+	if(!GLOB.priv_region_access)
+		GLOB.priv_region_access = list()
 		for(var/datum/access/A in get_all_access_datums())
-			if(!priv_region_access["[A.region]"])
-				priv_region_access["[A.region]"] = list()
-			priv_region_access["[A.region]"] += A.id
+			if(!GLOB.priv_region_access["[A.region]"])
+				GLOB.priv_region_access["[A.region]"] = list()
+			GLOB.priv_region_access["[A.region]"] += A.id
 
-	var/list/region = priv_region_access["[code]"]
+	var/list/region = GLOB.priv_region_access["[code]"]
 	return region.Copy()
 
 /proc/get_region_accesses_name(code)
@@ -196,7 +196,7 @@ var/global/list/priv_region_access
 			return "Service"
 
 /proc/get_access_desc(id)
-	var/list/AS = priv_all_access_datums_id || get_all_access_datums_by_id()
+	var/list/AS = GLOB.priv_all_access_datums_id || get_all_access_datums_by_id()
 	var/datum/access/A = AS["[id]"]
 
 	return A ? A.desc : ""
@@ -205,7 +205,7 @@ var/global/list/priv_region_access
 	return get_access_desc(A)
 
 /proc/get_access_by_id(id)
-	var/list/AS = priv_all_access_datums_id || get_all_access_datums_by_id()
+	var/list/AS = GLOB.priv_all_access_datums_id || get_all_access_datums_by_id()
 	return AS[id]
 
 /proc/get_all_centcom_jobs()

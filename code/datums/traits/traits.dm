@@ -64,7 +64,7 @@
 	var/name
 	var/description
 	/// Should either only contain TRAIT_LEVEL_EXISTS or a set of the other TRAIT_LEVEL_* levels
-	var/list/levels = list(TRAIT_LEVEL_EXISTS)
+	var/list/levels = list(GLOB.TRAIT_LEVEL_EXISTS)
 	/// These trait types may not co-exist on the same mob/species
 	var/list/incompatible_traits
 	abstract_type = /singleton/trait

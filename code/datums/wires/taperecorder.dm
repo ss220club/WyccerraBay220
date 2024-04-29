@@ -2,10 +2,10 @@
 	holder_type = /obj/item/device/taperecorder
 	wire_count = 1
 	descriptions = list(
-		new /datum/wire_description(TAPE_WIRE_TOGGLE, "This wire runs to the play/stop toggle.", SKILL_TRAINED)
+		new /datum/wire_description(GLOB.TAPE_WIRE_TOGGLE, "This wire runs to the play/stop toggle.", SKILL_TRAINED)
 	)
 
-var/global/const/TAPE_WIRE_TOGGLE = 1
+GLOBAL_VAR_CONST(TAPE_WIRE_TOGGLE, 1)
 
 /datum/wires/taperecorder/UpdatePulsed(index)
 	var/obj/item/device/taperecorder/T = holder

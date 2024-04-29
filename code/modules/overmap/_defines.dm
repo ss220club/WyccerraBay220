@@ -1,7 +1,7 @@
 //How far from the edge of overmap zlevel could randomly placed objects spawn
 #define OVERMAP_EDGE 2
 //Dimension of overmap (squares 4 lyfe)
-var/global/list/map_sectors = list()
+GLOBAL_LIST_INIT(map_sectors, list())
 
 /area/overmap
 	name = "System Map"
@@ -48,7 +48,7 @@ var/global/list/map_sectors = list()
 		AddOverlays(I)
 
 //list used to track which zlevels are being 'moved' by the proc below
-var/global/list/moving_levels = list()
+GLOBAL_LIST_INIT(moving_levels, list())
 //Proc to 'move' stars in spess
 //yes it looks ugly, but it should only fire when state actually change.
 //null direction stops movement
@@ -64,8 +64,8 @@ var/global/list/moving_levels = list()
 	if(!direction)
 		gen_dir = null
 
-	if (moving_levels["[zlevel]"] != gen_dir)
-		moving_levels["[zlevel]"] = gen_dir
+	if (GLOB.moving_levels["[zlevel]"] != gen_dir)
+		GLOB.moving_levels["[zlevel]"] = gen_dir
 
 		var/list/spaceturfs = block(locate(1, 1, zlevel), locate(world.maxx, world.maxy, zlevel))
 		for(var/turf/space/T in spaceturfs)

@@ -1,6 +1,6 @@
 
 //This is a list of words which are ignored by the parser when comparing message contents for names. MUST BE IN LOWER CASE!
-var/global/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","alien","as")
+GLOBAL_LIST_INIT(adminhelp_ignored_words, list("unknown","the","a","an","of","monkey","alien","as"))
 
 /proc/generate_ahelp_key_words(mob/mob, msg)
 	var/list/surnames = list()
@@ -38,7 +38,7 @@ var/global/list/adminhelp_ignored_words = list("unknown","the","a","an","of","mo
 	for(var/original_word in msglist)
 		var/word = ckey(original_word)
 		if(word)
-			if(!(word in adminhelp_ignored_words))
+			if(!(word in GLOB.adminhelp_ignored_words))
 				if(word == "ai" && !ai_found)
 					ai_found = 1
 					msg += "<b>[original_word] <A HREF='?_src_=holder;adminchecklaws=\ref[mob]'>(CL)</A></b> "
@@ -123,7 +123,7 @@ var/global/list/adminhelp_ignored_words = list("unknown","the","a","an","of","mo
 		if((R_ADMIN|R_MOD) & X.holder.rights)
 			if(X.is_afk())
 				admin_number_afk++
-			if(X.get_preference_value(/datum/client_preference/staff/play_adminhelp_ping) == GLOB.PREF_HEAR)
+			if(X.get_preference_value(/datum/client_preference/staff/play_adminhelp_ping) == PREF_HEAR)
 				sound_to(X, sound('sound/ui/pm-notify.ogg', volume = 40))
 			to_chat(X, msg)
 	//show it to the person adminhelping too

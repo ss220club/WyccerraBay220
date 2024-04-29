@@ -117,7 +117,7 @@
 /area/rnd/toxins
 	name = "Second Deck - RND - Toxins Lab"
 	icon_state = "toxstorage"
-	req_access = list(access_tox_storage)
+	req_access = list(GLOB.access_tox_storage)
 	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 
 /area/rnd/toxins/storage
@@ -165,7 +165,7 @@
 /area/janitor
 	name = "Second Deck - Service - Custodial Closet"
 	icon_state = "janitor"
-	req_access = list(access_janitor)
+	req_access = list(GLOB.access_janitor)
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/hydroponics
@@ -176,19 +176,19 @@
 /area/crew_quarters/galley
 	name = "Second Deck - Service - Galley"
 	icon_state = "kitchen"
-	req_access = list(list(access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/galley/backroom
 	name = "Second Deck - Service - Galley Backroom"
 	icon_state = "kitchen"
-	req_access = list(list(access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/galley/freezer
 	name = "Second Deck - Service - Galley Cold Storage"
 	icon_state = "kitchen"
-	req_access = list(list(access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/cafe/upper
@@ -222,7 +222,7 @@
 	name = "Second Deck - Service - Actor"
 	icon_state = "Theatre"
 	sound_env = SMALL_SOFTFLOOR
-	req_access = list(access_actor)
+	req_access = list(GLOB.access_actor)
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/actor/stage
@@ -274,14 +274,14 @@
 
 /area/chapel/office
 	name = "Second Deck - Chapel - Chaplain's Office"
-	req_access = list(access_chapel_office)
+	req_access = list(GLOB.access_chapel_office)
 	color = COLOR_GRAY80
 	sound_env = SMALL_SOFTFLOOR
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/chapel/mortuary
 	name = "Second Deck - Chapel - Morgue"
-	req_access = list(access_chapel_office)
+	req_access = list(GLOB.access_chapel_office)
 	color = COLOR_GRAY80
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
@@ -303,7 +303,7 @@
 /area/medical/maintenance_equipstorage
 	name = "Second Deck - Infirmary - Lower Storage"
 	icon_state = "medbay4"
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 
 /area/medical/morgue
 	name = "Second Deck - Infirmary - Morgue"
@@ -313,14 +313,14 @@
 		'sound/ambience/ambimo2.ogg',
 		'sound/music/main.ogg'
 	)
-	req_access = list(access_morgue)
+	req_access = list(GLOB.access_morgue)
 
 // Virology
 
 /area/medical/virology
 	name = "Second Deck - Virology"
 	icon_state = "decontamination"
-	req_access = list(access_virology)
+	req_access = list(GLOB.access_virology)
 
 /area/medical/virology/atmos
 	name = "Second Deck - Virology - Atmospherics Storage"

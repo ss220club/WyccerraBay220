@@ -72,7 +72,7 @@
 
 	update_growth_stages()
 
-	uid = sequential_id(/datum/seed)
+	uid = GLOB.sequential_id(/datum/seed)
 
 /datum/seed/proc/get_trait(trait)
 	return traits["[trait]"]

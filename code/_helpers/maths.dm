@@ -200,7 +200,7 @@
 /proc/gaussian(mean=0, stddev=1)
 	var u1 = rand()
 	var u2 = rand()
-	var z0 = sqrt(-2 * log(u1)) * cos(2 * PI * u2)
+	var z0 = sqrt(-2 * log(u1)) * cos(2 * M_PI * u2)
 	return z0 * stddev + mean
 
 

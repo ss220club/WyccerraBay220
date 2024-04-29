@@ -39,7 +39,7 @@
 	if(!working_sound)
 		return
 	if(!sound_id)
-		sound_id = "[type]_[sequential_id(/obj/machinery/power/port_gen)]"
+		sound_id = "[type]_[GLOB.sequential_id(/obj/machinery/power/port_gen)]"
 	if(active && HasFuel() && !IsBroken())
 		var/volume = 10 + 15*power_output
 		if(!sound_token)

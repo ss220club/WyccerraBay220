@@ -1,4 +1,4 @@
-var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+GLOBAL_LIST_INIT(valid_bloodtypes, list("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"))
 
 /datum/preferences
 	var/species = SPECIES_HUMAN
@@ -88,7 +88,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	pref.facial_hair_style		= sanitize_inlist(pref.facial_hair_style, GLOB.facial_hair_styles_list, initial(pref.facial_hair_style))
 	pref.b_type			= sanitize_text(pref.b_type, initial(pref.b_type))
 
-	if(!pref.species || !(pref.species in playable_species))
+	if(!pref.species || !(pref.species in GLOB.playable_species))
 		pref.species = SPECIES_HUMAN
 	var/datum/species/mob_species = all_species[pref.species]
 
@@ -213,9 +213,9 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if ("mechanical")
 				alt_organs += "[organ_name == BP_BRAIN ? "Positronic" : "Synthetic"] [organ_name]"
 			if ("cyborg")
-				var/datum/robolimb/limb = basic_robolimb
-				if (pref.rlimb_data[name] && all_robolimbs[pref.rlimb_data[name]])
-					limb = all_robolimbs[pref.rlimb_data[name]]
+				var/datum/robolimb/limb = GLOB.basic_robolimb
+				if (pref.rlimb_data[name] && GLOB.all_robolimbs[pref.rlimb_data[name]])
+					limb = GLOB.all_robolimbs[pref.rlimb_data[name]]
 				alt_organs += "[limb.company] [organ_name] prosthesis"
 			if ("assisted")
 				switch (organ_name)
@@ -279,13 +279,13 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["blood_type"])
-		var/new_b_type = tgui_input_list(user, "Choose your character's blood-type", CHARACTER_PREFERENCE_INPUT_TITLE, valid_bloodtypes)
+		var/new_b_type = tgui_input_list(user, "Choose your character's blood-type", CHARACTER_PREFERENCE_INPUT_TITLE, GLOB.valid_bloodtypes)
 		if(new_b_type && CanUseTopic(user))
 			pref.b_type = new_b_type
 			return TOPIC_REFRESH
 
 	else if(href_list["show_species"])
-		var/choice = tgui_input_list(user, "Which species would you like to look at?", "Species", playable_species)
+		var/choice = tgui_input_list(user, "Which species would you like to look at?", "Species", GLOB.playable_species)
 		if(choice)
 			var/datum/species/current_species = all_species[choice]
 			show_browser(user, current_species.get_description(), "window=species;size=700x400")
@@ -294,7 +294,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	else if(href_list["set_species"])
 
 		var/list/species_to_pick = list()
-		for(var/species in playable_species)
+		for(var/species in GLOB.playable_species)
 			if(!GLOB.skip_allow_lists && !check_rights(R_ADMIN, 0) && config.usealienwhitelist)
 				var/datum/species/current_species = all_species[species]
 				if(!(current_species.spawn_flags & SPECIES_CAN_JOIN))
@@ -546,8 +546,8 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				var/datum/species/temp_species = pref.species ? all_species[pref.species] : all_species[SPECIES_HUMAN]
 				var/tmp_species = temp_species.get_bodytype(user)
 				var/list/usable_manufacturers = list()
-				for(var/company in chargen_robolimbs)
-					var/datum/robolimb/M = chargen_robolimbs[company]
+				for(var/company in GLOB.chargen_robolimbs)
+					var/datum/robolimb/M = GLOB.chargen_robolimbs[company]
 					if(tmp_species in M.species_cannot_use)
 						continue
 					if(length(M.restricted_to) && !(tmp_species in M.restricted_to))

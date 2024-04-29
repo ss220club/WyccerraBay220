@@ -1,7 +1,7 @@
 /datum/map/sierra/setup_map()
 	..()
 	system_name = generate_system_name()
-	minor_announcement = new(new_sound = sound(ANNOUNCER_COMMANDREPORT, volume = 45))
+	GLOB.minor_announcement = new(new_sound = sound(ANNOUNCER_COMMANDREPORT, volume = 45))
 
 /datum/map/sierra/map_info(victim)
 	to_chat(victim, "<h2>Информация о карте</h2>")
@@ -22,9 +22,9 @@
 	welcome_text += "Результаты сканирования показали следующие потенциальные объекты для исследования:<br />"
 
 	var/list/space_things = list()
-	var/obj/overmap/sierra = map_sectors["1"]
-	for(var/zlevel in map_sectors)
-		var/obj/overmap/visitable/O = map_sectors[zlevel]
+	var/obj/overmap/sierra = GLOB.map_sectors["1"]
+	for(var/zlevel in GLOB.map_sectors)
+		var/obj/overmap/visitable/O = GLOB.map_sectors[zlevel]
 		if(O.name == sierra.name)
 			continue
 		if(istype(O, /obj/overmap/visitable/ship/landable)) //Don't show shuttles
@@ -49,6 +49,6 @@
 	welcome_text += "<hr>"
 
 	post_comm_message("NSV Sierra Sensor Readings", welcome_text)
-	minor_announcement.Announce("Сканирование сектора завершено. Информация передана в базу данных консолей связи.")
+	GLOB.minor_announcement.Announce("Сканирование сектора завершено. Информация передана в базу данных консолей связи.")
 	sleep(2 SECONDS)
-	minor_announcement.Announce("Текущая система: [system_name]. Приятной смены на борту [station_name].", new_sound = 'sound/misc/notice2.ogg')
+	GLOB.minor_announcement.Announce("Текущая система: [system_name]. Приятной смены на борту [station_name].", new_sound = 'sound/misc/notice2.ogg')

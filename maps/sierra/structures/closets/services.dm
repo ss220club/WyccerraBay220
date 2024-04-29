@@ -75,7 +75,7 @@
 /obj/structure/closet/secure_closet/bar_sierra
 	name = "bar locker"
 	desc = "It's a storage unit for bar equipment."
-	req_access = list(access_bar)
+	req_access = list(GLOB.access_bar)
 	closet_appearance = /singleton/closet_appearance/cabinet/secure
 	anchored = TRUE
 	//open_sound = 'sound/machines/wooden_closet_open.ogg'
@@ -106,7 +106,7 @@
 /obj/structure/closet/secure_closet/chaplain_sierra
 	name = "chaplain's locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/chaplain
-	req_access = list(access_chapel_office)
+	req_access = list(GLOB.access_chapel_office)
 
 /obj/structure/closet/secure_closet/chaplain_sierra/WillContain()
 	return list(
@@ -125,7 +125,7 @@
 
 /obj/structure/closet/secure_closet/chief_steward_sierra
 	name = "chief steward's locker"
-	req_access = list(access_chief_steward)
+	req_access = list(GLOB.access_chief_steward)
 	closet_appearance = /singleton/closet_appearance/cabinet/secure
 
 /obj/structure/closet/secure_closet/chief_steward_sierra/WillContain()

@@ -23,8 +23,8 @@
 	skill_points = 20
 
 	access = list(
-		access_liaison, access_bridge, access_solgov_crew,
-		access_nanotrasen, access_commissary, access_torch_fax,
+		access_liaison, GLOB.access_bridge, access_solgov_crew,
+		access_nanotrasen, GLOB.access_commissary, access_torch_fax,
 		access_radio_comm, access_radio_serv
 	)
 

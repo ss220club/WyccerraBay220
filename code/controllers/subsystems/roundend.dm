@@ -49,7 +49,7 @@ SUBSYSTEM_DEF(roundend)
 /datum/controller/subsystem/roundend/fire(resumed, no_mc_tick)
 	var/time = round_duration_in_ticks / 600
 	if (max_length && time > max_length)
-		if (evacuation_controller.is_idle())
+		if (GLOB.evacuation_controller.is_idle())
 			init_autotransfer()
 		return
 	if (empty_check && time > empty_check)

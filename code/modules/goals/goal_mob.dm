@@ -32,7 +32,7 @@
 		return
 
 	var/pref_val = get_preference_value(/datum/client_preference/give_personal_goals)
-	var/prefs_no_personal_goals = pref_val == GLOB.PREF_NEVER || (pref_val == GLOB.PREF_NON_ANTAG && player_is_antag(mind))
+	var/prefs_no_personal_goals = pref_val == PREF_NEVER || (pref_val == PREF_NON_ANTAG && player_is_antag(mind))
 	to_chat(src, "<hr>")
 	if(LAZYLEN(mind.goals))
 		to_chat(src, SPAN_NOTICE("[FONT_LARGE("<b>This round, you have the following personal goals:</b>")]<br>[jointext(mind.summarize_goals(show_success, allow_modification, mind.current), "<br>")]"))
@@ -42,7 +42,7 @@
 		to_chat(src, SPAN_NOTICE(FONT_LARGE("<b>You have no personal goals this round.</b>")))
 	if(allow_modification && !prefs_no_personal_goals && LAZYLEN(mind.goals) < max_goals)
 		to_chat(src, SPAN_NOTICE("<a href='?src=\ref[mind];add_goal=1;add_goal_caller=\ref[mind.current]'>Add Random Goal</a>"))
-	if(dept && get_preference_value(/datum/client_preference/show_department_goals) == GLOB.PREF_SHOW)
+	if(dept && get_preference_value(/datum/client_preference/show_department_goals) == PREF_SHOW)
 		if(LAZYLEN(dept.goals))
 			to_chat(src, SPAN_NOTICE("<br><br>[FONT_LARGE("<b>This round, [dept.name] has the following departmental goals:</b>")]<br>[jointext(dept.summarize_goals(show_success), "<br>")]"))
 		else

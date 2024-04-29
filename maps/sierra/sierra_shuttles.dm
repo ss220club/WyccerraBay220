@@ -59,7 +59,7 @@ SIERRA_ESCAPE_POD(11)
 	waypoint_station = "nav_petrov_start"
 	waypoint_offsite = "nav_petrov_out"
 	logging_home_tag = "nav_petrov_start"
-	logging_access = access_petrov_helm
+	logging_access = GLOB.access_petrov_helm
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
 	warmup_time = 7 SECONDS
 
@@ -346,7 +346,7 @@ SIERRA_ESCAPE_POD(11)
 	range = 1
 	fuel_consumption = 4
 	logging_home_tag = "nav_hangar_calypso"
-	logging_access = access_expedition_shuttle_helm
+	logging_access = GLOB.access_expedition_shuttle_helm
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
 	warmup_time = 7 SECONDS
 
@@ -355,10 +355,10 @@ SIERRA_ESCAPE_POD(11)
 	for(var/area/A in shuttle_area)
 		for(var/obj/machinery/alarm/alarm in A)
 			if(alarm.req_access)
-				alarm.req_access = list(list(access_engine, access_field_eng))  // engineering OR field eng
+				alarm.req_access = list(list(GLOB.access_engine, GLOB.access_field_eng))  // engineering OR field eng
 		for(var/obj/machinery/power/apc/apc in A)
 			if(apc.req_access)
-				apc.req_access = list(list(access_engine, access_field_eng))  // engineering OR field eng
+				apc.req_access = list(list(GLOB.access_engine, GLOB.access_field_eng))  // engineering OR field eng
 
 /obj/shuttle_landmark/sierra/hangar/exploration_shuttle
 	name = "Charon Hangar"
@@ -401,7 +401,7 @@ SIERRA_ESCAPE_POD(11)
 	sound_landing = 'sound/effects/rocket_backwards.ogg'
 	fuel_consumption = 2
 	logging_home_tag = "nav_hangar_guppy"
-	logging_access = access_guppy_helm
+	logging_access = GLOB.access_guppy_helm
 	skill_needed = SKILL_UNSKILLED
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
 	warmup_time = 5 SECONDS
@@ -447,7 +447,7 @@ SIERRA_ESCAPE_POD(11)
 	sound_landing = 'sound/effects/rocket_backwards.ogg'
 	fuel_consumption = 3
 	logging_home_tag = "nav_hangar_crucian"
-	logging_access = access_guppy_helm
+	logging_access = GLOB.access_guppy_helm
 	skill_needed = SKILL_UNSKILLED
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/sierra
 	warmup_time = 6 SECONDS
@@ -484,7 +484,7 @@ SIERRA_ESCAPE_POD(11)
 
 //Makes the deck management program use hangar access
 /datum/nano_module/deck_management
-	default_access = list(access_hangar, access_cargo, access_heads)
+	default_access = list(GLOB.access_hangar, GLOB.access_cargo, GLOB.access_heads)
 
 // away transit
 

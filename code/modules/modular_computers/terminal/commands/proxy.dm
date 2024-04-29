@@ -32,7 +32,7 @@
 		var/nid = text2num(arguments[2])
 		if(!nid)
 			return "[name]: Error; invalid NID."
-		var/datum/extension/interactive/ntos/target = ntnet_global.get_os_by_nid(nid)
+		var/datum/extension/interactive/ntos/target = GLOB.ntnet_global.get_os_by_nid(nid)
 		if(target == terminal.computer)
 			return "[name]: Error: cannot setup a device to be its own proxy."
 		if(!terminal.computer.get_ntnet_status_incoming() || !target || !target.get_ntnet_status_incoming()) // Both devices only need a direct connection to NTNet to set up

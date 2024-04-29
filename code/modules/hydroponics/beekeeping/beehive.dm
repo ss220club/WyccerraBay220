@@ -291,11 +291,9 @@
 
 /obj/item/stack/wax/New()
 	..()
-	recipes = wax_recipes
+	recipes = GLOB.wax_recipes
 
-var/global/list/datum/stack_recipe/wax_recipes = list(
-	new/datum/stack_recipe/candle
-)
+GLOBAL_LIST_EMPTY(wax_recipes)
 
 /obj/item/bee_pack
 	name = "bee pack"

@@ -1,4 +1,4 @@
-var/global/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
+#define OVERMAP_SPEED_CONSTANT 1 SECOND
 #define SHIP_MOVE_RESOLUTION 0.00001
 #define MOVING(speed) abs(speed) >= min_speed
 #define SANITIZE_SPEED(speed) SIGN(speed) * clamp(abs(speed), 0, max_speed)
@@ -280,7 +280,7 @@ var/global/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 	..()
 	for(var/obj/machinery/computer/ship/S as anything in SSmachines.get_machinery_of_type(/obj/machinery/computer/ship))
 		S.attempt_hook_up(src)
-	for(var/datum/ship_engine/E in ship_engines)
+	for(var/datum/ship_engine/E in GLOB.ship_engines)
 		if(check_ownership(E.holder))
 			engines |= E
 
@@ -293,3 +293,6 @@ var/global/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 #undef MOVING
 #undef SANITIZE_SPEED
 #undef CHANGE_SPEED_BY
+#undef SENSOR_COEFFICENT
+#undef SHIP_MOVE_RESOLUTION
+#undef OVERMAP_SPEED_CONSTANT

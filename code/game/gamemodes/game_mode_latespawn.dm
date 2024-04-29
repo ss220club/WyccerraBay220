@@ -12,7 +12,7 @@
 /datum/game_mode/proc/shall_process_autoantag()
 	if(!round_autoantag || world.time < next_spawn)
 		return FALSE
-	if(evacuation_controller.is_evacuating() || evacuation_controller.has_evacuated())
+	if(GLOB.evacuation_controller.is_evacuating() || GLOB.evacuation_controller.has_evacuated())
 		return FALSE
 	if (SSroundend.vote_check && SSroundend.vote_cache < config.transfer_vote_block_antag_time)
 		return FALSE

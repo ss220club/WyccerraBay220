@@ -19,7 +19,7 @@
 
 	// The program is active and connected to one of the station's networks. Has a very small chance to trigger IDS alarm every tick.
 	if(HNM && HNM.current_network && (HNM.current_network in GLOB.using_map.station_networks) && prob((SKILL_MAX - operator_skill) * 0.05))
-		ntnet_global.add_log_with_ids_check("Unauthorised access detected to camera network [HNM.current_network].", computer.get_component(PART_NETWORK))
+		GLOB.ntnet_global.add_log_with_ids_check("Unauthorised access detected to camera network [HNM.current_network].", computer.get_component(PART_NETWORK))
 
 /datum/computer_file/program/camera_monitor/hacked/ui_interact(mob/user)
 	operator_skill = user.get_skill_value(SKILL_COMPUTER)
@@ -34,7 +34,7 @@
 
 // The hacked variant has access to all commonly used networks.
 /datum/nano_module/camera_monitor/hacked/modify_networks_list(list/networks)
-	networks.Add(list(list("tag" = NETWORK_MERCENARY, "has_access" = 1)))
-	networks.Add(list(list("tag" = NETWORK_ERT, "has_access" = 1)))
-	networks.Add(list(list("tag" = NETWORK_CRESCENT, "has_access" = 1)))
+	networks.Add(list(list("tag" = GLOB.NETWORK_MERCENARY, "has_access" = 1)))
+	networks.Add(list(list("tag" = GLOB.NETWORK_ERT, "has_access" = 1)))
+	networks.Add(list(list("tag" = GLOB.NETWORK_CRESCENT, "has_access" = 1)))
 	return networks

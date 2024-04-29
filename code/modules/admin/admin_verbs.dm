@@ -1,5 +1,5 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
-var/global/list/admin_verbs_default = list(
+GLOBAL_LIST_INIT(admin_verbs_default, list(
 	// [SIERRA-ADD] - sierra-tweaks,
 	/client/proc/getserverlog,
 	// [/SIERRA-ADD],
@@ -14,8 +14,8 @@ var/global/list/admin_verbs_default = list(
 //	/client/proc/check_antagonists,		//shows all antags,
 	/client/proc/cmd_check_new_players
 //	/client/proc/deadchat				//toggles deadchat on/off,
-	)
-var/global/list/admin_verbs_admin = list(
+	))
+GLOBAL_LIST_INIT(admin_verbs_admin, list(
 	/client/proc/invisimin,				//allows our mob to go invisible/visible,
 //	/datum/admins/proc/show_traitor_panel,	//interface which shows a mob's mind, -Removed due to rare practical use. Moved to debug verbs ~Errorage,
 	/datum/admins/proc/show_game_mode,  //Configuration window for the current game mode.,
@@ -104,18 +104,18 @@ var/global/list/admin_verbs_admin = list(
 	/datum/admins/proc/ToggleContinueVote,
 	/datum/admins/proc/togglemoderequirementchecks,
 	/client/proc/delete_crew_record
-)
-var/global/list/admin_verbs_ban = list(
+))
+GLOBAL_LIST_INIT(admin_verbs_ban, list(
 	/client/proc/unban_panel,
 	/client/proc/jobbans
-	)
-var/global/list/admin_verbs_sounds = list(
+	))
+GLOBAL_LIST_INIT(admin_verbs_sounds, list(
 	/client/proc/play_local_sound,
 	/client/proc/play_sound,
 	/client/proc/play_server_sound
-	)
+	))
 
-var/global/list/admin_verbs_fun = list(
+GLOBAL_LIST_INIT(admin_verbs_fun, list(
 	/client/proc/object_talk,
 	/datum/admins/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
@@ -133,9 +133,9 @@ var/global/list/admin_verbs_fun = list(
 	/datum/admins/proc/ai_hologram_set,
 	/client/proc/bombard_zlevel,
 	/client/proc/rename_shuttle
-	)
+	))
 
-var/global/list/admin_verbs_spawn = list(
+GLOBAL_LIST_INIT(admin_verbs_spawn, list(
 	/datum/admins/proc/spawn_fruit,
 	/datum/admins/proc/spawn_fluid_verb,
 	/datum/admins/proc/spawn_custom_item,
@@ -148,8 +148,8 @@ var/global/list/admin_verbs_spawn = list(
 	/client/proc/respawn_as_self,
 	// [/SIERRA-ADD] - CLIENT_VERBS ,
 	/datum/admins/proc/mass_debug_closet_icons
-	)
-var/global/list/admin_verbs_server = list(
+	))
+GLOBAL_LIST_INIT(admin_verbs_server, list(
 	/datum/admins/proc/capture_map_part,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
@@ -166,8 +166,8 @@ var/global/list/admin_verbs_server = list(
 	/datum/admins/proc/adjump,
 	/client/proc/toggle_random_events,
 	/client/proc/nanomapgen_DumpImage
-	)
-var/global/list/admin_verbs_debug = list(
+	))
+GLOBAL_LIST_INIT(admin_verbs_debug, list(
 	/datum/admins/proc/jump_to_fluid_source,
 	/datum/admins/proc/jump_to_fluid_active,
 	/client/proc/cmd_admin_list_open_jobs,
@@ -212,26 +212,26 @@ var/global/list/admin_verbs_debug = list(
 	/client/proc/toggle_planet_repopulating,
 	/client/proc/spawn_exoplanet,
 	/client/proc/profiler_start
-	)
+	))
 
-var/global/list/admin_verbs_paranoid_debug = list(
+GLOBAL_LIST_INIT(admin_verbs_paranoid_debug, list(
 	/client/proc/callproc,
 	/client/proc/callproc_target,
 	/client/proc/debug_controller
-	)
+	))
 
-var/global/list/admin_verbs_possess = list(
+GLOBAL_LIST_INIT(admin_verbs_possess, list(
 	/proc/possess,
 	/proc/release
-	)
-var/global/list/admin_verbs_permissions = list(
+	))
+GLOBAL_LIST_INIT(admin_verbs_permissions, list(
 	/client/proc/edit_admin_permissions
-	)
-var/global/list/admin_verbs_rejuv = list(
-	)
+	))
+GLOBAL_LIST_INIT(admin_verbs_rejuv, list(
+	))
 
 //verbs which can be hidden - needs work
-var/global/list/admin_verbs_hideable = list(
+GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	/client/proc/deadmin_self,
 //	/client/proc/deadchat,
 	/datum/admins/proc/show_traitor_panel,
@@ -291,8 +291,8 @@ var/global/list/admin_verbs_hideable = list(
 	/proc/possess,
 	/proc/release,
 	/client/proc/cmd_admin_notarget
-	)
-var/global/list/admin_verbs_mod = list(
+	))
+GLOBAL_LIST_INIT(admin_verbs_mod, list(
 	/client/proc/cmd_admin_pm_context,	// right-click adminPM interface,
 	/client/proc/cmd_admin_pm_panel,	// admin-pm list,
 	/client/proc/debug_variables,		// allows us to -see- the variables of any instance in the game.,
@@ -314,51 +314,51 @@ var/global/list/admin_verbs_mod = list(
 	/datum/admins/proc/sendFax,
 	/client/proc/check_fax_history,
 	/datum/admins/proc/paralyze_mob // right-click paralyze ,
-)
+))
 
 /client/proc/add_admin_verbs()
 	if(holder)
-		verbs += admin_verbs_default
+		verbs += GLOB.admin_verbs_default
 		if(holder.rights & R_BUILDMODE)		verbs += /client/proc/togglebuildmodeself
-		if(holder.rights & R_ADMIN)			verbs += admin_verbs_admin
-		if(holder.rights & R_BAN)			verbs += admin_verbs_ban
-		if(holder.rights & R_FUN)			verbs += admin_verbs_fun
-		if(holder.rights & R_SERVER)		verbs += admin_verbs_server
+		if(holder.rights & R_ADMIN)			verbs += GLOB.admin_verbs_admin
+		if(holder.rights & R_BAN)			verbs += GLOB.admin_verbs_ban
+		if(holder.rights & R_FUN)			verbs += GLOB.admin_verbs_fun
+		if(holder.rights & R_SERVER)		verbs += GLOB.admin_verbs_server
 		if(holder.rights & R_DEBUG)
-			verbs += admin_verbs_debug
+			verbs += GLOB.admin_verbs_debug
 			if(config.debugparanoid && !(holder.rights & R_ADMIN))
-				verbs.Remove(admin_verbs_paranoid_debug)			//Right now it's just callproc but we can easily add others later on.
-		if(holder.rights & R_POSSESS)		verbs += admin_verbs_possess
-		if(holder.rights & R_PERMISSIONS)	verbs += admin_verbs_permissions
+				verbs.Remove(GLOB.admin_verbs_paranoid_debug)			//Right now it's just callproc but we can easily add others later on.
+		if(holder.rights & R_POSSESS)		verbs += GLOB.admin_verbs_possess
+		if(holder.rights & R_PERMISSIONS)	verbs += GLOB.admin_verbs_permissions
 		if(holder.rights & R_STEALTH)		verbs += /client/proc/stealth
-		if(holder.rights & R_REJUVINATE)	verbs += admin_verbs_rejuv
-		if(holder.rights & R_SOUNDS)		verbs += admin_verbs_sounds
-		if(holder.rights & R_SPAWN)			verbs += admin_verbs_spawn
-		if(holder.rights & R_MOD)			verbs += admin_verbs_mod
+		if(holder.rights & R_REJUVINATE)	verbs += GLOB.admin_verbs_rejuv
+		if(holder.rights & R_SOUNDS)		verbs += GLOB.admin_verbs_sounds
+		if(holder.rights & R_SPAWN)			verbs += GLOB.admin_verbs_spawn
+		if(holder.rights & R_MOD)			verbs += GLOB.admin_verbs_mod
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(
-		admin_verbs_default,
+		GLOB.admin_verbs_default,
 		/client/proc/togglebuildmodeself,
-		admin_verbs_admin,
-		admin_verbs_ban,
-		admin_verbs_fun,
-		admin_verbs_server,
-		admin_verbs_debug,
-		admin_verbs_possess,
-		admin_verbs_permissions,
+		GLOB.admin_verbs_admin,
+		GLOB.admin_verbs_ban,
+		GLOB.admin_verbs_fun,
+		GLOB.admin_verbs_server,
+		GLOB.admin_verbs_debug,
+		GLOB.admin_verbs_possess,
+		GLOB.admin_verbs_permissions,
 		/client/proc/stealth,
-		admin_verbs_rejuv,
-		admin_verbs_sounds,
-		admin_verbs_spawn,
-		debug_verbs
+		GLOB.admin_verbs_rejuv,
+		GLOB.admin_verbs_sounds,
+		GLOB.admin_verbs_spawn,
+		GLOB.debug_verbs
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
 	set name = "Adminverbs - Hide Most"
 	set category = "Admin"
 
-	verbs.Remove(/client/proc/hide_most_verbs, admin_verbs_hideable)
+	verbs.Remove(/client/proc/hide_most_verbs, GLOB.admin_verbs_hideable)
 	verbs += /client/proc/show_verbs
 
 	to_chat(src, SPAN_CLASS("interface", "Most of your adminverbs have been hidden."))
@@ -496,7 +496,7 @@ var/global/list/admin_verbs_mod = list(
 		return
 	if(!warned_ckey || !istext(warned_ckey))
 		return
-	if(warned_ckey in admin_datums)
+	if(warned_ckey in GLOB.admin_datums)
 		to_chat(usr, SPAN_COLOR("red", "Error: warn(): You can't warn admins."))
 		return
 	var/datum/preferences/D

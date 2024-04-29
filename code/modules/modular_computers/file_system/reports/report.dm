@@ -108,7 +108,7 @@
 		field.value = value
 	if(required)
 		field.required = 1
-	field.ID = sequential_id(type)
+	field.ID = GLOB.sequential_id(type)
 	fields += field
 	return field
 

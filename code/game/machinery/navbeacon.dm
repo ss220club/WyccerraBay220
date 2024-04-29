@@ -1,4 +1,4 @@
-var/global/list/navbeacons = list()
+GLOBAL_LIST_INIT(navbeacons, list())
 
 /obj/machinery/navbeacon
 	icon = 'icons/obj/structures/nav_beacon.dmi'
@@ -14,7 +14,7 @@ var/global/list/navbeacons = list()
 	var/location = ""	// location response text
 	var/list/codes = list()		// assoc. list of transponder codes
 
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 
 /obj/machinery/navbeacon/New()
 	..()
@@ -22,7 +22,7 @@ var/global/list/navbeacons = list()
 	var/turf/T = loc
 	hide(!T.is_plating())
 
-	navbeacons += src
+	GLOB.navbeacons += src
 
 /obj/machinery/navbeacon/hide(intact)
 	set_invisibility(intact ? INVISIBILITY_ABSTRACT : 0)
@@ -164,7 +164,7 @@ Transponder Codes:<UL>"}
 				updateDialog()
 
 /obj/machinery/navbeacon/Destroy()
-	navbeacons.Remove(src)
+	GLOB.navbeacons.Remove(src)
 	..()
 
 // Patrol beacon types below. So many.

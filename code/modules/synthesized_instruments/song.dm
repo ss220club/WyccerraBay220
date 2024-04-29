@@ -62,7 +62,7 @@
 	if(available_channels <= 0) //Ignore requests for new channels if we go over limit
 		return
 	available_channels -= 1
-	src.sound_id = "[type]_[sequential_id(type)]"
+	src.sound_id = "[type]_[GLOB.sequential_id(type)]"
 
 
 	var/sound/sound_copy = sound(what)

@@ -36,7 +36,7 @@
 	name = "DoS Traffic Generator"
 
 /datum/nano_module/program/computer_dos/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/topic_state/state = GLOB.default_state)
-	if(!ntnet_global)
+	if(!GLOB.ntnet_global)
 		return
 	var/datum/computer_file/program/ntnet_dos/PRG = program
 	var/list/data = list()
@@ -63,7 +63,7 @@
 		data["dos_strings"] = strings
 	else
 		var/list/relays[0]
-		for(var/obj/machinery/ntnet_relay/R in ntnet_global.relays)
+		for(var/obj/machinery/ntnet_relay/R in GLOB.ntnet_global.relays)
 			relays.Add(R.uid)
 		data["relays"] = relays
 		data["focus"] = PRG.target ? PRG.target.uid : null
@@ -80,7 +80,7 @@
 	if(..())
 		return TOPIC_HANDLED
 	if(href_list["PRG_target_relay"])
-		for(var/obj/machinery/ntnet_relay/R in ntnet_global.relays)
+		for(var/obj/machinery/ntnet_relay/R in GLOB.ntnet_global.relays)
 			if("[R.uid]" == href_list["PRG_target_relay"])
 				target = R
 		return TOPIC_HANDLED
@@ -102,10 +102,10 @@
 		var/extra_to_show = 2 * max(operator_skill - SKILL_TRAINED, 0)
 		if(extra_to_show)
 			for(var/i = 1, i <= extra_to_show, i++)
-				var/nid = pick(ntnet_global.registered_nids)
-				var/datum/extension/interactive/ntos/os = ntnet_global.registered_nids[nid]
+				var/nid = pick(GLOB.ntnet_global.registered_nids)
+				var/datum/extension/interactive/ntos/os = GLOB.ntnet_global.registered_nids[nid]
 				if(os.get_ntnet_status())
 					sources_to_show |= os.get_network_tag()
 
-		ntnet_global.add_log_with_ids_check("Excess traffic flood targeting Quantum Relay ([target.uid]) detected from [length(sources_to_show)] device\s: [english_list(sources_to_show)]")
+		GLOB.ntnet_global.add_log_with_ids_check("Excess traffic flood targeting Quantum Relay ([target.uid]) detected from [length(sources_to_show)] device\s: [english_list(sources_to_show)]")
 		return TRUE

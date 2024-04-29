@@ -14,7 +14,7 @@
 #define TRACKS_CRUSTIFY_TIME   50
 
 // color-dir-dry
-var/global/list/image/fluidtrack_cache=list()
+GLOBAL_LIST_INIT(fluidtrack_cache, list())
 
 /datum/fluidtrack
 	var/direction=0

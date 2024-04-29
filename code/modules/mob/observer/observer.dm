@@ -1,7 +1,7 @@
-var/global/const/GHOST_IMAGE_NONE = 0
-var/global/const/GHOST_IMAGE_DARKNESS = 1
-var/global/const/GHOST_IMAGE_SIGHTLESS = 2
-var/global/const/GHOST_IMAGE_ALL = ~GHOST_IMAGE_NONE
+GLOBAL_VAR_CONST(GHOST_IMAGE_NONE, 0)
+GLOBAL_VAR_CONST(GHOST_IMAGE_DARKNESS, 1)
+GLOBAL_VAR_CONST(GHOST_IMAGE_SIGHTLESS, 2)
+GLOBAL_VAR_CONST(GHOST_IMAGE_ALL, ~GHOST_IMAGE_NONE)
 
 /mob/observer
 	density = FALSE
@@ -14,7 +14,7 @@ var/global/const/GHOST_IMAGE_ALL = ~GHOST_IMAGE_NONE
 	stat = DEAD
 	status_flags = GODMODE
 	shift_to_open_context_menu = FALSE
-	var/ghost_image_flag = GHOST_IMAGE_DARKNESS
+	var/ghost_image_flag = GLOB.GHOST_IMAGE_DARKNESS
 	var/image/ghost_image = null //this mobs ghost image, for deleting and stuff
 
 /mob/observer/Initialize(mapload)
@@ -24,16 +24,16 @@ var/global/const/GHOST_IMAGE_ALL = ~GHOST_IMAGE_NONE
 	ghost_image.layer = layer
 	ghost_image.appearance = src
 	ghost_image.appearance_flags = DEFAULT_APPEARANCE_FLAGS | RESET_ALPHA
-	if(ghost_image_flag & GHOST_IMAGE_DARKNESS)
-		ghost_darkness_images |= ghost_image //so ghosts can see the eye when they disable darkness
-	if(ghost_image_flag & GHOST_IMAGE_SIGHTLESS)
-		ghost_sightless_images |= ghost_image //so ghosts can see the eye when they disable ghost sight
+	if(ghost_image_flag & GLOB.GHOST_IMAGE_DARKNESS)
+		GLOB.ghost_darkness_images |= ghost_image //so ghosts can see the eye when they disable darkness
+	if(ghost_image_flag & GLOB.GHOST_IMAGE_SIGHTLESS)
+		GLOB.ghost_sightless_images |= ghost_image //so ghosts can see the eye when they disable ghost sight
 	SSghost_images.queue_global_image_update()
 
 /mob/observer/Destroy()
 	if (ghost_image)
-		ghost_darkness_images -= ghost_image
-		ghost_sightless_images -= ghost_image
+		GLOB.ghost_darkness_images -= ghost_image
+		GLOB.ghost_sightless_images -= ghost_image
 		qdel(ghost_image)
 		ghost_image = null
 		SSghost_images.queue_global_image_update()

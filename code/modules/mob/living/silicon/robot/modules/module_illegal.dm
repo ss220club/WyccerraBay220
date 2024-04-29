@@ -16,7 +16,7 @@
 	)
 	var/id
 	access = list(
-		access_syndicate
+		GLOB.access_syndicate
 	)
 	use_map_synth_access = FALSE
 

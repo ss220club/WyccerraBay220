@@ -1,5 +1,5 @@
 var/global/datum/configuration/config
-var/global/diary
+GLOBAL_VAR(diary)
 
 
 GLOBAL_VAR(log_directory)

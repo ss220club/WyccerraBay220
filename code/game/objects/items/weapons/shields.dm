@@ -178,7 +178,7 @@
 
 /obj/item/shield/energy/Initialize()
 	. = ..()
-	sound_id = "[sequential_id(/obj/item/shield/energy)]"
+	sound_id = "[GLOB.sequential_id(/obj/item/shield/energy)]"
 	sparks = new
 
 

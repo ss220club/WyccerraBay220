@@ -5,7 +5,7 @@
 		"Science" = TRUE,
 		"Exploration" = TRUE
 	)
-	networks = list(NETWORK_RESEARCH)
+	networks = list(GLOB.NETWORK_RESEARCH)
 	sprites = list(
 		"Drone"  = "drone-science",
 		"Eyebot" = "eyebot-science"
@@ -51,14 +51,14 @@
 		/obj/item/gun/energy/gun
 	)
 	access = list(
-		access_emergency_storage,
-		access_eva,
-		access_expedition_shuttle,
-		access_explorer,
-		access_guppy,
-		access_hangar,
-		access_petrov,
-		access_research,
+		GLOB.access_emergency_storage,
+		GLOB.access_eva,
+		GLOB.access_expedition_shuttle,
+		GLOB.access_explorer,
+		GLOB.access_guppy,
+		GLOB.access_hangar,
+		GLOB.access_petrov,
+		GLOB.access_research,
 		access_radio_exp,
 		access_radio_sci
 	)

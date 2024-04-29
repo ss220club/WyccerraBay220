@@ -31,11 +31,6 @@ datum. For example:
 addTimer(CALLBACK(myMob, proc_ref(drop_l_hand())), 10 SECONDS)
 */
 
-var/global/const/GLOBAL_PROC = FALSE
-
-var/global/const/Callback = /datum/callback
-
-
 /datum/callback
 	//var/const/Global = FALSE //515 - GLOBAL_PROC becomes Callback::Global
 	var/identity

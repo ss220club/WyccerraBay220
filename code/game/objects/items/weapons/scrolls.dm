@@ -41,8 +41,8 @@
 	return
 
 /obj/item/teleportation_scroll/proc/teleportscroll(mob/user)
-	var/area/thearea = input(user, "Area to jump to", "BOOYEA") as null|anything in wizteleportlocs
-	thearea = thearea ? wizteleportlocs[thearea] : thearea
+	var/area/thearea = input(user, "Area to jump to", "BOOYEA") as null|anything in GLOB.wizteleportlocs
+	thearea = thearea ? GLOB.wizteleportlocs[thearea] : thearea
 
 	if (!thearea || CanUseTopic(user) != STATUS_INTERACTIVE)
 		return

@@ -1,5 +1,5 @@
 //STRIKE TEAMS
-var/global/const/commandos_possible = 6 //if more Commandos are needed in the future
+GLOBAL_VAR_CONST(commandos_possible, 6) //if more Commandos are needed in the future
 
 /client/proc/strike_team()
 	set category = "Fun"

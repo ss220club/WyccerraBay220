@@ -1,6 +1,6 @@
-var/global/datum/announcement/priority/priority_announcement = new(do_log = 0)
-var/global/datum/announcement/priority/command/command_announcement = new(do_log = 0, do_newscast = 1)
-var/global/datum/announcement/minor/minor_announcement = new(new_sound = ANNOUNCER_COMMANDREPORT,)
+GLOBAL_DATUM_INIT(priority_announcement, /datum/announcement/priority/command, new(do_log = 0, do_newscast = 1))
+GLOBAL_DATUM_INIT(command_announcement, /datum/announcement/minor, new(new_sound = ANNOUNCER_COMMANDREPORT,))
+GLOBAL_DATUM_INIT(minor_announcement, /datum/announcement/priority, new(do_log = 0))
 
 /datum/announcement
 	var/title = "Attention"
@@ -43,7 +43,7 @@ var/global/datum/announcement/minor/minor_announcement = new(new_sound = ANNOUNC
 
 	for(var/mob/M in GLOB.player_list)
 		if(M.client && (get_z(M) in (zlevels | GLOB.using_map.admin_levels)) && !istype(M,/mob/new_player) && !isdeaf(M))
-			if(message_sound && M.client.get_preference_value(/datum/client_preference/play_announcement_sfx) == GLOB.PREF_YES)
+			if(message_sound && M.client.get_preference_value(/datum/client_preference/play_announcement_sfx) == PREF_YES)
 				sound_to(M, message_sound)
 
 	if(do_newscast)
@@ -89,7 +89,7 @@ var/global/datum/announcement/minor/minor_announcement = new(new_sound = ANNOUNC
 	if (!message || !islist(zlevels))
 		return
 	var/datum/feed_network/network
-	for (var/datum/feed_network/candidate as anything in news_network)
+	for (var/datum/feed_network/candidate as anything in GLOB.news_network)
 		if (zlevels[1] in candidate.z_levels)
 			network = candidate
 			break
@@ -122,7 +122,7 @@ var/global/datum/announcement/minor/minor_announcement = new(new_sound = ANNOUNC
 	GLOB.using_map.level_x_biohazard_announcement(7)
 
 /proc/ion_storm_announcement(list/affecting_z)
-	command_announcement.Announce("It has come to our attention that the [station_name()] passed through an ion storm.  Please monitor all electronic equipment for malfunctions.", "Anomaly Alert", zlevels = affecting_z)
+	GLOB.command_announcement.Announce("It has come to our attention that the [station_name()] passed through an ion storm.  Please monitor all electronic equipment for malfunctions.", "Anomaly Alert", zlevels = affecting_z)
 
 /proc/AnnounceArrival(mob/living/carbon/human/character, datum/job/job, join_message)
 	if(!istype(job) || !job.announced)

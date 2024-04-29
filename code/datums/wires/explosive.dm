@@ -1,19 +1,19 @@
 /datum/wires/explosive
 	wire_count = 1
 
-var/global/const/WIRE_EXPLODE = 1
+GLOBAL_VAR_CONST(WIRE_EXPLODE, 1)
 
 /datum/wires/explosive/proc/explode()
 	return
 
 /datum/wires/explosive/UpdatePulsed(index)
 	switch(index)
-		if(WIRE_EXPLODE)
+		if(GLOB.WIRE_EXPLODE)
 			explode()
 
 /datum/wires/explosive/UpdateCut(index, mended)
 	switch(index)
-		if(WIRE_EXPLODE)
+		if(GLOB.WIRE_EXPLODE)
 			if(!mended)
 				explode()
 

@@ -49,7 +49,7 @@
 		if ("white")
 			skin_material = MATERIAL_SKIN_FUR_WHITE
 	if (name == "mouse")
-		name = "[name] ([sequential_id(/mob/living/simple_animal/passive/mouse)])"
+		name = "[name] ([GLOB.sequential_id(/mob/living/simple_animal/passive/mouse)])"
 		desc = "It's a small [body_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
 	real_name = name
 	icon_state = "mouse_[body_color]"

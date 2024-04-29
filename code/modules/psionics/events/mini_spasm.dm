@@ -10,7 +10,7 @@
 		)
 
 /datum/event/minispasm/announce()
-	priority_announcement.Announce( \
+	GLOB.priority_announcement.Announce( \
 		"PRIORITY ALERT: SIGMA-[rand(50,80)] PSIONIC SIGNAL LOCAL TRAMISSION DETECTED (97% MATCH, NONVARIANT) \
 		(SIGNAL SOURCE TRIANGULATED ADJACENT LOCAL SITE): All personnel are advised to avoid \
 		exposure to active audio transmission equipment including radio headsets and intercoms \
@@ -61,7 +61,7 @@
 	victim.psi.check_latency_trigger(100, "a psionic scream", redactive = TRUE)
 
 /datum/event/minispasm/end()
-	priority_announcement.Announce( \
+	GLOB.priority_announcement.Announce( \
 		"PRIORITY ALERT: SIGNAL BROADCAST HAS CEASED. Personnel are cleared to resume use of non-hardened radio transmission equipment. Have a nice day.", \
 		"Cuchulain Sensor Array Automated Message" \
 		)

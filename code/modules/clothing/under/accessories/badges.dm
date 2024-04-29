@@ -79,7 +79,7 @@
 	icon_state = "holobadge"
 	item_state = "holobadge"
 	badge_string = "Security"
-	var/badge_access = access_security
+	var/badge_access = GLOB.access_security
 	var/badge_number
 	var/emagged
 
@@ -90,7 +90,7 @@
 	icon_state = "ntholobadge"
 	color = null
 	badge_string = "Corporate Security"
-	badge_access = access_research
+	badge_access = GLOB.access_research
 
 
 /obj/item/clothing/accessory/badge/holo/cord
@@ -105,7 +105,7 @@
 
 /obj/item/clothing/accessory/badge/holo/set_name(new_name)
 	..()
-	badge_number = random_id(type, 1000, 9999)
+	badge_number = GLOB.random_id(type, 1000, 9999)
 	name = "[name] ([badge_number])"
 
 

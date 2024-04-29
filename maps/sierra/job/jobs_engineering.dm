@@ -30,9 +30,9 @@
 	                    SKILL_ATMOS        = SKILL_MAX,
 	                    SKILL_ENGINES      = SKILL_MAX)
 
-	access = list(	access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-			        access_eva, access_tech_storage, access_atmospherics, access_janitor, access_construction,
-			        access_tcomsat, access_seneng, access_hangar, access_network)
+	access = list(	GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+			        GLOB.access_eva, GLOB.access_tech_storage, GLOB.access_atmospherics, GLOB.access_janitor, GLOB.access_construction,
+			        GLOB.access_tcomsat, GLOB.access_seneng, GLOB.access_hangar, GLOB.access_network)
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
@@ -91,9 +91,9 @@
 	                    SKILL_ENGINES      = SKILL_MAX)
 
 
-	access = list(	access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks,
-			       	access_eva, access_tech_storage, access_atmospherics, access_janitor,
-			        access_construction, access_hangar, access_emergency_storage)
+	access = list(	GLOB.access_engine, GLOB.access_engine_equip, GLOB.access_maint_tunnels, GLOB.access_external_airlocks,
+			       	GLOB.access_eva, GLOB.access_tech_storage, GLOB.access_atmospherics, GLOB.access_janitor,
+			        GLOB.access_construction, GLOB.access_hangar, GLOB.access_emergency_storage)
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
@@ -140,9 +140,9 @@
 	                    SKILL_ATMOS        = SKILL_MAX,
 	                    SKILL_ENGINES      = SKILL_MAX)
 
-	access = list(		access_engine, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-			            access_eva, access_janitor, access_construction,
-			            access_hangar)
+	access = list(		GLOB.access_engine, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+			            GLOB.access_eva, GLOB.access_janitor, GLOB.access_construction,
+			            GLOB.access_hangar)
 
 
 	software_on_spawn = list(/datum/computer_file/program/power_monitor,
@@ -184,8 +184,8 @@
 	max_skill = list(   SKILL_ELECTRICAL   = SKILL_MAX,
 	                    SKILL_COMPUTER	   = SKILL_MAX)
 
-	access = list(	access_maint_tunnels, access_network, access_network_admin, access_external_airlocks,
-			       	access_tech_storage, access_emergency_storage, access_tcomsat)
+	access = list(	GLOB.access_maint_tunnels, GLOB.access_network, GLOB.access_network_admin, GLOB.access_external_airlocks,
+			       	GLOB.access_tech_storage, GLOB.access_emergency_storage, GLOB.access_tcomsat)
 
 
 /datum/job/infsys/get_description_blurb()

@@ -52,7 +52,7 @@
 /datum/donator_info/proc/get_decorated_message(client/C, message)
 	if(!SScharacter_setup.initialized || isnull(donation_type))
 		return message
-	if (C.get_preference_value(/datum/client_preference/ooc_donation_color) != GLOB.PREF_SHOW)
+	if (C.get_preference_value(/datum/client_preference/ooc_donation_color) != PREF_SHOW)
 		return message
 	return "<span class='[donation_tier_to_css_class(donation_type)]'>[message]</span>"
 

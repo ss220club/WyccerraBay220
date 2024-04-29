@@ -1,6 +1,6 @@
-var/global/const/TELEBEACON_WIRE_POWER     = 1
-var/global/const/TELEBEACON_WIRE_RELAY     = 2
-var/global/const/TELEBEACON_WIRE_SIGNALLER = 4
+#define TELEBEACON_WIRE_POWER FLAG(1)
+#define TELEBEACON_WIRE_RELAY FLAG(2)
+#define TELEBEACON_WIRE_SIGNALLER FLAG(3)
 
 
 // Targetable beacon used by teleporters
@@ -313,3 +313,7 @@ var/global/const/TELEBEACON_WIRE_SIGNALLER = 4
 			if (IsIndexCut(TELEBEACON_WIRE_POWER))
 				return
 			tele_beacon.set_power_cut(FALSE)
+
+#undef TELEBEACON_WIRE_POWER
+#undef TELEBEACON_WIRE_RELAY
+#undef TELEBEACON_WIRE_SIGNALLER

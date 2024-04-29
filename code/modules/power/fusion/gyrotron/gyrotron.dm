@@ -5,7 +5,7 @@
 	icon = 'icons/obj/machines/power/gyrotron.dmi'
 	desc = "A heavy-duty, highly configurable industrial gyrotron suited for powering fusion reactors."
 	icon_state = "emitter"
-	req_lock_access = list(access_engine)
+	req_lock_access = list(GLOB.access_engine)
 	use_power = POWER_USE_IDLE
 	active_power_usage = GYRO_POWER
 

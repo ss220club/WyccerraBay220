@@ -1,4 +1,4 @@
-var/global/datum/species/shapeshifter/promethean/prometheans
+GLOBAL_DATUM(prometheans, /datum/species/shapeshifter/promethean)
 
 // Species definition follows.
 /datum/species/shapeshifter/promethean
@@ -72,11 +72,11 @@ var/global/datum/species/shapeshifter/promethean/prometheans
 
 	var/heal_rate = 5 // Temp. Regen per tick.
 
-	traits = list(/singleton/trait/malus/water = TRAIT_LEVEL_MODERATE)
+	traits = list(/singleton/trait/malus/water = GLOB.TRAIT_LEVEL_MODERATE)
 
 /datum/species/shapeshifter/promethean/New()
 	..()
-	prometheans = src
+	GLOB.prometheans = src
 
 /datum/species/shapeshifter/promethean/hug(mob/living/carbon/human/H,mob/living/target)
 	H.visible_message(SPAN_NOTICE("\The [H] glomps [target] to make [target.p_them()] feel better!"), \
@@ -144,10 +144,10 @@ var/global/datum/species/shapeshifter/promethean/prometheans
 
 /datum/species/shapeshifter/promethean/get_additional_examine_text(mob/living/carbon/human/H)
 
-	if(!stored_shock_by_ref["\ref[H]"])
+	if(!GLOB.stored_shock_by_ref["\ref[H]"])
 		return
 
-	switch(stored_shock_by_ref["\ref[H]"])
+	switch(GLOB.stored_shock_by_ref["\ref[H]"])
 		if(1 to 10)
 			return "[H.p_They()] [H.p_are()] flickering gently with a little electrical activity."
 		if(11 to 20)

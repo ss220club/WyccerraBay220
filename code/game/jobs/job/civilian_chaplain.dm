@@ -7,7 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
-	access = list(access_morgue, access_chapel_office, access_crematorium, access_maint_tunnels)
+	access = list(GLOB.access_morgue, GLOB.access_chapel_office, GLOB.access_crematorium, GLOB.access_maint_tunnels)
 	outfit_type = /singleton/hierarchy/outfit/job/chaplain
 
 /datum/job/chaplain/equip(mob/living/carbon/human/H, alt_title, ask_questions = TRUE)

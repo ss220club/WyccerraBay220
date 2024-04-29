@@ -9,7 +9,7 @@
 	)
 
 /obj/machinery/vending/medical/sierra
-	req_access = list(access_medical)
+	req_access = list(GLOB.access_medical)
 
 /obj/machinery/vending/security
 	products = list(/obj/item/handcuffs = 8,/obj/item/grenade/flashbang = 8,/obj/item/grenade/chem_grenade/teargas = 4,/obj/item/device/flash = 5,
@@ -180,7 +180,7 @@
 	desc = "All what you need to build a new microwave or teleporter."
 	icon_state = "robotics"
 	icon_deny = "robotics-deny"
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	products = list(
 		/obj/item/airlock_electronics = 4,/obj/item/airlock_electronics/secure = 2,
 		/obj/item/module/power_control = 4,
@@ -207,7 +207,7 @@
 
 /obj/machinery/vending/parts/research
 	name = "Wolfor-Spares Vendor"
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 	products = list(
 		/obj/item/cell/standard = 5,
 		/obj/item/stock_parts/capacitor = 8,
@@ -245,7 +245,7 @@
 	density = FALSE
 	icon = 'maps/sierra/icons/obj/vending.dmi'
 	icon_state = "thundervendor"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 
 /obj/machinery/vending/armoryvend/kinetic
 	name = "WardenTech Kinetic"
@@ -360,12 +360,12 @@
 		/obj/item/reagent_containers/food/drinks/glass2/coconut = 3,
 		/obj/item/reagent_containers/food/drinks/glass2/coffeecup/diona = 1
 	)
-	req_access = list(access_bar)
+	req_access = list(GLOB.access_bar)
 
 /obj/machinery/vending/crates
 	name = "\improper Crate-o-Mat"
 	desc = "Vending machine that dispense crates for all your powerplay needs."
-	req_access = list(access_cargo)
+	req_access = list(GLOB.access_cargo)
 	base_type = /obj/machinery/vending/crates
 	icon = 'maps/sierra/icons/obj/vending.dmi'
 	icon_state = "crates"

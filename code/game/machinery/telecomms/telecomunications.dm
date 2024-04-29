@@ -13,7 +13,7 @@
 	Look at radio.dm for the prequel to this code.
 */
 
-var/global/list/obj/machinery/telecomms/telecomms_list = list()
+GLOBAL_LIST_EMPTY(telecomms_list)
 
 /obj/machinery/telecomms
 	var/list/links = list() // list of machines this machine is linked to
@@ -116,7 +116,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 
 /obj/machinery/telecomms/New()
-	telecomms_list += src
+	GLOB.telecomms_list += src
 	..()
 
 /obj/machinery/telecomms/Initialize()
@@ -136,14 +136,14 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			for(var/obj/machinery/telecomms/T in orange(20, src))
 				add_link(T)
 		else
-			for(var/obj/machinery/telecomms/T in telecomms_list)
+			for(var/obj/machinery/telecomms/T in GLOB.telecomms_list)
 				add_link(T)
 	update_power()
 	update_icon()
 
 /obj/machinery/telecomms/Destroy()
-	telecomms_list -= src
-	for(var/obj/machinery/telecomms/comm in telecomms_list)
+	GLOB.telecomms_list -= src
+	for(var/obj/machinery/telecomms/comm in GLOB.telecomms_list)
 		comm.links -= src
 	links = list()
 	..()
@@ -581,7 +581,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	for(var/list/rule in channel_tags)
 		if(rule[1] == freq)
 			return list(rule[2], rule[3])
-	return list(format_frequency(freq), channel_color_presets["Global Green"])
+	return list(format_frequency(freq), GLOB.channel_color_presets["Global Green"])
 
 
 // Simple log entry datum

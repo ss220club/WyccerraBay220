@@ -55,7 +55,7 @@
 	density = TRUE
 	opacity = 0
 	anchored = FALSE
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	health_max = 100
 	var/active = 0
 	var/malfunction = 0 //Malfunction causes parts of the shield to slowly dissapate

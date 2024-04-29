@@ -37,14 +37,14 @@
 	)
 
 	access_modify_region = list(
-		ACCESS_REGION_SECURITY = list(access_change_ids),
-		ACCESS_REGION_MEDBAY = list(access_change_ids),
-		ACCESS_REGION_RESEARCH = list(access_change_ids),
-		ACCESS_REGION_ENGINEERING = list(access_change_ids),
-		ACCESS_REGION_COMMAND = list(access_change_ids),
-		ACCESS_REGION_GENERAL = list(access_change_ids),
-		ACCESS_REGION_SUPPLY = list(access_change_ids),
-		ACCESS_REGION_SERVICE = list(access_change_ids)
+		ACCESS_REGION_SECURITY = list(GLOB.access_change_ids),
+		ACCESS_REGION_MEDBAY = list(GLOB.access_change_ids),
+		ACCESS_REGION_RESEARCH = list(GLOB.access_change_ids),
+		ACCESS_REGION_ENGINEERING = list(GLOB.access_change_ids),
+		ACCESS_REGION_COMMAND = list(GLOB.access_change_ids),
+		ACCESS_REGION_GENERAL = list(GLOB.access_change_ids),
+		ACCESS_REGION_SUPPLY = list(GLOB.access_change_ids),
+		ACCESS_REGION_SERVICE = list(GLOB.access_change_ids)
 	)
 
 /datum/map/torch/setup_job_lists()

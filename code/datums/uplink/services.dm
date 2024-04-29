@@ -78,7 +78,7 @@
 	if(state != AWAITING_ACTIVATION)
 		to_chat(user, SPAN_WARNING("\The [src] won't activate again."))
 		return
-	var/obj/overmap/visitable/O = map_sectors["[get_z(src)]"]
+	var/obj/overmap/visitable/O = GLOB.map_sectors["[get_z(src)]"]
 	var/choice = alert(user, "This will only affect your current location[istype(O) ? " ([O])" : ""]. Proceed?","Confirmation", "Yes", "No")
 	if(choice != "Yes")
 		return
@@ -230,9 +230,9 @@
 	var/z_levels = GetConnectedZlevels(get_z(user))
 	post_comm_message(title, message)
 	if (public_announce)
-		command_announcement.Announce(message, title, GLOB.using_map.command_report_sound, msg_sanitized = TRUE, zlevels = z_levels)
+		GLOB.command_announcement.Announce(message, title, GLOB.using_map.command_report_sound, msg_sanitized = TRUE, zlevels = z_levels)
 	else
-		minor_announcement.Announce("New [GLOB.using_map.company_name] Update available at all communication consoles.", zlevels = z_levels)
+		GLOB.minor_announcement.Announce("New [GLOB.using_map.company_name] Update available at all communication consoles.", zlevels = z_levels)
 	. = ..()
 
 
@@ -273,7 +273,7 @@
 
 	if(CanUseTopic(user, GLOB.hands_state) != STATUS_INTERACTIVE)
 		return FALSE
-	command_announcement.Announce(message, title, msg_sanitized = 1, zlevels = GetConnectedZlevels(get_z(src)))
+	GLOB.command_announcement.Announce(message, title, msg_sanitized = 1, zlevels = GetConnectedZlevels(get_z(src)))
 	return TRUE
 
 /*********************************

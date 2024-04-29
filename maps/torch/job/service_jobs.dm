@@ -26,17 +26,17 @@
 		SKILL_CHEMISTRY = SKILL_BASIC
 	)
 	access = list(
-		access_bridge,
+		GLOB.access_bridge,
 		access_torch_fax,
-		access_chief_steward,
+		GLOB.access_chief_steward,
 		access_solgov_crew,
 		access_radio_comm,
 		access_radio_serv,
-		access_emergency_storage,
-		access_janitor,
-		access_commissary,
-		access_hydroponics,
-		access_kitchen,
+		GLOB.access_emergency_storage,
+		GLOB.access_janitor,
+		GLOB.access_commissary,
+		GLOB.access_hydroponics,
+		GLOB.access_kitchen,
 		access_o_mess
 	)
 
@@ -64,8 +64,8 @@
 	min_skill = list(SKILL_BUREAUCRACY = SKILL_BASIC)
 
 	access = list(
-		access_morgue, access_chapel_office,
-		access_crematorium, access_solgov_crew,
+		GLOB.access_morgue, GLOB.access_chapel_office,
+		GLOB.access_crematorium, access_solgov_crew,
 		access_radio_serv
 	)
 
@@ -97,8 +97,8 @@
 	min_skill = list(   SKILL_HAULING = SKILL_BASIC)
 
 	access = list(
-		access_maint_tunnels, access_emergency_storage,
-		access_janitor, access_solgov_crew,
+		GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_janitor, access_solgov_crew,
 		access_radio_serv
 	)
 
@@ -137,9 +137,9 @@
 		SKILL_COOKING = SKILL_TRAINED
 	)
 	access = list(
-		access_commissary,
-		access_hydroponics,
-		access_kitchen,
+		GLOB.access_commissary,
+		GLOB.access_hydroponics,
+		GLOB.access_kitchen,
 		access_radio_serv,
 		access_solgov_crew,
 		access_o_mess
@@ -168,6 +168,6 @@
 	)
 
 	access = list(
-		access_maint_tunnels, access_emergency_storage,
+		GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
 		access_solgov_crew, access_radio_serv
 	)

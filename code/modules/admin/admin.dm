@@ -1,6 +1,5 @@
-
-var/global/BSACooldown = 0
-var/global/floorIsLava = 0
+GLOBAL_VAR(BSACooldown)
+GLOBAL_VAR(floorIsLava)
 
 
 ////////////////////////////////
@@ -21,7 +20,7 @@ var/global/floorIsLava = 0
 	var/rendered = SPAN_CLASS("log_message", "[SPAN_CLASS("prefix", "ATTACK:")] [SPAN_CLASS("message", text)]")
 	for(var/client/C as anything in GLOB.admins)
 		if(check_rights(R_INVESTIGATE, 0, C))
-			if(C.get_preference_value(/datum/client_preference/staff/show_attack_logs) == GLOB.PREF_SHOW)
+			if(C.get_preference_value(/datum/client_preference/staff/show_attack_logs) == PREF_SHOW)
 				var/msg = rendered
 				to_chat(C, msg)
 /proc/admin_notice(message, rights)
@@ -253,8 +252,8 @@ var/global/floorIsLava = 0
 	// language toggles
 	body += "<br><br><b>Languages:</b><br>"
 	var/f = 1
-	for(var/k in all_languages)
-		var/datum/language/L = all_languages[k]
+	for(var/k in GLOB.all_languages)
+		var/datum/language/L = GLOB.all_languages[k]
 		if(!(L.flags & INNATE))
 			if(!f) body += " | "
 			else f = 0
@@ -419,7 +418,7 @@ var/global/floorIsLava = 0
 		to_chat(usr, "Error: you are not an admin!")
 		return
 
-	var/datum/feed_network/torch_network = news_network[1] //temp change until the UI can be updated to support switching networks.
+	var/datum/feed_network/torch_network = GLOB.news_network[1] //temp change until the UI can be updated to support switching networks.
 
 	var/dat
 	dat = text("<HEAD><TITLE>Admin Newscaster</TITLE></HEAD><H3>Admin Newscaster Unit</H3>")
@@ -698,7 +697,7 @@ var/global/floorIsLava = 0
 
 	// Print the header with category selection buttons.
 	var/dat = "<B>The first rule of adminbuse is: you don't talk about the adminbuse.</B><HR>"
-	for(var/datum/admin_secret_category/category in admin_secrets.categories)
+	for(var/datum/admin_secret_category/category in GLOB.admin_secrets.categories)
 		if(!category.can_view(usr))
 			continue
 		if(active_category == category)

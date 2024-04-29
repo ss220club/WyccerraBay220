@@ -4,7 +4,7 @@
 
 /obj/structure/closet/secure_closet/decktech
 	name = "cargo technician's locker"
-	req_access = list(access_cargo)
+	req_access = list(GLOB.access_cargo)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/cargo/decktech
 
 /obj/structure/closet/secure_closet/decktech/WillContain()
@@ -27,7 +27,7 @@
 
 /obj/structure/closet/secure_closet/quartermaster_sierra
 	name = "quartermaster's locker"
-	req_access = list(access_qm)
+	req_access = list(GLOB.access_qm)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/cargo/quartmaster
 
 /obj/structure/closet/secure_closet/quartermaster_sierra/WillContain()
@@ -54,7 +54,7 @@
 
 /obj/structure/closet/secure_closet/prospector
 	name = "prospector's locker"
-	req_access = list(access_mining)
+	req_access = list(GLOB.access_mining)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/cargo/prospector
 
 /obj/structure/closet/secure_closet/prospector/WillContain()

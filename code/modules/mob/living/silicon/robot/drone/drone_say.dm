@@ -14,7 +14,7 @@
 			return emote(copytext(message,2))
 
 		if(copytext_char(message,1,2) == get_prefix_key(/singleton/prefix/radio_main_channel))
-			var/datum/language/L = all_languages[LANGUAGE_DRONE_GLOBAL]
+			var/datum/language/L = GLOB.all_languages[LANGUAGE_DRONE_GLOBAL]
 			if(istype(L))
 				return L.broadcast(src,trimtext(copytext(message,2)))
 
@@ -32,7 +32,7 @@
 		for (var/mob/M in GLOB.player_list)
 			if (istype(M, /mob/new_player))
 				continue
-			else if(M.stat == DEAD && M.get_preference_value(/datum/client_preference/ghost_ears) == GLOB.PREF_ALL_SPEECH)
+			else if(M.stat == DEAD && M.get_preference_value(/datum/client_preference/ghost_ears) == PREF_ALL_SPEECH)
 				if(M.client) to_chat(M, "<b>[src]</b> transmits, \"[message]\"")
 		return 1
 	return ..(message, 0)

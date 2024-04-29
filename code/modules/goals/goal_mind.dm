@@ -3,7 +3,7 @@
 
 /datum/mind/proc/show_roundend_summary(department_goals)
 	if(current)
-		if(department_goals && current.get_preference_value(/datum/client_preference/show_department_goals) == GLOB.PREF_SHOW)
+		if(department_goals && current.get_preference_value(/datum/client_preference/show_department_goals) == PREF_SHOW)
 			to_chat(current, SPAN_NOTICE(department_goals))
 		if(LAZYLEN(goals))
 			to_chat(current, SPAN_NOTICE("<br><br><b>You had the following personal goals this round:</b><br>[jointext(summarize_goals(TRUE), "<br>")]"))
@@ -50,7 +50,7 @@
 			return FALSE
 
 		var/pref_val = current.get_preference_value(/datum/client_preference/give_personal_goals)
-		if (pref_val == GLOB.PREF_NEVER || (pref_val == GLOB.PREF_NON_ANTAG && player_is_antag(src)))
+		if (pref_val == PREF_NEVER || (pref_val == PREF_NON_ANTAG && player_is_antag(src)))
 			if(!is_spawning)
 				to_chat(src.current, SPAN_WARNING("Your preferences do not allow you to add random goals."))
 			return FALSE

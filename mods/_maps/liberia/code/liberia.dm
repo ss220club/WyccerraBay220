@@ -63,7 +63,7 @@
 		GLOB.admin_departments += "FTU Agency"
 
 /obj/machinery/power/apc/liberia
-	req_access = list(access_merchant)
+	req_access = list(GLOB.access_merchant)
 
 /obj/machinery/power/smes/buildable/preset/liberia
 	_input_maxed = TRUE

@@ -4,7 +4,7 @@
 
 /datum/computer_file/report/recipient/command/generate_fields()
 	..()
-	set_access(access_heads)
+	set_access(GLOB.access_heads)
 
 /datum/computer_file/report/recipient/command/crew_transfer
 	form_name = "CTA-NTF-01"
@@ -27,7 +27,7 @@
 	hop_fields += add_field(/datum/report_field/signature, "Подпись Исполнителя (Глава Персонала/Капитан)", required = 1)
 	hop_fields += add_field(/datum/report_field/options/yes_no, "Одобрено")
 	for(var/datum/report_field/field in hop_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)
 
 /datum/computer_file/report/recipient/command/access_modification
 	form_name = "AMA-NTF-02"
@@ -51,7 +51,7 @@
 	hop_fields += add_field(/datum/report_field/signature, "Подпись Исполнителя (Глава Персонала/Капитан)", required = 1)
 	hop_fields += add_field(/datum/report_field/options/yes_no, "Одобрено")
 	for(var/datum/report_field/field in hop_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)
 
 /datum/computer_file/report/recipient/command/fire
 	form_name = "D-NTF-01"
@@ -75,7 +75,7 @@
 	hop_fields += add_field(/datum/report_field/signature, "Подпись Исполнителя (Глава Персонала/Капитан)", required = 1)
 	hop_fields += add_field(/datum/report_field/options/yes_no, "Одобрено")
 	for(var/datum/report_field/field in hop_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)
 
 /datum/computer_file/report/recipient/command/decree
 	form_name = "DEC-NTF"
@@ -110,7 +110,7 @@
 	add_field(/datum/report_field/time, "Время заполнения")
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи или печати.")
 	add_field(/datum/report_field/signature, "Подпись", required = 1)
-	set_access(list(list(access_qm, access_el)), list(list(access_qm, access_el)), override = 0)
+	set_access(list(list(GLOB.access_qm, GLOB.access_el)), list(list(GLOB.access_qm, GLOB.access_el)), override = 0)
 
 /datum/computer_file/report/recipient/command/issuing_bonuses
 	form_name = "CTA-IB-01"

@@ -1,13 +1,13 @@
 /datum/map/make_maint_all_access(radstorm = 0)
 	maint_all_access = 1
 	if(radstorm)
-		priority_announcement.Announce("Требования к доступу у шлюзов в технические тоннели временнно отключены. Экранированные отсеки - технические тоннели, челноки, камеры заключения, дормиторий.", "Внимание!")
+		GLOB.priority_announcement.Announce("Требования к доступу у шлюзов в технические тоннели временнно отключены. Экранированные отсеки - технические тоннели, челноки, камеры заключения, дормиторий.", "Внимание!")
 	else
-		priority_announcement.Announce("Требования к доступу у шлюзов в технические тоннели временнно отключены.", "Внимание!")
+		GLOB.priority_announcement.Announce("Требования к доступу у шлюзов в технические тоннели временнно отключены.", "Внимание!")
 
 /datum/map/revoke_maint_all_access(radstorm = 0)
 	maint_all_access = 0
-	priority_announcement.Announce("Требования к доступу у шлюзов в технические тоннели восстановлены.", "Внимание!")
+	GLOB.priority_announcement.Announce("Требования к доступу у шлюзов в технические тоннели восстановлены.", "Внимание!")
 
 /datum/map/sierra/roundend_player_status()
 	for(var/mob/Player as anything in GLOB.player_list)
@@ -16,7 +16,7 @@
 
 		if(Player.stat != DEAD)
 			var/turf/playerTurf = get_turf(Player)
-			if(evacuation_controller.round_over() && evacuation_controller.emergency_evacuation)
+			if(GLOB.evacuation_controller.round_over() && GLOB.evacuation_controller.emergency_evacuation)
 				if(isNotAdminLevel(playerTurf.z))
 					to_chat(Player, "<font color='blue'><b>Вам удалось выжить, но вы были брошены на [station_name()], [Player.real_name]...</b></font>")
 				else

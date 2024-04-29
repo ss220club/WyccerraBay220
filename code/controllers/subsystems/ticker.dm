@@ -440,7 +440,7 @@ Helpers
 		if(length(antag.candidates) >= antag.initial_spawn_req)
 			antag.attempt_spawn()
 			antag.finalize_spawn()
-			additional_antag_types.Add(antag.id)
+			GLOB.additional_antag_types.Add(antag.id)
 			return 1
 		else
 			if(antag.initial_spawn_req > 1)
@@ -463,9 +463,9 @@ Helpers
 	if(mode.explosion_in_progress)
 		return 0
 	if(config.continous_rounds)
-		return evacuation_controller.round_over() || mode.station_was_nuked
+		return GLOB.evacuation_controller.round_over() || mode.station_was_nuked
 	else
-		return mode.check_finished() || (evacuation_controller.round_over() && evacuation_controller.emergency_evacuation) || game_over
+		return mode.check_finished() || (GLOB.evacuation_controller.round_over() && GLOB.evacuation_controller.emergency_evacuation) || game_over
 
 /datum/controller/subsystem/ticker/proc/mode_finished()
 	if (forced_end)
@@ -482,7 +482,7 @@ Helpers
 	delay_notified = 1
 
 /datum/controller/subsystem/ticker/proc/handle_tickets()
-	for(var/datum/ticket/ticket in tickets)
+	for(var/datum/ticket/ticket in GLOB.tickets)
 		if(ticket.is_active())
 			if(!delay_notified)
 				message_staff(SPAN_WARNING("<b>Automatically delaying restart due to active tickets.</b>"))
@@ -508,14 +508,14 @@ Helpers
 	to_world("<br>")
 
 	for(var/mob/living/silicon/ai/aiPlayer in SSmobs.mob_list)
-		var/show_ai_key = aiPlayer.get_preference_value(/datum/client_preference/show_ckey_credits) == GLOB.PREF_SHOW
+		var/show_ai_key = aiPlayer.get_preference_value(/datum/client_preference/show_ckey_credits) == PREF_SHOW
 		to_world("<b>[aiPlayer.name][show_ai_key ? " (played by [aiPlayer.key])" : ""]'s laws at the [aiPlayer.stat == 2 ? "time of their deactivation" : "end of round"] were:</b>")
 		aiPlayer.show_laws(1)
 
 		if (length(aiPlayer.connected_robots))
 			var/minions = "<b>[aiPlayer.name]'s loyal minions were:</b>"
 			for(var/mob/living/silicon/robot/robo in aiPlayer.connected_robots)
-				var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == GLOB.PREF_SHOW
+				var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == PREF_SHOW
 				minions += " [robo.name][show_robot_key ? "(played by: [robo.key])" : ""][robo.stat ? " (deactivated)" : ""],"
 			to_world(minions)
 
@@ -528,7 +528,7 @@ Helpers
 			continue
 
 		if (!robo.connected_ai)
-			var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == GLOB.PREF_SHOW
+			var/show_robot_key = robo.get_preference_value(/datum/client_preference/show_ckey_credits) == PREF_SHOW
 			to_world("<b>[robo.name][show_robot_key ? " (played by [robo.key])" : ""]'s individual laws at the [robo.stat == 2 ? "time of their deactivation" : "end of round"] were:</b>")
 
 			if(robo) //How the hell do we lose robo between here and the world messages directly above this?
@@ -537,10 +537,10 @@ Helpers
 	if(dronecount)
 		to_world("<b>There [dronecount>1 ? "were" : "was"] [dronecount] industrious maintenance [dronecount>1 ? "drones" : "drone"] at the end of this round.</b>")
 
-	if(length(all_money_accounts))
-		var/datum/money_account/max_profit = all_money_accounts[1]
-		var/datum/money_account/max_loss = all_money_accounts[1]
-		for(var/datum/money_account/D in all_money_accounts)
+	if(length(GLOB.all_money_accounts))
+		var/datum/money_account/max_profit = GLOB.all_money_accounts[1]
+		var/datum/money_account/max_loss = GLOB.all_money_accounts[1]
+		for(var/datum/money_account/D in GLOB.all_money_accounts)
 			if(D == vendor_account) //yes we know you get lots of money
 				continue
 			var/saldo = D.get_balance()

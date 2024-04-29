@@ -1,5 +1,19 @@
 // Math constants.
+
+/// The mathematical constant pi, rounded to 8 places
 #define M_PI    3.14159265
+
+/// Twice the mathematical constant pi, rounded to 8 places
+#define TWO_PI 6.28318530
+
+/// Half the mathematical constant pi, rounded to 8 places
+#define HALF_PI 1.57079632
+
+/// Multiplier for converting degrees to radians, rounded to 8 places
+#define DEG_TO_RAD 0.01745329
+
+/// Multiplier for converting radians to degrees, rounded to 8 places
+#define RAD_TO_DEG 57.2957795
 
 #define R_IDEAL_GAS_EQUATION       8.31    // kPa*L/(K*mol).
 #define ONE_ATMOSPHERE             101.325 // kPa.
@@ -28,7 +42,7 @@
 #define QUANTIZE(variable) (round(variable, ATMOS_PRECISION))
 
 #define INFINITY	1.#INF
-
+#define NEGATIVE_INFINITY -1#INF
 #define SHORT_REAL_LIMIT 16777216 // 1 left-shift 24
 
 #define TICKS_IN_DAY 		24*60*60*10

@@ -1,10 +1,10 @@
 //Meteor groups, used for various random events and the Meteor gamemode.
 
 // Dust, used by space dust event and during earliest stages of meteor mode.
-var/global/list/meteors_dust = list(/obj/meteor/dust)
+GLOBAL_LIST_INIT(meteors_dust, list(/obj/meteor/dust))
 
 // Standard meteors, used during early stages of the meteor gamemode.
-var/global/list/meteors_normal = list(\
+GLOBAL_LIST_INIT(meteors_normal, list(\
 		/obj/meteor/medium=8,\
 		/obj/meteor/dust=3,\
 		/obj/meteor/irradiated=3,\
@@ -12,10 +12,10 @@ var/global/list/meteors_normal = list(\
 		/obj/meteor/flaming=1,\
 		/obj/meteor/golden=1,\
 		/obj/meteor/silver=1\
-		)
+		))
 
 // Threatening meteors, used during the meteor gamemode.
-var/global/list/meteors_threatening = list(\
+GLOBAL_LIST_INIT(meteors_threatening, list(\
 		/obj/meteor/big=10,\
 		/obj/meteor/medium=5,\
 		/obj/meteor/golden=3,\
@@ -23,10 +23,10 @@ var/global/list/meteors_threatening = list(\
 		/obj/meteor/flaming=3,\
 		/obj/meteor/irradiated=3,\
 		/obj/meteor/emp=3\
-		)
+		))
 
 // Catastrophic meteors, pretty dangerous without shields and used during the meteor gamemode.
-var/global/list/meteors_catastrophic = list(\
+GLOBAL_LIST_INIT(meteors_catastrophic, list(\
 		/obj/meteor/big=75,\
 		/obj/meteor/flaming=10,\
 		/obj/meteor/irradiated=10,\
@@ -35,10 +35,10 @@ var/global/list/meteors_catastrophic = list(\
 		/obj/meteor/golden=4,\
 		/obj/meteor/silver=4,\
 		/obj/meteor/tunguska=1\
-		)
+		))
 
 // Armageddon meteors, very dangerous, and currently used only during the meteor gamemode.
-var/global/list/meteors_armageddon = list(\
+GLOBAL_LIST_INIT(meteors_armageddon, list(\
 		/obj/meteor/big=25,\
 		/obj/meteor/flaming=10,\
 		/obj/meteor/irradiated=10,\
@@ -47,10 +47,10 @@ var/global/list/meteors_armageddon = list(\
 		/obj/meteor/tunguska=3,\
 		/obj/meteor/golden=2,\
 		/obj/meteor/silver=2\
-		)
+		))
 
 // Cataclysm meteor selection. Very very dangerous and effective even against shields. Used in late game meteor gamemode only.
-var/global/list/meteors_cataclysm = list(\
+GLOBAL_LIST_INIT(meteors_cataclysm, list(\
 		/obj/meteor/big=40,\
 		/obj/meteor/emp=20,\
 		/obj/meteor/tunguska=20,\
@@ -59,7 +59,7 @@ var/global/list/meteors_cataclysm = list(\
 		/obj/meteor/silver=10,\
 		/obj/meteor/flaming=10,\
 		/obj/meteor/supermatter=1\
-		)
+		))
 
 
 

@@ -1,23 +1,3 @@
-/// Destroy() return value. Queue the instance for eventual hard deletion.
-var/global/const/QDEL_HINT_QUEUE = 0
-
-/// Destroy() return value. Do not queue the instance for hard deletion. Does not expect to be refcount GCd.
-var/global/const/QDEL_HINT_LETMELIVE = 1
-
-/// Destroy() return value. Same as QDEL_HINT_LETMELIVE but the instance expects to refcount GC without help.
-var/global/const/QDEL_HINT_IWILLGC = 2
-
-/// Destroy() return value. Queue this instance for hard deletion regardless of its refcount GC state.
-var/global/const/QDEL_HINT_HARDDEL = 3
-
-/// Destroy() return value. Immediately hard delete the instance.
-var/global/const/QDEL_HINT_HARDDEL_NOW = 4
-
-
-/// datum.gc_destroyed signal value
-var/global/const/GC_CURRENTLY_BEING_QDELETED = -1
-
-
 SUBSYSTEM_DEF(garbage)
 	name = "Garbage"
 	priority = FIRE_PRIORITY_GARBAGE

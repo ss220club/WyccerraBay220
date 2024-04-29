@@ -20,10 +20,10 @@
 
 /datum/event/mob_spawning/rogue_drones/announce()
 	if (severity > EVENT_LEVEL_MODERATE)
-		command_announcement.Announce("Priority Warning: Unidentified drone attack-swarm detected near the [location_name()]", "[location_name()] Sensor Array", zlevels = affecting_z)
+		GLOB.command_announcement.Announce("Priority Warning: Unidentified drone attack-swarm detected near the [location_name()]", "[location_name()] Sensor Array", zlevels = affecting_z)
 	else
-		command_announcement.Announce("Attention: unidentified patrol drones detected within proximity to the [location_name()]", "[location_name()] Sensor Array", zlevels = affecting_z)
+		GLOB.command_announcement.Announce("Attention: unidentified patrol drones detected within proximity to the [location_name()]", "[location_name()] Sensor Array", zlevels = affecting_z)
 
 
 /datum/event/mob_spawning/rogue_drone/end()
-	command_announcement.Announce("Be advised: sensors indicate the unidentified drone swarm has left the immediate proximity of the [location_name()].", "[location_name()] Sensor Array", zlevels = affecting_z)
+	GLOB.command_announcement.Announce("Be advised: sensors indicate the unidentified drone swarm has left the immediate proximity of the [location_name()].", "[location_name()] Sensor Array", zlevels = affecting_z)

@@ -1,21 +1,21 @@
-var/global/const/NETWORK_AQUILA      = "Aquila"
-var/global/const/NETWORK_BRIDGE      = "Bridge"
-var/global/const/NETWORK_CHARON     = "Charon"
-var/global/const/NETWORK_FIRST_DECK  = "First Deck"
-var/global/const/NETWORK_FOURTH_DECK = "Fourth Deck"
-var/global/const/NETWORK_SECOND_DECK = "Second Deck"
-var/global/const/NETWORK_THIRD_DECK  = "Third Deck"
-var/global/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
+GLOBAL_VAR_CONST(NETWORK_AQUILA, "Aquila")
+GLOBAL_VAR_CONST(NETWORK_BRIDGE, "Bridge")
+GLOBAL_VAR_CONST(NETWORK_CHARON, "Charon")
+GLOBAL_VAR_CONST(NETWORK_FIRST_DECK, "First Deck")
+GLOBAL_VAR_CONST(NETWORK_FOURTH_DECK, "Fourth Deck")
+GLOBAL_VAR_CONST(NETWORK_SECOND_DECK, "Second Deck")
+GLOBAL_VAR_CONST(NETWORK_THIRD_DECK, "Third Deck")
+GLOBAL_VAR_CONST(NETWORK_FIFTH_DECK, "Fifth Deck")
 
 /datum/map/torch/get_network_access(network)
 	switch(network)
 		if(NETWORK_AQUILA)
 			return access_aquila
 		if(NETWORK_BRIDGE)
-			return access_heads
+			return GLOB.access_heads
 		if(NETWORK_CHARON)
-			return access_expedition_shuttle
-		if(NETWORK_HELMETS)
+			return GLOB.access_expedition_shuttle
+		if(GLOB.NETWORK_HELMETS)
 			return access_solgov_crew
 	return get_shared_network_access(network) || ..()
 
@@ -23,24 +23,24 @@ var/global/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
 	// Networks that will show up as options in the camera monitor program
 	station_networks = list(
 		NETWORK_BRIDGE,
-		NETWORK_FIRST_DECK,
-		NETWORK_SECOND_DECK,
-		NETWORK_THIRD_DECK,
-		NETWORK_FOURTH_DECK,
+		GLOB.NETWORK_FIRST_DECK,
+		GLOB.NETWORK_SECOND_DECK,
+		GLOB.NETWORK_THIRD_DECK,
+		GLOB.NETWORK_FOURTH_DECK,
 		NETWORK_FIFTH_DECK,
-		NETWORK_ENGINEERING,
-		NETWORK_MEDICAL,
-		NETWORK_RESEARCH,
-		NETWORK_SECURITY,
+		GLOB.NETWORK_ENGINEERING,
+		GLOB.NETWORK_MEDICAL,
+		GLOB.NETWORK_RESEARCH,
+		GLOB.NETWORK_SECURITY,
 		NETWORK_AQUILA,
 		NETWORK_CHARON,
-		NETWORK_HELMETS,
+		GLOB.NETWORK_HELMETS,
 		NETWORK_ALARM_ATMOS,
 		NETWORK_ALARM_CAMERA,
 		NETWORK_ALARM_FIRE,
 		NETWORK_ALARM_MOTION,
 		NETWORK_ALARM_POWER,
-		NETWORK_THUNDER,
+		GLOB.NETWORK_THUNDER,
 	)
 
 //
@@ -58,29 +58,29 @@ var/global/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
 	network = list(NETWORK_CHARON)
 
 /obj/machinery/camera/network/first_deck
-	network = list(NETWORK_FIRST_DECK)
+	network = list(GLOB.NETWORK_FIRST_DECK)
 
 /obj/machinery/camera/network/fourth_deck
-	network = list(NETWORK_FOURTH_DECK)
+	network = list(GLOB.NETWORK_FOURTH_DECK)
 
 /obj/machinery/camera/network/fifth_deck
 	network = list(NETWORK_FIFTH_DECK)
 
 /obj/machinery/camera/network/second_deck
-	network = list(NETWORK_SECOND_DECK)
+	network = list(GLOB.NETWORK_SECOND_DECK)
 
 /obj/machinery/camera/network/third_deck
-	network = list(NETWORK_THIRD_DECK)
+	network = list(GLOB.NETWORK_THIRD_DECK)
 
 /obj/machinery/camera/network/crescent
-	network = list(NETWORK_CRESCENT)
+	network = list(GLOB.NETWORK_CRESCENT)
 
 /obj/machinery/camera/network/engineering_outpost
-	network = list(NETWORK_ENGINEERING_OUTPOST)
+	network = list(GLOB.NETWORK_ENGINEERING_OUTPOST)
 
 // Motion
 /obj/machinery/camera/motion/engineering_outpost
-	network = list(NETWORK_ENGINEERING_OUTPOST)
+	network = list(GLOB.NETWORK_ENGINEERING_OUTPOST)
 
 // All Upgrades
 /obj/machinery/camera/all/command
@@ -163,33 +163,33 @@ var/global/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
 	_output_on = TRUE
 	_fully_charged = TRUE
 
-var/global/const/NETWORK_COMMAND = "Command"
-var/global/const/NETWORK_ENGINE  = "Engine"
-var/global/const/NETWORK_ENGINEERING_OUTPOST = "Engineering Outpost"
+GLOBAL_VAR_CONST(NETWORK_COMMAND, "Command")
+GLOBAL_VAR_CONST(NETWORK_ENGINE, "Engine")
+GLOBAL_VAR_CONST(NETWORK_ENGINEERING_OUTPOST, "Engineering Outpost")
 
 /datum/map/proc/get_shared_network_access(network)
 	switch(network)
-		if(NETWORK_COMMAND)
-			return access_heads
-		if(NETWORK_ENGINE, NETWORK_ENGINEERING_OUTPOST)
-			return access_engine
+		if(GLOB.NETWORK_COMMAND)
+			return GLOB.access_heads
+		if(GLOB.NETWORK_ENGINE, GLOB.NETWORK_ENGINEERING_OUTPOST)
+			return GLOB.access_engine
 
 /datum/map/torch/default_internal_channels()
 	return list(
 		num2text(PUB_FREQ)   = list(),
-		num2text(AI_FREQ)    = list(access_synth),
+		num2text(AI_FREQ)    = list(GLOB.access_synth),
 		num2text(ENT_FREQ)   = list(),
-		num2text(ERT_FREQ)   = list(access_cent_specops),
-		num2text(COMM_FREQ)  = list(access_radio_comm),
-		num2text(ENG_FREQ)   = list(access_radio_eng),
-		num2text(MED_FREQ)   = list(access_radio_med),
-		num2text(MED_I_FREQ) = list(access_radio_med),
-		num2text(SEC_FREQ)   = list(access_radio_sec),
-		num2text(SEC_I_FREQ) = list(access_radio_sec),
-		num2text(SCI_FREQ)   = list(access_radio_sci),
-		num2text(SUP_FREQ)   = list(access_radio_sup),
-		num2text(SRV_FREQ)   = list(access_radio_serv),
-		num2text(EXP_FREQ)   = list(access_radio_exp),
+		num2text(ERT_FREQ)   = list(GLOB.access_cent_specops),
+		num2text(COMM_FREQ)  = list(GLOB.access_radio_comm),
+		num2text(ENG_FREQ)   = list(GLOB.access_radio_eng),
+		num2text(MED_FREQ)   = list(GLOB.access_radio_med),
+		num2text(MED_I_FREQ) = list(GLOB.access_radio_med),
+		num2text(SEC_FREQ)   = list(GLOB.access_radio_sec),
+		num2text(SEC_I_FREQ) = list(GLOB.access_radio_sec),
+		num2text(SCI_FREQ)   = list(GLOB.access_radio_sci),
+		num2text(SUP_FREQ)   = list(GLOB.access_radio_sup),
+		num2text(SRV_FREQ)   = list(GLOB.access_radio_serv),
+		num2text(EXP_FREQ)   = list(GLOB.access_radio_exp),
 		num2text(HAIL_FREQ)  = list(),
 	)
 

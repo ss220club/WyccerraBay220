@@ -227,7 +227,7 @@
 				return 0
 	return 1 //Nothing found to block so return success!
 
-var/global/const/enterloopsanity = 100
+GLOBAL_VAR_CONST(enterloopsanity, 100)
 /turf/Entered(atom/atom, atom/old_loc)
 
 	..()
@@ -246,7 +246,7 @@ var/global/const/enterloopsanity = 100
 	var/objects = 0
 	if(A && (A.movable_flags & MOVABLE_FLAG_PROXMOVE))
 		for(var/atom/movable/thing in range(1))
-			if(objects > enterloopsanity) break
+			if(objects > GLOB.enterloopsanity) break
 			objects++
 			spawn(0)
 				if(A)

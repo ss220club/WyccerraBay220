@@ -31,7 +31,7 @@
 	off_state = "healthhud_off"
 	hud_type = HUD_MEDICAL
 	body_parts_covered = 0
-	req_access = list(access_medical)
+	req_access = list(GLOB.access_medical)
 
 /obj/item/clothing/glasses/hud/health/process_hud(mob/M)
 	process_med_hud(M, 1)
@@ -71,7 +71,7 @@
 	hud_type = HUD_SECURITY
 	body_parts_covered = 0
 	var/static/list/jobs[0]
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 
 /obj/item/clothing/glasses/hud/security/prescription
 	name = "prescription security HUD"

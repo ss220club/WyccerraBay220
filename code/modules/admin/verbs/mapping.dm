@@ -57,7 +57,7 @@ var/global/intercom_range_display_status = 0
 		qdel(C)
 
 	if(camera_range_display_status)
-		for(var/obj/machinery/camera/C in cameranet.cameras)
+		for(var/obj/machinery/camera/C in GLOB.cameranet.cameras)
 			new/obj/debugging/camera_range(C.loc)
 
 
@@ -68,7 +68,7 @@ var/global/intercom_range_display_status = 0
 
 	var/list/obj/machinery/camera/CL = list()
 
-	for(var/obj/machinery/camera/C in cameranet.cameras)
+	for(var/obj/machinery/camera/C in GLOB.cameranet.cameras)
 		CL += C
 
 	var/output = {"<B>CAMERA ANNOMALITIES REPORT</B><HR>
@@ -119,7 +119,7 @@ var/global/intercom_range_display_status = 0
 			if(!(F in atoms_in_view))
 				qdel(F)
 
-var/global/list/debug_verbs = list (
+GLOBAL_LIST_INIT(debug_verbs, list (
 		/client/proc/do_not_use_these
 		,/client/proc/camera_view
 		,/client/proc/sec_camera_report
@@ -149,7 +149,7 @@ var/global/list/debug_verbs = list (
 		,/client/proc/spawn_tanktransferbomb
 		,/client/proc/find_leaky_pipes
 		,/client/proc/analyze_openturf
-	)
+	))
 
 
 /client/proc/enable_debug_verbs()
@@ -158,7 +158,7 @@ var/global/list/debug_verbs = list (
 
 	if(!check_rights(R_DEBUG)) return
 
-	verbs += debug_verbs
+	verbs += GLOB.debug_verbs
 
 /client/proc/hide_debug_verbs()
 	set category = "Debug"
@@ -166,7 +166,7 @@ var/global/list/debug_verbs = list (
 
 	if(!check_rights(R_DEBUG)) return
 
-	verbs -= debug_verbs
+	verbs -= GLOB.debug_verbs
 
 
 /client/var/list/testZAScolors_turfs = list()
@@ -314,7 +314,7 @@ var/global/list/debug_verbs = list (
 
 /proc/get_zas_image(turf/T, icon_state)
 	RETURN_TYPE(/image)
-	return image_repository.atom_image(T, 'icons/misc/debug_group.dmi', icon_state, plane = DEFAULT_PLANE, layer = ABOVE_TILE_LAYER)
+	return GLOB.image_repository.atom_image(T, 'icons/misc/debug_group.dmi', icon_state, plane = DEFAULT_PLANE, layer = ABOVE_TILE_LAYER)
 
 //Special for Cakey
 /client/proc/find_leaky_pipes()

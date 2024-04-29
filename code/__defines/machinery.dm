@@ -41,17 +41,17 @@
 #define AI_CAMERA_LUMINOSITY 6
 
 // Camera networks
-var/global/const/NETWORK_CRESCENT       = "Crescent"
-var/global/const/NETWORK_ENGINEERING       = "Engineering"
-var/global/const/NETWORK_ERT       = "ERT"
-var/global/const/NETWORK_EXODUS       = "Exodus"
-var/global/const/NETWORK_MEDICAL       = "Medical"
-var/global/const/NETWORK_MERCENARY       = "MercurialNet"
-var/global/const/NETWORK_MINE       = "Mining"
-var/global/const/NETWORK_RESEARCH       = "Research"
-var/global/const/NETWORK_SECURITY       = "Security"
-var/global/const/NETWORK_THUNDER       = "Thunderdome"
-var/global/const/NETWORK_HELMETS       = "Helmet Cameras"
+GLOBAL_VAR_CONST(NETWORK_CRESCENT, "Crescent")
+GLOBAL_VAR_CONST(NETWORK_ENGINEERING, "Engineering")
+GLOBAL_VAR_CONST(NETWORK_ERT, "ERT")
+GLOBAL_VAR_CONST(NETWORK_EXODUS, "Exodus")
+GLOBAL_VAR_CONST(NETWORK_MEDICAL, "Medical")
+GLOBAL_VAR_CONST(NETWORK_MERCENARY, "MercurialNet")
+GLOBAL_VAR_CONST(NETWORK_MINE, "Mining")
+GLOBAL_VAR_CONST(NETWORK_RESEARCH, "Research")
+GLOBAL_VAR_CONST(NETWORK_SECURITY, "Security")
+GLOBAL_VAR_CONST(NETWORK_THUNDER, "Thunderdome")
+GLOBAL_VAR_CONST(NETWORK_HELMETS, "Helmet Cameras")
 
 #define NETWORK_ALARM_ATMOS "Atmosphere Alarms"
 #define NETWORK_ALARM_CAMERA "Camera Alarms"

@@ -35,7 +35,7 @@
 	var/datum/announcement/priority/crew_announcement = new
 	var/current_viewing_message_id = 0
 	var/current_viewing_message = null
-	var/admin_access = list(access_bridge)
+	var/admin_access = list(GLOB.access_bridge)
 
 /datum/nano_module/program/comm/New()
 	..()
@@ -83,14 +83,14 @@
 
 	var/datum/comm_message_listener/l = obtain_message_listener()
 	data["messages"] = l.messages
-	data["message_deletion_allowed"] = l != global_message_listener
+	data["message_deletion_allowed"] = l != GLOB.global_message_listener
 	data["message_current_id"] = current_viewing_message_id
 	if(current_viewing_message)
 		data["message_current"] = current_viewing_message
 
 	var/list/processed_evac_options = list()
-	if(!isnull(evacuation_controller))
-		for (var/datum/evacuation_option/EO in evacuation_controller.available_evac_options())
+	if(!isnull(GLOB.evacuation_controller))
+		for (var/datum/evacuation_option/EO in GLOB.evacuation_controller.available_evac_options())
 			if(EO.abandon_ship)
 				continue
 			var/list/option = list()
@@ -117,7 +117,7 @@
 	if(program)
 		var/datum/computer_file/program/comm/P = program
 		return P.message_core
-	return global_message_listener
+	return GLOB.global_message_listener
 
 /datum/nano_module/program/comm/Topic(href, href_list)
 	if(..())
@@ -188,7 +188,7 @@
 		if("evac")
 			. = TOPIC_HANDLED
 			if(is_authenticated(user))
-				var/datum/evacuation_option/selected_evac_option = evacuation_controller.evacuation_options[href_list["target"]]
+				var/datum/evacuation_option/selected_evac_option = GLOB.evacuation_controller.evacuation_options[href_list["target"]]
 				if (isnull(selected_evac_option) || !istype(selected_evac_option))
 					return
 				if (!selected_evac_option.silicon_allowed && issilicon(user))
@@ -197,7 +197,7 @@
 					return
 				var/confirm = alert("Are you sure you want to [selected_evac_option.option_desc]?", name, "No", "Yes")
 				if (confirm == "Yes" && can_still_topic())
-					evacuation_controller.handle_evac_option(selected_evac_option.option_target, user)
+					GLOB.evacuation_controller.handle_evac_option(selected_evac_option.option_target, user)
 		if("setstatus")
 			. = TOPIC_HANDLED
 			if(is_authenticated(user) && ntn_cont)
@@ -239,7 +239,7 @@
 				current_status = STATE_VIEWMESSAGE
 		if("delmessage")
 			. = TOPIC_HANDLED
-			if(is_authenticated(user) && ntn_comm && l != global_message_listener)
+			if(is_authenticated(user) && ntn_comm && l != GLOB.global_message_listener)
 				l.Remove(current_viewing_message)
 			current_status = STATE_MESSAGELIST
 		if("printmessage")
@@ -267,8 +267,8 @@
 /*
 General message handling stuff
 */
-var/global/list/comm_message_listeners = list() //We first have to initialize list then we can use it.
-var/global/datum/comm_message_listener/global_message_listener = new //May be used by admins
+GLOBAL_LIST_INIT(comm_message_listeners, list()) //We first have to initialize list then we can use it.
+GLOBAL_DATUM_INIT(global_message_listener, /datum/comm_message_listener, new) //May be used by admins
 var/global/last_message_id = 0
 
 /proc/get_comm_message_id()
@@ -281,7 +281,7 @@ var/global/last_message_id = 0
 	message["title"] = message_title
 	message["contents"] = message_text
 
-	for (var/datum/comm_message_listener/l in comm_message_listeners)
+	for (var/datum/comm_message_listener/l in GLOB.comm_message_listeners)
 		l.Add(message)
 
 /datum/comm_message_listener
@@ -290,7 +290,7 @@ var/global/last_message_id = 0
 /datum/comm_message_listener/New()
 	..()
 	messages = list()
-	comm_message_listeners.Add(src)
+	GLOB.comm_message_listeners.Add(src)
 
 /datum/comm_message_listener/proc/Add(list/message)
 	messages[LIST_PRE_INC(messages)] = message
@@ -300,7 +300,7 @@ var/global/last_message_id = 0
 
 /proc/post_status(command, data1, data2)
 
-	var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
+	var/datum/radio_frequency/frequency = GLOB.radio_controller.return_frequency(1435)
 
 	if(!frequency) return
 
@@ -320,10 +320,10 @@ var/global/last_message_id = 0
 	frequency.post_signal(signal = status_signal)
 
 /proc/cancel_call_proc(mob/user)
-	if (!evacuation_controller)
+	if (!GLOB.evacuation_controller)
 		return
 
-	if(evacuation_controller.cancel_evacuation())
+	if(GLOB.evacuation_controller.cancel_evacuation())
 		log_and_message_admins("has cancelled the evacuation.", user)
 
 	return
@@ -336,7 +336,7 @@ var/global/last_message_id = 0
 	return 0
 
 /proc/call_shuttle_proc(mob/user, emergency)
-	if (!evacuation_controller)
+	if (!GLOB.evacuation_controller)
 		return
 
 	if(isnull(emergency))
@@ -350,28 +350,28 @@ var/global/last_message_id = 0
 		to_chat(user, "[GLOB.using_map.boss_short] will not allow an evacuation to take place. Consider all contracts terminated.")
 		return
 
-	if(evacuation_controller.deny)
+	if(GLOB.evacuation_controller.deny)
 		to_chat(user, "An evacuation cannot be called at this time. Please try again later.")
 		return
 
-	if(evacuation_controller.is_on_cooldown()) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
-		to_chat(user, evacuation_controller.get_cooldown_message())
+	if(GLOB.evacuation_controller.is_on_cooldown()) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
+		to_chat(user, GLOB.evacuation_controller.get_cooldown_message())
 
-	if(evacuation_controller.is_evacuating())
+	if(GLOB.evacuation_controller.is_evacuating())
 		to_chat(user, "An evacuation is already underway.")
 		return
 
-	if(evacuation_controller.call_evacuation(user, _emergency_evac = emergency))
+	if(GLOB.evacuation_controller.call_evacuation(user, _emergency_evac = emergency))
 		log_and_message_admins("[user? key_name(user) : "Autotransfer"] has called the shuttle.")
 
 /proc/init_autotransfer()
 
-	if (!evacuation_controller)
+	if (!GLOB.evacuation_controller)
 		return
 
-	. = evacuation_controller.call_evacuation(null, _emergency_evac = FALSE, autotransfer = TRUE)
+	. = GLOB.evacuation_controller.call_evacuation(null, _emergency_evac = FALSE, autotransfer = TRUE)
 	if(.)
 		//delay events in case of an autotransfer
-		var/delay = evacuation_controller.evac_arrival_time - world.time + (2 MINUTES)
+		var/delay = GLOB.evacuation_controller.evac_arrival_time - world.time + (2 MINUTES)
 		SSevent.delay_events(EVENT_LEVEL_MODERATE, delay)
 		SSevent.delay_events(EVENT_LEVEL_MAJOR, delay)

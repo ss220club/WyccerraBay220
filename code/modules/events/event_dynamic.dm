@@ -1,4 +1,4 @@
-var/global/list/event_last_fired = list()
+GLOBAL_LIST_INIT(event_last_fired, list())
 
 //Always triggers an event when called, dynamically chooses events based on job population
 /proc/spawn_dynamic_event()
@@ -45,7 +45,7 @@ var/global/list/event_last_fired = list()
 	possibleEvents[/datum/event/electrical_storm] = 15 * active_with_role["Janitor"] + 5 * active_with_role["Engineer"]
 	possibleEvents[/datum/event/wallrot] = 30 * active_with_role["Engineer"] + 50 * active_with_role["Gardener"]
 
-	if(!spacevines_spawned)
+	if(!GLOB.spacevines_spawned)
 		possibleEvents[/datum/event/spacevine] = 10 + 5 * active_with_role["Engineer"]
 	if(minutes_passed >= 30) // Give engineers time to set up engine
 		possibleEvents[/datum/event/meteor_wave] = 10 * active_with_role["Engineer"]
@@ -61,15 +61,15 @@ var/global/list/event_last_fired = list()
 			possibleEvents[/datum/event/spider_infestation] = max(active_with_role["Security"], 5) + 5
 		possibleEvents[/datum/event/random_antag] = max(active_with_role["Security"], 5) + 2.5
 
-	for(var/event_type in event_last_fired) if(possibleEvents[event_type])
-		var/time_passed = world.time - event_last_fired[event_type]
+	for(var/event_type in GLOB.event_last_fired) if(possibleEvents[event_type])
+		var/time_passed = world.time - GLOB.event_last_fired[event_type]
 		var/full_recharge_after = 60 * 60 * 10 * 3 // 3 hours
 		var/weight_modifier = max(0, (full_recharge_after - time_passed) / 300)
 
 		possibleEvents[event_type] = max(possibleEvents[event_type] - weight_modifier, 0)
 
 	var/picked_event = pickweight(possibleEvents)
-	event_last_fired[picked_event] = world.time
+	GLOB.event_last_fired[picked_event] = world.time
 
 	// Debug code below here, very useful for testing so don't delete please.
 	var/debug_message = "Firing random event. "

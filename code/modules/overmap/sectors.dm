@@ -45,7 +45,7 @@ GLOBAL_LIST_EMPTY(known_overmap_sectors)
 		var/map_high = GLOB.using_map.overmap_size - OVERMAP_EDGE
 		var/turf/home
 		if (place_near_main)
-			var/obj/overmap/visitable/main = map_sectors["1"]
+			var/obj/overmap/visitable/main = GLOB.map_sectors["1"]
 			if (islist(place_near_main))
 				place_near_main = Roundm(Frand(place_near_main[1], place_near_main[2]), 0.1)
 			home = CircularRandomTurfAround(main, abs(place_near_main), map_low, map_low, map_high, map_high)
@@ -89,7 +89,7 @@ GLOBAL_LIST_EMPTY(known_overmap_sectors)
 
 /obj/overmap/visitable/proc/register_z_levels()
 	for(var/zlevel in map_z)
-		map_sectors["[zlevel]"] = src
+		GLOB.map_sectors["[zlevel]"] = src
 
 	GLOB.using_map.player_levels |= map_z
 	if(!HAS_FLAGS(sector_flags, OVERMAP_SECTOR_IN_SPACE))

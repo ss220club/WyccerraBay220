@@ -59,7 +59,7 @@
 
 	var/last_target			//last target fired at, prevents turrets from erratically firing at all valid targets in range
 
-	req_access = list(list(access_security, access_bridge))
+	req_access = list(list(GLOB.access_security, GLOB.access_bridge))
 	obj_flags = OBJ_FLAG_ANCHORABLE
 
 /obj/machinery/porta_turret/crescent
@@ -71,7 +71,7 @@
 	check_records = 1
 	check_weapons = 1
 	check_anomalies = 1
-	req_access = list(access_cent_specops)
+	req_access = list(GLOB.access_cent_specops)
 
 /obj/machinery/porta_turret/stationary
 	ailock = 1
@@ -155,15 +155,15 @@
 			eshot_sound = 'sound/weapons/Laser.ogg'
 			egun = 1
 
-var/global/list/turret_icons
+GLOBAL_LIST_EMPTY(turret_icons)
 
 /obj/machinery/porta_turret/on_update_icon()
-	if(!turret_icons)
-		turret_icons = list()
-		turret_icons["open"] = image(icon, "openTurretCover")
+	if(!GLOB.turret_icons)
+		GLOB.turret_icons = list()
+		GLOB.turret_icons["open"] = image(icon, "openTurretCover")
 
 	underlays.Cut()
-	underlays += turret_icons["open"]
+	underlays += GLOB.turret_icons["open"]
 
 	if(MACHINE_IS_BROKEN(src))
 		icon_state = "destroyed_target_prism"

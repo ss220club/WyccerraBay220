@@ -69,26 +69,26 @@
 /area/crew_quarters/heads/office/rd
 	icon_state = "heads_rd"
 	name = "First Deck - Command - RD's Office"
-	req_access = list(access_rd)
+	req_access = list(GLOB.access_rd)
 	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 
 /area/crew_quarters/heads/office/cmo
 	icon_state = "heads_cmo"
 	name = "First Deck - Command - CMO's Office"
-	req_access = list(access_cmo)
+	req_access = list(GLOB.access_cmo)
 	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
 
 /area/crew_quarters/heads/office/hos
 	icon_state = "heads_hos"
 	name = "Bridge - Command - HoS' Office"
-	req_access = list(access_hos)
+	req_access = list(GLOB.access_hos)
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
 
 /area/command/bsa
 	name = "First Deck - Obstruction Field Disperser"
 	icon = 'maps/sierra/icons/turf/areas.dmi'
 	icon_state = "bridge_gun"
-	req_access = list(access_gun)
+	req_access = list(GLOB.access_gun)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /* ENGINEERING AREAS
@@ -115,22 +115,22 @@
 /area/rnd/misc_lab
 	name = "First Deck - RND - Miscellaneous Lab"
 	icon_state = "misclab"
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 
 /area/rnd/research
 	name = "First Deck - RND - Research Lab"
 	icon_state = "research"
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 
 /area/rnd/storage
 	name = "First Deck - RND - Storage"
 	icon_state = "toxstorage"
-	req_access = list(access_tox_storage)
+	req_access = list(GLOB.access_tox_storage)
 
 /area/rnd/development
 	name = "First Deck - RND - Fabricator Lab"
 	icon_state = "devlab"
-	req_access = list(access_tox)
+	req_access = list(GLOB.access_tox)
 
 /area/rnd/entry
 	name = "First Deck - RND - Lobby"
@@ -143,22 +143,22 @@
 /area/rnd/locker
 	name = "First Deck - RND - Locker Room"
 	icon_state = "locker"
-	req_access = list(access_research_storage)
+	req_access = list(GLOB.access_research_storage)
 
 /area/rnd/office
 	name = "First Deck - RND - Research Office"
 	icon_state = "locker"
-	req_access = list(access_research_storage)
+	req_access = list(GLOB.access_research_storage)
 
 /area/rnd/servers
 	name = "First Deck - RND - Servers"
 	icon_state = "tcomsatcham"
 	area_flags = AREA_FLAG_RAD_SHIELDED
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_rd)
+	req_access = list(GLOB.access_rd)
 
 /area/assembly
-	req_access = list(access_robotics)
+	req_access = list(GLOB.access_robotics)
 
 /area/assembly/office
 	name = "First Deck - RND - Robotics Office"
@@ -203,19 +203,19 @@
 /area/security/sierra/sergeant
 	name = "First Deck - Security - Warden"
 	icon_state = "Warden"
-	req_access = list(access_warden)
+	req_access = list(GLOB.access_warden)
 
 /area/security/sierra/armory
 	name = "First Deck - Security - Armory"
 	icon_state = "armory"
-	req_access = list(access_armory)
+	req_access = list(GLOB.access_armory)
 
 /area/security/sierra/armory/lobby
 	name = "First Deck - Security - Armory Lobby"
 
 /area/security/sierra/suits
 	name = "First Deck - Security - Suits Storage"
-	req_access = list(access_seceva)
+	req_access = list(GLOB.access_seceva)
 
 /area/security/sierra/breakroom
 	name = "First Deck - Security - Break Room"
@@ -224,37 +224,37 @@
 /area/security/sierra/forensic
 	name = "First Deck - Security - Forensic"
 	icon_state = "detective"
-	req_access = list(access_forensics_lockers)
+	req_access = list(GLOB.access_forensics_lockers)
 
 /area/security/sierra/forensic/lab
 	name = "First Deck - Security - Forensic Laboratory"
 
 /area/security/sierra/equipment
 	name = "First Deck - Security - Equipment"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 
 /area/security/sierra/interrogation
 	name = "First Deck - Security - Interrogation"
 	icon_state = "detective"
-	req_access = list(list(access_forensics_lockers, access_security))
+	req_access = list(list(GLOB.access_forensics_lockers, GLOB.access_security))
 
 /area/security/sierra/interrogation/second
 
 /area/security/sierra/evidence
 	name = "First Deck - Security - Evidence Storage"
 	icon_state = "detective"
-	req_access = list(list(access_forensics_lockers, access_security))
+	req_access = list(list(GLOB.access_forensics_lockers, GLOB.access_security))
 
 /area/security/sierra/brig
 	name = "First Deck - Security - Brig"
 	icon_state = "brig"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	area_flags = AREA_FLAG_RAD_SHIELDED
 
 /area/security/sierra/prison
 	name = "First Deck - Security - Prison Wing"
 	icon_state = "sec_prison"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	area_flags = AREA_FLAG_RAD_SHIELDED
 
 
@@ -265,12 +265,12 @@
 /area/security/nuke_storage
 	name = "First Deck - Vault"
 	icon_state = "nuke_storage"
-	req_access = list(access_heads_vault)
+	req_access = list(GLOB.access_heads_vault)
 
 /area/security/opscheck
 	name = "First Deck - RND - Security Checkpoint"
 	icon_state = "checkpoint"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 
 /* MEDBAY AREAS
  * ============
@@ -291,24 +291,24 @@
 /area/medical/locker
 	name = "First Deck - Infirmary - Locker Room"
 	icon_state = "locker"
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 
 /area/medical/mentalhealth
 	name = "First Deck - Infirmary - Mental Health"
 	icon_state = "medbay3"
 	ambience = list('sound/ambience/signal.ogg')
-	req_access = list(access_psychiatrist)
+	req_access = list(GLOB.access_psychiatrist)
 
 /area/medical/mentalhealth/therapyroom
 	name = "First Deck - Infirmary - Therapy Room"
 	icon_state = "medbay3"
 	ambience = list('sound/ambience/signal.ogg')
-	req_access = list(access_psychiatrist)
+	req_access = list(GLOB.access_psychiatrist)
 
 /area/medical/chemistry
 	name = "First Deck - Infirmary - Chemistry"
 	icon_state = "chem"
-	req_access = list(access_chemistry)
+	req_access = list(GLOB.access_chemistry)
 
 /area/medical/morgue/autopsy
 	name = "First Deck - Infirmary - Autopsy"
@@ -317,12 +317,12 @@
 /area/medical/sleeper
 	name = "First Deck - Infirmary - Emergency Treatment Center"
 	icon_state = "exam_room"
-	req_access = list(list(access_medical_equip, access_field_med))
+	req_access = list(list(GLOB.access_medical_equip, GLOB.access_field_med))
 
 /area/medical/surgery
 	name = "First Deck - Infirmary - Operating Theatre"
 	icon_state = "surgery"
-	req_access = list(access_surgery)
+	req_access = list(GLOB.access_surgery)
 
 /area/medical/surgery/second
 	name = "First Deck - Infirmary - Operating Theatre 2"
@@ -330,7 +330,7 @@
 /area/medical/staging
 	name = "First Deck - Infirmary Staging"
 	icon_state = "patients"
-	req_access = list(list(access_medical, access_research))
+	req_access = list(list(GLOB.access_medical, GLOB.access_research))
 
 /area/medical/office
 	name = "First Deck - Infirmary - Office"

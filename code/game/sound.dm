@@ -73,10 +73,10 @@ GLOBAL_LIST_INIT(tray_hit_sound,list('sound/items/trayhit1.ogg', 'sound/items/tr
 			continue
 		if(get_dist(M, turf_source) <= (world.view + extrarange) * 2)
 			var/turf/T = get_turf(M)
-			if(T && T.z == turf_source.z && (!is_ambiance || M.get_preference_value(/datum/client_preference/play_ambiance) == GLOB.PREF_YES))
+			if(T && T.z == turf_source.z && (!is_ambiance || M.get_preference_value(/datum/client_preference/play_ambiance) == PREF_YES))
 				M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, is_global, extrarange)
 
-var/global/const/FALLOFF_SOUNDS = 0.5
+GLOBAL_VAR_CONST(FALLOFF_SOUNDS, 0.5)
 
 /mob/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, is_global, extrarange)
 	if (isnull(soundin))
@@ -137,7 +137,7 @@ var/global/const/FALLOFF_SOUNDS = 0.5
 		S.z = dz
 		// The y value is for above your head, but there is no ceiling in 2d spessmens.
 		S.y = 1
-		S.falloff = (falloff ? falloff : FALLOFF_SOUNDS)
+		S.falloff = (falloff ? falloff : GLOB.FALLOFF_SOUNDS)
 
 	if(!is_global)
 
@@ -170,7 +170,7 @@ var/global/const/FALLOFF_SOUNDS = 0.5
 	sound_to(src, S)
 
 /client/proc/playtitlemusic()
-	if (get_preference_value(/datum/client_preference/play_lobby_music) == GLOB.PREF_YES)
+	if (get_preference_value(/datum/client_preference/play_lobby_music) == PREF_YES)
 		sound_to(src, GLOB.using_map.lobby_track.get_sound())
 		to_chat(src, GLOB.using_map.lobby_track.get_info())
 

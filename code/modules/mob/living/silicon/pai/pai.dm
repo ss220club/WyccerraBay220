@@ -91,7 +91,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 	status_flags |= NO_ANTAG
 	add_language(LANGUAGE_HUMAN_EURO, TRUE)
 	verbs -= /mob/living/verb/ghost
-	software = default_pai_software.Copy()
+	software = GLOB.default_pai_software.Copy()
 
 
 /mob/living/silicon/pai/proc/CreateRadio()

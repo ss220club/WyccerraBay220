@@ -162,5 +162,5 @@
 	if(!GLOB.using_map.use_overmap)
 		return station_name()
 
-	var/obj/overmap/visitable/O = map_sectors["[pick(affecting_z)]"]
+	var/obj/overmap/visitable/O = GLOB.map_sectors["[pick(affecting_z)]"]
 	return O ? O.name : "Unknown Location"

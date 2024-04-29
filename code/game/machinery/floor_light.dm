@@ -1,4 +1,4 @@
-var/global/list/floor_light_cache = list()
+GLOBAL_LIST_INIT(floor_light_cache, list())
 
 /obj/machinery/floor_light
 	name = "floor light"
@@ -106,23 +106,23 @@ var/global/list/floor_light_cache = list()
 	if((use_power == POWER_USE_ACTIVE) && operable())
 		if (!health_damaged())
 			var/cache_key = "floorlight-[default_light_colour]"
-			if(!floor_light_cache[cache_key])
+			if(!GLOB.floor_light_cache[cache_key])
 				var/image/I = image("on")
 				I.color = default_light_colour
 				I.plane = plane
 				I.layer = layer+0.001
-				floor_light_cache[cache_key] = I
-			AddOverlays(floor_light_cache[cache_key])
+				GLOB.floor_light_cache[cache_key] = I
+			AddOverlays(GLOB.floor_light_cache[cache_key])
 		else
 			damaged = rand(1,4)
 			var/cache_key = "floorlight-broken[damaged]-[default_light_colour]"
-			if(!floor_light_cache[cache_key])
+			if(!GLOB.floor_light_cache[cache_key])
 				var/image/I = image("flicker[damaged]")
 				I.color = default_light_colour
 				I.plane = plane
 				I.layer = layer+0.001
-				floor_light_cache[cache_key] = I
-			AddOverlays(floor_light_cache[cache_key])
+				GLOB.floor_light_cache[cache_key] = I
+			AddOverlays(GLOB.floor_light_cache[cache_key])
 	if (MACHINE_IS_BROKEN(src))
 		AddOverlays("broken")
 

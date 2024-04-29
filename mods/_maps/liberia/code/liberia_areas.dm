@@ -1,5 +1,5 @@
 /area/liberia/
-	req_access = list(access_merchant)
+	req_access = list(GLOB.access_merchant)
 
 /area/liberia/dockinghall
 	name = "FTV Liberia - Docking Hall"
@@ -84,7 +84,7 @@
 /area/liberia/captain
 	name = "FTV Liberia - Captain Office"
 	icon_state = "blue-red"
-	req_access = list(access_merchant)
+	req_access = list(GLOB.access_merchant)
 
 /area/liberia/atmos
 	name = "FTV Liberia - Atmos Chamber"

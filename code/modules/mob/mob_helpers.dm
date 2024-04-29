@@ -91,7 +91,7 @@
 //TODO: Integrate defence zones and targeting body parts with the actual organ system, move these into organ definitions.
 
 //The base miss chance for the different defence zones
-var/global/list/base_miss_chance = list(
+GLOBAL_LIST_INIT(base_miss_chance, list(
 	BP_HEAD = 70,
 	BP_EYES = 70,
 	BP_MOUTH = 70,
@@ -105,11 +105,11 @@ var/global/list/base_miss_chance = list(
 	BP_R_HAND = 50,
 	BP_L_FOOT = 70,
 	BP_R_FOOT = 70,
-)
+))
 
 //Used to weight organs when an organ is hit randomly (i.e. not a directed, aimed attack).
 //Also used to weight the protection value that armour provides for covering that body part when calculating protection from full-body effects.
-var/global/list/organ_rel_size = list(
+GLOBAL_LIST_INIT(organ_rel_size, list(
 	BP_HEAD = 25,
 	BP_CHEST = 70,
 	BP_GROIN = 30,
@@ -121,7 +121,7 @@ var/global/list/organ_rel_size = list(
 	BP_R_HAND = 10,
 	BP_L_FOOT = 10,
 	BP_R_FOOT = 10,
-)
+))
 
 /proc/check_zone(zone)
 	if(!zone)	return BP_CHEST
@@ -144,17 +144,17 @@ var/global/list/organ_rel_size = list(
 	var/ran_zone = zone
 	while (ran_zone == zone)
 		ran_zone = pick (
-			organ_rel_size[BP_HEAD];   BP_HEAD,
-			organ_rel_size[BP_CHEST];  BP_CHEST,
-			organ_rel_size[BP_GROIN];  BP_GROIN,
-			organ_rel_size[BP_L_ARM];  BP_L_ARM,
-			organ_rel_size[BP_R_ARM];  BP_R_ARM,
-			organ_rel_size[BP_L_LEG];  BP_L_LEG,
-			organ_rel_size[BP_R_LEG];  BP_R_LEG,
-			organ_rel_size[BP_L_HAND]; BP_L_HAND,
-			organ_rel_size[BP_R_HAND]; BP_R_HAND,
-			organ_rel_size[BP_L_FOOT]; BP_L_FOOT,
-			organ_rel_size[BP_R_FOOT]; BP_R_FOOT
+			GLOB.organ_rel_size[BP_HEAD];   BP_HEAD,
+			GLOB.organ_rel_size[BP_CHEST];  BP_CHEST,
+			GLOB.organ_rel_size[BP_GROIN];  BP_GROIN,
+			GLOB.organ_rel_size[BP_L_ARM];  BP_L_ARM,
+			GLOB.organ_rel_size[BP_R_ARM];  BP_R_ARM,
+			GLOB.organ_rel_size[BP_L_LEG];  BP_L_LEG,
+			GLOB.organ_rel_size[BP_R_LEG];  BP_R_LEG,
+			GLOB.organ_rel_size[BP_L_HAND]; BP_L_HAND,
+			GLOB.organ_rel_size[BP_R_HAND]; BP_R_HAND,
+			GLOB.organ_rel_size[BP_L_FOOT]; BP_L_FOOT,
+			GLOB.organ_rel_size[BP_R_FOOT]; BP_R_FOOT
 		)
 
 	return ran_zone
@@ -175,8 +175,8 @@ var/global/list/organ_rel_size = list(
 				return zone
 
 	var/miss_chance = 10
-	if (zone in base_miss_chance)
-		miss_chance = base_miss_chance[zone]
+	if (zone in GLOB.base_miss_chance)
+		miss_chance = GLOB.base_miss_chance[zone]
 	miss_chance = max(miss_chance + miss_chance_mod, 0)
 	if(prob(miss_chance))
 		return null
@@ -336,7 +336,7 @@ var/global/list/organ_rel_size = list(
 	return FALSE
 
 //converts intent-strings into numbers and back
-var/global/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
+GLOBAL_LIST_INIT(intents, list(I_HELP,I_DISARM,I_GRAB,I_HURT))
 /proc/intent_numeric(argument)
 	if(istext(argument))
 		switch(argument)

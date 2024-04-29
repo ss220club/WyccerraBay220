@@ -2,16 +2,16 @@
 	wire_count = 5
 	holder_type = /obj/machinery/particle_accelerator/control_box
 	descriptions = list(
-		new /datum/wire_description(PARTICLE_TOGGLE_WIRE, "This wire seems to connect to the main power toggle.", SKILL_EXPERIENCED),
-		new /datum/wire_description(PARTICLE_STRENGTH_WIRE, "This wire connects to the primary magnets."),
-		new /datum/wire_description(PARTICLE_INTERFACE_WIRE, "This wire appears connected to the user panel."),
-		new /datum/wire_description(PARTICLE_LIMIT_POWER_WIRE, "This wire connects to the primary magnets.")
+		new /datum/wire_description(GLOB.PARTICLE_TOGGLE_WIRE, "This wire seems to connect to the main power toggle.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.PARTICLE_STRENGTH_WIRE, "This wire connects to the primary magnets."),
+		new /datum/wire_description(GLOB.PARTICLE_INTERFACE_WIRE, "This wire appears connected to the user panel."),
+		new /datum/wire_description(GLOB.PARTICLE_LIMIT_POWER_WIRE, "This wire connects to the primary magnets.")
 	)
 
-var/global/const/PARTICLE_TOGGLE_WIRE = 1 // Toggles whether the PA is on or not.
-var/global/const/PARTICLE_STRENGTH_WIRE = 2 // Determines the strength of the PA.
-var/global/const/PARTICLE_INTERFACE_WIRE = 4 // Determines the interface showing up.
-var/global/const/PARTICLE_LIMIT_POWER_WIRE = 8 // Determines how strong the PA can be.
+GLOBAL_VAR_CONST(PARTICLE_TOGGLE_WIRE, 1) // Toggles whether the PA is on or not.
+GLOBAL_VAR_CONST(PARTICLE_STRENGTH_WIRE, 2) // Determines the strength of the PA.
+GLOBAL_VAR_CONST(PARTICLE_INTERFACE_WIRE, 4) // Determines the interface showing up.
+GLOBAL_VAR_CONST(PARTICLE_LIMIT_POWER_WIRE, 8) // Determines how strong the PA can be.
 //var/const/PARTICLE_NOTHING_WIRE = 16 // Blank wire
 
 /datum/wires/particle_acc/control_box/CanUse(mob/living/L)
@@ -24,35 +24,35 @@ var/global/const/PARTICLE_LIMIT_POWER_WIRE = 8 // Determines how strong the PA c
 	var/obj/machinery/particle_accelerator/control_box/C = holder
 	switch(index)
 
-		if(PARTICLE_TOGGLE_WIRE)
+		if(GLOB.PARTICLE_TOGGLE_WIRE)
 			C.toggle_power()
 
-		if(PARTICLE_STRENGTH_WIRE)
+		if(GLOB.PARTICLE_STRENGTH_WIRE)
 			C.add_strength()
 
-		if(PARTICLE_INTERFACE_WIRE)
+		if(GLOB.PARTICLE_INTERFACE_WIRE)
 			C.interface_control = !C.interface_control
 
-		if(PARTICLE_LIMIT_POWER_WIRE)
+		if(GLOB.PARTICLE_LIMIT_POWER_WIRE)
 			C.visible_message("[icon2html(C, viewers(get_turf(C)))]<b>[C]</b> makes a large whirring noise.")
 
 /datum/wires/particle_acc/control_box/UpdateCut(index, mended)
 	var/obj/machinery/particle_accelerator/control_box/C = holder
 	switch(index)
 
-		if(PARTICLE_TOGGLE_WIRE)
+		if(GLOB.PARTICLE_TOGGLE_WIRE)
 			if(C.active == !mended)
 				C.toggle_power()
 
-		if(PARTICLE_STRENGTH_WIRE)
+		if(GLOB.PARTICLE_STRENGTH_WIRE)
 
 			for(var/i = 1; i < 3; i++)
 				C.remove_strength()
 
-		if(PARTICLE_INTERFACE_WIRE)
+		if(GLOB.PARTICLE_INTERFACE_WIRE)
 			C.interface_control = mended
 
-		if(PARTICLE_LIMIT_POWER_WIRE)
+		if(GLOB.PARTICLE_LIMIT_POWER_WIRE)
 			C.strength_upper_limit = (mended ? 2 : 3)
 			if(C.strength_upper_limit < C.strength)
 				C.remove_strength()

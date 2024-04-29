@@ -20,7 +20,7 @@
 
 /obj/item/device/geiger/Initialize()
 	. = ..()
-	sound_id = "[type]_[sequential_id(type)]"
+	sound_id = "[type]_[GLOB.sequential_id(type)]"
 
 /obj/item/device/geiger/proc/update_sound(playing)
 	if(playing && !sound_token)

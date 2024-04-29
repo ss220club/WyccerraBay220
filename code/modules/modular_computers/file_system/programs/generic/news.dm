@@ -71,7 +71,7 @@
 	var/datum/computer_file/program/newscast/prog = program
 	var/turf/T = get_turf(prog.computer.get_physical_host())
 	if (!connected_group) // Look for a network connected to these z-levels
-		for (var/datum/feed_network/G in news_network)
+		for (var/datum/feed_network/G in GLOB.news_network)
 			if (T.z in G.z_levels)
 				connected_group = G
 				LAZYADD(G.news_programs, src)

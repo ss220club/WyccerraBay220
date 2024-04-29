@@ -1,5 +1,5 @@
-var/global/list/gear_categories = list()
-var/global/list/gear_datums = list()
+GLOBAL_LIST_INIT(gear_categories, list())
+GLOBAL_LIST_INIT(gear_datums, list())
 
 /hook/startup/proc/populate_gear_list()
 	for(var/datum/gear/gear_type as anything in subtypesof(/datum/gear))
@@ -10,19 +10,19 @@ var/global/list/gear_datums = list()
 			continue
 
 		var/datum/gear/new_gear = new gear_type
-		gear_datums[new_gear.display_name] = new_gear
+		GLOB.gear_datums[new_gear.display_name] = new_gear
 
-		var/datum/gear_category/category = gear_categories[new_gear.category]
+		var/datum/gear_category/category = GLOB.gear_categories[new_gear.category]
 		if(!category)
 			category = new /datum/gear_category(new_gear.category)
-			gear_categories[new_gear.category] = category
+			GLOB.gear_categories[new_gear.category] = category
 
 		category.add_gear(new_gear)
 
-	gear_categories = sortAssoc(gear_categories)
+	GLOB.gear_categories = sortAssoc(GLOB.gear_categories)
 
-	for(var/gear_category in gear_categories)
-		var/datum/gear_category/category = gear_categories[gear_category]
+	for(var/gear_category in GLOB.gear_categories)
+		var/datum/gear_category/category = GLOB.gear_categories[gear_category]
 		category.sort_gear()
 
 	return TRUE
@@ -69,7 +69,7 @@ var/global/list/gear_datums = list()
 /datum/category_item/player_setup_item/loadout/proc/is_gear_valid(gear_name, max_cost)
 	var/datum/gear/gear_to_check = gear_name
 	if(!istype(gear_to_check))
-		gear_to_check = gear_datums[gear_to_check]
+		gear_to_check = GLOB.gear_datums[gear_to_check]
 
 	if(!gear_to_check)
 		return FALSE
@@ -112,7 +112,7 @@ var/global/list/gear_datums = list()
 
 		/// Filtering out invalid slots
 		for(var/gear_name in gear_entries)
-			var/datum/gear/gear_datum = gear_datums[gear_name]
+			var/datum/gear/gear_datum = GLOB.gear_datums[gear_name]
 			if(!is_gear_valid(gear_datum, gear_budget_left))
 				invalid_gear += gear_datum.display_name
 				continue
@@ -181,14 +181,14 @@ var/global/list/gear_datums = list()
 	// Categories
 
 	. += "<td style='white-space: nowrap; width: 40px;' class='block'><b>"
-	for(var/category_name in gear_categories)
-		var/datum/gear_category/category = gear_categories[category_name]
+	for(var/category_name in GLOB.gear_categories)
+		var/datum/gear_category/category = GLOB.gear_categories[category_name]
 		var/category_cost = 0
 		for(var/gear_name in category.get_gear_items())
 			if(!picked_slot.contains(gear_name))
 				continue
 
-			var/datum/gear/gear_datum = gear_datums[gear_name]
+			var/datum/gear/gear_datum = GLOB.gear_datums[gear_name]
 			category_cost += gear_datum.cost
 
 		var/category_class = category_cost ? "linkOn" : ""
@@ -207,13 +207,13 @@ var/global/list/gear_datums = list()
 	var/list/purchased_gears = list()
 	var/list/paid_gears = list()
 	var/list/not_paid_gears = list()
-	var/datum/gear_category/current_category = gear_categories[current_tab]
+	var/datum/gear_category/current_category = GLOB.gear_categories[current_tab]
 
 	for(var/gear_name in current_category.get_gear_items())
 		if(!is_gear_valid(gear_name))
 			continue
 
-		var/datum/gear/gear_datum = gear_datums[gear_name]
+		var/datum/gear/gear_datum = GLOB.gear_datums[gear_name]
 		if(!gear_datum?.path)
 			continue
 
@@ -477,7 +477,7 @@ var/global/list/gear_datums = list()
 	ASSERT(istype(user))
 
 	if(href_list["toggle_gear"])
-		if(toggle_gear(gear_datums[href_list["toggle_gear"]], user))
+		if(toggle_gear(GLOB.gear_datums[href_list["toggle_gear"]], user))
 			return TOPIC_REFRESH_UPDATE_PREVIEW
 
 		return TOPIC_NOACTION
@@ -515,7 +515,7 @@ var/global/list/gear_datums = list()
 		return TOPIC_REFRESH
 
 	if(href_list["select_gear"])
-		var/datum/gear/gear_to_select = gear_datums[href_list["select_gear"]]
+		var/datum/gear/gear_to_select = GLOB.gear_datums[href_list["select_gear"]]
 		if(!gear_to_select)
 			return TOPIC_NOACTION
 
@@ -591,8 +591,8 @@ var/global/list/gear_datums = list()
 	current_slot.clear()
 
 	var/list/pool = list()
-	for(var/gear_name in gear_datums)
-		var/datum/gear/gear_datum = gear_datums[gear_name]
+	for(var/gear_name in GLOB.gear_datums)
+		var/datum/gear/gear_datum = GLOB.gear_datums[gear_name]
 		if(gear_allowed_to_see(gear_datum) && is_gear_valid(gear_datum))
 			pool += gear_datum
 

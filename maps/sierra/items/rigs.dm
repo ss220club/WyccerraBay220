@@ -29,7 +29,7 @@
 	boot_type = /obj/item/clothing/shoes/magboots/rig/command
 	glove_type = /obj/item/clothing/gloves/rig/command
 
-	req_access = list(access_heads) // Bridge
+	req_access = list(GLOB.access_heads) // Bridge
 	allowed = list(
 		/obj/item/gun,
 		/obj/item/ammo_magazine,
@@ -94,7 +94,7 @@
 	helm_type = /obj/item/clothing/head/helmet/space/rig/command/hop
 
 	allowed = list(/obj/item/gun, /obj/item/ammo_magazine, /obj/item/device/flashlight, /obj/item/tank, /obj/item/device/suit_cooling_unit, /obj/item/storage/secure/briefcase)
-	req_access = list(access_hop)
+	req_access = list(GLOB.access_hop)
 
 /obj/item/clothing/head/helmet/space/rig/command/hop
 	icon_state = "command_XO_rig"
@@ -130,7 +130,7 @@
 	helm_type = /obj/item/clothing/head/helmet/space/rig/command/captain
 	allowed = list(/obj/item/gun, /obj/item/ammo_magazine, /obj/item/device/flashlight, /obj/item/tank, /obj/item/device/suit_cooling_unit, /obj/item/storage/secure/briefcase)
 
-	req_access = list(access_captain)
+	req_access = list(GLOB.access_captain)
 
 /obj/item/clothing/head/helmet/space/rig/command/captain
 	icon_state = "command_CO_rig"
@@ -172,7 +172,7 @@
 				   /obj/item/stack/medical,
 				   /obj/item/roller_bed)
 
-	req_access = list(access_cmo)
+	req_access = list(GLOB.access_cmo)
 
 /obj/item/clothing/head/helmet/space/rig/command/cmo
 	icon_state = "command_med_rig"
@@ -223,7 +223,7 @@
 				  /obj/item/device/suit_cooling_unit,
 				  /obj/item/melee/baton)
 
-	req_access = list(access_hos)
+	req_access = list(GLOB.access_hos)
 
 /obj/item/clothing/head/helmet/space/rig/command/hos
 	icon_state = "hos_rig"
@@ -296,7 +296,7 @@
 				   /obj/item/storage/bag/fossils,
 				   /obj/item/rig_module/grenade_launcher/light)
 
-	req_access = list(access_rd)
+	req_access = list(GLOB.access_rd)
 
 /obj/item/clothing/head/helmet/space/rig/command/science
 	icon_state = "command_sci_rig"

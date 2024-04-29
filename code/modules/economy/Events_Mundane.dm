@@ -3,7 +3,7 @@
 	endWhen = 10
 
 /datum/event/mundane_news/announce()
-	var/datum/trade_destination/affected_dest = pickweight(weighted_mundaneevent_locations)
+	var/datum/trade_destination/affected_dest = pickweight(GLOB.weighted_mundaneevent_locations)
 	var/event_type = 0
 	if(length(affected_dest.viable_mundane_events))
 		event_type = pick(affected_dest.viable_mundane_events)
@@ -122,7 +122,7 @@
 				"a huge new ARG by a popular entertainment company","a secret tour by popular artiste [random_name(pick(MALE,FEMALE))]")]. \
 				Nyx Daily is offering discount tickets for two to see [random_name(pick(MALE,FEMALE))] live in return for eyewitness reports and up to the minute coverage."
 
-	for (var/datum/feed_network/N in news_network)
+	for (var/datum/feed_network/N in GLOB.news_network)
 		N.SubmitArticle(body, author, channel, null, 1)
 
 /datum/event/trivial_news
@@ -132,7 +132,7 @@
 	var/author = "Editor Mike Hammers"
 	var/channel = "The Gibson Gazette"
 
-	var/datum/trade_destination/affected_dest = pick(weighted_mundaneevent_locations)
+	var/datum/trade_destination/affected_dest = pick(GLOB.weighted_mundaneevent_locations)
 	var/body = pick(
 	"Armadillos want aardvarks removed from dictionary claims 'here first'.",\
 	"Angel found dancing on pinhead ordered to stop; cited for public nuisance.",\
@@ -211,5 +211,5 @@
 	"If Tin Whistles Are Made Of Tin, What Do They Make Foghorns Out Of?",\
 	"Broccoli discovered to be colonies of tiny aliens with murder on their minds"\
 	)
-	for (var/datum/feed_network/N in news_network)
+	for (var/datum/feed_network/N in GLOB.news_network)
 		N.SubmitArticle(body, author, channel, null, 1)

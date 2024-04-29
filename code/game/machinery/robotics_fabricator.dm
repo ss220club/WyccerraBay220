@@ -7,7 +7,7 @@
 	anchored = TRUE
 	idle_power_usage = 20
 	active_power_usage = 5000
-	req_access = list(access_robotics)
+	req_access = list(GLOB.access_robotics)
 	base_type = /obj/machinery/robotics_fabricator
 	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
@@ -37,7 +37,7 @@
 
 /obj/machinery/robotics_fabricator/Initialize()
 	files = new /datum/research(src) //Setup the research data holder.
-	manufacturer = basic_robolimb.company
+	manufacturer = GLOB.basic_robolimb.company
 	update_categories()
 	. = ..()
 
@@ -92,10 +92,10 @@
 	data["buildable"] = get_build_options()
 	data["category"] = category
 	data["categories"] = categories
-	if(all_robolimbs)
+	if(GLOB.all_robolimbs)
 		var/list/T = list()
-		for(var/A in all_robolimbs)
-			var/datum/robolimb/R = all_robolimbs[A]
+		for(var/A in GLOB.all_robolimbs)
+			var/datum/robolimb/R = GLOB.all_robolimbs[A]
 			if(R.unavailable_at_fab || length(R.applies_to_part))
 				continue
 			T += list(list("id" = A, "company" = R.company))
@@ -136,7 +136,7 @@
 		return TOPIC_NOACTION
 
 	if(href_list["manufacturer"])
-		if(href_list["manufacturer"] in all_robolimbs)
+		if(href_list["manufacturer"] in GLOB.all_robolimbs)
 			manufacturer = href_list["manufacturer"]
 
 	if(href_list["eject"])

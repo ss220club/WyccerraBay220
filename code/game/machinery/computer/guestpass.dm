@@ -65,7 +65,7 @@
 
 /obj/machinery/computer/guestpass/New()
 	..()
-	uid = "[random_id("guestpass_serial_number",100,999)]-G[rand(10,99)]"
+	uid = "[GLOB.random_id("guestpass_serial_number",100,999)]-G[rand(10,99)]"
 
 /obj/machinery/computer/guestpass/use_tool(obj/item/O, mob/living/user, list/click_params)
 	if (isid(O))
@@ -169,7 +169,7 @@
 
 	else if (href_list["issue"])
 		if (giver && length(accesses))
-			var/number = pad_left(random_id("guestpass_id_number", 1, 9999), 6, "0")
+			var/number = pad_left(GLOB.random_id("guestpass_id_number", 1, 9999), 6, "0")
 			var/entry = "\[[stationtime2text()]\] Pass #[number] issued by [giver.registered_name] ([giver.assignment]) to [giv_name]. Reason: [reason]. Granted access to following areas: "
 			var/list/access_descriptors = list()
 			for (var/A in accesses)

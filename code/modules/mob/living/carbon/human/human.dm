@@ -293,10 +293,10 @@
 	if(status_flags & GODMODE)	return 0	//godmode
 
 	if(species.siemens_coefficient == -1)
-		if(stored_shock_by_ref["\ref[src]"])
-			stored_shock_by_ref["\ref[src]"] += shock_damage
+		if(GLOB.stored_shock_by_ref["\ref[src]"])
+			GLOB.stored_shock_by_ref["\ref[src]"] += shock_damage
 		else
-			stored_shock_by_ref["\ref[src]"] = shock_damage
+			GLOB.stored_shock_by_ref["\ref[src]"] = shock_damage
 		return
 
 	if (!def_zone)
@@ -1099,7 +1099,7 @@
 		var/turf/T= get_turf(src)
 
 		if(T.is_outside())// They're outside and hopefully on a planet.
-			var/obj/overmap/visitable/sector/exoplanet/E = map_sectors["[T.z]"]
+			var/obj/overmap/visitable/sector/exoplanet/E = GLOB.map_sectors["[T.z]"]
 			if (!istype(E))
 				to_chat(usr, SPAN_NOTICE("You see... things, it's hard to put into words what you're seeing specifically."))
 				return
@@ -1291,16 +1291,16 @@
 		var/singleton/cultural_info/check = cultural_info[thing]
 		if(istype(check))
 			if(check.default_language)
-				free_languages    |= all_languages[check.default_language]
-				default_languages |= all_languages[check.default_language]
+				free_languages    |= GLOB.all_languages[check.default_language]
+				default_languages |= GLOB.all_languages[check.default_language]
 			if(check.language)
-				free_languages    |= all_languages[check.language]
+				free_languages    |= GLOB.all_languages[check.language]
 			if(check.name_language)
-				free_languages    |= all_languages[check.name_language]
+				free_languages    |= GLOB.all_languages[check.name_language]
 			for(var/lang in check.additional_langs)
-				free_languages    |= all_languages[lang]
+				free_languages    |= GLOB.all_languages[lang]
 			for(var/lang in check.get_spoken_languages())
-				permitted_languages |= all_languages[lang]
+				permitted_languages |= GLOB.all_languages[lang]
 
 	for(var/thing in languages)
 		var/datum/language/lang = thing

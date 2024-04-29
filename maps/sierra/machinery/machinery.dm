@@ -43,11 +43,11 @@
 /obj/machinery/suit_cycler/exploration
 	name = "Exploration suit cycler"
 	model_text = "Exploration"
-	req_access = list(access_explorer)
+	req_access = list(GLOB.access_explorer)
 	available_modifications = list(/singleton/item_modifier/space_suit/sol/sierra/exploration)
 
 /obj/machinery/suit_cycler/pilot
-	req_access = list(access_explorer) //because unathi version of expeditonary suit it shit
+	req_access = list(GLOB.access_explorer) //because unathi version of expeditonary suit it shit
 
 // Overrides
 
@@ -58,7 +58,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	islocked = 1
 	ssu_color = "#cc0000"
 
@@ -69,7 +69,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_medical)
+	req_access = list(GLOB.access_medical)
 	islocked = 1
 	ssu_color = "#55aaaa"
 
@@ -102,7 +102,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/gas/half
-	req_access = list(access_explorer)
+	req_access = list(GLOB.access_explorer)
 	islocked = 1
 	ssu_color = "#9966ff"
 
@@ -113,7 +113,7 @@
 	boots = /obj/item/clothing/shoes/magboots
 	tank = /obj/item/tank/oxygen
 	mask = /obj/item/clothing/mask/breath
-	req_access = list(access_explorer, access_expedition_shuttle_helm)
+	req_access = list(GLOB.access_explorer, GLOB.access_expedition_shuttle_helm)
 	islocked = 1
 	ssu_color = "#990000"
 
@@ -123,7 +123,7 @@
 	islocked = 0
 
 /obj/machinery/photocopier/faxmachine/centcom
-	req_access = list(access_cent_general)
+	req_access = list(GLOB.access_cent_general)
 	department = "Office of Civil Investigation and Enforcement"
 
 /obj/machinery/photocopier/faxmachine/centcom/Initialize()
@@ -239,7 +239,7 @@
 	check_records = 1	//checks if a security record exists at all
 	check_weapons = 1	//checks if it can shoot people that have a weapon they aren't authorized to have
 	check_access = 1	//if this is active, the turret shoots everything that does not meet the access requirements
-	req_access = list(access_bridge)
+	req_access = list(GLOB.access_bridge)
 
 // Shieldgen
 

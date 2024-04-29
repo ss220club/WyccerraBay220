@@ -366,7 +366,7 @@
 
 	var/show_log = alert(src, "Show ion message?", "Message", "Yes", "No")
 	if(show_log == "Yes")
-		command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = ANNOUNCER_IONSTORM)
+		GLOB.command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = ANNOUNCER_IONSTORM)
 
 	IonStorm(0)
 
@@ -588,7 +588,7 @@ Ccomp's first proc.
 
 	var/show_log = alert(src, "Show ion message?", "Message", "Yes", "No")
 	if(show_log == "Yes")
-		command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = ANNOUNCER_IONSTORM)
+		GLOB.command_announcement.Announce("Ion storm detected near the [station_name()]. Please check all AI-controlled equipment for errors.", "Anomaly Alert", new_sound = ANNOUNCER_IONSTORM)
 
 /client/proc/cmd_admin_rejuvenate(mob/living/M as mob in SSmobs.mob_list)
 	set category = "Special Verbs"
@@ -626,9 +626,9 @@ Ccomp's first proc.
 
 	switch(alert("Should this be announced to the general population?",,"Yes","No"))
 		if("Yes")
-			command_announcement.Announce(input, customname, new_sound = GLOB.using_map.command_report_sound, msg_sanitized = 1);
+			GLOB.command_announcement.Announce(input, customname, new_sound = GLOB.using_map.command_report_sound, msg_sanitized = 1);
 		if("No")
-			minor_announcement.Announce(message = "New [GLOB.using_map.company_name] Update available at all communication consoles.")
+			GLOB.minor_announcement.Announce(message = "New [GLOB.using_map.company_name] Update available at all communication consoles.")
 
 	log_admin("[key_name(src)] has created a command report: [input]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
@@ -808,7 +808,7 @@ Ccomp's first proc.
 	set category = "Admin"
 	set name = "Call Evacuation"
 
-	if(!SSticker.mode || !evacuation_controller)
+	if(!SSticker.mode || !GLOB.evacuation_controller)
 		return
 
 	if(!check_rights(R_ADMIN))	return
@@ -820,7 +820,7 @@ Ccomp's first proc.
 			return
 
 	var/choice = input("Is this an emergency evacuation or a crew transfer?") in list("Emergency", "Crew Transfer")
-	evacuation_controller.call_evacuation(usr, (choice == "Emergency"))
+	GLOB.evacuation_controller.call_evacuation(usr, (choice == "Emergency"))
 	log_and_message_admins("admin-called an evacuation.")
 	return
 
@@ -832,25 +832,25 @@ Ccomp's first proc.
 
 	if(alert(src, "You sure?", "Confirm", "Yes", "No") != "Yes") return
 
-	if(!evacuation_controller)
+	if(!GLOB.evacuation_controller)
 		return
 
-	evacuation_controller.cancel_evacuation()
+	GLOB.evacuation_controller.cancel_evacuation()
 	log_and_message_admins("admin-cancelled the evacuation.")
 
 /client/proc/admin_deny_shuttle()
 	set category = "Admin"
 	set name = "Toggle Deny Evac"
 
-	if (!evacuation_controller)
+	if (!GLOB.evacuation_controller)
 		return
 
 	if(!check_rights(R_ADMIN))	return
 
-	evacuation_controller.deny = !evacuation_controller.deny
+	GLOB.evacuation_controller.deny = !GLOB.evacuation_controller.deny
 
-	log_admin("[key_name(src)] has [evacuation_controller.deny ? "denied" : "allowed"] evacuation to be called.")
-	message_admins("[key_name_admin(usr)] has [evacuation_controller.deny ? "denied" : "allowed"] evacuation to be called.")
+	log_admin("[key_name(src)] has [GLOB.evacuation_controller.deny ? "denied" : "allowed"] evacuation to be called.")
+	message_admins("[key_name_admin(usr)] has [GLOB.evacuation_controller.deny ? "denied" : "allowed"] evacuation to be called.")
 
 /client/proc/cmd_admin_attack_log(mob/M as mob in SSmobs.mob_list)
 	set category = "Special Verbs"
@@ -1012,7 +1012,7 @@ Ccomp's first proc.
 			shuttle.name = name
 			break
 
-	for (var/obj/shuttle_landmark/ship/S in landmarks_list)
+	for (var/obj/shuttle_landmark/ship/S in GLOB.landmarks_list)
 		if (S.name == original_name)
 			S.shuttle_name = name
 		if (istype(S, /obj/overmap/visitable/ship/landable))

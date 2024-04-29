@@ -1,4 +1,4 @@
-var/global/list/pai_emotions = list(
+GLOBAL_LIST_INIT(pai_emotions, list(
 		"Happy" = 1,
 		"Cat" = 2,
 		"Extremely Happy" = 3,
@@ -14,23 +14,23 @@ var/global/list/pai_emotions = list(
 		"Smirk" = 13,
 		"Exclamation Points" = 14,
 		"Question Mark" = 15
-	)
+	))
 
 
-var/global/list/pai_software_by_key = list()
-var/global/list/default_pai_software = list()
+GLOBAL_LIST_INIT(pai_software_by_key, list())
+GLOBAL_LIST_INIT(default_pai_software, list())
 /hook/startup/proc/populate_pai_software_list()
 	var/r = 1 // I would use ., but it'd sacrifice runtime detection
 	for(var/type in typesof(/datum/pai_software) - /datum/pai_software)
 		var/datum/pai_software/P = new type()
-		if(pai_software_by_key[P.id])
-			var/datum/pai_software/O = pai_software_by_key[P.id]
+		if(GLOB.pai_software_by_key[P.id])
+			var/datum/pai_software/O = GLOB.pai_software_by_key[P.id]
 			log_error(SPAN_WARNING("pAI software module [P.name] has the same key as [O.name]!"))
 			r = 0
 			continue
-		pai_software_by_key[P.id] = P
+		GLOB.pai_software_by_key[P.id] = P
 		if(P.default)
-			default_pai_software[P.id] = P
+			GLOB.default_pai_software[P.id] = P
 	return r
 
 
@@ -57,8 +57,8 @@ var/global/list/default_pai_software = list()
 	// Software we have not bought
 	var/not_bought_software[0]
 
-	for(var/key in pai_software_by_key)
-		var/datum/pai_software/S = pai_software_by_key[key]
+	for(var/key in GLOB.pai_software_by_key)
+		var/datum/pai_software/S = GLOB.pai_software_by_key[key]
 		var/software_data[0]
 		software_data["name"] = S.name
 		software_data["id"] = S.id
@@ -75,10 +75,10 @@ var/global/list/default_pai_software = list()
 
 	// Emotions
 	var/emotions[0]
-	for(var/name in pai_emotions)
+	for(var/name in GLOB.pai_emotions)
 		var/emote[0]
 		emote["name"] = name
-		emote["id"] = pai_emotions[name]
+		emote["id"] = GLOB.pai_emotions[name]
 		emotions[LIST_PRE_INC(emotions)] = emote
 
 	data["emotions"] = emotions
@@ -110,7 +110,7 @@ var/global/list/default_pai_software = list()
 
 		else if(href_list["purchase"])
 			var/soft = href_list["purchase"]
-			var/datum/pai_software/S = pai_software_by_key[soft]
+			var/datum/pai_software/S = GLOB.pai_software_by_key[soft]
 			if(S && (ram >= S.ram_cost))
 				ram -= S.ram_cost
 				software[S.id] = S
@@ -119,7 +119,7 @@ var/global/list/default_pai_software = list()
 
 		else if(href_list["image"])
 			var/img = text2num(href_list["image"])
-			if(1 <= img && img <= length(pai_emotions))
+			if(1 <= img && img <= length(GLOB.pai_emotions))
 				card.setEmotion(img)
 			return TOPIC_HANDLED
 

@@ -1,7 +1,7 @@
 /obj/structure/closet/secure_closet/engineering_chief
 	name = "chief engineer's locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/ce
-	req_access = list(access_ce)
+	req_access = list(GLOB.access_ce)
 
 /obj/structure/closet/secure_closet/engineering_chief/WillContain()
 	return list(
@@ -26,7 +26,7 @@
 
 /obj/structure/closet/secure_closet/engineering_electrical
 	name = "electrical supplies"
-	req_access = list(access_engine_equip)
+	req_access = list(GLOB.access_engine_equip)
 	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/electrical
 
 /obj/structure/closet/secure_closet/engineering_electrical/WillContain()
@@ -40,7 +40,7 @@
 
 /obj/structure/closet/secure_closet/engineering_welding
 	name = "welding supplies"
-	req_access = list(access_construction)
+	req_access = list(GLOB.access_construction)
 	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/welding
 
 /obj/structure/closet/secure_closet/engineering_welding/WillContain()
@@ -54,7 +54,7 @@
 
 /obj/structure/closet/secure_closet/engineering_personal
 	name = "engineer's locker"
-	req_access = list(access_engine_equip)
+	req_access = list(GLOB.access_engine_equip)
 	closet_appearance = /singleton/closet_appearance/secure_closet/engineering
 
 /obj/structure/closet/secure_closet/engineering_personal/WillContain()
@@ -72,7 +72,7 @@
 
 /obj/structure/closet/secure_closet/atmos_personal
 	name = "technician's locker"
-	req_access = list(access_atmospherics)
+	req_access = list(GLOB.access_atmospherics)
 	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/atmos
 
 /obj/structure/closet/secure_closet/atmos_personal/WillContain()

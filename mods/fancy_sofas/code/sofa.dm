@@ -26,42 +26,42 @@
 	..()
 
 	var/cache_key = "[base_icon]-[material.name]-over"
-	if(isnull(stool_cache[cache_key]))
+	if(isnull(GLOB.stool_cache[cache_key]))
 		var/image/I = image('mods/fancy_sofas/icons/furniture.dmi', "[base_icon]_over")
 		if(material_alteration & MATERIAL_ALTERATION_COLOR)
 			I.color = material.icon_colour
 		I.layer = ABOVE_HUMAN_LAYER
-		stool_cache[cache_key] = I
-	AddOverlays(stool_cache[cache_key])
+		GLOB.stool_cache[cache_key] = I
+	AddOverlays(GLOB.stool_cache[cache_key])
 	// Padding overlay.
 	if(padding_material)
 		var/padding_cache_key = "[base_icon]-padding-[padding_material.name]-over"
-		if(isnull(stool_cache[padding_cache_key]))
+		if(isnull(GLOB.stool_cache[padding_cache_key]))
 			var/image/I =  image(icon, "[base_icon]_padding_over")
 			if(material_alteration & MATERIAL_ALTERATION_COLOR)
 				I.color = padding_material.icon_colour
 			I.layer = ABOVE_HUMAN_LAYER
-			stool_cache[padding_cache_key] = I
-		AddOverlays(stool_cache[padding_cache_key])
+			GLOB.stool_cache[padding_cache_key] = I
+		AddOverlays(GLOB.stool_cache[padding_cache_key])
 
 	if(buckled_mob)
 		cache_key = "[base_icon]-armrest-[material.name]"
-		if(isnull(stool_cache[cache_key]))
+		if(isnull(GLOB.stool_cache[cache_key]))
 			var/image/I = image(icon, "[base_icon]_armrest")
 			I.layer = ABOVE_HUMAN_LAYER
 			if(material_alteration & MATERIAL_ALTERATION_COLOR)
 				I.color = material.icon_colour
-			stool_cache[cache_key] = I
-		AddOverlays(stool_cache[cache_key])
+			GLOB.stool_cache[cache_key] = I
+		AddOverlays(GLOB.stool_cache[cache_key])
 		if(padding_material)
 			cache_key = "[base_icon]-padding-armrest-[padding_material.name]"
-			if(isnull(stool_cache[cache_key]))
+			if(isnull(GLOB.stool_cache[cache_key]))
 				var/image/I = image(icon, "[base_icon]_padding_armrest")
 				I.layer = ABOVE_HUMAN_LAYER
 				if(material_alteration & MATERIAL_ALTERATION_COLOR)
 					I.color = padding_material.icon_colour
-				stool_cache[cache_key] = I
-			AddOverlays(stool_cache[cache_key])
+				GLOB.stool_cache[cache_key] = I
+			AddOverlays(GLOB.stool_cache[cache_key])
 
 /obj/structure/bed/sofa/m/rotate(mob/user)
 	if(!CanPhysicallyInteract(user) || anchored)

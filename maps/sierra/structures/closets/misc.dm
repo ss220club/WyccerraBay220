@@ -4,7 +4,7 @@
 
 /obj/structure/closet/secure_closet/iaa
 	name = "\improper Internal Affairs Agent's locker"
-	req_access = list(access_iaa)
+	req_access = list(GLOB.access_iaa)
 	closet_appearance = /singleton/closet_appearance/secure_closet/sierra/corporate/iaa
 
 /obj/structure/closet/secure_closet/iaa/WillContain()

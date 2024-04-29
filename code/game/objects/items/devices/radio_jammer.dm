@@ -80,9 +80,9 @@ GLOBAL_LIST_EMPTY(radio_jammers)
 			AddOverlays("off")
 
 /obj/item/device/radio_jammer/proc/set_frequency(new_frequency)
-	radio_controller.remove_object(src, frequency)
+	GLOB.radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_controller.add_object(src, frequency, RADIO_CHAT)
+	GLOB.radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/radio_jammer/receive_signal(datum/signal/signal)
 	if(signal?.encryption == code)

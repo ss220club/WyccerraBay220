@@ -8,22 +8,22 @@
 		return
 
 	switch(network)
-		if(NETWORK_ENGINEERING, NETWORK_ALARM_ATMOS, NETWORK_ALARM_CAMERA, NETWORK_ALARM_FIRE, NETWORK_ALARM_POWER)
-			return access_engine
-		if(NETWORK_CRESCENT, NETWORK_ERT)
-			return access_cent_specops
-		if(NETWORK_MEDICAL)
-			return access_medical
-		if(NETWORK_MINE)
-			return access_mailsorting // Cargo office - all cargo staff should have access here.
-		if(NETWORK_RESEARCH)
-			return access_research
-		if(NETWORK_THUNDER)
+		if(GLOB.NETWORK_ENGINEERING, NETWORK_ALARM_ATMOS, NETWORK_ALARM_CAMERA, NETWORK_ALARM_FIRE, NETWORK_ALARM_POWER)
+			return GLOB.access_engine
+		if(GLOB.NETWORK_CRESCENT, GLOB.NETWORK_ERT)
+			return GLOB.access_cent_specops
+		if(GLOB.NETWORK_MEDICAL)
+			return GLOB.access_medical
+		if(GLOB.NETWORK_MINE)
+			return GLOB.access_mailsorting // Cargo office - all cargo staff should have access here.
+		if(GLOB.NETWORK_RESEARCH)
+			return GLOB.access_research
+		if(GLOB.NETWORK_THUNDER)
 			return 0
-		if(NETWORK_HELMETS)
-			return access_eva
+		if(GLOB.NETWORK_HELMETS)
+			return GLOB.access_eva
 
-	return access_security // Default for all other networks
+	return GLOB.access_security // Default for all other networks
 
 /datum/computer_file/program/camera_monitor
 	filename = "cammon"
@@ -91,14 +91,14 @@
 	if(!network_access)
 		return 1
 
-	return check_access(user, access_security) || check_access(user, network_access)
+	return check_access(user, GLOB.access_security) || check_access(user, network_access)
 
 /datum/nano_module/camera_monitor/Topic(href, href_list)
 	if(..())
 		return 1
 
 	if(href_list["switch_camera"])
-		var/obj/machinery/camera/C = locate(href_list["switch_camera"]) in cameranet.cameras
+		var/obj/machinery/camera/C = locate(href_list["switch_camera"]) in GLOB.cameranet.cameras
 		var/datum/extension/interactive/ntos/os = get_extension(nano_host(), /datum/extension/interactive/ntos)
 		if(!C)
 			return
@@ -199,8 +199,8 @@
 // The ERT variant has access to ERT and crescent cams, but still checks for accesses. ERT members should be able to use it.
 /datum/nano_module/camera_monitor/ert/modify_networks_list(list/networks)
 	..()
-	networks.Add(list(list("tag" = NETWORK_ERT, "has_access" = 1)))
-	networks.Add(list(list("tag" = NETWORK_CRESCENT, "has_access" = 1)))
+	networks.Add(list(list("tag" = GLOB.NETWORK_ERT, "has_access" = 1)))
+	networks.Add(list(list("tag" = GLOB.NETWORK_CRESCENT, "has_access" = 1)))
 	return networks
 
 /datum/nano_module/camera_monitor/apply_visual(mob/M)

@@ -1,4 +1,4 @@
-var/global/repository/follow/follow_repository = new()
+GLOBAL_DATUM_INIT(follow_repository, /repository/follow, new())
 
 /repository/follow
 	var/datum/cache_entry/valid_until/cache
@@ -82,8 +82,8 @@ var/global/repository/follow/follow_repository = new()
 
 /atom/movable/Initialize()
 	. = ..()
-	if(!is_type_in_list(src, follow_repository.excluded_subtypes) && is_type_in_list(src, follow_repository.followed_subtypes))
-		follow_repository.add_subject(src)
+	if(!is_type_in_list(src, GLOB.follow_repository.excluded_subtypes) && is_type_in_list(src, GLOB.follow_repository.followed_subtypes))
+		GLOB.follow_repository.add_subject(src)
 
 /******************
 * Follow Metadata *

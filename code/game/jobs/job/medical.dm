@@ -10,9 +10,9 @@
 	selection_color = "#026865"
 	req_admin_notify = 1
 	economic_power = 10
-	access = list(access_medical, access_medical_equip, access_morgue, access_bridge, access_heads,
-			access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce,
-			access_keycard_auth, access_sec_doors, access_psychiatrist, access_eva, access_maint_tunnels, access_external_airlocks)
+	access = list(GLOB.access_medical, GLOB.access_medical_equip, GLOB.access_morgue, GLOB.access_bridge, GLOB.access_heads,
+			GLOB.access_chemistry, GLOB.access_virology, GLOB.access_cmo, GLOB.access_surgery, GLOB.access_RC_announce,
+			GLOB.access_keycard_auth, GLOB.access_sec_doors, GLOB.access_psychiatrist, GLOB.access_eva, GLOB.access_maint_tunnels, GLOB.access_external_airlocks)
 
 	minimal_player_age = 14
 	ideal_character_age = 50
@@ -29,7 +29,7 @@
 	supervisors = "the chief medical officer"
 	selection_color = "#013d3b"
 	economic_power = 7
-	access = list(access_medical, access_medical_equip, access_morgue, access_surgery, access_chemistry, access_virology)
+	access = list(GLOB.access_medical, GLOB.access_medical_equip, GLOB.access_morgue, GLOB.access_surgery, GLOB.access_chemistry, GLOB.access_virology)
 	alt_titles = list(
 		"Surgeon" = /singleton/hierarchy/outfit/job/medical/doctor/surgeon,
 		"Emergency Physician" = /singleton/hierarchy/outfit/job/medical/doctor/emergency_physician,
@@ -49,7 +49,7 @@
 	supervisors = "the chief medical officer"
 	selection_color = "#013d3b"
 	economic_power = 5
-	access = list(access_medical, access_medical_equip, access_morgue, access_surgery, access_chemistry, access_virology)
+	access = list(GLOB.access_medical, GLOB.access_medical_equip, GLOB.access_morgue, GLOB.access_surgery, GLOB.access_chemistry, GLOB.access_virology)
 	outfit_type = /singleton/hierarchy/outfit/job/medical/chemist
 
 /datum/job/geneticist
@@ -63,7 +63,7 @@
 	supervisors = "the Chief Medical Officer and Chief Science Officer"
 	selection_color = "#013d3b"
 	economic_power = 7
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_research)
+	access = list(GLOB.access_medical, GLOB.access_morgue, GLOB.access_surgery, GLOB.access_chemistry, GLOB.access_virology, GLOB.access_research)
 	outfit_type = /singleton/hierarchy/outfit/job/medical/geneticist
 
 /datum/job/psychiatrist
@@ -77,7 +77,7 @@
 	minimal_player_age = 3
 	supervisors = "the chief medical officer"
 	selection_color = "#013d3b"
-	access = list(access_medical, access_medical_equip, access_morgue, access_surgery, access_chemistry, access_virology, access_psychiatrist)
+	access = list(GLOB.access_medical, GLOB.access_medical_equip, GLOB.access_morgue, GLOB.access_surgery, GLOB.access_chemistry, GLOB.access_virology, GLOB.access_psychiatrist)
 	outfit_type = /singleton/hierarchy/outfit/job/medical/psychiatrist
 
 /datum/job/Paramedic
@@ -91,6 +91,6 @@
 	selection_color = "#013d3b"
 	economic_power = 4
 	minimal_player_age = 7
-	access = list(access_medical, access_medical_equip, access_morgue, access_surgery, access_chemistry, access_virology, access_eva, access_maint_tunnels, access_external_airlocks, access_psychiatrist)
+	access = list(GLOB.access_medical, GLOB.access_medical_equip, GLOB.access_morgue, GLOB.access_surgery, GLOB.access_chemistry, GLOB.access_virology, GLOB.access_eva, GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_psychiatrist)
 	alt_titles = list("Emergency Medical Technician" = /singleton/hierarchy/outfit/job/medical/paramedic/emt)
 	outfit_type = /singleton/hierarchy/outfit/job/medical/paramedic

@@ -1,7 +1,7 @@
 /area/ship/hand
 	name = "\improper Salvage Vessel"
 	icon_state = "shuttle2"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED
 
 /area/ship/hand/crew
@@ -50,7 +50,7 @@
 /area/ship/hand/crew/kitchen
 	name = "\improper Galley"
 	icon_state = "kitchen"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 /area/ship/hand/crew/hydro
 	name = "Hydroponics"
@@ -81,22 +81,22 @@
 /area/ship/hand/engineering/hallway
 	name = "\improper Engineering Hallway"
 	icon_state = "green"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 /area/ship/hand/engineering/port
 	name = "\improper Engineering Equipment"
 	icon_state = "green"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 /area/ship/hand/engineering/starboard
 	name = "\improper Engineering Equipment"
 	icon_state = "green"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 /area/ship/hand/engineering/storage
 	name = "\improper Engineering Storage"
 	icon_state = "green"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 
 /area/ship/hand/maintenance/solarport
@@ -111,12 +111,12 @@
 /area/ship/hand/medbay
 	name = "\improper Medical Bay"
 	icon_state = "medbay"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 /area/ship/hand/medbay/storage
 	name = "\improper Medical Bay Lobby"
 	icon_state = "medbay"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 
 
@@ -125,7 +125,7 @@
 	name = "\improper Atmospherics Comparment"
 	icon_state = "atmos"
 	ambience = HAND_ENG_AMBIENCE
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 /area/ship/hand/maintenance/atmos/fuel
 	name = "\improper Fuel Comparment"
@@ -133,7 +133,7 @@
 /area/ship/hand/maintenance/engine
 	icon_state = "engine"
 	ambience = HAND_ENG_AMBIENCE
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)
 
 /area/ship/hand/maintenance/engine/port
 	name = "\improper Port Thruster"
@@ -147,12 +147,12 @@
 /area/ship/hand/command
 	name = "\improper Flight Officers Quarters"
 	icon_state = "bridge"
-	req_access = list(access_away_hand_captain)
+	req_access = list(GLOB.access_away_hand_captain)
 
 /area/ship/hand/command/medic
 	name = "\improper Senior Staff Quarters"
 	icon_state = "bridge"
-	req_access = list(access_away_hand_med)
+	req_access = list(GLOB.access_away_hand_med)
 
 /area/ship/hand/command/bridge
 	name = "\improper Bridge"
@@ -161,4 +161,4 @@
 /area/ship/hand/airlock
 	name = "\improper External Airlock"
 	icon_state = "entry_1"
-	req_access = list(access_away_hand)
+	req_access = list(GLOB.access_away_hand)

@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/deck/generate_fields()
 	..()
-	set_access(access_cargo)
+	set_access(GLOB.access_cargo)
 
 /datum/computer_file/report/recipient/deck/shuttle
 	form_name = "NT-DEC-32"
@@ -38,8 +38,8 @@
 	permission_fields += add_field(/datum/report_field/options/yes_no, "Разрешение на вылет из ангара?", required = 1)
 	permission_fields += add_field(/datum/report_field/signature, "Для разрешения на вылет, поставьте подпись либо печать здесь", required = 1)
 	for(var/datum/report_field/field in permission_fields)
-		field.set_access(access_edit=list(list(access_el, access_qm, access_heads)))
-	set_access(list(list(access_guppy, access_expedition_shuttle, access_petrov)),list(list(access_guppy, access_expedition_shuttle, access_petrov)))
+		field.set_access(access_edit=list(list(GLOB.access_el, GLOB.access_qm, GLOB.access_heads)))
+	set_access(list(list(GLOB.access_guppy, GLOB.access_expedition_shuttle, GLOB.access_petrov)),list(list(GLOB.access_guppy, GLOB.access_expedition_shuttle, GLOB.access_petrov)))
 
 /datum/computer_file/report/recipient/deck/docking
 	form_name = "NT-DEC-33"
@@ -67,7 +67,7 @@
 	add_field(/datum/report_field/text_label, "ОТСТЫКОВКА И ОТЪЕЗД")
 	add_field(/datum/report_field/time, "Время отстыковки")
 	add_field(/datum/report_field/pencode_text,"Дополнительные заметки во время отстыковки")
-	set_access(access_security, override = 0)
+	set_access(GLOB.access_security, override = 0)
 
 /datum/computer_file/report/recipient/request
 	form_name = "NT-DEC-34"
@@ -89,4 +89,4 @@
 	add_field(/datum/report_field/signature, "Подпись запрашивающего")
 	cargo_fields+= add_field(/datum/report_field/signature, "Подпись квартирмейстера или работника карго", required = 1)
 	for(var/datum/report_field/field in cargo_fields)
-		field.set_access(access_edit = access_cargo)
+		field.set_access(access_edit = GLOB.access_cargo)

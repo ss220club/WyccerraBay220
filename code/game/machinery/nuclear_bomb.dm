@@ -297,7 +297,7 @@ var/global/bomb_set
 				if(safety)
 					to_chat(usr, SPAN_WARNING("The safety is still on."))
 					return 1
-				if(wires.IsIndexCut(NUCLEARBOMB_WIRE_TIMING))
+				if(wires.IsIndexCut(GLOB.NUCLEARBOMB_WIRE_TIMING))
 					to_chat(usr, SPAN_WARNING("Nothing happens, something might be wrong with the wiring."))
 					return 1
 				if(!timing && !safety)
@@ -305,7 +305,7 @@ var/global/bomb_set
 				else
 					secure_device()
 			if(href_list["safety"])
-				if (wires.IsIndexCut(NUCLEARBOMB_WIRE_SAFETY))
+				if (wires.IsIndexCut(GLOB.NUCLEARBOMB_WIRE_SAFETY))
 					to_chat(usr, SPAN_WARNING("Nothing happens, something might be wrong with the wiring."))
 					return 1
 				safety = !safety
@@ -394,7 +394,7 @@ var/global/bomb_set
 
 /obj/item/disk/nuclear/Initialize()
 	. = ..()
-	nuke_disks |= src
+	GLOB.nuke_disks |= src
 	// Can never be quite sure that a game mode has been properly initiated or not at this point, so always register
 	GLOB.moved_event.register(src, src, TYPE_PROC_REF(/obj/item/disk/nuclear, check_z_level))
 
@@ -408,8 +408,8 @@ var/global/bomb_set
 
 /obj/item/disk/nuclear/Destroy()
 	GLOB.moved_event.unregister(src, src, TYPE_PROC_REF(/obj/item/disk/nuclear, check_z_level))
-	nuke_disks -= src
-	if(!length(nuke_disks))
+	GLOB.nuke_disks -= src
+	if(!length(GLOB.nuke_disks))
 		var/turf/T = pick_area_turf(/area/maintenance, list(GLOBAL_PROC_REF(is_station_turf), GLOBAL_PROC_REF(not_turf_contains_dense_objects)))
 		if(T)
 			var/obj/D = new /obj/item/disk/nuclear(T)
@@ -515,14 +515,14 @@ var/global/bomb_set
 	..()
 	visible_message(SPAN_WARNING("Warning. The self-destruct sequence override will be disabled [self_destruct_cutoff/10] seconds before detonation."))
 	if(evacuate)
-		if(!evacuation_controller)
+		if(!GLOB.evacuation_controller)
 			visible_message(SPAN_DANGER("Warning. Unable to initiate evacuation procedures."))
 			return
-		for (var/datum/evacuation_option/EO in evacuation_controller.available_evac_options())
+		for (var/datum/evacuation_option/EO in GLOB.evacuation_controller.available_evac_options())
 			if(EO.abandon_ship)
-				evacuation_controller.evac_prep_delay = timeleft - world.time - 2 MINUTES
-				evacuation_controller.evac_launch_delay = 1.75 MINUTES //Escape pods take time to arm and eject appart from this delay. Take into account.
-				evacuation_controller.handle_evac_option(EO.option_target, usr)
+				GLOB.evacuation_controller.evac_prep_delay = timeleft - world.time - 2 MINUTES
+				GLOB.evacuation_controller.evac_launch_delay = 1.75 MINUTES //Escape pods take time to arm and eject appart from this delay. Take into account.
+				GLOB.evacuation_controller.handle_evac_option(EO.option_target, usr)
 
 /obj/machinery/nuclearbomb/station/secure_device()
 	if(timing && timeleft - world.time <= self_destruct_cutoff)
@@ -530,18 +530,18 @@ var/global/bomb_set
 		return
 	..()
 	announced = FALSE
-	for (var/datum/evacuation_option/EO in evacuation_controller.available_evac_options())
+	for (var/datum/evacuation_option/EO in GLOB.evacuation_controller.available_evac_options())
 		if(EO.option_target == "cancel_abandon_ship")
-			evacuation_controller.handle_evac_option(EO.option_target, usr)
-			evacuation_controller.evac_prep_delay = 5 MINUTES
-			evacuation_controller.evac_launch_delay = 3 MINUTES
+			GLOB.evacuation_controller.handle_evac_option(EO.option_target, usr)
+			GLOB.evacuation_controller.evac_prep_delay = 5 MINUTES
+			GLOB.evacuation_controller.evac_launch_delay = 3 MINUTES
 
 /obj/machinery/nuclearbomb/station/Process()
 	..()
 	if(timing && timeleft - world.time > 0 && GAME_STATE < RUNLEVEL_POSTGAME)
 		if(timeleft - world.time <= self_destruct_cutoff)
 			if(!announced)
-				priority_announcement.Announce("The self-destruct sequence has reached terminal countdown, abort systems have been disabled.", "Self-Destruct Control Computer")
+				GLOB.priority_announcement.Announce("The self-destruct sequence has reached terminal countdown, abort systems have been disabled.", "Self-Destruct Control Computer")
 				announced = TRUE
 			if(world.time >= time_to_explosion)
 				var/range

@@ -47,15 +47,15 @@
 	if(!istype(docking_controller))
 		CRASH("Could not find docking controller for shuttle waypoint '[name]', docking tag was '[docking_tag]'.")
 	if(GLOB.using_map.use_overmap)
-		var/obj/overmap/visitable/location = map_sectors["[z]"]
+		var/obj/overmap/visitable/location = GLOB.map_sectors["[z]"]
 		if(location && location.docking_codes)
 			docking_controller.docking_codes = location.docking_codes
 
 
 /obj/shuttle_landmark/forceMove()
-	var/obj/overmap/visitable/map_origin = map_sectors["[z]"]
+	var/obj/overmap/visitable/map_origin = GLOB.map_sectors["[z]"]
 	. = ..()
-	var/obj/overmap/visitable/map_destination = map_sectors["[z]"]
+	var/obj/overmap/visitable/map_destination = GLOB.map_sectors["[z]"]
 	if(map_origin != map_destination)
 		if(map_origin)
 			map_origin.remove_landmark(src, shuttle_restricted)
@@ -112,7 +112,7 @@
 
 
 /obj/shuttle_landmark/automatic/Initialize()
-	landmark_tag += "-[x]-[y]-[z]-[random_id("landmarks",1,9999)]"
+	landmark_tag += "-[x]-[y]-[z]-[GLOB.random_id("landmarks",1,9999)]"
 	return ..()
 
 

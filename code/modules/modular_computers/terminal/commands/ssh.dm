@@ -7,7 +7,7 @@
 		"NOTICE: Requires network admin access."
 	)
 	pattern = "^ssh"
-	req_access = list(access_network_admin)
+	req_access = list(GLOB.access_network_admin)
 	skill_needed = SKILL_EXPERIENCED
 
 /datum/terminal_command/check_access(mob/user, datum/terminal/terminal)
@@ -30,7 +30,7 @@
 	if(!nid)
 		. += "[name]: Error; invalid network id."
 		return
-	var/datum/extension/interactive/ntos/T = ntnet_global.get_os_by_nid(nid)
+	var/datum/extension/interactive/ntos/T = GLOB.ntnet_global.get_os_by_nid(nid)
 	if(!istype(T) || !T.get_ntnet_status_incoming()) // Target device only need a direct connection to NTNet
 		. += "[name]: Error; cannot locate target device. Try ping for diagnostics."
 		return

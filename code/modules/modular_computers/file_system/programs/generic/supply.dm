@@ -43,7 +43,7 @@
 	var/emagged_memory = FALSE // Keeps track if the program has to regenerate the catagories after an emag.
 	var/current_security_level
 	var/notifications_enabled = FALSE
-	var/admin_access = list(access_cargo, access_mailsorting)
+	var/admin_access = list(GLOB.access_cargo, GLOB.access_mailsorting)
 
 /datum/nano_module/supply/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, state = GLOB.default_state)
 	var/list/data = host.initial_data()
@@ -188,7 +188,7 @@
 		print_summary(user)
 
 	// Items requiring cargo access go below this entry. Other items go above.
-	if(!check_access(access_cargo))
+	if(!check_access(GLOB.access_cargo))
 		return 1
 
 	if(href_list["launch_shuttle"])
@@ -203,7 +203,7 @@
 				shuttle.launch(user)
 		else
 			shuttle.launch(user)
-			var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
+			var/datum/radio_frequency/frequency = GLOB.radio_controller.return_frequency(1435)
 			if(!frequency)
 				return
 

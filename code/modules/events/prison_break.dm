@@ -19,7 +19,7 @@
 
 /datum/event/prison_break/announce()
 	if (areas && length(areas) > 0)
-		command_announcement.Announce("[pick("Gr3yT1d3 virus","Malignant trojan",)] detected in [location_name()] [eventDept] subroutines. Secure any compromised areas immediately.", "[location_name()] Anti-Virus Alert", zlevels = affecting_z)
+		GLOB.command_announcement.Announce("[pick("Gr3yT1d3 virus","Malignant trojan",)] detected in [location_name()] [eventDept] subroutines. Secure any compromised areas immediately.", "[location_name()] Anti-Virus Alert", zlevels = affecting_z)
 
 
 /datum/event/prison_break/start()

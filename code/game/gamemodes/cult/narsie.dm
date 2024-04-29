@@ -1,6 +1,6 @@
-var/global/narsie_behaviour = "CultStation13"
-var/global/narsie_cometh = 0
-var/global/list/narsie_list = list()
+GLOBAL_VAR_INIT(narsie_behaviour, "CultStation13")
+GLOBAL_VAR(narsie_cometh)
+GLOBAL_LIST_INIT(narsie_list, list())
 /obj/singularity/narsie //Moving narsie to its own file for the sake of being clearer
 	name = "Nar-Sie"
 	desc = "Your mind begins to bubble and ooze as it tries to comprehend what it sees."
@@ -18,10 +18,10 @@ var/global/list/narsie_list = list()
 
 /obj/singularity/narsie/New()
 	..()
-	narsie_list.Add(src)
+	GLOB.narsie_list.Add(src)
 
 /obj/singularity/narsie/Destroy()
-	narsie_list.Remove(src)
+	GLOB.narsie_list.Remove(src)
 	..()
 
 /obj/singularity/narsie/large
@@ -48,15 +48,15 @@ var/global/list/narsie_list = list()
 
 	narsie_spawn_animation()
 
-	if(!narsie_cometh)//so we don't initiate Hell more than one time.
+	if(!GLOB.narsie_cometh)//so we don't initiate Hell more than one time.
 		if(cause_hell)
 			SetUniversalState(/datum/universal_state/hell)
-		narsie_cometh = 1
+		GLOB.narsie_cometh = 1
 
 		spawn(10 SECONDS)
-			if(evacuation_controller)
-				evacuation_controller.call_evacuation(null, TRUE, 1)
-				evacuation_controller.evac_no_return = 0 // Cannot recall
+			if(GLOB.evacuation_controller)
+				GLOB.evacuation_controller.call_evacuation(null, TRUE, 1)
+				GLOB.evacuation_controller.evac_no_return = 0 // Cannot recall
 
 /obj/singularity/narsie/Process()
 	eat()
@@ -159,12 +159,12 @@ var/global/list/narsie_list = list()
 
 /obj/singularity/narsie/large/consume(atom/A) //Has its own consume proc because it doesn't need energy and I don't want BoHs to explode it. --NEO
 //NEW BEHAVIOUR
-	if(narsie_behaviour == "CultStation13")
+	if(GLOB.narsie_behaviour == "CultStation13")
 	//MOB PROCESSING
 		new_narsie(A)
 
 //OLD BEHAVIOUR
-	else if(narsie_behaviour == "Nar-Singulo")
+	else if(GLOB.narsie_behaviour == "Nar-Singulo")
 		old_narsie(A)
 
 /obj/singularity/narsie/proc/new_narsie(atom/A)

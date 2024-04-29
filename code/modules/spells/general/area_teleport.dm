@@ -25,12 +25,12 @@
 /spell/area_teleport/choose_targets()
 	var/area/thearea
 	if(!randomise_selection)
-		thearea = input("Area to teleport to", "Teleport") as null|anything in wizteleportlocs
+		thearea = input("Area to teleport to", "Teleport") as null|anything in GLOB.wizteleportlocs
 		if(!thearea)
 			return
 	else
-		thearea = pick(wizteleportlocs)
-	return list(wizteleportlocs[thearea])
+		thearea = pick(GLOB.wizteleportlocs)
+	return list(GLOB.wizteleportlocs[thearea])
 
 /spell/area_teleport/cast(area/thearea, mob/user)
 	playsound(get_turf(user),cast_sound,50,1)

@@ -7,8 +7,8 @@ var/global/account_hack_attempted = 0
 
 /datum/event/money_hacker/setup()
 	end_time = world.time + 6000
-	if(length(all_money_accounts))
-		affected_account = pick(all_money_accounts)
+	if(length(GLOB.all_money_accounts))
+		affected_account = pick(GLOB.all_money_accounts)
 
 		account_hack_attempted = 1
 	else

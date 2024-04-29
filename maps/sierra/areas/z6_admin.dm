@@ -6,11 +6,11 @@
 
 /area/centcom/creed
 	name = "Creed's Office"
-	req_access = list(access_cent_creed)
+	req_access = list(GLOB.access_cent_creed)
 
 /area/centcom/living
 	name = "Centcom Living Quarters"
-	req_access = list(access_cent_living)
+	req_access = list(GLOB.access_cent_living)
 
 /* FLEET CENTCOM AREAS
  * =============
@@ -107,13 +107,13 @@
 /area/shuttle/administration/centcom
 	name = "Administration Shuttle"
 	icon_state = "shuttlered"
-	req_access = list(access_cent_general)
+	req_access = list(GLOB.access_cent_general)
 
 /area/supply/dock
 	name = "Supply Shuttle"
 	icon_state = "shuttle3"
 	requires_power = 0
-	req_access = list(access_cent_storage)
+	req_access = list(GLOB.access_cent_storage)
 
 /* ACTORS GUILD
  * ============
@@ -141,7 +141,7 @@
 	requires_power = 0
 	dynamic_lighting = 0
 	sound_env = ARENA
-	req_access = list(access_cent_thunder)
+	req_access = list(GLOB.access_cent_thunder)
 
 /area/tdome/tdome1
 	name = "Thunderdome (Team 1)"

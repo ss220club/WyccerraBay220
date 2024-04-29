@@ -47,7 +47,7 @@
 	return INITIALIZE_HINT_LATELOAD
 
 /mob/living/carbon/human/blank/LateInitialize(mapload)
-	var/number = "[pick(possible_changeling_IDs)]-[rand(1,30)]"
+	var/number = "[pick(GLOB.possible_changeling_IDs)]-[rand(1,30)]"
 	fully_replace_character_name("Subject [number]")
 	var/singleton/hierarchy/outfit/outfit = outfit_by_type(/singleton/hierarchy/outfit/blank_subject)
 	outfit.equip(src)

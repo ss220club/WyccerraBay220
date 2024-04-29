@@ -13,11 +13,11 @@ SUBSYSTEM_DEF(xenoarch)
 	var/list/artifact_turfs = list()
 	var/static/excavation_turf_chance = 0.5
 	var/list/banned_levels = map.admin_levels + map.escape_levels
-	for(var/z_level_index in mining_walls)
+	for(var/z_level_index in GLOB.mining_walls)
 		if(text2num(z_level_index) in banned_levels)
 			continue
 
-		var/list/mining_turfs = mining_walls[z_level_index]
+		var/list/mining_turfs = GLOB.mining_walls[z_level_index]
 		if(!length(mining_turfs))
 			continue
 

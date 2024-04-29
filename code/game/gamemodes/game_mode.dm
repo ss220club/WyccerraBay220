@@ -1,5 +1,5 @@
-var/global/antag_add_finished // Used in antag type voting.
-var/global/list/additional_antag_types = list()
+GLOBAL_VAR(antag_add_finished) // Used in antag type voting.
+GLOBAL_LIST_INIT(additional_antag_types, list())
 
 /datum/game_mode
 	var/name = "invalid"
@@ -109,9 +109,9 @@ var/global/list/additional_antag_types = list()
 			to_chat(usr, "Cannot remove core mode antag type.")
 			return
 		var/datum/antagonist/antag = GLOB.all_antag_types_[href_list["remove_antag_type"]]
-		if(antag_templates && length(antag_templates) && antag && (antag in antag_templates) && (antag.id in additional_antag_types))
+		if(antag_templates && length(antag_templates) && antag && (antag in antag_templates) && (antag.id in GLOB.additional_antag_types))
 			antag_templates -= antag
-			additional_antag_types -= antag.id
+			GLOB.additional_antag_types -= antag.id
 			message_admins("Admin [key_name_admin(usr)] removed [antag.role_text] template from game mode.")
 	else if(href_list["add_antag_type"])
 		var/choice = input("Which type do you wish to add?") as null|anything in GLOB.all_antag_types_
@@ -234,8 +234,8 @@ var/global/list/additional_antag_types = list()
 		mind.generate_goals(mind.assigned_job, is_spawning=TRUE)
 		mind.current.show_goals()
 
-	if(evacuation_controller && auto_recall_shuttle)
-		evacuation_controller.recall = 1
+	if(GLOB.evacuation_controller && auto_recall_shuttle)
+		GLOB.evacuation_controller.recall = 1
 	return 1
 
 /datum/game_mode/proc/fail_setup()
@@ -278,10 +278,10 @@ var/global/list/additional_antag_types = list()
 		"classified security operations",
 		"a gargantuan glowing goat"
 		)
-	command_announcement.Announce("The presence of [pick(reasons)] in the region is tying up all available local emergency resources; emergency response teams cannot be called at this time, and post-evacuation recovery efforts will be substantially delayed.","Emergency Transmission")
+	GLOB.command_announcement.Announce("The presence of [pick(reasons)] in the region is tying up all available local emergency resources; emergency response teams cannot be called at this time, and post-evacuation recovery efforts will be substantially delayed.","Emergency Transmission")
 
 /datum/game_mode/proc/check_finished()
-	if(evacuation_controller.round_over() || station_was_nuked)
+	if(GLOB.evacuation_controller.round_over() || station_was_nuked)
 		return 1
 	if(end_on_antag_death && antag_templates && length(antag_templates))
 		var/has_antags = 0
@@ -290,7 +290,7 @@ var/global/list/additional_antag_types = list()
 				has_antags = 1
 				break
 		if(!has_antags)
-			evacuation_controller.recall = 0
+			GLOB.evacuation_controller.recall = 0
 			return 1
 	return 0
 
@@ -314,7 +314,7 @@ var/global/list/additional_antag_types = list()
 		antag.print_player_summary()
 	sleep(2)
 
-	uplink_purchase_repository.print_entries()
+	GLOB.uplink_purchase_repository.print_entries()
 
 	sleep(2)
 
@@ -407,10 +407,10 @@ var/global/list/additional_antag_types = list()
 			if(antag)
 				antag_templates |= antag
 
-	if(additional_antag_types && length(additional_antag_types))
+	if(GLOB.additional_antag_types && length(GLOB.additional_antag_types))
 		if(!antag_templates)
 			antag_templates = list()
-		for(var/antag_type in additional_antag_types)
+		for(var/antag_type in GLOB.additional_antag_types)
 			var/datum/antagonist/antag = all_antag_types[antag_type]
 			if(antag)
 				antag_templates |= antag

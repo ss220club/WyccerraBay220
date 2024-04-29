@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/iaa/generate_fields()
 	..()
-	set_access(access_heads)
+	set_access(GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident
 	form_name = "IA-NTCO-01"
@@ -21,7 +21,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident_staff
 	form_name = "HR-NTCO-01a"
@@ -43,7 +43,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident_assets
 	form_name = "HR-NTCO-01b"
@@ -67,7 +67,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/iaa/incident_repstaff
 	form_name = "HR-NTCO-01e"
@@ -90,7 +90,7 @@
 	heads_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи и печати Агента Внутренних Дел или департамента.")
 	for(var/datum/report_field/field in heads_fields)
-		field.set_access(access_edit = access_heads)
+		field.set_access(access_edit = GLOB.access_heads)
 
 /datum/computer_file/report/recipient/archive
 	form_name = "HR-NTCO-04a"
@@ -118,9 +118,9 @@
 	add_field(/datum/report_field/pencode_text, "Меморандум", required = 1)
 	capiaa_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел или капитана.")
-	set_access(list(list(access_captain, access_iaa)), list(list(access_captain, access_iaa)))
+	set_access(list(list(GLOB.access_captain, GLOB.access_iaa)), list(list(GLOB.access_captain, GLOB.access_iaa)))
 	for(var/datum/report_field/field in capiaa_fields)
-		field.set_access(access_edit = list(list(access_captain, access_iaa)))
+		field.set_access(access_edit = list(list(GLOB.access_captain, GLOB.access_iaa)))
 
 /datum/computer_file/report/recipient/iaa/work_visa
 	form_name = "HR-NTCO-03b"
@@ -138,7 +138,7 @@
 	add_field(/datum/report_field/signature, "Подпись получателя", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел.")
 	for(var/datum/report_field/field in iaa_fields)
-		field.set_access(access_edit = access_iaa)
+		field.set_access(access_edit = GLOB.access_iaa)
 
 /datum/computer_file/report/recipient/iaa/salary_deceased
 	form_name = "HR-NTCO-03c"
@@ -161,7 +161,7 @@
 	iaahop_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел.")
 	for(var/datum/report_field/field in iaahop_fields)
-		field.set_access(access_edit = list(list(access_hop, access_iaa)))
+		field.set_access(access_edit = list(list(GLOB.access_hop, GLOB.access_iaa)))
 
 /datum/computer_file/report/recipient/iaa/check_citizenship
 	form_name = "HR-NTCO-02a"
@@ -182,8 +182,8 @@
 	iaahop_fields += add_field(/datum/report_field/options/yes_no, "Данная форма была одобрена/отклонена")
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия печати Агента Внутренних Дел.")
 	for(var/datum/report_field/field in iaahop_fields)
-		field.set_access(access_edit = list(access_hop, access_iaa))
-	set_access(access_security, override = 0)
+		field.set_access(access_edit = list(GLOB.access_hop, GLOB.access_iaa))
+	set_access(GLOB.access_security, override = 0)
 
 /datum/computer_file/report/recipient/iaa/audit
 	form_name = "HR-NTCO-03f"
@@ -206,4 +206,4 @@
 	capiaa_fields += add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Документ является недействительным в случае отсутствия подписи или печати.")
 	for(var/datum/report_field/field in capiaa_fields)
-		field.set_access(access_edit = list(list(access_captain, access_iaa)))
+		field.set_access(access_edit = list(list(GLOB.access_captain, GLOB.access_iaa)))

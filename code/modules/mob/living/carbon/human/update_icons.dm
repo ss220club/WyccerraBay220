@@ -4,8 +4,8 @@
 	TODO: Proper documentation
 	icon_key is [species.race_key][g][husk][fat][skeleton][skin_tone]
 */
-var/global/list/human_icon_cache = list()
-var/global/list/tail_icon_cache = list() //key is [species.race_key][skin_color]
+GLOBAL_LIST_INIT(human_icon_cache, list())
+GLOBAL_LIST_INIT(tail_icon_cache, list()) //key is [species.race_key][skin_color]
 
 GLOBAL_LIST_EMPTY(overlay_icon_cache)
 GLOBAL_LIST_EMPTY(species_icon_template_cache)
@@ -229,7 +229,7 @@ Please contact me on #coderbus IRC. ~Carn x
 		(1 + height_modifier) * (tf_scale_y || 1)
 	)
 
-var/global/list/damage_icon_parts = list()
+GLOBAL_LIST_INIT(damage_icon_parts, list())
 
 /mob/living/carbon/human/proc/get_lying_offset(image/I)
 	if(!lying)
@@ -292,13 +292,13 @@ var/global/list/damage_icon_parts = list()
 		var/icon/DI
 		var/use_colour = (BP_IS_ROBOTIC(O) ? SYNTH_BLOOD_COLOUR : O.species.get_blood_colour(src))
 		var/cache_index = "[O.damage_state]/[O.icon_name]/[use_colour]/[species.get_bodytype(src)]"
-		if(isnull(damage_icon_parts[cache_index]))
+		if(isnull(GLOB.damage_icon_parts[cache_index]))
 			DI = new /icon(species.get_damage_overlays(src), O.damage_state)			// the damage icon for whole human
 			DI.Blend(new /icon(species.get_damage_mask(src), O.icon_name), ICON_MULTIPLY)	// mask with this organ's pixels
 			DI.Blend(use_colour, ICON_MULTIPLY)
-			damage_icon_parts[cache_index] = DI
+			GLOB.damage_icon_parts[cache_index] = DI
 		else
-			DI = damage_icon_parts[cache_index]
+			DI = GLOB.damage_icon_parts[cache_index]
 
 		standing_image.AddOverlays(DI)
 
@@ -681,7 +681,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/proc/get_tail_icon()
 	var/icon_key = "[species.get_race_key(src)][skin_color][head_hair_color]"
-	var/icon/tail_icon = tail_icon_cache[icon_key]
+	var/icon/tail_icon = GLOB.tail_icon_cache[icon_key]
 	if(!tail_icon)
 		//generate a new one
 		var/species_tail_anim = species.get_tail_animation(src)
@@ -694,7 +694,7 @@ var/global/list/damage_icon_parts = list()
 			var/icon/hair_icon = icon('icons/effects/species.dmi', "[species.get_tail(src)]_[use_species_tail]")
 			hair_icon.Blend(head_hair_color, ICON_ADD)
 			tail_icon.Blend(hair_icon, ICON_OVERLAY)
-		tail_icon_cache[icon_key] = tail_icon
+		GLOB.tail_icon_cache[icon_key] = tail_icon
 
 	return tail_icon
 

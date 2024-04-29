@@ -5,7 +5,7 @@
 		to_chat(src, SPAN_WARNING("You're in no condition to do that."))
 		return
 	var/obj/item/organ/external/head/head = get_organ(BP_HEAD)
-	var/datum/robolimb/robohead = all_robolimbs[head.model]
+	var/datum/robolimb/robohead = GLOB.all_robolimbs[head.model]
 	if (!head || head.is_stump())
 		to_chat(src, SPAN_WARNING("You have no head!"))
 		return
@@ -32,7 +32,7 @@
 		to_chat(src, SPAN_WARNING("You're in no condition to do that."))
 		return
 	var/obj/item/organ/external/head/head = get_organ(BP_HEAD)
-	var/datum/robolimb/robohead = all_robolimbs[head.model]
+	var/datum/robolimb/robohead = GLOB.all_robolimbs[head.model]
 	if (!head || head.is_stump())
 		to_chat(src, SPAN_WARNING("You have no head!"))
 		return
@@ -53,7 +53,7 @@
 		to_chat(src, SPAN_WARNING("You're in no condition to do that."))
 		return
 	var/obj/item/organ/external/head/head = get_organ(BP_HEAD)
-	var/datum/robolimb/robohead = all_robolimbs[head.model]
+	var/datum/robolimb/robohead = GLOB.all_robolimbs[head.model]
 	if (!head || head.is_stump())
 		to_chat(src, SPAN_WARNING("You have no head!"))
 		return

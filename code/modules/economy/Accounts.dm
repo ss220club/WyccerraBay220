@@ -57,7 +57,7 @@
 		T.date = "[num2text(rand(1, 31))] [pick("January","February","March","April","May","June","July","August","September","October","November","December")], [GLOB.using_map.game_year-rand(8, 18)]"
 		T.time = "[rand(0,24)]:[rand(11,59)]"
 
-		M.account_number = random_id("station_account_number", 111111, 999999)
+		M.account_number = GLOB.random_id("station_account_number", 111111, 999999)
 	else
 		M.account_number = next_account_number
 		next_account_number += rand(1,25)
@@ -88,7 +88,7 @@
 
 	//add the account
 	T.perform()
-	all_money_accounts.Add(M)
+	GLOB.all_money_accounts.Add(M)
 
 	return M
 
@@ -101,6 +101,6 @@
 
 /proc/get_account(account_number)
 	RETURN_TYPE(/datum/money_account)
-	for(var/datum/money_account/D in all_money_accounts)
+	for(var/datum/money_account/D in GLOB.all_money_accounts)
 		if(D.account_number == account_number)
 			return D

@@ -1,6 +1,6 @@
 /obj/structure/closet/secure_closet/captains
 	name = "captain's locker"
-	req_access = list(access_captain)
+	req_access = list(GLOB.access_captain)
 	closet_appearance = /singleton/closet_appearance/secure_closet/command
 
 /obj/structure/closet/secure_closet/captains/WillContain()
@@ -27,7 +27,7 @@
 /obj/structure/closet/secure_closet/hop
 	name = "head of personnel's locker"
 	closet_appearance = /singleton/closet_appearance/secure_closet/command/hop
-	req_access = list(access_hop)
+	req_access = list(GLOB.access_hop)
 
 /obj/structure/closet/secure_closet/hop/WillContain()
 	return list(
@@ -41,7 +41,7 @@
 
 /obj/structure/closet/secure_closet/hop2
 	name = "head of personnel's attire"
-	req_access = list(access_hop)
+	req_access = list(GLOB.access_hop)
 	closet_appearance = /singleton/closet_appearance/secure_closet/command/hop
 
 /obj/structure/closet/secure_closet/hop2/WillContain()
@@ -63,7 +63,7 @@
 
 /obj/structure/closet/secure_closet/hos
 	name = "head of security's locker"
-	req_access = list(access_hos)
+	req_access = list(GLOB.access_hos)
 	closet_appearance = /singleton/closet_appearance/secure_closet/security/hos
 
 /obj/structure/closet/secure_closet/hos/WillContain()
@@ -95,7 +95,7 @@
 
 /obj/structure/closet/secure_closet/warden
 	name = "warden's locker"
-	req_access = list(access_armory)
+	req_access = list(GLOB.access_armory)
 	closet_appearance = /singleton/closet_appearance/secure_closet/security/warden
 
 /obj/structure/closet/secure_closet/warden/WillContain()
@@ -125,7 +125,7 @@
 
 /obj/structure/closet/secure_closet/security
 	name = "security officer's locker"
-	req_access = list(access_brig)
+	req_access = list(GLOB.access_brig)
 	closet_appearance = /singleton/closet_appearance/secure_closet/security
 
 /obj/structure/closet/secure_closet/security/WillContain()
@@ -173,7 +173,7 @@
 
 /obj/structure/closet/secure_closet/detective
 	name = "detective's cabinet"
-	req_access = list(access_forensics_lockers)
+	req_access = list(GLOB.access_forensics_lockers)
 	closet_appearance = /singleton/closet_appearance/cabinet/secure
 
 /obj/structure/closet/secure_closet/detective/WillContain()
@@ -202,14 +202,14 @@
 
 /obj/structure/closet/secure_closet/injection
 	name = "lethal injections locker"
-	req_access = list(access_captain)
+	req_access = list(GLOB.access_captain)
 
 /obj/structure/closet/secure_closet/injection/WillContain()
 	return list(/obj/item/reagent_containers/syringe/ld50_syringe/choral = 2)
 
 /obj/structure/closet/secure_closet/brig
 	name = "brig locker"
-	req_access = list(access_brig)
+	req_access = list(GLOB.access_brig)
 	anchored = TRUE
 	var/id = null
 
@@ -221,7 +221,7 @@
 
 /obj/structure/closet/secure_closet/courtroom
 	name = "courtroom locker"
-	req_access = list(access_lawyer)
+	req_access = list(GLOB.access_lawyer)
 
 /obj/structure/closet/secure_closet/courtroom/WillContain()
 	return list(
@@ -235,7 +235,7 @@
 
 /obj/structure/closet/secure_closet/wall
 	name = "wall locker"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	closet_appearance = /singleton/closet_appearance/wall
 
 	//too small to put a man in
@@ -243,7 +243,7 @@
 
 /obj/structure/closet/secure_closet/lawyer
 	name = "internal affairs secure closet"
-	req_access = list(access_lawyer)
+	req_access = list(GLOB.access_lawyer)
 
 /obj/structure/closet/secure_closet/lawyer/WillContain()
 	return list(

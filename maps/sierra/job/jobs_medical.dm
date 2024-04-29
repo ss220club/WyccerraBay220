@@ -38,10 +38,10 @@
 		SKILL_ANATOMY     = SKILL_MAX
 	)
 	access = list(
-		access_medical, access_morgue, access_virology,
-		access_maint_tunnels, access_emergency_storage, access_crematorium,
-		access_surgery, access_eva, access_external_airlocks,
-		access_medical_equip, access_senmed, access_hangar,
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_virology,
+		GLOB.access_maint_tunnels, GLOB.access_emergency_storage, GLOB.access_crematorium,
+		GLOB.access_surgery, GLOB.access_eva, GLOB.access_external_airlocks,
+		GLOB.access_medical_equip, GLOB.access_senmed, GLOB.access_hangar,
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/suit_sensors,
@@ -90,10 +90,10 @@
 		SKILL_VIROLOGY	=	SKILL_MAX
 	)
 	access = list(
-		access_medical, access_morgue, access_virology,
-		access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_eva, access_surgery, access_medical_equip,
-		access_hangar
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_virology,
+		GLOB.access_maint_tunnels, GLOB.access_external_airlocks, GLOB.access_emergency_storage,
+		GLOB.access_eva, GLOB.access_surgery, GLOB.access_medical_equip,
+		GLOB.access_hangar
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/suit_sensors,
@@ -138,9 +138,9 @@
 		SKILL_MEDICAL = SKILL_MAX
 	)
 	access = list(
-		access_medical, access_morgue, access_surgery,
-		access_medical_equip, access_maint_tunnels, access_emergency_storage,
-		access_external_airlocks, access_hangar
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_surgery,
+		GLOB.access_medical_equip, GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_external_airlocks, GLOB.access_hangar
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/suit_sensors,
@@ -177,8 +177,8 @@
 		SKILL_CHEMISTRY = SKILL_MAX
 	)
 	access = list(
-		access_medical, access_maint_tunnels, access_emergency_storage,
-		access_medical_equip, access_chemistry
+		GLOB.access_medical, GLOB.access_maint_tunnels, GLOB.access_emergency_storage,
+		GLOB.access_medical_equip, GLOB.access_chemistry
 	)
 
 
@@ -220,8 +220,8 @@
 		SKILL_MEDICAL = SKILL_MAX
 	)
 	access = list(
-		access_medical, access_morgue, access_chapel_office,
-		access_crematorium, access_psychiatrist
+		GLOB.access_medical, GLOB.access_morgue, GLOB.access_chapel_office,
+		GLOB.access_crematorium, GLOB.access_psychiatrist
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/suit_sensors,

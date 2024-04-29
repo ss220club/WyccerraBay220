@@ -36,7 +36,7 @@
 	cost = 120
 	containername = "exploration voidsuit crate"
 	containertype = /obj/structure/closet/crate/secure/large
-	access = access_explorer
+	access = GLOB.access_explorer
 
 /singleton/hierarchy/supply_pack/operations/voidsuit
 	name = "EVA - Excavation voidsuit"
@@ -76,7 +76,7 @@
 	cost = 120
 	containername = "exploration voidsuit crate"
 	containertype = /obj/structure/closet/crate/secure/large
-	access = access_explorer
+	access = GLOB.access_explorer
 
 /singleton/hierarchy/supply_pack/hydroponics/exoticseeds
 	contains = list(/obj/item/seeds/replicapod = 2,
@@ -115,4 +115,4 @@
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure
 	containername = "exploration equipment crate"
-	access = access_explorer
+	access = GLOB.access_explorer

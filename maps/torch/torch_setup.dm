@@ -1,7 +1,7 @@
 /datum/map/torch/setup_map()
 	..()
 	system_name = generate_system_name()
-	minor_announcement = new(new_sound = sound(ANNOUNCER_COMMANDREPORT, volume = 45))
+	GLOB.minor_announcement = new(new_sound = sound(ANNOUNCER_COMMANDREPORT, volume = 45))
 
 /datum/map/torch/get_map_info()
 	. = list()
@@ -45,4 +45,4 @@
 		welcome_text += "<hr>"
 
 	post_comm_message("SEV Torch Sensor Readings", welcome_text)
-	minor_announcement.Announce(message = "New [GLOB.using_map.company_name] Update available at all communication consoles.")
+	GLOB.minor_announcement.Announce(message = "New [GLOB.using_map.company_name] Update available at all communication consoles.")

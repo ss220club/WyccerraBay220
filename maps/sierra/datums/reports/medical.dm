@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/med/generate_fields()
 	..()
-	set_access (list(list(access_medical_equip, access_psychiatrist)))
+	set_access (list(list(GLOB.access_medical_equip, GLOB.access_psychiatrist)))
 
 /datum/computer_file/report/recipient/med/recipe
 	form_name = "NT-MED-01"
@@ -20,9 +20,9 @@
 	add_field(/datum/report_field/date, "Дата выдачи рецепта")
 	add_field(/datum/report_field/pencode_text, "Постановление врача", required = 1)
 	cmo_fields += add_field(/datum/report_field/signature, "Подпись главного врача", required = 1)
-	set_access(access_edit = access_medical)
+	set_access(access_edit = GLOB.access_medical)
 	for(var/datum/report_field/field in cmo_fields)
-		field.set_access(access_edit = access_cmo)
+		field.set_access(access_edit = GLOB.access_cmo)
 
 /datum/computer_file/report/recipient/med/checkup
 	form_name = "NT-MED-03b"
@@ -68,7 +68,7 @@
 	add_field(/datum/report_field/text_label/instruction,"Признание невменяемым означает полное отстранение от выполнения должностных обязанностей. \
 	Документ является недействительным при отсутствии подписи и печати главврача.")
 	for(var/datum/report_field/field in cmo_fields)
-		field.set_access(access_edit = access_cmo)
+		field.set_access(access_edit = GLOB.access_cmo)
 
 /datum/computer_file/report/recipient/med/report_autopsy
 	logo = "\[sierralogo\]"
@@ -93,7 +93,7 @@
 	add_field(/datum/report_field/signature, "Подпись", required = 1)
 	add_field(/datum/report_field/text_label/instruction, "Сотрудник, проводящий вскрытие, обязан обеспечить безопасную доставку личных и служебных вещей погибшего в Отдел Защиты Активов объекта, \
 	либо их хранение в морге объекта.")
-	set_access(access_morgue, access_morgue)
+	set_access(GLOB.access_morgue, GLOB.access_morgue)
 
 /datum/computer_file/report/recipient/med/medical_services
 	logo = "\[sierralogo\]"

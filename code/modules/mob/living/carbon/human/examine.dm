@@ -150,7 +150,7 @@
 				. += SPAN_NOTICE("[E.species.disfigure_msg(src)]")
 			else //Just in case they lack a species for whatever reason.
 				. += SPAN_WARNING("[p_their()] face is horribly mangled!")
-		var/datum/robolimb/robohead = all_robolimbs[E.model]
+		var/datum/robolimb/robohead = GLOB.all_robolimbs[E.model]
 		if(length(robohead?.display_text) && facial_hair_style == "Text")
 			. += SPAN_NOTICE("The message \"[robohead.display_text]\" is displayed on its screen.")
 

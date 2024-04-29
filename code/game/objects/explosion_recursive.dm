@@ -2,14 +2,14 @@
 
 
 
-var/global/list/explosion_turfs = list()
+GLOBAL_LIST_INIT(explosion_turfs, list())
 
-var/global/explosion_in_progress = 0
+GLOBAL_VAR(explosion_in_progress)
 
 
 /proc/explosion_rec(turf/epicenter, power, shaped)
 	var/loopbreak = 0
-	while(explosion_in_progress)
+	while(GLOB.explosion_in_progress)
 		if(loopbreak >= 15) return
 		sleep(10)
 		loopbreak++
@@ -18,10 +18,10 @@ var/global/explosion_in_progress = 0
 	epicenter = get_turf(epicenter)
 	if(!epicenter) return
 
-	explosion_in_progress = 1
-	explosion_turfs = list()
+	GLOB.explosion_in_progress = 1
+	GLOB.explosion_turfs = list()
 
-	explosion_turfs[epicenter] = power
+	GLOB.explosion_turfs[epicenter] = power
 
 	//This steap handles the gathering of turfs which will be ex_act() -ed in the next step. It also ensures each turf gets the maximum possible amount of power dealt to it.
 	for(var/direction in GLOB.cardinal)
@@ -39,13 +39,13 @@ var/global/explosion_in_progress = 0
 			T.explosion_spread(adj_power, direction)
 
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
-	for(var/spot in explosion_turfs)
+	for(var/spot in GLOB.explosion_turfs)
 		var/turf/T = spot
-		if(explosion_turfs[T] <= 0) continue
+		if(GLOB.explosion_turfs[T] <= 0) continue
 		if(!T) continue
 
 		//Wow severity looks confusing to calculate... Fret not, I didn't leave you with any additional instructions or help. (just kidding, see the line under the calculation)
-		var/severity = explosion_turfs[T] // effective power on tile
+		var/severity = GLOB.explosion_turfs[T] // effective power on tile
 		severity /= max(3, power / 3) // One third the total explosion power - One third because there are three power levels and I want each one to take up a third of the crater
 		severity = clamp(severity, 1, 3) // Sanity
 		severity = 4 - severity // Invert the value to accomodate lower numbers being a higher severity. Removing this inversion would require a lot of refactoring of math in `ex_act()` handlers.
@@ -66,17 +66,17 @@ var/global/explosion_in_progress = 0
 				if(!QDELETED(AM) && !AM.anchored)
 					addtimer(CALLBACK(AM, TYPE_PROC_REF(/atom/movable, throw_at), throw_target, 9/severity, 9/severity), 0)
 
-	explosion_turfs.Cut()
-	explosion_in_progress = 0
+	GLOB.explosion_turfs.Cut()
+	GLOB.explosion_in_progress = 0
 
 
 //Code-wise, a safe value for power is something up to ~25 or ~30.. This does quite a bit of damage to the station.
 //direction is the direction that the spread took to come to this tile. So it is pointing in the main blast direction - meaning where this tile should spread most of it's force.
 /turf/proc/explosion_spread(power, direction)
 
-	if(explosion_turfs[src] >= power)
+	if(GLOB.explosion_turfs[src] >= power)
 		return //The turf already sustained and spread a power greated than what we are dealing with. No point spreading again.
-	explosion_turfs[src] = power
+	GLOB.explosion_turfs[src] = power
 /*
 	sleep(2)
 	var/obj/debugging/M = locate() in src

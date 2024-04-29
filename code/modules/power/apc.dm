@@ -96,7 +96,7 @@
 		/obj/item/stock_parts/power/apc,
 		/obj/item/stock_parts/power/battery
 		)
-	req_access = list(access_engine_equip)
+	req_access = list(GLOB.access_engine_equip)
 	clicksound = "switch"
 	layer = ABOVE_WINDOW_LAYER
 	health_max = 80

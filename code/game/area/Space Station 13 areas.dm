@@ -126,7 +126,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	icon_state = "centcom"
 	requires_power = 0
 	dynamic_lighting = 0
-	req_access = list(access_cent_general)
+	req_access = list(GLOB.access_cent_general)
 
 /area/centcom/holding
 	name = "\improper Holding Facility"
@@ -138,63 +138,63 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/centcom/specops
 	name = "\improper Centcom Special Ops"
-	req_access = list(access_cent_specops)
+	req_access = list(GLOB.access_cent_specops)
 
 /area/hallway
 	name = "hallway"
 
 /area/medical
-	req_access = list(access_medical)
+	req_access = list(GLOB.access_medical)
 	lighting_tone = AREA_LIGHTING_COOL
 
 /area/security
-	req_access = list(access_sec_doors)
+	req_access = list(GLOB.access_sec_doors)
 
 /area/security/brig
 	name = "\improper Security - Brig"
 	icon_state = "brig"
-	req_access = list(access_brig)
+	req_access = list(GLOB.access_brig)
 
 /area/security/prison
 	name = "\improper Security - Prison Wing"
 	icon_state = "sec_prison"
-	req_access = list(access_brig)
+	req_access = list(GLOB.access_brig)
 
 /area/maintenance
 	area_flags = AREA_FLAG_RAD_SHIELDED
 	sound_env = TUNNEL_ENCLOSED
 	turf_initializer = /singleton/turf_initializer/maintenance
 	forced_ambience = list('sound/ambience/maintambience.ogg')
-	req_access = list(access_maint_tunnels)
+	req_access = list(GLOB.access_maint_tunnels)
 
 /area/rnd
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 	lighting_tone = AREA_LIGHTING_COOL
 
 /area/rnd/xenobiology
 	name = "\improper Xenobiology Lab"
 	icon_state = "xeno_lab"
-	req_access = list(access_xenobiology, access_research)
+	req_access = list(GLOB.access_xenobiology, GLOB.access_research)
 
 /area/rnd/xenobiology/cell_1
 	name = "\improper Xenobiology Containment Cell 1"
 	icon_state = "xeno_lab_cell_1"
-	req_access = list(access_xenobiology, access_research)
+	req_access = list(GLOB.access_xenobiology, GLOB.access_research)
 
 /area/rnd/xenobiology/cell_2
 	name = "\improper Xenobiology Containment Cell 2"
 	icon_state = "xeno_lab_cell_2"
-	req_access = list(access_xenobiology, access_research)
+	req_access = list(GLOB.access_xenobiology, GLOB.access_research)
 
 /area/rnd/xenobiology/cell_3
 	name = "\improper Xenobiology Containment Cell 3"
 	icon_state = "xeno_lab_cell_3"
-	req_access = list(access_xenobiology, access_research)
+	req_access = list(GLOB.access_xenobiology, GLOB.access_research)
 
 /area/rnd/xenobiology/cell_4
 	name = "\improper Xenobiology Containment Cell 4"
 	icon_state = "xeno_lab_cell_4"
-	req_access = list(access_xenobiology, access_research)
+	req_access = list(GLOB.access_xenobiology, GLOB.access_research)
 
 /area/rnd/xenobiology/xenoflora
 	name = "\improper Xenoflora Lab"
@@ -207,31 +207,31 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/shuttle/escape/centcom
 	name = "\improper Emergency Shuttle Centcom"
 	icon_state = "shuttle"
-	req_access = list(access_cent_general)
+	req_access = list(GLOB.access_cent_general)
 
 /area/shuttle/specops/centcom
 	icon_state = "shuttlered"
-	req_access = list(access_cent_specops)
+	req_access = list(GLOB.access_cent_specops)
 	area_flags = AREA_FLAG_RAD_SHIELDED | AREA_FLAG_ION_SHIELDED
 
 /area/shuttle/syndicate_elite/mothership
 	icon_state = "shuttlered"
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 
 /area/shuttle/syndicate_elite/station
 	icon_state = "shuttlered2"
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 
 /area/supply
 	name = "Supply Shuttle"
 	icon_state = "shuttle3"
-	req_access = list(access_cargo)
+	req_access = list(GLOB.access_cargo)
 	area_flags = AREA_FLAG_HIDE_FROM_HOLOMAP
 
 /area/syndicate_elite_squad
 	name = "\improper Elite Mercenary Squad"
 	icon_state = "syndie-elite"
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 
 ////////////
 //SHUTTLES//

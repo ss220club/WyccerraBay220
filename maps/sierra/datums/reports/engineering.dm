@@ -1,6 +1,6 @@
 /datum/computer_file/report/recipient/eng/generate_fields()
 	..()
-	set_access(access_engine)
+	set_access(GLOB.access_engine)
 
 /datum/computer_file/report/recipient/construction_work
 	form_name = "NT-ENG-11"
@@ -24,7 +24,7 @@
 	work_fields += add_field(/datum/report_field/signature, "Подпись ответственного", required = 1)
 	add_field(/datum/report_field/signature, "Подпись запросившего работы", required = 1)
 	for(var/datum/report_field/field in work_fields)
-		field.set_access(access_edit = access_engine)
+		field.set_access(access_edit = GLOB.access_engine)
 
 /datum/computer_file/report/recipient/eng/report_work
 	form_name = "NT-ENG-11a"
@@ -47,7 +47,7 @@
 	work_fields += add_field(/datum/report_field/signature, "Подпись ответственного", required = 1)
 	add_field(/datum/report_field/signature, "Подпись изъявшего временный доступ", required = 1)
 	for(var/datum/report_field/field in work_fields)
-		field.set_access(access_edit = access_engine)
+		field.set_access(access_edit = GLOB.access_engine)
 
 /datum/computer_file/report/recipient/request_eng
 	form_name = "NT-ENG-12"
@@ -71,7 +71,7 @@
 	add_field(/datum/report_field/signature, "Подпись запросившего", required = 1)
 	work_fields += add_field(/datum/report_field/signature, "Подпись ответственного", required = 1)
 	for(var/datum/report_field/field in work_fields)
-		field.set_access(access_edit = access_engine)
+		field.set_access(access_edit = GLOB.access_engine)
 
 /datum/computer_file/report/recipient/eng/startup_systems
 	form_name = "NT-ENG-13"

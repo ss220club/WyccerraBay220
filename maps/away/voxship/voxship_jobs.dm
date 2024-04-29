@@ -152,14 +152,14 @@
 	)
 	skill_points = 20
 
-var/global/const/access_voxship = "ACCESS_VOXSHIP"
+GLOBAL_VAR_CONST(access_voxship, "ACCESS_VOXSHIP")
 /datum/access/vox
-	id = access_voxship
+	id = GLOB.access_voxship
 	desc = "Vox Ship"
 	region = ACCESS_REGION_NONE
 
 /obj/item/card/id/voxship
-	access = list(access_voxship)
+	access = list(GLOB.access_voxship)
 
 /obj/machinery/door/airlock/hatch/voxship
 

@@ -30,7 +30,7 @@ GLOBAL_LIST(hazard_overlays)
 			use_after(airlock, null)
 		return INITIALIZE_HINT_QDEL
 
-var/global/list/tape_roll_applications = list()
+GLOBAL_LIST_INIT(tape_roll_applications, list())
 
 /obj/item/tape
 	name = "tape"
@@ -75,7 +75,7 @@ var/global/list/tape_roll_applications = list()
 /obj/item/tape/police
 	name = "police tape"
 	desc = "A length of police tape.  Do not cross."
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	color = COLOR_RED
 
 /obj/item/taperoll/engineering
@@ -90,7 +90,7 @@ var/global/list/tape_roll_applications = list()
 /obj/item/tape/engineering
 	name = "engineering tape"
 	desc = "A length of engineering tape. Better not cross it."
-	req_access = list(list(access_engine,access_atmospherics))
+	req_access = list(list(GLOB.access_engine,GLOB.access_atmospherics))
 	color = COLOR_ORANGE
 
 /obj/item/taperoll/atmos
@@ -102,7 +102,7 @@ var/global/list/tape_roll_applications = list()
 /obj/item/tape/atmos
 	name = "atmospherics tape"
 	desc = "A length of atmospherics tape. Better not cross it."
-	req_access = list(list(access_engine,access_atmospherics))
+	req_access = list(list(GLOB.access_engine,GLOB.access_atmospherics))
 	color = COLOR_BLUE_LIGHT
 	icon_base = "stripetape"
 	detail_overlay = "stripes"
@@ -117,7 +117,7 @@ var/global/list/tape_roll_applications = list()
 /obj/item/tape/research
 	name = "research tape"
 	desc = "A length of research tape. Better not cross it."
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 	color = COLOR_RESEARCH
 
 /obj/item/taperoll/medical
@@ -129,7 +129,7 @@ var/global/list/tape_roll_applications = list()
 /obj/item/tape/medical
 	name = "medical tape"
 	desc = "A length of medical tape. Better not cross it."
-	req_access = list(access_medical)
+	req_access = list(GLOB.access_medical)
 	icon_base = "stripetape"
 	detail_overlay = "stripes"
 	detail_color = COLOR_PALE_BLUE_GRAY
@@ -300,17 +300,17 @@ var/global/list/tape_roll_applications = list()
 		var/turf/F = A
 		var/direction = user.loc == F ? user.dir : turn(user.dir, 180)
 		var/hazard_overlay = GLOB.hazard_overlays["[direction]"]
-		if(isnull(tape_roll_applications[F]))
-			tape_roll_applications[F] = 0
+		if(isnull(GLOB.tape_roll_applications[F]))
+			GLOB.tape_roll_applications[F] = 0
 
-		if(tape_roll_applications[F] & direction)
+		if(GLOB.tape_roll_applications[F] & direction)
 			user.visible_message("\The [user] uses the adhesive of \the [src] to remove area markings from \the [F].", "You use the adhesive of \the [src] to remove area markings from \the [F].")
 			F.CutOverlays(hazard_overlay)
-			tape_roll_applications[F] &= ~direction
+			GLOB.tape_roll_applications[F] &= ~direction
 		else
 			user.visible_message("\The [user] applied \the [src] on \the [F] to create area markings.", "You apply \the [src] on \the [F] to create area markings.")
 			F.AddOverlays(hazard_overlay)
-			tape_roll_applications[F] |= direction
+			GLOB.tape_roll_applications[F] |= direction
 		return TRUE
 
 	return ..()

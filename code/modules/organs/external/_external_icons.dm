@@ -1,4 +1,4 @@
-var/global/list/limb_icon_cache = list()
+GLOBAL_LIST_INIT(limb_icon_cache, list())
 
 /// Layer for bodyparts that should appear behind every other bodypart - Mostly, legs when facing WEST or EAST
 #define BODYPARTS_LOW_LAYER -2
@@ -16,7 +16,7 @@ var/global/list/limb_icon_cache = list()
 	base_skin = ""
 	h_col = rgb2num(human.head_hair_color)
 	if(BP_IS_ROBOTIC(src) && !(human.species.appearance_flags & SPECIES_APPEARANCE_HAS_BASE_SKIN_COLOURS))
-		var/datum/robolimb/franchise = all_robolimbs[model]
+		var/datum/robolimb/franchise = GLOB.all_robolimbs[model]
 		if(!(franchise && franchise.skintone))
 			return
 	if(species && human.species && species.name != human.species.name)
@@ -34,7 +34,7 @@ var/global/list/limb_icon_cache = list()
 	base_skin = dna.base_skin
 	h_col = list(dna.GetUIValue(DNA_UI_HAIR_R),dna.GetUIValue(DNA_UI_HAIR_G),dna.GetUIValue(DNA_UI_HAIR_B))
 	if(BP_IS_ROBOTIC(src))
-		var/datum/robolimb/franchise = all_robolimbs[model]
+		var/datum/robolimb/franchise = GLOB.all_robolimbs[model]
 		if(!(franchise && franchise.skintone))
 			return
 	if(!isnull(dna.GetUIValue(DNA_UI_SKIN_TONE)) && (species.appearance_flags & SPECIES_APPEARANCE_HAS_A_SKIN_TONE))
@@ -181,10 +181,10 @@ var/global/list/limb_icon_cache = list()
 
 	if(body_hair && islist(h_col) && length(h_col) >= 3)
 		var/cache_key = "[body_hair]-[icon_name]-[h_col[1]][h_col[2]][h_col[3]]"
-		if(!limb_icon_cache[cache_key])
+		if(!GLOB.limb_icon_cache[cache_key])
 			var/icon/I = icon(species.get_icobase(owner), "[icon_name]_[body_hair]")
 			I.Blend(rgb(h_col[1],h_col[2],h_col[3]), ICON_ADD)
-		mob_icon.Blend(limb_icon_cache[cache_key], ICON_OVERLAY)
+		mob_icon.Blend(GLOB.limb_icon_cache[cache_key], ICON_OVERLAY)
 
 	//Fix leg layering here
 	//Alternatively you could use masks but it's about same amount of work
@@ -236,8 +236,8 @@ var/global/list/limb_icon_cache = list()
 // amount to represent the obfuscation of being in agonizing pain.
 
 // Global scope, used in code below.
-var/global/list/flesh_hud_colours = list("#00ff00","#aaff00","#ffff00","#ffaa00","#ff0000","#aa0000","#660000")
-var/global/list/robot_hud_colours = list("#ffffff","#cccccc","#aaaaaa","#888888","#666666","#444444","#222222","#000000")
+GLOBAL_LIST_INIT(flesh_hud_colours, list("#00ff00","#aaff00","#ffff00","#ffaa00","#ff0000","#aa0000","#660000"))
+GLOBAL_LIST_INIT(robot_hud_colours, list("#ffffff","#cccccc","#aaaaaa","#888888","#666666","#444444","#222222","#000000"))
 
 /obj/item/organ/external/proc/get_damage_hud_image()
 
@@ -246,7 +246,7 @@ var/global/list/robot_hud_colours = list("#ffffff","#cccccc","#aaaaaa","#888888"
 	// This looks convoluted, but it's this way to avoid icon proc calls.
 	if(!hud_damage_image)
 		var/cache_key = "dambase-[json_encode(get_icon_key())]"
-		if(!cache_key || !limb_icon_cache[cache_key])
+		if(!cache_key || !GLOB.limb_icon_cache[cache_key])
 			var/list/appearances = get_overlays()
 			for(var/image/I as anything in appearances) //Mutable appearances are a type of image
 				I.dir = SOUTH
@@ -259,8 +259,8 @@ var/global/list/robot_hud_colours = list("#ffffff","#cccccc","#aaaaaa","#888888"
 					I.color = list(r, r, r, g, g, g, b, b, b)
 				I.pixel_x = owner.default_pixel_x
 				I.pixel_y = owner.default_pixel_y
-			limb_icon_cache[cache_key] = appearances
-		var/list/appearances = limb_icon_cache[cache_key]
+			GLOB.limb_icon_cache[cache_key] = appearances
+		var/list/appearances = GLOB.limb_icon_cache[cache_key]
 		hud_damage_image = image(null)
 		hud_damage_image.AddOverlays(appearances)
 
@@ -270,7 +270,7 @@ var/global/list/robot_hud_colours = list("#ffffff","#cccccc","#aaaaaa","#888888"
 	if(min_dam_state && dam_state < min_dam_state)
 		dam_state = min_dam_state
 	// Apply colour and return product.
-	var/list/hud_colours = !BP_IS_ROBOTIC(src) ? flesh_hud_colours : robot_hud_colours
+	var/list/hud_colours = !BP_IS_ROBOTIC(src) ? GLOB.flesh_hud_colours : GLOB.robot_hud_colours
 	hud_damage_image.color = hud_colours[max(1,min(ceil(dam_state*length(hud_colours)),length(hud_colours)))]
 	return hud_damage_image
 

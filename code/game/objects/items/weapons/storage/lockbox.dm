@@ -7,7 +7,7 @@
 	w_class = ITEM_SIZE_HUGE
 	max_w_class = ITEM_SIZE_NORMAL
 	max_storage_space = 32
-	req_access = list(access_armory)
+	req_access = list(GLOB.access_armory)
 	var/locked = TRUE
 	var/broken = FALSE
 	var/icon_locked = "lockbox+l"
@@ -69,7 +69,7 @@
 
 /obj/item/storage/lockbox/loyalty
 	name = "lockbox of loyalty implants"
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	startswith = list(
 		/obj/item/implantcase/loyalty = 3,
 		/obj/item/implanter/loyalty = 1
@@ -79,7 +79,7 @@
 /obj/item/storage/lockbox/clusterbang
 	name = "lockbox of clusterbangs"
 	desc = "You have a bad feeling about opening this."
-	req_access = list(access_security)
+	req_access = list(GLOB.access_security)
 	startswith = list(
 		/obj/item/grenade/flashbang/clusterbang = 1
 	)
@@ -95,7 +95,7 @@
 	max_w_class = ITEM_SIZE_TINY
 	max_storage_space = null
 	storage_slots = 12
-	req_access = list(access_virology)
+	req_access = list(GLOB.access_virology)
 
 /obj/item/storage/lockbox/vials/New()
 	..()

@@ -208,7 +208,7 @@
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure
 	containername = "silver cutlery crate"
-	access = access_kitchen
+	access = GLOB.access_kitchen
 	contains = list(
 		/obj/item/storage/box/silverware
 	)

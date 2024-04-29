@@ -50,7 +50,7 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 
 /proc/log_runtime(text)
 	for (var/client/C as anything in GLOB.admins)
-		if (!C.prefs || C.get_preference_value(/datum/client_preference/staff/show_runtime_logs) == GLOB.PREF_SHOW)
+		if (!C.prefs || C.get_preference_value(/datum/client_preference/staff/show_runtime_logs) == PREF_SHOW)
 			to_chat(C, append_admin_tools(SPAN_DEBUG("<b>RUNTIME</b>: [text]"), usr, usr?.loc))
 
 /proc/log_signal(text)
@@ -67,7 +67,7 @@ var/global/log_end= world.system_type == UNIX ? ascii2text(13) : ""
 
 /proc/to_debug_listeners(text, prefix = "DEBUG")
 	for(var/client/C as anything in GLOB.admins)
-		if (!C.prefs || C.get_preference_value(/datum/client_preference/staff/show_debug_logs) == GLOB.PREF_SHOW)
+		if (!C.prefs || C.get_preference_value(/datum/client_preference/staff/show_debug_logs) == PREF_SHOW)
 			to_chat(C, MESSAGE_TYPE_DEBUG, SPAN_DEBUG("<b>[prefix]</b>: [text]"), TRUE)
 
 /proc/log_game(text)

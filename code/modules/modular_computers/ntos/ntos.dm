@@ -73,7 +73,7 @@
 
 	var/obj/item/stock_parts/computer/network_card/network_card = get_component(PART_NETWORK)
 	if(network_card)
-		ntnet_global.unregister(network_card.identification_id)
+		GLOB.ntnet_global.unregister(network_card.identification_id)
 
 	on = FALSE
 	ntnet_status = null
@@ -99,7 +99,7 @@
 
 	var/obj/item/stock_parts/computer/network_card/network_card = get_component(PART_NETWORK)
 	if(network_card)
-		ntnet_global.register(network_card.identification_id, src)
+		GLOB.ntnet_global.register(network_card.identification_id, src)
 
 	var/datum/computer_file/data/autorun = get_file("autorun")
 	if(istype(autorun))
@@ -207,7 +207,7 @@
 /datum/extension/interactive/ntos/proc/add_log(text)
 	if(!get_ntnet_status())
 		return FALSE
-	return ntnet_global.add_log(text, get_component(PART_NETWORK))
+	return GLOB.ntnet_global.add_log(text, get_component(PART_NETWORK))
 
 /datum/extension/interactive/ntos/proc/get_physical_host()
 	var/atom/A = holder

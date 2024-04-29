@@ -58,7 +58,7 @@ TORCH_ESCAPE_POD(17)
 	waypoint_station = "nav_petrov_start"
 	waypoint_offsite = "nav_petrov_out"
 	logging_home_tag = "nav_petrov_start"
-	logging_access = access_petrov_helm
+	logging_access = GLOB.access_petrov_helm
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling
 
 /datum/shuttle/autodock/ferry/petrov/New(_name, obj/shuttle_landmark/initial_location)
@@ -356,7 +356,7 @@ TORCH_ESCAPE_POD(17)
 	range = 1
 	fuel_consumption = 4
 	logging_home_tag = "nav_hangar_charon"
-	logging_access = access_expedition_shuttle_helm
+	logging_access = GLOB.access_expedition_shuttle_helm
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/torch
 
 /obj/shuttle_landmark/torch/hangar/exploration_shuttle
@@ -401,7 +401,7 @@ TORCH_ESCAPE_POD(17)
 	sound_landing = 'sound/effects/rocket_backwards.ogg'
 	fuel_consumption = 2
 	logging_home_tag = "nav_hangar_guppy"
-	logging_access = access_guppy_helm
+	logging_access = GLOB.access_guppy_helm
 	skill_needed = SKILL_UNSKILLED
 	ceiling_type = /turf/simulated/floor/shuttle_ceiling/torch
 
@@ -479,4 +479,4 @@ TORCH_ESCAPE_POD(17)
 
 //Makes the deck management program use hangar access
 /datum/nano_module/deck_management
-	default_access = list(access_hangar, access_cargo, access_heads)
+	default_access = list(GLOB.access_hangar, GLOB.access_cargo, GLOB.access_heads)

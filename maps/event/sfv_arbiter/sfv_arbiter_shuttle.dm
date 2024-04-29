@@ -45,12 +45,12 @@
 //Machinery
 /obj/machinery/computer/shuttle_control/explore/sfv_arbiter_shuttle
 	name = "SFV Arbiter Control Console"
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 	shuttle_tag = "SFV Arbiter"
 
 /obj/machinery/power/apc/debug/sfv_arbiter
 	cell_type = /obj/item/cell/infinite
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 
 /obj/machinery/telecomms/allinone/sfv_arbiter
 	listening_freqs = list(SFV_FREQ)

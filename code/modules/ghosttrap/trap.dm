@@ -1,25 +1,25 @@
 // This system is used to grab a ghost from observers with the required preferences
 // and lack of bans set. See posibrain.dm for an example of how they are called/used.
 
-var/global/list/ghost_traps
+GLOBAL_LIST_EMPTY(ghost_traps)
 
 /proc/get_ghost_trap(trap_key)
 	RETURN_TYPE(/datum/ghosttrap)
-	if(!ghost_traps)
+	if(!GLOB.ghost_traps)
 		populate_ghost_traps()
-	return ghost_traps[trap_key]
+	return GLOB.ghost_traps[trap_key]
 
 /proc/get_ghost_traps()
 	RETURN_TYPE(/list)
-	if(!ghost_traps)
+	if(!GLOB.ghost_traps)
 		populate_ghost_traps()
-	return ghost_traps
+	return GLOB.ghost_traps
 
 /proc/populate_ghost_traps()
-	ghost_traps = list()
+	GLOB.ghost_traps = list()
 	for(var/traptype in typesof(/datum/ghosttrap))
 		var/datum/ghosttrap/G = new traptype
-		ghost_traps[G.object] = G
+		GLOB.ghost_traps[G.object] = G
 
 /datum/ghosttrap
 	var/object = "default ghost trap"
@@ -82,7 +82,7 @@ var/global/list/ghost_traps
 		unregister_target(target)
 
 	for(var/mob/observer/ghost/O in GLOB.player_list)
-		if (O.client.get_preference_value(/datum/client_preference/notify_ghost_trap) == GLOB.PREF_NO)
+		if (O.client.get_preference_value(/datum/client_preference/notify_ghost_trap) == PREF_NO)
 			return
 		if(!assess_candidate(O, target, FALSE))
 			continue

@@ -26,7 +26,7 @@
 	var/check_synth = 0 	//if active, will shoot at anything not an AI or cyborg
 	var/ailock = 0 	//Silicons cannot use this
 
-	req_access = list(access_ai_upload)
+	req_access = list(GLOB.access_ai_upload)
 
 /obj/machinery/turretid/stun
 	enabled = 1

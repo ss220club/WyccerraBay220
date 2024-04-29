@@ -19,7 +19,7 @@ var/global/sent_spiders_to_station = 0
 
 /datum/event/spider_infestation/announce()
 	GLOB.using_map.unidentified_lifesigns_announcement()
-	var/obj/overmap/visitable/O = map_sectors["[pick(affecting_z)]"]
+	var/obj/overmap/visitable/O = GLOB.map_sectors["[pick(affecting_z)]"]
 	if (!O)
 		return
 

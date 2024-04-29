@@ -27,7 +27,7 @@
 
 /obj/machinery/computer/teleporter/Initialize()
 	. = ..()
-	id = "[random_id(/obj/machinery/computer/teleporter, 1000, 9999)]"
+	id = "[GLOB.random_id(/obj/machinery/computer/teleporter, 1000, 9999)]"
 	update_refs()
 
 
@@ -122,8 +122,8 @@
 	target = _target
 
 	if (GLOB.using_map.use_overmap && GLOB.using_map.use_bluespace_interlude)
-		var/obj/overmap/overmap_target = map_sectors["[get_z(target)]"]
-		var/obj/overmap/overmap_source = map_sectors["[get_z(src)]"]
+		var/obj/overmap/overmap_target = GLOB.map_sectors["[get_z(target)]"]
+		var/obj/overmap/overmap_source = GLOB.map_sectors["[get_z(src)]"]
 		if (overmap_target && overmap_source)
 			var/distance = get_dist(overmap_target, overmap_source)
 			if (distance > GLOB.minimum_safe_teleport_distance)

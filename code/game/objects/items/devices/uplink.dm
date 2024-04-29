@@ -45,13 +45,13 @@
 	update_nano_data()
 
 	src.uplink_owner = owner
-	world_uplinks += src
+	GLOB.world_uplinks += src
 	uses = telecrystals
 	START_PROCESSING(SSobj, src)
 
 /obj/item/device/uplink/Destroy()
 	uplink_owner = null
-	world_uplinks -= src
+	GLOB.world_uplinks -= src
 	STOP_PROCESSING(SSobj, src)
 	return ..()
 
@@ -148,7 +148,7 @@
 // The purchasing code.
 /obj/item/device/uplink/OnTopic(user, href_list)
 	if(href_list["buy_item"])
-		var/datum/uplink_item/UI = (locate(href_list["buy_item"]) in uplink.items)
+		var/datum/uplink_item/UI = (locate(href_list["buy_item"]) in GLOB.uplink.items)
 		UI.buy(src, usr)
 		. = TOPIC_REFRESH
 	else if(href_list["lock"])
@@ -166,7 +166,7 @@
 		if(href_list["id"])
 			exploit_id = text2num(href_list["id"])
 		if(href_list["category"])
-			category = locate(href_list["category"]) in uplink.categories
+			category = locate(href_list["category"]) in GLOB.uplink.categories
 		. = TOPIC_REFRESH
 
 	if(. == TOPIC_REFRESH)
@@ -175,7 +175,7 @@
 /obj/item/device/uplink/proc/update_nano_data()
 	if(nanoui_menu == 0)
 		var/categories[0]
-		for(var/datum/uplink_category/category in uplink.categories)
+		for(var/datum/uplink_category/category in GLOB.uplink.categories)
 			if(category.can_view(src))
 				categories[LIST_PRE_INC(categories)] = list("name" = category.name, "ref" = "\ref[category]")
 		nanoui_data["categories"] = categories

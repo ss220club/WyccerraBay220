@@ -1,14 +1,14 @@
-var/global/list/all_robolimbs = list()
-var/global/list/chargen_robolimbs = list()
-var/global/datum/robolimb/basic_robolimb
+GLOBAL_LIST_INIT(all_robolimbs, list())
+GLOBAL_LIST_INIT(chargen_robolimbs, list())
+GLOBAL_DATUM(basic_robolimb, /datum/robolimb)
 
 /proc/populate_robolimb_list()
-	basic_robolimb = new()
+	GLOB.basic_robolimb = new()
 	for(var/limb_type in typesof(/datum/robolimb))
 		var/datum/robolimb/R = new limb_type()
-		all_robolimbs[R.company] = R
+		GLOB.all_robolimbs[R.company] = R
 		if(!R.unavailable_at_chargen)
-			chargen_robolimbs[R.company] = R
+			GLOB.chargen_robolimbs[R.company] = R
 
 
 /datum/robolimb

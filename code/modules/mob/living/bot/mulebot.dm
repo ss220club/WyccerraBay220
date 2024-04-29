@@ -23,7 +23,7 @@
 	max_target_dist = 250
 	target_speed = 3
 	max_frustration = 5
-	botcard_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mining, access_mining_station)
+	botcard_access = list(GLOB.access_maint_tunnels, GLOB.access_mailsorting, GLOB.access_cargo, GLOB.access_cargo_bot, GLOB.access_qm, GLOB.access_mining, GLOB.access_mining_station)
 
 	var/atom/movable/load
 
@@ -252,7 +252,7 @@
 
 /mob/living/bot/mulebot/proc/GetBeaconList()
 	var/list/beaconlist = list()
-	for(var/obj/machinery/navbeacon/N in navbeacons)
+	for(var/obj/machinery/navbeacon/N in GLOB.navbeacons)
 		if(!N.codes["delivery"])
 			continue
 		beaconlist.Add(N.location)

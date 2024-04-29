@@ -1,4 +1,4 @@
-var/global/list/mob_hat_cache = list()
+GLOBAL_LIST_INIT(mob_hat_cache, list())
 /proc/get_hat_icon(obj/item/hat, offset_x = 0, offset_y = 0)
 	RETURN_TYPE(/image)
 	var/t_state = hat.icon_state
@@ -7,7 +7,7 @@ var/global/list/mob_hat_cache = list()
 	else if(hat.item_state)
 		t_state = hat.item_state
 	var/key = "[t_state]_[offset_x]_[offset_y]"
-	if(!mob_hat_cache[key])            // Not ideal as there's no guarantee all hat icon_states
+	if(!GLOB.mob_hat_cache[key])            // Not ideal as there's no guarantee all hat icon_states
 		var/t_icon = GLOB.default_onmob_icons[slot_head_str] // are unique across multiple dmis, but whatever.
 		if(hat.icon_override)
 			t_icon = hat.icon_override
@@ -16,8 +16,8 @@ var/global/list/mob_hat_cache = list()
 		var/image/I = image(icon = t_icon, icon_state = t_state)
 		I.pixel_x = offset_x
 		I.pixel_y = offset_y
-		mob_hat_cache[key] = I
-	return mob_hat_cache[key]
+		GLOB.mob_hat_cache[key] = I
+	return GLOB.mob_hat_cache[key]
 
 /mob/living/silicon/robot/drone
 	name = "maintenance drone"
@@ -35,7 +35,7 @@ var/global/list/mob_hat_cache = list()
 	braintype = "Drone"
 	lawupdate = FALSE
 	density = TRUE
-	req_access = list(access_engine, access_robotics)
+	req_access = list(GLOB.access_engine, GLOB.access_robotics)
 	integrated_light_power = 0.5
 	local_transmit = 1
 	possession_candidate = TRUE
@@ -72,7 +72,7 @@ var/global/list/mob_hat_cache = list()
 	remove_language(LANGUAGE_ROBOT_GLOBAL)
 	add_language(LANGUAGE_ROBOT_GLOBAL, 0)
 	add_language(LANGUAGE_DRONE_GLOBAL, 1)
-	default_language = all_languages[LANGUAGE_DRONE_GLOBAL]
+	default_language = GLOB.all_languages[LANGUAGE_DRONE_GLOBAL]
 	// NO BRAIN.
 	mmi = null
 
@@ -159,7 +159,7 @@ var/global/list/mob_hat_cache = list()
 	SetName(real_name)
 
 /mob/living/silicon/robot/drone/updatename()
-	real_name = "[initial(name)] ([random_id(type,100,999)])"
+	real_name = "[initial(name)] ([GLOB.random_id(type,100,999)])"
 	SetName(real_name)
 
 /mob/living/silicon/robot/drone/on_update_icon()

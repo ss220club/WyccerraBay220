@@ -23,7 +23,7 @@
 	despawn()
 
 /mob/living/silicon/ai/proc/despawn()
-	empty_playable_ai_cores += new /obj/structure/AIcore/deactivated(loc)
+	GLOB.empty_playable_ai_cores += new /obj/structure/AIcore/deactivated(loc)
 
 	//Handle job slot/tater cleanup.
 	clear_client()

@@ -32,19 +32,19 @@
 		SKILL_WEAPONS = SKILL_EXPERIENCED
 	)
 	access = list(
-		access_el,
-		access_explorer,
-		access_eva,
-		access_bridge,
-		access_heads,
-		access_emergency_storage,
-		access_tech_storage,
-		access_guppy_helm,
-		access_expedition_shuttle,
-		access_expedition_shuttle_helm,
-		access_guppy,
-		access_hangar,
-		access_research
+		GLOB.access_el,
+		GLOB.access_explorer,
+		GLOB.access_eva,
+		GLOB.access_bridge,
+		GLOB.access_heads,
+		GLOB.access_emergency_storage,
+		GLOB.access_tech_storage,
+		GLOB.access_guppy_helm,
+		GLOB.access_expedition_shuttle,
+		GLOB.access_expedition_shuttle_helm,
+		GLOB.access_guppy,
+		GLOB.access_hangar,
+		GLOB.access_research
 	)
 	software_on_spawn = list(
 		/datum/computer_file/program/deck_management,
@@ -97,14 +97,14 @@
 	// SIERRA TODO: required_role
 	// required_role = list("Exploration Leader", "Expeditionary Pilot")
 	access = list(
-		access_explorer,
-		access_eva,
-		access_emergency_storage,
-		access_guppy_helm,
-		access_expedition_shuttle,
-		access_guppy,
-		access_hangar,
-		access_research
+		GLOB.access_explorer,
+		GLOB.access_eva,
+		GLOB.access_emergency_storage,
+		GLOB.access_guppy_helm,
+		GLOB.access_expedition_shuttle,
+		GLOB.access_guppy,
+		GLOB.access_hangar,
+		GLOB.access_research
 	)
 	software_on_spawn = list(/datum/computer_file/program/deck_management)
 
@@ -153,15 +153,15 @@
 		SKILL_WEAPONS = SKILL_EXPERIENCED
 	)
 	access = list(
-		access_explorer,
-		access_eva,
-		access_emergency_storage,
-		access_guppy_helm,
-		access_expedition_shuttle,
-		access_guppy,
-		access_hangar,
-		access_expedition_shuttle_helm,
-		access_research
+		GLOB.access_explorer,
+		GLOB.access_eva,
+		GLOB.access_emergency_storage,
+		GLOB.access_guppy_helm,
+		GLOB.access_expedition_shuttle,
+		GLOB.access_guppy,
+		GLOB.access_hangar,
+		GLOB.access_expedition_shuttle_helm,
+		GLOB.access_research
 	)
 	software_on_spawn = list(/datum/computer_file/program/deck_management)
 
@@ -208,15 +208,15 @@
 	// SIERRA TODO: required_role
 	// required_role = list("Exploration Leader", "Expeditionary Pilot")
 	access = list(
-		access_explorer,
-		access_eva,
-		access_emergency_storage,
-		access_field_med,
-		access_guppy_helm,
-		access_expedition_shuttle,
-		access_guppy,
-		access_hangar,
-		access_research
+		GLOB.access_explorer,
+		GLOB.access_eva,
+		GLOB.access_emergency_storage,
+		GLOB.access_field_med,
+		GLOB.access_guppy_helm,
+		GLOB.access_expedition_shuttle,
+		GLOB.access_guppy,
+		GLOB.access_hangar,
+		GLOB.access_research
 	)
 	software_on_spawn = list(/datum/computer_file/program/deck_management)
 
@@ -274,15 +274,15 @@
 	// SIERRA TODO: required_role
 	// required_role = list("Exploration Leader", "Expeditionary Pilot")
 	access = list(
-		access_explorer,
-		access_eva,
-		access_emergency_storage,
-		access_field_eng,
-		access_guppy_helm,
-		access_expedition_shuttle,
-		access_guppy,
-		access_hangar,
-		access_research
+		GLOB.access_explorer,
+		GLOB.access_eva,
+		GLOB.access_emergency_storage,
+		GLOB.access_field_eng,
+		GLOB.access_guppy_helm,
+		GLOB.access_expedition_shuttle,
+		GLOB.access_guppy,
+		GLOB.access_hangar,
+		GLOB.access_research
 	)
 	software_on_spawn = list(/datum/computer_file/program/deck_management)
 

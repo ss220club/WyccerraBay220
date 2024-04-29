@@ -101,7 +101,7 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/Initialize()
 	if (!id_tag)
-		id_tag = num2text(sequential_id("obj/machinery"))
+		id_tag = num2text(GLOB.sequential_id("obj/machinery"))
 	if(!scrubbing_gas)
 		reset_scrubbing()
 	var/area/A = get_area(src)

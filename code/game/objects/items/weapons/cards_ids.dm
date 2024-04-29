@@ -157,8 +157,6 @@
 	origin_tech = list(TECH_MAGNET = 2, TECH_ESOTERIC = 2)
 	var/uses = 10
 
-var/global/const/NO_EMAG_ACT = -50
-
 /obj/item/card/emag/resolve_attackby(atom/A, mob/user)
 	var/used_uses = A.emag_act(uses, user, src)
 	if(used_uses == NO_EMAG_ACT)
@@ -464,7 +462,7 @@ var/global/const/NO_EMAG_ACT = -50
 	desc = "An ID straight from the Syndicate."
 	registered_name = "Syndicate"
 	assignment = "Syndicate Overlord"
-	access = list(access_syndicate, access_external_airlocks)
+	access = list(GLOB.access_syndicate, GLOB.access_external_airlocks)
 	color = COLOR_RED_GRAY
 	detail_color = COLOR_GRAY40
 
@@ -691,6 +689,6 @@ var/global/const/NO_EMAG_ACT = -50
 /obj/item/card/id/merchant
 	name = "identification card"
 	desc = "A card issued to Merchants, indicating their right to sell and buy goods."
-	access = list(access_merchant)
+	access = list(GLOB.access_merchant)
 	color = COLOR_OFF_WHITE
 	detail_color = COLOR_BEIGE

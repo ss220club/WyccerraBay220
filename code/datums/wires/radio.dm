@@ -2,14 +2,14 @@
 	holder_type = /obj/item/device/radio
 	wire_count = 3
 	descriptions = list(
-		new /datum/wire_description(WIRE_SIGNAL, "This wire connects several radio components."),
-		new /datum/wire_description(WIRE_RECEIVE, "This wire runs to the radio reciever.", SKILL_EXPERIENCED),
-		new /datum/wire_description(WIRE_TRANSMIT, "This wire runs to the radio transmitter.")
+		new /datum/wire_description(GLOB.WIRE_SIGNAL, "This wire connects several radio components."),
+		new /datum/wire_description(GLOB.WIRE_RECEIVE, "This wire runs to the radio reciever.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.WIRE_TRANSMIT, "This wire runs to the radio transmitter.")
 	)
 
-var/global/const/WIRE_SIGNAL = 1
-var/global/const/WIRE_RECEIVE = 2
-var/global/const/WIRE_TRANSMIT = 4
+GLOBAL_VAR_CONST(WIRE_SIGNAL, 1)
+GLOBAL_VAR_CONST(WIRE_RECEIVE, 2)
+GLOBAL_VAR_CONST(WIRE_TRANSMIT, 4)
 
 /datum/wires/radio/CanUse(mob/living/L)
 	var/obj/item/device/radio/R = holder
@@ -26,27 +26,27 @@ var/global/const/WIRE_TRANSMIT = 4
 /datum/wires/radio/UpdatePulsed(index)
 	var/obj/item/device/radio/R = holder
 	switch(index)
-		if(WIRE_SIGNAL)
-			R.listening = !R.listening && !IsIndexCut(WIRE_RECEIVE)
-			R.broadcasting = R.listening && !IsIndexCut(WIRE_TRANSMIT)
+		if(GLOB.WIRE_SIGNAL)
+			R.listening = !R.listening && !IsIndexCut(GLOB.WIRE_RECEIVE)
+			R.broadcasting = R.listening && !IsIndexCut(GLOB.WIRE_TRANSMIT)
 
-		if(WIRE_RECEIVE)
-			R.listening = !R.listening && !IsIndexCut(WIRE_SIGNAL)
+		if(GLOB.WIRE_RECEIVE)
+			R.listening = !R.listening && !IsIndexCut(GLOB.WIRE_SIGNAL)
 
-		if(WIRE_TRANSMIT)
-			R.broadcasting = !R.broadcasting && !IsIndexCut(WIRE_SIGNAL)
+		if(GLOB.WIRE_TRANSMIT)
+			R.broadcasting = !R.broadcasting && !IsIndexCut(GLOB.WIRE_SIGNAL)
 	SSnano.update_uis(holder)
 
 /datum/wires/radio/UpdateCut(index, mended)
 	var/obj/item/device/radio/R = holder
 	switch(index)
-		if(WIRE_SIGNAL)
-			R.listening = mended && !IsIndexCut(WIRE_RECEIVE)
-			R.broadcasting = mended && !IsIndexCut(WIRE_TRANSMIT)
+		if(GLOB.WIRE_SIGNAL)
+			R.listening = mended && !IsIndexCut(GLOB.WIRE_RECEIVE)
+			R.broadcasting = mended && !IsIndexCut(GLOB.WIRE_TRANSMIT)
 
-		if(WIRE_RECEIVE)
-			R.listening = mended && !IsIndexCut(WIRE_SIGNAL)
+		if(GLOB.WIRE_RECEIVE)
+			R.listening = mended && !IsIndexCut(GLOB.WIRE_SIGNAL)
 
-		if(WIRE_TRANSMIT)
-			R.broadcasting = mended && !IsIndexCut(WIRE_SIGNAL)
+		if(GLOB.WIRE_TRANSMIT)
+			R.broadcasting = mended && !IsIndexCut(GLOB.WIRE_SIGNAL)
 	SSnano.update_uis(holder)

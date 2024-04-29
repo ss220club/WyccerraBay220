@@ -40,7 +40,7 @@ var/global/hadevent    = 0
 	GLOB.using_map.radiation_detected_announcement()
 
 /proc/carp_migration() // -- Darem
-	for(var/obj/landmark/C in landmarks_list)
+	for(var/obj/landmark/C in GLOB.landmarks_list)
 		if(C.name == "carpspawn")
 			new /mob/living/simple_animal/hostile/carp(C.loc)
 	//sleep(100)
@@ -49,14 +49,14 @@ var/global/hadevent    = 0
 
 /proc/lightsout(isEvent = 0, lightsoutAmount = 1,lightsoutRange = 25) //leave lightsoutAmount as 0 to break ALL lights
 	if(isEvent)
-		command_announcement.Announce("An Electrical storm has been detected in your area, please repair potential electronic overloads.","Electrical Storm Alert")
+		GLOB.command_announcement.Announce("An Electrical storm has been detected in your area, please repair potential electronic overloads.","Electrical Storm Alert")
 
 	if(lightsoutAmount)
 		var/list/epicentreList = list()
 
 		for(var/i=1,i<=lightsoutAmount,i++)
 			var/list/possibleEpicentres = list()
-			for(var/obj/landmark/newEpicentre in landmarks_list)
+			for(var/obj/landmark/newEpicentre in GLOB.landmarks_list)
 				if(newEpicentre.name == "lightsout" && !(newEpicentre in epicentreList))
 					possibleEpicentres += newEpicentre
 			if(length(possibleEpicentres))

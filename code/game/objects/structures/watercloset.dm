@@ -298,7 +298,7 @@
 	if(!working_sound)
 		return
 	if(!sound_id)
-		sound_id = "[type]_[sequential_id(/obj/structure/hygiene/shower)]"
+		sound_id = "[type]_[GLOB.sequential_id(/obj/structure/hygiene/shower)]"
 	if(on)
 		var/volume = 20
 		if(!sound_token)

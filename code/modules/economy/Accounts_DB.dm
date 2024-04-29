@@ -3,7 +3,7 @@
 	desc = "Access transaction logs, account data and all kinds of other financial records."
 	machine_name = "accounts uplink terminal"
 	machine_desc = "Displays financial records, account information, and all sorts of info for anything related to network banking accounts."
-	var/needed_access = list(list(access_hop, access_captain))
+	var/needed_access = list(list(GLOB.access_hop, GLOB.access_captain))
 	var/receipt_num
 	var/machine_id = ""
 	var/obj/item/card/id/held_card
@@ -14,9 +14,9 @@
 /obj/machinery/computer/account_database/proc/get_access_level()
 	if (!held_card)
 		return 0
-	if(access_cent_captain in held_card.access)
+	if(GLOB.access_cent_captain in held_card.access)
 		return 2
-	else if(access_hop in held_card.access || (access_captain in held_card.access))
+	else if(GLOB.access_hop in held_card.access || (GLOB.access_captain in held_card.access))
 		return 1
 
 /obj/machinery/computer/account_database/proc/accounting_letterhead(report_name)
@@ -83,8 +83,8 @@
 			data["transactions"] = trx
 
 	var/list/accounts[0]
-	for(var/i=1, i<=length(all_money_accounts), i++)
-		var/datum/money_account/D = all_money_accounts[i]
+	for(var/i=1, i<=length(GLOB.all_money_accounts), i++)
+		var/datum/money_account/D = GLOB.all_money_accounts[i]
 		accounts.Add(list(list(\
 			"account_number"=D.account_number,\
 			"owner_name"=D.owner_name,\
@@ -152,8 +152,8 @@
 
 			if("view_account_detail")
 				var/index = text2num(href_list["account_index"])
-				if(index && index <= length(all_money_accounts))
-					detailed_account_view = all_money_accounts[index]
+				if(index && index <= length(GLOB.all_money_accounts))
+					detailed_account_view = GLOB.all_money_accounts[index]
 
 			if("view_accounts_list")
 				detailed_account_view = null
@@ -223,8 +223,8 @@
 							<tbody>
 					"}
 
-					for(var/i=1, i<=length(all_money_accounts), i++)
-						var/datum/money_account/D = all_money_accounts[i]
+					for(var/i=1, i<=length(GLOB.all_money_accounts), i++)
+						var/datum/money_account/D = GLOB.all_money_accounts[i]
 						text += {"
 								<tr>
 									<td>#[D.account_number]</td>

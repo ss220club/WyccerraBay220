@@ -7,8 +7,8 @@
 	They receive their message from a server after the message has been logged.
 */
 
-var/global/list/recentmessages = list() // global list of recent messages broadcasted : used to circumvent massive radio spam
-var/global/message_delay = 0 // To make sure restarting the recentmessages list is kept in sync
+GLOBAL_LIST_INIT(recentmessages, list()) // global list of recent messages broadcasted : used to circumvent massive radio spam
+GLOBAL_LIST_EMPTY(message_delay) // To make sure restarting the recentmessages list is kept in sync
 
 /obj/machinery/telecomms/broadcaster
 	name = "subspace broadcaster"
@@ -44,9 +44,9 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 			original.data["level"] = signal.data["level"]
 
 		var/signal_message = "[signal.frequency]:[signal.data["message"]]:[signal.data["realname"]]"
-		if(signal_message in recentmessages)
+		if(signal_message in GLOB.recentmessages)
 			return
-		recentmessages.Add(signal_message)
+		GLOB.recentmessages.Add(signal_message)
 
 		if(signal.data["slow"] > 0)
 			sleep(signal.data["slow"]) // simulate the network lag if necessary
@@ -92,19 +92,19 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 							  signal.data["realname"], signal.data["vname"], 4, signal.data["compression"], signal.data["level"], signal.frequency,
 							  signal.data["verb"], signal.data["language"], signal.data["channel_tag"], signal.data["channel_color"])
 
-		if(!message_delay)
-			message_delay = 1
+		if(!GLOB.message_delay)
+			GLOB.message_delay = 1
 			spawn(10)
-				message_delay = 0
-				recentmessages = list()
+				GLOB.message_delay = 0
+				GLOB.recentmessages = list()
 
 		/* --- Do a snazzy animation! --- */
 		flick("broadcaster_send", src)
 
 /obj/machinery/telecomms/broadcaster/Destroy()
 	// In case message_delay is left on 1, otherwise it won't reset the list and people can't say the same thing twice anymore.
-	if(message_delay)
-		message_delay = 0
+	if(GLOB.message_delay)
+		GLOB.message_delay = 0
 	..()
 
 
@@ -135,7 +135,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 
 /obj/machinery/telecomms/allinone/Initialize()
 	if(!listening_freqs)
-		listening_freqs = ANTAG_FREQS	//Covers any updates to ANTAG_FREQS
+		listening_freqs = GLOB.ANTAG_FREQS	//Covers any updates to ANTAG_FREQS
 	return ..()
 
 /obj/machinery/telecomms/allinone/receive_signal(datum/signal/signal)
@@ -309,8 +309,8 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 	// --- Broadcast to antag radios! ---
 
 	else if(data == 3)
-		for(var/antag_freq in ANTAG_FREQS)
-			var/datum/radio_frequency/antag_connection = radio_controller.return_frequency(antag_freq)
+		for(var/antag_freq in GLOB.ANTAG_FREQS)
+			var/datum/radio_frequency/antag_connection = GLOB.radio_controller.return_frequency(antag_freq)
 			for (var/obj/item/device/radio/R in antag_connection.devices["[RADIO_CHAT]"])
 				if(R.intercept && R.receive_range(antag_freq, level) > -1)
 					radios += R
@@ -348,7 +348,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 			continue
 
 		// Ghosts hearing all radio chat don't want to hear syndicate intercepts, they're duplicates
-		if(data == 3 && isghost(R) && R.get_preference_value(/datum/client_preference/ghost_radio) == GLOB.PREF_ALL_CHATTER)
+		if(data == 3 && isghost(R) && R.get_preference_value(/datum/client_preference/ghost_radio) == PREF_ALL_CHATTER)
 			continue
 
 		// --- Check for compression ---
@@ -390,7 +390,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 
 		// Default to commons channel green
 		if(!channel_color)
-			channel_color = channel_color_presets["Global Green"]
+			channel_color = GLOB.channel_color_presets["Global Green"]
 
 		var/part_b_extra = ""
 		if(data == 3) // intercepted radio message
@@ -446,7 +446,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 		var/mob/living/carbon/human/H = new
 		M = H
 
-	var/datum/radio_frequency/connection = radio_controller.return_frequency(frequency)
+	var/datum/radio_frequency/connection = GLOB.radio_controller.return_frequency(frequency)
 
 	var/display_freq = connection.frequency
 
@@ -477,8 +477,8 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 	// --- Broadcast to antag radios! ---
 
 	else if(data == 3)
-		for(var/freq in ANTAG_FREQS)
-			var/datum/radio_frequency/antag_connection = radio_controller.return_frequency(freq)
+		for(var/freq in GLOB.ANTAG_FREQS)
+			var/datum/radio_frequency/antag_connection = GLOB.radio_controller.return_frequency(freq)
 			for (var/obj/item/device/radio/R in antag_connection.devices["[RADIO_CHAT]"])
 				var/turf/position = get_turf(R)
 				if(position && position.z == level)
@@ -535,7 +535,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 			freq_text = channel_tag
 
 		if(!channel_color)
-			channel_color = channel_color_presets["Global Green"]
+			channel_color = GLOB.channel_color_presets["Global Green"]
 
 		var/part_a = "<span style='color: [channel_color]'><span class='name'>" // goes in the actual output
 
@@ -608,7 +608,7 @@ var/global/message_delay = 0 // To make sure restarting the recentmessages list 
 	signal.frequency = PUB_FREQ// Common channel
 
 //#### Sending the signal to all subspace receivers ####//
-	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
+	for(var/obj/machinery/telecomms/receiver/R in GLOB.telecomms_list)
 		R.receive_signal(signal)
 
 	if(do_sleep)

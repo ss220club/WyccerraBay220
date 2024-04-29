@@ -1,8 +1,8 @@
 #define AI_CHECK_WIRELESS 1
 #define AI_CHECK_RADIO 2
 
-var/global/list/ai_list = list()
-var/global/list/ai_verbs_default = list(
+GLOBAL_LIST_INIT(ai_list, list())
+GLOBAL_LIST_INIT(ai_verbs_default, list(
 	/mob/living/silicon/ai/proc/ai_announcement,
 	/mob/living/silicon/ai/proc/ai_call_shuttle,
 	/mob/living/silicon/ai/proc/ai_emergency_message,
@@ -35,13 +35,13 @@ var/global/list/ai_verbs_default = list(
 	/mob/living/silicon/ai/proc/ai_power_override,
 	/mob/living/silicon/ai/proc/ai_shutdown,
 	/mob/living/silicon/ai/proc/ai_reset_radio_keys
-)
+))
 
 //Not sure why this is necessary...
 /proc/AutoUpdateAI(obj/subject)
 	var/is_in_use = 0
 	if (subject!=null)
-		for(var/A in ai_list)
+		for(var/A in GLOB.ai_list)
 			var/mob/living/silicon/ai/M = A
 			if ((M.client && M.machine == subject))
 				is_in_use = 1
@@ -114,11 +114,11 @@ var/global/list/ai_verbs_default = list(
 	var/static/list/custom_ai_icons_by_ckey_and_name
 
 /mob/living/silicon/ai/proc/add_ai_verbs()
-	src.verbs |= ai_verbs_default
+	src.verbs |= GLOB.ai_verbs_default
 	src.verbs -= /mob/living/verb/ghost
 
 /mob/living/silicon/ai/proc/remove_ai_verbs()
-	src.verbs -= ai_verbs_default
+	src.verbs -= GLOB.ai_verbs_default
 	src.verbs += /mob/living/verb/ghost
 
 
@@ -172,7 +172,7 @@ var/global/list/ai_verbs_default = list(
 
 	if(!safety)//Only used by AIize() to successfully spawn an AI.
 		if (!B)//If there is no player/brain inside.
-			empty_playable_ai_cores += new/obj/structure/AIcore/deactivated(loc)//New empty terminal.
+			GLOB.empty_playable_ai_cores += new/obj/structure/AIcore/deactivated(loc)//New empty terminal.
 			qdel(src)//Delete AI.
 			return
 		else
@@ -191,7 +191,7 @@ var/global/list/ai_verbs_default = list(
 	hud_list[IMPTRACK_HUD]    = new /image/hud_overlay('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = new /image/hud_overlay('icons/mob/hud.dmi', src, "hudblank")
 
-	ai_list += src
+	GLOB.ai_list += src
 	. = ..()
 	ai_radio = silicon_radio
 	ai_radio.myAi = src
@@ -232,7 +232,7 @@ var/global/list/ai_verbs_default = list(
 		S.connected_ai = null
 	connected_robots.Cut()
 
-	ai_list -= src
+	GLOB.ai_list -= src
 	ai_radio = null
 
 	QDEL_NULL(announcement)
@@ -419,7 +419,7 @@ var/global/list/ai_verbs_default = list(
 			return ..() // Does further work on this key
 
 		if (href_list["switchcamera"])
-			switchCamera(locate(href_list["switchcamera"])) in cameranet.cameras
+			switchCamera(locate(href_list["switchcamera"])) in GLOB.cameranet.cameras
 			return TOPIC_HANDLED
 
 		if (href_list["showalerts"])
@@ -487,7 +487,7 @@ var/global/list/ai_verbs_default = list(
 		return
 
 	var/list/cameralist = new()
-	for (var/obj/machinery/camera/C in cameranet.cameras)
+	for (var/obj/machinery/camera/C in GLOB.cameranet.cameras)
 		if(!C.can_use())
 			continue
 		var/list/tempnetwork = difflist(C.network, GLOB.restricted_camera_networks, 1)
@@ -511,7 +511,7 @@ var/global/list/ai_verbs_default = list(
 
 	src.network = network
 
-	for(var/obj/machinery/camera/C in cameranet.cameras)
+	for(var/obj/machinery/camera/C in GLOB.cameranet.cameras)
 		if(!C.can_use())
 			continue
 		if(network in C.network)

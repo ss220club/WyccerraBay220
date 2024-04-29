@@ -88,17 +88,17 @@
 		return
 
 	if(href_list["togglep"])
-		if(!wires.IsIndexCut(PARTICLE_TOGGLE_WIRE))
+		if(!wires.IsIndexCut(GLOB.PARTICLE_TOGGLE_WIRE))
 			src.toggle_power()
 	else if(href_list["scan"])
 		src.part_scan()
 
 	else if(href_list["strengthup"])
-		if(!wires.IsIndexCut(PARTICLE_STRENGTH_WIRE))
+		if(!wires.IsIndexCut(GLOB.PARTICLE_STRENGTH_WIRE))
 			add_strength()
 
 	else if(href_list["strengthdown"])
-		if(!wires.IsIndexCut(PARTICLE_STRENGTH_WIRE))
+		if(!wires.IsIndexCut(GLOB.PARTICLE_STRENGTH_WIRE))
 			remove_strength()
 
 	src.updateDialog()

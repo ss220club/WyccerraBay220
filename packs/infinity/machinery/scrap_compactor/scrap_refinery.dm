@@ -1,4 +1,4 @@
-var/global/const/SAFETY_COOLDOWN = 100
+#define SAFETY_COOLDOWN 10 SECONDS
 
 /obj/machinery/recycler
 	name = "recycler"
@@ -157,3 +157,5 @@ var/global/const/SAFETY_COOLDOWN = 100
 			sleep(10)
 			L.adjustBruteLoss(80)
 	L.anchored = FALSE
+
+#undef SAFETY_COOLDOWN

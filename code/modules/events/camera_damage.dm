@@ -17,18 +17,18 @@
 			if(prob(2*severity))
 				cam.kill_health()
 			else
-				if(!cam.wires.IsIndexCut(CAMERA_WIRE_POWER))
-					cam.wires.CutWireIndex(CAMERA_WIRE_POWER)
-				if(!cam.wires.IsIndexCut(CAMERA_WIRE_ALARM) && prob(5*severity))
-					cam.wires.CutWireIndex(CAMERA_WIRE_ALARM)
+				if(!cam.wires.IsIndexCut(GLOB.CAMERA_WIRE_POWER))
+					cam.wires.CutWireIndex(GLOB.CAMERA_WIRE_POWER)
+				if(!cam.wires.IsIndexCut(GLOB.CAMERA_WIRE_ALARM) && prob(5*severity))
+					cam.wires.CutWireIndex(GLOB.CAMERA_WIRE_ALARM)
 
 /datum/event/camera_damage/proc/acquire_random_camera(remaining_attempts = 5)
-	if(!length(cameranet.cameras))
+	if(!length(GLOB.cameranet.cameras))
 		return
 	if(!remaining_attempts)
 		return
 
-	var/obj/machinery/camera/C = pick(cameranet.cameras)
+	var/obj/machinery/camera/C = pick(GLOB.cameranet.cameras)
 	if(is_valid_camera(C))
 		return C
 	return acquire_random_camera(remaining_attempts-1)

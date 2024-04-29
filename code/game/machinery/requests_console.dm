@@ -17,10 +17,10 @@
 #define RCS_MESSAUTH 7	// Authentication before sending
 #define RCS_ANNOUNCE 8	// Send announcement
 
-var/global/req_console_assistance = list()
-var/global/req_console_supplies = list()
-var/global/req_console_information = list()
-var/global/list/obj/machinery/requests_console/allConsoles = list()
+GLOBAL_LIST_INIT(req_console_assistance, list())
+GLOBAL_LIST_INIT(req_console_supplies, list())
+GLOBAL_LIST_INIT(req_console_information, list())
+GLOBAL_LIST_EMPTY(allConsoles)
 
 /obj/machinery/requests_console
 	name = "requests console"
@@ -68,30 +68,30 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	announcement.newscast = 1
 
 	name = "[department] requests console"
-	allConsoles += src
+	GLOB.allConsoles += src
 	if (departmentType & RC_ASSIST)
-		req_console_assistance |= department
+		GLOB.req_console_assistance |= department
 	if (departmentType & RC_SUPPLY)
-		req_console_supplies |= department
+		GLOB.req_console_supplies |= department
 	if (departmentType & RC_INFO)
-		req_console_information |= department
+		GLOB.req_console_information |= department
 
 	set_light(1)
 
 /obj/machinery/requests_console/Destroy()
-	allConsoles -= src
+	GLOB.allConsoles -= src
 	var/lastDeptRC = 1
-	for (var/obj/machinery/requests_console/Console in allConsoles)
+	for (var/obj/machinery/requests_console/Console in GLOB.allConsoles)
 		if (Console.department == department)
 			lastDeptRC = 0
 			break
 	if(lastDeptRC)
 		if (departmentType & RC_ASSIST)
-			req_console_assistance -= department
+			GLOB.req_console_assistance -= department
 		if (departmentType & RC_SUPPLY)
-			req_console_supplies -= department
+			GLOB.req_console_supplies -= department
 		if (departmentType & RC_INFO)
-			req_console_information -= department
+			GLOB.req_console_information -= department
 	. = ..()
 
 /obj/machinery/requests_console/interface_interact(mob/user)
@@ -108,9 +108,9 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 	data["silent"] = silent
 	data["announcementConsole"] = announcementConsole
 
-	data["assist_dept"] = req_console_assistance
-	data["supply_dept"] = req_console_supplies
-	data["info_dept"]   = req_console_information
+	data["assist_dept"] = GLOB.req_console_assistance
+	data["supply_dept"] = GLOB.req_console_supplies
+	data["info_dept"]   = GLOB.req_console_information
 
 	data["message"] = message
 	data["recipient"] = recipient
@@ -173,7 +173,7 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 		if(tempScreen == RCS_ANNOUNCE && !announcementConsole)
 			return
 		if(tempScreen == RCS_VIEWMSGS)
-			for (var/obj/machinery/requests_console/Console in allConsoles)
+			for (var/obj/machinery/requests_console/Console in GLOB.allConsoles)
 				if (Console.department == department)
 					Console.newmessagepriority = 0
 					Console.icon_state = "req_comp0"
@@ -197,7 +197,7 @@ var/global/list/obj/machinery/requests_console/allConsoles = list()
 			SSnano.update_uis(src)
 		if(screen == RCS_ANNOUNCE)
 			var/obj/item/card/id/ID = O
-			if (access_RC_announce in ID.GetAccess())
+			if (GLOB.access_RC_announce in ID.GetAccess())
 				announceAuth = 1
 				announcement.announcer = ID.assignment ? "[ID.assignment] [ID.registered_name]" : ID.registered_name
 			else

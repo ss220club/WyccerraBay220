@@ -1,7 +1,7 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
-var/global/list/priority_air_alarms = list()
-var/global/list/minor_air_alarms = list()
+GLOBAL_LIST_INIT(priority_air_alarms, list())
+GLOBAL_LIST_INIT(minor_air_alarms, list())
 
 
 /obj/machinery/computer/atmos_alert
@@ -64,11 +64,11 @@ var/global/list/minor_air_alarms = list()
 				var/obj/machinery/alarm/air_alarm = alarm_source.source
 				if(istype(air_alarm))
 					var/list/new_ref = list("atmos_reset" = 1)
-					air_alarm.Topic(air_alarm, new_ref, state = air_alarm_topic)
+					air_alarm.Topic(air_alarm, new_ref, state = GLOB.air_alarm_topic)
 		return TOPIC_REFRESH
 
 
-var/global/datum/topic_state/air_alarm_topic/air_alarm_topic = new()
+GLOBAL_DATUM_INIT(air_alarm_topic, /datum/topic_state/air_alarm_topic, new())
 
 /datum/topic_state/air_alarm_topic/href_list(mob/user)
 	var/list/extra_href = list()

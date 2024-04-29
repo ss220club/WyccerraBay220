@@ -1,4 +1,4 @@
-var/global/list/angle_step_to_dir = list(
+GLOBAL_LIST_INIT(angle_step_to_dir, list(
 	"N",
 	"NE",
 	"E",
@@ -8,7 +8,7 @@ var/global/list/angle_step_to_dir = list(
 	"W",
 	"NW",
 	"N"
-)
+))
 
 #define MIN_VIEW 15
 
@@ -64,7 +64,7 @@ var/global/list/angle_step_to_dir = list(
 	rebuild_overlay_lists(TRUE)
 
 /obj/compass_holder/proc/get_string_from_angle(angle)
-	return global.angle_step_to_dir[clamp(round(angle/45)+1, 1, length(global.angle_step_to_dir))]
+	return GLOB.angle_step_to_dir[clamp(round(angle/45)+1, 1, length(GLOB.angle_step_to_dir))]
 
 /obj/compass_holder/Destroy()
 	QDEL_NULL_ASSOC_LIST(compass_waypoints)

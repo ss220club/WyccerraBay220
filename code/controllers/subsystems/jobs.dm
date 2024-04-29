@@ -1,16 +1,3 @@
-var/global/const/ENG = FLAG(0)
-var/global/const/SEC = FLAG(1)
-var/global/const/MED = FLAG(2)
-var/global/const/SCI = FLAG(3)
-var/global/const/CIV = FLAG(4)
-var/global/const/COM = FLAG(5)
-var/global/const/MSC = FLAG(6)
-var/global/const/SRV = FLAG(7)
-var/global/const/SUP = FLAG(8)
-var/global/const/SPT = FLAG(9)
-var/global/const/EXP = FLAG(10)
-var/global/const/ROB = FLAG(11)
-
 GLOBAL_VAR(antag_code_phrase)
 GLOBAL_VAR(antag_code_response)
 
@@ -391,7 +378,7 @@ SUBSYSTEM_DEF(jobs)
 	var/list/loadout_taken_slots = list()
 	var/list/failed_to_equip_gear = list()
 	for(var/gear_name as anything in gear_to_equip)
-		var/datum/gear/gear_item = gear_datums[gear_name]
+		var/datum/gear/gear_item = GLOB.gear_datums[gear_name]
 		if(!gear_item)
 			stack_trace("Non-existing gear: `gear_name`")
 			continue
@@ -451,7 +438,7 @@ SUBSYSTEM_DEF(jobs)
 			if (H.client.prefs.email_pass)
 				pass = H.client.prefs.email_pass
 			if(domain)
-				ntnet_global.create_email(H, addr, domain, rank, pass)
+				GLOB.ntnet_global.create_email(H, addr, domain, rank, pass)
 		// END EMAIL GENERATION
 
 		job.equip(H, H.mind ? H.mind.role_alt_title : "", H.char_branch, H.char_rank)
@@ -486,7 +473,7 @@ SUBSYSTEM_DEF(jobs)
 	// If they're head, give them the account info for their department
 	if(H.mind && job.head_position)
 		var/remembered_info = ""
-		var/datum/money_account/department_account = department_accounts[job.department]
+		var/datum/money_account/department_account = GLOB.department_accounts[job.department]
 
 		if(department_account)
 			remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"
@@ -546,10 +533,10 @@ SUBSYSTEM_DEF(jobs)
 	return positions_by_department["[dept]"] || list()
 
 /datum/controller/subsystem/jobs/proc/spawn_empty_ai()
-	for(var/obj/landmark/start/S in landmarks_list)
+	for(var/obj/landmark/start/S in GLOB.landmarks_list)
 		if(S.name != "AI")
 			continue
 		if(locate(/mob/living) in S.loc)
 			continue
-		empty_playable_ai_cores += new /obj/structure/AIcore/deactivated(get_turf(S))
+		GLOB.empty_playable_ai_cores += new /obj/structure/AIcore/deactivated(get_turf(S))
 	return 1

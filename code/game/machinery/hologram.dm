@@ -29,7 +29,7 @@ Possible to do for anyone motivated enough:
 #define RANGE_BASED 4
 #define AREA_BASED 6
 
-var/global/const/HOLOPAD_MODE = RANGE_BASED
+GLOBAL_VAR_CONST(HOLOPAD_MODE, RANGE_BASED)
 
 /obj/machinery/hologram/holopad
 	name = "holopad"
@@ -128,8 +128,8 @@ var/global/const/HOLOPAD_MODE = RANGE_BASED
 				var/zlevels = GetConnectedZlevels(z)
 				var/zlevels_long = list()
 				if(GLOB.using_map.use_overmap && holopadType == HOLOPAD_LONG_RANGE)
-					for(var/zlevel in map_sectors)
-						var/obj/overmap/visitable/O = map_sectors["[zlevel]"]
+					for(var/zlevel in GLOB.map_sectors)
+						var/obj/overmap/visitable/O = GLOB.map_sectors["[zlevel]"]
 						if(!isnull(O))
 							zlevels_long |= O.map_z
 				for(var/obj/machinery/hologram/holopad/H as anything in SSmachines.get_machinery_of_type(/obj/machinery/hologram/holopad))
@@ -279,7 +279,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 					ai_text = pick(SA.speak)
 			var/name_used = M.GetVoice()
 			//This communication is imperfect because the holopad "filters" voices and is only designed to connect to the master only.
-			var/short_links = master.get_preference_value(/datum/client_preference/ghost_follow_link_length) == GLOB.PREF_SHORT
+			var/short_links = master.get_preference_value(/datum/client_preference/ghost_follow_link_length) == PREF_SHORT
 			var/follow = short_links ? "\[F]" : "\[Follow]"
 			var/prefix = "<a href='byond://?src=\ref[master];trackname=[html_encode(name_used)];track=\ref[M]'>[follow]</a>"
 			master.show_message(get_hear_message(name_used, ai_text, verb, speaking, prefix), 2)
@@ -415,10 +415,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			clear_holo(user)
 			return 0
 
-		if((HOLOPAD_MODE == RANGE_BASED && (get_dist(user.eyeobj, src) > holo_range)))
+		if((GLOB.HOLOPAD_MODE == RANGE_BASED && (get_dist(user.eyeobj, src) > holo_range)))
 			clear_holo(user)
 
-		if(HOLOPAD_MODE == AREA_BASED)
+		if(GLOB.HOLOPAD_MODE == AREA_BASED)
 			var/area/holo_area = get_area(src)
 			var/area/hologram_area = get_area(H)
 			if(hologram_area != holo_area)

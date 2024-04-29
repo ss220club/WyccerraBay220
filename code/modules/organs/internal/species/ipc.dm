@@ -24,7 +24,7 @@
 	var/searching = null
 	var/last_search = 0
 
-	req_access = list(access_robotics)
+	req_access = list(GLOB.access_robotics)
 
 	var/list/shackled_verbs = list(
 		/obj/item/organ/internal/posibrain/proc/show_laws_brain,
@@ -182,7 +182,7 @@
 	..()
 
 /obj/item/organ/internal/posibrain/proc/PickName()
-	src.brainmob.SetName("[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[random_id(type,100,999)]")
+	src.brainmob.SetName("[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[GLOB.random_id(type,100,999)]")
 	src.brainmob.real_name = src.brainmob.name
 
 /obj/item/organ/internal/posibrain/proc/shackle(given_lawset)

@@ -1,5 +1,5 @@
 //list used to cache empty zlevels to avoid needless map bloat
-var/global/list/cached_space = list()
+GLOBAL_LIST_INIT(cached_space, list())
 
 //Space stragglers go here
 
@@ -20,16 +20,16 @@ var/global/list/cached_space = list()
 
 /obj/overmap/visitable/sector/temporary/proc/register(nx, ny)
 	forceMove(locate(nx, ny, GLOB.using_map.overmap_z))
-	map_sectors["[map_z[1]]"] = src
+	GLOB.map_sectors["[map_z[1]]"] = src
 	testing("Temporary sector at zlevel [map_z[1]] moved to coordinates [x],[y]")
 
 /obj/overmap/visitable/sector/temporary/proc/unregister()
 	// Note that any structures left in the zlevel will remain there, and may later turn up at completely different
 	// coordinates if this temporary sector is recycled. Perhaps everything remaining in the zlevel should be destroyed?
 	testing("Caching temporary sector for future use, corresponding zlevel is [map_z[1]], previous coordinates were [x],[y]")
-	map_sectors.Remove(src)
+	GLOB.map_sectors.Remove(src)
 	src.forceMove(null)
-	cached_space += src
+	GLOB.cached_space += src
 
 /obj/overmap/visitable/sector/temporary/proc/can_die(mob/observer)
 	testing("Checking if sector at [map_z[1]] can die.")
@@ -48,9 +48,9 @@ var/global/list/cached_space = list()
 		break
 	if(istype(res))
 		return res
-	else if(length(cached_space))
-		res = cached_space[length(cached_space)]
-		cached_space -= res
+	else if(length(GLOB.cached_space))
+		res = GLOB.cached_space[length(GLOB.cached_space)]
+		GLOB.cached_space -= res
 		res.register(x, y)
 		return res
 	else
@@ -72,7 +72,7 @@ var/global/list/cached_space = list()
 	if (!T || !A)
 		return
 
-	var/obj/overmap/visitable/M = map_sectors["[T.z]"]
+	var/obj/overmap/visitable/M = GLOB.map_sectors["[T.z]"]
 	if (!M)
 		return
 

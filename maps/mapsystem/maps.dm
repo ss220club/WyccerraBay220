@@ -2,9 +2,6 @@
 
 GLOBAL_LIST_EMPTY(all_maps)
 
-var/global/const/MAP_HAS_BRANCH = 1	//Branch system for occupations, togglable
-var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
-
 /hook/startup/proc/initialise_map_list()
 	for(var/type in subtypesof(/datum/map))
 		var/datum/map/M
@@ -214,13 +211,13 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 	)
 
 	var/access_modify_region = list(
-		ACCESS_REGION_SECURITY = list(access_hos, access_change_ids),
-		ACCESS_REGION_MEDBAY = list(access_cmo, access_change_ids),
-		ACCESS_REGION_RESEARCH = list(access_rd, access_change_ids),
-		ACCESS_REGION_ENGINEERING = list(access_ce, access_change_ids),
-		ACCESS_REGION_COMMAND = list(access_change_ids),
-		ACCESS_REGION_GENERAL = list(access_change_ids),
-		ACCESS_REGION_SUPPLY = list(access_change_ids)
+		ACCESS_REGION_SECURITY = list(GLOB.access_hos, GLOB.access_change_ids),
+		ACCESS_REGION_MEDBAY = list(GLOB.access_cmo, GLOB.access_change_ids),
+		ACCESS_REGION_RESEARCH = list(GLOB.access_rd, GLOB.access_change_ids),
+		ACCESS_REGION_ENGINEERING = list(GLOB.access_ce, GLOB.access_change_ids),
+		ACCESS_REGION_COMMAND = list(GLOB.access_change_ids),
+		ACCESS_REGION_GENERAL = list(GLOB.access_change_ids),
+		ACCESS_REGION_SUPPLY = list(GLOB.access_change_ids)
 	)
 
 	// List of /datum/department types to instantiate at roundstart.
@@ -477,10 +474,10 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 // Used to apply various post-compile procedural effects to the map.
 /datum/map/proc/refresh_mining_turfs(zlevel)
-	for(var/turf/simulated/mineral/mineral_turf as anything in mining_walls["[zlevel]"])
+	for(var/turf/simulated/mineral/mineral_turf as anything in GLOB.mining_walls["[zlevel]"])
 		mineral_turf.update_icon()
 
-	for(var/thing in mining_floors["[zlevel]"])
+	for(var/thing in GLOB.mining_floors["[zlevel]"])
 		var/turf/simulated/floor/asteroid/M = thing
 		if(istype(M))
 			M.updateMineralOverlays()
@@ -537,21 +534,21 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 /proc/get_overmap_sector(z)
 	if(GLOB.using_map.use_overmap)
-		return map_sectors["[z]"]
+		return GLOB.map_sectors["[z]"]
 	else
 		return null
 
 //	SIERRA TGUI /*
 
 /datum/map/proc/setup_economy()
-	for (var/datum/feed_network/N in news_network)
+	for (var/datum/feed_network/N in GLOB.news_network)
 		N.CreateFeedChannel("Nyx Daily", "SolGov Minister of Information", 1, 1)
 		N.CreateFeedChannel("The Gibson Gazette", "Editor Mike Hammers", 1, 1)
 
 	for(var/loc_type in typesof(/datum/trade_destination) - /datum/trade_destination)
 		var/datum/trade_destination/D = new loc_type
-		weighted_randomevent_locations[D] = length(D.viable_random_events)
-		weighted_mundaneevent_locations[D] = length(D.viable_mundane_events)
+		GLOB.weighted_randomevent_locations[D] = length(D.viable_random_events)
+		GLOB.weighted_mundaneevent_locations[D] = length(D.viable_mundane_events)
 
 	if(!station_account)
 		station_account = create_account("[station_name()] Primary Account", "[station_name()]", starting_money, ACCOUNT_TYPE_DEPARTMENT)
@@ -563,10 +560,10 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 			station_departments |= dept
 
 	for(var/department in station_departments)
-		department_accounts[department] = create_account("[department] Account", "[department]", department_money, ACCOUNT_TYPE_DEPARTMENT)
+		GLOB.department_accounts[department] = create_account("[department] Account", "[department]", department_money, ACCOUNT_TYPE_DEPARTMENT)
 
-	department_accounts["Vendor"] = create_account("Vendor Account", "Vendor", 0, ACCOUNT_TYPE_DEPARTMENT)
-	vendor_account = department_accounts["Vendor"]
+	GLOB.department_accounts["Vendor"] = create_account("Vendor Account", "Vendor", 0, ACCOUNT_TYPE_DEPARTMENT)
+	vendor_account = GLOB.department_accounts["Vendor"]
 
 /datum/map/proc/map_info(client/victim)
 	to_chat(victim, "<h2>Current map information</h2>")
@@ -577,29 +574,29 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 
 /datum/map/proc/make_maint_all_access(radstorm = 0) // parameter used by torch
 	maint_all_access = TRUE
-	priority_announcement.Announce("The maintenance access requirement has been revoked on all maintenance airlocks.", "Attention!")
+	GLOB.priority_announcement.Announce("The maintenance access requirement has been revoked on all maintenance airlocks.", "Attention!")
 
 /datum/map/proc/revoke_maint_all_access(radstorm = 0) // parameter used by torch
 	maint_all_access = FALSE
-	priority_announcement.Announce("The maintenance access requirement has been readded on all maintenance airlocks.", "Attention!")
+	GLOB.priority_announcement.Announce("The maintenance access requirement has been readded on all maintenance airlocks.", "Attention!")
 
 // Access check is of the type requires one. These have been carefully selected to avoid allowing the janitor to see channels he shouldn't
 // This list needs to be purged but people insist on adding more cruft to the radio.
 /datum/map/proc/default_internal_channels()
 	return list(
 		num2text(PUB_FREQ)   = list(),
-		num2text(AI_FREQ)    = list(access_synth),
+		num2text(AI_FREQ)    = list(GLOB.access_synth),
 		num2text(ENT_FREQ)   = list(),
-		num2text(ERT_FREQ)   = list(access_cent_specops),
-		num2text(COMM_FREQ)  = list(access_bridge),
-		num2text(ENG_FREQ)   = list(access_engine_equip, access_atmospherics),
-		num2text(MED_FREQ)   = list(access_medical_equip),
-		num2text(MED_I_FREQ) = list(access_medical_equip),
-		num2text(SEC_FREQ)   = list(access_security),
-		num2text(SEC_I_FREQ) = list(access_security),
-		num2text(SCI_FREQ)   = list(access_tox,access_robotics,access_xenobiology),
-		num2text(SUP_FREQ)   = list(access_cargo),
-		num2text(SRV_FREQ)   = list(access_janitor, access_hydroponics),
+		num2text(ERT_FREQ)   = list(GLOB.access_cent_specops),
+		num2text(COMM_FREQ)  = list(GLOB.access_bridge),
+		num2text(ENG_FREQ)   = list(GLOB.access_engine_equip, GLOB.access_atmospherics),
+		num2text(MED_FREQ)   = list(GLOB.access_medical_equip),
+		num2text(MED_I_FREQ) = list(GLOB.access_medical_equip),
+		num2text(SEC_FREQ)   = list(GLOB.access_security),
+		num2text(SEC_I_FREQ) = list(GLOB.access_security),
+		num2text(SCI_FREQ)   = list(GLOB.access_tox,GLOB.access_robotics,GLOB.access_xenobiology),
+		num2text(SUP_FREQ)   = list(GLOB.access_cargo),
+		num2text(SRV_FREQ)   = list(GLOB.access_janitor, GLOB.access_hydroponics),
 		num2text(HAIL_FREQ)  = list(),
 	)
 
@@ -638,7 +635,7 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 		if(Player.mind && !isnewplayer(Player))
 			if(Player.stat != DEAD)
 				var/turf/playerTurf = get_turf(Player)
-				if(evacuation_controller.round_over() && evacuation_controller.emergency_evacuation)
+				if(GLOB.evacuation_controller.round_over() && GLOB.evacuation_controller.emergency_evacuation)
 					if(isStationLevel(playerTurf.z))
 						to_chat(Player, SPAN_INFO("<b>You managed to survive, but were left behind on [station_name()] as [Player.real_name]...</b>"))
 					else if (isEscapeLevel(playerTurf.z))
@@ -685,9 +682,9 @@ var/global/const/MAP_HAS_RANK = 2		//Rank system, also togglable
 						data["escaped_total"]++
 						if(ishuman(M))
 							data["escaped_humans"]++
-					if (evacuation_controller.emergency_evacuation && !isEscapeLevel(A.z)) //left behind after evac
+					if (GLOB.evacuation_controller.emergency_evacuation && !isEscapeLevel(A.z)) //left behind after evac
 						data["left_behind_total"]++
-					if (!evacuation_controller.emergency_evacuation && isNotStationLevel(A.z))
+					if (!GLOB.evacuation_controller.emergency_evacuation && isNotStationLevel(A.z))
 						data["left_behind_total"]++
 				else
 					data["offship_players"]++

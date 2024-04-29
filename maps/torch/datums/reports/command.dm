@@ -23,7 +23,7 @@
 	xo_fields += add_field(/datum/report_field/number, "Number of personnel in requested position")
 	xo_fields += add_field(/datum/report_field/options/yes_no, "Approved")
 	for(var/datum/report_field/field in xo_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)
 
 /datum/computer_file/report/recipient/access_modification
 	form_name = "AMA-SGF-02"
@@ -49,4 +49,4 @@
 	xo_fields += add_field(/datum/report_field/number, "Number of personnel in relevant position")
 	xo_fields += add_field(/datum/report_field/options/yes_no, "Approved")
 	for(var/datum/report_field/field in xo_fields)
-		field.set_access(access_edit = access_hop)
+		field.set_access(access_edit = GLOB.access_hop)

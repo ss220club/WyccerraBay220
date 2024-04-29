@@ -5,7 +5,7 @@
 	icon_state = "base"
 	anchored = TRUE
 	density = FALSE
-	req_access = list(access_heads_vault)
+	req_access = list(GLOB.access_heads_vault)
 
 	var/locked = TRUE
 	var/open = FALSE

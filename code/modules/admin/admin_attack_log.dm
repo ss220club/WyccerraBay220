@@ -57,18 +57,18 @@
 			attacker.attack_logs_ += text("\[[time_stamp()]\] [SPAN_COLOR("red", "[key_name(victim)] - [attacker_message] [intent] [zone_sel]")]")
 		else
 			attacker.attack_logs_ += text("\[[time_stamp()]\] [SPAN_COLOR("red", "[attacker_message] [intent] [zone_sel]")]")
-		attacker.last_attacked_ = mob_repository.get_lite_mob(victim)
+		attacker.last_attacked_ = GLOB.mob_repository.get_lite_mob(victim)
 		attack_location = get_turf(attacker)
 	if(victim)
 		if(attacker)
 			victim.attack_logs_ += text("\[[time_stamp()]\] [SPAN_COLOR("orange", "[key_name(attacker)] - [victim_message] [intent] [zone_sel]")]")
 		else
 			victim.attack_logs_ += text("\[[time_stamp()]\] [SPAN_COLOR("orange", "[victim_message]")]")
-		victim.last_attacker_ = mob_repository.get_lite_mob(attacker)
+		victim.last_attacker_ = GLOB.mob_repository.get_lite_mob(attacker)
 		if(!attack_location)
 			attack_location = get_turf(victim)
 
-	attack_log_repository.store_attack_log(attacker, victim, admin_message)
+	GLOB.attack_log_repository.store_attack_log(attacker, victim, admin_message)
 
 	if(!notify_about_admin_attack_log(attacker, victim))
 		return

@@ -1,4 +1,4 @@
-var/global/repository/mob/mob_repository = new()
+GLOBAL_DATUM_INIT(mob_repository, /repository/mob, new())
 
 /repository/mob
 	var/list/mobs_

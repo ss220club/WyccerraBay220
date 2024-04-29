@@ -1,4 +1,4 @@
-var/global/datum/getrev/revdata = new()
+GLOBAL_DATUM_INIT(revdata, /datum/getrev, new)
 
 /datum/getrev
 	var/branch
@@ -25,12 +25,12 @@ var/global/datum/getrev/revdata = new()
 	set desc = "Check the current server code revision"
 
 	to_chat(src, "<b>Client Version:</b> [byond_version]")
-	if(revdata.revision)
-		var/server_revision = revdata.revision
+	if(GLOB.revdata.revision)
+		var/server_revision = GLOB.revdata.revision
 		if(config.source_url)
 			server_revision = "<a href='[config.source_url]/commit/[server_revision]'>[server_revision]</a>"
-		to_chat(src, "<b>Server Revision:</b> [server_revision] - [revdata.branch] - [revdata.date]")
+		to_chat(src, "<b>Server Revision:</b> [server_revision] - [GLOB.revdata.branch] - [GLOB.revdata.date]")
 	else
 		to_chat(src, "<b>Server Revision:</b> Revision Unknown")
-	to_chat(src, "Game ID: <b>[game_id]</b>")
+	to_chat(src, "Game ID: <b>[GLOB.game_id]</b>")
 	to_chat(src, "Current map: [GLOB.using_map.full_name]")

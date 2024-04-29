@@ -78,7 +78,7 @@
 
 /obj/item/organ/external/head/robotize(company, skip_prosthetics, keep_organs)
 	if(company)
-		var/datum/robolimb/R = all_robolimbs[company]
+		var/datum/robolimb/R = GLOB.all_robolimbs[company]
 		if(R)
 			can_intake_reagents = R.can_eat
 			draw_eyes = R.has_eyes

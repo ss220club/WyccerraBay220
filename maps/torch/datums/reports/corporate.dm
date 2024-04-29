@@ -78,7 +78,7 @@
 
 /datum/computer_file/report/recipient/corp/fire/New()
 	..()
-	set_access(access_heads, access_heads)
+	set_access(access_heads, GLOB.access_heads)
 	set_access(access_nanotrasen, override = 0)
 
 /datum/computer_file/report/recipient/corp/fire/generate_fields()

@@ -2,18 +2,18 @@
 	holder_type = /obj/machinery/power/smes/buildable
 	wire_count = 5
 	descriptions = list(
-		new /datum/wire_description(SMES_WIRE_RCON, "This wire runs to a remote signaling mechanism."),
-		new /datum/wire_description(SMES_WIRE_INPUT, "This seems to be the primary input.", SKILL_EXPERIENCED),
-		new /datum/wire_description(SMES_WIRE_OUTPUT, "This seems to be the primary output.", SKILL_EXPERIENCED),
-		new /datum/wire_description(SMES_WIRE_GROUNDING, "This wire appeas to connect directly to the floor.", SKILL_EXPERIENCED),
-		new /datum/wire_description(SMES_WIRE_FAILSAFES, "This wire appears to connect to a failsafe mechanism.")
+		new /datum/wire_description(GLOB.SMES_WIRE_RCON, "This wire runs to a remote signaling mechanism."),
+		new /datum/wire_description(GLOB.SMES_WIRE_INPUT, "This seems to be the primary input.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.SMES_WIRE_OUTPUT, "This seems to be the primary output.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.SMES_WIRE_GROUNDING, "This wire appeas to connect directly to the floor.", SKILL_EXPERIENCED),
+		new /datum/wire_description(GLOB.SMES_WIRE_FAILSAFES, "This wire appears to connect to a failsafe mechanism.")
 	)
 
-var/global/const/SMES_WIRE_RCON = 1		// Remote control (AI and consoles), cut to disable
-var/global/const/SMES_WIRE_INPUT = 2		// Input wire, cut to disable input, pulse to disable for 60s
-var/global/const/SMES_WIRE_OUTPUT = 4		// Output wire, cut to disable output, pulse to disable for 60s
-var/global/const/SMES_WIRE_GROUNDING = 8	// Cut to quickly discharge causing sparks, pulse to only create few sparks
-var/global/const/SMES_WIRE_FAILSAFES = 16	// Cut to disable failsafes, mend to reenable
+GLOBAL_VAR_CONST(SMES_WIRE_RCON, 1)		// Remote control (AI and consoles), cut to disable
+GLOBAL_VAR_CONST(SMES_WIRE_INPUT, 2)		// Input wire, cut to disable input, pulse to disable for 60s
+GLOBAL_VAR_CONST(SMES_WIRE_OUTPUT, 4)		// Output wire, cut to disable output, pulse to disable for 60s
+GLOBAL_VAR_CONST(SMES_WIRE_GROUNDING, 8)	// Cut to quickly discharge causing sparks, pulse to only create few sparks
+GLOBAL_VAR_CONST(SMES_WIRE_FAILSAFES, 16)	// Cut to disable failsafes, mend to reenable
 
 
 /datum/wires/smes/CanUse(mob/living/L)
@@ -36,33 +36,33 @@ var/global/const/SMES_WIRE_FAILSAFES = 16	// Cut to disable failsafes, mend to r
 /datum/wires/smes/UpdateCut(index, mended)
 	var/obj/machinery/power/smes/buildable/S = holder
 	switch(index)
-		if(SMES_WIRE_RCON)
+		if(GLOB.SMES_WIRE_RCON)
 			S.RCon = mended
-		if(SMES_WIRE_INPUT)
+		if(GLOB.SMES_WIRE_INPUT)
 			S.input_cut = !mended
-		if(SMES_WIRE_OUTPUT)
+		if(GLOB.SMES_WIRE_OUTPUT)
 			S.output_cut = !mended
-		if(SMES_WIRE_GROUNDING)
+		if(GLOB.SMES_WIRE_GROUNDING)
 			S.grounding = mended
-		if(SMES_WIRE_FAILSAFES)
+		if(GLOB.SMES_WIRE_FAILSAFES)
 			S.safeties_enabled = mended
 
 
 /datum/wires/smes/UpdatePulsed(index)
 	var/obj/machinery/power/smes/buildable/S = holder
 	switch(index)
-		if(SMES_WIRE_RCON)
+		if(GLOB.SMES_WIRE_RCON)
 			if(S.RCon)
 				S.RCon = 0
 				spawn(10)
 					S.RCon = 1
-		if(SMES_WIRE_INPUT)
+		if(GLOB.SMES_WIRE_INPUT)
 			S.toggle_input()
-		if(SMES_WIRE_OUTPUT)
+		if(GLOB.SMES_WIRE_OUTPUT)
 			S.toggle_output()
-		if(SMES_WIRE_GROUNDING)
+		if(GLOB.SMES_WIRE_GROUNDING)
 			S.grounding = 0
-		if(SMES_WIRE_FAILSAFES)
+		if(GLOB.SMES_WIRE_FAILSAFES)
 			if(S.safeties_enabled)
 				S.safeties_enabled = 0
 				spawn(10)

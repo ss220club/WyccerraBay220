@@ -43,7 +43,7 @@
 /singleton/dsay_communication/proc/can_receive(client/C, mob/M)
 	if(istype(C) && C.mob == M)
 		return TRUE
-	if(M.get_preference_value(/datum/client_preference/show_dsay) == GLOB.PREF_HIDE)
+	if(M.get_preference_value(/datum/client_preference/show_dsay) == PREF_HIDE)
 		return FALSE
 	if(istype(C) && M.is_key_ignored(C.key))
 		return FALSE
@@ -74,7 +74,7 @@
 
 	var/lname
 	var/mob/observer/ghost/DM
-	var/hide_deadchat_ckey = C.get_preference_value(/datum/client_preference/show_ckey_deadchat) == GLOB.PREF_HIDE
+	var/hide_deadchat_ckey = C.get_preference_value(/datum/client_preference/show_ckey_deadchat) == PREF_HIDE
 
 	if(isghost(C.mob))
 		DM = C.mob

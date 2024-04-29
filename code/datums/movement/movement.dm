@@ -1,22 +1,3 @@
-var/global/const/MOVEMENT_HANDLED = FLAG(0) // If no further movement handling should occur after this
-var/global/const/MOVEMENT_REMOVE  = FLAG(1)
-
-var/global/const/MOVEMENT_PROCEED = FLAG(2)
-var/global/const/MOVEMENT_STOP    = FLAG(3)
-
-#define INIT_MOVEMENT_HANDLERS \
-if(LAZYLEN(movement_handlers) && ispath(movement_handlers[1])) { \
-	var/new_handlers = list(); \
-	for(var/path in movement_handlers){ \
-		var/arguments = movement_handlers[path];   \
-		arguments = arguments ? (list(src) | (arguments)) : list(src); \
-		new_handlers += new path(arglist(arguments)); \
-	} \
-	movement_handlers= new_handlers; \
-}
-
-#define REMOVE_AND_QDEL(X) LAZYREMOVE(movement_handlers, X); qdel(X);
-
 /atom/movable
 	var/list/movement_handlers
 

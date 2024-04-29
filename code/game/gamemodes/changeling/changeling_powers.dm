@@ -1,4 +1,4 @@
-var/global/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa","Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega")
+GLOBAL_LIST_INIT(possible_changeling_IDs, list("Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa","Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega"))
 
 /datum/changeling //stores changeling powers, changeling recharge thingie, changeling absorbed DNA and changeling ID (for changeling hivemind)
 	var/list/datum/absorbed_dna/absorbed_dna = list()
@@ -23,9 +23,9 @@ var/global/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","E
 
 /datum/changeling/New()
 	..()
-	if(length(possible_changeling_IDs))
-		changelingID = pick(possible_changeling_IDs)
-		possible_changeling_IDs -= changelingID
+	if(length(GLOB.possible_changeling_IDs))
+		changelingID = pick(GLOB.possible_changeling_IDs)
+		GLOB.possible_changeling_IDs -= changelingID
 		changelingID = "[changelingID]"
 	else
 		changelingID = "[rand(1,999)]"
@@ -65,12 +65,12 @@ var/global/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","E
 
 	var/lesser_form = !ishuman(src)
 
-	if(!length(powerinstances))
-		for(var/P in powers)
-			powerinstances += new P()
+	if(!length(GLOB.powerinstances))
+		for(var/P in GLOB.powers)
+			GLOB.powerinstances += new P()
 
 	// Code to auto-purchase free powers.
-	for(var/datum/power/changeling/P in powerinstances)
+	for(var/datum/power/changeling/P in GLOB.powerinstances)
 		if(!P.genomecost) // Is it free?
 			if(!(P in mind.changeling.purchasedpowers)) // Do we not have it already?
 				mind.changeling.purchasePower(mind, P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.
@@ -562,7 +562,7 @@ var/global/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","E
 
 // HIVE MIND UPLOAD/DOWNLOAD DNA
 
-var/global/list/datum/absorbed_dna/hivemind_bank = list()
+GLOBAL_LIST_EMPTY(hivemind_bank)
 
 /mob/proc/changeling_hiveupload()
 	set category = "Changeling"
@@ -575,7 +575,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	var/list/names = list()
 	for(var/datum/absorbed_dna/DNA in changeling.absorbed_dna)
 		var/valid = 1
-		for(var/datum/absorbed_dna/DNB in hivemind_bank)
+		for(var/datum/absorbed_dna/DNB in GLOB.hivemind_bank)
 			if(DNA.name == DNB.name)
 				valid = 0
 				break
@@ -600,7 +600,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 		return
 
 	changeling.chem_charges -= 10
-	hivemind_bank += chosen_dna
+	GLOB.hivemind_bank += chosen_dna
 	to_chat(src, SPAN_NOTICE("We channel the DNA of [S] to the air."))
 	return 1
 
@@ -613,7 +613,7 @@ var/global/list/datum/absorbed_dna/hivemind_bank = list()
 	if(!changeling)	return
 
 	var/list/names = list()
-	for(var/datum/absorbed_dna/DNA in hivemind_bank)
+	for(var/datum/absorbed_dna/DNA in GLOB.hivemind_bank)
 		if(!(changeling.GetDNA(DNA.name)))
 			names[DNA.name] = DNA
 

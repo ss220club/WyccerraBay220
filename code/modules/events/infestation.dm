@@ -66,7 +66,7 @@
 				S.amount_grown = -1
 
 /datum/event/infestation/announce()
-	command_announcement.Announce("Bioscans indicate that [vermstring] have been breeding in \the [location]. Further infestation is likely if left unchecked.", "[location_name()] Biologic Sensor Network", zlevels = affecting_z)
+	GLOB.command_announcement.Announce("Bioscans indicate that [vermstring] have been breeding in \the [location]. Further infestation is likely if left unchecked.", "[location_name()] Biologic Sensor Network", zlevels = affecting_z)
 
 /datum/event/infestation/proc/set_location_get_infestation_turfs()
 	location = pick_area(list(GLOBAL_PROC_REF(is_not_space_area), GLOBAL_PROC_REF(is_station_area)))

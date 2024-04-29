@@ -52,9 +52,9 @@
 
 
 /obj/item/device/radio/proc/set_frequency(new_frequency)
-	radio_controller.remove_object(src, frequency)
+	GLOB.radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
+	radio_connection = GLOB.radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/radio/Initialize()
 	. = ..()
@@ -71,7 +71,7 @@
 		default_frequency = frequency
 
 	for (var/ch_name in channels)
-		secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  RADIO_CHAT)
+		secure_radio_connections[ch_name] = GLOB.radio_controller.add_object(src, GLOB.radiochannels[ch_name],  RADIO_CHAT)
 
 /obj/item/device/radio/Process()
 	if(power_usage && on) //radio will use power and is on
@@ -89,10 +89,10 @@
 /obj/item/device/radio/Destroy()
 	QDEL_NULL(wires)
 	GLOB.listening_objects -= src
-	if(radio_controller)
-		radio_controller.remove_object(src, frequency)
+	if(GLOB.radio_controller)
+		GLOB.radio_controller.remove_object(src, frequency)
 		for (var/ch_name in channels)
-			radio_controller.remove_object(src, radiochannels[ch_name])
+			GLOB.radio_controller.remove_object(src, GLOB.radiochannels[ch_name])
 	if(get_cell())
 		STOP_PROCESSING(SSobj, src)
 	return ..()
@@ -125,8 +125,8 @@
 	if(has_cell && power_usage > 0)
 		var/charge = round(has_cell.percent())
 		data["charge"] = charge ? "[charge]%" : "NONE"
-	data["mic_cut"] = (wires.IsIndexCut(WIRE_TRANSMIT) || wires.IsIndexCut(WIRE_SIGNAL))
-	data["spk_cut"] = (wires.IsIndexCut(WIRE_RECEIVE) || wires.IsIndexCut(WIRE_SIGNAL))
+	data["mic_cut"] = (wires.IsIndexCut(GLOB.WIRE_TRANSMIT) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
+	data["spk_cut"] = (wires.IsIndexCut(GLOB.WIRE_RECEIVE) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
 
 	var/list/chanlist = list_channels(user)
 	if(islist(chanlist) && length(chanlist))
@@ -152,7 +152,7 @@
 		var/chan_stat = channels[ch_name]
 		var/listening = !!(chan_stat & FREQ_LISTENING) != 0
 
-		dat.Add(list(list("chan" = ch_name, "display_name" = ch_name, "secure_channel" = 1, "sec_channel_listen" = !listening, "chan_span" = frequency_span_class(radiochannels[ch_name]))))
+		dat.Add(list(list("chan" = ch_name, "display_name" = ch_name, "secure_channel" = 1, "sec_channel_listen" = !listening, "chan_span" = frequency_span_class(GLOB.radiochannels[ch_name]))))
 
 	return dat
 
@@ -198,10 +198,10 @@
 		frequency = default_frequency
 
 /obj/item/device/radio/proc/ToggleBroadcast()
-	broadcasting = !broadcasting && !(wires.IsIndexCut(WIRE_TRANSMIT) || wires.IsIndexCut(WIRE_SIGNAL))
+	broadcasting = !broadcasting && !(wires.IsIndexCut(GLOB.WIRE_TRANSMIT) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
 
 /obj/item/device/radio/proc/ToggleReception()
-	listening = !listening && !(wires.IsIndexCut(WIRE_RECEIVE) || wires.IsIndexCut(WIRE_SIGNAL))
+	listening = !listening && !(wires.IsIndexCut(GLOB.WIRE_RECEIVE) || wires.IsIndexCut(GLOB.WIRE_SIGNAL))
 
 /obj/item/device/radio/proc/TogglePower()
 	if(!power_usage)
@@ -370,7 +370,7 @@
 
 	//  Uncommenting this. To the above comment:
 	// 	The permacell radios aren't suppose to be able to transmit, this isn't a bug and this "fix" is just making radio wires useless. -Giacom
-	if(wires.IsIndexCut(WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
+	if(wires.IsIndexCut(GLOB.WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
 		return 0
 
 	if(!radio_connection)
@@ -482,7 +482,7 @@
 			"reject" = 0,	// if nonzero, the signal will not be accepted by any broadcasting machinery
 			"level" = position.z, // The source's z level
 			"channel_tag" = "[connection.frequency]", // channel tag for the message
-			"channel_color" = channel_color_presets["Menacing Maroon"], // radio message color
+			"channel_color" = GLOB.channel_color_presets["Menacing Maroon"], // radio message color
 			"language" = speaking,
 			"verb" = verb
 		)
@@ -490,11 +490,11 @@
 
 	  //#### Sending the signal to all subspace receivers ####//
 
-		for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
+		for(var/obj/machinery/telecomms/receiver/R in GLOB.telecomms_list)
 			R.receive_signal(signal)
 
 		// Allinone can act as receivers.
-		for(var/obj/machinery/telecomms/allinone/R in telecomms_list)
+		for(var/obj/machinery/telecomms/allinone/R in GLOB.telecomms_list)
 			R.receive_signal(signal)
 
 		// Receiving code can be located in Telecommunications.dm
@@ -545,7 +545,7 @@
 		"reject" = 0,
 		"level" = position.z,
 		"channel_tag" = "#unkn",
-		"channel_color" = channel_color_presets["Menacing Maroon"],
+		"channel_color" = GLOB.channel_color_presets["Menacing Maroon"],
 		"language" = speaking,
 		"verb" = verb
 	)
@@ -553,7 +553,7 @@
 	var/obj/item/cell/has_cell = get_cell()
 	if(has_cell && has_cell.percent() < 20)
 		signal.data["compression"] = max(0, 80 - has_cell.percent()*3)
-	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
+	for(var/obj/machinery/telecomms/receiver/R in GLOB.telecomms_list)
 		R.receive_signal(signal)
 
 	sleep(rand(10,25)) // wait a little...
@@ -570,7 +570,7 @@
 	return Broadcast_Message(connection, M, voicemask, pick(M.speak_emote),
 					  src, message, displayname, jobname, real_name, M.voice_name,
 					  filter_type, signal.data["compression"], GetConnectedZlevels(position.z), connection.frequency, verb, speaking,
-					  "[connection.frequency]", channel_color_presets["Menacing Maroon"])
+					  "[connection.frequency]", GLOB.channel_color_presets["Menacing Maroon"])
 
 
 /obj/item/device/radio/hear_talk(mob/M as mob, msg, verb = "says", datum/language/speaking = null)
@@ -585,7 +585,7 @@
 	// returns: -1 if can't receive, range otherwise
 	if (!wires)
 		return -1
-	if (wires.IsIndexCut(WIRE_RECEIVE))
+	if (wires.IsIndexCut(GLOB.WIRE_RECEIVE))
 		return -1
 	if(!listening)
 		return -1
@@ -593,7 +593,7 @@
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
 			return -1
-	if(freq in ANTAG_FREQS)
+	if(freq in GLOB.ANTAG_FREQS)
 		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1
 	if (!on)
@@ -732,7 +732,7 @@
 		balloon_alert(user, "нет ключей шифрования!")
 		return
 	for(var/channel_name in channels)
-		radio_controller.remove_object(src, radiochannels[channel_name])
+		GLOB.radio_controller.remove_object(src, GLOB.radiochannels[channel_name])
 		secure_radio_connections[channel_name] = null
 	if(!tool.use_as_tool(src, user, volume = 50, do_flags = DO_REPAIR_CONSTRUCT))
 		return
@@ -786,11 +786,11 @@
 			src.syndie = 1
 
 	for (var/ch_name in src.channels)
-		if(!radio_controller)
+		if(!GLOB.radio_controller)
 			src.SetName("broken radio")
 			return
 
-		secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  RADIO_CHAT)
+		secure_radio_connections[ch_name] = GLOB.radio_controller.add_object(src, GLOB.radiochannels[ch_name],  RADIO_CHAT)
 
 /obj/item/device/radio/borg/Topic(href, href_list)
 	if(..())
@@ -858,14 +858,14 @@
 		ui.open()
 
 /obj/item/device/radio/proc/config(op)
-	if(radio_controller)
+	if(GLOB.radio_controller)
 		for (var/ch_name in channels)
-			radio_controller.remove_object(src, radiochannels[ch_name])
+			GLOB.radio_controller.remove_object(src, GLOB.radiochannels[ch_name])
 	secure_radio_connections = new
 	channels = op
-	if(radio_controller)
+	if(GLOB.radio_controller)
 		for (var/ch_name in op)
-			secure_radio_connections[ch_name] = radio_controller.add_object(src, radiochannels[ch_name],  RADIO_CHAT)
+			secure_radio_connections[ch_name] = GLOB.radio_controller.add_object(src, GLOB.radiochannels[ch_name],  RADIO_CHAT)
 	return
 
 /obj/item/device/radio/map_preset

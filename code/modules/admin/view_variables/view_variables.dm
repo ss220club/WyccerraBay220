@@ -1,7 +1,7 @@
 // Variables not to expand the lists of. Vars is pointless to expand, and overlays/underlays cannot be expanded.
-var/global/list/view_variables_dont_expand = list("overlays", "underlays", "vars")
+GLOBAL_LIST_INIT(view_variables_dont_expand, list("overlays", "underlays", "vars"))
 // Variables that runtime if you try to test associativity of the lists they contain by indexing
-var/global/list/view_variables_no_assoc = list("verbs", "contents","screen","images")
+GLOBAL_LIST_INIT(view_variables_no_assoc, list("verbs", "contents","screen","images"))
 
 // Acceptable 'in world', as VV would be incredibly hampered otherwise
 /client/proc/debug_variables(datum/D in world)
@@ -181,11 +181,11 @@ var/global/list/view_variables_no_assoc = list("verbs", "contents","screen","ima
 	else if(islist(value))
 		var/list/L = value
 		vtext = "/list ([length(L)])"
-		if(!(varname in view_variables_dont_expand) && length(L) > 0 && length(L) < 100)
+		if(!(varname in GLOB.view_variables_dont_expand) && length(L) > 0 && length(L) < 100)
 			extra += "<ul>"
 			for (var/index = 1 to length(L))
 				var/entry = L[index]
-				if(!isnum(entry) && !isnull(entry) && !(varname in view_variables_no_assoc))
+				if(!isnum(entry) && !isnull(entry) && !(varname in GLOB.view_variables_no_assoc))
 					extra += "<li>[index]: [make_view_variables_value(entry)] -> [make_view_variables_value(L[entry])]</li>"
 				else
 					extra += "<li>[index]: [make_view_variables_value(entry)]</li>"

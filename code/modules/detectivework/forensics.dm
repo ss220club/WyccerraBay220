@@ -4,9 +4,9 @@
 
 //This is the output of the stringpercent(print) proc, and means about 80% of
 //the print must be there for it to be complete.  (Prints are 32 digits)
-var/global/const/FINGERPRINT_COMPLETE = 6
+GLOBAL_VAR_CONST(FINGERPRINT_COMPLETE, 6)
 /proc/is_complete_print(print)
-	return stringpercent(print) <= FINGERPRINT_COMPLETE
+	return stringpercent(print) <= GLOB.FINGERPRINT_COMPLETE
 
 /// LAZYLIST of mobs that have touched/used the atom. Used for staff investigation. Each entry includes a timestamp and name of the mob that generated the fingerprint. Do not modify directly. See `add_hiddenprint()`.
 /atom/var/list/fingerprintshidden

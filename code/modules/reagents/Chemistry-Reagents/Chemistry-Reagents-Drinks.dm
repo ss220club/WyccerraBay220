@@ -102,7 +102,7 @@
 
 /datum/reagent/drink/juice/lime/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.adjustToxLoss(-0.5 * removed)
 
@@ -117,7 +117,7 @@
 
 /datum/reagent/drink/juice/orange/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.adjustOxyLoss(-2 * removed)
 
@@ -177,7 +177,7 @@
 
 /datum/reagent/drink/juice/tomato/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.heal_organ_damage(0, 0.5 * removed)
 
@@ -279,7 +279,7 @@
 	..()
 	holder.remove_reagent(/datum/reagent/capsaicin, 10 * removed)
 
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.heal_organ_damage(0.5 * removed, 0)
 
@@ -332,7 +332,7 @@
 	if(adj_temp > 0)
 		holder.remove_reagent(/datum/reagent/frostoil, 10 * removed)
 
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	..()
 
@@ -360,7 +360,7 @@
 
 	glass_name = "iced coffee"
 	glass_desc = "A drink to perk you up and refresh you!"
-	glass_special = list(DRINK_ICE)
+	glass_special = list(GLOB.DRINK_ICE)
 
 /datum/reagent/drink/coffee/soy_latte
 	name = "Soy Latte"
@@ -508,7 +508,7 @@
 
 	glass_name = "soda water"
 	glass_desc = "Soda water. Why not make a scotch and soda?"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/grapesoda
 	name = "Grape Soda"
@@ -519,7 +519,7 @@
 
 	glass_name = "grape soda"
 	glass_desc = "Looks like a delicious drink!"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/tonic
 	name = "Tonic Water"
@@ -543,7 +543,7 @@
 
 	glass_name = "lemonade"
 	glass_desc = "Oh the nostalgia..."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/kiraspecial
 	name = "Kira Special"
@@ -554,7 +554,7 @@
 
 	glass_name = "Kira Special"
 	glass_desc = "Long live the guy who everyone had mistaken for a girl. Baka!"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/triplecitrus
 	name = "Triple Citrus"
@@ -575,7 +575,7 @@
 
 	glass_name = "Orange Soda"
 	glass_desc = "A surprisingly tasty dye."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/rootbeer
 	name = "Root WeiBeer"
@@ -586,7 +586,7 @@
 
 	glass_name = "Root Beer"
 	glass_desc = "Yep that sure is some rooty beer."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/apple_soda
 	name = "Apple Soda"
@@ -597,7 +597,7 @@
 
 	glass_name = "Apple Soda"
 	glass_desc = "Disappointing cider."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/strawberry_soda
 	name = "Strawberry Soda"
@@ -608,7 +608,7 @@
 
 	glass_name = "Strawberry Soda"
 	glass_desc = "Attractive and alliterative."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/porksoda
 	name = "Pork Soda"
@@ -620,7 +620,7 @@
 
 	glass_name = "Pork Soda"
 	glass_desc = "I asked for a glass of PORT!"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/milkshake
 	name = "Milkshake"
@@ -658,7 +658,7 @@
 
 	glass_name = "Nuka-Cola"
 	glass_desc = "Don't cry, Don't raise your eye, It's only nuclear wasteland"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/nuka_cola/affect_ingest(mob/living/carbon/M, removed)
 	..()
@@ -698,7 +698,7 @@
 
 	glass_name = "Space Cola"
 	glass_desc = "A glass of refreshing Space Cola"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/spacemountainwind
 	name = "Mountain Wind"
@@ -711,7 +711,7 @@
 
 	glass_name = "Space Mountain Wind"
 	glass_desc = "Space Mountain Wind. As you know, there are no mountains in space, only wind."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/dr_gibb
 	name = "Dr. Gibb"
@@ -733,7 +733,7 @@
 
 	glass_name = "Space-up"
 	glass_desc = "Space-up. It helps keep your cool."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/lemon_lime
 	name = "Lemon Lime"
@@ -744,7 +744,7 @@
 
 	glass_name = "lemon lime soda"
 	glass_desc = "A tangy substance made of 0.5% natural citrus!"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/doctor_delight
 	name = "The Doctor's Delight"
@@ -759,7 +759,7 @@
 
 /datum/reagent/drink/doctor_delight/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.adjustOxyLoss(-4 * removed)
 	M.heal_organ_damage(2 * removed, 2 * removed)
@@ -795,7 +795,7 @@
 
 /datum/reagent/drink/hell_ramen/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
@@ -850,7 +850,7 @@
 
 /datum/reagent/drink/beastenergy/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.drowsyness = max(0, M.drowsyness - 7)
 	M.make_jittery(2)
@@ -957,7 +957,7 @@
 
 	glass_name = "Cola Float"
 	glass_desc = "A delicious combination ofice cream and cola"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/vanilla_cola
 	name = "Vanilla Cola"
@@ -970,7 +970,7 @@
 
 	glass_name = "Vanilla Cola"
 	glass_desc = "A glass of refreshing Space Cola with hints of vanilla."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/orange_cola
 	name = "Orange Cola"
@@ -983,7 +983,7 @@
 
 	glass_name = "Orange Cola"
 	glass_desc = "A glass of refreshing Space Cola with orange flavoring."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/cherry_cola
 	name = "Cherry Cola"
@@ -996,7 +996,7 @@
 
 	glass_name = "Cherry Cola"
 	glass_desc = "A glass of refreshing Space Cola with cherry flavoring."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/coffee/coffee_cola
 	name = "Coffee Cola"
@@ -1009,7 +1009,7 @@
 
 	glass_name = "Coffee Cola"
 	glass_desc = "All you need is some bread and butter and honey"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/diet_cola
 	name = "Diet Cola"
@@ -1022,7 +1022,7 @@
 
 	glass_name = "Diet Cola"
 	glass_desc = "A glass of refreshing Space Cola. This one's calorie-free!"
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/ionbru
 	name = "Ion-Bru"
@@ -1035,7 +1035,7 @@
 
 	glass_name = "Ion-Bru"
 	glass_desc = "The official drink of some faraway, mountainous land."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/ironbru
 	name = "Iron-Bru"
@@ -1048,7 +1048,7 @@
 
 	glass_name = "Iron-Bru"
 	glass_desc = "The official drink of shipbuilders."
-	glass_special = list(DRINK_FIZZ)
+	glass_special = list(GLOB.DRINK_FIZZ)
 
 /datum/reagent/drink/dandelionburdock
 	name = "Dandelion and Burdock"
@@ -1115,7 +1115,7 @@
 
 /datum/reagent/drink/tea/affect_ingest(mob/living/carbon/M, removed)
 	..()
-	if (METABOLIC_INERTNESS(M) > TRAIT_LEVEL_MINOR)
+	if (METABOLIC_INERTNESS(M) > GLOB.TRAIT_LEVEL_MINOR)
 		return
 	M.adjustToxLoss(-0.5 * removed)
 
@@ -1127,7 +1127,7 @@
 
 	glass_name = "iced black tea"
 	glass_desc = "It's the black tea you know and love, but now it's cold."
-	glass_special = list(DRINK_ICE)
+	glass_special = list(GLOB.DRINK_ICE)
 
 /datum/reagent/drink/tea/icetea/sweet
 	name = "Sweet Black Tea"

@@ -1,4 +1,4 @@
-var/global/list/sounds_cache = list()
+GLOBAL_LIST_INIT(sounds_cache, list())
 
 /client/proc/play_sound(S as sound)
 	set category = "Fun"
@@ -8,7 +8,7 @@ var/global/list/sounds_cache = list()
 	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = GLOB.admin_sound_channel)
 	uploaded_sound.priority = 250
 
-	sounds_cache += S
+	GLOB.sounds_cache += S
 	var/volume = 100
 
 	while (TRUE)
@@ -34,7 +34,7 @@ var/global/list/sounds_cache = list()
 	log_admin("[key_name(src)] played sound [S]")
 	message_admins("[key_name_admin(src)] played sound [S]", 1)
 	for(var/mob/M in GLOB.player_list)
-		if(M.get_preference_value(/datum/client_preference/play_admin_midis) == GLOB.PREF_YES)
+		if(M.get_preference_value(/datum/client_preference/play_admin_midis) == PREF_YES)
 			sound_to(M, uploaded_sound)
 
 /client/proc/play_local_sound(S as sound)
@@ -53,7 +53,7 @@ var/global/list/sounds_cache = list()
 	if(!check_rights(R_SOUNDS))	return
 
 	var/list/sounds = list("sound/items/bikehorn.ogg","sound/effects/siren.ogg")
-	sounds += sounds_cache
+	sounds += GLOB.sounds_cache
 
 	var/melody = input("Select a sound from the server to play", "Server sound list") as null|anything in sounds
 

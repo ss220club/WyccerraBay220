@@ -226,7 +226,7 @@
 
 	var/list/possible_locations = list()
 	if(GLOB.using_map.use_overmap)
-		var/obj/overmap/visitable/O = map_sectors["[z]"]
+		var/obj/overmap/visitable/O = GLOB.map_sectors["[z]"]
 		for(var/obj/overmap/visitable/OO in range(O,2))
 			if(HAS_FLAGS(OO.sector_flags, OVERMAP_SECTOR_IN_SPACE) || istype(OO,/obj/overmap/visitable/sector/exoplanet))
 				possible_locations |= text2num(level)
@@ -242,7 +242,7 @@
 
 //Don't use these for in-round leaving
 /obj/machinery/cryopod/lifepod/Process()
-	if(evacuation_controller && evacuation_controller.state >= EVAC_LAUNCHING)
+	if(GLOB.evacuation_controller && GLOB.evacuation_controller.state >= EVAC_LAUNCHING)
 		if(occupant && !launched)
 			launch()
 		..()
@@ -370,7 +370,7 @@
 				W.forceMove(src.loc)
 
 	//Update any existing objectives involving this mob.
-	for(var/datum/objective/O in all_objectives)
+	for(var/datum/objective/O in GLOB.all_objectives)
 		// We don't want revs to get objectives that aren't for heads of staff. Letting
 		// them win or lose based on cryo is silly so we remove the objective.
 		if(O.target == occupant.mind)

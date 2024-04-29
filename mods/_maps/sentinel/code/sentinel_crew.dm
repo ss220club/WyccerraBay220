@@ -40,30 +40,30 @@
  * =======
  */
 
-var/global/const/access_away_cavalry = "ACCESS_CAVALRY"
-var/global/const/access_away_cavalry_fleet_armory = "ACCESS_CAVALRY_EMERG_ARMORY"
-var/global/const/access_away_cavalry_ops = "ACCESS_CAVALRY_OPS"
-var/global/const/access_away_cavalry_pilot = "ACCESS_CAVALRY_PILOT"
-var/global/const/access_away_cavalry_captain = "ACCESS_CAVALRY_CAPTAIN"
-var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
+GLOBAL_VAR_CONST(access_away_cavalry, "ACCESS_CAVALRY")
+GLOBAL_VAR_CONST(access_away_cavalry_fleet_armory, "ACCESS_CAVALRY_EMERG_ARMORY")
+GLOBAL_VAR_CONST(access_away_cavalry_ops, "ACCESS_CAVALRY_OPS")
+GLOBAL_VAR_CONST(access_away_cavalry_pilot, "ACCESS_CAVALRY_PILOT")
+GLOBAL_VAR_CONST(access_away_cavalry_captain, "ACCESS_CAVALRY_CAPTAIN")
+GLOBAL_VAR_CONST(access_away_cavalry_commander, "ACCESS_CAVALRY_COMMANDER")
 
-/datum/access/access_away_cavalry_patrol
-	id = access_away_cavalry
+/datum/access/GLOB.access_away_cavalry_patrol
+	id = GLOB.access_away_cavalry
 	desc = "SPS Main"
 	region = ACCESS_REGION_NONE
 
-/datum/access/access_away_cavalry_ops
-	id = access_away_cavalry_ops
+/datum/access/GLOB.access_away_cavalry_ops
+	id = GLOB.access_away_cavalry_ops
 	desc = "SPS Army"
 	region = ACCESS_REGION_NONE
 
-/datum/access/access_away_cavalry_captain
-	id = access_away_cavalry_captain
+/datum/access/GLOB.access_away_cavalry_captain
+	id = GLOB.access_away_cavalry_captain
 	desc = "SPS Captain"
 	region = ACCESS_REGION_NONE
 
-/datum/access/access_away_patrol_commander
-	id = access_away_cavalry_commander
+/datum/access/GLOB.access_away_patrol_commander
+	id = GLOB.access_away_cavalry_commander
 	desc = "SPS Commander"
 	region = ACCESS_REGION_NONE
 
@@ -96,7 +96,7 @@ var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
 					SKILL_HAULING = SKILL_BASIC,
 					SKILL_MEDICAL = SKILL_BASIC,
 					SKILL_EVA = SKILL_BASIC)
-	access = list(access_away_cavalry, access_away_cavalry_ops)
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops)
 
 /datum/job/submap/patrol/captain
 	title = "Army SCGSO Leader"
@@ -127,7 +127,7 @@ var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
 		SKILL_MEDICAL = SKILL_BASIC,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_fleet_armory, access_away_cavalry_captain)
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops, GLOB.access_away_cavalry_fleet_armory, GLOB.access_away_cavalry_captain)
 
 /datum/job/submap/patrol/commander
 	title = "Fleet Commander"
@@ -154,7 +154,7 @@ var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
 		SKILL_PILOT   = SKILL_TRAINED,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(access_away_cavalry, access_away_cavalry_ops, access_away_cavalry_pilot, access_away_cavalry_fleet_armory, access_away_cavalry_commander)
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_ops, GLOB.access_away_cavalry_pilot, GLOB.access_away_cavalry_fleet_armory, GLOB.access_away_cavalry_commander)
 
 /datum/job/submap/patrol/pilot1
 	title = "Fleet Pilot"
@@ -181,7 +181,7 @@ var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
 		SKILL_PILOT   = SKILL_TRAINED,
 		SKILL_EVA     = SKILL_BASIC
 	)
-	access = list(access_away_cavalry, access_away_cavalry_pilot, access_away_cavalry_fleet_armory)
+	access = list(GLOB.access_away_cavalry, GLOB.access_away_cavalry_pilot, GLOB.access_away_cavalry_fleet_armory)
 
 /datum/job/submap/patrol/surgeon
 	title = "Fleet Corpsman"
@@ -210,7 +210,7 @@ var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
 		SKILL_CHEMISTRY = SKILL_BASIC,
 		SKILL_EVA       = SKILL_BASIC
 	)
-	access = list(access_away_cavalry)
+	access = list(GLOB.access_away_cavalry)
 
 /datum/job/submap/patrol/engineer
 	title = "Fleet Technician"
@@ -241,7 +241,7 @@ var/global/const/access_away_cavalry_commander = "ACCESS_CAVALRY_COMMANDER"
 		SKILL_ELECTRICAL   = SKILL_TRAINED,
 		SKILL_CONSTRUCTION = SKILL_TRAINED,
 	)
-	access = list(access_away_cavalry)
+	access = list(GLOB.access_away_cavalry)
 
 
 /* BRANCH & RANKS

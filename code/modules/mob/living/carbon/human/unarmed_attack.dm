@@ -1,4 +1,4 @@
-var/global/list/sparring_attack_cache = list()
+GLOBAL_LIST_INIT(sparring_attack_cache, list())
 
 //Species unarmed attacks
 /datum/unarmed_attack
@@ -28,9 +28,9 @@ var/global/list/sparring_attack_cache = list()
 
 /datum/unarmed_attack/proc/get_sparring_variant()
 	if(sparring_variant_type)
-		if(!sparring_attack_cache[sparring_variant_type])
-			sparring_attack_cache[sparring_variant_type] = new sparring_variant_type()
-		return sparring_attack_cache[sparring_variant_type]
+		if(!GLOB.sparring_attack_cache[sparring_variant_type])
+			GLOB.sparring_attack_cache[sparring_variant_type] = new sparring_variant_type()
+		return GLOB.sparring_attack_cache[sparring_variant_type]
 
 /datum/unarmed_attack/proc/is_usable(mob/living/carbon/human/user, mob/target, zone)
 	if(user.restrained())

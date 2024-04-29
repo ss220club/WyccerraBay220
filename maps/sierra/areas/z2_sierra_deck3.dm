@@ -52,7 +52,7 @@
 /area/maintenance/cistern
 	name = "Third Deck - Water Cistern"
 	icon_state = "disposal"
-	req_access = list(list(access_cargo, access_engine, access_el))
+	req_access = list(list(GLOB.access_cargo, GLOB.access_engine, GLOB.access_el))
 
 /area/hydroponics/third_deck_storage
 	name = "Third Deck - Service - Hydroponics Storage"
@@ -72,7 +72,7 @@
 	name = "Third Deck - Service - Bar"
 	icon_state = "bar"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(list(access_kitchen, access_bar))
+	req_access = list(list(GLOB.access_kitchen, GLOB.access_bar))
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /area/crew_quarters/bar/cobed
@@ -89,7 +89,7 @@
 	icon_state = "kitchen"
 	sound_env = SMALL_ENCLOSED
 	lighting_tone = AREA_LIGHTING_WARM
-	req_access = list(access_chief_steward)
+	req_access = list(GLOB.access_chief_steward)
 	holomap_color = HOLOMAP_AREACOLOR_CREW
 
 /* ENGINEERING AREAS
@@ -111,13 +111,13 @@
 		'maps/sierra/sound/ambience/engineering2.ogg',
 		'maps/sierra/sound/ambience/engineering3.ogg'
 	)
-	req_access = list(access_engine_equip)
+	req_access = list(GLOB.access_engine_equip)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/engine_eva
 	name = "Third Deck - Engineering - EVA"
 	icon_state = "engine_eva"
-	req_access = list(list(access_eva, access_external_airlocks), access_engine)
+	req_access = list(list(GLOB.access_eva, GLOB.access_external_airlocks), GLOB.access_engine)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/engine_monitoring
@@ -161,20 +161,20 @@
 		'maps/sierra/sound/ambience/atmospherics1.ogg'
 	)
 	sound_env = LARGE_ENCLOSED
-	req_access = list(access_atmospherics)
+	req_access = list(GLOB.access_atmospherics)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/gravitaional_generator
 	name = "Third Deck - Gravitational Generator"
 	icon_state = "engine_monitoring"
-	req_access = list(list(access_engine_equip, access_heads), list(access_seneng, access_engine_equip))
+	req_access = list(list(GLOB.access_engine_equip, GLOB.access_heads), list(GLOB.access_seneng, GLOB.access_engine_equip))
 	sound_env = SMALL_ENCLOSED
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/bluespace
 	name = "Third Deck - Engineering - BlueSpace Drive"
 	icon_state = "engine_monitoring"
-	req_access = list(list(access_engine_equip, access_heads), access_engine, access_maint_tunnels)
+	req_access = list(list(GLOB.access_engine_equip, GLOB.access_heads), GLOB.access_engine, GLOB.access_maint_tunnels)
 	sound_env = SMALL_ENCLOSED
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
@@ -187,14 +187,14 @@
 /area/engineering/fuelbay
 	name = "Third Deck - Engineering - Fuel Bay"
 	icon_state = "engineering"
-	req_access = list(access_construction)
+	req_access = list(GLOB.access_construction)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/atmos/storage
 	name = "Third Deck - Engineering - Atmospherics Storage"
 	icon_state = "atmos_storage"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_atmospherics)
+	req_access = list(GLOB.access_atmospherics)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/turret_protected/ai_cyborg_station
@@ -219,7 +219,7 @@
 /area/crew_quarters/heads/office/ce
 	icon_state = "heads_ce"
 	name = "Bridge - Command - CE's Office"
-	req_access = list(access_ce)
+	req_access = list(GLOB.access_ce)
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 // Tcomm
@@ -230,7 +230,7 @@
 		'sound/ambience/ambigen10.ogg',
 		'maps/sierra/sound/ambience/aiservers.wav'
 	)
-	req_access = list(access_tcomsat)
+	req_access = list(GLOB.access_tcomsat)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/tcommsat/chamber
@@ -250,7 +250,7 @@
  */
 
 /area/vacant/prototype
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vacant/prototype/control
@@ -266,7 +266,7 @@
 	name = "First Deck - Solar - Port"
 	icon_state = "SolarcontrolP"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(access_engine)
+	req_access = list(GLOB.access_engine)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/maintenance/solar/starboard
@@ -294,7 +294,7 @@
 /area/storage/tech
 	name = "Third Deck - Engineering - Technical Storage"
 	icon_state = "storage"
-	req_access = list(access_tech_storage)
+	req_access = list(GLOB.access_tech_storage)
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/storage/tech/high_risk
@@ -313,12 +313,12 @@
 	name = "Third Deck - Compactor"
 	icon_state = "disposal"
 	sound_env = STANDARD_STATION
-	req_access = list(list(access_cargo, access_maint_tunnels))
+	req_access = list(list(GLOB.access_cargo, GLOB.access_maint_tunnels))
 
 /area/maintenance/incinerator
 	name = "Third Deck - Incinerator"
 	icon_state = "disposal"
-	req_access = list(list(access_engine, access_medical, access_cargo))
+	req_access = list(list(GLOB.access_engine, GLOB.access_medical, GLOB.access_cargo))
 
 //Vacant
 
@@ -350,4 +350,4 @@
 /area/storage/eva
 	name = "Third Deck - EVA"
 	icon_state = "eva"
-	req_access = list(access_eva)
+	req_access = list(GLOB.access_eva)

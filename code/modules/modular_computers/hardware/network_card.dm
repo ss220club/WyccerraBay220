@@ -51,10 +51,10 @@
 
 /obj/item/stock_parts/computer/network_card/Initialize()
 	. = ..()
-	identification_id = random_id("network_card_id", 1, 999)
+	identification_id = GLOB.random_id("network_card_id", 1, 999)
 
 /obj/item/stock_parts/computer/network_card/Destroy()
-	ntnet_global.unregister(identification_id)
+	GLOB.ntnet_global.unregister(identification_id)
 	return ..()
 
 /obj/item/stock_parts/computer/network_card/proc/set_identification_string(identificator)
@@ -82,21 +82,21 @@
 		return
 	. += src
 	if(proxy_id)
-		var/datum/extension/interactive/ntos/comp = ntnet_global.get_os_by_nid(proxy_id)
+		var/datum/extension/interactive/ntos/comp = GLOB.ntnet_global.get_os_by_nid(proxy_id)
 		if(comp && comp.on)
 			var/obj/item/stock_parts/computer/network_card/nc = comp.get_component(PART_NETWORK)
 			if(nc && nc.get_signal_direct())
 				return nc.get_route(.)
 
 /obj/item/stock_parts/computer/network_card/proc/is_banned()
-	return ntnet_global.check_banned(identification_id)
+	return GLOB.ntnet_global.check_banned(identification_id)
 
 /// Returns the signal strength directly to NTNet for this card. 0 - No signal, 1 - Low signal, 2 - High signal. 3 - Wired Connection
 /obj/item/stock_parts/computer/network_card/proc/get_signal_direct()
 	. = 0
-	if(!check_functionality() || !ntnet_global || is_banned())
+	if(!check_functionality() || !GLOB.ntnet_global || is_banned())
 		return
-	if(!ntnet_global.check_function() && !ethernet)
+	if(!GLOB.ntnet_global.check_function() && !ethernet)
 		return
 	var/strength = 1
 	if(ethernet)
@@ -122,7 +122,7 @@
 		if(i == length(cards))
 			if(nc.proxy_id) // We have an unresolved proxy chain. No signal
 				return 0
-			if(specific_action && ntnet_global && !ntnet_global.check_capability(specific_action))
+			if(specific_action && GLOB.ntnet_global && !GLOB.ntnet_global.check_capability(specific_action))
 				if(!nc.ethernet) // If capabilities are restricted for wireless connections, and public-facing network card is not ethernet, then no signal
 					return 0
 		. = isnull(.) ? nc.get_signal_direct() : min(., nc.get_signal_direct())
@@ -142,10 +142,10 @@
 		return last_card.get_network_tag_direct()
 
 /obj/item/stock_parts/computer/network_card/on_disable()
-	ntnet_global.unregister(identification_id)
+	GLOB.ntnet_global.unregister(identification_id)
 
 /obj/item/stock_parts/computer/network_card/on_enable(datum/extension/interactive/ntos/os)
-	ntnet_global.register(identification_id, os)
+	GLOB.ntnet_global.register(identification_id, os)
 
 /obj/item/stock_parts/computer/network_card/on_install(obj/machinery/machine)
 	..()

@@ -162,13 +162,13 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 		return
 
 	if(config.player_limit != 0)
-		if((length(GLOB.clients) >= config.player_limit) && !(ckey in admin_datums))
+		if((length(GLOB.clients) >= config.player_limit) && !(ckey in GLOB.admin_datums))
 			alert(src,"This server is currently full and not accepting new connections.","Server Full","OK")
 			log_admin("[ckey] tried to join and was turned away due to the server being full (player_limit=[config.player_limit])")
 			qdel(src)
 			return
 
-	for (var/datum/ticket/T in tickets)
+	for (var/datum/ticket/T in GLOB.tickets)
 		if (T.status == TICKET_OPEN && T.owner.ckey == ckey)
 			message_staff("[key_name_admin(src)] has joined the game with an open ticket. Status: [length(T.assigned_admins) ? "Assigned to: [english_list(T.assigned_admin_ckeys())]" : SPAN_DANGER("Unassigned.")]")
 			break
@@ -188,12 +188,12 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	// Automatic admin rights for people connecting locally.
 	// Concept stolen from /tg/ with deepest gratitude.
 	var/local_connection = (config.auto_local_admin && (isnull(address) || GLOB.localhost_addresses[address]))
-	if(local_connection && !admin_datums[ckey])
+	if(local_connection && !GLOB.admin_datums[ckey])
 		new /datum/admins("Local Host", 32767, ckey) // Прости меня бог за это
 
 
 	//Admin Authorisation
-	holder = admin_datums[ckey]
+	holder = GLOB.admin_datums[ckey]
 	if(holder)
 		GLOB.admins += src
 		holder.owner = src
@@ -290,7 +290,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 
 
 /client/Destroy()
-	for (var/datum/ticket/T in tickets)
+	for (var/datum/ticket/T in GLOB.tickets)
 		if (T.status == TICKET_OPEN && T.owner.ckey == ckey)
 			message_staff("[key_name_admin(src)] has left the game with an open ticket. Status: [length(T.assigned_admins) ? "Assigned to: [english_list(T.assigned_admin_ckeys())]" : SPAN_DANGER("Unassigned.")]")
 			break
@@ -300,7 +300,7 @@ GLOBAL_LIST_INIT(localhost_addresses, list(
 	if (watched_variables_window)
 		STOP_PROCESSING(SSprocessing, watched_variables_window)
 	GLOB.ckey_directory -= ckey
-	ticket_panels -= src
+	GLOB.ticket_panels -= src
 	GLOB.clients -= src
 	..()
 	return QDEL_HINT_HARDDEL_NOW

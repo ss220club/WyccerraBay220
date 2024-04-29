@@ -1,4 +1,4 @@
-var/global/datum/ntnet/ntnet_global = new()
+GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 
 
 // This is the NTNet datum. There can be only one NTNet datum in game at once. Modular computers read data from this.
@@ -40,8 +40,8 @@ var/global/datum/ntnet/ntnet_global = new()
 
 // If new NTNet datum is spawned, it replaces the old one.
 /datum/ntnet/New()
-	if(ntnet_global && (ntnet_global != src))
-		ntnet_global = src // There can be only one.
+	if(GLOB.ntnet_global && (GLOB.ntnet_global != src))
+		GLOB.ntnet_global = src // There can be only one.
 	for(var/obj/machinery/ntnet_relay/R as anything in SSmachines.get_machinery_of_type(/obj/machinery/ntnet_relay))
 		relays += R
 	build_software_lists()
@@ -74,7 +74,7 @@ var/global/datum/ntnet/ntnet_global = new()
 				break
 
 	// Log entries are backed up on portable drives in every relay, if present.
-	for(var/obj/machinery/ntnet_relay/R in ntnet_global.relays)
+	for(var/obj/machinery/ntnet_relay/R in GLOB.ntnet_global.relays)
 		var/obj/item/stock_parts/computer/hard_drive/portable/P = R.get_component_of_type(/obj/item/stock_parts/computer/hard_drive/portable)
 		if(istype(P))
 			P.update_data_file("ntnet_log", "[log_text]\[br\]", /datum/computer_file/data/logfile)
@@ -224,7 +224,7 @@ var/global/datum/ntnet/ntnet_global = new()
 
 /// Returns email account matching login. Otherwise null
 /datum/ntnet/proc/find_email_by_name(login)
-	for(var/datum/computer_file/data/email_account/A in ntnet_global.email_accounts)
+	for(var/datum/computer_file/data/email_account/A in GLOB.ntnet_global.email_accounts)
 		if(A.login == login)
 			return A
 
@@ -257,7 +257,7 @@ var/global/datum/ntnet/ntnet_global = new()
 	// It is VERY unlikely that we'll have two players, in the same round, with the same name and branch, but still, this is here.
 	// If such conflict is encountered, a random number will be appended to the email address. If this fails too, no email account will be created.
 	if(find_email_by_name(login))
-		login = "[desired_name][random_id(/datum/computer_file/data/email_account, 100, 999)]@[domain]"
+		login = "[desired_name][GLOB.random_id(/datum/computer_file/data/email_account, 100, 999)]@[domain]"
 	// If even fallback login generation failed, just don't give them an email. The chance of this happening is astronomically low.
 	if(find_email_by_name(login))
 		to_chat(user, "You were not assigned an email address.")
@@ -281,6 +281,6 @@ var/global/datum/ntnet/ntnet_global = new()
 		return
 	var/old_email = mind.initial_email_login["login"]
 	if(!old_email)
-		ntnet_global.create_email(src, newname, domain)
+		GLOB.ntnet_global.create_email(src, newname, domain)
 	else
-		ntnet_global.rename_email(src, old_email, newname, domain)
+		GLOB.ntnet_global.rename_email(src, old_email, newname, domain)

@@ -18,7 +18,7 @@
 
 	var/universal_translate = 0 // set to 1 if it can translate nonhuman speech
 
-	req_access = list(access_tcomsat)
+	req_access = list(GLOB.access_tcomsat)
 
 /obj/machinery/computer/telecomms/server/interface_interact(mob/user)
 	interact(user)

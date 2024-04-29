@@ -1,11 +1,11 @@
-var/global/list/datum/supply_drop_loot/supply_drop
+GLOBAL_LIST_EMPTY(supply_drop)
 
 /proc/supply_drop_random_loot_types()
 	RETURN_TYPE(/list)
-	if(!supply_drop)
-		supply_drop = init_subtypes(/datum/supply_drop_loot)
-		supply_drop = dd_sortedObjectList(supply_drop)
-	return supply_drop
+	if(!GLOB.supply_drop)
+		GLOB.supply_drop = init_subtypes(/datum/supply_drop_loot)
+		GLOB.supply_drop = dd_sortedObjectList(GLOB.supply_drop)
+	return GLOB.supply_drop
 
 /datum/supply_drop_loot
 	var/name = ""

@@ -26,7 +26,7 @@
 	var/list/report_prototypes = list()              //Stores report prototypes to use for UI purposes.
 	var/datum/shuttle/prototype_shuttle              //The shuttle for which the prototypes were built (to avoid excessive prototype rebuilding)
 	//The default access needed to properly use. Should be set in map files.
-	var/default_access = list(access_cargo, access_bridge)  //The format is (needs one of list(these access constants or lists of access constants))
+	var/default_access = list(GLOB.access_cargo, GLOB.access_bridge)  //The format is (needs one of list(these access constants or lists of access constants))
 
 /datum/nano_module/deck_management/New()
 	..()
@@ -177,7 +177,7 @@
 			return 1
 
 /datum/nano_module/deck_management/proc/get_shuttle_access(mob/user, datum/shuttle/shuttle)
-	return shuttle.logging_access ? (check_access(user, shuttle.logging_access) || check_access(user, access_bridge)) : 0
+	return shuttle.logging_access ? (check_access(user, shuttle.logging_access) || check_access(user, GLOB.access_bridge)) : 0
 
 /datum/nano_module/deck_management/proc/set_shuttle(mob/user, shuttle_name, need_access = 1)
 	var/datum/shuttle/shuttle
@@ -333,7 +333,7 @@
 			return 1
 		var/place = selected_shuttle.name
 		if(alert(user, "Would you like to choose a custom gathering point, or just use [place]?", "Announcement Creation", "Default", "Custom") == "Custom")
-			var/list/areas = area_repository.get_areas_by_name()
+			var/list/areas = GLOB.area_repository.get_areas_by_name()
 			var/area/A = input(user, "Pick a custom location from the list.", "Announcement Creation") as null|anything in areas
 			if(A)
 				place = A

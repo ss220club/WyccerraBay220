@@ -9,7 +9,7 @@
 	offline_vision_restriction = 0
 	hides_uniform = 0
 
-	req_access = list(access_lawyer)
+	req_access = list(GLOB.access_lawyer)
 
 	glove_type = null
 	helm_type = null
@@ -123,7 +123,7 @@
 	boot_type = /obj/item/clothing/shoes/magboots/rig/eva
 	glove_type = /obj/item/clothing/gloves/rig/eva
 
-	req_access = list(access_engine_equip)
+	req_access = list(GLOB.access_engine_equip)
 
 	sprite_sheets = list(
 		SPECIES_UNATHI = 'icons/mob/species/unathi/onmob_rig_back_unathi.dmi'
@@ -200,7 +200,7 @@
 	helm_type = /obj/item/clothing/head/helmet/space/rig/ce
 	glove_type = /obj/item/clothing/gloves/rig/ce
 
-	req_access = list(access_ce)
+	req_access = list(GLOB.access_ce)
 	max_pressure_protection = FIRESUIT_MAX_PRESSURE
 	min_pressure_protection = 0
 
@@ -274,7 +274,7 @@
 	boot_type = /obj/item/clothing/shoes/magboots/rig/hazmat
 	glove_type = /obj/item/clothing/gloves/rig/hazmat
 
-	req_access = list(access_tox)
+	req_access = list(GLOB.access_tox)
 
 /obj/item/clothing/head/helmet/space/rig/hazmat
 	light_overlay = "helmet_light_dual"
@@ -338,7 +338,7 @@
 	boot_type = /obj/item/clothing/shoes/magboots/rig/medical
 	glove_type = /obj/item/clothing/gloves/rig/medical
 
-	req_access = list(access_medical_equip)
+	req_access = list(GLOB.access_medical_equip)
 
 /obj/item/clothing/head/helmet/space/rig/medical
 	light_overlay = "helmet_light_wide"

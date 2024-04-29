@@ -5,7 +5,7 @@
 
 /datum/shuttle/autodock/ferry/emergency/New()
 	. = ..()
-	emergency_controller = evacuation_controller
+	emergency_controller = GLOB.evacuation_controller
 	if(!istype(emergency_controller))
 		CRASH("Escape shuttle created without the appropriate controller type.")
 	if(emergency_controller.shuttle)
@@ -28,7 +28,7 @@
 /datum/shuttle/autodock/ferry/emergency/shuttle_moved()
 	if(next_location != waypoint_station)
 		emergency_controller.shuttle_leaving() // This is a hell of a line. v
-		priority_announcement.Announce(replacetext(replacetext((emergency_controller.emergency_evacuation ? GLOB.using_map.emergency_shuttle_leaving_message : GLOB.using_map.shuttle_leaving_message), "%dock_name%", "[GLOB.using_map.dock_name]"),  "%ETA%", "[round(emergency_controller.get_eta()/60,1)] minute\s"))
+		GLOB.priority_announcement.Announce(replacetext(replacetext((emergency_controller.emergency_evacuation ? GLOB.using_map.emergency_shuttle_leaving_message : GLOB.using_map.shuttle_leaving_message), "%dock_name%", "[GLOB.using_map.dock_name]"),  "%ETA%", "[round(emergency_controller.get_eta()/60,1)] minute\s"))
 	else if(next_location == waypoint_offsite && emergency_controller.has_evacuated())
 		emergency_controller.shuttle_evacuated()
 	..()
@@ -122,7 +122,7 @@
 		return 0 //don't need any more
 
 	var/singleton/security_state/security_state = GET_SINGLETON(GLOB.using_map.security_state)
-	if (!evacuation_controller.emergency_evacuation && security_state.current_security_level_is_lower_than(security_state.high_security_level))
+	if (!GLOB.evacuation_controller.emergency_evacuation && security_state.current_security_level_is_lower_than(security_state.high_security_level))
 		src.visible_message("\The [src] buzzes. It does not appear to be accepting any commands.")
 		return 0
 
@@ -146,7 +146,7 @@
 		src.visible_message("\The [src] buzzes. That ID has already been scanned.")
 		return 0
 
-	if (!(access_bridge in access))
+	if (!(GLOB.access_bridge in access))
 		src.visible_message("\The [src] buzzes, rejecting [ident].")
 		return 0
 

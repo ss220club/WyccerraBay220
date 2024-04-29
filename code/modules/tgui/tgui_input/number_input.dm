@@ -29,7 +29,7 @@
 		return
 
 	// Client does NOT have tgui_input on: Returns regular input
-	if(user.get_preference_value(/datum/client_preference/tgui_input) == GLOB.PREF_NO)
+	if(user.get_preference_value(/datum/client_preference/tgui_input) == PREF_NO)
 		var/input_number = input(user, message, title, default) as null|num
 		return clamp(round_value ? round(input_number) : input_number, min_value, max_value)
 

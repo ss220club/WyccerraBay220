@@ -2,7 +2,7 @@
 	name = "emergency response drone module"
 	display_name = "Emergency Response"
 	channels = list("Medical" = TRUE)
-	networks = list(NETWORK_MEDICAL)
+	networks = list(GLOB.NETWORK_MEDICAL)
 	subsystems = list(/datum/nano_module/crew_monitor)
 	sprites = list(
 		"Drone" = "drone-medical",

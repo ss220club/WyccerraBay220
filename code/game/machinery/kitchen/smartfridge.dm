@@ -359,7 +359,7 @@
 	name = "\improper Slime Extract Storage"
 	desc = "A refrigerated storage unit for slime extracts."
 	icon_contents = "slime"
-	req_access = list(access_research)
+	req_access = list(GLOB.access_research)
 	accepted_types = list(
 		/obj/item/slime_extract
 	)
@@ -368,7 +368,7 @@
 	name = "\improper Refrigerated Medicine Storage"
 	desc = "A refrigerated storage unit for storing medicine and chemicals."
 	icon_contents = "chem"
-	req_access = list(list(access_medical,access_chemistry))
+	req_access = list(list(GLOB.access_medical,GLOB.access_chemistry))
 	accepted_types = list(
 		/obj/item/reagent_containers/glass,
 		/obj/item/storage/pill_bottle,
@@ -379,7 +379,7 @@
 /obj/machinery/smartfridge/secure/virology
 	name = "\improper Refrigerated Virus Storage"
 	desc = "A refrigerated storage unit for storing viral material."
-	req_access = list(access_virology)
+	req_access = list(GLOB.access_virology)
 	icon_contents = "chem"
 	accepted_types = list(
 		/obj/item/reagent_containers/glass/beaker/vial

@@ -450,17 +450,17 @@ GLOBAL_DATUM_INIT(xeno_state, /datum/topic_state/admin_state/xeno, new)
 	var/SQL = config.usealienwhitelistSQL
 	. = list()
 	//Нам нужен действующий ВЛ сервера, и он есть.
-	if(!not_used_list && alien_whitelist)
-		. = alien_whitelist
+	if(!not_used_list && GLOB.alien_whitelist)
+		. = GLOB.alien_whitelist
 	//Нам нужен txt ВЛ, и его надо загрузить. (!XOR)
-	else if(!(not_used_list ^ SQL) || (!alien_whitelist && !SQL))
+	else if(!(not_used_list ^ SQL) || (!GLOB.alien_whitelist && !SQL))
 		var/text = file2text("config/alienwhitelist.txt")
 		if (text)
 			. = splittext(text, "\n")
 		else
 			return
 	//Нам нужен SQL ВЛ, и его надо загрузить. (XOR)
-	else if((not_used_list ^ SQL) || (!alien_whitelist && SQL))
+	else if((not_used_list ^ SQL) || (!GLOB.alien_whitelist && SQL))
 		establish_db_connection()
 		if(!dbcon.IsConnected())
 			return

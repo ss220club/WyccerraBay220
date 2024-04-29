@@ -67,15 +67,15 @@
 
 	// See LIGHTING_CORNER_DIAGONAL in lighting_corner.dm for why these values are what they are.
 	var/list/corners = T.corners
-	var/datum/lighting_corner/cr = dummy_lighting_corner
-	var/datum/lighting_corner/cg = dummy_lighting_corner
-	var/datum/lighting_corner/cb = dummy_lighting_corner
-	var/datum/lighting_corner/ca = dummy_lighting_corner
+	var/datum/lighting_corner/cr = GLOB.dummy_lighting_corner
+	var/datum/lighting_corner/cg = GLOB.dummy_lighting_corner
+	var/datum/lighting_corner/cb = GLOB.dummy_lighting_corner
+	var/datum/lighting_corner/ca = GLOB.dummy_lighting_corner
 	if (corners)
-		cr = corners[3] || dummy_lighting_corner
-		cg = corners[2] || dummy_lighting_corner
-		cb = corners[4] || dummy_lighting_corner
-		ca = corners[1] || dummy_lighting_corner
+		cr = corners[3] || GLOB.dummy_lighting_corner
+		cg = corners[2] || GLOB.dummy_lighting_corner
+		cb = corners[4] || GLOB.dummy_lighting_corner
+		ca = corners[1] || GLOB.dummy_lighting_corner
 
 	var/max = max(cr.cache_mx, cg.cache_mx, cb.cache_mx, ca.cache_mx)
 	luminosity = max > 0

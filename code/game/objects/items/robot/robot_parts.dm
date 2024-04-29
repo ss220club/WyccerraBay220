@@ -18,7 +18,7 @@
 	..(newloc)
 	if(model_info && model)
 		model_info = model
-		var/datum/robolimb/R = all_robolimbs[model]
+		var/datum/robolimb/R = GLOB.all_robolimbs[model]
 		if(R)
 			SetName("[R.company] [initial(name)]")
 			desc = "[R.desc]"
@@ -136,7 +136,7 @@
 				return
 			var/name = sanitizeSafe(input(user,"Set a name for the new prosthetic."), MAX_NAME_LEN)
 			if(!name)
-				SetName("prosthetic ([random_id("prosthetic_id", 1, 999)])")
+				SetName("prosthetic ([GLOB.random_id("prosthetic_id", 1, 999)])")
 
 			// Create a new, nonliving human.
 			var/mob/living/carbon/human/H = new /mob/living/carbon/human(get_turf(loc))
@@ -176,7 +176,7 @@
 
 /obj/item/robot_parts/chest/proc/GetCyborgSpecies()
 	. = list()
-	for(var/N in playable_species)
+	for(var/N in GLOB.playable_species)
 		var/datum/species/S = all_species[N]
 		if(S.spawn_flags & SPECIES_NO_FBP_CONSTRUCTION)
 			continue

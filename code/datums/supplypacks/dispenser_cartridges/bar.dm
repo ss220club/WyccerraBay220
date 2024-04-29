@@ -2,7 +2,7 @@
 	name = "Reagent refill - beer"
 	containername = "beer reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/beer
 	)
@@ -14,7 +14,7 @@
 	name = "Reagent refill - kahlua"
 	containername = "kahlua reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/kahlua
 	)
@@ -25,7 +25,7 @@
 	name = "Reagent refill - whiskey"
 	containername = "whiskey reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/whiskey
 	)
@@ -36,7 +36,7 @@
 	name = "Reagent refill - wine"
 	containername = "wine reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/wine
 	)
@@ -47,7 +47,7 @@
 	name = "Reagent refill - vodka"
 	containername = "vodka reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/vodka
 	)
@@ -58,7 +58,7 @@
 	name = "Reagent refill - gin"
 	containername = "gin reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/gin
 	)
@@ -69,7 +69,7 @@
 	name = "Reagent refill - rum"
 	containername = "rum reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/rum
 	)
@@ -80,7 +80,7 @@
 	name = "Reagent refill - tequila"
 	containername = "tequila reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/tequila
 	)
@@ -91,7 +91,7 @@
 	name = "Reagent refill - vermouth"
 	containername = "vermouth reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/vermouth
 	)
@@ -102,7 +102,7 @@
 	name = "Reagent refill - cognac"
 	containername = "cognac reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/cognac
 	)
@@ -113,7 +113,7 @@
 	name = "Reagent refill - ale"
 	containername = "ale reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/ale
 	)
@@ -124,7 +124,7 @@
 	name = "Reagent refill - mead"
 	containername = "mead reagent cartridge crate"
 	containertype = /obj/structure/closet/crate/secure
-	access = list(access_kitchen)
+	access = list(GLOB.access_kitchen)
 	contains = list(
 		/obj/item/reagent_containers/chem_disp_cartridge/mead
 	)

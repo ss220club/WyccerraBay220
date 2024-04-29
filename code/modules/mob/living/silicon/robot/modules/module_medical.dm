@@ -4,7 +4,7 @@
 		"Medical" = TRUE
 	)
 	networks = list(
-		NETWORK_MEDICAL
+		GLOB.NETWORK_MEDICAL
 	)
 	subsystems = list(
 		/datum/nano_module/crew_monitor

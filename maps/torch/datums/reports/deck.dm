@@ -10,7 +10,7 @@
 
 /datum/computer_file/report/recipient/docked/New()
 	..()
-	set_access(access_cargo, access_cargo)
+	set_access(access_cargo, GLOB.access_cargo)
 	set_access(access_heads, override = 0)
 
 /datum/computer_file/report/recipient/docked/generate_fields()

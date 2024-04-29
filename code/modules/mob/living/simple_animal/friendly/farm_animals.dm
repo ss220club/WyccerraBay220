@@ -247,7 +247,7 @@
 		new /mob/living/simple_animal/passive/chicken(src.loc)
 		qdel(src)
 
-var/global/const/MAX_CHICKENS = 50
+GLOBAL_VAR_CONST(MAX_CHICKENS, 50)
 var/global/chicken_count = 0
 
 /mob/living/simple_animal/passive/chicken
@@ -340,7 +340,7 @@ var/global/chicken_count = 0
 		var/obj/item/reagent_containers/food/snacks/egg/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6)
 		E.pixel_y = rand(-6,6)
-		if(chicken_count < MAX_CHICKENS && prob(10))
+		if(chicken_count < GLOB.MAX_CHICKENS && prob(10))
 			E.amount_grown = 1
 			START_PROCESSING(SSobj, E)
 

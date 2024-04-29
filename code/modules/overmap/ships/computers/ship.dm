@@ -24,7 +24,7 @@ somewhere on that shuttle. Subtypes of these can be then used to perform ship ov
 	. = ..()
 
 /obj/machinery/computer/ship/proc/sync_linked()
-	var/obj/overmap/visitable/ship/sector = map_sectors["[z]"]
+	var/obj/overmap/visitable/ship/sector = GLOB.map_sectors["[z]"]
 	if(!sector)
 		return
 	return attempt_hook_up_recursive(sector)

@@ -1,7 +1,7 @@
 // READ: Don't use the apostrophe in name or desc. Causes script errors.
 
-var/global/list/powers = typesof(/datum/power/changeling) - /datum/power/changeling	//needed for the badmin verb for now
-var/global/list/datum/power/changeling/powerinstances = list()
+GLOBAL_LIST_INIT(powers, typesof(/datum/power/changeling) - /datum/power/changeling)	//needed for the badmin verb for now
+GLOBAL_LIST_EMPTY(powerinstances)
 
 /datum/power			//Could be used by other antags too
 	var/name = "Power"
@@ -171,9 +171,9 @@ var/global/list/datum/power/changeling/powerinstances = list()
 	if(!usr || !usr.mind || !usr.mind.changeling)	return
 	src = usr.mind.changeling
 
-	if(!length(powerinstances))
-		for(var/P in powers)
-			powerinstances += new P()
+	if(!length(GLOB.powerinstances))
+		for(var/P in GLOB.powers)
+			GLOB.powerinstances += new P()
 
 	var/dat = "<html><head><title>Changling Evolution Menu</title></head>"
 
@@ -385,7 +385,7 @@ var/global/list/datum/power/changeling/powerinstances = list()
 		<table width='560' align='center' cellspacing='0' cellpadding='5' id='maintable_data'>"}
 
 	var/i = 1
-	for(var/datum/power/changeling/P in powerinstances)
+	for(var/datum/power/changeling/P in GLOB.powerinstances)
 		var/ownsthis = 0
 
 		if(P in purchasedpowers)
@@ -452,7 +452,7 @@ var/global/list/datum/power/changeling/powerinstances = list()
 	var/datum/power/changeling/Thepower = Pname
 
 
-	for (var/datum/power/changeling/P in powerinstances)
+	for (var/datum/power/changeling/P in GLOB.powerinstances)
 //		log_debug("[P] - [Pname] = [P.name == Pname ? "True" : "False"]")
 
 		if(P.name == Pname)

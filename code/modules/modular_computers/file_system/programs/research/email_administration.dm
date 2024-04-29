@@ -9,7 +9,7 @@
 	requires_ntnet = TRUE
 	available_on_ntnet = TRUE
 	nanomodule_path = /datum/nano_module/program/email_administration
-	required_access = access_network_admin
+	required_access = GLOB.access_network_admin
 	category = PROG_ADMIN
 
 /datum/nano_module/program/email_administration
@@ -57,7 +57,7 @@
 		data["messagecount"] = length(all_messages)
 	else
 		var/list/all_accounts = list()
-		for(var/datum/computer_file/data/email_account/account in ntnet_global.email_accounts)
+		for(var/datum/computer_file/data/email_account/account in GLOB.ntnet_global.email_accounts)
 			if(!account.can_login)
 				continue
 			all_accounts.Add(list(list(
@@ -94,7 +94,7 @@
 
 	// High security - can only be operated when the user has an ID with access on them.
 	var/obj/item/card/id/I = user.GetIdCard()
-	if(!istype(I) || !(access_network_admin in I.access))
+	if(!istype(I) || !(GLOB.access_network_admin in I.access))
 		return TOPIC_HANDLED
 
 	if(href_list["back"])
@@ -137,7 +137,7 @@
 		return TOPIC_HANDLED
 
 	if(href_list["viewaccount"])
-		for(var/datum/computer_file/data/email_account/email_account in ntnet_global.email_accounts)
+		for(var/datum/computer_file/data/email_account/email_account in GLOB.ntnet_global.email_accounts)
 			if(email_account.uid == text2num(href_list["viewaccount"]))
 				current_account = email_account
 				break
@@ -152,7 +152,7 @@
 			return TOPIC_HANDLED
 
 		var/complete_login = "[newlogin]@[newdomain]"
-		if(ntnet_global.find_email_by_name(complete_login))
+		if(GLOB.ntnet_global.find_email_by_name(complete_login))
 			error = "Error creating account: An account with same address already exists."
 			return TOPIC_HANDLED
 

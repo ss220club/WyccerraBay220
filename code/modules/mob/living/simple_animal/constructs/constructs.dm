@@ -43,7 +43,7 @@
 
 /mob/living/simple_animal/construct/Initialize()
 	. = ..()
-	SetName("[initial(name)] ([random_id(/mob/living/simple_animal/construct, 1000, 9999)])")
+	SetName("[initial(name)] ([GLOB.random_id(/mob/living/simple_animal/construct, 1000, 9999)])")
 	real_name = name
 	add_language(LANGUAGE_CULT)
 	add_language(LANGUAGE_CULT_GLOBAL)

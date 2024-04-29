@@ -530,7 +530,7 @@ GLOBAL_LIST_EMPTY(diversion_junctions)
 	. = ..()
 	if(id) id_tag = id
 	else
-		id_tag = "ds[sequential_id(/obj/item/disposal_switch_construct)]"
+		id_tag = "ds[GLOB.sequential_id(/obj/item/disposal_switch_construct)]"
 
 /obj/item/disposal_switch_construct/use_after(atom/A, mob/living/user, click_parameters)
 	if(!istype(A, /turf/simulated/floor) || istype(A, /area/shuttle) || user.incapacitated() || !id_tag)

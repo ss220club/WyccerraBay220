@@ -124,7 +124,7 @@
 	. = ..()
 
 /mob/living/simple_animal/borer/proc/set_borer_name()
-	truename = "[borer_names[min(generation, length(borer_names))]] [random_id("borer[generation]", 1000, 9999)]"
+	truename = "[borer_names[min(generation, length(borer_names))]] [GLOB.random_id("borer[generation]", 1000, 9999)]"
 
 /mob/living/simple_animal/borer/Life()
 
@@ -190,8 +190,8 @@
 	. = ..()
 	statpanel("Status")
 
-	if(evacuation_controller)
-		var/eta_status = evacuation_controller.get_status_panel_eta()
+	if(GLOB.evacuation_controller)
+		var/eta_status = GLOB.evacuation_controller.get_status_panel_eta()
 		if(eta_status)
 			stat(null, eta_status)
 

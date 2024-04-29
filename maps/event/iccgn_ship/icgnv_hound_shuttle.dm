@@ -46,12 +46,12 @@
 //Machinery
 /obj/machinery/computer/shuttle_control/explore/icgnv_hound_shuttle
 	name = "ICGNV Hound Control Console"
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 	shuttle_tag = "ICGNV Hound"
 
 /obj/machinery/power/apc/debug/iccgn
 	cell_type = /obj/item/cell/infinite
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 
 /obj/machinery/telecomms/allinone/iccgn
 	listening_freqs = list(ICCGN_FREQ)

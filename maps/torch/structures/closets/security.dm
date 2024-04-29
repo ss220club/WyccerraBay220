@@ -31,7 +31,7 @@
 
 /obj/structure/closet/secure_closet/security_torch
 	name = "master at arms' locker"
-	req_access = list(access_brig)
+	req_access = list(GLOB.access_brig)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/security
 
 /obj/structure/closet/secure_closet/security_torch/WillContain()
@@ -59,7 +59,7 @@
 
 /obj/structure/closet/secure_closet/cos
 	name = "chief of security's locker"
-	req_access = list(access_hos)
+	req_access = list(GLOB.access_hos)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/security/hos
 
 /obj/structure/closet/secure_closet/cos/WillContain()
@@ -91,7 +91,7 @@
 
 /obj/structure/closet/secure_closet/brigchief
 	name = "brig chief's locker"
-	req_access = list(access_armory)
+	req_access = list(GLOB.access_armory)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/security/warden
 
 /obj/structure/closet/secure_closet/brigchief/WillContain()
@@ -119,7 +119,7 @@
 
 /obj/structure/closet/secure_closet/forensics
 	name = "forensics technician's locker"
-	req_access = list(access_forensics_lockers)
+	req_access = list(GLOB.access_forensics_lockers)
 	closet_appearance = /singleton/closet_appearance/secure_closet/torch/security/forensics
 
 /obj/structure/closet/secure_closet/forensics/WillContain()

@@ -5,7 +5,7 @@
 	icon_screen = "holocontrol"
 	machine_name = "holodeck control console"
 	machine_desc = "Holodecks are immensely complicated and delicate machines, and holodeck control consoles are the devices used to calibrate and modify them."
-	var/lock_access = list(access_bridge)
+	var/lock_access = list(GLOB.access_bridge)
 	var/islocked = 0
 
 	active_power_usage = 8000 //8kW for the scenery + 500W per holoitem
@@ -281,7 +281,7 @@
 	for(var/obj/holo_obj in holographic_objs)
 		holo_obj.alpha *= 0.8 //give holodeck objs a slight transparency
 		holo_obj.holographic = TRUE
-		holo_obj.SetupChameleonExtension(CHAMELEON_FLEXIBLE_OPTIONS_PARENT_TYPE, TRUE, FALSE)
+		holo_obj.SetupChameleonExtension(GLOB.CHAMELEON_FLEXIBLE_OPTIONS_PARENT_TYPE, TRUE, FALSE)
 
 	if(HP.ambience)
 		linkedholodeck.forced_ambience = HP.ambience.Copy()

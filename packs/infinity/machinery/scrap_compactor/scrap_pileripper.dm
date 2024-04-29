@@ -1,3 +1,5 @@
+#define SAFETY_COOLDOWN 10 SECONDS
+
 /obj/machinery/pile_ripper
 	name = "pile ripper"
 	desc = "This machine rips everything in front of it apart."
@@ -153,3 +155,5 @@
 			C.adjustBruteLoss(45)
 		else
 			C.gib()
+
+#undef SAFETY_COOLDOWN

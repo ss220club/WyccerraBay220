@@ -20,7 +20,7 @@
 
 /mob/living/simple_animal/hostile/rogue_drone/Initialize()
 	. = ..()
-	name = "[initial(name)] ([random_id(type,100,999)])"
+	name = "[initial(name)] ([GLOB.random_id(type,100,999)])"
 
 /mob/living/simple_animal/hostile/rogue_drone/death(gibbed, deathmessage, show_dead_message)
 	.=..()

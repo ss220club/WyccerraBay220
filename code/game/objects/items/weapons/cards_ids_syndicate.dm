@@ -8,7 +8,7 @@
 
 /obj/item/card/id/syndicate/New(mob/user as mob)
 	..()
-	access = syndicate_access.Copy()
+	access = GLOB.syndicate_access.Copy()
 
 /obj/item/card/id/syndicate/station_access/New()
 	..() // Same as the normal Syndicate id, only already has all station access
@@ -192,7 +192,7 @@
 					age = initial(age)
 					formal_name_prefix = initial(formal_name_prefix)
 					formal_name_suffix = initial(formal_name_suffix)
-					access = syndicate_access.Copy()
+					access = GLOB.syndicate_access.Copy()
 					assignment = initial(assignment)
 					blood_type = initial(blood_type)
 					dna_hash = initial(dna_hash)
@@ -226,11 +226,11 @@
 	// Always update the UI, or buttons will spin indefinitely
 	SSnano.update_uis(src)
 
-var/global/list/id_card_states
+GLOBAL_LIST_EMPTY(id_card_states)
 /proc/id_card_states()
 	RETURN_TYPE(/list)
-	if(!id_card_states)
-		id_card_states = list()
+	if(!GLOB.id_card_states)
+		GLOB.id_card_states = list()
 		for(var/path in typesof(/obj/item/card/id))
 			var/obj/item/card/id/ID = path
 			var/datum/card_state/CS = new()
@@ -251,10 +251,10 @@ var/global/list/id_card_states
 				color_pair += "/[CS.detail_color]"
 			if(color_pair)
 				CS.name += " - [color_pair]"
-			id_card_states += CS
-		id_card_states = dd_sortedObjectList(id_card_states)
+			GLOB.id_card_states += CS
+		GLOB.id_card_states = dd_sortedObjectList(GLOB.id_card_states)
 
-	return id_card_states
+	return GLOB.id_card_states
 
 /datum/card_state
 	var/name

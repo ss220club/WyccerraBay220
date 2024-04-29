@@ -72,14 +72,14 @@
 
 /obj/item/gun/energy/laser/secure
 	icon = 'mods/guns/icons/obj/laser_carbine.dmi'
-	req_access = list(list(access_brig, access_bridge))
+	req_access = list(list(GLOB.access_brig, GLOB.access_bridge))
 
 /obj/item/gun/energy/confuseray/secure
 	name = "disorientator"
 	desc = "The W-T Mk. 6 Disorientator fitted with an NT1017 secure fire chip. It has a Nanotrasen logo on the grip."
 	icon = 'mods/guns/icons/obj/confuseray_secure.dmi'
 	icon_state = "confusesecure"
-	req_access = list(list(access_brig, access_bridge))
+	req_access = list(list(GLOB.access_brig, GLOB.access_bridge))
 
 /obj/item/gun/energy/stunrevolver/secure
 	name = "smart service revolver"
@@ -91,4 +91,4 @@
 		list(mode_name="shock", projectile_type=/obj/item/projectile/beam/stun/shock, modifystate="energyrevolvershock"),
 		list(mode_name="kill", projectile_type=/obj/item/projectile/beam, modifystate="energyrevolverkill")
 		)
-	req_access = list(list(access_brig, access_heads))
+	req_access = list(list(GLOB.access_brig, GLOB.access_heads))

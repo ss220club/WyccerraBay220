@@ -52,7 +52,7 @@
 	if (!working_sound)
 		return
 	if (!sound_id)
-		sound_id = "[type]_[sequential_id(/obj/machinery/computer/ship/sensors)]"
+		sound_id = "[type]_[GLOB.sequential_id(/obj/machinery/computer/ship/sensors)]"
 	var/obj/machinery/shipsensors/sensors = get_sensors()
 	if (sensors && linked && sensors.use_power ** sensors.powered())
 		var/volume = 8

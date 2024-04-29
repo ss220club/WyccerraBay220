@@ -5,7 +5,7 @@
 	winset(client, "mapwindow.statusbar", "is-visible=false")
 	if (config.motd)
 		to_chat(src, "<div class=\"motd\">[config.motd]</div>", handle_whitespace=FALSE)
-	to_chat(src, "<div class='info'>Game ID: <div class='danger'>[game_id]</div></div>")
+	to_chat(src, "<div class='info'>Game ID: <div class='danger'>[GLOB.game_id]</div></div>")
 
 	if(!mind)
 		mind = new /datum/mind(key)

@@ -10,7 +10,7 @@ They sell generic supplies and ask for generic supplies.
 	name = "AI"
 	origin = "Trading Beacon"
 	name_language = LANGUAGE_EAL
-	trade_flags = TRADER_MONEY|TRADER_GOODS
+	trade_flags = TRADER_MONEY|TRADER_GOODS|TRADER_WANTED_ONLY
 	speech = list(TRADER_HAIL_GENERIC    = "Greetings, I am MERCHANT, Artifical Intelligence onboard ORIGIN, tasked with trading goods in return for CURRENCY and supplies.",
 				TRADER_HAIL_DENY         = "We are sorry, your connection has been blacklisted. Have a nice day.",
 

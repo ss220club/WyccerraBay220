@@ -268,6 +268,31 @@
 					/obj/item/clothing/accessory/storage/black_drop = 5,
 					/obj/item/clothing/accessory/solgov/fleet_patch/fifth = 5,
 					)
+
+/obj/machinery/vending/engivend/sol
+	name = "\improper Fleet Engi-Vend"
+	req_access = list(access_away_cavalry)
+	products = list(
+		/obj/item/device/flashlight = 3,
+		/obj/item/device/multitool = 3,
+		/obj/item/device/multitool/multimeter = 3,
+		/obj/item/device/geiger = 3,
+		/obj/item/device/scanner/gas = 3,
+		/obj/item/device/t_scanner = 3,
+		/obj/item/rpd = 2,
+		/obj/item/clamp = 4,
+		/obj/item/tape_roll = 6,
+		/obj/item/device/paint_sprayer = 2,
+		/obj/item/grenade/chem_grenade/metalfoam = 5,
+		/obj/item/sealgen_case/sol = 2,
+		/obj/item/swapper/power_drill = 1,
+		/obj/item/swapper/jaws_of_life = 1
+	)
+	contraband = list(
+		/obj/item/cell/high =  5
+	)
+
+
 /* Voidsuit Storage Unit
  * ====
  */

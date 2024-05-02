@@ -372,3 +372,22 @@
 		</div>
 		<p><i>Ченков В.П.</i></p>
 	"}
+
+// Sealgen
+
+/obj/machinery/sealgen/iccgn
+	req_access = list(access_away_iccgn)
+
+/obj/item/sealgen_case/iccgn
+	name = "fleet sealing field generator case"
+	desc = "Petrovitch Spacecraft brand case. This case quite heavy and contains one sealing field inside. Also it have an ID lock and a ICCGN insignia on it's side."
+
+/obj/item/sealgen_case/iccgn/attack_self(mob/user)
+	. = ..()
+	to_chat(user,SPAN_NOTICE("You start deploying [src]."))
+	user.visible_message(SPAN_NOTICE("[user] starts deploying [src]."))
+	if(do_after(user, deploy_time, src))
+		qdel(src)
+		var/obj/machinery/sealgen/iccgn/G  = new(get_turf(user))
+		user.visible_message(SPAN_NOTICE("[user] deploys [G]."),SPAN_INFO("You deploy [G]."))
+		G.dir = user.dir

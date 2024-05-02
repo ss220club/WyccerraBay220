@@ -115,3 +115,22 @@
 	name = "SCG armband"
 	desc = "An armband, worn by the crew to display which country they represent. This one is blue and gold."
 	icon_state = "solblue"
+
+// Sealgen
+
+/obj/machinery/sealgen/sol
+	req_access = list(access_away_cavalry)
+
+/obj/item/sealgen_case/sol
+	name = "fleet sealing field generator case"
+	desc = "Aether Atmospherics brand case. This case quite heavy and contains one sealing field inside. Also it have an ID lock and a SCGF insignia on it's side."
+
+/obj/item/sealgen_case/sol/attack_self(mob/user)
+	. = ..()
+	to_chat(user,SPAN_NOTICE("You start deploying [src]."))
+	user.visible_message(SPAN_NOTICE("[user] starts deploying [src]."))
+	if(do_after(user, deploy_time, src))
+		qdel(src)
+		var/obj/machinery/sealgen/sol/G  = new(get_turf(user))
+		user.visible_message(SPAN_NOTICE("[user] deploys [G]."),SPAN_INFO("You deploy [G]."))
+		G.dir = user.dir
